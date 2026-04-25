@@ -13,6 +13,7 @@ wiki/log.md       Chronological append-only activity log.
 wiki/threads/     Synthetic essays tracing themes across sources. The "big theory" layer.
 wiki/authors/     Entity pages for people and organizations.
 wiki/concepts/    Concept pages for ideas, patterns, and technologies.
+wiki/projects/    Entity pages for specific tools, frameworks, and products.
 wiki/src/         Processed summaries of source documents.
 ```
 

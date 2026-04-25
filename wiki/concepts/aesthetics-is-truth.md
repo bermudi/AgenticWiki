@@ -22,10 +22,15 @@ In an AI-augmented workflow, maintaining aesthetics becomes even more critical. 
 
 - [[shared-design-concept]] — Aesthetics help maintain the shared "theory" of the code.
 - [[deep-vs-shallow-modules]] — Elegant module boundaries are a form of aesthetic truth.
-- [[slop]] — The antithesis of aesthetic truth.
+- [[slop]] — The antithesis of aesthetic truth; "ugly" code is often slop.
+- [[verification-loop]] — The mechanical counterpart to aesthetic judgment.
+
+> [!note] Departure: Taste vs. Proof
+> While [[dex-horthy|Dex Horthy]] advocates for rigorous **[[verification-loop|verification loops]]** as the primary defense against errors, DHH's philosophy of "Aesthetics is Truth" suggests that human "taste" can be a more sensitive indicator of architectural decay than any automated test.
 
 ## Thread
 - [[the-human-lever]] — Aesthetics is one of the primary levers a human uses to guide AI agents.
+- [[the-slop-problem]] — Aesthetic decay is the first sign of accumulating slop.
 
 ## Sources
 

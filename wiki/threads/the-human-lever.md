@@ -26,6 +26,9 @@ The practical expression of this shift is **[[grey-box-engineering]]**: you don'
 
 This has a direct implication for how you structure code. [[deep-vs-shallow-modules|Deep modules]] — simple interfaces hiding complex internals — are the ideal unit of delegation. The agent works inside the box; you define the box. Shallow modules, by contrast, leak complexity everywhere and confuse the LLM's context.
 
+> [!note] Departure: Aesthetics vs. Verification
+> There is a notable tension between [[dex-horthy|Dex Horthy]]'s insistence on a rigorous **[[verification-loop]]** (types, tests, linters) and [[dhh|David Heinemeier Hansson]]'s emphasis on **[[aesthetics-is-truth]]**. While Horthy focuses on mechanical proof, DHH argues that a human's aesthetic judgment ("taste") is a faster and often more accurate proxy for system health. Most modern agentic workflows attempt to balance both.
+
 ## The Verification Contract
 
 [[dex-horthy|Dex Horthy]] provides the mechanical side: the **[[verification-loop]]** is the contract between human design authority and agent implementation. It has four steps: propose, execute, verify (static + dynamic analysis), refine. This loop replaces trust with proof. You don't *believe* the agent's code is correct — you *prove* it with types, tests, and linters.

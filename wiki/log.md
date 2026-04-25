@@ -1,9 +1,12 @@
-## [2026-04-25] ingest | The End of Implementation: DHH on AI-pilled Development
+## [2026-04-25] ingest | The End of Implementation: DHH on AI-pilled Development (Revised)
 
-- Created: [[authors/dhh]], [[authors/gergely-orosz]], [[src/dhh-ai-pilled-interview]], [[concepts/aesthetics-is-truth]], [[concepts/peak-programmer]], [[concepts/omarchy]]
-- Updated: [[threads/the-human-lever]], [[threads/the-agent-workflow]], [[index.md]]
+- Created: [[authors/dhh]], [[authors/gergely-orosz]], [[src/dhh-ai-pilled-interview]], [[concepts/aesthetics-is-truth]], [[concepts/peak-programmer]], [[projects/omarchy]]
+- Updated: [[threads/the-slop-problem]], [[threads/the-human-lever]], [[threads/the-agent-workflow]], [[concepts/slop]], [[concepts/verification-loop]], [[index.md]], [[AGENTS.md]]
+- Moved: [[projects/cody]], [[projects/pi]] from `concepts/` to `projects/`
 - Sources: `raw/yt-dhh-ai-pilled.md`
-- Notes: DHH's transition to "AI-pilled" workflow adds a significant aesthetic and economic dimension to the wiki. The "Peak Programmer" concept shifts the focus even further toward design authority.
+- Notes: Fixed architectural inconsistencies. Moved projects to their own directory. Surfaced the "Taste vs. Proof" departure in `the-human-lever`. Incorporated DHH's critique of "AI as autocomplete" into `the-slop-problem`. Fixed bidirectional links for `aesthetics-is-truth`.
+
+## [2026-04-25] ingest | The End of Implementation: DHH on AI-pilled Development
 
 ## [2026-04-25] lint | Thread layer restructuring
 

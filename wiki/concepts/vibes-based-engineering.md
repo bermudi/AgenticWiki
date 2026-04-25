@@ -32,6 +32,8 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[slop]] — Vibes-based engineering often leads to the generation of "slop."
 - [[grey-box-engineering]] — The rigorous alternative that emphasizes the [[verification-loop]].
 - [[strategic-vs-tactical-programming]] — Vibes-based engineering is the extreme end of tactical programming.
+- [[peak-programmer]] — The era that incentivizes the speed of vibes over the rigor of engineering.
+- [[aesthetics-is-truth]] — Often confused with vibes, but represents a more disciplined, experience-driven intuition.
 
 ## Sources
 

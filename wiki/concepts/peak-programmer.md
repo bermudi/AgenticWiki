@@ -24,6 +24,8 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 
 - [[the-human-lever]] — The human moves from being a "writer" to an "editor/architect."
 - [[vibes-based-engineering]] — A risk of the Peak Programmer era is developers relying on "vibes" rather than rigorous understanding.
+- [[strategic-vs-tactical-programming]] — Peak Programmer marks the commoditization of tactical programming.
+- [[aesthetics-is-truth]] — In the post-implementation era, taste becomes the primary differentiator.
 
 ## Thread
 - [[the-agent-workflow]] — How developers adapt to the post-implementation world.
