@@ -1,0 +1,16 @@
+# Large binary assets (add as needed)
+raw/assets/*.mp4
+raw/assets/*.pdf
+raw/assets/*.zip
+
+# Editor / OS junk
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Pi session artifacts
+.pi/sessions/
+
+# Obsidian workspace state
+wiki/.obsidian/

@@ -1,0 +1,35 @@
+---
+title: Deep vs. Shallow Modules
+created: 2026-04-24
+updated: 2026-04-25
+sources: ["raw/yt-ai-coding-for-real-engineers.md"]
+tags: ["software-architecture", "clean-code"]
+---
+
+# Deep vs. Shallow Modules
+
+> A concept from *A Philosophy of Software Design* (John Ousterhout) that is critical for managing AI agents.
+
+## Definition
+
+### Deep Modules
+A **Deep Module** provides a simple, powerful interface that hides significant internal complexity.
+- **Interface**: Small, stable, and easy to understand.
+- **Implementation**: Complex, high-value, and encapsulated.
+
+### Shallow Modules
+A **Shallow Module** has an interface that is complex relative to the amount of logic it provides.
+
+## Why it Matters for AI
+In a [[grey-box-engineering]] workflow, the human owns the interface and the agent owns the implementation.
+
+- **Deep Modules are AI-Friendly**: The human can define a small "surface area" (the interface) and delegate a large "volume" of work (the implementation) to the agent. This keeps the agent in the [[smart-zone-dumb-zone]] because it doesn't need to understand the wider system to work on the module.
+- **Shallow Modules are AI-Hostile**: They force the agent to understand the "leaky" details of the rest of the system, quickly pushing it into the **Dumb Zone**.
+
+## Related
+- [[grey-box-engineering]] — Designing deep interfaces for agent delegation.
+- [[smart-zone-dumb-zone]] — How module depth helps manage context.
+
+## Sources
+- [[software-fundamentals-matter-more-than-ever]]
+- [[ai-coding-for-real-engineers]]
