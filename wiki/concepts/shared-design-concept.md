@@ -21,6 +21,9 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
     - *Try:* "Refactor this using a Strategy pattern because we expect to add more payment providers in the future."
 3.  **The "Vibe Check"**: If the AI's code feels "wrong" even if it works, it's usually a sign that your shared design concept has diverged. Stop and realign.
 
+## Thread
+- [[the-human-lever]] — The shared design concept as the core of human design authority
+
 ---
 **Source**: [[software-fundamentals-matter-more-than-ever|Software Fundamentals Matter More Than Ever]] (Matt Pocock)
 **Reference**: Peter Naur, *Programming as Theory Building* (1985)

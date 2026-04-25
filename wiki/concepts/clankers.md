@@ -20,6 +20,9 @@ tags: [concept, ai-agents, critique]
 - **Context Unawareness**: They tend to pull in too much or too little context, leading to poor code quality.
 - **Black Box Nature**: Users cannot easily see or modify the agent's internal prompts or tools.
 
+## Thread
+- [[the-slop-problem]] — Clankers as the agents that mass-produce slop
+
 ## Related
 
 - [[slop]] — The output of clankers.

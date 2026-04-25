@@ -21,6 +21,9 @@ Matt Pocock argues that to succeed with AI, you must spend **more time being str
 
 > "The more code the AI writes, the more your design decisions matter."
 
+## Thread
+- [[the-human-lever]] — Strategic programming as the human's primary job in the age of AI
+
 ---
 **Source**: [[software-fundamentals-matter-more-than-ever|Software Fundamentals Matter More Than Ever]] (Matt Pocock)
 **Origin**: John Ousterhout, *A Philosophy of Software Design*

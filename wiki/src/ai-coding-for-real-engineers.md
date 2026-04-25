@@ -29,6 +29,9 @@ Following the principle from *The Pragmatic Programmer*, Pocock advocates for bu
 - **Deep Modules**: Preferring modules with simple interfaces and complex internals. This reduces the surface area an agent has to understand.
 - **TDD for Agents**: Agents perform best when there is a clear "definition of done." Tests and type systems provide the automated feedback loops necessary to prevent "slop."
 
+## Thread
+- [[the-agent-workflow]] — The design loop as the planning phase of the agent workflow
+
 ## Related
 
 - [[grey-box-engineering]] — The core philosophy of balancing human design with agentic execution.

@@ -24,6 +24,9 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 2. **Deterministic Verification**: Building a [[verification-loop]] into the AI workflow.
 3. **Structured Reasoning**: Forcing the AI (and the human) to reason about the system's architecture before writing code.
 
+## Thread
+- [[the-slop-problem]] — Vibes-based engineering as the root cause of slop
+
 ## Related
 
 - [[slop]] — Vibes-based engineering often leads to the generation of "slop."

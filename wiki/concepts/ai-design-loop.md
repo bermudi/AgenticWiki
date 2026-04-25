@@ -23,6 +23,9 @@ Matt Pocock defines the design process in two phases:
 - **AFK Execution**: Once the Journey is clear, let the agent work Away-From-Keyboard.
 - **Clearing Context**: Instead of compacting history (which leads to "Doc Rot"), clear the session and restart with the PRD and the current Kanban task.
 
+## Thread
+- [[the-agent-workflow]] — The design loop as the planning phase of the agent workflow
+
 ## Related
 - [[grey-box-engineering]] — The implementation phase of the loop.
 - [[smart-zone-dumb-zone]] — Managing the technical limits of the loop.

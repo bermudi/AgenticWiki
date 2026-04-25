@@ -20,6 +20,9 @@ Because AI agents often lack a deep understanding of the entire system architect
 - **High-Quality Review**: Humans must treat agent-generated code with the same (or more) scrutiny as human-written code.
 - [[grey-box-engineering]] — Maintaining a mental model of the system to spot "booboos" early.
 
+## Thread
+- [[the-slop-problem]] — Compounding booboos as the mechanism of degradation
+
 ## Related
 
 - [[slop]] — The accumulation of booboos results in slop.

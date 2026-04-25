@@ -5,15 +5,27 @@
 ## 🧭 Navigation
 - [[log|Activity Log]]
 
-## ✍️ Entities
-- [[dex-horthy|Dex Horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
-- [[mario-zechner|Mario Zechner]] — Creator of Pi.
-- [[matt-pocock|Matt Pocock]] — Educator and advocate for strategic programming.
-- [[sourcegraph|Sourcegraph]] — Code intelligence platform and creators of Cody.
+## 🧵 Threads — The Big Picture
+
+Synthetic essays that trace themes across multiple sources. Start here.
+
+- [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
+- [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
+- [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
+
+## ✍️ Authors
+- [[dex-horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
+- [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
+- [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
+- [[mario-zechner]] — Creator of Pi.
+- [[matt-pocock]] — Educator and advocate for strategic programming.
 
 ## 📚 Sources
 ### Dex Horthy
 - [[no-vibes-allowed-dex-horthy]] — Rigorous engineering vs. vibes in complex codebases.
+
+### David Heinemeier Hansson (DHH)
+- [[dhh-ai-pilled-interview]] — The shift to agentic workflows and the end of implementation.
 
 ### Mario Zechner
 - [[building-pi-in-a-world-of-slop]] — Minimalism, malleability, and avoiding "slop" in AI coding.
@@ -23,6 +35,7 @@
 - [[ai-coding-for-real-engineers]] — Moving beyond Vibe Coding toward structured engineering with agents.
 
 ## 🧠 Concepts
+- [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[clankers]] — Poorly designed agents that generate slop and lack control.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
@@ -30,6 +43,7 @@
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
+- [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
@@ -41,4 +55,5 @@
 ## 🛠️ Projects & Tools
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
+- [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
 

@@ -31,6 +31,9 @@ Instead of "compacting" or summarizing a long chat history (which preserves the 
 ### Connection to [[pi]]
 The [[pi]] agent harness is designed to help stay in the Smart Zone by providing a minimal core and allowing for "sessions" that can be easily reset or partitioned to keep context fresh and relevant.
 
+## Thread
+- [[the-agent-workflow]] — Context hygiene as the operational challenge of the workflow
+
 ## Related
 
 - [[grey-box-engineering]] — Designing interfaces to stay in the Smart Zone.

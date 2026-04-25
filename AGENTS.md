@@ -8,8 +8,9 @@ This is a personal knowledge base built and maintained by an LLM agent. You are 
 raw/              Immutable source documents. Never modify. Read-only.
 raw/assets/       Downloaded images referenced by source documents.
 wiki/             LLM-generated wiki pages. You own this layer entirely.
-wiki/index.md     Content catalog — every wiki page listed with a one-line summary.
+wiki/index.md     Content catalog — thread-first, updated after every change.
 wiki/log.md       Chronological append-only activity log.
+wiki/threads/     Synthetic essays tracing themes across sources. The "big theory" layer.
 wiki/authors/     Entity pages for people and organizations.
 wiki/concepts/    Concept pages for ideas, patterns, and technologies.
 wiki/src/         Processed summaries of source documents.
@@ -30,7 +31,7 @@ wiki/src/         Processed summaries of source documents.
 - Entity pages for people, organizations, projects: `jeff-dean.md`
 - Concept pages for ideas, patterns, technologies: `map-reduce.md`
 - Source pages for processed source documents: `src/designing-data-intensive-applications-ch12.md`
-- Analysis pages for synthesized work: `comparison-cap-vs-pacelc.md`
+- Thread pages for synthetic essays tracing themes across sources: `threads/the-slop-problem.md`
 
 ## Page Format
 
@@ -53,6 +54,9 @@ tags: []
 
 The actual content. Use headings, lists, tables, code blocks as appropriate.
 
+## Thread
+- [[thread-name]] — why this concept belongs to this thread
+
 ## Related
 
 - [[other-page]] — brief note on the relationship
@@ -70,7 +74,9 @@ The `> blockquote` immediately after the title is the page summary — it must e
 - Use Obsidian wiki-links: `[[page-name]]` (no `.md` extension)
 - Always add a brief note explaining the relationship: `[[page-name]] — why it's linked`
 - When creating a new page, add links to it from at least 2-3 existing pages that relate to it
-- When updating a page, check if other pages need updating too (follow the `## Related` links)
+- When updating a page, check if other pages need updating too (follow the `## Related` and `## Thread` links)
+- Concepts that belong to a thread must have a `## Thread` section linking back to it
+- Thread pages link down to concepts; concept pages link up to threads. This bidirectional weave is the navigation backbone.
 
 ## index.md
 
@@ -79,19 +85,19 @@ The content catalog. Organized by category. Updated after every ingest and every
 ```markdown
 # Index
 
-## Overview
-- [[overview]] — wiki-wide synthesis and current state of knowledge
+## 🧵 Threads — The Big Picture
+- [[thread-name]] — one-line thesis
 
-## Entities
+## ✍️ Authors
 - [[page-name]] — one-line summary
 
-## Concepts
-- [[page-name]] — one-line summary
-
-## Sources
+## 📚 Sources
 - [[src/source-name]] — one-line summary
 
-## Analysis & Synthesis
+## 🧠 Concepts
+- [[page-name]] — one-line summary
+
+## 🛠️ Projects & Tools
 - [[page-name]] — one-line summary
 ```
 
@@ -144,6 +150,26 @@ ingested: YYYY-MM-DD
 
 This stub serves as the durable record of what was ingested. It's not the original video, but it's enough for future sessions to re-read and re-evaluate. Wiki source pages reference these stubs the same way they reference any `raw/` file.
 
+## Ingest Philosophy
+
+Threads are not just filing — they are the wiki's living theory. During ingestion:
+
+1. **Actively look for theory.** Don't just extract concepts — identify recurring claims, workflows, and principles across sources. When multiple sources converge on the same idea, that's a thread. When a new source reinforces an existing thread, deepen it.
+2. **Highlight contradictions and departures.** When a source disagrees with an existing thread or concept, don't silently reconcile. Flag it explicitly with a `> [!warning] Contradiction` callout on both the concept page and the thread, and surface it to the human in your ingest summary so they can decide which direction to take.
+3. **Propose new threads when themes emerge.** If a source introduces a coherent argument that doesn't fit any existing thread, propose a new one. Explain how it relates to existing threads (supports, contradicts, extends).
+4. **Present the state of the theory.** After ingestion, summarize not just what was added but how the overall picture changed — which threads gained support, which took a hit, where the tensions are.
+
+## Git
+
+After every ingestion, commit all changes with a descriptive message:
+
+```bash
+git add -A
+git commit -m "ingest: <source title> — <brief summary of what was created/updated>"
+```
+
+The commit message should be useful in `git log` — include the source name and the scope of changes. If contradictions were flagged, mention them.
+
 ## Rules
 
 1. **Never modify files in `raw/`** — that's the source of truth.
@@ -151,5 +177,5 @@ This stub serves as the durable record of what was ingested. It's not the origin
 3. **Always add a `## Related` section** to new pages with links to existing pages.
 4. **Always update the `updated` date** in frontmatter when editing a page.
 5. **Prefer creating a page over leaving knowledge in chat history.** Good answers, comparisons, and analyses should be filed as wiki pages.
-6. **Note contradictions explicitly.** If a new source contradicts an existing claim, flag it with a `> [!warning]` callout, not a silent overwrite.
+6. **Note contradictions explicitly.** If a new source contradicts an existing claim, flag it with a `> [!warning]` callout, not a silent overwrite. Surface contradictions in the ingest summary and in the relevant thread page so the human can decide.
 7. **Ask before deleting pages.** Suggest merges or reorganizations, don't execute unilaterally.

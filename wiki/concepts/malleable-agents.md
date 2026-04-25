@@ -21,6 +21,9 @@ In the pi agent harness, malleability is achieved through:
 - **Agent Modification**: The agent can be asked to write new skills or modify its own configuration.
 - **Extensible Tools**: The human can quickly add new bash scripts or TypeScript modules that become tools for the agent.
 
+## Thread
+- [[the-agent-workflow]] — Malleability as a tool for context management mid-session
+
 ## Related
 
 - [[pi]] — An implementation of a malleable agent harness.

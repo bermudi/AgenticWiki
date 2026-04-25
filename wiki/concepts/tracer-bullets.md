@@ -19,6 +19,9 @@ A term popularized by *The Pragmatic Programmer* and championed by [[matt-pocock
 - **Agent Focus**: Agents perform better when given a specific "vertical" goal (e.g., "Make the user profile update work end-to-end") rather than a "horizontal" goal (e.g., "Write all the API endpoints").
 - **Concrete Feedback**: Providing a working (if minimal) feature allows the human to verify the "Shared Design Concept" early.
 
+## Thread
+- [[the-agent-workflow]] — Tracer bullets as the first thing to ship in the Journey phase
+
 ## Related
 
 - [[grey-box-engineering]] — Using vertical slices to validate human designs.

@@ -29,8 +29,11 @@ Pi is composed of several modules:
 - `pi-tui`: A terminal UI for interaction.
 - `pi-coding-agent`: The CLI implementation that manages sessions and context.
 
-## Related
+## Thread
+- [[the-agent-workflow]] — Pi's minimalism and session model as structural safeguards for context management
+- [[the-human-lever]] — Observability as the mechanism that enables grey box engineering
 
+## Related
 - [[mario-zechner]] — Creator of pi.
 - [[malleable-agents]] — The philosophy behind pi.
 - [[slop]] — Pi is designed to help engineers avoid generating slop.

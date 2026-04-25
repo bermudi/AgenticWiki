@@ -29,6 +29,10 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - **Human-In-The-Loop (HITL)**: Used during the planning phase to reach a "Shared Design Concept."
 - **Away-From-Keyboard (AFK)**: Once the plan is granular enough, the agent can execute the "Grey Box" implementation autonomously. This approach avoids [[vibes-based-engineering]] by providing a rigorous framework for delegation.
 
+## Thread
+- [[the-human-lever]] — Grey box engineering as the core discipline of the human shift
+- [[the-agent-workflow]] — Operationalizing the HITL/AFK handoff
+
 ## Related
 - [[smart-zone-dumb-zone]] — Keeping the context small to maintain reasoning quality.
 - [[tracer-bullets]] — Vertical slices to verify Grey Box designs.
