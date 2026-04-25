@@ -10,69 +10,52 @@ description: |
 
 # Wiki Operations
 
-Detailed operational procedures for the three core wiki operations: ingest, query, and lint.
+Detailed operational procedures for wiki operations: ingest, query, and lint.
 
-Read this skill when performing wiki maintenance tasks. For wiki structure and conventions, see `AGENTS.md` in the project root.
+For wiki structure and conventions, see `AGENTS.md` in the project root.
 
 ## Ingest
 
-Processing a new source into the wiki. The core operation.
+Processing a new source into the wiki. **Two-phase operation: filing, then analysis.**
 
-### Step 1: Read and understand the source
+### Phase 1: Filing
+
+The mechanical work of extracting knowledge from the source and filing it into the wiki.
+
+#### Step 1: Read and understand the source
 
 1. Read the source file from `raw/` (or process inline content the user shared)
-2. Identify: key entities (people, orgs, projects), key concepts, key claims, relationships to existing wiki pages
-3. **Read existing threads.** Before creating anything, read the current thread pages to understand the wiki's accumulated theory. Identify where the new source fits, reinforces, or contradicts.
-4. Discuss the source with the user — highlight what you found interesting, flag contradictions with existing threads, ask about emphasis
+2. Identify: key entities (people, orgs, projects), key concepts, key claims
+3. Read existing thread pages to understand the wiki's accumulated theory
+4. Discuss the source with the user — highlight what you found interesting, ask about emphasis
 
-### Step 2: Create/update wiki pages
+#### Step 2: Create/update wiki pages
 
-For each ingest, you will typically touch 5-15 pages. Work through this checklist:
+Work through this checklist:
 
-- [ ] **Source file**: If the source is a YouTube video, create `raw/yt-<descriptive-slug>.md` first — a metadata stub with key points extracted during processing. This is the durable record (see AGENTS.md for format)
+- [ ] **Source stub**: If YouTube video, create `raw/yt-<descriptive-slug>.md` (see AGENTS.md for format)
 - [ ] **Source page**: Create `wiki/src/<source-name>.md` with full summary and key takeaways
-- [ ] **Entity pages**: Create or update a page for each significant entity mentioned. If updating, add new information and note how it relates to existing content
-- [ ] **Concept pages**: Create or update a page for each significant concept. Connect to related concepts already in the wiki
-- [ ] **Contradictions**: If the source contradicts existing wiki content, add a `> [!warning] Contradiction` callout on the relevant page **and** on the thread page. Surface the contradiction in your ingest summary so the human can decide which direction to take. Do not silently overwrite or reconcile.
-- [ ] **Departures**: If a source takes a novel position that doesn't contradict but departs from the established theory (a new frame, a different emphasis, a dissenting view), note this explicitly in the thread page as a departure. Use a `> [!note] Departure` callout.
-- [ ] **Cross-references**: Add `[[new-page]]` links to at least 2-3 existing pages' `## Related` sections
-- [ ] **Threads**: After creating/updating concepts, update existing thread pages to incorporate new evidence or nuances from the source. If the source introduces a coherent argument that doesn't fit any existing thread, propose a new thread page to the human — explain how it relates to existing threads (supports, contradicts, extends).
-- [ ] **Thread backlinks**: When adding a concept to a thread, add a `## Thread` section to the concept page linking to the thread. When a concept appears in multiple threads, list all of them.
+- [ ] **Entity pages**: Create or update a page for each significant entity mentioned
+- [ ] **Concept pages**: Create or update a page for each significant concept. Add `## Thread` section linking to relevant threads. Connect to related concepts via `## Related`
+- [ ] **Thread updates**: Update existing thread pages to incorporate new concepts and claims. If the source introduces a coherent argument that doesn't fit any existing thread, propose a new thread to the human
+- [ ] **Bidirectional cross-refs**: For each new page, edit at least 2-3 **existing** pages to add backlinks in their `## Related` sections. New→old AND old→new.
+- [ ] **Index and log**: Add all new pages to `wiki/index.md` under the correct category. Append entry to `wiki/log.md`
 
-### Step 3: Theory summary
+#### Step 3: Present filing summary to the human
 
-Before finalizing, synthesize the impact on the wiki's accumulated theory:
+Show what was created and updated. **Do NOT commit yet.**
 
-- Which threads gained support? Which took a hit?
-- Were any contradictions or departures introduced?
-- Does the overall picture shift meaningfully?
-- Are there emerging themes that might warrant a new thread?
+Then read [the analytical pass instructions](references/analytical-pass.md) and complete Phase 2 before committing.
 
-Present this to the human as part of your ingest summary. **Don't just list what was added — tell them how the theory changed.**
+### Phase 2: Analysis
 
-### Step 4: Update index, log, and commit
+After filing is complete, load [analytical-pass.md](references/analytical-pass.md) and follow those instructions. This is a separate cognitive pass — you re-read existing wiki pages critically to find contradictions, departures, and gaps.
 
-- [ ] Add all new pages to `wiki/index.md` under the correct category
-- [ ] Update one-line summaries for any pages that changed significantly
-- [ ] Append an entry to `wiki/log.md` following the format:
-  ```
-  ## [YYYY-MM-DD] ingest | Source Title
-
-  - Created: [[page-1]], [[page-2]]
-  - Updated: [[page-3]], [[page-4]]
-  - Sources: `raw/filename.md`
-  - Notes: brief observations including contradictions/departures
-  ```
-- [ ] **Commit**: Stage and commit all changes with a descriptive message:
-  ```bash
-  git add -A
-  git commit -m "ingest: <source title> — <brief summary>"
-  ```
-  Mention contradictions in the commit message if any were flagged.
+**Do not skip Phase 2.** It is not optional.
 
 ### Batch ingest
 
-If the user wants to process multiple sources at once, repeat the full checklist per source but batch the index and log updates — update `index.md` once at the end and write one log entry covering all sources.
+If processing multiple sources, complete both phases per source. Batch index and log updates — update `index.md` once at the end and write one log entry covering all sources.
 
 ## Query
 
@@ -140,7 +123,9 @@ done
 echo '=== Concepts missing Thread section (but linked from a thread) ==='
 grep -roh '\[\[[a-z0-9-]*\]\]' wiki/threads/ | sort -u | while read link; do
   clean="${link//[[/}"; clean="${clean//]]/}"
-  grep -qL "Thread" "wiki/concepts/${clean}.md" 2>/dev/null && echo "  MISSING: ${clean} has no ## Thread section"
+  if [ -f "wiki/concepts/${clean}.md" ]; then
+    grep -q "## Thread" "wiki/concepts/${clean}.md" || echo "  MISSING: ${clean} has no ## Thread section"
+  fi
 done
 
 echo '=== Threads referenced from concepts but not found ==='
