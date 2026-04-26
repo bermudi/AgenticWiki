@@ -33,6 +33,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 ### Mario Zechner
 - [[building-pi-in-a-world-of-slop]] — Minimalism, malleability, and avoiding "slop" in AI coding.
 
+### AI Simplified
+- [[src/why-lms-hallucinate]] — An overview of why LLMs produce factually incorrect info.
+
 ### Matt Pocock
 - [[software-fundamentals-matter-more-than-ever]] — Why deep modules and interfaces matter more in the age of AI.
 - [[ai-coding-for-real-engineers]] — Moving beyond Vibe Coding toward structured engineering with agents.
@@ -43,6 +46,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
+- [[hallucination]] — Factually incorrect or unfaithful output generated with high confidence.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.

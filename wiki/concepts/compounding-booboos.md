@@ -12,7 +12,7 @@ tags: [concept, ai, reliability]
 
 ## Overview
 
-Because AI agents often lack a deep understanding of the entire system architecture, they may introduce minor bugs or stylistic inconsistencies ("booboos"). If these are not caught during human review, subsequent agent actions are built upon this flawed foundation, leading to a cascade of errors.
+Because AI agents often lack a deep understanding of the entire system architecture, they may introduce minor bugs, stylistic inconsistencies, or outright [[hallucination|hallucinations]]. If these are not caught during human review, subsequent agent actions are built upon this flawed foundation, leading to a cascade of errors.
 
 ## Mitigation
 
@@ -26,6 +26,7 @@ Because AI agents often lack a deep understanding of the entire system architect
 ## Related
 
 - [[slop]] — The accumulation of booboos results in slop.
+- [[hallucination]] — A primary source of the "booboos" that compound.
 
 ## Sources
 

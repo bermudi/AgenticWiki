@@ -8,6 +8,7 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-reinventing-software-panel.md
+  - raw/yt-why-lms-hallucinate.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop]
 ---
 
@@ -57,6 +58,7 @@ Delegation without design authority is abdication. The human isn't less importan
 - [[strategic-vs-tactical-programming]] — Human as strategist, AI as tactician
 - [[shared-design-concept]] — The "theory of the code" both human and agent must share
 - [[deep-vs-shallow-modules]] — Deep modules as the ideal delegation target
+- [[hallucination]] — The technical reason why agents require human design authority and verification
 - [[verification-loop]] — Automated proof replacing human trust
 - [[aesthetics-is-truth]] — Beauty as a proxy for technical correctness and quality
 
@@ -71,4 +73,5 @@ Delegation without design authority is abdication. The human isn't less importan
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loops, code intelligence
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Observability, minimalism as a structural safeguard
 - `raw/yt-dhh-ai-pilled.md` — The "AI-pilled" workflow and aesthetics as truth
+- `raw/yt-why-lms-hallucinate.md` — Establishes the technical baseline for why verification is non-negotiable.
 
