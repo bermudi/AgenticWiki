@@ -34,6 +34,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[building-pi-in-a-world-of-slop]] — Minimalism, malleability, and avoiding "slop" in AI coding.
 
 ### Matt Pocock
+- [[why-llms-hallucinate]] — Why LLMs make things up and how to ground them.
 - [[software-fundamentals-matter-more-than-ever]] — Why deep modules and interfaces matter more in the age of AI.
 - [[ai-coding-for-real-engineers]] — Moving beyond Vibe Coding toward structured engineering with agents.
 
@@ -45,6 +46,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
+- [[hallucination]] — The technical causes and types of LLM fabrications.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.

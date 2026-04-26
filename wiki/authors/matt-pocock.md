@@ -2,7 +2,7 @@
 title: Matt Pocock
 created: 2026-04-24
 updated: 2026-04-25
-sources: ["raw/yt-ai-coding-for-real-engineers.md"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
@@ -19,3 +19,4 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 ## Sources
 - [[software-fundamentals-matter-more-than-ever]]
 - [[ai-coding-for-real-engineers]]
+- [[why-llms-hallucinate]]

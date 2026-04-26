@@ -8,6 +8,7 @@ sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-reinventing-software-panel.md
+  - raw/yt-why-llms-hallucinate.md
 tags: [thread, ai-engineering, code-quality, failure-modes]
 ---
 
@@ -27,7 +28,7 @@ The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent 
 
 [[dex-horthy|Dex Horthy]] frames this as the failure mode of **[[vibes-based-engineering]]**: prompting an LLM and accepting the output without providing adequate context or running verification. This works for isolated, trivial tasks. In a complex codebase — where knowledge is distributed across files, implicit dependencies exist, and architectural patterns must be followed — vibes-based engineering produces code that *looks* right but violates the system's invariants.
 
-[[matt-pocock|Matt Pocock]] adds a structural angle: the problem is worst when engineers skip the design phase entirely and jump straight from a vague spec to generated code — what he calls the failure mode of the **[[ai-design-loop]]**.
+[[matt-pocock|Matt Pocock]] adds a structural angle: the problem is worst when engineers skip the design phase entirely and jump straight from a vague spec to generated code — what he calls the failure mode of the **[[ai-design-loop]]**. He also identifies **[[hallucination]]** as the technical fuel for slop—the statistical nature of LLMs means they will inevitably fabricate details (intrinsic or extrinsic) that look plausible but are functionally incorrect.
 
 [[dhh|David Heinemeier Hansson]] identifies a similar risk in the "AI as autocomplete" paradigm. When AI is used merely to finish a sentence or a line of code, it encourages a hyper-tactical focus that ignores the overall architecture, inevitably leading to a fragmented, unmaintainable system. He argues that true value comes from treating AI as an agent that understands the high-level intent, rather than a glorified typewriter.
 
@@ -49,6 +50,7 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 
 - [[slop]] — Low-quality AI output that degrades system health
 - [[compounding-booboos]] — Small errors accumulating into systemic failure
+- [[hallucination]] — The technical mechanism for generating false info
 - [[vibes-based-engineering]] — Accepting AI output without context or verification
 - [[verification-loop]] — Automated feedback loops as the primary defense
 
@@ -57,5 +59,6 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Defines slop and compounding booboos
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Diagnosis of vibes-based engineering in complex codebases
 - `raw/yt-ai-coding-for-real-engineers.md` — The design-loop failure mode and context management
+- `raw/yt-why-llms-hallucinate.md` — The technical causes of hallucination as the source of slop.
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
 
