@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-how-agents-use-dev-tools.md"]
 tags: ["concept", "agent-tooling", "developer-tools", "dx"]
 ---
@@ -54,6 +54,17 @@ Agents make it trivial to scale from one agent to hundreds. This means 10-person
 ## The Self-Tooling Horizon
 
 Research shows agents that construct their own tools outperform those with pre-built harnesses. Foundational tooling requires deep domain expertise agents don't yet have, but the possibility that agents will modify tools to suit their own needs is real. This connects to [[malleable-agents]] — the agent isn't just using tools, it's extending them.
+
+## Ronacher's Practical Instantiation
+
+[[armin-ronacher|Armin Ronacher]] embodies many of these principles in shell scripts and Makefiles rather than formal tool protocols:
+
+- **Misuse resistance**: Process manager with pidfile — double-spawn produces a clear error, not a silent port conflict.
+- **Observability by default**: Dual-output logging (terminal + file) so agents can read logs autonomously.
+- **Speed over feature richness**: No MCP unless the alternative is unreliable. Plain shell scripts are faster and more reliable than protocol servers.
+- **Emergent tools**: Agents write temporary scripts; the daemon pattern gives them a fast evaluation path within the application context.
+
+See [[agent-friendly-tooling]] for the full practical treatment.
 
 ## Thread
 

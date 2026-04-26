@@ -13,6 +13,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## ✍️ Authors
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
+- [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
 - [[dex-horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
@@ -37,6 +38,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 ### Mario Zechner
 - [[building-pi-in-a-world-of-slop]] — Minimalism, malleability, and avoiding "slop" in AI coding.
 
+### Armin Ronacher
+- [[agentic-coding-recommendations]] — Practical guide to agentic coding: language choice (Go wins), tooling must be fast and observable, simplicity is a force multiplier.
+
 ### Matt Pocock
 - [[why-llms-hallucinate]] — Why LLMs make things up and how to ground them.
 - [[software-fundamentals-matter-more-than-ever]] — Why deep modules and interfaces matter more in the age of AI.
@@ -45,6 +49,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## 🧠 Concepts
 - [[tool-design-for-agents]] — Developer tools need redesigned output, confidence levels, and trust models for agentic consumers.
+- [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as the practical craft of tooling for agents.
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.

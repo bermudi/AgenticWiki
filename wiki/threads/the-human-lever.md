@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -59,6 +59,15 @@ The unifying principle across all sources:
 > **The more code the AI writes, the more your design decisions matter.**
 
 Delegation without design authority is abdication. The human isn't less important in an AI-assisted workflow — they're *more* important, because the cost of a bad design decision is amplified by the speed at which the agent will faithfully implement it.
+
+## Ronacher's Simplicity Imperative
+
+[[armin-ronacher|Armin Ronacher]] reinforces the human lever with practical prescriptions:
+
+- **Functions over classes, plain SQL over ORMs**: The simpler the code, the less the human needs to verify. Complex abstractions that obscure what's happening make the grey box opaque.
+- **Local permission checks**: Hiding auth in config files or separate modules guarantees the agent will forget to add them to new routes. The human's design authority extends to placing checks where the agent *will see them*.
+- **Conservative upgrades**: Agent-cheapened upgrades invalidate the shared theory embedded in comments and patterns. The human must be *more* conservative, not less.
+- **More code, fewer dependencies**: Generated code the agent can maintain beats library sprawl the agent can't control.
 
 ## Concepts in this thread
 

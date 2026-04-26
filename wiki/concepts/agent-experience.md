@@ -1,8 +1,8 @@
 ---
 title: Agent Experience (AX)
 created: 2026-04-25
-updated: 2026-04-25
-sources: ["raw/yt-reinventing-software-panel.md", "raw/yt-how-agents-use-dev-tools.md"]
+updated: 2026-04-26
+sources: ["raw/yt-reinventing-software-panel.md", "raw/yt-how-agents-use-dev-tools.md", "raw/agentic-coding-recommendations.md"]
 tags: ["concept", "dx", "ax", "software-design", "tool-design"]
 ---
 
@@ -23,6 +23,12 @@ As suggested by Martin Fowler and Kent Beck in the [[reinventing-software-panel]
 - **Clear Naming:** Helps the LLM's semantic understanding.
 - **Consistency:** Reduces the amount of "novelty" the agent must process.
 
+## Language as AX Optimization
+
+[[armin-ronacher|Armin Ronacher]] adds a concrete, language-specific dimension: Go's structural interfaces, explicit context system, and fast test caching make it inherently more agent-friendly than Python (slow boot, fixture magic, async event loop issues) or JavaScript (high ecosystem churn). Language choice is an AX decision.
+
+He also extends AX from code structure to **infrastructure design**: Makefile targets, dual-output logging, and pidfile-protected process managers are all AX optimizations. The codebase isn't just the source code — it's everything the agent interacts with.
+
 ## Why AX Matters
 
 As software development shifts toward agentic workflows, the "usability" of a codebase will be measured by how effectively an agent can operate within it. A codebase with poor AX will lead to more [[slop]] and more frequent [[compounding-booboos]].
@@ -42,8 +48,11 @@ As software development shifts toward agentic workflows, the "usability" of a co
 - [[kent-beck]] — Co-originator of the AX/DX convergence insight.
 - [[zanie-blue]] — Extended AX from codebases to tool design.
 - [[tool-design-for-agents]] — Extends AX from codebases to the tools agents use.
+- [[agent-friendly-tooling]] — The practical craft: speed, observability, misuse resistance.
+- [[armin-ronacher]] — Language choice and infrastructure as AX optimization.
 
 ## Sources
 
 - `raw/yt-reinventing-software-panel.md`
 - `raw/yt-how-agents-use-dev-tools.md`
+- `raw/agentic-coding-recommendations.md`

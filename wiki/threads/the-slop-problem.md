@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -48,6 +48,14 @@ The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent 
 ## What the Sources Agree On
 
 All these sources agree: the answer isn't to use less AI. It's to change *how* you use it. The human must shift from writing code to **owning design boundaries and verifying outcomes**. [[aesthetics-is-truth|Aesthetic decay]] is often the first visible sign that slop is accumulating. That argument continues in [[the-human-lever]].
+
+## Ronacher on Slop Prevention
+
+[[armin-ronacher|Armin Ronacher]] adds language choice and tooling speed as slop prevention mechanisms:
+
+- **Language as slop factor**: Python's magic (pytest fixtures, async event loops) produces incorrect code that even the agent loop struggles to fix. Go's simplicity and explicitness reduce the surface area for agent errors.
+- **Tooling speed as slop factor**: Slow tools mean fewer verification cycles per session. The agent writes more code between checks, increasing the chance of uncaught errors.
+- **Upgrade-induced slop**: Agent-cheapened upgrades invalidate stale decision comments and patterns. The agent builds on outdated assumptions — a subtle form of slop that passes tests.
 
 ## Concepts in this thread
 
