@@ -7,6 +7,7 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-software-fundamentals-matter-more-than-ever.md
   - raw/yt-dhh-ai-pilled.md
+  - raw/yt-claude-code-feature-build.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management]
 ---
 
@@ -18,7 +19,7 @@ tags: [thread, ai-engineering, workflow, agent-design, context-management]
 
 [[matt-pocock|Matt Pocock]] describes the workflow as two distinct phases:
 
-1. **The Destination** (the PRD): Defining *what* you're building. This is a human-led, high-stakes activity. Tools like `grill-me` force the human to articulate the [[shared-design-concept]] before writing a single line of code.
+1. **The Destination** (the PRD): Defining *what* you're building. This is a human-led, high-stakes activity. Tools like `grill-me` force the human to articulate the [[shared-design-concept]] and establish a [[ubiquitous-language]] before writing a single line of code.
 2. **The Journey** (the Kanban): Breaking the Destination into granular, actionable steps. Each step should be small enough to stay in the [[smart-zone-dumb-zone|Smart Zone]].
 
 The key discipline: **never skip the Destination**. Going straight from a vague idea to generated code is the failure mode of the [[ai-design-loop]] — it produces code that lacks a coherent design and compounds into [[the-slop-problem|slop]]. [[dhh|David Heinemeier Hansson]] argues that we are in the era of the **[[peak-programmer]]**, where the ability to automate this "Journey" means that the "Destination" (the why and the what) is now the primary differentiator and value of an engineer.
@@ -28,7 +29,7 @@ The key discipline: **never skip the Destination**. Going straight from a vague 
 [[grey-box-engineering|Grey Box Engineering]] defines the handoff between the two phases:
 
 - **HITL (Human-In-The-Loop)**: Used during planning. The human defines interfaces, types, and the overall architecture. The agent may participate in refining the design, but the human has final authority.
-- **AFK (Away-From-Keyboard)**: Once the plan is granular enough, the agent executes autonomously. Each task is bounded by the interfaces and verified by the [[verification-loop]].
+- **AFK (Away-From-Keyboard)**: Once the plan is granular enough, an [[afk-agent]] executes autonomously. Each task is bounded by the interfaces and verified by the [[verification-loop]].
 
 This isn't a one-time handoff — it's a cycle. After each AFK execution, the human reviews the outcome (via tests, not line-reading) and adjusts the plan before the next AFK session.
 
@@ -64,9 +65,11 @@ Putting it together:
 
 ## Concepts in this thread
 
+- [[afk-agent]] — Agents that implement features in the background
 - [[ai-design-loop]] — Iterating with an agent to refine plans
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality via context hygiene
 - [[tracer-bullets]] — Vertical slices for early end-to-end validation
+- [[ubiquitous-language]] — Shared terminology to align human and agent
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves
 - [[verification-loop]] — Automated feedback for each execution step
 - [[peak-programmer]] — The shift from manual implementation to high-level design and verification
@@ -82,4 +85,5 @@ Putting it together:
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Context management, malleability, minimalism
 - `raw/yt-software-fundamentals-matter-more-than-ever.md` — AI design loop, shared design concept
 - `raw/yt-dhh-ai-pilled.md` — DHH on the shift from manual implementation to agentic workflows
+- `raw/yt-claude-code-feature-build.md` — Ubiquitous Language, AFK agents (Ralph), PRD to Issues pipeline
 

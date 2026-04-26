@@ -37,9 +37,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[why-llms-hallucinate]] — Why LLMs make things up and how to ground them.
 - [[software-fundamentals-matter-more-than-ever]] — Why deep modules and interfaces matter more in the age of AI.
 - [[ai-coding-for-real-engineers]] — Moving beyond Vibe Coding toward structured engineering with agents.
+- [[yt-claude-code-feature-build]] — Building a complex feature with an AI agent (Claude Code).
 
 ## 🧠 Concepts
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
+- [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
@@ -54,10 +56,12 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
 - [[strategic-vs-tactical-programming]] — Prioritizing long-term health over immediate tactical fixes.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
+- [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 
 ## 🛠️ Projects & Tools
+- [[claude-code]] — Agentic CLI tool for code exploration and editing.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.

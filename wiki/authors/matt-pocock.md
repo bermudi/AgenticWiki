@@ -2,7 +2,7 @@
 title: Matt Pocock
 created: 2026-04-24
 updated: 2026-04-25
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
@@ -15,8 +15,11 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[smart-zone-dumb-zone]] — Managing LLM context quality.
 - [[tracer-bullets]] — Vertical slices over horizontal layers.
 - [[deep-vs-shallow-modules]] — Module design for agent navigation.
+- [[ubiquitous-language]] — Ensuring human and agent use the same terminology.
+- [[afk-agent]] — Leveraging background agents for implementation tasks.
 
 ## Sources
 - [[software-fundamentals-matter-more-than-ever]]
 - [[ai-coding-for-real-engineers]]
 - [[why-llms-hallucinate]]
+- [[yt-claude-code-feature-build]]
