@@ -8,7 +8,7 @@ tags: ["software-architecture", "clean-code"]
 
 # Deep vs. Shallow Modules
 
-> A concept from *A Philosophy of Software Design* (John Ousterhout) that is critical for managing AI agents.
+> Deep modules provide simple interfaces that hide complex implementation; shallow modules expose their internals. From Ousterhout's design philosophy, deep modules are the ideal delegation unit for AI agents — the human owns the small interface, the agent owns the large implementation.
 
 ## Definition
 

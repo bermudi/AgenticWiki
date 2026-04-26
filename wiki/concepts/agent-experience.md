@@ -51,6 +51,7 @@ As software development shifts toward agentic workflows, the "usability" of a co
 - [[tool-design-for-agents]] — Extends AX from codebases to the tools agents use.
 - [[agent-friendly-tooling]] — The practical craft: speed, observability, misuse resistance.
 - [[armin-ronacher]] — Language choice and infrastructure as AX optimization.
+- [[code-intelligence]] — Code intelligence provides the high-fidelity context that enables good AX.
 
 ## Sources
 

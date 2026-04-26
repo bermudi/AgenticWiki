@@ -21,6 +21,8 @@ He is known for his data-driven analysis of the software industry, hiring trends
 ## Related
 
 - [[dhh]] — Interviewed on his podcast.
+- [[martin-fowler]] — Panelist in the Reinventing Software discussion he moderated.
+- [[kent-beck]] — Panelist in the Reinventing Software discussion he moderated.
 - `raw/yt-reinventing-software-panel.md` — Moderated the panel with Martin Fowler and Kent Beck.
 - `raw/yt-dhh-ai-pilled.md` — The full interview with DHH on AI-pilled development.
 

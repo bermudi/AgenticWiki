@@ -40,6 +40,7 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[dex-horthy]] — The primary critic of vibes-based engineering.
 - [[cody]] — Designed to counter vibes with real codebase context.
 - [[ai-design-loop]] — The structured alternative to vibe coding.
+- [[hallucination]] — Vibe coding accepts hallucinated code without verification.
 
 ## Sources
 

@@ -36,6 +36,7 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 
 ## Thread
 - [[the-agent-workflow]] — Context hygiene as the operational challenge of the workflow
+- [[tool-design-for-agents]] — Tool output as a context threat; designing tools to keep agents in the Smart Zone
 
 ## Related
 
@@ -45,6 +46,10 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[ai-design-loop]] — The loop degrades when the Dumb Zone is hit.
 - [[tool-design-for-agents]] — Tool output design as a context management concern.
 - [[zanie-blue]] — Identified tool output as a major contributor to Dumb Zone drift.
+- [[hallucination]] — The Dumb Zone increases hallucination risk.
+- [[plan-disposability]] — Plan resets as a Smart Zone recovery strategy.
+- [[ralph-loop]] — One-task-per-iteration sidesteps the Dumb Zone entirely.
+- [[agent-friendly-tooling]] — Verbose tool output is a primary cause of Dumb Zone drift.
 
 ## Sources
 

@@ -8,7 +8,7 @@ tags: ["engineer", "cto", "sourcegraph"]
 
 # Dex Horthy
 
-> CTO of [[sourcegraph]] and a key figure in the development of [[cody]].
+> CTO of Sourcegraph and advocate for "No Vibes" engineering — replacing superficial AI coding with deep [[code-intelligence]] and rigorous [[verification-loop|verification loops]].
 
 ## Overview
 

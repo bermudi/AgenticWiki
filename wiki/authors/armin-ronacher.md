@@ -36,6 +36,8 @@ His emphasis on Go's structural interfaces and explicit context system adds a co
 - [[tool-design-for-agents]] — His tooling philosophy is a concrete instantiation
 - [[agent-experience]] — Language choice as AX optimization
 - [[the-agent-workflow]] — His workflow practices (AFK, parallelization)
+- [[agent-friendly-tooling]] — Primary source for Makefile patterns, daemon pattern, misuse resistance
+- [[slop]] — Conservative upgrades and tooling speed as slop prevention
 
 ## Sources
 

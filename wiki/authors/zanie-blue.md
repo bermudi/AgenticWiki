@@ -27,6 +27,9 @@ Zanie Blue works at Astral, building tools for Python developers (Ruff, ty, uv).
 - `raw/yt-how-agents-use-dev-tools.md` — The source talk.
 - [[astral]] — Their employer.
 - [[tool-design-for-agents]] — The core concept from their talk.
+- [[agent-experience]] — Extended AX from codebases to tool design.
+- [[malleable-agents]] — Advocate for plugins as agent memory and self-tooling.
+- [[smart-zone-dumb-zone]] — Identified tool output as a major contributor to Dumb Zone drift.
 
 ## Sources
 

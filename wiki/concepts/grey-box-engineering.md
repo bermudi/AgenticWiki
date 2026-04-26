@@ -25,6 +25,9 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - **Tests**: Catch logic errors (Red-Green-Refactor).
 - **Tracer Bullets**: Catch integration errors.
 
+> [!warning] Contradiction
+> [[compounding-booboos|Compounding Booboos]] advocates treating agent code with "the same (or more) scrutiny as human-written code" — implying line-by-line human review. Grey Box Engineering argues the opposite: humans review interfaces and outputs, not implementation lines. Both agree on *rigor*; the disagreement is on *mechanism* — Grey Box delegates line-level scrutiny to the automated verification loop.
+
 ## The HITL/AFK Loop
 - **Human-In-The-Loop (HITL)**: Used during the planning phase to reach a "Shared Design Concept."
 - **Away-From-Keyboard (AFK)**: Once the plan is granular enough, the agent can execute the "Grey Box" implementation autonomously. This approach avoids [[vibes-based-engineering]] by providing a rigorous framework for delegation.
@@ -45,6 +48,10 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - [[shared-design-concept]] — The human owns the concept; the agent implements it.
 - [[slop]] — Grey box engineering is the primary alternative to slop generation.
 - [[ai-design-loop]] — The design loop feeds into grey box delegation.
+- [[strategic-vs-tactical-programming]] — Grey box engineering is strategic programming in practice.
+- [[ubiquitous-language]] — The language defines the boundaries of the grey box.
+- [[pi]] — Pi's observability enables grey box engineering in practice.
+- [[mario-zechner]] — Creator of pi, advocate for grey box engineering.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

@@ -1,7 +1,7 @@
 ---
 title: Malleable Agents
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-building-pi-in-a-world-of-slop.md", "raw/yt-how-agents-use-dev-tools.md"]
 tags: ["concept", "ai-agents", "design-patterns", "plugins"]
 ---
@@ -29,6 +29,7 @@ In the pi agent harness, malleability is achieved through:
 
 ## Thread
 - [[the-agent-workflow]] — Malleability as a tool for context management mid-session
+- [[tool-design-for-agents]] — Plugin extensibility and self-tooling as a tool design principle for agents
 
 ## Related
 

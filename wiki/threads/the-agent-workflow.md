@@ -2,11 +2,16 @@
 title: The Agent Workflow
 created: 2026-04-25
 updated: 2026-04-26
+sources:
+  - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-software-fundamentals-matter-more-than-ever.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-claude-code-feature-build.md
   - raw/yt-how-agents-use-dev-tools.md
+  - raw/agentic-coding-recommendations.md
+  - raw/how-to-ralph-wiggum.md
+  - raw/ralph-wiggum-playbook.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 

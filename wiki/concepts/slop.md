@@ -28,17 +28,22 @@ He also identifies tooling speed as a slop factor: slow tools mean fewer agent i
 
 ## Thread
 - [[the-slop-problem]] — Slop as the central threat in AI-assisted engineering
+- [[tool-design-for-agents]] — Slow, noisy tools produce more slop; tool design as a slop prevention mechanism
 
 ## Related
-
 - [[pi]] — Designed to combat slop through observability.
 - [[grey-box-engineering]] — The alternative: human-in-the-loop engineering.
 - [[aesthetics-is-truth]] — Aesthetic decay is a leading indicator of slop.
 - [[hallucination]] — Hallucinations are the atomic source of slop.
+- [[compounding-booboos]] — Hallucinated code compounds into systemic errors.
+- [[vibes-based-engineering]] — The root cause of most slop: accepting AI output without verification.
 - [[agent-experience]] — Poor AX leads to more slop.
-- [[mario-zechner]] — Coined and defined the term in the AI engineering context.
+- [[mario-zechner]] — Coined and defined slop in the AI engineering context.
 - [[agent-friendly-tooling]] — Slow tools produce more slop by limiting verification cycles.
 - [[armin-ronacher]] — Conservative upgrades and tooling speed as slop prevention.
+- [[backpressure]] — Lack of backpressure produces slop in autonomous loops.
+- [[compounding-booboos]] — Booboos accumulate into slop over time.
+- [[vibes-based-engineering]] — The root cause of most slop: accepting AI output without verification.
 
 ## Sources
 

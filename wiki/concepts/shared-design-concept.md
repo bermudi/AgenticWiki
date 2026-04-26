@@ -39,12 +39,14 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[verification-loop]] — Proving the implementation matches the shared concept.
 - [[aesthetics-is-truth]] — Aesthetics help signal when the shared concept is diverging.
 - [[agent-experience]] — AX is high when the agent shares the design concept.
+- [[the-human-lever]] — The shared design concept as the core of human design authority.
+- [[the-slop-problem]] — Without a shared concept, each agent session drifts from the architecture.
 
 ## Thread
 - [[the-human-lever]] — The shared design concept as the core of human design authority
 - [[the-slop-problem]] — Without a shared concept, each agent session drifts from the architecture
 - [[the-agent-workflow]] — The design concept must be explicit for the agent to participate in it
 
----
-**Source**: `raw/yt-software-fundamentals-matter-more-than-ever.md` (Matt Pocock)
-**Reference**: Peter Naur, *Programming as Theory Building* (1985)
+## Sources
+- `raw/yt-software-fundamentals-matter-more-than-ever.md` — Matt Pocock on making the design concept explicit for AI agents
+- Peter Naur, *Programming as Theory Building* (1985) — The theoretical origin: programming as building a shared theory of the system

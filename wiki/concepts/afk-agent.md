@@ -44,6 +44,7 @@ This creates a temporal parallelism — sometimes called the **"day shift / nigh
 
 ## Thread
 - [[the-agent-workflow]] — AFK is the "execution" phase of the modern agentic workflow.
+- [[the-human-lever]] — The human shifts from implementation to QA and design; AFK agents execute under human-owned boundaries.
 
 ## Related
 
@@ -53,6 +54,7 @@ This creates a temporal parallelism — sometimes called the **"day shift / nigh
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum AFK implementation.
 - [[backpressure]] — The convergence mechanism AFK agents need.
 - [[plan-disposability]] — Plans as ephemeral coordination state for AFK loops.
+- [[ralph-loop]] — The canonical AFK implementation (Ralph Wiggum loop).
 - [[the-agent-workflow]] — The full pipeline from grilling through QA.
 
 ## Sources

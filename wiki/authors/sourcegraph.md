@@ -1,14 +1,14 @@
 ---
 title: Sourcegraph
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md"]
 tags: ["organization", "code-search", "ai-tools"]
 ---
 
 # Sourcegraph
 
-> A technology company building a universal code search and intelligence platform.
+> Universal code search and intelligence platform, and the company behind [[cody]] — an AI assistant that uses symbol-level [[code-intelligence]] to ground LLM responses in actual codebase structure.
 
 ## Products
 
@@ -27,6 +27,7 @@ Sourcegraph's mission is to make it so that everyone can code. They focus on sol
 
 - [[cody]] — Their flagship AI assistant.
 - [[code-intelligence]] — The core technology powering their platform.
+- [[dex-horthy]] — CTO of Sourcegraph, advocate for code intelligence in AI workflows.
 
 ## Sources
 

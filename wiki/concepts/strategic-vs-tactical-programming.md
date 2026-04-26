@@ -39,10 +39,12 @@ Matt Pocock argues that to succeed with AI, you must spend **more time being str
 - [[peak-programmer]] — Peak Programmer marks the commoditization of tactical programming.
 - [[vibes-based-engineering]] — The extreme end of tactical programming.
 - [[martin-fowler]] — Advocate for strategic design throughout his career.
+- [[the-slop-problem]] — Tactical programming produces slop.
+- [[verification-loop]] — Strategic programming requires verification to prove design intent.
 
 ## Thread
 - [[the-human-lever]] — Strategic programming as the human's primary job in the age of AI
 
----
-**Source**: `raw/yt-software-fundamentals-matter-more-than-ever.md` (Matt Pocock)
-**Origin**: John Ousterhout, *A Philosophy of Software Design*
+## Sources
+- `raw/yt-software-fundamentals-matter-more-than-ever.md` — Matt Pocock applying Ousterhout's strategic/tactical distinction to AI workflows
+- John Ousterhout, *A Philosophy of Software Design* — The original strategic vs. tactical programming framework

@@ -1,7 +1,7 @@
 ---
 title: pi
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: [raw/yt-building-pi-in-a-world-of-slop.md]
 tags: [tool, ai-agents, open-source]
 ---
@@ -32,6 +32,7 @@ Pi is composed of several modules:
 ## Thread
 - [[the-agent-workflow]] — Pi's minimalism and session model as structural safeguards for context management
 - [[the-human-lever]] — Observability as the mechanism that enables grey box engineering
+- [[tool-design-for-agents]] — Four-tool minimalism as the extreme end of tool design for agents
 
 ## Related
 - [[mario-zechner]] — Creator of pi.
@@ -40,6 +41,8 @@ Pi is composed of several modules:
 - [[claude-code]] — Peer agent tool with a different philosophy (more features, less minimal).
 - [[compounding-booboos]] — Pi's observability helps catch booboos early.
 - [[smart-zone-dumb-zone]] — Pi's session model helps stay in the Smart Zone.
+- [[astral]] — Peer tool builder adapting for agentic use.
+- [[grey-box-engineering]] — Pi's observability enables grey box engineering.
 
 ## Sources
 

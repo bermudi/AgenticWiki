@@ -1,7 +1,7 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: [raw/yt-building-pi-in-a-world-of-slop.md]
 tags: [concept, ai, reliability]
 ---
@@ -17,8 +17,11 @@ Because AI agents often lack a deep understanding of the entire system architect
 ## Mitigation
 
 - **Frequent Verification**: Running tests and linting after every agent action.
-- **High-Quality Review**: Humans must treat agent-generated code with the same (or more) scrutiny as human-written code.
+- **High-Quality Review**: Humans must review agent outputs rigorously — though the wiki's dominant thesis ([[grey-box-engineering]], [[the-human-lever]]) argues this review should focus on **outputs and interfaces**, not line-by-line code reading. The verification loop automates the line-level checking that humans can no longer scale to.
 - [[grey-box-engineering]] — Maintaining a mental model of the system to spot "booboos" early.
+
+> [!warning] Contradiction
+> This page's original guidance — "treat agent-generated code with the same (or more) scrutiny as human-written code" — implies line-by-line human review. The wiki's dominant thesis ([[grey-box-engineering]], [[the-human-lever]], Matt Pocock's workflow) argues the opposite: humans should review **outputs and interfaces**, not implementation lines, because the speed asymmetry makes line-level review impossible at scale. The verification loop (tests, types, linters) automates the scrutiny humans can no longer provide manually. Both agree on *rigor*; they disagree on *who provides it* for line-level details.
 
 ## Thread
 - [[the-slop-problem]] — Compounding booboos as the mechanism of degradation
@@ -29,6 +32,12 @@ Because AI agents often lack a deep understanding of the entire system architect
 - [[verification-loop]] — The primary defense: catch booboos before they compound.
 - [[pi]] — Designed to provide observability so booboos are visible before they cascade.
 - [[vibes-based-engineering]] — The approach that lets booboos slip through unverified.
+- [[agent-experience]] — Poor AX causes errors to compound faster.
+- [[hallucination]] — Hallucinated code that passes review becomes invisible booboos.
+- [[mario-zechner]] — Coined the term and warned about compounding errors in AI-assisted code.
+- [[backpressure]] — Backpressure catches booboos before they compound.
+- [[grey-box-engineering]] — Grey box engineering catches booboos at the interface boundary.
+- [[plan-disposability]] — Stale plans compound booboos across AFK iterations.
 
 ## Sources
 

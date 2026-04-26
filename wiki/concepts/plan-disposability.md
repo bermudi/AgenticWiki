@@ -38,6 +38,7 @@ Plan disposability is a form of [[smart-zone-dumb-zone|context management]] for 
 
 - [[the-agent-workflow]] — Plan disposability as a key discipline in the AFK loop
 - [[the-human-lever]] — The human decides when to regenerate, not the agent
+- [[the-slop-problem]] — Stale plans are a slop source; regenerating prevents compounding drift
 
 ## Related
 
@@ -46,6 +47,7 @@ Plan disposability is a form of [[smart-zone-dumb-zone|context management]] for 
 - [[smart-zone-dumb-zone]] — The same reset principle applied to coordination state
 - [[compounding-booboos]] — Stale plans compound booboos across iterations
 - [[geoffrey-huntley]] — Originator of the plan disposability principle
+- [[ralph-loop]] — Plan disposability as a core discipline of the Ralph loop
 
 ## Sources
 

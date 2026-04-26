@@ -94,6 +94,7 @@ Matt explicitly merges issues that are too small to avoid the overhead of spinni
 
 - [[the-agent-workflow]] — The most detailed AFK implementation in the wiki
 - [[the-slop-problem]] — [[backpressure|Backpressure]] as the primary defense against slop in autonomous loops
+- [[the-human-lever]] — The human engineers the environment (specs, backpressure, plan) that makes the loop converge
 
 ## Related
 

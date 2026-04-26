@@ -24,7 +24,7 @@ The mechanical work of extracting knowledge from the source and filing it into t
 
 #### Step 1: Read and understand the source
 
-1. Read the source file from `raw/` (or process inline content the user shared)
+1. Read the source file from `raw/` (or process inline content the user shared, use web-content skill as needed)
 2. Identify: key entities (people, orgs, projects), key concepts, key claims
 3. Read existing thread pages to understand the wiki's accumulated theory
 4. Discuss the source with the user — highlight what you found interesting, ask about emphasis

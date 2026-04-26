@@ -70,6 +70,9 @@ Ronacher uses MCP only when the alternative is unreliable. MCP servers themselve
 - [[verification-loop]] — Fast tools make the verification loop tight
 - [[smart-zone-dumb-zone]] — Verbose tool output pushes agents into the Dumb Zone
 - [[armin-ronacher]] — Primary source for these practices
+- [[backpressure]] — Fast, observable tools enable tighter backpressure
+- [[ralph-loop]] — AGENTS.md as agent-friendly infrastructure for the Ralph loop
+- [[slop]] — Slow, noisy tools produce more slop by limiting verification cycles
 
 ## Sources
 

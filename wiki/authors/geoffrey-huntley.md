@@ -36,6 +36,9 @@ Huntley's Ralph pattern is the most operationally detailed AFK implementation in
 - [[afk-agent]] — The concept Ralph instantiates
 - [[the-agent-workflow]] — How Ralph fits the HITL/AFK loop
 - [[claude-code]] — The agent CLI Ralph wraps
+- [[ralph-loop]] — Originator of the Ralph Wiggum technique
+- [[backpressure]] — Originated "backpressure beats direction" principle
+- [[plan-disposability]] — Originated the plan disposability principle
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: Astral
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-how-agents-use-dev-tools.md"]
 tags: ["organization", "python", "developer-tools"]
 ---
@@ -34,6 +34,7 @@ Astral is actively reassessing priorities based on the rise of agentic programmi
 - [[tool-design-for-agents]] — The design philosophy Astral is adopting.
 - [[zanie-blue]] — Key speaker on this topic.
 - [[pi]] — Another tool designed with agentic use as a primary concern.
+- [[malleable-agents]] — Plugin extensibility as a form of agent malleability; Astral is exploring this.
 
 ## Sources
 

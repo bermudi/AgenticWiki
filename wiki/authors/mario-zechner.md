@@ -1,7 +1,7 @@
 ---
 title: Mario Zechner
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/yt-ai-coding-for-real-engineers.md]
 tags: [people, engineering, ai]
 ---
@@ -31,6 +31,8 @@ Zechner emphasizes "Grey Box Engineering"—the idea that humans must remain int
 - [[malleable-agents]] — Philosophy of modifiable tools.
 - [[matt-pocock]] — Collaborator or peer in the AI engineering space.
 - [[dhh]] — Shares similar views on agentic workflows.
+- [[grey-box-engineering]] — Zechner's philosophy of human-in-the-loop AI engineering.
+- [[compounding-booboos]] — Pi's observability helps engineers catch booboos before they cascade.
 
 ## Sources
 

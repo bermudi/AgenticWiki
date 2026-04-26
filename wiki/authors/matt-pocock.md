@@ -31,3 +31,8 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[dhh]] — Peer in AI-native engineering; shares emphasis on design over implementation.
 - [[dex-horthy]] — Shares focus on rigor and verification; differs in emphasis on code intelligence over aesthetics.
 - [[mario-zechner]] — Peer in agent tooling; pi and Matt's workflows are complementary.
+- [[afk-agent]] — Primary advocate of the HITL/AFK split (Docker "Sandcastle" runner).
+- [[tracer-bullets]] — Championed tracer bullets for AI engineering.
+- [[ubiquitous-language]] — Primary advocate of ubiquitous language in AI workflows.
+- [[ralph-loop]] — Docker-based issue-driven Ralph variant (Sandcastle).
+- [[hallucination]] — Originated the intrinsic/extrinsic hallucination taxonomy used in this wiki.

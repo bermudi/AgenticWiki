@@ -56,6 +56,8 @@ This is backpressure in the literal sense — the human's testing activity *push
 - [[agent-friendly-tooling]] — Fast tools make backpressure tighter
 - [[compounding-booboos]] — Backpressure catches booboos before they compound
 - [[geoffrey-huntley]] — Originator of the "backpressure beats direction" principle
+- [[ralph-loop]] — The Ralph loop uses backpressure as its primary convergence mechanism
+- [[plan-disposability]] — Backpressure catches bad implementations; plan disposability catches bad plans
 
 ## Sources
 

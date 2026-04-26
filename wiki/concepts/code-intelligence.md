@@ -29,6 +29,8 @@ This prevents [[vibes-based-engineering]] by grounding the AI's suggestions in t
 - [[vibes-based-engineering]] — Code intelligence is the antidote to vibes-based context.
 - [[cody]] — The product that embodies code intelligence for AI coding.
 - [[dex-horthy]] — Primary advocate for code intelligence in AI workflows.
+- [[the-human-lever]] — Code intelligence as the foundation for human design authority.
+- [[agent-experience]] — Code intelligence improves AX by providing high-fidelity context.
 
 ## Sources
 

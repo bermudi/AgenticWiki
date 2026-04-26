@@ -1,7 +1,7 @@
 ---
 title: David Heinemeier Hansson (DHH)
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: [raw/yt-dhh-ai-pilled.md]
 tags: [author, rails, basecamp, 37signals]
 ---
@@ -32,6 +32,8 @@ DHH has recently undergone a shift from AI skepticism to being "AI-pilled." He v
 - [[peak-programmer]] — Central thesis of his AI advocacy.
 - [[omarchy]] — His new project, enabled by AI agents.
 - [[matt-pocock]] — Peer in AI-native engineering with complementary philosophy.
+- [[martin-fowler]] — Shares emphasis on software fundamentals in the AI era.
+- [[kent-beck]] — Co-panelist on the Reinventing Software discussion.
 
 ## Sources
 

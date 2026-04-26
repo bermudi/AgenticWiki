@@ -82,6 +82,8 @@ See [[agent-friendly-tooling]] for the full practical treatment.
 - [[slop]] — Poor tool design leads to more slop via unverified agent output
 - [[compounding-booboos]] — Better tool feedback catches booboos before they compound
 - [[astral]] — Tool builder adapting for agentic consumption
+- [[agent-friendly-tooling]] — The practical craft beneath this theory
+- [[zanie-blue]] — Primary source for the tool design theory
 
 ## Sources
 

@@ -42,10 +42,13 @@ The model generates output that is not supported by its training data or the pro
 - [[the-slop-problem]] — Hallucinations are the "atoms" of slop.
 
 ## Related
+
 - [[slop]] — The result of unverified hallucinations being accepted as truth.
 - [[verification-loop]] — The primary engineering defense against hallucinations.
 - [[smart-zone-dumb-zone]] — The Dumb Zone increases hallucination risk.
 - [[matt-pocock]] — Originator of the intrinsic/extrinsic hallucination taxonomy used here.
+- [[compounding-booboos]] — Hallucinated code compounds into systemic errors.
+- [[vibes-based-engineering]] — Vibe coding accepts hallucinated code without verification.
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations.
