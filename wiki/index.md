@@ -15,10 +15,15 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[dex-horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
+- [[kent-beck]] — Pioneer of TDD and Extreme Programming (XP).
+- [[martin-fowler]] — Pioneer of Agile and Refactoring.
 - [[mario-zechner]] — Creator of Pi.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
 
 ## 📚 Sources
+### Gergely Orosz
+- [[reinventing-software-panel]] — A discussion on AI history and craft with Fowler and Beck.
+
 ### Dex Horthy
 - [[no-vibes-allowed-dex-horthy]] — Rigorous engineering vs. vibes in complex codebases.
 
@@ -34,6 +39,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## 🧠 Concepts
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
+- [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
