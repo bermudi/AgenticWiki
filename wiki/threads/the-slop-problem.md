@@ -18,7 +18,7 @@ tags: [thread, ai-engineering, code-quality, failure-modes]
 
 Three sources in this wiki converge on the same warning: the bottleneck has shifted. It used to be writing code. Now it's **reviewing** code. AI can produce hundreds of lines in seconds, but a human still needs to understand every one of those lines before shipping them. That asymmetry is dangerous.
 
-[[mario-zechner|Mario Zechner]] calls the output of that asymmetry **[[slop]]** — code that works, sort of, but rots the codebase from the inside. He identifies the agents that mass-produce slop as **[[clankers]]**: bloated, opaque tools that "fire and forget" without giving the human enough visibility or control to catch the damage.
+[[mario-zechner|Mario Zechner]] calls the output of that asymmetry **[[slop]]** — code that works, sort of, but rots the codebase from the inside. He identifies the agents that mass-produce slop as bloated, opaque tools that "fire and forget" without giving the human enough visibility or control to catch the damage.
 
 ## How It Happens
 
@@ -43,14 +43,13 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 ## Concepts in this thread
 
 - [[slop]] — Low-quality AI output that degrades system health
-- [[clankers]] — Agents that mass-produce slop
 - [[compounding-booboos]] — Small errors accumulating into systemic failure
 - [[vibes-based-engineering]] — Accepting AI output without context or verification
 - [[verification-loop]] — Automated feedback loops as the primary defense
 
 ## Sources
 
-- `raw/yt-building-pi-in-a-world-of-slop.md` — Defines slop, clankers, compounding booboos
+- `raw/yt-building-pi-in-a-world-of-slop.md` — Defines slop and compounding booboos
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Diagnosis of vibes-based engineering in complex codebases
 - `raw/yt-ai-coding-for-real-engineers.md` — The design-loop failure mode and context management
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.

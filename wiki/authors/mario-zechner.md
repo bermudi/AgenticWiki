@@ -22,7 +22,6 @@ Zechner emphasizes "Grey Box Engineering"—the idea that humans must remain int
 
 - [[pi]] — Minimalist agent harness.
 - [[slop]] — Critique of low-quality AI code.
-- [[clankers]] — Critique of poorly designed agents.
 - [[malleable-agents]] — Philosophy of modifiable tools.
 
 ## Related

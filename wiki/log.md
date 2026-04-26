@@ -1,3 +1,9 @@
+## [2026-04-25] lint | Remove "clankers" nomenclature
+
+- Deleted: [[concepts/clankers]]
+- Updated: [[index.md]], [[src/building-pi-in-a-world-of-slop]], [[threads/the-slop-problem]], [[authors/mario-zechner]], [[concepts/slop]], [[concepts/compounding-booboos]]
+- Notes: Removed all mentions of "clankers" as requested. References rephrased to focus on "bloated agents" or "poorly designed agents" without the specific slang.
+
 ## [2026-04-25] ingest | The End of Implementation: DHH on AI-pilled Development (Revised)
 
 - Created: [[authors/dhh]], [[authors/gergely-orosz]], [[src/dhh-ai-pilled-interview]], [[concepts/aesthetics-is-truth]], [[concepts/peak-programmer]], [[projects/omarchy]]

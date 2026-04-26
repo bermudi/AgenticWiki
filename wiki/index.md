@@ -37,7 +37,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 ## 🧠 Concepts
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
-- [[clankers]] — Poorly designed agents that generate slop and lack control.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.

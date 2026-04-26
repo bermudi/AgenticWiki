@@ -26,7 +26,6 @@ Because AI agents often lack a deep understanding of the entire system architect
 ## Related
 
 - [[slop]] — The accumulation of booboos results in slop.
-- [[clankers]] — Agents prone to creating compounding errors.
 
 ## Sources
 

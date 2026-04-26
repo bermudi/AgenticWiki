@@ -8,7 +8,7 @@ tags: [ai-coding, agents, pi, engineering-philosophy]
 
 # Building pi in a World of Slop
 
-> Mario Zechner discusses the rise of AI-generated "slop," the failure of complex agents ("clankers"), and the design of [[pi]], a minimal and malleable coding agent harness. He argues for keeping humans in the loop to maintain code quality and system understanding.
+> Mario Zechner discusses the rise of AI-generated "slop," the failure of complex agents, and the design of [[pi]], a minimal and malleable coding agent harness. He argues for keeping humans in the loop to maintain code quality and system understanding.
 
 ## Summary
 
@@ -18,7 +18,7 @@ Zechner introduces [[pi]] as a reaction to bloated and opaque AI coding tools. P
 
 ## Key Takeaways
 
-- **Slop and Clankers**: High-volume, low-quality AI output is a significant risk to codebase health. Tools that encourage "fire and forget" coding are "clankers."
+- **Slop and Bloated Agents**: High-volume, low-quality AI output is a significant risk to codebase health. Tools that encourage "fire and forget" coding are often to blame.
 - **The Speed-Review Bottleneck**: AI can generate code faster than humans can review it, necessitating higher standards for agent-generated code and better human oversight.
 - **Minimalism as Performance**: According to Terminal-Bench 2.0, minimal harnesses often outperform complex ones because they provide clearer context and fewer failure points for the LLM.
 - **The Malleability Principle**: Coding agents should be "soft" and easily modified. Both the user and the agent should be able to create new tools and behaviors on the fly.
@@ -28,7 +28,6 @@ Zechner introduces [[pi]] as a reaction to bloated and opaque AI coding tools. P
 
 - [[pi]] — The agent harness discussed in the talk.
 - [[slop]] — The low-quality code the speaker warns against.
-- [[clankers]] — Poorly performing agents that generate slop.
 - [[mario-zechner]] — The creator of pi and speaker of the talk.
 - [[compounding-booboos]] — The accumulation of small errors over time.
 - [[malleable-agents]] — The philosophy of agents that can be modified.
