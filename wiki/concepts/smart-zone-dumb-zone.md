@@ -1,7 +1,7 @@
 ---
 title: Smart Zone vs. Dumb Zone
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-building-pi-in-a-world-of-slop.md", "raw/yt-how-agents-use-dev-tools.md"]
 tags: ["ai-limitations", "context-management", "tool-design"]
 ---

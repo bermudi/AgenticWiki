@@ -10,6 +10,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
 - [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
+- [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. Three sources converge on the tool as the bottleneck.
 
 ## ✍️ Authors
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.

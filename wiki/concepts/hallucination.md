@@ -1,7 +1,7 @@
 ---
 title: Hallucination
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: [raw/yt-why-llms-hallucinate.md]
 tags: [llm, reliability, engineering]
 ---
@@ -38,6 +38,7 @@ The model generates output that is not supported by its training data or the pro
 - **Verification Loops**: Implement automated checks (e.g., [[verification-loop]]) to validate model outputs.
 
 ## Thread
+- [[the-agent-workflow]] — Understanding hallucination mechanics is prerequisite for working with agents effectively
 - [[the-slop-problem]] — Hallucinations are the "atoms" of slop.
 
 ## Related

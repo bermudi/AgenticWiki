@@ -35,6 +35,7 @@ As software development shifts toward agentic workflows, the "usability" of a co
 
 ## Thread
 
+- [[tool-design-for-agents]] — AX extends from codebases to the tools agents use
 - [[the-human-lever]] — AX/DX convergence as a core argument for why the human must own design boundaries.
 
 ## Related

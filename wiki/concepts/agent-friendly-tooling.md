@@ -43,6 +43,7 @@ Agents write temporary scripts to evaluate code. These scripts must compile and 
 
 ## Thread
 
+- [[tool-design-for-agents]] — This concept is the practice layer of the thread
 - [[the-agent-workflow]] — Tool speed as the bottleneck in the AFK execution loop
 - [[the-slop-problem]] — Slow, noisy tools produce more slop by degrading agent reasoning
 - [[the-human-lever]] — Observability infrastructure as the human's window into agent activity

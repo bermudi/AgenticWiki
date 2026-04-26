@@ -38,6 +38,35 @@ This isn't a one-time handoff — it's a cycle. After each AFK execution, the hu
 
 The fix is [[tool-design-for-agents|designing tools for agentic consumption]]: machine-readable output with built-in context reduction, verbose logs persisted to files instead of returned inline, and schemas that let agents request only the data they need. This isn't a nice-to-have — as inference gets faster, tools become the bottleneck.
 
+## Know Thy Machine
+
+The workflow assumes you understand *what the machine actually does*. Treating the LLM as a black box that "just works" leads to bad planning, bad tool choices, and bad verification strategies. Several sources converge on a shared mental model of LLM internals that should inform every workflow decision:
+
+### The Machine Is Lossy Compression
+An LLM is ~10TB of training data squeezed into ~140GB of weights. It does not contain facts — it contains statistical patterns that *resemble* facts. This has two consequences:
+
+1. **Extrinsic hallucination**: When the model "remembers" something, it's reconstructing a compressed approximation, not retrieving a record. It invents npm packages that don't exist, cites papers that were never written, and fabricates APIs with plausible signatures.
+2. **Fluency over accuracy**: The training objective is next-token prediction — producing the most *plausible* continuation, not the most *true* one. RLHF exacerbates this by rewarding confident, helpful-sounding answers over hedging or admitting ignorance.
+
+### Attention Degrades Quadratically
+The [[smart-zone-dumb-zone]] isn't a vague metaphor — it's a consequence of the transformer architecture. As context fills, the model's ability to connect distant pieces of information degrades. This is why:
+- Long sessions produce worse code than fresh ones with minimal, high-quality context.
+- "Compacting" (summarizing history) preserves the vibes but loses the precision needed for implementation.
+- The Memento Strategy works: clear everything, reload only what matters.
+
+### Intrinsic vs. Extrinsic Tasks
+A practical distinction from [[matt-pocock|Matt Pocock]]:
+- **Extrinsic tasks** ask the model to reach into its weights for knowledge. "What's the API for React hooks?" — high hallucination risk.
+- **Intrinsic tasks** give the model everything it needs in context. "Given this file and these types, add a function that..." — much lower risk.
+
+The entire RAG strategy, the emphasis on providing source files in context, and the [[verification-loop]] all follow from this distinction: **engineer the workflow to make tasks intrinsic whenever possible.** Don't ask the model to remember; give it the reference.
+
+### The Agent Can't Self-Assess Quality
+Agents cannot reliably judge their own output. They don't experience confusion, they don't notice when they've drifted from the design concept, and they confidently produce code that looks right but is wrong. This is why:
+- [[backpressure]] must be mechanical (test failures, type errors), not vibes-based ("this looks good").
+- [[verification-loop|Verification loops]] are non-negotiable infrastructure, not optional quality gates.
+- The human's role in HITL isn't to read every line — it's to own the tests and types that automate the assessment.
+
 ## Managing Context
 
 Context management is the operational challenge nobody anticipated. The [[smart-zone-dumb-zone]] heuristic describes the problem: LLMs reason best in the first ~100k tokens of context. Beyond that, attention degrades quadratically. The model starts ignoring constraints, hallucinating APIs, and losing track of the design concept.
@@ -85,6 +114,8 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 
 ## Concepts in this thread
 
+- [[hallucination]] — The machine's failure mode: lossy compression masquerading as knowledge
+- [[smart-zone-dumb-zone]] — Why context hygiene matters, grounded in transformer architecture
 - [[afk-agent]] — Agents that implement features in the background
 - [[ai-design-loop]] — Iterating with an agent to refine plans
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality via context hygiene
@@ -102,6 +133,7 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 
 - [[the-slop-problem]] — What happens when you skip the planning phase
 - [[the-human-lever]] — The design authority that underpins the whole workflow
+- [[tool-design-for-agents]] — The tool layer that makes this workflow possible
 
 ## Sources
 

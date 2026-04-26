@@ -68,6 +68,7 @@ See [[agent-friendly-tooling]] for the full practical treatment.
 
 ## Thread
 
+- [[tool-design-for-agents]] — This concept is the theoretical core of the thread
 - [[the-slop-problem]] — Tool feedback as the mechanical defense against slop
 - [[the-human-lever]] — Trust models and constraining agents as part of human design authority
 - [[the-agent-workflow]] — Context reduction, scale effects, and reproducibility in the HITL/AFK loop
