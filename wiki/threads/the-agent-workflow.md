@@ -97,6 +97,26 @@ Putting it together:
 5. **Review** (HITL): After each task, verify via tests and types. Adjust the plan if needed.
 6. **Repeat** from step 4 until the Journey is complete.
 
+## Pocock's Full Pipeline
+
+[[matt-pocock|Matt Pocock]] demonstrates the most operationally detailed version of this workflow in a real feature build:
+
+1. **Grill Me**: A 22-minute Q&A session where the agent asks increasingly precise questions about the feature. The agent explores the codebase via subagents (token-efficient — the parent only gets a summary). The human dictates rough ideas; the agent challenges framing, identifies gaps, and forces specificity.
+2. **Update Ubiquitous Language**: New terms from the grilling session are added to the glossary before proceeding. This ensures the vocabulary for the PRD and implementation is already agreed upon.
+3. **Write PRD**: The agent generates a Product Requirements Document as a GitHub issue. The PRD includes user stories, implementation decisions, module boundaries, and testing decisions.
+4. **PRD to Issues**: A separate skill breaks the PRD into individual GitHub issues with blocked-by relationships. The PRD is still in context from writing it, making decomposition token-efficient.
+5. **Ralph Loop (AFK)**: An [[afk-agent]] runs in a Docker container, implementing issues sequentially, committing, and closing them. Tests and type-checks run on every commit.
+6. **QA in Parallel**: While the agent implements, the human tests the application manually, filing bugs as GitHub issues. The next Ralph iteration picks these up.
+7. **Repeat**: Ralph loop after Ralph loop until issues are exhausted.
+
+The key insight: **steps 5 and 6 happen concurrently**. The human doesn't wait for the agent to finish before starting QA. This is the "**day shift / night shift**" pattern (coined by Jamon on Twitter) — the human designs and QA's during the day, the agent implements at night.
+
+### Interface Review, Not Code Review
+
+A critical discipline in Pocock's pipeline: during the PRD phase, he reviews **module interfaces**, not implementations. When the agent proposes adding a new `materializeCourseAndLesson` method to the course write service, Matt evaluates whether it should be a new method or a parameter on an existing one — an interface decision. He doesn't care how it's implemented.
+
+During QA, he reviews **outputs** (does the feature work?), not code. Bugs are filed as GitHub issues with enough context for the AFK agent to fix them. This is [[grey-box-engineering|Grey Box Engineering]] in practice.
+
 ## Ronacher's Concrete Practices
 
 [[armin-ronacher|Armin Ronacher]] grounds the workflow in specific tooling and language choices:

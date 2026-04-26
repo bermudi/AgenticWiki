@@ -26,6 +26,22 @@ tags: [concept, workflow, agents]
 
 [[geoffrey-huntley|Geoffrey Huntley]]'s [[ralph-loop|Ralph Loop]] is the most detailed AFK implementation in this wiki — a dumb bash loop with fresh context per iteration, a plan file as shared state, and [[backpressure]] as the convergence mechanism. See [[ralph-loop]] for full mechanics.
 
+## Matt Pocock's "Sandcastle" Setup
+
+[[matt-pocock|Matt Pocock]] uses a Docker-based AFK runner (provisionally named "Sandcastle") that:
+1. Spins up a Docker container mounting the working directory
+2. Runs Claude Code inside the container to implement GitHub issues
+3. Extracts commits made inside Docker as patches
+4. Applies those patches to the local repo
+
+This approach provides isolation (the agent can't break the host environment) while keeping the full codebase available. Task selection is issue-based rather than plan-file-based: the agent pulls open GitHub issues, picks one, implements it, commits, and closes the issue.
+
+## QA as Parallel Activity
+
+A key pattern from Matt's workflow: **QA runs concurrently with AFK implementation, not after it**. While the Ralph loop implements issues in the background, Matt simultaneously tests the application, finds bugs, and files new GitHub issues. These issues become fodder for the next Ralph iteration.
+
+This creates a temporal parallelism — sometimes called the **"day shift / night shift"** pattern (coined by Jamon on Twitter): the human does the day shift (grilling, PRD writing, QA) while the agent does the night shift (implementation). The human's work queues tasks for the agent; the agent's work provides material for the human's QA.
+
 ## Thread
 - [[the-agent-workflow]] — AFK is the "execution" phase of the modern agentic workflow.
 
@@ -37,6 +53,7 @@ tags: [concept, workflow, agents]
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum AFK implementation.
 - [[backpressure]] — The convergence mechanism AFK agents need.
 - [[plan-disposability]] — Plans as ephemeral coordination state for AFK loops.
+- [[the-agent-workflow]] — The full pipeline from grilling through QA.
 
 ## Sources
 

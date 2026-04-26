@@ -73,7 +73,18 @@ project/
 - **Work-scoped branches**: Scoped `IMPLEMENTATION_PLAN.md` per branch. Scope at plan creation (deterministic) not runtime filtering (probabilistic).
 - **JTBD → Story Map → SLC releases**: Reframe specs as user journey activities, slice horizontally for Simple, Lovable, Complete releases.
 
-## Limitations
+## Matt Pocock's Issue-Based Variant
+
+[[matt-pocock|Matt Pocock]] uses a Docker-based variant (provisionally named "Sandcastle") that replaces the plan file with **GitHub issues as the task queue**. Instead of `IMPLEMENTATION_PLAN.md`, the agent pulls open GitHub issues, picks one, implements it, commits with a descriptive message, and closes the issue. Each iteration closes issues until none remain.
+
+Key differences from Huntley's original:
+- **Issues as plan**: GitHub issues replace the plan file. Blocked-by relationships encode execution order.
+- **PRD as parent issue**: The PRD lives as a GitHub issue, with child issues linking to it.
+- **PRD-to-Issues as a skill**: A separate skill decomposes the PRD into issues while the PRD is still in context — token-efficient since the agent doesn't need to re-read the PRD.
+- **QA feedback as issues**: Matt files bugs and feature requests as GitHub issues during QA, which the next Ralph iteration picks up.
+- **Human-in-the-loop labels**: Issues labeled "AFK" are agent-pickable; human-labeled issues are skipped.
+
+Matt explicitly merges issues that are too small to avoid the overhead of spinning up a full agent session for trivial changes.
 
 - **Bad specs**: Garbage in, garbage out. Assumes Phase 1 is done properly.
 - **Architectural decisions**: Novel abstractions still need human judgment. Ralph handles execution, not design.
@@ -94,6 +105,7 @@ project/
 - [[claude-code]] — The agent CLI the loop wraps
 - [[agent-friendly-tooling]] — AGENTS.md as agent-friendly infrastructure
 - [[geoffrey-huntley]] — Originator of the technique
+- [[matt-pocock]] — Docker-based issue-driven variant (Sandcastle)
 
 ## Sources
 

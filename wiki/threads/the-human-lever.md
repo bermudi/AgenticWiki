@@ -60,6 +60,12 @@ The unifying principle across all sources:
 
 Delegation without design authority is abdication. The human isn't less important in an AI-assisted workflow — they're *more* important, because the cost of a bad design decision is amplified by the speed at which the agent will faithfully implement it.
 
+## Reviewing Outputs, Not Code
+
+[[matt-pocock|Matt Pocock]]'s QA process illustrates the grey box in practice: during review, he doesn't read the agent's code. He reviews **outputs** — does the feature work? Does the UI behave correctly? When something is wrong, he files a GitHub issue with enough context for the [[afk-agent]] to fix it, without ever opening the implementation file.
+
+He also reviews **module interfaces** during the PRD phase — evaluating whether a new method should exist on a service, or whether an existing method should gain a parameter. This is pure interface design, agnostic to implementation details. The discipline: care about *what* the modules do and *how they connect*, not *how they're built inside*.
+
 ## Ronacher's Simplicity Imperative
 
 [[armin-ronacher|Armin Ronacher]] reinforces the human lever with practical prescriptions:

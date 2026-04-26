@@ -2,7 +2,7 @@
 title: Matt Pocock
 created: 2026-04-24
 updated: 2026-04-26
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
