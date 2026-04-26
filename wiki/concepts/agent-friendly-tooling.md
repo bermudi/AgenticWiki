@@ -28,8 +28,15 @@ The "LLM chaos monkey" will use tools in ways no human would. There is no such t
 
 Example: Ronacher's process manager writes a pidfile. If spawned a second time, it errors with "services already running" instead of silently failing on a port conflict.
 
+### Code Should Be Misuse-Resistant Too
+Ronacher extends the principle from tooling to code structure itself:
+- **Functions over classes**: Clear, descriptive, longer-than-usual function names. Agents navigate functions more reliably than class hierarchies.
+- **Plain SQL over ORMs**: Agents produce excellent SQL and can match it against SQL logs. ORM min-maxing produces code that's hard to debug from log output.
+- **Local permission checks**: Don't hide auth in config files or separate modules — the agent will forget to add them to new routes. Keep auth logic adjacent to the route definition.
+- **"The dumbest possible thing that will work."**
+
 ### Tools Must Provide Observability
-The agent needs to understand system state without human help. Dual-output logging (terminal + file) lets the agent read logs independently. Logged emails in debug mode let the agent complete auth flows autonomously.
+The agent needs to understand system state without human help. Dual-output logging (terminal + file) lets the agent read logs independently. Logged emails in debug mode let the agent complete auth flows autonomously — it reads the log for the magic link, no human intermediation needed.
 
 ### Emergent Tools
 Agents write temporary scripts to evaluate code. These scripts must compile and run fast to be useful in the loop. For slow codebases, Ronacher's daemon pattern — a watcher that imports and executes modules from a filesystem location and writes output to a log — gives the agent a fast evaluation path within the application context.
@@ -40,6 +47,14 @@ Agents write temporary scripts to evaluate code. These scripts must compile and 
 2. **Daemon patterns**: For codebases where reload is expensive, provide a hot-reload sandbox the agent can push code into.
 3. **Log verbosity balancing**: Informative yet concise output. Provide knobs the agent can adjust.
 4. **Incremental testing**: Go's test caching means the agent doesn't need to figure out which tests to run — the tool does it automatically.
+
+## Code Generation Over Dependencies
+
+Ronacher strongly prefers generating code over pulling in libraries. The agent can maintain generated code; dependency sprawl is harder to control. Each new dependency is a contract the agent may misunderstand, an upgrade surface that may silently break, and a chunk of unfamiliar code the agent can't reason about. Generated code, by contrast, is code the agent wrote — it understands it.
+
+## MCP as Last Resort
+
+Ronacher uses MCP only when the alternative is unreliable. MCP servers themselves are unreliable and add failure surface. Custom tools are normal shell scripts — faster to invoke, easier to debug, no protocol overhead. This aligns with the broader [[tool-design-for-agents]] minimalism thesis: fewer moving parts, clearer failure modes.
 
 ## Thread
 

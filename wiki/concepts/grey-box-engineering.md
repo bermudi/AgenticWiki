@@ -1,7 +1,7 @@
 ---
 title: Grey Box Engineering
 created: 2026-04-24
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-ai-coding-for-real-engineers.md"]
 tags: ["software-design", "ai-workflow"]
 ---
@@ -47,5 +47,4 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - [[ai-design-loop]] — The design loop feeds into grey box delegation.
 
 ## Sources
-- [[software-fundamentals-matter-more-than-ever]]
-- [[ai-coding-for-real-engineers]]
+- `raw/yt-ai-coding-for-real-engineers.md`

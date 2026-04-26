@@ -13,8 +13,9 @@ wiki/threads/     Synthetic essays tracing themes across sources. The "big theor
 wiki/authors/     Entity pages for people and organizations.
 wiki/concepts/    Concept pages for ideas, patterns, and technologies.
 wiki/projects/    Entity pages for specific tools, frameworks, and products.
-wiki/src/         Processed summaries of source documents.
 ```
+
+Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. There is no intermediate source-summary layer — the wiki pages themselves are the digest.
 
 ## Ownership Rules
 
@@ -30,7 +31,6 @@ wiki/src/         Processed summaries of source documents.
 - One topic per page. Split when a section outgrows its parent.
 - Entity pages for people, organizations, projects: `jeff-dean.md`
 - Concept pages for ideas, patterns, technologies: `map-reduce.md`
-- Source pages for processed source documents: `src/designing-data-intensive-applications-ch12.md`
 - Thread pages for synthetic essays tracing themes across sources: `threads/the-slop-problem.md`
 
 ## Page Format
@@ -91,15 +91,14 @@ The content catalog. Organized by category. Updated after every ingest and every
 ## ✍️ Authors
 - [[page-name]] — one-line summary
 
-## 📚 Sources
-- [[src/source-name]] — one-line summary
-
 ## 🧠 Concepts
 - [[page-name]] — one-line summary
 
 ## 🛠️ Projects & Tools
 - [[page-name]] — one-line summary
 ```
+
+Sources are tracked per-page in `## Sources` sections pointing to `raw/` files. Git log provides the timeline. No centralized source list needed.
 
 When answering queries, read `wiki/index.md` first to locate relevant pages, then drill into them.
 

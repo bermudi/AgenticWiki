@@ -1,7 +1,7 @@
 ---
 title: Kent Beck
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-reinventing-software-panel.md"]
 tags: ["author", "tdd", "extreme-programming", "software-design"]
 ---
@@ -20,7 +20,7 @@ Beck describes the AI as a "genie" that changes the cost structure of software d
 
 ## Related
 
-- [[reinventing-software-panel]] — Panel discussion with Martin Fowler.
+- `raw/yt-reinventing-software-panel.md` — Panel discussion with Kent Beck.
 - [[martin-fowler]] — Frequent collaborator.
 - [[verification-loop]] — Beck's TDD philosophy is a core part of the verification loop.
 - [[agent-experience]] — Co-originator of the AX/DX convergence insight.

@@ -1,7 +1,7 @@
 ---
 title: Strategic vs. Tactical Programming
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: []
 tags: ["software-design", "ai-engineering", "strategy"]
 ---
@@ -44,5 +44,5 @@ Matt Pocock argues that to succeed with AI, you must spend **more time being str
 - [[the-human-lever]] — Strategic programming as the human's primary job in the age of AI
 
 ---
-**Source**: [[software-fundamentals-matter-more-than-ever|Software Fundamentals Matter More Than Ever]] (Matt Pocock)
+**Source**: `raw/yt-software-fundamentals-matter-more-than-ever.md` (Matt Pocock)
 **Origin**: John Ousterhout, *A Philosophy of Software Design*

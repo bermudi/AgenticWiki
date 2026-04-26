@@ -1,7 +1,7 @@
 ---
 title: Vibes-Based Engineering
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md"]
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
@@ -43,4 +43,4 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 
 ## Sources
 
-- [[src/no-vibes-allowed-dex-horthy]]
+- `raw/yt-no-vibes-allowed-dex-horthy.md`

@@ -29,19 +29,30 @@ The mechanical work of extracting knowledge from the source and filing it into t
 3. Read existing thread pages to understand the wiki's accumulated theory
 4. Discuss the source with the user — highlight what you found interesting, ask about emphasis
 
-#### Step 2: Create/update wiki pages
+#### Step 2: Thread identification
+
+Before filing individual pages, determine how this source fits the wiki's theory:
+
+1. Re-read existing thread pages to understand accumulated theory
+2. Ask: **does this source strengthen an existing thread, contradict one, or introduce a new one?**
+3. If it strengthens: note which claims add weight and plan the update
+4. If it contradicts: flag with `> [!warning] Contradiction` callout, surface to human
+5. If it introduces a new thread: propose it to the human before filing — explain how it relates to existing threads
+
+This step is intentionally early. Threads are the wiki's living theory; filing without understanding thread fit produces orphaned concepts.
+
+#### Step 3: Create/update wiki pages
 
 Work through this checklist:
 
 - [ ] **Source stub**: If YouTube video, create `raw/yt-<descriptive-slug>.md` (see AGENTS.md for format)
-- [ ] **Source page**: Create `wiki/src/<source-name>.md` with full summary and key takeaways
 - [ ] **Entity pages**: Create or update a page for each significant entity mentioned
 - [ ] **Concept pages**: Create or update a page for each significant concept. Add `## Thread` section linking to relevant threads. Connect to related concepts via `## Related`
-- [ ] **Thread updates**: Update existing thread pages to incorporate new concepts and claims. If the source introduces a coherent argument that doesn't fit any existing thread, propose a new thread to the human
+- [ ] **Thread updates**: Update existing thread pages to incorporate new concepts and claims. If a new thread was proposed and approved, create it now
 - [ ] **Bidirectional cross-refs**: For each new page, edit at least 2-3 **existing** pages to add backlinks in their `## Related` sections. New→old AND old→new.
 - [ ] **Index**: Add all new pages to `wiki/index.md` under the correct category.
 
-#### Step 3: Present filing summary to the human
+#### Step 4: Present filing summary to the human
 
 Show what was created and updated. **Do NOT commit yet.**
 
@@ -143,9 +154,8 @@ done
 
 ## Gotchas
 
-- **Wiki-links don't include `.md`**: Use `[[page-name]]`, not `[[page-name.md]]`
-- **Source pages go in `wiki/src/`**: Not in `raw/`. `raw/` is immutable originals. `wiki/src/` is your processed summaries of those originals.
 - **One source can touch many pages**: A single YouTube video about distributed systems might update pages on consistency models, a specific engineer, a specific paper, and the overview. That's expected. The value is in the cross-referencing.
 - **Don't over-split**: A page should cover one coherent topic. If it's getting long (>200 lines), consider splitting. If it's under 10 lines, consider merging into a related page.
 - **Dates in frontmatter are ISO 8601**: `YYYY-MM-DD`. No exceptions.
 - **YouTube videos need a source stub**: After processing a YouTube video, create a `raw/yt-<slug>.md` stub with key points extracted during ingest. This is the only case where you write to `raw/`. Without the stub, future sessions can't re-read the source.
+- **No src/ layer**: Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. Each page's `## Sources` section references the `raw/` files it draws from.

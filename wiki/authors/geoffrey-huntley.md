@@ -32,7 +32,7 @@ Huntley's Ralph pattern is the most operationally detailed AFK implementation in
 
 ## Related
 
-- [[ralph-wiggum-playbook]] — The full source documenting his technique
+- `raw/ralph-wiggum-playbook.md` — The paddo.dev summary documenting his technique
 - [[afk-agent]] — The concept Ralph instantiates
 - [[the-agent-workflow]] — How Ralph fits the HITL/AFK loop
 - [[claude-code]] — The agent CLI Ralph wraps

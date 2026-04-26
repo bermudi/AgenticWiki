@@ -1,7 +1,7 @@
 ---
 title: Cody
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md"]
 tags: ["ai-assistant", "tool", "sourcegraph"]
 ---
@@ -29,4 +29,4 @@ Cody is designed to mitigate [[vibes-based-engineering]] by grounding its respon
 
 ## Sources
 
-- [[src/no-vibes-allowed-dex-horthy]]
+- `raw/yt-no-vibes-allowed-dex-horthy.md`

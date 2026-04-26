@@ -32,7 +32,7 @@ His emphasis on Go's structural interfaces and explicit context system adds a co
 
 ## Related
 
-- [[agentic-coding-recommendations]] — His primary source in the wiki
+- `raw/agentic-coding-recommendations.md` — His primary source in the wiki
 - [[tool-design-for-agents]] — His tooling philosophy is a concrete instantiation
 - [[agent-experience]] — Language choice as AX optimization
 - [[the-agent-workflow]] — His workflow practices (AFK, parallelization)

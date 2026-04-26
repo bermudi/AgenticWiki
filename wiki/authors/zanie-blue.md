@@ -1,7 +1,7 @@
 ---
 title: Zanie Blue
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-how-agents-use-dev-tools.md"]
 tags: ["person", "astral", "python", "developer-tools"]
 ---
@@ -24,7 +24,7 @@ Zanie Blue works at Astral, building tools for Python developers (Ruff, ty, uv).
 
 ## Related
 
-- [[how-agents-use-developer-tools]] — The source talk.
+- `raw/yt-how-agents-use-dev-tools.md` — The source talk.
 - [[astral]] — Their employer.
 - [[tool-design-for-agents]] — The core concept from their talk.
 

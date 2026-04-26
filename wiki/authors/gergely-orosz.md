@@ -1,7 +1,7 @@
 ---
 title: Gergely Orosz
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-dhh-ai-pilled.md", "raw/yt-reinventing-software-panel.md"]
 tags: [author, pragmatic-engineer, journalism]
 ---
@@ -21,9 +21,8 @@ He is known for his data-driven analysis of the software industry, hiring trends
 ## Related
 
 - [[dhh]] — Interviewed on his podcast.
-- [[reinventing-software-panel]] — Moderated the panel with Martin Fowler and Kent Beck.
-- [[dhh-ai-pilled-interview]] — The full interview with DHH on AI-pilled development.
-- [[no-vibes-allowed-dex-horthy]] — Gergely often discusses themes of engineering rigor.
+- `raw/yt-reinventing-software-panel.md` — Moderated the panel with Martin Fowler and Kent Beck.
+- `raw/yt-dhh-ai-pilled.md` — The full interview with DHH on AI-pilled development.
 
 ## Sources
 

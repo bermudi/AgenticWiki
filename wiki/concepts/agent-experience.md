@@ -16,7 +16,7 @@ Agent Experience (AX) is a burgeoning concept that posits that the quality of a 
 
 ## The AX/DX Convergence
 
-As suggested by Martin Fowler and Kent Beck in the [[reinventing-software-panel]], the Venn diagram of DX and AX is a circle. [[zanie-blue|Zanie Blue]] extends this from codebase design to tool design: tools must also be optimized for agentic consumption, not just code structure. Practices that make code easier for humans also make it easier for agents:
+As suggested by Martin Fowler and Kent Beck (see `raw/yt-reinventing-software-panel.md`), the Venn diagram of DX and AX is a circle. [[zanie-blue|Zanie Blue]] extends this from codebase design to tool design: tools must also be optimized for agentic consumption, not just code structure. Practices that make code easier for humans also make it easier for agents:
 
 - **TDD/Automated Tests:** Provide a clear "contract" for the agent to verify its work.
 - **Deep Modules:** Reduce the surface area an agent needs to reason about at any one time (see [[deep-vs-shallow-modules]]).

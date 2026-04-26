@@ -2,7 +2,6 @@
 
 > A repository of software engineering wisdom and AI-native development patterns.
 
-## 🧭 Navigation
 ## 🧵 Threads — The Big Picture
 
 Synthetic essays that trace themes across multiple sources. Start here.
@@ -23,34 +22,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[martin-fowler]] — Pioneer of Agile and Refactoring.
 - [[mario-zechner]] — Creator of Pi.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
-
-## 📚 Sources
-### Gergely Orosz
-- [[reinventing-software-panel]] — A discussion on AI history and craft with Fowler and Beck.
-
-### Dex Horthy
-- [[no-vibes-allowed-dex-horthy]] — Rigorous engineering vs. vibes in complex codebases.
-
-### David Heinemeier Hansson (DHH)
-- [[dhh-ai-pilled-interview]] — The shift to agentic workflows and the end of implementation.
-
-### Zanie Blue
-- [[how-agents-use-developer-tools]] — Tool design for agentic consumption: feedback, context reduction, confidence levels, trust models.
-
-### Mario Zechner
-- [[building-pi-in-a-world-of-slop]] — Minimalism, malleability, and avoiding "slop" in AI coding.
-
-### Armin Ronacher
-- [[agentic-coding-recommendations]] — Practical guide to agentic coding: language choice (Go wins), tooling must be fast and observable, simplicity is a force multiplier.
-
-### Geoffrey Huntley / Clayton Farr
-- [[ralph-wiggum-playbook]] — The canonical methodology for autonomous agent loops: dumb bash loop, plan file as shared state, backpressure over direction, one task per iteration.
-
-### Matt Pocock
-- [[why-llms-hallucinate]] — Why LLMs make things up and how to ground them.
-- [[software-fundamentals-matter-more-than-ever]] — Why deep modules and interfaces matter more in the age of AI.
-- [[ai-coding-for-real-engineers]] — Moving beyond Vibe Coding toward structured engineering with agents.
-- [[yt-claude-code-feature-build]] — Building a complex feature with an AI agent (Claude Code).
 
 ## 🧠 Concepts
 - [[tool-design-for-agents]] — Developer tools need redesigned output, confidence levels, and trust models for agentic consumers.

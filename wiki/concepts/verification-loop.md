@@ -1,7 +1,7 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
@@ -39,7 +39,7 @@ The verification loop is the primary defense against [[vibes-based-engineering]]
 - [[agent-experience]] — Strong AX depends on verification loops.
 - [[afk-agent]] — AFK agents require verification loops to ensure correctness.
 - [[tool-design-for-agents]] — Tool output design determines verification loop efficiency.
-- [[how-agents-use-developer-tools]] — Source on tools as the engine of verification.
+- `raw/yt-how-agents-use-dev-tools.md` — Source on tools as the engine of verification.
 
 ## Thread
 

@@ -1,7 +1,7 @@
 ---
 title: AI Design Loop
 created: 2026-04-24
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-ai-coding-for-real-engineers.md"]
 tags: ["ai-workflow", "software-design"]
 ---
@@ -38,5 +38,4 @@ Matt Pocock defines the design process in two phases:
 - [[malleable-agents]] — Agents can be adapted during the design loop.
 
 ## Sources
-- [[software-fundamentals-matter-more-than-ever]]
-- [[ai-coding-for-real-engineers]]
+- `raw/yt-ai-coding-for-real-engineers.md`

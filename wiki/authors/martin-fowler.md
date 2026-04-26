@@ -1,7 +1,7 @@
 ---
 title: Martin Fowler
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-reinventing-software-panel.md"]
 tags: ["author", "software-design", "agile", "refactoring"]
 ---
@@ -20,7 +20,7 @@ Fowler views AI as a significant shift in the industry, comparable to the rise o
 
 ## Related
 
-- [[reinventing-software-panel]] — Panel discussion with Kent Beck.
+- `raw/yt-reinventing-software-panel.md` — Panel discussion with Kent Beck.
 - [[kent-beck]] — Frequent collaborator.
 - [[strategic-vs-tactical-programming]] — Fowler's work often emphasizes strategic design.
 - [[agent-experience]] — Co-originator of the AX/DX convergence insight.

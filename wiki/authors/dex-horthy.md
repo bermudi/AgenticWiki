@@ -1,7 +1,7 @@
 ---
 title: Dex Horthy
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md"]
 tags: ["engineer", "cto", "sourcegraph"]
 ---
@@ -30,4 +30,4 @@ Dex Horthy is a software engineer and leader focused on code intelligence and de
 
 ## Sources
 
-- [[src/no-vibes-allowed-dex-horthy]] — Talk at the AI Engineer Code Summit.
+- `raw/yt-no-vibes-allowed-dex-horthy.md` — Talk at the AI Engineer Code Summit.

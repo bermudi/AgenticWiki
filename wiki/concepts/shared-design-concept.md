@@ -1,7 +1,7 @@
 ---
 title: Shared Design Concept
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-04-26
 sources: []
 tags: ["design", "ai-engineering", "mental-models"]
 ---
@@ -46,5 +46,5 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[the-agent-workflow]] — The design concept must be explicit for the agent to participate in it
 
 ---
-**Source**: [[software-fundamentals-matter-more-than-ever|Software Fundamentals Matter More Than Ever]] (Matt Pocock)
+**Source**: `raw/yt-software-fundamentals-matter-more-than-ever.md` (Matt Pocock)
 **Reference**: Peter Naur, *Programming as Theory Building* (1985)

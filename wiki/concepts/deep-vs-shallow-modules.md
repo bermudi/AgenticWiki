@@ -1,7 +1,7 @@
 ---
 title: Deep vs. Shallow Modules
 created: 2026-04-24
-updated: 2026-04-25
+updated: 2026-04-26
 sources: ["raw/yt-ai-coding-for-real-engineers.md"]
 tags: ["software-architecture", "clean-code"]
 ---
@@ -37,5 +37,4 @@ In a [[grey-box-engineering]] workflow, the human owns the interface and the age
 - [[agent-experience]] — Deep modules improve both DX and AX.
 
 ## Sources
-- [[software-fundamentals-matter-more-than-ever]]
-- [[ai-coding-for-real-engineers]]
+- `raw/yt-ai-coding-for-real-engineers.md`
