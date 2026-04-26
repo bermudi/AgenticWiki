@@ -25,6 +25,7 @@ Cody is designed to mitigate [[vibes-based-engineering]] by grounding its respon
 - [[sourcegraph]] — The parent organization.
 - [[code-intelligence]] — The underlying technology.
 - [[dex-horthy]] — Lead engineer/advocate.
+- [[vibes-based-engineering]] — Cody is designed to counter vibes-based engineering with real context.
 
 ## Sources
 

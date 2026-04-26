@@ -23,6 +23,9 @@ This prevents [[vibes-based-engineering]] by grounding the AI's suggestions in t
 
 - [[sourcegraph]] — A platform built around code intelligence.
 - [[grey-box-engineering]] — Relies on code intelligence for "Human Design Authority."
+- [[vibes-based-engineering]] — Code intelligence is the antidote to vibes-based context.
+- [[cody]] — The product that embodies code intelligence for AI coding.
+- [[dex-horthy]] — Primary advocate for code intelligence in AI workflows.
 
 ## Sources
 

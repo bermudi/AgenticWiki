@@ -43,6 +43,8 @@ The model generates output that is not supported by its training data or the pro
 ## Related
 - [[slop]] — The result of unverified hallucinations being accepted as truth.
 - [[verification-loop]] — The primary engineering defense against hallucinations.
+- [[smart-zone-dumb-zone]] — The Dumb Zone increases hallucination risk.
+- [[matt-pocock]] — Originator of the intrinsic/extrinsic hallucination taxonomy used here.
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations.

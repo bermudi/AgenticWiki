@@ -25,6 +25,7 @@ Claude Code is an agentic tool that operates directly in the terminal, allowing 
 
 - [[pi]] — Similar agent harness philosophy but with a focus on minimalism and malleability.
 - [[the-agent-workflow]] — The primary workflow pattern enabled by tools like Claude Code.
+- [[afk-agent]] — Claude Code can spawn AFK agents (e.g., "Ralph").
 
 ## Sources
 

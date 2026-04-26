@@ -1,3 +1,11 @@
+---
+title: Software Fundamentals Matter More Than Ever
+created: 2026-04-25
+updated: 2026-04-25
+sources: []
+tags: ["ai-engineering", "software-design", "typescript"]
+---
+
 # Software Fundamentals Matter More Than Ever
 
 - **Author**: [[matt-pocock|Matt Pocock]]
@@ -29,3 +37,14 @@ Treating AI-generated components as "grey boxes"—you don't necessarily need to
 - [[deep-vs-shallow-modules]]
 - [[shared-design-concept]]
 - [[strategic-vs-tactical-programming]]
+
+## Thread
+- [[the-human-lever]] — The foundational source for the "human as strategist" thesis.
+- [[the-agent-workflow]] — Deep modules and design loops as the structural foundation for agentic workflows.
+
+## Related
+
+- [[ai-coding-for-real-engineers]] — Follow-up talk expanding on the same themes with workflow specifics.
+- [[matt-pocock]] — Author and presenter.
+- [[the-human-lever]] — The thread where these concepts are synthesized into a theory of human-AI collaboration.
+- [[the-slop-problem]] — Without these fundamentals, AI-generated code degrades into slop.

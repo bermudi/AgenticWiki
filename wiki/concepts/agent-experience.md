@@ -27,11 +27,19 @@ As suggested by Martin Fowler and Kent Beck in the [[reinventing-software-panel]
 
 As software development shifts toward agentic workflows, the "usability" of a codebase will be measured by how effectively an agent can operate within it. A codebase with poor AX will lead to more [[slop]] and more frequent [[compounding-booboos]].
 
+## Thread
+
+- [[the-human-lever]] — AX/DX convergence as a core argument for why the human must own design boundaries.
+
 ## Related
 
 - [[deep-vs-shallow-modules]] — Key for managing agent context.
 - [[verification-loop]] — AX relies on strong feedback loops.
 - [[shared-design-concept]] — AX is high when the agent can easily infer the system's "theory."
+- [[slop]] — Poor AX leads to more slop.
+- [[compounding-booboos]] — Poor AX causes errors to compound.
+- [[martin-fowler]] — Co-originator of the AX/DX convergence insight.
+- [[kent-beck]] — Co-originator of the AX/DX convergence insight.
 
 ## Sources
 

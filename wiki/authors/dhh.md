@@ -28,6 +28,10 @@ DHH has recently undergone a shift from AI skepticism to being "AI-pilled." He v
 
 - [[gergely-orosz]] — Interviewer in "The End of Implementation"
 - [[mario-zechner]] — Shares similar views on agentic workflows and malleability.
+- [[aesthetics-is-truth]] — Core philosophy he advocates.
+- [[peak-programmer]] — Central thesis of his AI advocacy.
+- [[omarchy]] — His new project, enabled by AI agents.
+- [[matt-pocock]] — Peer in AI-native engineering with complementary philosophy.
 
 ## Sources
 

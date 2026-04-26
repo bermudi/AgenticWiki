@@ -32,6 +32,9 @@ In a [[grey-box-engineering]] workflow, the human owns the interface and the age
 ## Related
 - [[grey-box-engineering]] — Designing deep interfaces for agent delegation.
 - [[smart-zone-dumb-zone]] — How module depth helps manage context.
+- [[aesthetics-is-truth]] — Elegant module boundaries as aesthetic truth.
+- [[strategic-vs-tactical-programming]] — Strategic design favors deep modules.
+- [[agent-experience]] — Deep modules improve both DX and AX.
 
 ## Sources
 - [[software-fundamentals-matter-more-than-ever]]

@@ -36,6 +36,8 @@ AI enables small teams to build and maintain products that previously required l
 - [[aesthetics-is-truth]] — Core philosophy discussed.
 - [[peak-programmer]] — The central thesis of the interview.
 - [[omarchy]] — His new Linux project mentioned as an AI-enabled endeavor.
+- [[gergely-orosz]] — Interviewer in this source.
+- [[the-human-lever]] — DHH reinforces the idea that the human's role is shifting from implementation to design and verification.
 
 ## Sources
 

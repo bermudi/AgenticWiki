@@ -23,14 +23,22 @@ tags: ["ai-workflow", "testing", "rigor"]
 
 The verification loop is the primary defense against [[vibes-based-engineering]]. It shifts the burden of proof from the human "vibing" the code to the machine proving the code meets the system's requirements.
 
+## Related
+
 - [[grey-box-engineering]] — Emphasizes the loop as a replacement for trust.
 - [[ai-design-loop]] — The broader process of which the verification loop is a part.
 - [[tracer-bullets]] — A technique often used within a verification loop to prove a vertical slice works.
 - [[aesthetics-is-truth]] — The qualitative counterpart to the mechanical verification loop.
+- [[hallucination]] — Verification loops catch hallucinated code.
+- [[vibes-based-engineering]] — The anti-pattern the verification loop replaces.
+- [[compounding-booboos]] — The loop catches booboos before they compound.
+- [[agent-experience]] — Strong AX depends on verification loops.
+- [[afk-agent]] — AFK agents require verification loops to ensure correctness.
 
 ## Thread
 - [[the-human-lever]] — Verification as the contract between human design authority and agent implementation
 - [[the-slop-problem]] — The verification loop as the primary defense against slop
+- [[the-agent-workflow]] — The verification step in every AFK execution cycle
 
 ## Sources
 

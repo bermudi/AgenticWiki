@@ -26,12 +26,19 @@ Matt Pocock defines the design process in two phases:
 ## Thread
 - [[the-agent-workflow]] — The design loop as the planning phase of the agent workflow
 
+## Thread
+- [[the-agent-workflow]] — The design loop as the planning phase of the agent workflow
+- [[the-slop-problem]] — Skipping the design loop is a primary source of slop
+
 ## Related
 - [[grey-box-engineering]] — The implementation phase of the loop.
 - [[smart-zone-dumb-zone]] — Managing the technical limits of the loop.
 - [[tracer-bullets]] — The first "Journey" step for any new feature.
 - [[verification-loop]] — The iterative process of refining the journey.
 - [[vibes-based-engineering]] — Why a structured loop is necessary.
+- [[shared-design-concept]] — The design loop produces the shared concept.
+- [[ubiquitous-language]] — The language that emerges from the design loop.
+- [[malleable-agents]] — Agents can be adapted during the design loop.
 
 ## Sources
 - [[software-fundamentals-matter-more-than-ever]]

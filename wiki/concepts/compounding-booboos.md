@@ -26,6 +26,9 @@ Because AI agents often lack a deep understanding of the entire system architect
 ## Related
 
 - [[slop]] — The accumulation of booboos results in slop.
+- [[verification-loop]] — The primary defense: catch booboos before they compound.
+- [[pi]] — Designed to provide observability so booboos are visible before they cascade.
+- [[vibes-based-engineering]] — The approach that lets booboos slip through unverified.
 
 ## Sources
 

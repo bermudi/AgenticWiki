@@ -28,6 +28,8 @@ In the pi agent harness, malleability is achieved through:
 
 - [[pi]] — An implementation of a malleable agent harness.
 - [[ai-design-loop]] — The process of iterating on the agent's capabilities.
+- [[verification-loop]] — Malleable agents benefit from tight verification loops.
+- [[mario-zechner]] — Creator and advocate of malleable agent design.
 
 ## Sources
 

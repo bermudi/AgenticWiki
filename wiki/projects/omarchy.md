@@ -22,6 +22,7 @@ It serves as a case study for the [[peak-programmer]] thesis: an individual or t
 
 - [[dhh]] — Creator and lead.
 - [[aesthetics-is-truth]] — The guiding principle for the OS design.
+- [[peak-programmer]] — Case study: a solo dev building an OS with AI agents.
 
 ## Sources
 

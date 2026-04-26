@@ -29,6 +29,9 @@ Originally a core tenet of Domain-Driven Design (DDD), Ubiquitous Language takes
 
 - [[shared-design-concept]] — The internal mental model that the language describes.
 - [[ai-design-loop]] — The process of refining the language through interaction.
+- [[the-human-lever]] — Defining the language is a high-leverage human task.
+- [[grey-box-engineering]] — The language defines the boundaries of the grey box.
+- [[matt-pocock]] — Primary advocate of ubiquitous language in AI workflows.
 
 ## Sources
 

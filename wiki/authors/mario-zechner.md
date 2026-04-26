@@ -26,8 +26,11 @@ Zechner emphasizes "Grey Box Engineering"—the idea that humans must remain int
 
 ## Related
 
-- [[pi]] — The main project.
+- [[pi]] — Minimalist agent harness.
+- [[slop]] — Critique of low-quality AI code.
+- [[malleable-agents]] — Philosophy of modifiable tools.
 - [[matt-pocock]] — Collaborator or peer in the AI engineering space.
+- [[dhh]] — Shares similar views on agentic workflows.
 
 ## Sources
 

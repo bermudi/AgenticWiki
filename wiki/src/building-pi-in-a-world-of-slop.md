@@ -24,6 +24,11 @@ Zechner introduces [[pi]] as a reaction to bloated and opaque AI coding tools. P
 - **The Malleability Principle**: Coding agents should be "soft" and easily modified. Both the user and the agent should be able to create new tools and behaviors on the fly.
 - **Context is King**: Strategies like [[smart-zone-dumb-zone]] and [[tracer-bullets]] are essential for managing the limited context windows of current models.
 
+## Thread
+- [[the-slop-problem]] — Zechner's talk defines slop and warns of its dangers.
+- [[the-agent-workflow]] — Pi's minimalism and session model as context management safeguards.
+- [[the-human-lever]] — Observability as the mechanism enabling grey box engineering.
+
 ## Related
 
 - [[pi]] — The agent harness discussed in the talk.
@@ -31,6 +36,7 @@ Zechner introduces [[pi]] as a reaction to bloated and opaque AI coding tools. P
 - [[mario-zechner]] — The creator of pi and speaker of the talk.
 - [[compounding-booboos]] — The accumulation of small errors over time.
 - [[malleable-agents]] — The philosophy of agents that can be modified.
+- [[smart-zone-dumb-zone]] — Context management strategies discussed in the talk.
 
 ## Sources
 

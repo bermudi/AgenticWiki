@@ -27,6 +27,9 @@ A term popularized by *The Pragmatic Programmer* and championed by [[matt-pocock
 - [[grey-box-engineering]] — Using vertical slices to validate human designs.
 - [[ai-coding-for-real-engineers]] — Source discussion.
 - [[building-pi-in-a-world-of-slop]] — Discusses tracer bullets as a strategy for maintaining quality.
+- [[verification-loop]] — Tracer bullets are verified within the loop.
+- [[ai-design-loop]] — The first "Journey" step after the design loop completes.
+- [[matt-pocock]] — Primary advocate in the AI engineering context.
 
 ## Sources
 

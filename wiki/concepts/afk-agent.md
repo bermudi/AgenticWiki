@@ -23,13 +23,13 @@ tags: [concept, workflow, agents]
 - **Focus**: Frees the human from watching the "cursor" and allows them to move to the next design challenge.
 
 ## Thread
-
 - [[the-agent-workflow]] — AFK is the "execution" phase of the modern agentic workflow.
 
 ## Related
 
 - [[claude-code]] — Can be used to spawn AFK agents (e.g., "Ralph").
 - [[verification-loop]] — Essential for ensuring AFK agent output is correct.
+- [[matt-pocock]] — Primary advocate of the HITL/AFK split.
 
 ## Sources
 

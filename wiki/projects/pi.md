@@ -37,6 +37,9 @@ Pi is composed of several modules:
 - [[mario-zechner]] — Creator of pi.
 - [[malleable-agents]] — The philosophy behind pi.
 - [[slop]] — Pi is designed to help engineers avoid generating slop.
+- [[claude-code]] — Peer agent tool with a different philosophy (more features, less minimal).
+- [[compounding-booboos]] — Pi's observability helps catch booboos early.
+- [[smart-zone-dumb-zone]] — Pi's session model helps stay in the Smart Zone.
 
 ## Sources
 

@@ -34,11 +34,17 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - [[the-agent-workflow]] — Operationalizing the HITL/AFK handoff
 
 ## Related
+
 - [[smart-zone-dumb-zone]] — Keeping the context small to maintain reasoning quality.
 - [[tracer-bullets]] — Vertical slices to verify Grey Box designs.
 - [[deep-vs-shallow-modules]] — Deep modules are the ideal targets for Grey Box delegation.
 - [[verification-loop]] — The mechanical process of validating the implementation.
 - [[vibes-based-engineering]] — The anti-pattern that Grey Box engineering seeks to avoid.
+- [[code-intelligence]] — Enables high-fidelity context for grey box verification.
+- [[compounding-booboos]] — Grey box engineering catches booboos before they compound.
+- [[shared-design-concept]] — The human owns the concept; the agent implements it.
+- [[slop]] — Grey box engineering is the primary alternative to slop generation.
+- [[ai-design-loop]] — The design loop feeds into grey box delegation.
 
 ## Sources
 - [[software-fundamentals-matter-more-than-ever]]

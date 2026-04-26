@@ -44,7 +44,7 @@ The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent 
 
 ## What the Sources Agree On
 
-All three speakers agree: the answer isn't to use less AI. It's to change *how* you use it. The human must shift from writing code to **owning design boundaries and verifying outcomes**. That argument continues in [[the-human-lever]].
+All three speakers agree: the answer isn't to use less AI. It's to change *how* you use it. The human must shift from writing code to **owning design boundaries and verifying outcomes**. [[aesthetics-is-truth|Aesthetic decay]] is often the first visible sign that slop is accumulating. That argument continues in [[the-human-lever]].
 
 ## Concepts in this thread
 
@@ -61,4 +61,9 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 - `raw/yt-ai-coding-for-real-engineers.md` — The design-loop failure mode and context management
 - `raw/yt-why-llms-hallucinate.md` — The technical causes of hallucination as the source of slop.
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
+
+## Related threads
+
+- [[the-human-lever]] — The discipline that prevents slop from accumulating.
+- [[the-agent-workflow]] — The operational practices that keep agent output high-quality.
 

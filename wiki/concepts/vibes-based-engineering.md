@@ -34,6 +34,12 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[strategic-vs-tactical-programming]] — Vibes-based engineering is the extreme end of tactical programming.
 - [[peak-programmer]] — The era that incentivizes the speed of vibes over the rigor of engineering.
 - [[aesthetics-is-truth]] — Often confused with vibes, but represents a more disciplined, experience-driven intuition.
+- [[verification-loop]] — The loop that replaces vibes with proof.
+- [[code-intelligence]] — High-fidelity context as the antidote to vibes.
+- [[compounding-booboos]] — Vibe coding lets booboos slip through unchecked.
+- [[dex-horthy]] — The primary critic of vibes-based engineering.
+- [[cody]] — Designed to counter vibes with real codebase context.
+- [[ai-design-loop]] — The structured alternative to vibe coding.
 
 ## Sources
 

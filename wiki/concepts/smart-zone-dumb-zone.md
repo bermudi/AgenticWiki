@@ -36,10 +36,12 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 
 ## Related
 
-- [[grey-box-engineering]] — Designing interfaces to stay in the Smart Zone.
-- [[ai-coding-for-real-engineers]] — Source of the concept.
 - [[pi]] — Tooling built to facilitate Smart Zone operation.
 - [[building-pi-in-a-world-of-slop]] — Context on the tool's design.
+- [[grey-box-engineering]] — Designing interfaces to stay in the Smart Zone.
+- [[ai-coding-for-real-engineers]] — Source of the concept.
+- [[deep-vs-shallow-modules]] — Deep modules help stay in the Smart Zone.
+- [[ai-design-loop]] — The loop degrades when the Dumb Zone is hit.
 
 ## Sources
 

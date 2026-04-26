@@ -22,6 +22,7 @@ He is known for his data-driven analysis of the software industry, hiring trends
 
 - [[dhh]] — Interviewed on his podcast.
 - [[reinventing-software-panel]] — Moderated the panel with Martin Fowler and Kent Beck.
+- [[dhh-ai-pilled-interview]] — The full interview with DHH on AI-pilled development.
 - [[no-vibes-allowed-dex-horthy]] — Gergely often discusses themes of engineering rigor.
 
 ## Sources

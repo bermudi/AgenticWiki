@@ -20,10 +20,14 @@ In an AI-augmented workflow, maintaining aesthetics becomes even more critical. 
 
 ## Related
 
-- [[shared-design-concept]] — Aesthetics help maintain the shared "theory" of the code.
-- [[deep-vs-shallow-modules]] — Elegant module boundaries are a form of aesthetic truth.
+- [[deep-vs-shallow-modules]] — Elegant module boundaries as a form of aesthetic truth.
 - [[slop]] — The antithesis of aesthetic truth; "ugly" code is often slop.
 - [[verification-loop]] — The mechanical counterpart to aesthetic judgment.
+- [[shared-design-concept]] — Aesthetics help maintain the shared "theory" of the code.
+- [[peak-programmer]] — In the post-implementation era, taste becomes the primary differentiator.
+- [[vibes-based-engineering]] — Aesthetic judgment is often confused with vibes, but is more disciplined.
+- [[omarchy]] — An example of aesthetics driving OS design.
+- [[dhh]] — The primary advocate of this philosophy.
 
 > [!note] Departure: Taste vs. Proof
 > While [[dex-horthy|Dex Horthy]] advocates for rigorous **[[verification-loop|verification loops]]** as the primary defense against errors, DHH's philosophy of "Aesthetics is Truth" suggests that human "taste" can be a more sensitive indicator of architectural decay than any automated test.

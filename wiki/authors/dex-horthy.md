@@ -24,6 +24,9 @@ Dex Horthy is a software engineer and leader focused on code intelligence and de
 - [[sourcegraph]] — The company where he serves as CTO.
 - [[cody]] — The AI coding assistant he helps lead.
 - [[vibes-based-engineering]] — The anti-pattern he argues against.
+- [[code-intelligence]] — The technology he advocates for in AI workflows.
+- [[verification-loop]] — The structured process he champions.
+- [[matt-pocock]] — Peer in AI-native engineering with a complementary focus.
 
 ## Sources
 

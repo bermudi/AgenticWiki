@@ -23,6 +23,7 @@ Beck describes the AI as a "genie" that changes the cost structure of software d
 - [[reinventing-software-panel]] — Panel discussion with Martin Fowler.
 - [[martin-fowler]] — Frequent collaborator.
 - [[verification-loop]] — Beck's TDD philosophy is a core part of the verification loop.
+- [[agent-experience]] — Co-originator of the AX/DX convergence insight.
 
 ## Sources
 

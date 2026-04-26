@@ -23,3 +23,9 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[ai-coding-for-real-engineers]]
 - [[why-llms-hallucinate]]
 - [[yt-claude-code-feature-build]]
+
+## Related
+
+- [[dhh]] — Peer in AI-native engineering; shares emphasis on design over implementation.
+- [[dex-horthy]] — Shares focus on rigor and verification; differs in emphasis on code intelligence over aesthetics.
+- [[mario-zechner]] — Peer in agent tooling; pi and Matt's workflows are complementary.

@@ -23,6 +23,7 @@ Fowler views AI as a significant shift in the industry, comparable to the rise o
 - [[reinventing-software-panel]] — Panel discussion with Kent Beck.
 - [[kent-beck]] — Frequent collaborator.
 - [[strategic-vs-tactical-programming]] — Fowler's work often emphasizes strategic design.
+- [[agent-experience]] — Co-originator of the AX/DX convergence insight.
 
 ## Sources
 

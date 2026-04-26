@@ -20,7 +20,7 @@ In this video, Matt Pocock uses Claude Code to implement "Ghost Courses" and "Gh
 Matt emphasizes the need for a [[shared-design-concept]] through a "Ubiquitous Language" document. This ensures that when the human says "Ghost Course," the agent knows exactly what that means in terms of types, database schemas, and expected behavior.
 
 ### The Grill-Me Session
-Before implementation, Matt uses a `/grill-me` skill (similar to [[grill-me]]) to have the agent challenge his assumptions. This identifies edge cases (like what happens if a ghost lesson is created for a course that doesn't exist yet) before a single line of feature code is written.
+Before implementation, Matt uses a `grill-me` skill to have the agent challenge his assumptions. This identifies edge cases (like what happens if a ghost lesson is created for a course that doesn't exist yet) before a single line of feature code is written.
 
 ### PRD to Issues Pipeline
 The workflow moves from a high-level PRD to granular GitHub issues. This decomposition allows the agent to work in smaller, verifiable chunks rather than attempting a monolithic feature build.
@@ -50,7 +50,8 @@ A complex logic pattern where an action on a child entity (Ghost Lesson) trigger
 
 - [[claude-code]] — The primary tool used in the demonstration.
 - [[shared-design-concept]] — The underlying theory of ensuring human and agent are aligned.
-- [[grill-me]] — The specific skill used for design pressure-testing.
+- `/grill-me` — The specific skill used for design pressure-testing.
+- [[verification-loop]] — The broader pattern of verification that `/grill-me` fits into.
 
 ## Sources
 

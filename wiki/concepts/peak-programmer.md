@@ -26,6 +26,8 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 - [[vibes-based-engineering]] — A risk of the Peak Programmer era is developers relying on "vibes" rather than rigorous understanding.
 - [[strategic-vs-tactical-programming]] — Peak Programmer marks the commoditization of tactical programming.
 - [[aesthetics-is-truth]] — In the post-implementation era, taste becomes the primary differentiator.
+- [[omarchy]] — Case study: small team building an OS with AI.
+- [[dhh]] — The originator of the Peak Programmer thesis.
 
 ## Thread
 - [[the-agent-workflow]] — How developers adapt to the post-implementation world.

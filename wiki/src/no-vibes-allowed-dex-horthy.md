@@ -33,11 +33,17 @@ Horthy stresses that engineering rigor requires a loop:
 3. **Verification**: Run tests, linters, and type checkers to catch "vibey" hallucinations.
 4. **Refinement**: Use the feedback from verification to iterate on the solution.
 
+## Thread
+- [[the-slop-problem]] — Vibes-based engineering as a root cause of slop.
+- [[the-human-lever]] — Horthy's verification loop as the contract between human authority and agent implementation.
+
 ## Related
 
 - [[grey-box-engineering]] — Horthy's "No Vibes" approach aligns with the idea of knowing enough about the internals to verify results.
 - [[strategic-vs-tactical-programming]] — "No Vibes" is a form of strategic programming, focusing on long-term correctness over tactical speed.
 - [[ai-design-loop]] — The verification loop Horthy describes is a core part of an effective AI-assisted design process.
+- [[dex-horthy]] — The speaker and CTO of Sourcegraph.
+- [[cody]] — The tool built on the code intelligence principles described.
 
 ## Sources
 
