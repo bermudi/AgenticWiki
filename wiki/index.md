@@ -3,8 +3,6 @@
 > A repository of software engineering wisdom and AI-native development patterns.
 
 ## 🧭 Navigation
-- [[log|Activity Log]]
-
 ## 🧵 Threads — The Big Picture
 
 Synthetic essays that trace themes across multiple sources. Start here.

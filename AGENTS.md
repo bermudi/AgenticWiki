@@ -9,7 +9,6 @@ raw/              Immutable source documents. Never modify. Read-only.
 raw/assets/       Downloaded images referenced by source documents.
 wiki/             LLM-generated wiki pages. You own this layer entirely.
 wiki/index.md     Content catalog — thread-first, updated after every change.
-wiki/log.md       Chronological append-only activity log.
 wiki/threads/     Synthetic essays tracing themes across sources. The "big theory" layer.
 wiki/authors/     Entity pages for people and organizations.
 wiki/concepts/    Concept pages for ideas, patterns, and technologies.
@@ -104,23 +103,6 @@ The content catalog. Organized by category. Updated after every ingest and every
 
 When answering queries, read `wiki/index.md` first to locate relevant pages, then drill into them.
 
-## log.md
-
-Append-only chronological record. Each entry uses a consistent prefix for parseability:
-
-```markdown
-## [YYYY-MM-DD] type | Title
-
-- Created: [[page-1]], [[page-2]]
-- Updated: [[page-3]]
-- Sources: `raw/filename.md`
-- Notes: any relevant observations
-```
-
-Entry types: `ingest`, `query`, `lint`.
-
-`grep "^## \[" wiki/log.md | tail -5` shows the last 5 entries. Keep this pattern intact.
-
 ## YouTube Videos
 
 This project uses the Gemini YouTube extension. When the user shares a YouTube URL, the extension delivers the video content directly into the conversation — no file lands on disk. To keep the `raw/` layer complete, **always create a source stub in `raw/` after processing a YouTube video.**
@@ -174,7 +156,7 @@ The commit message should be useful in `git log` — include the source name and
 ## Rules
 
 1. **Never modify files in `raw/`** — that's the source of truth.
-2. **Always update `index.md` and `log.md`** when creating or significantly updating pages.
+2. **Always update `index.md`** when creating or significantly updating pages.
 3. **Always add a `## Related` section** to new pages with links to existing pages.
 4. **Always update the `updated` date** in frontmatter when editing a page.
 5. **Prefer creating a page over leaving knowledge in chat history.** Good answers, comparisons, and analyses should be filed as wiki pages.

@@ -39,7 +39,7 @@ Work through this checklist:
 - [ ] **Concept pages**: Create or update a page for each significant concept. Add `## Thread` section linking to relevant threads. Connect to related concepts via `## Related`
 - [ ] **Thread updates**: Update existing thread pages to incorporate new concepts and claims. If the source introduces a coherent argument that doesn't fit any existing thread, propose a new thread to the human
 - [ ] **Bidirectional cross-refs**: For each new page, edit at least 2-3 **existing** pages to add backlinks in their `## Related` sections. New→old AND old→new.
-- [ ] **Index and log**: Add all new pages to `wiki/index.md` under the correct category. Append entry to `wiki/log.md`
+- [ ] **Index**: Add all new pages to `wiki/index.md` under the correct category.
 
 #### Step 3: Present filing summary to the human
 
@@ -55,7 +55,7 @@ After filing is complete, load [analytical-pass.md](references/analytical-pass.m
 
 ### Batch ingest
 
-If processing multiple sources, complete both phases per source. Batch index and log updates — update `index.md` once at the end and write one log entry covering all sources.
+If processing multiple sources, complete both phases per source. Batch index updates — update `index.md` once at the end.
 
 ## Query
 
@@ -67,7 +67,7 @@ Answering questions using wiki knowledge.
 2. Read the relevant **thread pages** first — they provide the narrative context and show how concepts connect
 3. Drill into individual concept and source pages as needed
 4. If pages link to other pages that seem relevant, follow the links
-5. Check `wiki/log.md` (last 10 entries) for recent activity that might be relevant
+5. Check recent git history for activity that might be relevant
 
 ### Step 2: Synthesize an answer
 
@@ -83,7 +83,6 @@ If the answer is substantial (a comparison, an analysis, a connection discovered
 - [ ] Add to `wiki/index.md` under the correct category (threads, concepts, etc.)
 - [ ] Add `## Related` links from existing pages
 - [ ] If it traces a theme across sources, create it as a thread page under `wiki/threads/`
-- [ ] Append a `query` entry to `wiki/log.md`
 
 The user may decline — that's fine. But always offer.
 
@@ -104,13 +103,12 @@ Work through each item and report findings:
 - [ ] **Thin pages**: Pages with only a few sentences that could be merged or expanded
 - [ ] **Missing frontmatter**: Pages without proper frontmatter (title, created, updated, sources, tags)
 - [ ] **Index accuracy**: Every page in the wiki directory is listed in `index.md`, and every entry in `index.md` points to an existing page
-- [ ] **Log recency**: Last log entry matches the most recent file modification in the wiki
 
 ### How to check
 
 ```bash
 # List all wiki pages
-find wiki/ -name "*.md" ! -name "index.md" ! -name "log.md" | sort
+find wiki/ -name "*.md" ! -name "index.md" | sort
 
 # Check for wiki-links that don't resolve (searches subdirectories)
 grep -roh '\[\[[a-z0-9-]*\]\]' wiki/ | sort -u | while read link; do
@@ -133,9 +131,6 @@ grep -rh 'Thread' wiki/concepts/ | grep -oP '\[\[([a-z0-9-]+)\]\]' | sort -u | w
   clean="${link//[[/}"; clean="${clean//]]/}"
   [ ! -f "wiki/threads/${clean}.md" ] && echo "  MISSING: thread ${clean} does not exist"
 done
-
-# Recent log entries
-grep "^## \[" wiki/log.md | tail -10
 ```
 
 ### Report and fix
@@ -144,7 +139,7 @@ grep "^## \[" wiki/log.md | tail -10
 2. Fix what you can (broken links, missing frontmatter, index drift)
 3. For judgment calls (merges, reorganizations, contradiction resolutions), propose changes and ask the user
 4. Suggest new pages to create and new sources to look for
-5. Append a `lint` entry to `wiki/log.md`
+5. Commit fixes with a descriptive message
 
 ## Gotchas
 
