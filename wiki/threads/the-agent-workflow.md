@@ -7,7 +7,6 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-software-fundamentals-matter-more-than-ever.md
   - raw/yt-dhh-ai-pilled.md
-  - raw/yt-why-lms-hallucinate.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management]
 ---
 
@@ -35,7 +34,7 @@ This isn't a one-time handoff — it's a cycle. After each AFK execution, the hu
 
 ## Managing Context
 
-Context management is the operational challenge nobody anticipated. The [[smart-zone-dumb-zone]] heuristic describes the problem: LLMs reason best in the first ~100k tokens of context. Beyond that, attention degrades quadratically. The model starts ignoring constraints, losing track of the design concept, and its tendency to [[hallucination|hallucinate]] increases as it struggles to synthesize a bloated context.
+Context management is the operational challenge nobody anticipated. The [[smart-zone-dumb-zone]] heuristic describes the problem: LLMs reason best in the first ~100k tokens of context. Beyond that, attention degrades quadratically. The model starts ignoring constraints, hallucinating APIs, and losing track of the design concept.
 
 The fix isn't bigger context windows — it's **ruthless context hygiene**:
 
@@ -83,5 +82,4 @@ Putting it together:
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Context management, malleability, minimalism
 - `raw/yt-software-fundamentals-matter-more-than-ever.md` — AI design loop, shared design concept
 - `raw/yt-dhh-ai-pilled.md` — DHH on the shift from manual implementation to agentic workflows
-- `raw/yt-why-lms-hallucinate.md` — Technical background on hallucinations as a failure mode of LLM reasoning.
 

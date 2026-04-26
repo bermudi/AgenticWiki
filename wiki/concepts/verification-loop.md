@@ -21,7 +21,7 @@ tags: ["ai-workflow", "testing", "rigor"]
 
 ## Importance
 
-The verification loop is the primary defense against [[vibes-based-engineering]] and [[hallucination|hallucinations]]. It shifts the burden of proof from the human "vibing" the code to the machine proving the code meets the system's requirements.
+The verification loop is the primary defense against [[vibes-based-engineering]]. It shifts the burden of proof from the human "vibing" the code to the machine proving the code meets the system's requirements.
 
 - [[grey-box-engineering]] — Emphasizes the loop as a replacement for trust.
 - [[ai-design-loop]] — The broader process of which the verification loop is a part.

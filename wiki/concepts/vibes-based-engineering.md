@@ -15,7 +15,7 @@ tags: ["anti-pattern", "ai-engineering", "heuristics"]
 - **Shallow Prompting**: Providing minimal context and hoping the LLM "gets it."
 - **Lack of Verification**: Not running tests or static analysis to confirm the AI's output works as intended.
 - **Trial and Error**: Repeatedly asking the AI to "try again" without providing more information or structure.
-- **Trust over Evidence**: Relying on the fluency of the LLM rather than the correctness of the code. This makes the system highly susceptible to [[hallucination|hallucinations]].
+- **Trust over Evidence**: Relying on the fluency of the LLM rather than the correctness of the code.
 
 ## The Alternative: "No Vibes"
 
@@ -30,7 +30,6 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 ## Related
 
 - [[slop]] — Vibes-based engineering often leads to the generation of "slop."
-- [[hallucination]] — The technical failure mode that vibes-based engineering fails to detect.
 - [[grey-box-engineering]] — The rigorous alternative that emphasizes the [[verification-loop]].
 - [[strategic-vs-tactical-programming]] — Vibes-based engineering is the extreme end of tactical programming.
 - [[peak-programmer]] — The era that incentivizes the speed of vibes over the rigor of engineering.

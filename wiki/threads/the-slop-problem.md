@@ -8,7 +8,6 @@ sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-reinventing-software-panel.md
-  - raw/yt-why-lms-hallucinate.md
 tags: [thread, ai-engineering, code-quality, failure-modes]
 ---
 
@@ -49,7 +48,6 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 ## Concepts in this thread
 
 - [[slop]] — Low-quality AI output that degrades system health
-- [[hallucination]] — The root engine of slop; confident but incorrect generation.
 - [[compounding-booboos]] — Small errors accumulating into systemic failure
 - [[vibes-based-engineering]] — Accepting AI output without context or verification
 - [[verification-loop]] — Automated feedback loops as the primary defense
@@ -60,5 +58,4 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Diagnosis of vibes-based engineering in complex codebases
 - `raw/yt-ai-coding-for-real-engineers.md` — The design-loop failure mode and context management
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
-- `raw/yt-why-lms-hallucinate.md` — Details on the technical causes and types of hallucinations.
 
