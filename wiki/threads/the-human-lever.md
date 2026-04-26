@@ -7,6 +7,7 @@ sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-dhh-ai-pilled.md
+  - raw/yt-reinventing-software-panel.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop]
 ---
 
@@ -33,7 +34,13 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 [[dex-horthy|Dex Horthy]] provides the mechanical side: the **[[verification-loop]]** is the contract between human design authority and agent implementation. It has four steps: propose, execute, verify (static + dynamic analysis), refine. This loop replaces trust with proof. You don't *believe* the agent's code is correct — you *prove* it with types, tests, and linters.
 
+[[kent-beck|Kent Beck]] argues that TDD (Test-Driven Development) is more important now than ever. In the AI era, tests are the primary mechanism for "ordering" and "verifying" work from what he calls "the genie." TDD is the feedback loop that keeps the human in control of the implementation.
+
 [[mario-zechner|Mario Zechner]] reinforces this from the tooling side: [[pi]] is designed around **observability** so the human can always see what the agent is doing and intervene before small errors compound. Minimalism in tooling isn't an aesthetic choice — it's a structural safeguard against the speed-review bottleneck.
+
+## Agent Experience (AX) is Developer Experience (DX)
+
+A major insight from [[martin-fowler|Martin Fowler]] and [[kent-beck|Kent Beck]] is the convergence of human and agent needs. The same architectural patterns that make code easier for humans to understand (modularity, low coupling, strong contracts) are precisely what allow AI agents to operate effectively. High **[[agent-experience|AX]]** is not a separate goal from good **DX**; they are the same thing. Writing code for an AI isn't about learning "prompt engineering"—it's about doubling down on the fundamentals of the software craft.
 
 ## The Principle
 
@@ -45,6 +52,7 @@ Delegation without design authority is abdication. The human isn't less importan
 
 ## Concepts in this thread
 
+- [[agent-experience]] — Converging DX and AX
 - [[grey-box-engineering]] — Owning interfaces, delegating implementation
 - [[strategic-vs-tactical-programming]] — Human as strategist, AI as tactician
 - [[shared-design-concept]] — The "theory of the code" both human and agent must share

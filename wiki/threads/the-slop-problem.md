@@ -7,6 +7,7 @@ sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-dhh-ai-pilled.md
+  - raw/yt-reinventing-software-panel.md
 tags: [thread, ai-engineering, code-quality, failure-modes]
 ---
 
@@ -29,6 +30,10 @@ The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent 
 [[matt-pocock|Matt Pocock]] adds a structural angle: the problem is worst when engineers skip the design phase entirely and jump straight from a vague spec to generated code — what he calls the failure mode of the **[[ai-design-loop]]**.
 
 [[dhh|David Heinemeier Hansson]] identifies a similar risk in the "AI as autocomplete" paradigm. When AI is used merely to finish a sentence or a line of code, it encourages a hyper-tactical focus that ignores the overall architecture, inevitably leading to a fragmented, unmaintainable system. He argues that true value comes from treating AI as an agent that understands the high-level intent, rather than a glorified typewriter.
+
+## The Snake Oil Industry
+
+[[martin-fowler|Martin Fowler]] points out that every technological shift—like the 1990s move to OOP and the Internet—is accompanied by a "snake oil" industry. This "AI Industrial Complex" (echoing the "Agile Industrial Complex") sells shallow solutions that prioritize immediate tactical gains (like generating code faster) over long-term system health. This market pressure accelerates the production of slop by encouraging teams to replace deep engineering with fast, unverified generation.
 
 ## Why It Matters
 
