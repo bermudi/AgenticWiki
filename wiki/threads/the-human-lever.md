@@ -69,6 +69,16 @@ Delegation without design authority is abdication. The human isn't less importan
 - **Conservative upgrades**: Agent-cheapened upgrades invalidate the shared theory embedded in comments and patterns. The human must be *more* conservative, not less.
 - **More code, fewer dependencies**: Generated code the agent can maintain beats library sprawl the agent can't control.
 
+## Huntley's Environmental Design
+
+[[geoffrey-huntley|Geoffrey Huntley]] reframes the human's role from directing the agent to **engineering the environment**:
+
+- **[[backpressure|Backpressure]] over direction**: The human's job isn't to tell the agent what to do. It's to create conditions where wrong outputs are mechanically rejected — tests that fail, builds that break, LLM-as-judge that rejects.
+- **[[plan-disposability|Plan disposability]]**: The human decides when to regenerate a plan, not the agent. Plans are coordination state owned by the human.
+- **Specs as boundaries**: `specs/` files define what should exist. The agent gap-analyzes against them. The human owns the specs.
+
+This extends Grey Box Engineering: the human doesn't just own the interface (types, function signatures), they own the **entire environment** — the plan, the specs, the backpressure mechanisms, the validation commands in AGENTS.md.
+
 ## Concepts in this thread
 
 - [[agent-experience]] — Converging DX and AX
@@ -79,6 +89,9 @@ Delegation without design authority is abdication. The human isn't less importan
 - [[verification-loop]] — Automated proof replacing human trust
 - [[aesthetics-is-truth]] — Beauty as a proxy for technical correctness and quality
 - [[tool-design-for-agents]] — Tool design as part of the verification contract
+- [[backpressure]] — Engineering the environment to reject wrong outputs
+- [[ralph-loop]] — The canonical AFK loop implementation
+- [[plan-disposability]] — Plans as ephemeral coordination state
 
 ## Related threads
 
@@ -92,4 +105,6 @@ Delegation without design authority is abdication. The human isn't less importan
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Observability, minimalism as a structural safeguard
 - `raw/yt-dhh-ai-pilled.md` — The "AI-pilled" workflow and aesthetics as truth
 - `raw/yt-how-agents-use-dev-tools.md` — Trust models, confidence levels, and constraining agents
+- `raw/how-to-ralph-wiggum.md` — Backpressure over direction, environmental design
+- `raw/ralph-wiggum-playbook.md` — Human roles shift to engineering conditions for good outcomes
 

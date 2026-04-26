@@ -2,14 +2,12 @@
 title: The Agent Workflow
 created: 2026-04-25
 updated: 2026-04-26
-sources:
-  - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-software-fundamentals-matter-more-than-ever.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-claude-code-feature-build.md
   - raw/yt-how-agents-use-dev-tools.md
-tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design]
+tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
 # The Agent Workflow
@@ -79,6 +77,12 @@ Putting it together:
 - **Parallelization frontier**: Ronacher identifies shared state (filesystem, databases) as the bottleneck for running multiple agents. Tools like container-use and background agents are early attempts at solving this.
 - **Refactor timing**: Don't refactor too early (wastes agent effort) or too late (complexity overwhelms the agent). Extract component libraries when Tailwind classes splinter across 50 files.
 
+## Huntley's Ralph Loop
+
+[[geoffrey-huntley|Geoffrey Huntley]]'s [[ralph-loop|Ralph Loop]] provides the most operationally detailed AFK implementation in the wiki. A dumb bash loop feeds a prompt to Claude; the agent reads a plan file, picks one task, implements, commits, exits. Fresh context each iteration. [[backpressure|Backpressure]] rejects wrong outputs. [[plan-disposability|Plans are disposable]]. See [[ralph-loop]] for full mechanics.
+
+The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requirements) is HITL, Phase 2 (Planning) is automated gap analysis, Phase 3 (Building) is AFK with backpressure.
+
 ## Concepts in this thread
 
 - [[afk-agent]] — Agents that implement features in the background
@@ -90,6 +94,9 @@ Putting it together:
 - [[verification-loop]] — Automated feedback for each execution step
 - [[peak-programmer]] — The shift from manual implementation to high-level design and verification
 - [[tool-design-for-agents]] — Tool output design as workflow infrastructure
+- [[backpressure]] — Engineering the environment to reject wrong outputs
+- [[ralph-loop]] — The canonical AFK loop implementation
+- [[plan-disposability]] — Plans as ephemeral coordination state
 
 ## Related threads
 
@@ -105,4 +112,6 @@ Putting it together:
 - `raw/yt-claude-code-feature-build.md` — Ubiquitous Language, AFK agents (Ralph), PRD to Issues pipeline
 - `raw/yt-how-agents-use-dev-tools.md` — Tool design as workflow infrastructure, scale effects, context reduction
 - `raw/agentic-coding-recommendations.md` — Go for agents, Makefile interfaces, parallelization, refactor timing
+- `raw/how-to-ralph-wiggum.md` — Ralph Wiggum loop: one task per iteration, backpressure, plan disposability
+- `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology
 

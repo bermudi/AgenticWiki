@@ -1,0 +1,56 @@
+---
+title: Backpressure
+created: 2026-04-26
+updated: 2026-04-26
+sources:
+  - raw/how-to-ralph-wiggum.md
+  - raw/ralph-wiggum-playbook.md
+tags: [concept, autonomous-agents, agent-loops, verification, convergence]
+---
+
+# Backpressure
+
+> Engineering the environment so that wrong agent outputs are mechanically rejected, rather than trying to direct the agent's every move. The primary convergence mechanism for autonomous agent loops.
+
+## The Core Insight
+
+[[geoffrey-huntley|Geoffrey Huntley]]'s principle: "Backpressure beats direction." Instead of telling the agent what to do, create conditions where wrong outputs get rejected automatically. The human's role shifts from directing to **engineering the environment**.
+
+## Three Layers
+
+### Downstream Gates
+Tests, type-checking, linting, build validation. Deterministic and mechanical. If these fail, the agent knows to retry or adjust. This is the [[verification-loop]] operating autonomously.
+
+### Upstream Steering
+Existing code patterns guide the agent's approach. It discovers conventions through exploration rather than explicit instruction. The codebase itself becomes a form of documentation that shapes agent behavior.
+
+### LLM-as-Judge
+For subjective criteria (tone, aesthetics, UX quality), use another LLM call with binary pass/fail. Non-deterministic by nature, but converges through iteration. The Ralph playbook implements this as a reusable fixture (`llm-review.ts`) with a clean API the agent discovers from code examples.
+
+## Start With Hard Gates
+
+Tests and builds are deterministic. Start there. Add LLM-as-judge for subjective criteria only after the mechanical backpressure is working.
+
+## Relationship to Verification Loop
+
+[[verification-loop|Verification loops]] are the mechanism; backpressure is the strategy. A verification loop proves individual changes correct. Backpressure engineers the loop into the autonomous workflow so that the agent can't escape verification — it's built into the environment, not optional.
+
+## Thread
+
+- [[the-agent-workflow]] — Backpressure as the convergence mechanism in the AFK loop
+- [[the-slop-problem]] — Backpressure as the primary defense against slop in autonomous mode
+- [[the-human-lever]] — Engineering backpressure as the human's new role
+
+## Related
+
+- [[verification-loop]] — The mechanism backpressure employs
+- [[afk-agent]] — Autonomous agents need backpressure to converge
+- [[slop]] — Lack of backpressure produces slop
+- [[agent-friendly-tooling]] — Fast tools make backpressure tighter
+- [[compounding-booboos]] — Backpressure catches booboos before they compound
+- [[geoffrey-huntley]] — Originator of the "backpressure beats direction" principle
+
+## Sources
+
+- `raw/how-to-ralph-wiggum.md` — Backpressure as the core principle of the Ralph loop
+- `raw/ralph-wiggum-playbook.md` — Three layers of backpressure (downstream, upstream, LLM-as-judge)

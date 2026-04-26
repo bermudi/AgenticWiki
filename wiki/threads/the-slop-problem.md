@@ -57,6 +57,14 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - **Tooling speed as slop factor**: Slow tools mean fewer verification cycles per session. The agent writes more code between checks, increasing the chance of uncaught errors.
 - **Upgrade-induced slop**: Agent-cheapened upgrades invalidate stale decision comments and patterns. The agent builds on outdated assumptions — a subtle form of slop that passes tests.
 
+## Huntley on Autonomous Slop
+
+[[geoffrey-huntley|Geoffrey Huntley]] identifies slop as the primary risk of autonomous loops and provides the most detailed defense:
+
+- **[[backpressure|Backpressure]] as the primary defense**: Without backpressure (tests, builds, LLM-as-judge), autonomous loops produce slop by default. The agent keeps going, accumulating [[compounding-booboos|booboos]] across iterations with no correction signal.
+- **Context degradation as slop source**: The [[smart-zone-dumb-zone|Dumb Zone]] doesn't just degrade reasoning — it produces slop that compounds across loop iterations. Fresh context per iteration is slop prevention.
+- **Stale plans as slop**: A drifting plan causes the agent to implement wrong things, duplicate work, and build on outdated assumptions. [[plan-disposability|Plan disposability]] is a slop defense.
+
 ## Concepts in this thread
 
 - [[slop]] — Low-quality AI output that degrades system health
@@ -65,6 +73,9 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - [[vibes-based-engineering]] — Accepting AI output without context or verification
 - [[verification-loop]] — Automated feedback loops as the primary defense
 - [[tool-design-for-agents]] — Tool design determines feedback loop efficiency
+- [[backpressure]] — Engineering the environment to reject wrong outputs
+- [[ralph-loop]] — The loop that needs backpressure to converge
+- [[plan-disposability]] — Stale plans as a slop source
 
 ## Sources
 
