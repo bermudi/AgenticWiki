@@ -8,6 +8,8 @@ tags: ["design", "ai-engineering", "mental-models"]
 
 # Shared Design Concept
 
+> The underlying "theory of the code" that both human and AI agent must share to produce coherent work. Without it, each agent session drifts further from the original architecture.
+
 A **Shared Design Concept** is the underlying theory or mental model of how a system works. It is the "why" behind the code.
 
 ## The Human-AI Gap

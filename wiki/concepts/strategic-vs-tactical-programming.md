@@ -8,6 +8,8 @@ tags: ["software-design", "ai-engineering", "strategy"]
 
 # Strategic vs. Tactical Programming
 
+> A distinction from Ousterhout's *A Philosophy of Software Design*, central to the AI era: the human must be the strategist (designing interfaces, choosing patterns) while the AI acts as the ultimate tactician (implementing exactly what's asked, whether or not it's good for the system).
+
 A distinction popularized by **John Ousterhout** in *A Philosophy of Software Design* and central to **Matt Pocock's** argument for modern engineering.
 
 ## Tactical Programming

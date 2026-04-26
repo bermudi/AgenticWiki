@@ -9,7 +9,8 @@ sources:
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-reinventing-software-panel.md
   - raw/yt-why-llms-hallucinate.md
-tags: [thread, ai-engineering, code-quality, failure-modes]
+  - raw/yt-how-agents-use-dev-tools.md
+tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
 # The Slop Problem
@@ -18,7 +19,7 @@ tags: [thread, ai-engineering, code-quality, failure-modes]
 
 ## The Threat
 
-Three sources in this wiki converge on the same warning: the bottleneck has shifted. It used to be writing code. Now it's **reviewing** code. AI can produce hundreds of lines in seconds, but a human still needs to understand every one of those lines before shipping them. That asymmetry is dangerous.
+Multiple sources in this wiki converge on the same warning: the bottleneck has shifted. It used to be writing code. Now it's **reviewing** code. AI can produce hundreds of lines in seconds, but a human still needs to understand every one of those lines before shipping them. That asymmetry is dangerous.
 
 [[mario-zechner|Mario Zechner]] calls the output of that asymmetry **[[slop]]** — code that works, sort of, but rots the codebase from the inside. He identifies the agents that mass-produce slop as bloated, opaque tools that "fire and forget" without giving the human enough visibility or control to catch the damage.
 
@@ -29,6 +30,8 @@ The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent 
 [[dex-horthy|Dex Horthy]] frames this as the failure mode of **[[vibes-based-engineering]]**: prompting an LLM and accepting the output without providing adequate context or running verification. This works for isolated, trivial tasks. In a complex codebase — where knowledge is distributed across files, implicit dependencies exist, and architectural patterns must be followed — vibes-based engineering produces code that *looks* right but violates the system's invariants.
 
 [[matt-pocock|Matt Pocock]] adds a structural angle: the problem is worst when engineers skip the design phase entirely and jump straight from a vague spec to generated code — what he calls the failure mode of the **[[ai-design-loop]]**. He also identifies **[[hallucination]]** as the technical fuel for slop—the statistical nature of LLMs means they will inevitably fabricate details (intrinsic or extrinsic) that look plausible but are functionally incorrect.
+
+[[zanie-blue|Zanie Blue]] adds the tool design dimension: when tool output is optimized for humans rather than agents, it floods context windows with noise, pushing agents into the [[smart-zone-dumb-zone|Dumb Zone]]. Verbose diagnostics eat the context budget without providing actionable signal. Without [[tool-design-for-agents|tools designed for agentic consumption]], agents produce more slop not because they're careless, but because the feedback loop is inefficient.
 
 [[dhh|David Heinemeier Hansson]] identifies a similar risk in the "AI as autocomplete" paradigm. When AI is used merely to finish a sentence or a line of code, it encourages a hyper-tactical focus that ignores the overall architecture, inevitably leading to a fragmented, unmaintainable system. He argues that true value comes from treating AI as an agent that understands the high-level intent, rather than a glorified typewriter.
 
@@ -44,7 +47,7 @@ The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent 
 
 ## What the Sources Agree On
 
-All three speakers agree: the answer isn't to use less AI. It's to change *how* you use it. The human must shift from writing code to **owning design boundaries and verifying outcomes**. [[aesthetics-is-truth|Aesthetic decay]] is often the first visible sign that slop is accumulating. That argument continues in [[the-human-lever]].
+All these sources agree: the answer isn't to use less AI. It's to change *how* you use it. The human must shift from writing code to **owning design boundaries and verifying outcomes**. [[aesthetics-is-truth|Aesthetic decay]] is often the first visible sign that slop is accumulating. That argument continues in [[the-human-lever]].
 
 ## Concepts in this thread
 
@@ -53,6 +56,7 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 - [[hallucination]] — The technical mechanism for generating false info
 - [[vibes-based-engineering]] — Accepting AI output without context or verification
 - [[verification-loop]] — Automated feedback loops as the primary defense
+- [[tool-design-for-agents]] — Tool design determines feedback loop efficiency
 
 ## Sources
 
@@ -61,6 +65,7 @@ All three speakers agree: the answer isn't to use less AI. It's to change *how* 
 - `raw/yt-ai-coding-for-real-engineers.md` — The design-loop failure mode and context management
 - `raw/yt-why-llms-hallucinate.md` — The technical causes of hallucination as the source of slop.
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
+- `raw/yt-how-agents-use-dev-tools.md` — Tool design as a factor in slop production.
 
 ## Related threads
 

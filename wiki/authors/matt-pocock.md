@@ -8,6 +8,8 @@ tags: ["typescript", "ai-engineering", "author"]
 
 # Matt Pocock
 
+> TypeScript expert turned AI-engineering advocate. Champions a return to software fundamentals — deep modules, shared design concepts, and verification loops — as the key to making AI-assisted development actually work.
+
 Matt Pocock is a TypeScript expert, educator, and developer advocate known for his deep dives into the TypeScript type system. Recently, he has focused on the intersection of AI and software engineering, advocating for the return to fundamentals as a way to manage the complexity introduced by LLMs.
 
 ## Key Concepts Championed

@@ -8,7 +8,8 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-reinventing-software-panel.md
-tags: [thread, ai-engineering, software-design, human-in-the-loop]
+  - raw/yt-how-agents-use-dev-tools.md
+tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
 # The Human Lever
@@ -42,9 +43,18 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 A major insight from [[martin-fowler|Martin Fowler]] and [[kent-beck|Kent Beck]] is the convergence of human and agent needs. The same architectural patterns that make code easier for humans to understand (modularity, low coupling, strong contracts) are precisely what allow AI agents to operate effectively. High **[[agent-experience|AX]]** is not a separate goal from good **DX**; they are the same thing. Writing code for an AI isn't about learning "prompt engineering"—it's about doubling down on the fundamentals of the software craft.
 
+## Trust Models for Agents
+
+[[zanie-blue|Zanie Blue]] raises the question: should agents have the same escape hatches as humans? Tools like `noqa`, type error suppressions, and format-off directives allow humans to override automated feedback. For agents, these same mechanisms can enable [[vibes-based-engineering|bypassing the verification loop]] instead of genuinely resolving the issue.
+
+The design principle: **default to constraining agents more than humans**. This extends the grey box model — the human owns the boundaries (including which escape hatches are available), and the agent operates within those constraints. Tool-level sandboxing (e.g., uv restricting filesystem access for uvx commands) applies this at the infrastructure layer.
+
+> [!note] Departure: More Signal, Fewer Escapes
+> Zanie's position contains a productive tension: agents should receive **more** feedback (low-confidence lints, unsafe fixes) — trusting the agent to filter noise — but **fewer** escape hatches (no `noqa`, no suppressions) — constraining the agent from bypassing feedback. This is not a contradiction but a design principle: flood the agent with signal, then force it to engage with that signal rather than suppress it. It inverts the traditional tool design pattern of "fewer but more confident results with human overrides."
+
 ## The Principle
 
-The unifying principle across all three sources:
+The unifying principle across all sources:
 
 > **The more code the AI writes, the more your design decisions matter.**
 
@@ -59,6 +69,7 @@ Delegation without design authority is abdication. The human isn't less importan
 - [[deep-vs-shallow-modules]] — Deep modules as the ideal delegation target
 - [[verification-loop]] — Automated proof replacing human trust
 - [[aesthetics-is-truth]] — Beauty as a proxy for technical correctness and quality
+- [[tool-design-for-agents]] — Tool design as part of the verification contract
 
 ## Related threads
 
@@ -71,4 +82,5 @@ Delegation without design authority is abdication. The human isn't less importan
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loops, code intelligence
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Observability, minimalism as a structural safeguard
 - `raw/yt-dhh-ai-pilled.md` — The "AI-pilled" workflow and aesthetics as truth
+- `raw/yt-how-agents-use-dev-tools.md` — Trust models, confidence levels, and constraining agents
 

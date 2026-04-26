@@ -2,8 +2,8 @@
 title: Agent Experience (AX)
 created: 2026-04-25
 updated: 2026-04-25
-sources: ["raw/yt-reinventing-software-panel.md"]
-tags: ["concept", "dx", "ax", "software-design"]
+sources: ["raw/yt-reinventing-software-panel.md", "raw/yt-how-agents-use-dev-tools.md"]
+tags: ["concept", "dx", "ax", "software-design", "tool-design"]
 ---
 
 # Agent Experience (AX)
@@ -16,7 +16,7 @@ Agent Experience (AX) is a burgeoning concept that posits that the quality of a 
 
 ## The AX/DX Convergence
 
-As suggested by Martin Fowler and Kent Beck in the [[reinventing-software-panel]], the Venn diagram of DX and AX is a circle. Practices that make code easier for humans also make it easier for agents:
+As suggested by Martin Fowler and Kent Beck in the [[reinventing-software-panel]], the Venn diagram of DX and AX is a circle. [[zanie-blue|Zanie Blue]] extends this from codebase design to tool design: tools must also be optimized for agentic consumption, not just code structure. Practices that make code easier for humans also make it easier for agents:
 
 - **TDD/Automated Tests:** Provide a clear "contract" for the agent to verify its work.
 - **Deep Modules:** Reduce the surface area an agent needs to reason about at any one time (see [[deep-vs-shallow-modules]]).
@@ -40,7 +40,10 @@ As software development shifts toward agentic workflows, the "usability" of a co
 - [[compounding-booboos]] — Poor AX causes errors to compound.
 - [[martin-fowler]] — Co-originator of the AX/DX convergence insight.
 - [[kent-beck]] — Co-originator of the AX/DX convergence insight.
+- [[zanie-blue]] — Extended AX from codebases to tool design.
+- [[tool-design-for-agents]] — Extends AX from codebases to the tools agents use.
 
 ## Sources
 
 - `raw/yt-reinventing-software-panel.md`
+- `raw/yt-how-agents-use-dev-tools.md`

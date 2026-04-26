@@ -25,9 +25,6 @@ Matt Pocock defines the design process in two phases:
 
 ## Thread
 - [[the-agent-workflow]] — The design loop as the planning phase of the agent workflow
-
-## Thread
-- [[the-agent-workflow]] — The design loop as the planning phase of the agent workflow
 - [[the-slop-problem]] — Skipping the design loop is a primary source of slop
 
 ## Related

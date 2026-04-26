@@ -8,7 +8,8 @@ sources:
   - raw/yt-software-fundamentals-matter-more-than-ever.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-claude-code-feature-build.md
-tags: [thread, ai-engineering, workflow, agent-design, context-management]
+  - raw/yt-how-agents-use-dev-tools.md
+tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design]
 ---
 
 # The Agent Workflow
@@ -32,6 +33,12 @@ The key discipline: **never skip the Destination**. Going straight from a vague 
 - **AFK (Away-From-Keyboard)**: Once the plan is granular enough, an [[afk-agent]] executes autonomously. Each task is bounded by the interfaces and verified by the [[verification-loop]].
 
 This isn't a one-time handoff — it's a cycle. After each AFK execution, the human reviews the outcome (via tests, not line-reading) and adjusts the plan before the next AFK session.
+
+## Tool Design as Workflow Infrastructure
+
+[[zanie-blue|Zanie Blue]] (Astral) identifies tool output design as a workflow concern, not just a tooling detail. When agents run tools in the AFK phase, the output those tools produce directly affects context consumption. Verbose output from a type checker or package manager floods the context window, degrading subsequent reasoning.
+
+The fix is [[tool-design-for-agents|designing tools for agentic consumption]]: machine-readable output with built-in context reduction, verbose logs persisted to files instead of returned inline, and schemas that let agents request only the data they need. This isn't a nice-to-have — as inference gets faster, tools become the bottleneck.
 
 ## Managing Context
 
@@ -73,6 +80,7 @@ Putting it together:
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves
 - [[verification-loop]] — Automated feedback for each execution step
 - [[peak-programmer]] — The shift from manual implementation to high-level design and verification
+- [[tool-design-for-agents]] — Tool output design as workflow infrastructure
 
 ## Related threads
 
@@ -86,4 +94,5 @@ Putting it together:
 - `raw/yt-software-fundamentals-matter-more-than-ever.md` — AI design loop, shared design concept
 - `raw/yt-dhh-ai-pilled.md` — DHH on the shift from manual implementation to agentic workflows
 - `raw/yt-claude-code-feature-build.md` — Ubiquitous Language, AFK agents (Ralph), PRD to Issues pipeline
+- `raw/yt-how-agents-use-dev-tools.md` — Tool design as workflow infrastructure, scale effects, context reduction
 

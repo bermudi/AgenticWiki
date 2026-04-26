@@ -19,6 +19,9 @@ In the context of AI coding assistants like [[cody]], code intelligence is used 
 
 This prevents [[vibes-based-engineering]] by grounding the AI's suggestions in the actual structure of the codebase.
 
+## Thread
+- [[the-human-lever]] — Code intelligence as the foundation for high-fidelity context in grey box engineering
+
 ## Related
 
 - [[sourcegraph]] — A platform built around code intelligence.

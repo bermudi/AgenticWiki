@@ -12,6 +12,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
 
 ## ✍️ Authors
+- [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
 - [[dex-horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
@@ -30,6 +31,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 ### David Heinemeier Hansson (DHH)
 - [[dhh-ai-pilled-interview]] — The shift to agentic workflows and the end of implementation.
 
+### Zanie Blue
+- [[how-agents-use-developer-tools]] — Tool design for agentic consumption: feedback, context reduction, confidence levels, trust models.
+
 ### Mario Zechner
 - [[building-pi-in-a-world-of-slop]] — Minimalism, malleability, and avoiding "slop" in AI coding.
 
@@ -40,6 +44,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[yt-claude-code-feature-build]] — Building a complex feature with an AI agent (Claude Code).
 
 ## 🧠 Concepts
+- [[tool-design-for-agents]] — Developer tools need redesigned output, confidence levels, and trust models for agentic consumers.
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
@@ -60,7 +65,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 
+## Organizations
+- [[sourcegraph]] — Universal code search and intelligence platform.
+
 ## 🛠️ Projects & Tools
+- [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.

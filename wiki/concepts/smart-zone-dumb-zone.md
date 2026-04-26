@@ -2,8 +2,8 @@
 title: Smart Zone vs. Dumb Zone
 created: 2026-04-25
 updated: 2026-04-25
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-building-pi-in-a-world-of-slop.md"]
-tags: ["ai-limitations", "context-management"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-building-pi-in-a-world-of-slop.md", "raw/yt-how-agents-use-dev-tools.md"]
+tags: ["ai-limitations", "context-management", "tool-design"]
 ---
 
 # Smart Zone vs. Dumb Zone
@@ -28,6 +28,9 @@ Instead of "compacting" or summarizing a long chat history (which preserves the 
 2. "Clear" the context by starting a fresh session.
 3. Provide the high-quality, minimal context needed for the next task.
 
+### Tool Output as a Context Threat
+[[zanie-blue|Zanie Blue]] (Astral) identifies tool output as a major contributor to Dumb Zone drift. Verbose diagnostics, JSON blobs, and repeated command output flood context windows. The solution isn't bigger context windows — it's tools designed to minimize context consumption: machine-readable output with built-in context reduction, persisting verbose logs to files instead of returning them inline.
+
 ### Connection to [[pi]]
 The [[pi]] agent harness is designed to help stay in the Smart Zone by providing a minimal core and allowing for "sessions" that can be easily reset or partitioned to keep context fresh and relevant.
 
@@ -42,8 +45,12 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[ai-coding-for-real-engineers]] — Source of the concept.
 - [[deep-vs-shallow-modules]] — Deep modules help stay in the Smart Zone.
 - [[ai-design-loop]] — The loop degrades when the Dumb Zone is hit.
+- [[tool-design-for-agents]] — Tool output design as a context management concern.
+- [[zanie-blue]] — Identified tool output as a major contributor to Dumb Zone drift.
+- [[how-agents-use-developer-tools]] — Source of the tool-output-as-context-threat insight.
 
 ## Sources
 
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-building-pi-in-a-world-of-slop.md`
+- `raw/yt-how-agents-use-dev-tools.md`

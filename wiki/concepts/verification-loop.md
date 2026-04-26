@@ -2,8 +2,8 @@
 title: Verification Loop
 created: 2026-04-25
 updated: 2026-04-25
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md"]
-tags: ["ai-workflow", "testing", "rigor"]
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md"]
+tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
 
 # Verification Loop
@@ -23,6 +23,10 @@ tags: ["ai-workflow", "testing", "rigor"]
 
 The verification loop is the primary defense against [[vibes-based-engineering]]. It shifts the burden of proof from the human "vibing" the code to the machine proving the code meets the system's requirements.
 
+## Tool Feedback as the Engine
+
+[[zanie-blue|Zanie Blue]] (Astral) emphasizes that the verification loop depends on tools providing deterministic, specialized feedback. Agents are stochastic — they need static analysis, test runners, and linters to mechanically prove correctness. Research shows agents can't perform complex static analysis even with fine-tuning; they *need* tools for this. The design of [[tool-design-for-agents|tool output]] directly affects how efficiently the loop operates — verbose output floods context, while context-optimized output keeps the agent in the [[smart-zone-dumb-zone|Smart Zone]].
+
 ## Related
 
 - [[grey-box-engineering]] — Emphasizes the loop as a replacement for trust.
@@ -34,12 +38,16 @@ The verification loop is the primary defense against [[vibes-based-engineering]]
 - [[compounding-booboos]] — The loop catches booboos before they compound.
 - [[agent-experience]] — Strong AX depends on verification loops.
 - [[afk-agent]] — AFK agents require verification loops to ensure correctness.
+- [[tool-design-for-agents]] — Tool output design determines verification loop efficiency.
+- [[how-agents-use-developer-tools]] — Source on tools as the engine of verification.
 
 ## Thread
+
 - [[the-human-lever]] — Verification as the contract between human design authority and agent implementation
 - [[the-slop-problem]] — The verification loop as the primary defense against slop
 - [[the-agent-workflow]] — The verification step in every AFK execution cycle
 
 ## Sources
 
-- [[src/no-vibes-allowed-dex-horthy]]
+- `raw/yt-no-vibes-allowed-dex-horthy.md`
+- `raw/yt-how-agents-use-dev-tools.md`

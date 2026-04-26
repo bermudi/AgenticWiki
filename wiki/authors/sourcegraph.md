@@ -30,4 +30,4 @@ Sourcegraph's mission is to make it so that everyone can code. They focus on sol
 
 ## Sources
 
-- [[src/no-vibes-allowed-dex-horthy]]
+- `raw/yt-no-vibes-allowed-dex-horthy.md`

@@ -8,6 +8,8 @@ tags: ["ai-engineering", "software-design", "typescript"]
 
 # Software Fundamentals Matter More Than Ever
 
+> Matt Pocock argues that AI can generate code but can't design systems. The ease of generation makes skipping design tempting — and catastrophic. Doubling down on modularity, ubiquitous language, and TDD is the antidote.
+
 - **Author**: [[matt-pocock|Matt Pocock]]
 - **Type**: Talk / Presentation
 - **Key Themes**: #ai-engineering #software-design #typescript
