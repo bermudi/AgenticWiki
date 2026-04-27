@@ -86,8 +86,9 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
 - `raw/yt-how-agents-use-dev-tools.md` — Tool design as a factor in slop production.
 
-## Related threads
+## Related
 
 - [[the-human-lever]] — The discipline that prevents slop from accumulating.
 - [[the-agent-workflow]] — The operational practices that keep agent output high-quality.
+- [[tool-design-for-agents]] — Tool feedback as the mechanical defense against quality degradation.
 

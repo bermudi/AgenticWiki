@@ -20,12 +20,6 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[ubiquitous-language]] — Ensuring human and agent use the same terminology.
 - [[afk-agent]] — Leveraging background agents for implementation tasks.
 
-## Sources
-- `raw/yt-software-fundamentals-matter-more-than-ever.md`
-- `raw/yt-ai-coding-for-real-engineers.md`
-- `raw/yt-why-llms-hallucinate.md`
-- `raw/yt-claude-code-feature-build.md`
-
 ## Related
 
 - [[dhh]] — Peer in AI-native engineering; shares emphasis on design over implementation.
@@ -36,3 +30,9 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[ubiquitous-language]] — Primary advocate of ubiquitous language in AI workflows.
 - [[ralph-loop]] — Docker-based issue-driven Ralph variant (Sandcastle).
 - [[hallucination]] — Originated the intrinsic/extrinsic hallucination taxonomy used in this wiki.
+
+## Sources
+- `raw/yt-software-fundamentals-matter-more-than-ever.md`
+- `raw/yt-ai-coding-for-real-engineers.md`
+- `raw/yt-why-llms-hallucinate.md`
+- `raw/yt-claude-code-feature-build.md`

@@ -99,10 +99,11 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[ralph-loop]] — The canonical AFK loop implementation
 - [[plan-disposability]] — Plans as ephemeral coordination state
 
-## Related threads
+## Related
 
 - [[the-slop-problem]] — What happens when the human lever is absent
 - [[the-agent-workflow]] — How to operationalize this day-to-day
+- [[tool-design-for-agents]] — Trust models and constraining agents as part of human design authority
 
 ## Sources
 

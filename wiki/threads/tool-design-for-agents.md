@@ -35,8 +35,8 @@ Today's tools output for humans: verbose diagnostics, interactive TUIs, color-co
 ### The Scale Effect
 Agents make it trivially easy to go from one agent to a hundred and back to zero. This means a 10-person team suddenly faces the problems of a 100-engineer organization: concurrency, git worktrees, reproducible environments, declarative dependency management. Tools designed for individual human use become insufficient at agent scale. As inference gets faster, tools — not model intelligence — become the bottleneck.
 
-### The Self-Tooling Horizon
-Research shows agents that construct their own tools outperform those with pre-built harnesses. This isn't theoretical — [[malleable-agents|agents that can modify their own tools]] are already emerging. Plugin extensibility becomes higher priority than it ever was for human-only use: an agent defining custom lint rules to prevent its own future mistakes is a form of agent memory. See [[tool-design-for-agents]] (concept page) for the full framework.
+### Plugin Extensibility and Self-Tooling
+Research shows agents that construct their own tools outperform those with pre-built harnesses. This isn't theoretical — [[malleable-agents|agents that can modify their own tools]] are already emerging. Plugin extensibility becomes higher priority than it ever was for human-only use: an agent defining custom lint rules to prevent its own future mistakes is a form of agent memory. Language servers need re-prioritization too — autocomplete is high-effort but largely irrelevant to agents, while rename/find-references is genuinely valuable. The LSP protocol itself may not be the right abstraction for agents; new protocols may be needed.
 
 ## Layer 2: Language and Infrastructure as Tooling
 
@@ -73,7 +73,6 @@ The risk of minimalism is rigidity. Zechner's answer: [[malleable-agents]]. Both
 
 ## Concepts in this thread
 
-- [[tool-design-for-agents]] — The theoretical framework: feedback qualities, output optimization, confidence levels, trust models
 - [[agent-friendly-tooling]] — The practice: speed, observability, misuse resistance, daemon patterns
 - [[agent-experience]] — AX/DX convergence extends to tool design
 - [[malleable-agents]] — Minimal cores with emergent periphery
@@ -81,7 +80,7 @@ The risk of minimalism is rigidity. Zechner's answer: [[malleable-agents]]. Both
 - [[verification-loop]] — Tool feedback is the engine that drives verification
 - [[slop]] — Poor tool design → unverified output → slop
 
-## Related threads
+## Related
 
 - [[the-agent-workflow]] — Tool speed and output design as the infrastructure layer beneath HITL/AFK
 - [[the-human-lever]] — Trust models and constraining agents as part of human design authority

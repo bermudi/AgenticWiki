@@ -24,7 +24,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
 
 ## 🧠 Concepts
-- [[tool-design-for-agents]] — Developer tools need redesigned output, confidence levels, and trust models for agentic consumers.
 - [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as the practical craft of tooling for agents.
 - [[backpressure]] — Engineering the environment so wrong agent outputs are mechanically rejected.
 - [[ralph-loop]] — Minimalist autonomous agent loop: dumb bash loop, plan file as shared state, one task per iteration.

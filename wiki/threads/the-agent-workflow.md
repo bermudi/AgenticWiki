@@ -154,7 +154,7 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 - [[ralph-loop]] — The canonical AFK loop implementation
 - [[plan-disposability]] — Plans as ephemeral coordination state
 
-## Related threads
+## Related
 
 - [[the-slop-problem]] — What happens when you skip the planning phase
 - [[the-human-lever]] — The design authority that underpins the whole workflow
