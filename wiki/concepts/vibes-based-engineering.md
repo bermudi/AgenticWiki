@@ -39,6 +39,8 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[compounding-booboos]] — Vibe coding lets booboos slip through unchecked.
 - [[dex-horthy]] — The primary critic of vibes-based engineering.
 - [[cody]] — Designed to counter vibes with real codebase context.
+- [[agent-evals]] — Evals are the structural antidote to shipping agents on vibes: "looks right to me" vs "score 0.83, here's what failed"
+- [[agent-quality-engineering]] — The quality framework that replaces vibes with measurement
 - [[ai-design-loop]] — The structured alternative to vibe coding.
 - [[hallucination]] — Vibe coding accepts hallucinated code without verification.
 

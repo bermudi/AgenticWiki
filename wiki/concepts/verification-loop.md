@@ -41,20 +41,23 @@ The verification loop is the primary defense against [[vibes-based-engineering]]
 - [[tool-design-for-agents]] — Tool output design determines verification loop efficiency.
 - [[agent-friendly-tooling]] — Fast tools make verification loops tighter.
 - [[backpressure]] — Backpressure employs verification loops as its mechanism.
+- [[agent-evals]] — The probabilistic equivalent of the verification loop for agentic systems
+- [[agent-quality-loop]] — The flywheel that feeds production failures back into the loop
 - [[ralph-loop]] — The Ralph loop uses verification as its downstream gate.
 - [[shared-design-concept]] — Verification proves the implementation matches the shared concept.
 - [[dex-horthy]] — Advocate for structured verification in AI workflows ("No Vibes Allowed").
 - [[kent-beck]] — Beck's TDD as the original verification loop.
 - [[malleable-agents]] — Malleable agents benefit from tight verification loops.
 - [[strategic-vs-tactical-programming]] — Strategic programming requires verification to prove design intent.
+- [[agent-quality-engineering]] — Evals + observability + flywheel: the quality framework for agentic systems
 - `raw/yt-how-agents-use-dev-tools.md` — Source on tools as the engine of verification.
 
 ## Thread
-
 - [[the-human-lever]] — Verification as the contract between human design authority and agent implementation
 - [[the-slop-problem]] — The verification loop as the primary defense against slop
 - [[the-agent-workflow]] — The verification step in every AFK execution cycle
 - [[tool-design-for-agents]] — Tool feedback is the engine that drives the verification loop
+- [[agent-quality-engineering]] — Evals as the probabilistic verification loop for agentic systems
 
 ## Sources
 

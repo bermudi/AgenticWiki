@@ -10,10 +10,12 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
 - [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
 - [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. Three sources converge on the tool as the bottleneck.
+- [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
 
 ## ✍️ Authors
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
+- [[damian-galarza]] — Multi-agent system operator and author of the three-part agent quality series (evals, observability, quality loop).
 - [[dex-horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum technique for autonomous agent loops.
@@ -31,6 +33,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
+- [[agent-evals]] — CI for probabilistic systems: the 4-layer eval stack for AI agents.
+- [[agent-observability]] — Logs, traces, and metrics for agent decision chains.
+- [[agent-quality-loop]] — The flywheel: traces → evals → scorers → code.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
@@ -55,6 +60,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
+- [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
 

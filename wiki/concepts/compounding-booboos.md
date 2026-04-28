@@ -36,6 +36,7 @@ Because AI agents often lack a deep understanding of the entire system architect
 - [[hallucination]] — Hallucinated code that passes review becomes invisible booboos.
 - [[mario-zechner]] — Coined the term and warned about compounding errors in AI-assisted code.
 - [[backpressure]] — Backpressure catches booboos before they compound.
+- [[agent-quality-loop]] — The quality flywheel catches production booboos and turns them into permanent eval cases
 - [[grey-box-engineering]] — Grey box engineering catches booboos at the interface boundary.
 - [[plan-disposability]] — Stale plans compound booboos across AFK iterations.
 
