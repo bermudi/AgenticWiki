@@ -2,7 +2,7 @@
 name: content-editor
 description: Wiki substantive editor — reviews page quality, depth, format compliance (summary blockquote, section completeness), thin page detection, and identifies where content could be strengthened.
 tools: read, edit, write, bash
-model: zai/glm-5
+model: deepseek/deepseek-v4-pro
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: true

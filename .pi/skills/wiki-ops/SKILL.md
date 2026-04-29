@@ -16,7 +16,7 @@ For wiki structure and conventions, see `AGENTS.md` in the project root.
 
 ## Ingest
 
-Processing a new source into the wiki. **Two-phase operation: filing, then analysis.**
+Processing a new source into the wiki. **Three-phase operation: filing, then analysis, then verification.**
 
 ### Phase 1: Filing
 
@@ -64,9 +64,17 @@ After filing is complete, load [analytical-pass.md](references/analytical-pass.m
 
 **Do not skip Phase 2.** It is not optional.
 
+### Phase 3: Verification
+
+After analysis is complete and the theory summary has been presented to the human, load [verification-pass.md](references/verification-pass.md) and follow those instructions. Verification runs BEFORE committing.
+
+This phase uses separate subagent sessions (source-verifier + mechanical re-checks) to audit the ingest for hallucinations, omissions, deletions, and cross-reference drift. It exists because LLMs silently corrupt documents during delegated editing — verification as a separate judgment pass is architecturally more reliable than self-review.
+
+**Do not skip Phase 3.** It is not optional.
+
 ### Batch ingest
 
-If processing multiple sources, complete both phases per source. Batch index updates — update `index.md` once at the end.
+If processing multiple sources, complete all three phases per source. Batch index updates — update `index.md` once at the end.
 
 ## Query
 

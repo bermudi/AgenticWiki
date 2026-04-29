@@ -2,7 +2,7 @@
 name: link-editor
 description: Wiki cross-reference editor — ensures bidirectional linking, thread↔concept coverage, Related section completeness, and that the wiki's navigation weave is intact.
 tools: read, edit, write, bash
-model: zai/glm-5
+model: deepseek/deepseek-v4-pro
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: true
