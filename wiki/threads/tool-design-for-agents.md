@@ -85,6 +85,7 @@ The risk of minimalism is rigidity. Zechner's answer: [[malleable-agents]]. Both
 - [[the-agent-workflow]] — Tool speed and output design as the infrastructure layer beneath HITL/AFK
 - [[the-human-lever]] — Trust models and constraining agents as part of human design authority
 - [[the-slop-problem]] — Tool feedback as the mechanical defense against quality degradation
+- [[wide-events]] — OTEL SDKs and observability instrumentation as tools agents must wield correctly
 
 ## Sources
 

@@ -55,6 +55,8 @@ Designing for observability from the start is an architectural decision. If your
 
 - [[agent-evals]] — Evals run on trace data; observability is the substrate evals depend on
 - [[agent-quality-loop]] — Traces → evals → scorers → code: observability is the first step in the flywheel
+- [[wide-events]] — Same primitives (spans, structured data), different target: service request processing vs. agent decision chains
+- [[axiom]] — Observability platform that can host agent decision-chain traces alongside service logs
 - [[verification-loop]] — Traces as the input to the verification loop for agentic systems
 - [[agent-experience]] — Designing for observability is an AX principle
 - [[compounding-booboos]] — Tracing catches booboos in their decision context, not as isolated log lines

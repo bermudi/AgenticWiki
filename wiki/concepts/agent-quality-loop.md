@@ -57,6 +57,7 @@ Not every production run needs to go through full LLM-as-judge evals. Sampling (
 
 - [[agent-evals]] — The measurement layer the loop depends on
 - [[agent-observability]] — Traces as the input to the loop
+- [[wide-events]] — Same feedback loop shape: production gaps → add missing data → next time you have it
 - [[verification-loop]] — The deterministic sibling: test → fail → fix → retest
 - [[compounding-booboos]] — The quality loop catches booboos before they compound in production
 - [[tracer-bullets]] — The quality loop as tracer bullets for agent quality

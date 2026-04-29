@@ -52,12 +52,14 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
+- [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.
 
 ## 🛠️ Projects & Tools
 - [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.
+- [[axiom]] — Observability platform for high-cardinality, high-dimensionality log data at scale.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
