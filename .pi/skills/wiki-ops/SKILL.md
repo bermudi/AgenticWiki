@@ -162,6 +162,7 @@ done
 
 ## Gotchas
 
+- **Source-anchored claims only**: Every factual claim on a wiki page must be supported by at least one source listed in the page's frontmatter. If you know something from outside the listed sources (e.g., term etymology, historical context, a book you remember), either cite the additional source or leave the claim out. The verification pass will flag unsourced claims as hallucinations. Synthesis and cross-page connections are fine — but specific factual assertions need a source.
 - **One source can touch many pages**: A single YouTube video about distributed systems might update pages on consistency models, a specific engineer, a specific paper, and the overview. That's expected. The value is in the cross-referencing.
 - **Don't over-split**: A page should cover one coherent topic. If it's getting long (>200 lines), consider splitting. If it's under 10 lines, consider merging into a related page.
 - **Dates in frontmatter are ISO 8601**: `YYYY-MM-DD`. No exceptions.
