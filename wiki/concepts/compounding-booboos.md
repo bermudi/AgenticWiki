@@ -1,8 +1,8 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-04-26
-sources: [raw/yt-building-pi-in-a-world-of-slop.md]
+updated: 2026-05-01
+sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md]
 tags: [concept, ai, reliability]
 ---
 
@@ -13,6 +13,12 @@ tags: [concept, ai, reliability]
 ## Overview
 
 Because AI agents often lack a deep understanding of the entire system architecture, they may introduce minor bugs or stylistic inconsistencies ("booboos"). If these are not caught during human review, subsequent agent actions are built upon this flawed foundation, leading to a cascade of errors.
+
+## The Human Bottleneck
+
+[[mario-zechner|Mario Zechner]] identifies the key asymmetry: humans are bottlenecks. A human can only produce so many booboos per day. Usually, when booboo pain gets too big, the human (who hates pain) fixes them. With agents, there is no bottleneck and no pain. The tiny harmless booboos compound at an unsustainable rate. You've removed yourself from the loop, so you don't even know they've formed a monster until it's too late.
+
+An agent also has no learning ability — it will continue making the same errors over and over. You can teach it via AGENTS.md or memory systems, but that requires observing the errors in the first place.
 
 ## Mitigation
 
@@ -38,8 +44,10 @@ Because AI agents often lack a deep understanding of the entire system architect
 - [[backpressure]] — Backpressure catches booboos before they compound.
 - [[agent-quality-loop]] — The quality flywheel catches production booboos and turns them into permanent eval cases
 - [[grey-box-engineering]] — Grey box engineering catches booboos at the interface boundary.
+- [[deliberate-friction]] — Deliberate friction interrupts the compounding cycle.
 - [[plan-disposability]] — Stale plans compound booboos across AFK iterations.
 
 ## Sources
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
+- `raw/slowing-the-fuck-down.md`

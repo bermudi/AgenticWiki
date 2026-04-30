@@ -1,7 +1,7 @@
 ---
 title: Vibes-Based Engineering
 created: 2026-04-25
-updated: 2026-04-26
+updated: 2026-04-30
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md"]
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
@@ -42,7 +42,7 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[agent-evals]] — Evals are the structural antidote to shipping agents on vibes: "looks right to me" vs "score 0.83, here's what failed"
 - [[agent-quality-engineering]] — The quality framework that replaces vibes with measurement
 - [[ai-design-loop]] — The structured alternative to vibe coding.
-- [[hallucination]] — Vibe coding accepts hallucinated code without verification.
+- [[deliberate-friction]] — Absence of deliberate friction enables vibes-based engineering.
 
 ## Sources
 

@@ -1,11 +1,12 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-04-26
+updated: 2026-05-01
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/yt-claude-code-feature-build.md
+  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
 ---
 
@@ -38,6 +39,10 @@ Tests and builds are deterministic. Start there. Add LLM-as-judge for subjective
 
 This is backpressure in the literal sense — the human's testing activity *pushes back* on the agent's output by creating corrective work items. The agent can't escape QA findings because they're encoded as issues it must close. Combined with the [[afk-agent|day shift/night shift]] pattern, this creates a tight feedback loop where implementation and verification run concurrently rather than sequentially.
 
+## Social Backpressure: The Auto-Close Filter
+
+[[mario-zechner|Mario Zechner]] demonstrates a novel form of backpressure against agent-generated PRs: every pull request from an unknown GitHub account gets auto-closed. A workflow posts a comment asking the human to resubmit as a human-voice issue. Agents don't read the comment, so it acts as an effective bot filter. Once a human demonstrates intent, their account is whitelisted for future PRs. This is backpressure applied to the social layer of open source — not rejecting wrong *code*, but rejecting wrong *intent* (machine-generated contributions without human investment).
+
 ## Relationship to Verification Loop
 
 [[verification-loop|Verification loops]] are the mechanism; backpressure is the strategy. A verification loop proves individual changes correct. Backpressure engineers the loop into the autonomous workflow so that the agent can't escape verification — it's built into the environment, not optional.
@@ -55,6 +60,7 @@ This is backpressure in the literal sense — the human's testing activity *push
 - [[slop]] — Lack of backpressure produces slop
 - [[agent-friendly-tooling]] — Fast tools make backpressure tighter
 - [[compounding-booboos]] — Backpressure catches booboos before they compound
+- [[deliberate-friction]] — Deliberate friction operates before the change (cognitive); backpressure operates after (mechanical). Both needed.
 - [[geoffrey-huntley]] — Originator of the "backpressure beats direction" principle
 - [[ralph-loop]] — The Ralph loop uses backpressure as its primary convergence mechanism
 - [[plan-disposability]] — Backpressure catches bad implementations; plan disposability catches bad plans

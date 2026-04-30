@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-04-29
+updated: 2026-04-30
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -10,6 +10,8 @@ sources:
   - raw/yt-why-llms-hallucinate.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
+  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/slowing-the-fuck-down.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
@@ -57,6 +59,39 @@ The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent 
 
 All these sources agree: the answer isn't to use less AI. It's to change *how* you use it. The human must shift from writing code to **owning design boundaries and verifying outcomes**. [[aesthetics-is-truth|Aesthetic decay]] is often the first visible sign that slop is accumulating. That argument continues in [[the-human-lever]].
 
+## Agents Don't Feel Pain
+
+[[mario-zechner|Mario Zechner]] identifies the root cause of agent-driven slop: agents don't feel pain. Humans feel complexity as pain — terrible interfaces, entangled systems — and eventually fix root causes. Senior engineers are valuable precisely because of battle scars: they've been burned by tech debt spirals, seen what happens when they left them, and now make decisions to avoid them. Agents have no such feedback loop.
+
+Worse, agents invert the discipline. A good engineer says no a lot. Agents encourage saying yes: "I don't have to type it myself, I don't have to think about it, I just give the little machine a prompt and it will spit out something that kind of looks like the thing I wanted. Good enough. And that's where all the problems start."
+
+Combined with **automation bias** — you see one brilliant agent output, lower your guard, then miss the garbage in the next one — the result is compounding slop that nobody catches because nobody's looking carefully anymore.
+
+## The Training Data Ceiling
+
+[[mario-zechner|Mario Zechner]] adds a structural argument: the quality ceiling for agent output is bounded by training data. The median code on the internet is garbage — cargo-culting, trend-of-the-day patterns, abandonware. The handful of excellently engineered projects (Linux, etc.) are minuscule by comparison. ML models converge toward the mean, and the mean is mediocre. When you let agents fill in the blanks in your spec (and every spec has blanks unless it's the software itself), they fill them from the median of internet code.
+
+In his blog post, Mario extends this further: agents are **"merchants of learned complexity"**. They've seen many bad architectural decisions in their training data and RL training. When you let them architect your application, the result is "an amalgam of terrible cargo cult 'industry best practices'." Your agents never see each other's runs, never see the full codebase, never see all prior decisions — so their decisions are always *local*, leading to immense code duplication and abstractions for abstractions' sake. This is the same mess found in human-made enterprise codebases, but those take years; with agents and 2 humans, you reach it within weeks.
+
+## Agentic Search Has Low Recall
+
+[[mario-zechner|Mario Zechner]] identifies a distinct failure mode beyond context window size: **agentic search has low recall**. Before an agent can fix or extend code, it needs to find *all* the relevant code. Whether it uses ripgrep, codebase indexes, LSP servers, or vector databases — the bigger the codebase, the lower the recall. Low recall means the agent misses existing code, duplicates things, introduces inconsistencies. This is the root cause of code-smell booboos: not that the agent writes bad code per se, but that it can't find all the code it needs to write good code. The shit flower blossoms from there.
+
+This is a compounding feedback loop: agents produce more code → codebase gets bigger → recall gets worse → agents produce even worse code → repeat.
+
+## The Untrustworthy Test Suite
+
+Mario raises an underappreciated consequence: when you let agents write tests alongside implementation, **the tests themselves become untrustworthy**. "You realize that the gazillions of unit, snapshot, and e2e tests you had your clankers write are equally untrustworthy. The only thing that's still a reliable measure of 'does this work' is manually testing the product." The tests pass, but they test the wrong things or test them wrong. This is a particularly insidious form of slop because tests are supposed to be your safety net — when they're agent-generated slop too, you've lost your last verification mechanism.
+
+## The "Slow the F Down" Math
+
+[[mario-zechner|Mario Zechner]] provides the arithmetic of slop production:
+
+- Agent produces ~10x more code per day than a human → ~10x more bugs.
+- Even at half the human's error rate → 5x more bugs.
+- Scale to 100 agents ("dark factory") → simple, devastating math.
+- Humans can review ~1.5k LOC/day meaningfully. Agents produce 10-15k/day. The review bottleneck is structural.
+
 ## Ronacher on Slop Prevention
 
 [[armin-ronacher|Armin Ronacher]] adds language choice and tooling speed as slop prevention mechanisms:
@@ -64,6 +99,15 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - **Language as slop factor**: Python's magic (pytest fixtures, async event loops) produces incorrect code that even the agent loop struggles to fix. Go's simplicity and explicitness reduce the surface area for agent errors.
 - **Tooling speed as slop factor**: Slow tools mean fewer verification cycles per session. The agent writes more code between checks, increasing the chance of uncaught errors.
 - **Upgrade-induced slop**: Agent-cheapened upgrades invalidate stale decision comments and patterns. The agent builds on outdated assumptions — a subtle form of slop that passes tests.
+
+## Ronacher's 30-Team Findings
+
+After interviewing ~30 engineering teams about agent adoption, [[armin-ronacher|Armin Ronacher]] provides ground-level evidence of slop accumulation:
+
+- **Quality drops after adoption**: PRs get larger, more frequent, harder to review. Code doesn't look like what an engineer would produce — agents over-recover from errors, adding complexity instead of failing cleanly (the "emergence state machine" pattern).
+- **Responsibility doesn't scale**: Drawing an analogy to the British textile industrial revolution, Armin argues that every optimization at the head of the pipeline (faster production) eventually eliminated individual responsibility for quality. We're doing the same: 10x code production but nobody goes back to the maker when it's bad.
+- **Removing [[deliberate-friction]] accelerates slop**: Companies that stripped all engineering friction to enable agent autonomy also stripped safety gates that were deliberately designed to prevent exactly the kind of errors agents introduce.
+- **The curse word metric**: Armin's tongue-in-cheek proxy — the frequency of curse words in agent sessions increases over a project's lifetime as the agent degrades alongside the complexity it added.
 
 ## Huntley on Autonomous Slop
 
@@ -81,6 +125,7 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - [[vibes-based-engineering]] — Accepting AI output without context or verification
 - [[verification-loop]] — Automated feedback loops as the primary defense
 - [[tool-design-for-agents]] — Tool design determines feedback loop efficiency
+- [[deliberate-friction]] — Removing intentional slowdowns accelerates slop production
 - [[backpressure]] — Engineering the environment to reject wrong outputs
 - [[ralph-loop]] — The loop that needs backpressure to converge
 - [[plan-disposability]] — Stale plans as a slop source
@@ -97,10 +142,13 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
 - `raw/yt-how-agents-use-dev-tools.md` — Tool design as a factor in slop production.
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — AI as entropy accelerator; de-slopping via deep modules and periodic architecture review.
+- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Agents don't feel pain; training data ceiling; "slow the f down" math; 30-team interview findings; deliberate friction removal as slop accelerant.
+- `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; agentic search low recall; untrustworthy tests; write architecture by hand; friction as understanding.
 
 ## Related
 
 - [[the-human-lever]] — The discipline that prevents slop from accumulating.
 - [[the-agent-workflow]] — The operational practices that keep agent output high-quality.
 - [[tool-design-for-agents]] — Tool feedback as the mechanical defense against quality degradation.
+- [[deliberate-friction]] — Removing friction as a slop accelerant.
 

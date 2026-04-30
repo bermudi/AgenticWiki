@@ -39,6 +39,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
+- [[deliberate-friction]] — Intentional engineering slowdowns at high-stakes decision points. Not all friction is bad DX.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.

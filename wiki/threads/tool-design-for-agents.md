@@ -1,11 +1,13 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-04-26
+updated: 2026-04-30
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
   - raw/yt-building-pi-in-a-world-of-slop.md
+  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/slowing-the-fuck-down.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 ---
 
@@ -60,6 +62,24 @@ Ronacher treats infrastructure the way Zanie treats tool output — as an interf
 
 See [[agent-friendly-tooling]] for the full practical treatment of these patterns.
 
+## MCP vs CLI: The Structural Analysis
+
+Both [[mario-zechner|Mario Zechner]] and [[armin-ronacher|Armin Ronacher]] are firmly in the CLI camp, but the podcast reveals more nuance than their reputation suggests.
+
+### Mario's Three Problems with MCP
+
+Despite his reputation, Mario clarifies: "I don't actually hate MCP quite as much" — but identifies three structural issues:
+
+1. **Bad servers from big corporations**: Companies mapping entire OpenAPI specs into MCP servers, exposing hundreds of tools. "That's garbage." The model can't effectively choose from hundreds of similar tools.
+2. **Inherent non-composability**: Combining outputs from two different MCP servers requires the model to do data transformation through context. Compare with CLI pipes — the model sees only the end result and is free to massage data. Code mode (Anthropic's workaround) is essentially admitting MCP can't compose by itself.
+3. **Auth as the valid use case**: David from Sentry is a big MCP proponent because of auth. Mario acknowledges this is genuinely useful for enterprises but hopes for an "MCP 2" based on auth specs + code execution rather than context-heavy tool calls.
+
+### Armin's Nuanced Position
+
+Armin sees MCP as a victim of its own success. It started as a consumer-side solution (connect email, OneDrive to chat apps), then IDEs adopted it, then developers tried to use it for complex tooling — a use case it wasn't designed for. His key observation: **the most capable personal agents (OpenClaw) are just coding agents hidden from users**. When a non-technical user asks how to do something, the model doesn't say "install this MCP server" — it says "I'll write a Python script that does it." Code execution won naturally.
+
+Both agree: for developer-facing agent tools, CLI composability (pipes, scripts) outperforms MCP's context-transit model. But MCP has a legitimate enterprise niche (auth, consumer integrations) that won't go away.
+
 ## Layer 3: Minimalism as Performance
 
 [[mario-zechner|Mario Zechner]] approaches from a different angle. Rather than redesigning existing tools, he argues for fewer tools with simpler contracts. [[pi]]'s core is four tools: `read`, `write`, `edit`, `bash`. No MCP server, no protocol overhead, no feature negotiation.
@@ -67,6 +87,10 @@ See [[agent-friendly-tooling]] for the full practical treatment of these pattern
 The argument: complex tools create complex failure modes. A harness with 50 specialized tools gives the LLM 50 chances to pick the wrong one, misuse it, or get confused by overlapping functionality. A harness with 4 composable tools gives the LLM clarity and forces creativity into *how* the tools are composed, not *which* one to pick.
 
 This aligns with Ronacher's skepticism of MCP unless the alternative is unreliable. Plain shell scripts are faster and more predictable than protocol servers. Minimalism isn't asceticism — it's a performance strategy. Terminal-Bench 2.0 results show minimal harnesses often outperform complex ones because clearer context and fewer failure points matter more than feature coverage.
+
+### Pi's Origin: Rejection of Context Manipulation
+
+Pi was born from Mario's frustration with Claude Code silently injecting context — system reminders, modified tool definitions — behind his back. He reverse-engineered Claude Code's obfuscated JavaScript and tracked every system prompt change (cc-history.mario.ai). Open Code had similar sins: pruning tool results, injecting LSP diagnostics after every edit (confusing the model with errors for code it hadn't finished writing). Pi's founding principle: **the user controls the context.** This is minimalism as a safeguard, not asceticism.
 
 ### Malleability as the Escape Valve
 The risk of minimalism is rigidity. Zechner's answer: [[malleable-agents]]. Both the user and the agent should be able to create new tools mid-session. The core stays small; the periphery is emergent. This resolves the tension between Zanie's "tools need richer interfaces" and Zechner's "keep the core minimal" — the core is minimal, but agents extend it on demand by composing the primitives.
@@ -92,3 +116,5 @@ The risk of minimalism is rigidity. Zechner's answer: [[malleable-agents]]. Both
 - `raw/yt-how-agents-use-dev-tools.md` — Zanie Blue's systematic treatment: feedback qualities, scale effects, output optimization, self-tooling
 - `raw/agentic-coding-recommendations.md` — Ronacher on Go, Makefiles, misuse resistance, daemon patterns, speed
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Zechner on minimalism, malleability, four-tool core, Terminal-Bench results
+- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — MCP vs CLI structural analysis, Pi origin story, OpenClaw as hidden coding agent, context transparency
+- `raw/slowing-the-fuck-down.md` — Agentic search recall as a fundamental tool limitation; low recall as the root cause of slop.

@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-04-29
+updated: 2026-05-01
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -13,6 +13,8 @@ sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
+  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/slowing-the-fuck-down.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -92,6 +94,17 @@ Within the Journey phase, [[tracer-bullets]] are the first thing to ship: thin v
 2. **Context scaffold**: Gives the agent a concrete end-to-end reference for subsequent tasks.
 3. **Design validation**: Tests whether the [[shared-design-concept]] actually works in practice, not just on paper.
 
+## What Makes a Good Agent Task
+
+[[mario-zechner|Mario Zechner]] provides a crisp checklist from his blog post:
+
+1. **Scopable**: The agent doesn't need to understand the full system.
+2. **Closable loop**: The agent has a way to evaluate its own work.
+3. **Not mission-critical**: Nobody's life or revenue depends on the output.
+4. **Exploratory**: Trying things you'd otherwise not have time for.
+
+Karpathy's auto-research is a good example — you give it a narrow evaluation function (startup time, loss), and it optimizes. But beware: the evaluation function only captures a narrow metric. The agent will happily ignore code quality, complexity, or correctness if your evaluation function doesn't capture them. The human is always the final quality gate.
+
 ## The Day-to-Day Loop
 
 Putting it together:
@@ -152,13 +165,20 @@ During QA, he reviews **outputs** (does the feature work?), not code. Bugs are f
 
 The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requirements) is HITL, Phase 2 (Planning) is automated gap analysis, Phase 3 (Building) is AFK with backpressure.
 
+## The Adoption Learning Curve
+
+[[armin-ronacher|Armin Ronacher]]'s interviews with ~30 engineering teams reveal a consistent pattern: agent adoption follows a 2-3 week learning curve that can't be mandated from above. Teams that adopted during vacation periods (summer, Thanksgiving, Christmas) developed genuine proficiency. Mandates ("you must use Cursor") didn't stick. The honeymoon period lasts ~2 months before engineers start feeling the complexity they introduced. This suggests patience rather than urgency in adoption strategy.
+
+## The "Prompt Request" Pattern
+
+Peter Steinberger's idea: instead of sending code (pull requests), send the prompt that generated it. [[armin-ronacher|Armin Ronacher]] refines this: the prompt is valuable because the act of creating clarifies what you really wanted to build. Once intent is understood, the senior engineer often starts fresh rather than fixing the agent's implementation. [[mario-zechner|Mario Zechner]] values seeing the terrible implementation anyway — it reveals the problem space without costing his own time ("valuable garbage").
+
 ## Concepts in this thread
 
 - [[hallucination]] — The machine's failure mode: lossy compression masquerading as knowledge
-- [[smart-zone-dumb-zone]] — Why context hygiene matters, grounded in transformer architecture
+- [[smart-zone-dumb-zone]] — Why context hygiene matters, grounded in transformer architecture; managing LLM reasoning quality
 - [[afk-agent]] — Agents that implement features in the background
 - [[ai-design-loop]] — Iterating with an agent to refine plans
-- [[smart-zone-dumb-zone]] — Managing LLM reasoning quality via context hygiene
 - [[tracer-bullets]] — Vertical slices for early end-to-end validation
 - [[ubiquitous-language]] — Shared terminology to align human and agent
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves
@@ -170,6 +190,7 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 - [[improve-codebase-architecture]] — The skill for periodic architecture scans and deepening
 - [[seams-and-adapters]] — Missing seams are the primary deepening candidates found by architecture scans
 - [[locality-and-leverage]] — The two evaluation criteria for every deepening candidate
+- [[deliberate-friction]] — Intentional friction at high-stakes decision points in the HITL phase
 
 ## Related
 
@@ -189,4 +210,5 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 - `raw/how-to-ralph-wiggum.md` — Ralph Wiggum loop: one task per iteration, backpressure, plan disposability
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Architecture review as a distinct, cadenced workflow phase.
+- `raw/slowing-the-fuck-down.md` — Good agent task criteria; Karpathy auto-research as example; agentic search recall problem.
 

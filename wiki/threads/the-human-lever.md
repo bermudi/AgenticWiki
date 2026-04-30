@@ -11,6 +11,8 @@ sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
+  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/slowing-the-fuck-down.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -87,6 +89,30 @@ Delegation without design authority is abdication. The human isn't less importan
 
 He also reviews **module interfaces** during the PRD phase — evaluating whether a new method should exist on a service, or whether an existing method should gain a parameter. This is pure interface design, agnostic to implementation details. The discipline: care about *what* the modules do and *how they connect*, not *how they're built inside*.
 
+## Automation Bias
+
+[[mario-zechner|Mario Zechner]] warns of a subtle failure mode: agents occasionally produce moments of brilliance — perfectly fine, simple code, exactly what you needed. You relax, stop checking carefully, and then the next output is the worst garbage imaginable. But you don't notice because you've fallen into **automation bias**. Unlike a junior engineer who earns trust over 6-12 months (and whose code you review thoroughly until they prove themselves), agents don't learn. You can't build a trust relationship with something that doesn't retain lessons.
+
+## The "Valuable Garbage" Insight
+
+[[mario-zechner|Mario Zechner]] pushes back on the "just send me your prompt" approach (Peter Steinberger's "prompt request" idea). He values seeing terrible implementations: someone instructed their agent to build something, the result is garbage, but it shows what they wanted. The naive agent attempt reveals the problem space. He doesn't have to waste his own time on the first try.
+
+[[armin-ronacher|Armin Ronacher]] refines this: the prompt request is valuable not because you can "reclank your clanker slightly better," but because the act of creating clarifies what you really wanted. Once you understand the intent, it's often faster for the senior engineer to start fresh than to fix the agent's implementation.
+
+## Deliberate Friction as Human Authority
+
+[[armin-ronacher|Armin Ronacher]] introduces [[deliberate-friction]] as a human lever tool. Not all friction is bad DX. Tiered code review, director sign-offs, SLO requirements, checklists before migrations — these exist to make humans think at high-stakes decision points. Removing them to enable agent autonomy removes the human's cognitive safeguard. The human's authority isn't just about owning interfaces (the grey box); it's about preserving the institutional mechanisms that force deliberation when the cost of error is high.
+
+## Mario's "Write Architecture by Hand"
+
+[[mario-zechner|Mario Zechner]] provides a concrete boundary for human vs. agent work: "Anything that defines the gestalt of your system — architecture, API, and so on — write it by hand." Maybe use tab completion for nostalgia. Or pair-program with your agent. But *be in the code*. The reasoning: "the simple act of having to write the thing or seeing it being built up step by step introduces friction that allows you to better understand what you want to build and how the system 'feels'." This is where experience and taste operate — something current models cannot replace. Friction isn't the enemy; it's the medium through which understanding develops.
+
+This complements the General/Sergeant model from [[matt-pocock|Matt Pocock]]: the General writes the architecture (by hand, feeling every decision), the Sergeant fills in implementation. And it extends Grey Box Engineering: the human doesn't just *own* the interface — they *write* it, because writing is thinking.
+
+## Mario's "Refactor Mercilessly"
+
+[[mario-zechner|Mario Zechner]] describes his personal practice for staying in the code: he refactors mercilessly. Refactoring forces structural understanding — you need to know what you want to change, not just line by line. Being in the code is the one thing that keeps quality high and complexity low. He accepts slop in unimportant places (Pi's HTML export: never read a line), but guards the core (agent loop, extension loading) through deliberate, repeated engagement.
+
 ## Ronacher's Simplicity Imperative
 
 [[armin-ronacher|Armin Ronacher]] reinforces the human lever with practical prescriptions:
@@ -116,6 +142,7 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[verification-loop]] — Automated proof replacing human trust
 - [[aesthetics-is-truth]] — Beauty as a proxy for technical correctness and quality
 - [[tool-design-for-agents]] — Tool design as part of the verification contract
+- [[deliberate-friction]] — Preserving institutional mechanisms that force human deliberation
 - [[backpressure]] — Engineering the environment to reject wrong outputs
 - [[ralph-loop]] — The canonical AFK loop implementation
 - [[plan-disposability]] — Plans as ephemeral coordination state
@@ -139,4 +166,6 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/how-to-ralph-wiggum.md` — Backpressure over direction, environmental design
 - `raw/ralph-wiggum-playbook.md` — Human roles shift to engineering conditions for good outcomes
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — General/sergeant metaphor and periodic architecture review as an operational rhythm.
+- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Automation bias, "valuable garbage" insight, deliberate friction, "refactor mercilessly" practice, prompt request refinement.
+- `raw/slowing-the-fuck-down.md` — Write architecture by hand; friction as understanding; agents are merchants of complexity; agentic search recall.
 
