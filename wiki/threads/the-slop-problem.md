@@ -1,15 +1,15 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-04-26
+updated: 2026-04-29
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-dhh-ai-pilled.md
-  - raw/yt-reinventing-software-panel.md
   - raw/yt-why-llms-hallucinate.md
   - raw/yt-how-agents-use-dev-tools.md
+  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
@@ -22,6 +22,14 @@ tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 Multiple sources in this wiki converge on the same warning: the bottleneck has shifted. It used to be writing code. Now it's **reviewing** code. AI can produce hundreds of lines in seconds, but a human still needs to understand every one of those lines before shipping them. That asymmetry is dangerous.
 
 [[mario-zechner|Mario Zechner]] calls the output of that asymmetry **[[slop]]** — code that works, sort of, but rots the codebase from the inside. He identifies the agents that mass-produce slop as bloated, opaque tools that "fire and forget" without giving the human enough visibility or control to catch the damage.
+
+## AI Accelerates Software Entropy
+
+[[matt-pocock|Matt Pocock]] offers a crisp articulation of the mechanism:
+
+> "AI has simply accelerated software entropy. Code bases are falling apart faster than they ever have before. Because every time that you make a change that doesn't take into account the entire codebase, you are likely to introduce little things, weird things that make the codebase harder to change."
+
+AI doesn't create new failure modes — it accelerates existing ones. The same entropy that human-written codebases accumulate over years happens in months or weeks with AI, because the tactical speed of generation outpaces the strategic work of maintaining coherence.
 
 ## How It Happens
 
@@ -76,6 +84,9 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - [[backpressure]] — Engineering the environment to reject wrong outputs
 - [[ralph-loop]] — The loop that needs backpressure to converge
 - [[plan-disposability]] — Stale plans as a slop source
+- [[seams-and-adapters]] — Missing seams as a structural slop cause (parallel implementations diverge)
+- [[locality-and-leverage]] — Low locality and low leverage as slop symptoms
+- [[improve-codebase-architecture]] — The systematic scan for slop-prone module boundaries
 
 ## Sources
 
@@ -85,6 +96,7 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 - `raw/yt-why-llms-hallucinate.md` — The technical causes of hallucination as the source of slop.
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
 - `raw/yt-how-agents-use-dev-tools.md` — Tool design as a factor in slop production.
+- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — AI as entropy accelerator; de-slopping via deep modules and periodic architecture review.
 
 ## Related
 

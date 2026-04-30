@@ -1,14 +1,16 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-04-26
+updated: 2026-04-29
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-dhh-ai-pilled.md
-  - raw/yt-reinventing-software-panel.md
   - raw/yt-how-agents-use-dev-tools.md
+  - raw/how-to-ralph-wiggum.md
+  - raw/ralph-wiggum-playbook.md
+  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -21,6 +23,25 @@ tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 [[matt-pocock|Matt Pocock]] frames the shift using John Ousterhout's distinction between **[[strategic-vs-tactical-programming|strategic and tactical programming]]**. In the pre-AI era, engineers did both: they designed the system *and* wrote the implementation. Now, the AI is the ultimate tactical programmer — it will do exactly what you ask, instantly, whether or not it's good for the long-term health of the codebase.
 
 The human's role becomes purely strategic: designing interfaces, choosing patterns, and defining the **[[shared-design-concept]]** — the "theory of the code" that both human and agent must share to produce coherent work. Peter Naur's insight from *Programming as Theory Building* (1985) becomes newly relevant: programming isn't about writing lines of code, it's about building a shared mental model of how the system solves a problem. [[dhh|David Heinemeier Hansson]] adds an aesthetic dimension to this: **[[aesthetics-is-truth]]**. If the code is becoming ugly or complex, the human strategist must intervene, as it is a signal that the shared theory is breaking down.
+
+[[matt-pocock|Matt Pocock]] uses a military metaphor to make the distinction visceral:
+
+> "I think of agents as really, really good tactical programmers. They're able to get on the ground and make changes quickly, but they need someone on the level above them who is the strategic programmer."
+
+- **The General (Human)**: Scans the terrain, decides which battles to fight, owns the strategy. Runs the [[improve-codebase-architecture]] skill to identify architectural weaknesses, then makes judgment calls about which to fix and how.
+- **The Sergeant (AI)**: Executes tactical orders. Given a clear interface, implements the module. Given a GitHub issue, ships the fix. Fast, precise, but needs direction.
+
+The [[grey-box-engineering|grey box]] boundary is where the general hands off to the sergeant.
+
+## Periodic Architecture Review
+
+In a fast-moving AI-assisted codebase, architecture drifts faster than in human-written codebases. Matt recommends running the [[improve-codebase-architecture]] skill **every couple of days** as a recurring practice:
+
+- The skill scans for deepening candidates — places where [[seams-and-adapters|seams]] are missing, [[locality-and-leverage|locality]] is low, or parallel implementations have diverged.
+- The human general reviews the candidates and decides which to pursue.
+- The selected refactorings become GitHub issues for an [[afk-agent]] to implement.
+
+This turns architecture maintenance from a crisis-driven activity into a steady rhythm. Small, frequent deepening is cheaper than occasional large refactors — and it prevents the [[the-slop-problem|entropy acceleration]] that AI otherwise causes.
 
 ## Grey Box Engineering
 
@@ -98,6 +119,9 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[backpressure]] — Engineering the environment to reject wrong outputs
 - [[ralph-loop]] — The canonical AFK loop implementation
 - [[plan-disposability]] — Plans as ephemeral coordination state
+- [[locality-and-leverage]] — The properties the human optimizes for in module design
+- [[seams-and-adapters]] — Where design authority meets implementation
+- [[improve-codebase-architecture]] — The operational tool for periodic architecture review
 
 ## Related
 
@@ -114,4 +138,5 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/yt-how-agents-use-dev-tools.md` — Trust models, confidence levels, and constraining agents
 - `raw/how-to-ralph-wiggum.md` — Backpressure over direction, environmental design
 - `raw/ralph-wiggum-playbook.md` — Human roles shift to engineering conditions for good outcomes
+- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — General/sergeant metaphor and periodic architecture review as an operational rhythm.
 

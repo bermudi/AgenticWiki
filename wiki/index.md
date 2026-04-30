@@ -42,8 +42,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
+- [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
+- [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
@@ -62,6 +64,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[axiom]] — Observability platform for high-cardinality, high-dimensionality log data at scale.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
+- [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.

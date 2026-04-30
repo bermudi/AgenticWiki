@@ -1,7 +1,7 @@
 ---
 title: AI Design Loop
 created: 2026-04-24
-updated: 2026-04-26
+updated: 2026-04-29
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md"]
 tags: ["ai-workflow", "software-design"]
 ---
@@ -48,6 +48,7 @@ The session produces not just requirements, but also updates the [[ubiquitous-la
 - [[shared-design-concept]] — The design loop produces the shared concept.
 - [[ubiquitous-language]] — The language that emerges from the design loop.
 - [[malleable-agents]] — Agents can be adapted during the design loop.
+- [[improve-codebase-architecture]] — The skill that applies the design loop to architecture: explore, grill, propose.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

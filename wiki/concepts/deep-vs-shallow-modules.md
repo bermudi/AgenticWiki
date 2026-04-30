@@ -1,8 +1,8 @@
 ---
 title: Deep vs. Shallow Modules
 created: 2026-04-24
-updated: 2026-04-26
-sources: ["raw/yt-ai-coding-for-real-engineers.md"]
+updated: 2026-04-29
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md"]
 tags: ["software-architecture", "clean-code"]
 ---
 
@@ -35,6 +35,10 @@ In a [[grey-box-engineering]] workflow, the human owns the interface and the age
 - [[aesthetics-is-truth]] — Elegant module boundaries as aesthetic truth.
 - [[strategic-vs-tactical-programming]] — Strategic design favors deep modules.
 - [[agent-experience]] — Deep modules improve both DX and AX.
+- [[locality-and-leverage]] — The two payoff properties of deep modules.
+- [[seams-and-adapters]] — Deep modules have clear, minimal seams.
+- [[improve-codebase-architecture]] — The skill that finds deepening candidates.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
+- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Locality, leverage, seams, and adapters as the vocabulary of module depth.

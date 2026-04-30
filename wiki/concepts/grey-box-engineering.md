@@ -1,7 +1,7 @@
 ---
 title: Grey Box Engineering
 created: 2026-04-24
-updated: 2026-04-26
+updated: 2026-04-29
 sources: ["raw/yt-ai-coding-for-real-engineers.md"]
 tags: ["software-design", "ai-workflow"]
 ---
@@ -50,6 +50,9 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - [[ai-design-loop]] — The design loop feeds into grey box delegation.
 - [[strategic-vs-tactical-programming]] — Grey box engineering is strategic programming in practice.
 - [[ubiquitous-language]] — The language defines the boundaries of the grey box.
+- [[locality-and-leverage]] — The grey box boundary should maximize leverage (simple interface) and locality (contained implementation).
+- [[seams-and-adapters]] — The seam is the grey box boundary; adapters fill the box.
+- [[improve-codebase-architecture]] — The skill that identifies where grey box boundaries should be drawn.
 - [[pi]] — Pi's observability enables grey box engineering in practice.
 - [[mario-zechner]] — Creator of pi, advocate for grey box engineering.
 

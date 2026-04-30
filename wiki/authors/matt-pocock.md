@@ -1,8 +1,8 @@
 ---
 title: Matt Pocock
 created: 2026-04-24
-updated: 2026-04-26
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever.md"]
+updated: 2026-04-29
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
@@ -19,6 +19,9 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[deep-vs-shallow-modules]] — Module design for agent navigation.
 - [[ubiquitous-language]] — Ensuring human and agent use the same terminology.
 - [[afk-agent]] — Leveraging background agents for implementation tasks.
+- [[improve-codebase-architecture]] — Systematic scans for deepening opportunities.
+- [[seams-and-adapters]] — Where modules meet and how they can be substituted.
+- [[locality-and-leverage]] — The two payoff properties of deep modules.
 
 ## Related
 
@@ -30,9 +33,13 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[ubiquitous-language]] — Primary advocate of ubiquitous language in AI workflows.
 - [[ralph-loop]] — Docker-based issue-driven Ralph variant (Sandcastle).
 - [[hallucination]] — Originated the intrinsic/extrinsic hallucination taxonomy used in this wiki.
+- [[improve-codebase-architecture]] — Created the skill for systematic architecture review.
+- [[seams-and-adapters]] — Introduced seams and adapters as the architecture vocabulary for de-slopping.
+- [[locality-and-leverage]] — Defined locality and leverage as the goals of deepening.
 
 ## Sources
 - `raw/yt-software-fundamentals-matter-more-than-ever.md`
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-why-llms-hallucinate.md`
 - `raw/yt-claude-code-feature-build.md`
+- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — The improve-codebase-architecture skill, general/sergeant metaphor, seams/adapters vocabulary.

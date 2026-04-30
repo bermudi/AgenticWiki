@@ -1,7 +1,7 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-04-26
+updated: 2026-04-29
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md]
 tags: [concept, workflow, agents]
 ---
@@ -56,6 +56,7 @@ This creates a temporal parallelism — sometimes called the **"day shift / nigh
 - [[plan-disposability]] — Plans as ephemeral coordination state for AFK loops.
 - [[ralph-loop]] — The canonical AFK implementation (Ralph Wiggum loop).
 - [[the-agent-workflow]] — The full pipeline from grilling through QA.
+- [[improve-codebase-architecture]] — The skill produces GitHub issues for AFK agents to implement.
 
 ## Sources
 

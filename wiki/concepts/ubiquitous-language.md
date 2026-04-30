@@ -1,8 +1,8 @@
 ---
 title: Ubiquitous Language
 created: 2026-04-25
-updated: 2026-04-26
-sources: [raw/yt-claude-code-feature-build.md]
+updated: 2026-04-29
+sources: ["raw/yt-claude-code-feature-build.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md"]
 tags: [concept, ddd, ai-native, design]
 ---
 
@@ -19,6 +19,7 @@ Originally a core tenet of Domain-Driven Design (DDD), Ubiquitous Language takes
 - **Glossary as Context**: Maintaining a `UBIQUITOUS_LANGUAGE.md` file in the codebase allows the agent to ground its reasoning in specific, pre-defined terms (e.g., "Ghost Course" vs. "Real Course").
 - **Reducing Ambiguity**: By forcing a shared vocabulary, the developer prevents the agent from introducing conflicting concepts or "slop" that doesn't align with the project's architecture.
 - **Shared Design Concept**: It is the textual representation of the [[shared-design-concept]].
+- **Precision Protocol**: [[matt-pocock|Matt Pocock]] emphasizes that a shared glossary is the protocol for precision between human and AI — it's how you ensure the agent uses the same language you do, avoiding the drift that produces [[the-slop-problem|slop]].
 
 ## Practical Example: The Materialization Cascade
 
@@ -44,7 +45,9 @@ Matt updates the ubiquitous language document after each grill-me session, addin
 - [[the-human-lever]] — Defining the language is a high-leverage human task.
 - [[grey-box-engineering]] — The language defines the boundaries of the grey box.
 - [[matt-pocock]] — Primary advocate of ubiquitous language in AI workflows.
+- [[improve-codebase-architecture]] — The skill's grilling phase establishes the vocabulary for the implementing agent.
 
 ## Sources
 
 - `raw/yt-claude-code-feature-build.md` — Matt Pocock's use of a Ubiquitous Language document to guide a feature build.
+- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Glossary as the protocol for precision between human and AI.

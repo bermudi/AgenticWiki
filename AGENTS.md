@@ -104,7 +104,7 @@ When answering queries, read `wiki/index.md` first to locate relevant pages, the
 
 ## YouTube Videos
 
-This project uses the Gemini YouTube extension. When the user shares a YouTube URL, the extension delivers the video content directly into the conversation — no file lands on disk. To keep the `raw/` layer complete, **always create a source stub in `raw/` after processing a YouTube video.**
+This project formerly used the Gemini YouTube extension for native video understanding. Currently, YouTube content may arrive either as a transcript file already in `raw/` or as inline content from a Gemini extension. **Only create a source stub in `raw/` when the content arrived inline and no file already exists on disk.** If a transcript file (`raw/*.md`) already exists, it IS the source — do not create a stub.
 
 ### YouTube source stub format
 

@@ -1,8 +1,8 @@
 ---
 title: Strategic vs. Tactical Programming
 created: 2026-04-25
-updated: 2026-04-26
-sources: []
+updated: 2026-04-29
+sources: ["raw/yt-software-fundamentals-matter-more-than-ever.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "John Ousterhout, *A Philosophy of Software Design*"]
 tags: ["software-design", "ai-engineering", "strategy"]
 ---
 
@@ -24,6 +24,17 @@ Strategic programming prioritizes the long-term health and modularity of the sys
 - **Result**: A codebase that remains easy to change even as it grows.
 - **Human Relation**: This is the human's primary job in the age of AI. You are the Architect/Strategist; the AI is the Builder/Tactician.
 
+## The General and the Sergeant
+
+[[matt-pocock|Matt Pocock]] uses a military metaphor to make the distinction vivid:
+
+> "I think of agents as really, really good tactical programmers. They're able to get on the ground and make changes quickly, but they need someone on the level above them who is the strategic programmer."
+
+- **The General (Human)**: Scans the terrain, decides which battles to fight, owns the strategy. Runs the [[improve-codebase-architecture]] skill to identify architectural weaknesses, then makes judgment calls about which to fix and how.
+- **The Sergeant (AI)**: Executes tactical orders. Given a clear interface, implements the module. Given a GitHub issue, ships the fix. Fast, precise, but needs direction.
+
+The [[grey-box-engineering|grey box]] boundary is where the general hands off to the sergeant.
+
 ## The Shift
 Matt Pocock argues that to succeed with AI, you must spend **more time being strategic**. 
 - You do the "deep thinking" (designing interfaces, choosing patterns).
@@ -41,10 +52,13 @@ Matt Pocock argues that to succeed with AI, you must spend **more time being str
 - [[martin-fowler]] — Advocate for strategic design throughout his career.
 - [[the-slop-problem]] — Tactical programming produces slop.
 - [[verification-loop]] — Strategic programming requires verification to prove design intent.
+- [[improve-codebase-architecture]] — The skill that operationalizes strategic programming as a recurring practice.
+- [[locality-and-leverage]] — What the strategist optimizes for when designing module boundaries.
 
 ## Thread
 - [[the-human-lever]] — Strategic programming as the human's primary job in the age of AI
 
 ## Sources
 - `raw/yt-software-fundamentals-matter-more-than-ever.md` — Matt Pocock applying Ousterhout's strategic/tactical distinction to AI workflows
+- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — The general/sergeant metaphor and strategic architecture review as a recurring practice.
 - John Ousterhout, *A Philosophy of Software Design* — The original strategic vs. tactical programming framework

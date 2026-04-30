@@ -45,7 +45,7 @@ This step is intentionally early. Threads are the wiki's living theory; filing w
 
 Work through this checklist:
 
-- [ ] **Source stub**: If YouTube video, create `raw/yt-<descriptive-slug>.md` (see AGENTS.md for format)
+- [ ] **Source stub**: If YouTube content arrived inline (no file on disk), create `raw/yt-<descriptive-slug>.md` (see AGENTS.md for format). If a transcript file already exists in `raw/`, skip this — the transcript IS the source.
 - [ ] **Entity pages**: Create or update a page for each significant entity mentioned
 - [ ] **Concept pages**: Create or update a page for each significant concept. Add `## Thread` section linking to relevant threads. Connect to related concepts via `## Related`
 - [ ] **Thread updates**: Update existing thread pages to incorporate new concepts and claims. If a new thread was proposed and approved, create it now
@@ -165,5 +165,5 @@ done
 - **One source can touch many pages**: A single YouTube video about distributed systems might update pages on consistency models, a specific engineer, a specific paper, and the overview. That's expected. The value is in the cross-referencing.
 - **Don't over-split**: A page should cover one coherent topic. If it's getting long (>200 lines), consider splitting. If it's under 10 lines, consider merging into a related page.
 - **Dates in frontmatter are ISO 8601**: `YYYY-MM-DD`. No exceptions.
-- **YouTube videos need a source stub**: After processing a YouTube video, create a `raw/yt-<slug>.md` stub with key points extracted during ingest. This is the only case where you write to `raw/`. Without the stub, future sessions can't re-read the source.
+- **YouTube videos that arrive inline need a source stub**: When video content arrives via an extension with no file on disk, create a `raw/yt-<slug>.md` stub with key points extracted during ingest. This is the only case where you write to `raw/`. If a transcript file already exists in `raw/`, it is the source — do not create a stub. Without the stub, future sessions can't re-read the source.
 - **No src/ layer**: Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. Each page's `## Sources` section references the `raw/` files it draws from.

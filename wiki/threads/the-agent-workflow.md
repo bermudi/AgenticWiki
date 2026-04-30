@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-04-26
+updated: 2026-04-29
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -12,6 +12,7 @@ sources:
   - raw/agentic-coding-recommendations.md
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
+  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -102,6 +103,20 @@ Putting it together:
 5. **Review** (HITL): After each task, verify via tests and types. Adjust the plan if needed.
 6. **Repeat** from step 4 until the Journey is complete.
 
+## Architecture Review Cadence
+
+Separate from the feature-building loop, [[matt-pocock|Matt Pocock]] identifies a slower, architectural rhythm: running the [[improve-codebase-architecture]] skill **every couple of days**, especially in fast-moving codebases.
+
+This is not feature work — it's structural triage:
+
+1. **Scan** (HITL): The skill explores the codebase and surfaces deepening candidates — parallel implementations without a shared [[seams-and-adapters|seam]], concepts scattered across files with low [[locality-and-leverage|locality]], [[deep-vs-shallow-modules|shallow modules]] with poor leverage.
+2. **Grill** (HITL): The human picks a candidate. The skill enters a grilling session, probing the human's intent for the module (What should the interface be? What invariants must hold? What adapters will satisfy it?). The human is an active design partner, not a passive reviewer.
+3. **Propose** (HITL): The skill produces a concrete module design — interfaces, method signatures, invariants — that becomes a GitHub issue for an [[afk-agent]] to implement.
+
+The key difference from the feature loop: architecture review is **proactive entropy prevention**. It doesn't respond to a feature spec — it scans for structural decay and proposes fixes before the decay becomes [[the-slop-problem|slop]].
+
+AI-accelerated development means architecture drifts faster than human-written codebases. Small, frequent deepening (every few days) is cheaper than occasional large refactors.
+
 ## Pocock's Full Pipeline
 
 [[matt-pocock|Matt Pocock]] demonstrates the most operationally detailed version of this workflow in a real feature build:
@@ -152,7 +167,9 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 - [[tool-design-for-agents]] — Tool output design as workflow infrastructure
 - [[backpressure]] — Engineering the environment to reject wrong outputs
 - [[ralph-loop]] — The canonical AFK loop implementation
-- [[plan-disposability]] — Plans as ephemeral coordination state
+- [[improve-codebase-architecture]] — The skill for periodic architecture scans and deepening
+- [[seams-and-adapters]] — Missing seams are the primary deepening candidates found by architecture scans
+- [[locality-and-leverage]] — The two evaluation criteria for every deepening candidate
 
 ## Related
 
@@ -171,4 +188,5 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 - `raw/agentic-coding-recommendations.md` — Go for agents, Makefile interfaces, parallelization, refactor timing
 - `raw/how-to-ralph-wiggum.md` — Ralph Wiggum loop: one task per iteration, backpressure, plan disposability
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology
+- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Architecture review as a distinct, cadenced workflow phase.
 
