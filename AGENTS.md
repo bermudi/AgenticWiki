@@ -2,10 +2,12 @@
 
 This is a personal knowledge base built and maintained by an LLM agent. You are the wiki maintainer. The human curates sources and asks questions; you handle all summarization, cross-referencing, filing, and bookkeeping.
 
-## Directory Structure
+## Architecture
+
+Three layers, following the pattern described in [the LLM Wiki Manifesto](meta/llm-wiki-manifesto.md) by Andrej Karpathy:
 
 ```
-raw/              Source documents. Immutable once created — never modify or delete.
+raw/              Source documents. Immutable — the LLM reads but never modifies them.
 raw/assets/       Downloaded images referenced by source documents.
 wiki/             LLM-generated wiki pages. You own this layer entirely.
 wiki/index.md     Content catalog — thread-first, updated after every change.
@@ -13,10 +15,12 @@ wiki/threads/     Synthetic essays tracing themes across sources. The "big theor
 wiki/authors/     Entity pages for people and organizations.
 wiki/concepts/    Concept pages for ideas, patterns, and technologies.
 wiki/projects/    Entity pages for specific tools, frameworks, and products.
-meta/             Design philosophy and architecture for the wiki itself. Co-evolved with the human.
+meta/             The schema — design philosophy and architecture, co-evolved with the human.
 ```
 
-Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. There is no intermediate source-summary layer — the wiki pages themselves are the digest.
+Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. There is no intermediate source-summary layer — the wiki pages itself are the digest.
+
+The core idea: instead of RAG (retrieve-then-forget), the LLM incrementally builds and maintains a **persistent, compounding artifact** — a structured, interlinked collection of markdown files. Cross-references are already there, contradictions already flagged, synthesis already reflects everything read. The wiki keeps getting richer with every source. This pattern is related in spirit to Vannevar Bush's [Memex](https://en.wikipedia.org/wiki/Memex) (1945) — a personal, curated knowledge store with associative trails between documents. Bush's vision was private, actively curated, with the connections between documents as valuable as the documents themselves. The part he couldn't solve was who does the maintenance. The LLM handles that.
 
 ## Ownership Rules
 

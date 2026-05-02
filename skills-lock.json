@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "liteparse": {
+      "source": "bermudi/skills",
+      "sourceType": "github",
+      "skillPath": "liteparse/SKILL.md",
+      "computedHash": "293ef7db6707f91ab29f112c06ba8430dd8688d9cbc104fb4085085e3738b7bd"
+    }
+  }
+}
