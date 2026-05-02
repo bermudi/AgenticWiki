@@ -88,34 +88,30 @@ List the pages that need verification. This list is the input to Step 3.
 
 ## Step 3: Source-Anchored Verification (Parallel Subagents)
 
-For each page that needs verification, spawn a `source-verifier` subagent. Run them in parallel — each is an independent session with narrow scope.
+For each page that needs verification, use `delegate` to spawn source-verifier subagents. Run them in parallel — each is an independent session with narrow scope.
 
-```typescript
-subagent({
+```
+delegate({
   tasks: [
     {
-      agent: "source-verifier",
-      task: "Verify wiki/concepts/some-page.md against its raw/ sources. Check for hallucinations, omissions, misattributions, and summary accuracy. Produce a structured verification report.",
-      output: ".pi/verification/some-page-report.md"
+      prompt: "Verify wiki/concepts/some-page.md against its raw/ sources. Check for hallucinations, omissions, misattributions, and summary accuracy. Produce a structured verification report.",
+      agent: "source-verifier"
     },
     {
-      agent: "source-verifier",
-      task: "Verify wiki/concepts/another-page.md against its raw/ sources. Check for hallucinations, omissions, misattributions, and summary accuracy. Produce a structured verification report.",
-      output: ".pi/verification/another-page-report.md"
+      prompt: "Verify wiki/concepts/another-page.md against its raw/ sources. Check for hallucinations, omissions, misattributions, and summary accuracy. Produce a structured verification report.",
+      agent: "source-verifier"
     }
     // ... more pages as needed
-  ],
-  concurrency: 5
+  ]
 })
 ```
 
 **Important:**
 - Each source-verifier gets a single page. Narrow scope = reliable judgment per DELEGATE-52.
-- Use `output` to persist reports to `.pi/verification/` so you can review them.
-- Use `.pi/verification/` directory (gitignored or cleaned up after review — temporary artifacts).
-- Don't send the verifier the git diff or the editing context. It gets only: the page file + its source files.
+- Don't send the verifier the git diff or the editing context. It gets only: the page file + its source files (it reads those itself from the paths in frontmatter `sources`).
+- The verifier produces its report as text output in the delegate response. Read the responses to build the aggregate report.
 
-**Parallelism limit:** Don't exceed `concurrency: 5`. More than 5 parallel subagent sessions can hit API rate limits. If you have more than 5 pages to verify, run them in batches.
+**Parallelism limit:** Don't include more than 5 tasks in a single `delegate` call. More than 5 parallel subagent sessions can hit API rate limits. If you have more than 5 pages to verify, run them in batches.
 
 ### If verification fails (subagent error)
 
@@ -127,15 +123,20 @@ After source verification, re-run the structural-editor and link-editor on chang
 
 Run these sequentially (not parallel — link-editor depends on structural-editor's index fixes):
 
-```typescript
-subagent({
-  agent: "structural-editor",
-  task: "Re-check structural integrity of recently changed wiki pages. Fix any mechanical issues (frontmatter, broken links, index accuracy, orphans). Focus only on pages that changed in this ingest."
+```
+delegate({
+  tasks: [{
+    prompt: "Re-check structural integrity of recently changed wiki pages. Fix any mechanical issues (frontmatter, broken links, index accuracy, orphans). Focus only on pages that changed in this ingest.",
+    agent: "structural-editor"
+  }]
 })
 
-subagent({
-  agent: "link-editor",
-  task: "Re-check cross-reference integrity of recently changed wiki pages. Fix bidirectional links, thread↔concept coverage, Related section completeness. Focus only on pages that changed in this ingest."
+// Then after structural-editor completes:
+delegate({
+  tasks: [{
+    prompt: "Re-check cross-reference integrity of recently changed wiki pages. Fix bidirectional links, thread↔concept coverage, Related section completeness. Focus only on pages that changed in this ingest.",
+    agent: "link-editor"
+  }]
 })
 ```
 
@@ -143,7 +144,7 @@ subagent({
 
 ## Step 5: Aggregate Findings
 
-Read all verification reports from `.pi/verification/` and aggregate them into a single summary:
+Read the verification reports from the source-verifier delegate responses and aggregate them into a single summary:
 
 ```
 ## Verification Summary
@@ -184,12 +185,14 @@ For each CRITICAL finding:
 3. Fix the wiki page to align with the source
 4. If the verifier's finding was incorrect (false positive), note it and dismiss
 
-After all critical fixes are applied, **re-run source-verifier on the fixed pages** to confirm the fixes didn't introduce new errors:
+After all critical fixes are applied, **re-run source-verifier** on the fixed pages via `delegate` to confirm the fixes didn't introduce new errors:
 
-```typescript
-subagent({
-  agent: "source-verifier",
-  task: "Re-verify wiki/concepts/fixed-page.md after critical fixes. Confirm previous CRITICAL findings are resolved. Check for any new issues introduced by the fix."
+```
+delegate({
+  tasks: [{
+    prompt: "Re-verify wiki/concepts/fixed-page.md after critical fixes. Confirm previous CRITICAL findings are resolved. Check for any new issues introduced by the fix.",
+    agent: "source-verifier"
+  }]
 })
 ```
 
@@ -208,11 +211,7 @@ Include verification status in the commit message for audit trail.
 
 ## Cleanup
 
-After commit, clean up temporary verification reports:
-
-```bash
-rm -f .pi/verification/*-report.md
-```
+After commit, no cleanup needed — verification reports exist only in the delegate responses, not on disk.
 
 ## What NOT to Do in Verification
 

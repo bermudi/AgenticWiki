@@ -21,10 +21,39 @@ Phase 1: Filing     →  Phase 2: Analysis  →  Phase 3: Verification  →  Com
    - Add `## Related` section with links to 2-3 existing pages
    - Add `## Sources` section with annotated entries (must match frontmatter `sources` list)
    - Update `wiki/index.md` with any new pages
-4. Run editors sequentially:
-   - `structural-editor` → frontmatter, broken links, index accuracy
-   - `link-editor` → bidirectional cross-refs, thread↔concept coverage
-   - `content-editor` → summaries, thin pages, contradictions
+4. Run editors sequentially via `delegate`. Scope each editor to recently changed/created pages only:
+
+   First, `structural-editor`:
+   ```
+   delegate({
+     tasks: [{
+       prompt: "Check and fix structural integrity of recently changed wiki pages. Focus on: frontmatter completeness (title, created, updated, sources, tags), broken wiki-links, index accuracy, orphan detection. Only process pages changed in this ingest."
+       agent: "structural-editor"
+     }]
+   })
+   ```
+
+   Then, `link-editor` (depends on structural-editor's index fixes):
+   ```
+   delegate({
+     tasks: [{
+       prompt: "Check and fix cross-reference integrity of recently changed wiki pages. Focus on: bidirectional links, thread↔concept coverage, Related section completeness, dangling references. Only process pages changed in this ingest."
+       agent: "link-editor"
+     }]
+   })
+   ```
+
+   Finally, `content-editor`:
+   ```
+   delegate({
+     tasks: [{
+       prompt: "Review substantive quality of recently changed wiki pages. Focus on: summary blockquote exists and is 1-3 sentences, section completeness (Thread, Related, Sources), thin page detection, content-structure alignment. Only process pages changed in this ingest."
+       agent: "content-editor"
+     }]
+   })
+   ```
+
+   Read each editor's report. Fix any issues surfaced before proceeding to Step 5.
 5. Filing summary → human. Do NOT commit.
 
 ## Phase 2 — Analysis (main agent only)
