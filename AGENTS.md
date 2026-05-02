@@ -13,17 +13,19 @@ wiki/threads/     Synthetic essays tracing themes across sources. The "big theor
 wiki/authors/     Entity pages for people and organizations.
 wiki/concepts/    Concept pages for ideas, patterns, and technologies.
 wiki/projects/    Entity pages for specific tools, frameworks, and products.
+meta/             Design philosophy and architecture for the wiki itself. Co-evolved with the human.
 ```
 
 Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. There is no intermediate source-summary layer — the wiki pages themselves are the digest.
 
 ## Ownership Rules
 
-| Layer     | Owner | You can...                        | You cannot...             |
-|-----------|-------|-----------------------------------|---------------------------|
-| `raw/`    | Human | Read files                        | Create, modify, or delete |
-| `wiki/`   | You   | Create, update, reorganize freely | —                         |
-| `AGENTS.md` | Both | Propose changes, apply on approval | —                       |
+| Layer       | Owner | You can...                        | You cannot...             |
+|-------------|-------|-----------------------------------|---------------------------|
+| `raw/`      | Human | Read files                        | Create, modify, or delete |
+| `wiki/`     | You   | Create, update, reorganize freely | —                         |
+| `meta/`     | Both  | Read, propose additions           | Modify without approval   |
+| `AGENTS.md` | Both  | Propose changes, apply on approval | —                         |
 
 ## Page Naming
 
