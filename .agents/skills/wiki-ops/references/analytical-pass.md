@@ -28,52 +28,16 @@ If you find a contradiction or departure:
 - Add a `> [!note] Departure` callout for novel-but-not-contradictory positions
 - Do not silently reconcile. Flag it explicitly so the human can decide.
 
-## Step 3: Verify bidirectional cross-refs
+## Step 3: Theory summary
 
-For every new page you created, check that at least 2-3 **existing** pages link back to it. This is the most commonly missed step. Check:
-
-```
-grep -rl 'new-page-name' wiki/
-```
-
-If no existing pages reference the new page, add backlinks now.
-
-## Step 4: Verify thread coverage
-
-Every concept linked from a thread must link back:
-
-```bash
-# Check for missing backlinks
-grep -roh '\[\[[a-z0-9-]*\]\]' wiki/threads/ | sort -u | while read link; do
-  clean="${link//[[/}"; clean="${clean//]]/}"
-  if [ -f "wiki/concepts/${clean}.md" ]; then
-    grep -q "## Thread" "wiki/concepts/${clean}.md" || echo "  MISSING: ${clean} has no ## Thread section"
-  fi
-done
-```
-
-Fix any gaps.
-
-## Step 5: Theory summary
-
-Present this to the human **before committing**:
+Present this to the human:
 
 - **Threads gained support**: Which threads did this source reinforce?
 - **Threads took a hit**: Did any thread lose ground?
 - **Contradictions found**: List them with the conflicting claims and pages
 - **Departures found**: List novel positions that don't fit the existing theory
 - **Emerging themes**: Is a new thread brewing? Are there tensions that need resolution?
-- **Gaps fixed**: What cross-refs or thread backlinks did this pass catch that filing missed?
 
 Don't just list what was added. Tell the human how the theory changed.
 
-## Step 6: Commit
-
-Only after the theory summary is presented:
-
-```bash
-git add -A
-git commit -m "ingest: <source title> — <brief summary>"
-```
-
-Mention contradictions in the commit message if any were flagged. Amend the log entry if contradictions or departures were added during this pass.
+After the human reviews the theory summary, proceed to Phase 3 (verification). Do **not** commit — verification runs before any commit.

@@ -9,11 +9,18 @@ Phase 1: Filing     →  Phase 2: Analysis  →  Phase 3: Verification  →  Com
 
 ## Phase 1 — Filing (main agent + 3 editors)
 
-**Who:** Main agent (deepseek-v4-pro) orchestrates, subagent editors auto-fix.
+**Who:** Main agent orchestrates, subagent editors auto-fix.
 
 1. Read source, identify entities/concepts/claims
 2. Determine thread fit (strengthen/contradict/new thread?)
-3. Create/update pages (concepts, threads, authors, index)
+3. Create/update pages. For **each** page created or updated:
+   - Populate YAML frontmatter: `title`, `created` (new pages only), `updated` (always), `sources` (list of `raw/` filenames), `tags`
+   - Write the blockquote summary (1-3 sentences immediately after the `# Title` heading)
+   - For concept pages: add `## Thread` section linking to relevant threads
+   - For thread pages: add `## Concepts in this thread` section listing all linked concepts
+   - Add `## Related` section with links to 2-3 existing pages
+   - Add `## Sources` section with annotated entries (must match frontmatter `sources` list)
+   - Update `wiki/index.md` with any new pages
 4. Run editors sequentially:
    - `structural-editor` → frontmatter, broken links, index accuracy
    - `link-editor` → bidirectional cross-refs, thread↔concept coverage
@@ -25,8 +32,8 @@ Phase 1: Filing     →  Phase 2: Analysis  →  Phase 3: Verification  →  Com
 **Who:** Main agent, switching to critical mode.
 
 - Re-read every thread page
-- Check: contradictions, departures, gaps
-- Present theory summary: what gained support, what took a hit, tensions
+- Check: contradictions, departures, tensions
+- Present theory summary: what gained support, what took a hit
 
 ## Phase 3 — Verification (separate agents, separate sessions)
 
@@ -46,13 +53,13 @@ Phase 1: Filing     →  Phase 2: Analysis  →  Phase 3: Verification  →  Com
 
 ## Agents
 
-| Agent | Model | Role | Tools |
-|---|---|---|---|
-| main agent | deepseek-v4-pro | Orchestrate filing, analysis, verification | all |
-| structural-editor | deepseek-v4-pro | Frontmatter, links, index, orphans | read, edit, write, bash |
-| link-editor | deepseek-v4-pro | Bidirectional refs, thread↔concept | read, edit, write, bash |
-| content-editor | deepseek-v4-pro | Summaries, thin pages, contradictions | read, edit, write, bash |
-| source-verifier | deepseek-v4-pro | Source fidelity (read-only) | read, bash |
+| Agent | Role | Tools |
+|---|---|---|
+| main agent | Orchestrate filing, analysis, verification | all |
+| structural-editor | Frontmatter, links, index, orphans | read, edit, write, bash |
+| link-editor | Bidirectional refs, thread↔concept | read, edit, write, bash |
+| content-editor | Summaries, thin pages, contradictions | read, edit, write, bash |
+| source-verifier | Source fidelity (read-only) | read, bash |
 
 ## Key architectural rule
 

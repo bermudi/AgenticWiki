@@ -5,7 +5,7 @@ This is a personal knowledge base built and maintained by an LLM agent. You are 
 ## Directory Structure
 
 ```
-raw/              Immutable source documents. Never modify. Read-only.
+raw/              Source documents. Immutable once created — never modify or delete.
 raw/assets/       Downloaded images referenced by source documents.
 wiki/             LLM-generated wiki pages. You own this layer entirely.
 wiki/index.md     Content catalog — thread-first, updated after every change.
@@ -22,7 +22,7 @@ Knowledge flows directly from `raw/` into concepts, threads, authors, and projec
 
 | Layer       | Owner | You can...                        | You cannot...             |
 |-------------|-------|-----------------------------------|---------------------------|
-| `raw/`      | Human | Read files                        | Create, modify, or delete |
+| `raw/`      | Human | Read files, create new source files | Modify or delete existing files |
 | `wiki/`     | You   | Create, update, reorganize freely | —                         |
 | `meta/`     | Both  | Read, propose additions           | Modify without approval   |
 | `AGENTS.md` | Both  | Propose changes, apply on approval | —                         |
@@ -71,6 +71,53 @@ The actual content. Use headings, lists, tables, code blocks as appropriate.
 
 The `> blockquote` immediately after the title is the page summary — it must exist on every page because `index.md` uses it. Keep it to 1-3 sentences.
 
+Frontmatter `sources` is a machine-readable list of `raw/` filenames. The body `## Sources` section is the human-readable annotated version — each entry notes what the source contributed. Both must stay in sync. When adding a source to a page, update both places.
+
+### Thread page format
+
+Thread pages live in `wiki/threads/` and follow the same frontmatter conventions, but have a different body structure:
+
+```markdown
+---
+title: Thread Title
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+sources:
+  - raw/source-one.md
+  - raw/source-two.md
+tags: [thread, relevant-tags]
+---
+
+# Thread Title
+
+> One-paragraph thesis statement. What this thread argues.
+
+## Thesis
+
+The core argument. May span multiple sections with headings as needed.
+
+## Concepts in this thread
+
+- [[concept-name]] — how it connects to the thesis
+- [[concept-name]] — how it connects
+
+## Tensions
+
+Where the theory is unsettled. Contradictions between sources, open questions.
+
+## Related
+
+- [[other-thread]] — how the threads relate
+- [[concept-page]] — relationship
+
+## Sources
+
+- `raw/source-one.md` — what this source contributed
+- `raw/source-two.md` — what this source contributed
+```
+
+The `## Concepts in this thread` section is required — it lists every concept linked from this thread. Each concept must have a `## Thread` section linking back. The `## Tensions` section is optional but encouraged when sources disagree.
+
 ## Cross-References
 
 - Use Obsidian wiki-links: `[[page-name]]` (no `.md` extension)
@@ -106,9 +153,28 @@ When answering queries, read `wiki/index.md` first to locate relevant pages, the
 
 ## Web Sources
 
-When ingesting a web source (article, GitHub README, blog post, documentation), **always fetch and save the actual content to `raw/`** — not a summary stub. Use `curl` or Jina Reader (`https://r.jina.ai/<url>`) to extract the full text. Save as markdown with YAML frontmatter (type, url, title, author, date, ingested). The file in `raw/` should be the verbatim source content that a future session can re-read in full.
+When ingesting a web source (article, GitHub README, blog post, documentation), **always fetch and save the actual content to `raw/`** — not a summary stub. Use `curl` or Jina Reader (`https://r.jina.ai/<url>`) to extract the full text. The file in `raw/` should be the verbatim source content that a future session can re-read in full.
 
 Never replace source content with extracted key points. The whole point of `raw/` is that it preserves the original so wiki pages can be re-derived from it.
+
+### Web source file format
+
+Create `raw/<descriptive-slug>.md`:
+
+```markdown
+---
+type: web
+url: https://example.com/article-slug
+title: Article Title
+author: Author Name
+date: YYYY-MM-DD
+ingested: YYYY-MM-DD
+---
+
+<Full text of the article as extracted markdown>
+```
+
+The slug should be human-readable and descriptive (e.g., `how-to-ralph-wiggum.md`). If the source has no clear date, use the ingestion date. The `ingested` date is always today.
 
 ## YouTube Videos
 
@@ -151,18 +217,20 @@ Threads are not just filing — they are the wiki's living theory. During ingest
 
 ## Git
 
-After every ingestion, commit all changes with a descriptive message:
+Commits happen at the end of the verification phase (Phase 3), after all three ingest phases are complete and the human has approved. See the skill's verification pass for the commit gate.
+
+Commit message format:
 
 ```bash
 git add -A
 git commit -m "ingest: <source title> — <brief summary of what was created/updated>"
 ```
 
-The commit message should be useful in `git log` — include the source name and the scope of changes. If contradictions were flagged, mention them.
+The commit message should be useful in `git log` — include the source name and the scope of changes. If contradictions were flagged, mention them. Include verification status.
 
 ## Rules
 
-1. **Never modify files in `raw/`** — that's the source of truth.
+1. **Never modify or delete files in `raw/`** — that's the source of truth. You may *create* new source files (web content, YouTube stubs) during ingest.
 2. **Always update `index.md`** when creating or significantly updating pages.
 3. **Always add a `## Related` section** to new pages with links to existing pages.
 4. **Always update the `updated` date** in frontmatter when editing a page.

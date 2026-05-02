@@ -20,43 +20,22 @@ Processing a new source into the wiki. **Three-phase operation: filing, then ana
 
 ### Phase 1: Filing
 
-The mechanical work of extracting knowledge from the source and filing it into the wiki.
+The mechanical work of extracting knowledge from the source and filing it into the wiki. Follow the detailed procedure in [ingest-flow.md](references/ingest-flow.md).
 
-#### Step 1: Read and understand the source
+#### Step 0: Source Acquisition (if needed)
 
-1. Read the source file from `raw/` (or process inline content the user shared, use web-content skill as needed)
-2. Identify: key entities (people, orgs, projects), key concepts, key claims
-3. Read existing thread pages to understand the wiki's accumulated theory
-4. Discuss the source with the user — highlight what you found interesting, ask about emphasis
+If the user provided a URL and no file exists in `raw/` yet:
+1. Use the web-content skill to fetch the content
+2. Save to `raw/` following the appropriate template (see AGENTS.md "Web Sources" or "YouTube Videos" sections)
+3. Proceed with the filed source
 
-#### Step 2: Thread identification
+If the source is already in `raw/`, skip this step.
 
-Before filing individual pages, determine how this source fits the wiki's theory:
+#### Steps 1–5: Follow [ingest-flow.md](references/ingest-flow.md)
 
-1. Re-read existing thread pages to understand accumulated theory
-2. Ask: **does this source strengthen an existing thread, contradict one, or introduce a new one?**
-3. If it strengthens: note which claims add weight and plan the update
-4. If it contradicts: flag with `> [!warning] Contradiction` callout, surface to human
-5. If it introduces a new thread: propose it to the human before filing — explain how it relates to existing threads
+The detailed filing procedure covers: reading and understanding the source, thread identification, creating/updating pages (with proper frontmatter, blockquote summaries, and all required sections), running structural/link/content editors, and presenting the filing summary to the human. **Do NOT commit.**
 
-This step is intentionally early. Threads are the wiki's living theory; filing without understanding thread fit produces orphaned concepts.
-
-#### Step 3: Create/update wiki pages
-
-Work through this checklist:
-
-- [ ] **Source stub**: If YouTube content arrived inline (no file on disk), create `raw/yt-<descriptive-slug>.md` (see AGENTS.md for format). If a transcript file already exists in `raw/`, skip this — the transcript IS the source.
-- [ ] **Entity pages**: Create or update a page for each significant entity mentioned
-- [ ] **Concept pages**: Create or update a page for each significant concept. Add `## Thread` section linking to relevant threads. Connect to related concepts via `## Related`
-- [ ] **Thread updates**: Update existing thread pages to incorporate new concepts and claims. If a new thread was proposed and approved, create it now
-- [ ] **Bidirectional cross-refs**: For each new page, edit at least 2-3 **existing** pages to add backlinks in their `## Related` sections. New→old AND old→new.
-- [ ] **Index**: Add all new pages to `wiki/index.md` under the correct category.
-
-#### Step 4: Present filing summary to the human
-
-Show what was created and updated. **Do NOT commit yet.**
-
-Then read [the analytical pass instructions](references/analytical-pass.md) and complete Phase 2 before committing.
+After the filing summary is presented and approved, proceed to Phase 2 by reading [the analytical pass instructions](references/analytical-pass.md).
 
 ### Phase 2: Analysis
 
@@ -166,5 +145,5 @@ done
 - **One source can touch many pages**: A single YouTube video about distributed systems might update pages on consistency models, a specific engineer, a specific paper, and the overview. That's expected. The value is in the cross-referencing.
 - **Don't over-split**: A page should cover one coherent topic. If it's getting long (>200 lines), consider splitting. If it's under 10 lines, consider merging into a related page.
 - **Dates in frontmatter are ISO 8601**: `YYYY-MM-DD`. No exceptions.
-- **YouTube videos that arrive inline need a source stub**: When video content arrives via an extension with no file on disk, create a `raw/yt-<slug>.md` stub with key points extracted during ingest. This is the only case where you write to `raw/`. If a transcript file already exists in `raw/`, it is the source — do not create a stub. Without the stub, future sessions can't re-read the source.
+- **YouTube videos that arrive inline need a source stub**: When video content arrives via an extension with no file on disk, create a `raw/yt-<slug>.md` stub with key points extracted during ingest. YouTube stubs and web source files are the only cases where you write to `raw/`. If a transcript file already exists in `raw/`, it is the source — do not create a stub. Without the stub, future sessions can't re-read the source.
 - **No src/ layer**: Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. Each page's `## Sources` section references the `raw/` files it draws from.
