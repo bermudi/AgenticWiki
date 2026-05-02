@@ -27,6 +27,18 @@ Knowledge flows directly from `raw/` into concepts, threads, authors, and projec
 | `meta/`     | Both  | Read, propose additions           | Modify without approval   |
 | `AGENTS.md` | Both  | Propose changes, apply on approval | —                         |
 
+## Skills
+
+Detailed operational procedures live in skill files. **Always load the relevant skill before executing an operation** — the skill contains step-by-step procedures, checklists, and verification gates that the schema only summarizes.
+
+| Operation | Skill file | When to load |
+|---|---|---|
+| Ingest | `.agents/skills/wiki-ops/SKILL.md` | Processing a new source: article, paper, YouTube video, podcast notes |
+| Query | `.agents/skills/wiki-ops/SKILL.md` | Answering questions against accumulated wiki knowledge |
+| Lint | `.agents/skills/wiki-ops/SKILL.md` | Health-checking the wiki: broken links, orphans, contradictions, stale claims |
+
+When in doubt, load the skill. It's better to re-read the procedure than to skip a verification step.
+
 ## Page Naming
 
 - Kebab-case: `distributed-systems.md`, `map-reduce.md`, `jeff-dean.md`
@@ -217,7 +229,7 @@ Threads are not just filing — they are the wiki's living theory. During ingest
 
 ## Git
 
-Commits happen at the end of the verification phase (Phase 3), after all three ingest phases are complete and the human has approved. See the skill's verification pass for the commit gate.
+Commits happen at the end of the verification phase (Phase 3), after all three ingest phases are complete and the human has approved. See `.agents/skills/wiki-ops/SKILL.md` verification pass for the commit gate.
 
 Commit message format:
 
