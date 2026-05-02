@@ -102,6 +102,12 @@ Sources are tracked per-page in `## Sources` sections pointing to `raw/` files. 
 
 When answering queries, read `wiki/index.md` first to locate relevant pages, then drill into them.
 
+## Web Sources
+
+When ingesting a web source (article, GitHub README, blog post, documentation), **always fetch and save the actual content to `raw/`** — not a summary stub. Use `curl` or Jina Reader (`https://r.jina.ai/<url>`) to extract the full text. Save as markdown with YAML frontmatter (type, url, title, author, date, ingested). The file in `raw/` should be the verbatim source content that a future session can re-read in full.
+
+Never replace source content with extracted key points. The whole point of `raw/` is that it preserves the original so wiki pages can be re-derived from it.
+
 ## YouTube Videos
 
 This project formerly used the Gemini YouTube extension for native video understanding. Currently, YouTube content may arrive either as a transcript file already in `raw/` or as inline content from a Gemini extension. **Only create a source stub in `raw/` when the content arrived inline and no file already exists on disk.** If a transcript file (`raw/*.md`) already exists, it IS the source — do not create a stub.
