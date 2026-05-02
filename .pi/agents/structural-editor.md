@@ -2,7 +2,6 @@
 name: structural-editor
 description: Wiki copy desk — enforces frontmatter conventions, naming rules, index accuracy, broken link detection, and orphan page identification. Handles the mechanical structural integrity of the wiki.
 tools: read, edit, write, bash
-model: deepseek/deepseek-v4-pro
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: true

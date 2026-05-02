@@ -2,7 +2,6 @@
 name: source-verifier
 description: Wiki source-anchored verification — compares wiki pages against their raw/ sources to detect hallucinations, omissions, and misattributions. Read-only, judgment-only.
 tools: read, bash
-model: deepseek/deepseek-v4-pro
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: true
