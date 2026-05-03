@@ -4,12 +4,13 @@ created: 2026-05-02
 updated: 2026-05-02
 sources:
   - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
+  - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
 
 # Context Engineering
 
-> The practice of getting the most out of LLMs by putting the right information in, keeping it as small and dense as possible — maximizing information-per-token density rather than token count. Emerged independently in April 2025 from both Jeff Huber (Chroma CEO) and [[dex-horthy|Dex Horthy]] around the same time — Horthy included it as one factor in his "12 Factor Agents" article, which helped popularize the term.
+> The practice of getting the most out of LLMs by putting the right information in, keeping it as small and dense as possible — maximizing information-per-token density rather than token count. Emerged independently in April 2025 from Jeff Huber (Chroma CEO) and [[dex-horthy|Dex Horthy]], then refined by practitioners like [[lance-martin|Lance Martin]] who catalogued the techniques that operationalize it: progressive disclosure, context offloading, sub-agent isolation, caching, and evolving context.
 
 ## Definition
 
@@ -51,6 +52,25 @@ Frontier models can follow ~100-200 instructions before attention spreads too th
 ### NoSQL Over SQL for AI
 Dex argues that flexible schemas (front matter, markdown) are more AI-friendly than rigid SQL schemas. The agent doesn't care about the schema — it reads the data and extracts what it needs. Schemas constrain programs, not AI. An agent can evolve its own schema by adding front matter fields as needed.
 
+## Operational Techniques
+
+[[lance-martin|Lance Martin]] catalogues the concrete techniques that operationalize context engineering in agent harnesses:
+
+### Progressive Disclosure
+Don't dump all tools, skills, or instructions into the system prompt. Pull context in on demand: tool search (semantic search over indexed tool descriptions), skills as file-based SOPs that agents read only when needed, and MCP servers synced to the file system rather than bound as tools. The [[multi-tier-action-space]] architecture depends on this pattern.
+
+### Context Offloading
+Save tool results to the file system instead of accumulating them in chat history. Give the agent a pointer and summary; let it retrieve the full result if needed. This avoids both context bloat and the destructiveness of compaction (summarizing history loses precision). Anthropic's "context editing" SDK feature formalizes this. A variant: offload the agent's plan to a scratchpad file and re-read it for "recitation" — reinforcing objectives mid-task.
+
+### Sub-Agent Isolation
+For atomic, parallelizable tasks, spawn sub-agents with clean context windows. Prevents task A's tool results from polluting task B's reasoning. Claude Code uses sub-agents for code review, migrations, and lint rules. The [[ralph-loop]] extends this to serial tasks: each iteration is a fresh context window, with a plan file as shared state between otherwise isolated executions.
+
+### KV Caching
+Cache the invariant portion of chat history (system prompt, previous turns). Each incremental turn only processes the new bit. Cache hit rate is one of the most important metrics for production agents — directly affects speed and cost.
+
+### Context Layers
+A mental model articulated by the host (Dex Horthy) and engaged with by Lance Martin for thinking about where context comes from: **session context** (what's happening in the current agent session), **agent context** (multi-session — skills, memories, past sessions), **organizational context** (Slack, email, calendars, knowledge bases), **global context** (web search, external information). The goal: materialize a just-in-time view across these layers that enables the agent's best next action.
+
 ## Thread
 
 - [[the-agent-workflow]] — Context engineering is the infrastructure layer beneath the agent workflow; managing information-per-token density is the operational skill the workflow depends on
@@ -63,7 +83,12 @@ Dex argues that flexible schemas (front matter, markdown) are more AI-friendly t
 - [[smart-zone-dumb-zone]] — Context engineering operationalizes staying in the Smart Zone
 - [[the-agent-workflow]] — Context engineering is the infrastructure layer beneath the workflow
 - [[instruction-severity-inflation]] — Instruction density management is a core context engineering skill
+- [[multi-tier-action-space]] — Context engineering techniques enable the thin-tool-layer architecture
+- [[evolving-context]] — Context engineering extended into the temporal dimension
+- [[lance-martin]] — Catalogued the operational techniques
+- [[ralph-loop]] — The Ralph Loop applies context isolation (sub-agent spawning) to serial tasks; each iteration gets a clean context window
 
 ## Sources
 
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Full interview defining context engineering origins, principles, and practices
+- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Operational techniques catalog, context layers model, context isolation patterns

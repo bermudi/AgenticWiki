@@ -1,10 +1,11 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-04-26
+updated: 2026-05-02
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
+  - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
 tags: [concept, autonomous-agents, agent-loops, claude-code, workflow]
 ---
 
@@ -23,6 +24,12 @@ while :; do cat PROMPT.md | claude ; done
 Each iteration: the agent reads `PROMPT.md` + `AGENTS.md` + `IMPLEMENTATION_PLAN.md`, picks the most important task, implements it, updates the plan, commits, exits. The loop restarts with fresh context. The plan file persists on disk as shared state between iterations.
 
 No sophisticated orchestration needed — just a dumb bash loop that keeps restarting the agent, and the agent figures out what to do next by reading the plan file each time.
+
+### Why It Works (Context Isolation)
+
+[[lance-martin|Lance Martin]] frames the Ralph Loop as a **context isolation pattern** for long-running tasks. The core problem: you can't fit a large task in a single context window. The solution: isolate individual tasks to different sub-agents, each with a clean context window. The agents communicate via git and the file system (a `progress.txt` scratchpad), not via shared context.
+
+The loop is serial — one agent takes a task, does it, commits everything, and exits. The next agent picks up the next task, reads the git history and progress file to understand what happened, then works on the next item. Martin presents this as one variant of context isolation, alongside parallel sub-agent patterns (like Claude Code's parallel code review agents) — both are instances of the same principle applied differently.
 
 ## Key Design Decisions
 
@@ -107,8 +114,11 @@ Matt explicitly merges issues that are too small to avoid the overhead of spinni
 - [[agent-friendly-tooling]] — AGENTS.md as agent-friendly infrastructure
 - [[geoffrey-huntley]] — Originator of the technique
 - [[matt-pocock]] — Docker-based issue-driven variant (Sandcastle)
+- [[lance-martin]] — Framed the Ralph Loop as a serial context isolation pattern for long-running tasks
+- [[context-engineering]] — The Ralph Loop is a context isolation technique; context engineering provides the theoretical framework for why fresh context per iteration works
 
 ## Sources
 
 - `raw/how-to-ralph-wiggum.md` — The canonical implementation
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the methodology
+- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Context isolation framing of the Ralph Loop pattern

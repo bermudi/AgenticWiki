@@ -26,6 +26,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[louis-knight-webb]] — Articulated the plan-vs-review tradeoff and focus maxing as the new software engineering workflow.
 - [[martin-fowler]] — Pioneer of Agile and Refactoring.
 - [[mario-zechner]] — Creator of Pi.
+- [[lance-martin]] — Engineer at LangChain who built the Deep Agents harness and skill system; catalogued context engineering techniques and evolving context
 - [[the-gray-cat]] — YouTube creator; personal essay on living inside comprehension debt and recovering via teaching mode.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
 
@@ -55,6 +56,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
+- [[multi-tier-action-space]] — The thin tool layer + computer architecture converged on by Claude Code, Manis, AMP, and Deep Agents.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
 - [[plan-vs-review]] — The quantified tradeoff: 5 minutes of planning saves 30 minutes of reviewing AI-generated code.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
@@ -65,6 +67,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
+- [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
 - [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.

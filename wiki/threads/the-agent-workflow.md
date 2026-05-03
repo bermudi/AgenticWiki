@@ -17,16 +17,17 @@ sources:
   - raw/slowing-the-fuck-down.md
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
+  - "raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md"
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
 # The Agent Workflow
 
-> How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software.
+> How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software. The agent harness architecture has converged on a [[multi-tier-action-space]] pattern (thin tool layer + computer primitive), while [[evolving-context|evolving context]] — agents improving their own prompts, skills, and memories over time — is the major unsolved frontier.
 
 ## Thesis
 
-The agent workfkow consists of two interdependent phases — human-in-the-loop design (HITL) and away-from-keyboard execution (AFK) — joined by a tight feedback cycle. The HITL phase owns the [[shared-design-concept]] and tests; the AFK phase executes within those boundaries. Success depends on three supporting layers: [[context-engineering|context hygiene]] (keeping the model in the [[smart-zone-dumb-zone|Smart Zone]]), [[tool-design-for-agents|tool design]] (outputs that agents can consume), and [[verification-loop|verification infrastructure]] (mechanical backpressure that rejects wrong outputs). Without any of these, the workflow degrades into [[the-slop-problem|slop]].
+The agent workflow consists of two interdependent phases — human-in-the-loop design (HITL) and away-from-keyboard execution (AFK) — joined by a tight feedback cycle. The HITL phase owns the [[shared-design-concept]] and tests; the AFK phase executes within those boundaries. Success depends on three supporting layers: [[context-engineering|context hygiene]] (keeping the model in the [[smart-zone-dumb-zone|Smart Zone]]), [[tool-design-for-agents|tool design]] (outputs that agents can consume), and [[verification-loop|verification infrastructure]] (mechanical backpressure that rejects wrong outputs). Without any of these, the workflow degrades into [[the-slop-problem|slop]].
 
 ## The Two Phases
 
@@ -129,6 +130,37 @@ This creates a tension with multi-model architectures: if specialization across 
 The AMP Code team pioneered an architecture that resolves the multi-model tension differently: instead of switching models across different sessions, delegate within a single session. The fast model (Sonnet) handles navigation, tool calling, and routing. When heavy reasoning is needed — 50 files to analyze for a race condition — the fast model batches the context and hands it to a slower, smarter "oracle" (Opus, o3) as a single prompt.
 
 Key insight: **smart models are bad at tool calling.** If you have the fast orchestrator determine relevance, then batch everything into one prompt for the oracle, you avoid the oracle wasting time on tool calls. The oracle gets a dense, curated context — the essence of [[context-engineering]].
+
+## The Agent Harness Architecture
+
+The [[multi-tier-action-space]] pattern has emerged across Claude Code, Manis, AMP, and Deep Agents as a shared agent harness architecture. It has two tiers:
+
+1. **Tool calling layer**: A thin set of atomic, general-purpose tools (~12) — glob, grep, file read/write, bash. These control the computer but don't encode domain logic.
+2. **Computer**: A shell, file system, and code execution environment where the actual actions happen via bash commands, scripts, and file operations.
+
+The key insight: **n actions ≠ n tools**. Instead of binding every action as an individual tool (each consuming context tokens), push actions out to the computer where the agent can compose them via bash pipes and code. This keeps the tool layer from bloating context and confusing the model.
+
+This architecture is supported by a family of [[context-engineering]] techniques:
+
+- **Progressive disclosure**: Pull context (tools, skills, SOPs) on demand rather than preloading everything. Tool search, file-based skills, and MCP-to-filesystem sync.
+- **Context offloading**: Save tool results to the file system instead of accumulating them in chat history. Avoids both context bloat and the destructiveness of compaction.
+- **Sub-agent isolation**: Spawn sub-agents with clean context windows for atomic, parallelizable tasks. The [[ralph-loop]] extends this to serial tasks — each loop iteration is a fresh context window.
+- **KV caching**: Cache the invariant portion of chat history. Cache hit rate directly affects speed and cost.
+
+### The MCP Lesson
+
+MCP (Model Context Protocol) made it easy to add tools, which created a tool-bloat problem — the GitHub MCP server is 35,000 tokens across 35 tools. The resolution: push MCP servers out of the tool calling layer and into the computer tier. Cursor syncs MCP tool definitions to the file system as files; Manis built a CLI for MCP. The principle: MCP servers are a capability source, but their definitions don't belong in the system prompt.
+
+## The Evolving Context Frontier
+
+[[evolving-context]] — continual learning in token space — is the major unsolved problem in agent workflows. Currently, all context management is hand-tuned heuristics: "offload after N turns," "spawn sub-agents for these task types." The emerging vision is agents that improve their own context over time:
+
+- **Task-specific prompt evolution**: Reflect over agent trajectories, score outcomes, and iteratively refine prompts (a paper Lance references as "Jeepa" from DSPy/Omar).
+- **Memory and preference learning**: Accumulate preferences across sessions — coding style, PR conventions, durable vs. temporary preferences. [[lance-martin|Lance Martin]]'s Claude Diary is a crude prototype.
+- **Skill learning**: When an agent discovers a reusable SOP, capture it as a skill file for future tasks (Let paper).
+
+> [!warning] Open Frontier
+> All three categories are currently "super hacky" — custom prompts and manual reflection loops. RLM (Recursive Language Models, trained to manage their own context) is an exciting direction, but the classifier heuristic (articulated by the host, Dex Horthy, and elaborated by Martin) suggests some decisions (user-specific preferences, nuanced memory salience) will always need user-supplied guardrails. The mechanics of storage and retrieval can be learned; the *values* for what to keep may stay external.
 
 ## Tracer Bullets
 
@@ -256,6 +288,9 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 - [[comprehension-debt]] — Teaching mode as inquiry-based workflow; the cognitive cost of delegation-only workflows
 - [[plan-vs-review]] — The quantified tradeoff between planning depth and review burden
 - [[context-engineering]] — The practice of maximizing information-per-token density; the infrastructure of the workflow
+- [[multi-tier-action-space]] — The thin-tool-layer + computer architecture that dominates current agent harnesses
+- [[evolving-context]] — Continual learning in token space; the unsolved frontier of agents improving their own context over time
+- [[lance-martin]] — Catalogued the agent harness architecture and evolving context categories
 
 ## Related
 
@@ -279,4 +314,5 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Context management, malleability, Pi origin story, one-task-per-iteration sidesteps Dumb Zone.
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Plan-vs-review tradeoff, feature type matrix, time horizon shift, focus maxing / parallel agent management.
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Context engineering definition, model switching strategy, fast orchestrator + smart oracle pattern, personal productivity systems.
+- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Multi-tier action space architecture, evolving context categories, MCP lesson, context management techniques catalog, Ralph Loop context isolation framing.
 

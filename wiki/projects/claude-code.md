@@ -47,6 +47,9 @@ This experience directly motivated Mario to build [[pi]], founded on the princip
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum pattern using Claude Code.
 - [[mario-zechner]] — Former happy user who left due to context manipulation.
 - [[tool-design-for-agents]] — Claude Code as a cautionary tale of context transparency failures.
+- [[lance-martin]] — Identified Claude Code as a reference implementation of the thin-tool-layer architecture his Deep Agents harness also uses
+- [[context-engineering]] — Claude Code's sub-agent spawning and context isolation are operational context engineering techniques
+- [[multi-tier-action-space]] — Claude Code is one of the four independent implementations (with Manis, AMP, Deep Agents) that converged on the thin-tool-layer + computer architecture
 
 ## Sources
 
