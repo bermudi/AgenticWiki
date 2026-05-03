@@ -1,8 +1,8 @@
 ---
 title: Strategic vs. Tactical Programming
 created: 2026-04-25
-updated: 2026-04-29
-sources: ["raw/yt-software-fundamentals-matter-more-than-ever.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "John Ousterhout, *A Philosophy of Software Design*"]
+updated: 2026-05-02
+sources: ["raw/yt-software-fundamentals-matter-more-than-ever.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "John Ousterhout, *A Philosophy of Software Design*", "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"]
 tags: ["software-design", "ai-engineering", "strategy"]
 ---
 
@@ -54,6 +54,7 @@ Matt Pocock argues that to succeed with AI, you must spend **more time being str
 - [[verification-loop]] — Strategic programming requires verification to prove design intent.
 - [[improve-codebase-architecture]] — The skill that operationalizes strategic programming as a recurring practice.
 - [[locality-and-leverage]] — What the strategist optimizes for when designing module boundaries.
+- [[comprehension-debt]] — The cost of going all-tactical: you ship fast but stop understanding what you ship.
 
 ## Thread
 - [[the-human-lever]] — Strategic programming as the human's primary job in the age of AI
@@ -62,3 +63,4 @@ Matt Pocock argues that to succeed with AI, you must spend **more time being str
 - `raw/yt-software-fundamentals-matter-more-than-ever.md` — Matt Pocock applying Ousterhout's strategic/tactical distinction to AI workflows
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — The general/sergeant metaphor and strategic architecture review as a recurring practice.
 - John Ousterhout, *A Philosophy of Software Design* — The original strategic vs. tactical programming framework
+- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Comprehension debt as the long-term cost of going all-tactical: shipping fast without understanding

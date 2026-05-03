@@ -13,6 +13,7 @@ sources:
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
+  - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -83,6 +84,14 @@ The unifying principle across all sources:
 
 Delegation without design authority is abdication. The human isn't less important in an AI-assisted workflow — they're *more* important, because the cost of a bad design decision is amplified by the speed at which the agent will faithfully implement it.
 
+## Comprehension Debt: The Inside View
+
+[[the-gray-cat|The Gray Cat]] provides the most visceral first-person account of losing the human lever. After a year of full AI-assisted development, he couldn't pass a bare-editor coding interview. The drift happened in three stages: dictation (he had the codebase in his head, AI was a fast typist) → planning delegation (AI produced plans he merely approved) → full delegation (AI explored the codebase, planned, executed, and self-corrected before he noticed). His attention migrated from the code to the workflow around the code — comparing models, optimizing setup, trying methodologies. He became the tester of the code, not the author.
+
+The recovery came from an accidental experiment: joining an unfamiliar Python codebase and choosing to use AI in **teaching mode** — asking it to explain the architecture, compare language semantics, walk through the request flow, and implement fixes *with explanations*. This is the [[comprehension-debt|inquiry mode]] from the Anthropic RCT applied in practice: same tool, opposite outcome.
+
+His personal rule crystallizes the human lever: "Even when Claude writes the code, opens the PR, and reviews the PR, it is doing all that on my behalf. My name is on the commit. I am the one who gets paged at 2 a.m." You don't need to remember every function. You need a grip on the architecture, the protocols, and the *why* of the system — the part the model cannot hold for you, because that is the part you are being paid to hold.
+
 ## Reviewing Outputs, Not Code
 
 [[matt-pocock|Matt Pocock]]'s QA process illustrates the grey box in practice: during review, he doesn't read the agent's code. He reviews **outputs** — does the feature work? Does the UI behave correctly? When something is wrong, he files a GitHub issue with enough context for the [[afk-agent]] to fix it, without ever opening the implementation file.
@@ -152,6 +161,7 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[jagged-frontier]] — Capability unevenness means human domain judgment is irreplaceable
 - [[critical-failure]] — Rare catastrophic errors require human-level architectural safeguards
 - [[document-degradation]] — Silent corruption is why humans must own the verification contract
+- [[comprehension-debt]] — The cognitive cost of losing the human lever
 
 ## Related
 
@@ -171,4 +181,5 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — General/sergeant metaphor and periodic architecture review as an operational rhythm.
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Automation bias, "valuable garbage" insight, deliberate friction, "refactor mercilessly" practice, prompt request refinement.
 - `raw/slowing-the-fuck-down.md` — Write architecture by hand; friction as understanding; agents are merchants of complexity; agentic search recall.
+- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — First-person account of losing the human lever and recovering it through teaching mode; Anthropic RCT on inquiry vs. delegation.
 

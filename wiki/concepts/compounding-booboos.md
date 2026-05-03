@@ -62,6 +62,7 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 - [[document-degradation]] — The core finding that documents silently degrade over delegation
 - [[critical-failure]] — Sparse catastrophic errors explain ~80% of observed degradation
 - [[round-trip-relay]] — The relay method quantifies how errors compound over long workflows
+- [[comprehension-debt]] — Comprehension debt is compounding booboos applied to the human's mental model
 
 ## Sources
 

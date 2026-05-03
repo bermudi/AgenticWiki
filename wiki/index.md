@@ -13,6 +13,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
 
 ## ✍️ Authors
+- [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
 - [[philippe-laban]] — Researcher at Microsoft Research; lead author of DELEGATE-52 benchmark on LLM document corruption.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
@@ -24,6 +25,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[kent-beck]] — Pioneer of TDD and Extreme Programming (XP).
 - [[martin-fowler]] — Pioneer of Agile and Refactoring.
 - [[mario-zechner]] — Creator of Pi.
+- [[the-gray-cat]] — YouTube creator; personal essay on living inside comprehension debt and recovering via teaching mode.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
 
 ## 🧠 Concepts
@@ -40,6 +42,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
+- [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
 - [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
 - [[deliberate-friction]] — Intentional engineering slowdowns at high-stakes decision points. Not all friction is bad DX.

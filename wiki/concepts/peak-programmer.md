@@ -1,8 +1,8 @@
 ---
 title: Peak Programmer
 created: 2026-04-25
-updated: 2026-04-25
-sources: [raw/yt-dhh-ai-pilled.md]
+updated: 2026-05-02
+sources: [raw/yt-dhh-ai-pilled.md, "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"]
 tags: [future-of-work, economics, ai]
 ---
 
@@ -28,6 +28,7 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 - [[aesthetics-is-truth]] — In the post-implementation era, taste becomes the primary differentiator.
 - [[omarchy]] — Case study: small team building an OS with AI.
 - [[dhh]] — The originator of the Peak Programmer thesis.
+- [[comprehension-debt]] — A senior engineer who can't pass a coding interview after a year of AI is peak programmer made personal.
 
 ## Thread
 - [[the-agent-workflow]] — How developers adapt to the post-implementation world.
@@ -35,3 +36,4 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 ## Sources
 
 - `raw/yt-dhh-ai-pilled.md` — Central topic of the interview between DHH and Gergely Orosz.
+- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — The senior engineer who fails the coding interview as the personal face of peak programmer

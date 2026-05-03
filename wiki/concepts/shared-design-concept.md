@@ -1,8 +1,10 @@
 ---
 title: Shared Design Concept
 created: 2026-04-25
-updated: 2026-04-26
-sources: []
+updated: 2026-05-02
+sources:
+  - "raw/yt-software-fundamentals-matter-more-than-ever.md"
+  - "Peter Naur, Programming as Theory Building (1985)"
 tags: ["design", "ai-engineering", "mental-models"]
 ---
 
@@ -41,6 +43,7 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[agent-experience]] — AX is high when the agent shares the design concept.
 - [[the-human-lever]] — The shared design concept as the core of human design authority.
 - [[the-slop-problem]] — Without a shared concept, each agent session drifts from the architecture.
+- [[comprehension-debt]] — What happens when the shared design concept erodes: code exists but nobody holds the theory.
 
 ## Thread
 - [[the-human-lever]] — The shared design concept as the core of human design authority

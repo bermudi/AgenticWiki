@@ -1,7 +1,7 @@
 ---
 title: Grey Box Engineering
 created: 2026-04-24
-updated: 2026-04-29
+updated: 2026-05-02
 sources: ["raw/yt-ai-coding-for-real-engineers.md"]
 tags: ["software-design", "ai-workflow"]
 ---
@@ -55,6 +55,7 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - [[improve-codebase-architecture]] — The skill that identifies where grey box boundaries should be drawn.
 - [[pi]] — Pi's observability enables grey box engineering in practice.
 - [[mario-zechner]] — Creator of pi, advocate for grey box engineering.
+- [[comprehension-debt]] — Grey box requires holding architecture in your head; comprehension debt is what happens when you stop.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

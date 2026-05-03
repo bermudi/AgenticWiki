@@ -76,6 +76,7 @@ A novel (if tongue-in-cheek) slop indicator: Armin reports that the frequency of
 - [[armin-ronacher]] — Conservative upgrades and tooling speed as slop prevention.
 - [[backpressure]] — Lack of backpressure produces slop in autonomous loops.
 - [[deliberate-friction]] — Removing deliberate friction accelerates slop production.
+- [[comprehension-debt]] — Slop degrades the human's mental model too: code multiplies, understanding doesn't.
 
 ## Sources
 

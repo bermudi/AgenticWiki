@@ -5,6 +5,7 @@ updated: 2026-05-02
 sources:
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/2604.15597v1.pdf
+  - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
 tags: [concept, engineering-process, ai-engineering, code-review, quality]
 ---
 
@@ -69,7 +70,9 @@ Don't remove friction wholesale to enable agent autonomy. Audit which friction i
 - [[critical-failure]] — Rare catastrophic errors that friction might catch
 - [[armin-ronacher]] — Primary source for this concept
 - [[pi]] — Mario's auto-close PR workflow as concrete deliberate friction: filtering agent-generated noise from human contributors
+- [[comprehension-debt]] — Teaching mode as deliberate friction: slowing down to build understanding instead of shipping faster
 
 ## Sources
 
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Armin's analysis of deliberate vs. accidental friction, the "ship without friction" incident
+- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Teaching mode as deliberate friction; inquiry vs. delegation in the Anthropic RCT

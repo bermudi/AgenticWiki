@@ -192,6 +192,7 @@ Peter Steinberger's idea: instead of sending code (pull requests), send the prom
 - [[locality-and-leverage]] — The two evaluation criteria for every deepening candidate
 - [[deliberate-friction]] — Intentional friction at high-stakes decision points in the HITL phase
 - [[document-degradation]] — Silent document corruption undermines AFK delegation viability
+- [[comprehension-debt]] — Teaching mode as inquiry-based workflow; the cognitive cost of delegation-only workflows
 
 ## Related
 
