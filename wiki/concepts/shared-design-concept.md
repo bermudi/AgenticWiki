@@ -1,9 +1,9 @@
 ---
 title: Shared Design Concept
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-03
 sources:
-  - "raw/yt-software-fundamentals-matter-more-than-ever.md"
+  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
   - "Peter Naur, Programming as Theory Building (1985)"
 tags: ["design", "ai-engineering", "mental-models"]
 ---
@@ -23,7 +23,7 @@ In traditional software engineering, the design concept exists in the heads of t
 ## The "Theory of the Code"
 Peter Naur's paper, *"Programming as Theory Building,"* argues that programming isn't just about writing lines of code; it's about building a theory of how the system solves a problem. 
 
-**Matt Pocock** argues that we must be explicit about this theory so the AI can participate in it.
+[[matt-pocock|Matt Pocock]] argues that we must be explicit about this theory so the AI can participate in it.
 
 ## How to Maintain a Shared Concept
 
@@ -44,6 +44,8 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[the-human-lever]] — The shared design concept as the core of human design authority.
 - [[the-slop-problem]] — Without a shared concept, each agent session drifts from the architecture.
 - [[comprehension-debt]] — What happens when the shared design concept erodes: code exists but nobody holds the theory.
+- [[matt-pocock]] — Primary advocate for making the design concept explicit in AI workflows.
+- [[vibes-based-engineering]] — Specs-to-code bypasses building a shared design concept; the user never develops a theory of the code.
 
 ## Thread
 - [[the-human-lever]] — The shared design concept as the core of human design authority
@@ -51,5 +53,5 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[the-agent-workflow]] — The design concept must be explicit for the agent to participate in it
 
 ## Sources
-- `raw/yt-software-fundamentals-matter-more-than-ever.md` — Matt Pocock on making the design concept explicit for AI agents
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Matt Pocock on making the design concept explicit for AI agents; Grill Me skill as the mechanism for building shared understanding
 - Peter Naur, *Programming as Theory Building* (1985) — The theoretical origin: programming as building a shared theory of the system

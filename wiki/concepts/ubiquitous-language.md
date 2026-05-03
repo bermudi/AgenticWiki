@@ -1,11 +1,12 @@
 ---
 title: Ubiquitous Language
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-03
 sources:
   - raw/yt-claude-code-feature-build.md
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
   - raw/yt-slop-watch-ideation.md
+  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
 tags: [concept, ddd, ai-native, design]
 ---
 
@@ -26,7 +27,7 @@ Originally a core tenet of Domain-Driven Design (DDD), Ubiquitous Language takes
 
 ## Practical Example: Greenfield DDD — Slop Watch
 
-Matt Pocock's Slop Watch stream provides the most detailed real-time demonstration of DDD-driven ubiquitous language definition for a **greenfield project** — starting from vague brainstorming and ending with a precise glossary that maps directly to the data model and architecture.
+[[matt-pocock|Matt Pocock]]'s Slop Watch stream provides the most detailed real-time demonstration of DDD-driven ubiquitous language definition for a **greenfield project** — starting from vague brainstorming and ending with a precise glossary that maps directly to the data model and architecture.
 
 ### The Process
 
@@ -85,6 +86,8 @@ The value compounds immediately:
 
 Matt updates the ubiquitous language document after each grill-me session, adding new terms before proceeding to the PRD. This ensures the vocabulary is fresh and agreed-upon before any implementation begins.
 
+[[matt-pocock|Pocock]] also reports a practical benefit: by reading the AI's thinking traces, a shared ubiquitous language makes the AI think in a less verbose way and produces implementation more aligned with the plan. The terminology acts as a compression mechanism — dense, agreed-upon terms replace lengthy explanations in the agent's reasoning.
+
 ## Thread
 
 - [[the-human-lever]] — Defining the language is a high-leverage human task.
@@ -106,3 +109,4 @@ Matt updates the ubiquitous language document after each grill-me session, addin
 - `raw/yt-claude-code-feature-build.md` — Matt Pocock's use of a Ubiquitous Language document to guide a feature build.
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Glossary as the protocol for precision between human and AI.
 - `raw/yt-slop-watch-ideation.md` — Greenfield DDD: domain modeling from scratch, terms emerged and road-tested via scenarios, ub-lang locked before PRD.
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Ubiquitous language as a compression mechanism for AI reasoning; shared terms reduce verbosity and align implementation with planning.

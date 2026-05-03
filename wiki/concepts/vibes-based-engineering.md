@@ -1,8 +1,8 @@
 ---
 title: Vibes-Based Engineering
 created: 2026-04-25
-updated: 2026-05-02
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/2604.15597v1.pdf", "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"]
+updated: 2026-05-03
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/2604.15597v1.pdf", "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
 
@@ -17,6 +17,7 @@ tags: ["anti-pattern", "ai-engineering", "heuristics"]
 - **Trial and Error**: Repeatedly asking the AI to "try again" without providing more information or structure.
 - **Trust over Evidence**: Relying on the fluency of the LLM rather than the correctness of the code.
 - **Single-Step Myopia**: Judging each agent output in isolation without considering how errors compound over a long workflow. [[philippe-laban|Laban]] et al. (2026) show that even when every individual interaction *looks* correct, documents can silently lose 25–50% of their semantic content over 20 interactions.
+- **Specs-to-Code**: A variant where the user writes a specification, compiles it to code with AI, and avoids looking at the code. When something breaks, they modify the spec and recompile. [[matt-pocock|Matt Pocock]] identifies this as "vibe coding by another name" — each recompilation produces worse code (software entropy), and the user never builds a [[shared-design-concept]] for the system.
 
 ## The Alternative: "No Vibes"
 
@@ -27,6 +28,8 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 
 ## Thread
 - [[the-slop-problem]] — Vibes-based engineering as the root cause of slop
+- [[the-human-lever]] — The human lever is what replaces vibes with design authority and verification
+- [[tool-design-for-agents]] — Absence of structured tool feedback enables vibes-based acceptance of outputs
 
 ## Related
 
@@ -49,7 +52,11 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[critical-failure]] — Rare severe errors that pass vibe checks until it's too late
 - [[jagged-frontier]] — Generalizing capabilities across domains is a vibes failure mode
 - [[comprehension-debt]] — The cognitive cost of vibes-based engineering: delegation mode scores below 40% on comprehension
+- [[matt-pocock]] — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
 
 ## Sources
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md`
+- `raw/2604.15597v1.pdf` — Single-step myopia: documents can lose 25–50% of semantic content over 20 interactions even when each step looks correct.
+- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Delegation mode scores below 40% on comprehension; cognitive cost of vibes-based engineering.
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.

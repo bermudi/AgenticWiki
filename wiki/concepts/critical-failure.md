@@ -1,7 +1,7 @@
 ---
 title: Critical Failure
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-03
 sources:
   - raw/2604.15597v1.pdf
 tags: [failure-mode, llm, reliability, long-horizon]
@@ -57,6 +57,7 @@ This means the reliability problem is not about reducing average error rate — 
 - [[compounding-booboos]] — A single critical failure is a "booboo" that compounds irreversibly
 - [[verification-loop]] — Spot-checking is insufficient; critical failures are rare and severe
 - [[agent-evals]] — Long-horizon evals are necessary because short runs miss critical failures
+- [[vibes-based-engineering]] — Critical failures pass vibe checks; spot-checking a few steps gives false confidence
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Critical failure analysis, Table 9, and discussion of dynamics in Section 5

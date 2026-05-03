@@ -1,8 +1,8 @@
 ---
 title: Grey Box Engineering
 created: 2026-04-24
-updated: 2026-05-02
-sources: ["raw/yt-ai-coding-for-real-engineers.md"]
+updated: 2026-05-03
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["software-design", "ai-workflow"]
 ---
 
@@ -27,6 +27,11 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 
 > [!warning] Contradiction
 > [[compounding-booboos|Compounding Booboos]] advocates treating agent code with "the same (or more) scrutiny as human-written code" — implying line-by-line human review. Grey Box Engineering argues the opposite: humans review interfaces and outputs, not implementation lines. Both agree on *rigor*; the disagreement is on *mechanism* — Grey Box delegates line-level scrutiny to the automated verification loop.
+
+## Design the Interface, Delegate the Implementation
+[[matt-pocock|Matt Pocock]] distills grey box engineering into a single instruction: **design the interface, delegate the implementation**. The human designs the narrow boundary of a [[deep-vs-shallow-modules|deep module]]; the agent fills in the internals. This has a brain-saving benefit: you can treat module internals as grey boxes — reviewing the interface design but not reading every line of implementation. "I'll let you handle what's inside the big blob. I'm just going to test from the outside and verify it."
+
+This is only safe when the interface is testable. The [[verification-loop]] must be strong enough to catch implementation errors at the boundary, so the human doesn't need to look inside.
 
 ## The HITL/AFK Loop
 - **Human-In-The-Loop (HITL)**: Used during the planning phase to reach a "Shared Design Concept."
@@ -60,3 +65,4 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — "Design the interface, delegate the implementation" as the distillation of grey box engineering; treating module internals as grey boxes to save cognitive load.

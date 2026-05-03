@@ -1,8 +1,8 @@
 ---
 title: Matt Pocock
 created: 2026-04-24
-updated: 2026-05-02
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/yt-slop-watch-ideation.md"]
+updated: 2026-05-03
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/yt-slop-watch-ideation.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
@@ -24,6 +24,10 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[locality-and-leverage]] — The two payoff properties of deep modules.
 - [[slop-watch]] — His self-hosted coding agent observability platform.
 - [[agent-observability]] — Sessions as DAGs of turns, per-session listener pattern, per-agent adapters.
+- [[strategic-vs-tactical-programming]] — Human as General/strategist, AI as Sergeant/tactician.
+- [[ai-design-loop]] — The Grill Me skill and Destination/Journey design process.
+- [[shared-design-concept]] — Making the "theory of the code" explicit for AI participation.
+- [[verification-loop]] — TDD and "outrunning your headlights" as verification discipline.
 
 ## Related
 
@@ -39,9 +43,10 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[seams-and-adapters]] — Introduced seams and adapters as the architecture vocabulary for de-slopping.
 - [[locality-and-leverage]] — Defined locality and leverage as the goals of deepening.
 - [[slop-watch]] — His real-time-streamed ideation process: parallel research via sub-agents, DDD-driven ubiquitous language definition, per-session listener architecture.
+- [[vibes-based-engineering]] — Identifies specs-to-code as "vibe coding by another name"; each recompilation degrades code quality.
 
 ## Sources
-- `raw/yt-software-fundamentals-matter-more-than-ever.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop, software entropy, outrunning headlights, Grill Me skill
 - `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK split, tracer bullets, context management
 - `raw/yt-why-llms-hallucinate.md` — Intrinsic/extrinsic hallucination taxonomy
 - `raw/yt-claude-code-feature-build.md` — Ubiquitous language workflow, AFK agents (Ralph), PRD to Issues pipeline

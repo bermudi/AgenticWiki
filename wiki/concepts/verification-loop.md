@@ -1,8 +1,8 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-05-02
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf"]
+updated: 2026-05-03
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
 
@@ -35,6 +35,12 @@ Why tools failed to help:
 This does not mean verification loops are futile — it means **current tool harnesses are insufficient for long-horizon, multi-domain document editing**. The silent nature of degradation (documents look plausible while being semantically corrupted) also makes verification exceptionally difficult: a file may parse correctly and look structurally sound while having lost or altered 25% of its meaning.
 
 The paper's implication: verification must be **domain-aware and semantic**, not merely syntactic. Generic tool use without domain-specific parsing fails to catch the errors that matter.
+
+## Outrunning Your Headlights
+
+[[matt-pocock|Matt Pocock]] credits *The Pragmatic Programmer* for the metaphor of **outrunning your headlights** — driving faster than your feedback allows. When an LLM produces large amounts of code before running type checks or tests, it's outrunning its headlights. Pocock states: "the rate of feedback is your speed limit." TDD forces the LLM to take small, deliberate steps — write a test, make it pass, refactor — instead of producing a massive diff and then discovering nothing works.
+
+The LLM's default behavior is to do too much at once: produce a huge code change, then belatedly think "I should probably type-check that." The verification loop isn't just a quality gate — it's the mechanism that keeps the agent's speed proportional to its ability to verify.
 
 ## Tool Feedback as the Engine
 
@@ -75,10 +81,12 @@ The paper's implication: verification must be **domain-aware and semantic**, not
 - [[strategic-vs-tactical-programming]] — Strategic programming requires verification to prove design intent.
 - [[agent-quality-engineering]] — Evals + observability + flywheel: the quality framework for agentic systems
 - [[seams-and-adapters]] — Testing at seams is how the verification loop proves correctness.
+- [[matt-pocock]] — "Outrunning your headlights" metaphor; TDD as the discipline for keeping agent speed proportional to verification ability.
 - [[agent-observability]] — Traces as the input to the verification loop: you can only verify what you can see.
-- `raw/yt-how-agents-use-dev-tools.md` — Source on tools as the engine of verification.
 
 ## Sources
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md`
 - `raw/yt-how-agents-use-dev-tools.md`
+- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: agentic tool use does not improve document fidelity; verification must be domain-aware and semantic.
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — "Outrunning your headlights" as the Pragmatic Programmer metaphor for why AI does too much at once; TDD as the discipline that enforces small steps.

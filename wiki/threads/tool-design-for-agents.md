@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-05-02
+updated: 2026-05-03
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -123,6 +123,7 @@ This is a departure from the assumptions behind both CLI tools (single process, 
 - [[smart-zone-dumb-zone]] — Tool output as a context threat that pushes agents into the Dumb Zone
 - [[verification-loop]] — Tool feedback is the engine that drives verification
 - [[slop]] — Poor tool design → unverified output → slop
+- [[vibes-based-engineering]] — Absence of structured tool feedback enables vibes-based acceptance of outputs
 
 ## Related
 

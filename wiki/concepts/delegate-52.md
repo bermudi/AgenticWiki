@@ -1,7 +1,7 @@
 ---
 title: DELEGATE-52
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-03
 sources:
   - raw/2604.15597v1.pdf
 tags: [benchmark, eval, agents, delegation, long-horizon]
@@ -61,6 +61,8 @@ Key results: Python is the **only domain** (out of 52) where most models (17 of 
 - [[compounding-booboos]] — Quantified empirical evidence for compounding errors
 - [[critical-failure]] — Critical failures explain ~80% of the degradation measured by this benchmark
 - [[deliberate-friction]] — The compounding degradation supports preserving friction at delegation boundaries
+- [[verification-loop]] — Evidence that current tool-based verification is insufficient for long delegation
+- [[vibes-based-engineering]] — DELEGATE-52 quantifies the failure mode of accepting outputs that look correct per step
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Full benchmark design, domain list, work environment construction, and evaluation protocol

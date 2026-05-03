@@ -5,7 +5,7 @@ updated: 2026-05-03
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
-  - raw/yt-software-fundamentals-matter-more-than-ever.md
+  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-claude-code-feature-build.md
   - raw/yt-how-agents-use-dev-tools.md
@@ -209,7 +209,7 @@ AI-accelerated development means architecture drifts faster than human-written c
 
 ## Research Phase: Going From Zero to Greenfield
 
-Before an existing project has features to build, the workflow must start with **research**. Matt Pocock's Slop Watch stream is the most detailed real-time demonstration of how to go from a vague idea to a buildable concept.
+Before an existing project has features to build, the workflow must start with **research**. [[matt-pocock|Matt Pocock]]'s Slop Watch stream is the most detailed real-time demonstration of how to go from a vague idea to a buildable concept.
 
 The process mirrors the feature pipeline but at a higher level of abstraction — instead of grilling a concrete feature, you're grilling the idea itself:
 
@@ -231,7 +231,7 @@ This split is an operational principle:
 
 When the domain modeling session starts producing diminishing returns — Matt's phrase was "I'm sort of sick of talking about the app now" — that's a signal to stop deciding and start building. "You can only make meaningful decisions when you're working with an actual asset. Working in this abstract space is not good." The stream ended with 8 resolved decisions, clear language, and a known architecture — precisely at the point where further abstraction would be wasteful.
 
-## Pocock's Full Pipeline
+## [[matt-pocock|Pocock]]'s Full Pipeline
 
 Once a project has been established, [[matt-pocock|Matt Pocock]] demonstrates the most operationally detailed version of this workflow in a real feature build:
 
@@ -247,7 +247,7 @@ The key insight: **steps 5 and 6 happen concurrently**. The human doesn't wait f
 
 ### Interface Review, Not Code Review
 
-A critical discipline in Pocock's pipeline: during the PRD phase, he reviews **module interfaces**, not implementations. When the agent proposes adding a new `materializeCourseAndLesson` method to the course write service, Matt evaluates whether it should be a new method or a parameter on an existing one — an interface decision. He doesn't care how it's implemented.
+A critical discipline in [[matt-pocock|Pocock]]'s pipeline: during the PRD phase, he reviews **module interfaces**, not implementations. When the agent proposes adding a new `materializeCourseAndLesson` method to the course write service, [[matt-pocock|Matt]] evaluates whether it should be a new method or a parameter on an existing one — an interface decision. He doesn't care how it's implemented.
 
 During QA, he reviews **outputs** (does the feature work?), not code. Bugs are filed as GitHub issues with enough context for the AFK agent to fix them. This is [[grey-box-engineering|Grey Box Engineering]] in practice.
 
@@ -289,7 +289,7 @@ This is a fundamentally different mode from traditional software engineering, wh
 
 The key design constraint: agents must run for **long enough** that context-switching doesn't fry the human. Shifting attention every 30 seconds between agent outputs is unsustainable. The ideal is sessions of 5+ minutes where the agent produces a complete, reviewable unit — not incremental partial outputs that require constant mid-stream intervention.
 
-This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipeline: the human runs multiple agents during the day (each in different stages), not just one overnight batch. The [[verification-loop]] becomes a parallel concern — different streams may need different verification gates.
+This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|Pocock]]'s pipeline: the human runs multiple agents during the day (each in different stages), not just one overnight batch. The [[verification-loop]] becomes a parallel concern — different streams may need different verification gates.
 
 ## Concepts in this thread
 
@@ -319,6 +319,8 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 - [[evolving-context]] — Continual learning in token space; the unsolved frontier of agents improving their own context over time
 - [[lance-martin]] — Catalogued the agent harness architecture and evolving context categories
 - [[agent-friendly-tooling]] — Fast, observable, misuse-resistant tools as the operational infrastructure of the workflow
+- [[deep-vs-shallow-modules]] — Deep modules as context boundaries and delegation units within the workflow
+- [[grey-box-engineering]] — The core HITL/AFK handoff pattern that structures the workflow
 
 ## Related
 
@@ -331,7 +333,7 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 
 - `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK, tracer bullets, Smart Zone
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Context management, malleability, minimalism
-- `raw/yt-software-fundamentals-matter-more-than-ever.md` — AI design loop, shared design concept
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — AI design loop, shared design concept, outrunning headlights, software entropy, code is not cheap
 - `raw/yt-dhh-ai-pilled.md` — DHH on the shift from manual implementation to agentic workflows
 - `raw/yt-claude-code-feature-build.md` — Ubiquitous Language, AFK agents (Ralph), PRD to Issues pipeline
 - `raw/yt-how-agents-use-dev-tools.md` — Tool design as workflow infrastructure, scale effects, context reduction

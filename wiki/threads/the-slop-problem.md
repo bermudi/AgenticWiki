@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-03
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -15,6 +15,7 @@ sources:
   - raw/2604.15597v1.pdf
   - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
   - raw/yt-slop-watch-ideation.md
+  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
@@ -30,7 +31,7 @@ Multiple sources in this wiki converge on the same warning: the bottleneck has s
 
 ## AI Accelerates Software Entropy
 
-[[matt-pocock|Matt Pocock]] offers a crisp articulation of the mechanism:
+[[matt-pocock|Matt Pocock]] offers a crisp articulation of the mechanism, drawing explicitly on *The Pragmatic Programmer*'s concept of **software entropy**:
 
 > "AI has simply accelerated software entropy. Code bases are falling apart faster than they ever have before. Because every time that you make a change that doesn't take into account the entire codebase, you are likely to introduce little things, weird things that make the codebase harder to change."
 
@@ -154,6 +155,8 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - [[comprehension-debt]] — The cognitive dimension of slop: code multiplies, understanding doesn't
 - [[instruction-severity-inflation]] — Too many competing instructions cause the model to miss constraints, producing slop
 - [[slop-watch]] — The concrete observability platform built to measure and combat slop
+- [[ai-design-loop]] — Skipping the design loop is a primary source of slop
+- [[shared-design-concept]] — Design erosion: without a shared concept, each agent session drifts
 
 ## Related
 
@@ -162,6 +165,7 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - [[tool-design-for-agents]] — Tool feedback as the mechanical defense against quality degradation.
 - [[deliberate-friction]] — Removing friction as a slop accelerant.
 - [[slop-watch]] — The self-hosted observability platform named after, and built to address, this problem.
+- [[strategic-vs-tactical-programming]] — Tactical programming produces slop; strategic programming prevents it.
 
 ## Sources
 
@@ -177,3 +181,4 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Comprehension debt as cognitive slop; Anthropic RCT on comprehension loss; "let me ask Claude" as cultural diagnostic.
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors, sparse critical failures driving document degradation.
 - `raw/yt-slop-watch-ideation.md` — Slop Watch: the concrete observability platform built to measure and combat slop.
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Software entropy as the named mechanism from The Pragmatic Programmer; specs-to-code as a named movement that accelerates entropy; "code is not cheap" thesis.

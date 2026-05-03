@@ -1,8 +1,8 @@
 ---
 title: AI Design Loop
 created: 2026-04-24
-updated: 2026-04-29
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md"]
+updated: 2026-05-03
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["ai-workflow", "software-design"]
 ---
 
@@ -11,7 +11,7 @@ tags: ["ai-workflow", "software-design"]
 > The process of iterating with an agent to reach a shared understanding before delegating implementation.
 
 ## The Strategy: Destination and Journey
-Matt Pocock defines the design process in two phases:
+[[matt-pocock|Matt Pocock]] defines the design process in two phases:
 
 1.  **The Destination (The PRD)**: Defining *what* we are building. This is a high-stakes, human-led activity. Use tools like `grill-me` to ensure the "Shared Design Concept" is solid.
 2.  **The Journey (The Kanban/Issues)**: Breaking the Destination into granular, actionable steps. Each step should be small enough to stay in the [[smart-zone-dumb-zone]].
@@ -25,9 +25,7 @@ Matt Pocock defines the design process in two phases:
 
 ## The Grill-Me Session in Practice
 
-[[matt-pocock|Matt Pocock]] demonstrates the "Destination" phase as a structured Q&A session using a `grill-me` skill. The mechanics:
-
-1. **Human dictates rough ideas**: No polish needed — woolly, half-formed requirements are fine. The human explains both the *what* and the *why* (the why is critical — without it, the agent can't suggest alternatives).
+[[matt-pocock|Matt Pocock]] demonstrates the "Destination" phase as a structured Q&A session using a `grill-me` skill. The mechanics:1. **Human dictates rough ideas**: No polish needed — woolly, half-formed requirements are fine. The human explains both the *what* and the *why* (the why is critical — without it, the agent can't suggest alternatives).
 2. **Agent explores the codebase**: Uses subagents to read schemas, services, and tests. The parent agent receives only a summary — token-efficient exploration.
 3. **Agent asks precise questions**: Challenges framing ("the code already handles this — is the gap in the UI?"), forces binary choices ("option A or B?"), and surfaces edge cases ("what happens when all real lessons are deleted?").
 4. **Human drives or agent drives**: The skill is flexible — sometimes the agent leads with questions, sometimes the human directs with specific decisions.
@@ -49,6 +47,9 @@ The session produces not just requirements, but also updates the [[ubiquitous-la
 - [[ubiquitous-language]] — The language that emerges from the design loop.
 - [[malleable-agents]] — Agents can be adapted during the design loop.
 - [[improve-codebase-architecture]] — The skill that applies the design loop to architecture: explore, grill, propose.
+- [[matt-pocock]] — Originated the Grill Me skill and the Destination/Journey framework.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
+- `raw/yt-claude-code-feature-build.md`
+- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Grill Me skill as the mechanism for building a shared design concept; the skill went viral (13k stars) by turning the AI into an adversarial interviewer.
