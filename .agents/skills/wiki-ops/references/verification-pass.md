@@ -203,9 +203,12 @@ If WARNING findings were also fixed, re-verify those too.
 Only after all CRITICAL findings are resolved and re-verified:
 
 ```bash
-git add -A
+git add wiki/
+git add raw/<source-file-being-ingested.md>
 git commit -m "ingest: <source title> — <summary>. Verification: [PASSED / N issues fixed]"
 ```
+
+> ⚠️ **Never use `git add -A`.** It stages untracked raw/ files the user may have dropped in but hasn't asked you to ingest. Only stage `wiki/` plus the specific `raw/` file you ingested.
 
 Include verification status in the commit message for audit trail.
 

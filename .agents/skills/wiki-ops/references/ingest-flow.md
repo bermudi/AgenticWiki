@@ -21,39 +21,32 @@ Phase 1: Filing     →  Phase 2: Analysis  →  Phase 3: Verification  →  Com
    - Add `## Related` section with links to 2-3 existing pages
    - Add `## Sources` section with annotated entries (must match frontmatter `sources` list)
    - Update `wiki/index.md` with any new pages
-4. Run editors sequentially via `delegate`. Scope each editor to recently changed/created pages only:
 
-   First, `structural-editor`:
+   **Batch your edits.** Use the `edit` tool's `edits[]` array to make multiple changes to the same file in one call. A file needing a frontmatter fix, a new paragraph, and a source entry = one `edit` call with three entries in `edits[]`, not three separate calls. Files that don't share changes can be done in parallel calls, but never make sequential single-change calls to the same file.
+
+   **Don't re-read what you just wrote.** After editing pages, you already know their content. Move directly to editors — they will re-read every page independently. Re-reading before invoking editors adds latency with zero additional signal.
+4. Run editors in **parallel** via `delegate`. Scope each editor to recently changed/created pages only. The three editors are independent — structural checks frontmatter/links, link checks cross-references, content checks summaries. They can run simultaneously:
+
    ```
    delegate({
-     tasks: [{
-       prompt: "Check and fix structural integrity of recently changed wiki pages. Focus on: frontmatter completeness (title, created, updated, sources, tags), broken wiki-links, index accuracy, orphan detection. Only process pages changed in this ingest."
-       agent: "structural-editor"
-     }]
+     tasks: [
+       {
+         prompt: "Check and fix structural integrity of recently changed wiki pages. Focus on: frontmatter completeness (title, created, updated, sources, tags), broken wiki-links, index accuracy, orphan detection. Only process pages changed in this ingest."
+         agent: "structural-editor"
+       },
+       {
+         prompt: "Check and fix cross-reference integrity of recently changed wiki pages. Focus on: bidirectional links, thread↔concept coverage, Related section completeness, dangling references. Only process pages changed in this ingest."
+         agent: "link-editor"
+       },
+       {
+         prompt: "Review substantive quality of recently changed wiki pages. Focus on: summary blockquote exists and is 1-3 sentences, section completeness (Thread, Related, Sources), thin page detection, content-structure alignment. Only process pages changed in this ingest."
+         agent: "content-editor"
+       }
+     ]
    })
    ```
 
-   Then, `link-editor` (depends on structural-editor's index fixes):
-   ```
-   delegate({
-     tasks: [{
-       prompt: "Check and fix cross-reference integrity of recently changed wiki pages. Focus on: bidirectional links, thread↔concept coverage, Related section completeness, dangling references. Only process pages changed in this ingest."
-       agent: "link-editor"
-     }]
-   })
-   ```
-
-   Finally, `content-editor`:
-   ```
-   delegate({
-     tasks: [{
-       prompt: "Review substantive quality of recently changed wiki pages. Focus on: summary blockquote exists and is 1-3 sentences, section completeness (Thread, Related, Sources), thin page detection, content-structure alignment. Only process pages changed in this ingest."
-       agent: "content-editor"
-     }]
-   })
-   ```
-
-   Read each editor's report. Fix any issues surfaced before proceeding to Step 5.
+   Read all editor reports. Fix any issues surfaced before proceeding to Step 5.
 5. Filing summary → human. Do NOT commit.
 
 ## Phase 2 — Analysis (main agent only)

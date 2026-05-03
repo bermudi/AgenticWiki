@@ -43,6 +43,31 @@ Detailed operational procedures live in skill files. **Always load the relevant 
 
 When in doubt, load the skill. It's better to re-read the procedure than to skip a verification step.
 
+## Editors
+
+Specialized subagents for wiki quality. Each owns a narrow beat — invoke them via `delegate` when their domain is relevant. All editors inherit project context and the wiki-ops skill.
+
+| Editor | Agent | Beat | When to invoke |
+|---|---|---|---|
+| Structural | `structural-editor` | Copy desk — frontmatter, broken links, index accuracy, orphan pages | Post-ingest verification, periodic lint |
+| Content | `content-editor` | Developmental editor — summary quality, thin pages, section completeness, contradictions | Post-ingest verification, when pages feel shallow |
+| Link | `link-editor` | Weaver — bidirectional links, thread↔concept coverage, dangling refs | Post-ingest verification, when cross-references feel sparse |
+| Source Verifier | `source-verifier` | Fact-checker — hallucinations, omissions, misattributions (read-only) | Post-ingest verification, when fidelity is uncertain |
+| Temporal | `temporal-editor` | Diachronic guardian — stale pages, thread drift, contradiction aging, coverage gaps over git history | Weekly, surfaced via session nudge |
+
+All editors run during the wiki-ops lint phase. You can also invoke them individually for targeted checks.
+
+### Temporal Editor — Session Nudge
+
+The temporal editor runs on a weekly cadence, but there's no cron. Instead:
+
+1. At session start, read `.agents/state/temporal-editor-last-run`.
+2. If the date is 7+ days ago, suggest running `temporal-editor` via delegate.
+3. If the user agrees, delegate to `temporal-editor`. It will update the state file on completion.
+4. If the user declines or is mid-task, don't block — just note it.
+
+Don't be pushy. One mention per session is enough.
+
 ## Page Naming
 
 - Kebab-case: `distributed-systems.md`, `map-reduce.md`, `jeff-dean.md`
@@ -239,9 +264,12 @@ Commits happen at the end of the verification phase (Phase 3), after all three i
 Commit message format:
 
 ```bash
-git add -A
+git add wiki/
+git add raw/<source-file-being-ingested.md>
 git commit -m "ingest: <source title> — <brief summary of what was created/updated>"
 ```
+
+**Never use `git add -A`** — it sweeps up untracked raw/ files that haven't been ingested yet. Only stage `wiki/` (all changed + new wiki pages) plus the specific `raw/` source file you ingested. If you ingested multiple sources in a batch, add each one explicitly.
 
 The commit message should be useful in `git log` — include the source name and the scope of changes. If contradictions were flagged, mention them. Include verification status.
 
