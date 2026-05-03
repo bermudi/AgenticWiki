@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-04-30
+updated: 2026-05-02
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -12,6 +12,7 @@ sources:
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
+  - raw/2604.15597v1.pdf
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
@@ -36,6 +37,10 @@ AI doesn't create new failure modes — it accelerates existing ones. The same e
 ## How It Happens
 
 The degradation isn't dramatic. It's **[[compounding-booboos]]** — each agent interaction introduces a small error or awkwardness. Individually, each one is tolerable. Together, they accumulate into a system nobody fully understands.
+
+Laban et al. (2026) provide the first large-scale quantitative measurement of this mechanism in [[delegate-52|DELEGATE-52]]. They find that LLMs delegated to edit documents across 52 professional domains silently corrupt those documents over repeated interactions: **frontier models lose 25% of content on average after 20 interactions; the average across all 19 tested models is 50%**. The corruption is driven not by uniform small errors but by **[[critical-failure|sparse critical failures]]** — rare interactions that drop document fidelity by 10–30+ points in a single step. Most rounds look perfect; a few destroy the document. This invisibility makes slop especially dangerous: the document still *looks* correct after each edit.
+
+The degradation also **compounds multiplicatively** with document size and interaction length. Larger documents degrade faster over time, and extending interactions from 20 to 100 shows monotonic decline with no plateauing. In short, the more you delegate, the worse it gets — and the worse it gets, the faster it gets worse.
 
 [[dex-horthy|Dex Horthy]] frames this as the failure mode of **[[vibes-based-engineering]]**: prompting an LLM and accepting the output without providing adequate context or running verification. This works for isolated, trivial tasks. In a complex codebase — where knowledge is distributed across files, implicit dependencies exist, and architectural patterns must be followed — vibes-based engineering produces code that *looks* right but violates the system's invariants.
 
@@ -132,6 +137,18 @@ After interviewing ~30 engineering teams about agent adoption, [[armin-ronacher|
 - [[seams-and-adapters]] — Missing seams as a structural slop cause (parallel implementations diverge)
 - [[locality-and-leverage]] — Low locality and low leverage as slop symptoms
 - [[improve-codebase-architecture]] — The systematic scan for slop-prone module boundaries
+- [[delegate-52]] — Benchmark quantifying document degradation across 52 domains
+- [[document-degradation]] — Silent corruption as the quantitative mechanism of slop
+- [[critical-failure]] — Sparse catastrophic errors that drive invisible degradation
+- [[jagged-frontier]] — Capability varies by domain, so slop risk varies too
+- [[round-trip-relay]] — Reference-free eval method that reveals how slop accumulates over long workflows
+
+## Related
+
+- [[the-human-lever]] — The discipline that prevents slop from accumulating.
+- [[the-agent-workflow]] — The operational practices that keep agent output high-quality.
+- [[tool-design-for-agents]] — Tool feedback as the mechanical defense against quality degradation.
+- [[deliberate-friction]] — Removing friction as a slop accelerant.
 
 ## Sources
 
@@ -144,11 +161,3 @@ After interviewing ~30 engineering teams about agent adoption, [[armin-ronacher|
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — AI as entropy accelerator; de-slopping via deep modules and periodic architecture review.
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Agents don't feel pain; training data ceiling; "slow the f down" math; 30-team interview findings; deliberate friction removal as slop accelerant.
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; agentic search low recall; untrustworthy tests; write architecture by hand; friction as understanding.
-
-## Related
-
-- [[the-human-lever]] — The discipline that prevents slop from accumulating.
-- [[the-agent-workflow]] — The operational practices that keep agent output high-quality.
-- [[tool-design-for-agents]] — Tool feedback as the mechanical defense against quality degradation.
-- [[deliberate-friction]] — Removing friction as a slop accelerant.
-

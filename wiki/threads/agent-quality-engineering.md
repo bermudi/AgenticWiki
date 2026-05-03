@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-04-27
+updated: 2026-05-02
 sources:
   - "raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md"
   - "raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md"
@@ -91,6 +91,9 @@ This flywheel makes agents shippable because it provides:
 - [[agent-evals]] — The 4-layer eval stack: CI for probabilistic systems
 - [[agent-observability]] — Logs/traces/metrics for agent decision chains
 - [[agent-quality-loop]] — The flywheel: production failures → eval cases → continuous improvement
+- [[delegate-52]] — Long-horizon benchmark quantifying agent reliability across 52 domains
+- [[document-degradation]] — The failure mode long-horizon evals are designed to surface
+- [[critical-failure]] — Sparse catastrophic errors that only long-horizon evals can catch
 
 ## Related
 
@@ -100,6 +103,8 @@ This flywheel makes agents shippable because it provides:
 - [[backpressure]] — Quality scores as soft backpressure
 - [[tool-design-for-agents]] — Tool design determines what's observable
 - [[damian-galarza]] — Author of the three-part series that forms this thread
+- [[round-trip-relay]] — Reference-free eval methodology powering long-horizon benchmarks
+- [[jagged-frontier]] — Evals must be domain-specific because capability is uneven
 
 ## Sources
 

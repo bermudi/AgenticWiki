@@ -1,8 +1,8 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-04-27
-sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"]
+updated: 2026-05-02
+sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf"]
 tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 ---
 
@@ -13,6 +13,18 @@ tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 Agents don't fail like deterministic software. Output can look correct, logs can look clean, but the agent made the wrong decision somewhere in the middle. Unit tests assume same input → same output. Integration tests assume predictable interfaces, but an agent's interface is natural language. End-to-end tests assume a fixed happy path, but an agent might take 3 steps or 25.
 
 Evals are not tests. They are quality measurement over time.
+
+## Long-Horizon Evals: DELEGATE-52
+
+Most agent evals measure single-session or short-horizon performance. [[philippe-laban|Laban]] et al. (2026) demonstrate that this is insufficient for delegated work: **short-term performance is not predictive of long-horizon performance**. In [[delegate-52|DELEGATE-52]], models with near-identical scores after 2 interactions diverged sharply after 20 interactions (e.g., GPT 5 vs. Kimi K2.5: 91.5 vs. 91.1 at 2 interactions; 48.3 vs. 64.1 at 20).
+
+[[delegate-52|DELEGATE-52]] extends the eval stack into **long-horizon, multi-domain delegation**:
+- **52 professional domains** spanning code, science, creative media, structured records, and everyday tasks
+- **Reference-free evaluation** via [[round-trip-relay|round-trip relays]], eliminating the cost of human annotation
+- **Domain-specific semantic scoring** rather than generic LLM-as-judge (the authors found that even GPT 5.4 as judge captures at most 25% of the variance of their parsing-based metric)
+- A "ready" threshold of **98% reconstruction after 20 interactions** — only Python passes for most models
+
+The paper argues the community needs **more long-horizon benchmarks** that simulate extended interactions, because degradation compounds over time and short simulations systematically underestimate severity.
 
 ## The Framework
 
@@ -40,6 +52,9 @@ This is where **LLM-as-Judge** comes in: a second language model evaluates the a
 > [!warning] Limitation
 > Automated evals don't catch everything. Regularly reading production traces directly surfaces the subtle failures no rubric anticipated.
 
+> [!warning] Contradiction: LLM-as-Judge Inadequacy
+> This page and the [[agent-quality-engineering]] thread treat LLM-as-Judge as a viable outcome-scoring mechanism. [[philippe-laban|Laban]] et al. (2026) found that even GPT 5.4 as judge captures **at most 25% of the variance** of domain-specific parsing metrics in [[delegate-52|DELEGATE-52]]. Generic rubrics and LLM judges failed to detect nuanced semantic corruption in documents — only domain-specific parsers (e.g., parsing a recipe into ingredients, steps, and tips, then comparing structurally) caught real degradation. This suggests that for complex document editing and delegation tasks, evals need **structured, domain-aware scoring** rather than generic LLM-as-judge. The outcome eval layer may be less reliable than this framework assumes.
+
 ### 4. System Monitoring
 Watching for quality degrading in production at scale — not individual failures, but patterns across real usage over time. This is where evals and [[agent-observability|observability]] overlap.
 
@@ -54,6 +69,10 @@ Watching for quality degrading in production at scale — not individual failure
 
 You can only measure what you can see. If your agent doesn't emit structured traces, you can't evaluate trajectory. If it doesn't log tool calls with parameters, you can't measure efficiency. Quality requires visibility designed in from day one.
 
+## Thread
+
+- [[agent-quality-engineering]] — Evals as the measurement layer of the quality framework
+
 ## Related
 
 - [[agent-observability]] — Evals depend on observability; you can only score what you can see
@@ -62,10 +81,10 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - [[vibes-based-engineering]] — Evals are the structural antidote to shipping agents on vibes
 - [[shared-design-concept]] — "Design so quality is measurable" is a shared-design principle
 - [[compounding-booboos]] — The eval flywheel catches booboos before they compound in production
-
-## Thread
-
-- [[agent-quality-engineering]] — Evals as the measurement layer of the quality framework
+- [[delegate-52]] — Long-horizon benchmark for delegated document editing
+- [[round-trip-relay]] — Reference-free eval methodology for long workflows
+- [[document-degradation]] — The failure mode long-horizon evals are designed to surface
+- [[critical-failure]] — Long-horizon evals are necessary because short runs miss critical failures
 
 ## Sources
 

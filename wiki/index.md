@@ -14,6 +14,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## ✍️ Authors
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
+- [[philippe-laban]] — Researcher at Microsoft Research; lead author of DELEGATE-52 benchmark on LLM document corruption.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
 - [[damian-galarza]] — Multi-agent system operator and author of the three-part agent quality series (evals, observability, quality loop).
 - [[dex-horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
@@ -39,8 +40,13 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
+- [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
+- [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
 - [[deliberate-friction]] — Intentional engineering slowdowns at high-stakes decision points. Not all friction is bad DX.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
+- [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
+- [[jagged-frontier]] — LLM capabilities are unevenly distributed; strong in some domains, severely error-prone in others.
+- [[round-trip-relay]] — Reference-free evaluation method chaining reversible edits to measure long-horizon degradation.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.

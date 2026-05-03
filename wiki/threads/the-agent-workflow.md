@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-01
+updated: 2026-05-02
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -191,6 +191,7 @@ Peter Steinberger's idea: instead of sending code (pull requests), send the prom
 - [[seams-and-adapters]] — Missing seams are the primary deepening candidates found by architecture scans
 - [[locality-and-leverage]] — The two evaluation criteria for every deepening candidate
 - [[deliberate-friction]] — Intentional friction at high-stakes decision points in the HITL phase
+- [[document-degradation]] — Silent document corruption undermines AFK delegation viability
 
 ## Related
 

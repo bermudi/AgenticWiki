@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-04-29
+updated: 2026-05-02
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -149,6 +149,9 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[locality-and-leverage]] — The properties the human optimizes for in module design
 - [[seams-and-adapters]] — Where design authority meets implementation
 - [[improve-codebase-architecture]] — The operational tool for periodic architecture review
+- [[jagged-frontier]] — Capability unevenness means human domain judgment is irreplaceable
+- [[critical-failure]] — Rare catastrophic errors require human-level architectural safeguards
+- [[document-degradation]] — Silent corruption is why humans must own the verification contract
 
 ## Related
 

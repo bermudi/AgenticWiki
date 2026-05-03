@@ -1,8 +1,8 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-05-01
-sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md]
+updated: 2026-05-02
+sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf]
 tags: [concept, ai, reliability]
 ---
 
@@ -19,6 +19,18 @@ Because AI agents often lack a deep understanding of the entire system architect
 [[mario-zechner|Mario Zechner]] identifies the key asymmetry: humans are bottlenecks. A human can only produce so many booboos per day. Usually, when booboo pain gets too big, the human (who hates pain) fixes them. With agents, there is no bottleneck and no pain. The tiny harmless booboos compound at an unsustainable rate. You've removed yourself from the loop, so you don't even know they've formed a monster until it's too late.
 
 An agent also has no learning ability — it will continue making the same errors over and over. You can teach it via AGENTS.md or memory systems, but that requires observing the errors in the first place.
+
+## Empirical Evidence
+
+Laban et al. (2026) provide direct quantitative evidence for compounding booboos in [[delegate-52|DELEGATE-52]], a benchmark of 52 professional domains with 19 LLMs:
+
+- **Even frontier models** (Gemini 3.1 Pro, Claude 4.6 Opus, GPT 5.4) corrupt an average of **25% of document content** after just 20 delegated interactions
+- **Average degradation across all models**: **50%** by the end of a 20-interaction workflow
+- **80% of model-domain combinations** show catastrophic corruption (≥20% degradation)
+- Degradation **compounds multiplicatively** with document size, interaction length, and distractor context
+- **Short-term performance is not predictive**: a model's score after 2 interactions is a poor predictor of its score after 20 interactions
+
+This confirms the mechanism Mario Zechner described: small errors introduced in each interaction build upon the degraded state, and the compounding is non-linear.
 
 ## Mitigation
 
@@ -46,6 +58,10 @@ An agent also has no learning ability — it will continue making the same error
 - [[grey-box-engineering]] — Grey box engineering catches booboos at the interface boundary.
 - [[deliberate-friction]] — Deliberate friction interrupts the compounding cycle.
 - [[plan-disposability]] — Stale plans compound booboos across AFK iterations.
+- [[delegate-52]] — Quantified benchmark of compounding errors across 52 domains
+- [[document-degradation]] — The core finding that documents silently degrade over delegation
+- [[critical-failure]] — Sparse catastrophic errors explain ~80% of observed degradation
+- [[round-trip-relay]] — The relay method quantifies how errors compound over long workflows
 
 ## Sources
 

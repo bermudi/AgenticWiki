@@ -1,9 +1,10 @@
 ---
 title: Deliberate Friction
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-02
 sources:
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/2604.15597v1.pdf
 tags: [concept, engineering-process, ai-engineering, code-review, quality]
 ---
 
@@ -47,6 +48,10 @@ The trap: some friction *is* accidental complexity (terrible DX, bad tooling, bu
 
 Don't remove friction wholesale to enable agent autonomy. Audit which friction is deliberate, preserve it, and only remove the accidental kind. The goal isn't speed — it's appropriate speed.
 
+## Empirical Support
+
+[[philippe-laban|Laban]] et al. (2026) provide a quantitative reason to preserve friction at delegation boundaries. In [[delegate-52|DELEGATE-52]], degradation from LLM document editing **compounds multiplicatively** with interaction length. Short simulations (2 interactions) systematically underestimate the severity of long-horizon degradation (20+ interactions). Removing the friction that forces humans to pause, review, and reset between agent sessions doesn't just risk one bad output — it enables the silent compounding that destroys 25–50% of document content. Deliberate friction at the delegation boundary is a circuit breaker for this compounding.
+
 ## Thread
 
 - [[the-slop-problem]] — Removing deliberate friction accelerates slop production
@@ -59,6 +64,9 @@ Don't remove friction wholesale to enable agent autonomy. Audit which friction i
 - [[slop]] — Removing friction is a slop accelerant
 - [[vibes-based-engineering]] — The absence of deliberate friction enables vibes-based engineering
 - [[compounding-booboos]] — Deliberate friction interrupts the compounding cycle
+- [[delegate-52]] — Evidence that interaction length compounds degradation
+- [[document-degradation]] — The damage that accumulates when friction is removed
+- [[critical-failure]] — Rare catastrophic errors that friction might catch
 - [[armin-ronacher]] — Primary source for this concept
 - [[pi]] — Mario's auto-close PR workflow as concrete deliberate friction: filtering agent-generated noise from human contributors
 

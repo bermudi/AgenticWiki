@@ -1,8 +1,8 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-04-29
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md"]
+updated: 2026-05-02
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
 
@@ -23,9 +23,30 @@ tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 
 The verification loop is the primary defense against [[vibes-based-engineering]]. It shifts the burden of proof from the human "vibing" the code to the machine proving the code meets the system's requirements.
 
+## A Challenge from [[delegate-52|DELEGATE-52]]
+
+[[philippe-laban|Laban]] et al. (2026) present a sobering finding for verification-loop optimism: **agentic tool use does not improve document fidelity**. In the [[delegate-52|DELEGATE-52]] benchmark, four tested LLMs operated with a basic agentic harness (file reading, writing, and code execution tools) performed **worse** than direct text-in/text-out operation, incurring an average additional degradation of 6%.
+
+Why tools failed to help:
+- **Overhead**: Tool use consumed 2–5× more input tokens and introduced higher latency
+- **Preference for file writing**: Models favored regenerating entire files over targeted code execution, undermining the precision benefit tools should provide
+- **Context pressure**: Preserving performance in long-context settings remains a known challenge for current LLMs
+
+This does not mean verification loops are futile — it means **current tool harnesses are insufficient for long-horizon, multi-domain document editing**. The silent nature of degradation (documents look plausible while being semantically corrupted) also makes verification exceptionally difficult: a file may parse correctly and look structurally sound while having lost or altered 25% of its meaning.
+
+The paper's implication: verification must be **domain-aware and semantic**, not merely syntactic. Generic tool use without domain-specific parsing fails to catch the errors that matter.
+
 ## Tool Feedback as the Engine
 
 [[zanie-blue|Zanie Blue]] (Astral) emphasizes that the verification loop depends on tools providing deterministic, specialized feedback. Agents are stochastic — they need static analysis, test runners, and linters to mechanically prove correctness. Research shows agents can't perform complex static analysis even with fine-tuning; they *need* tools for this. The design of [[tool-design-for-agents|tool output]] directly affects how efficiently the loop operates — verbose output floods context, while context-optimized output keeps the agent in the [[smart-zone-dumb-zone|Smart Zone]].
+
+## Thread
+
+- [[the-human-lever]] — Verification as the contract between human design authority and agent implementation
+- [[the-slop-problem]] — The verification loop as the primary defense against slop
+- [[the-agent-workflow]] — The verification step in every AFK execution cycle
+- [[tool-design-for-agents]] — Tool feedback is the engine that drives the verification loop
+- [[agent-quality-engineering]] — Evals as the probabilistic verification loop for agentic systems
 
 ## Related
 
@@ -42,6 +63,9 @@ The verification loop is the primary defense against [[vibes-based-engineering]]
 - [[agent-friendly-tooling]] — Fast tools make verification loops tighter.
 - [[backpressure]] — Backpressure employs verification loops as its mechanism.
 - [[agent-evals]] — The probabilistic equivalent of the verification loop for agentic systems
+- [[delegate-52]] — Evidence that current tool-based verification is insufficient for long delegation
+- [[document-degradation]] — Silent corruption that bypasses standard verification
+- [[critical-failure]] — Rare severe errors that slip through per-step checks
 - [[agent-quality-loop]] — The flywheel that feeds production failures back into the loop
 - [[ralph-loop]] — The Ralph loop uses verification as its downstream gate.
 - [[shared-design-concept]] — Verification proves the implementation matches the shared concept.
@@ -52,13 +76,6 @@ The verification loop is the primary defense against [[vibes-based-engineering]]
 - [[agent-quality-engineering]] — Evals + observability + flywheel: the quality framework for agentic systems
 - [[seams-and-adapters]] — Testing at seams is how the verification loop proves correctness.
 - `raw/yt-how-agents-use-dev-tools.md` — Source on tools as the engine of verification.
-
-## Thread
-- [[the-human-lever]] — Verification as the contract between human design authority and agent implementation
-- [[the-slop-problem]] — The verification loop as the primary defense against slop
-- [[the-agent-workflow]] — The verification step in every AFK execution cycle
-- [[tool-design-for-agents]] — Tool feedback is the engine that drives the verification loop
-- [[agent-quality-engineering]] — Evals as the probabilistic verification loop for agentic systems
 
 ## Sources
 

@@ -1,8 +1,8 @@
 ---
 title: Vibes-Based Engineering
 created: 2026-04-25
-updated: 2026-04-30
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md"]
+updated: 2026-05-02
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/2604.15597v1.pdf"]
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
 
@@ -16,6 +16,7 @@ tags: ["anti-pattern", "ai-engineering", "heuristics"]
 - **Lack of Verification**: Not running tests or static analysis to confirm the AI's output works as intended.
 - **Trial and Error**: Repeatedly asking the AI to "try again" without providing more information or structure.
 - **Trust over Evidence**: Relying on the fluency of the LLM rather than the correctness of the code.
+- **Single-Step Myopia**: Judging each agent output in isolation without considering how errors compound over a long workflow. [[philippe-laban|Laban]] et al. (2026) show that even when every individual interaction *looks* correct, documents can silently lose 25–50% of their semantic content over 20 interactions.
 
 ## The Alternative: "No Vibes"
 
@@ -43,6 +44,10 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[agent-quality-engineering]] — The quality framework that replaces vibes with measurement
 - [[ai-design-loop]] — The structured alternative to vibe coding.
 - [[deliberate-friction]] — Absence of deliberate friction enables vibes-based engineering.
+- [[delegate-52]] — Evidence that "looks correct per step" fails catastrophically over time
+- [[document-degradation]] — Silent corruption invisible to vibe-checking
+- [[critical-failure]] — Rare severe errors that pass vibe checks until it's too late
+- [[jagged-frontier]] — Generalizing capabilities across domains is a vibes failure mode
 
 ## Sources
 
