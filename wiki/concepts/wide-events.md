@@ -107,6 +107,7 @@ This is the same shape as the [[agent-quality-loop]] — production failures dri
 ## Thread
 
 - [[agent-quality-engineering]] — Wide events as the production observability layer that agents must ship with their code
+- [[tool-design-for-agents]] — Tool output design determines whether wide events are emitted at agent scale
 
 ## Related
 

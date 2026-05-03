@@ -23,6 +23,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum technique for autonomous agent loops.
 - [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
 - [[kent-beck]] — Pioneer of TDD and Extreme Programming (XP).
+- [[louis-knight-webb]] — Articulated the plan-vs-review tradeoff and focus maxing as the new software engineering workflow.
 - [[martin-fowler]] — Pioneer of Agile and Refactoring.
 - [[mario-zechner]] — Creator of Pi.
 - [[the-gray-cat]] — YouTube creator; personal essay on living inside comprehension debt and recovering via teaching mode.
@@ -55,6 +56,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
+- [[plan-vs-review]] — The quantified tradeoff: 5 minutes of planning saves 30 minutes of reviewing AI-generated code.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.

@@ -82,6 +82,7 @@ That is the part the model cannot hold for you, because that is the part you are
 
 - [[the-human-lever]] — Comprehension debt is what happens when you lose the human lever
 - [[the-slop-problem]] — Comprehension debt is the cognitive consequence of slop accumulation
+- [[the-agent-workflow]] — Comprehension debt is the cost of delegating without understanding the workflow's outcome
 
 ## Related
 

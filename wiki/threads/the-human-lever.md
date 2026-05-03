@@ -14,6 +14,7 @@ sources:
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
   - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
+  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -83,6 +84,14 @@ The unifying principle across all sources:
 > **The more code the AI writes, the more your design decisions matter.**
 
 Delegation without design authority is abdication. The human isn't less important in an AI-assisted workflow — they're *more* important, because the cost of a bad design decision is amplified by the speed at which the agent will faithfully implement it.
+
+## Planning as Investment
+
+[[louis-knight-webb|Louis Knight-Webb]] provides a quantified expression of the human lever: **5 minutes of planning saves 30 minutes of reviewing AI-generated code.** This is not just a rule of thumb — it captures a structural asymmetry in the work. Planning is a one-time, focused cognitive investment. Reviewing is interrupt-driven, context-switch-heavy, and iterates on work the agent has already committed to a direction.
+
+The key insight: planning and reviewing are not substitutable forms of the same work. One is proactive design authority (the human lever in action), the other is reactive quality assurance. Choosing the plan-heavy approach when the domain allows it is the human's most efficient use of strategic attention.
+
+This directly reinforces the [[grey-box-engineering|Grey Box]] model: upfront planning corresponds to defining the box (interfaces, types, invariants), and review corresponds to verifying the box was built correctly. The tradeoff is about where you invest — specifying the boundary or inspecting the contents.
 
 ## Comprehension Debt: The Inside View
 
@@ -162,6 +171,7 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[critical-failure]] — Rare catastrophic errors require human-level architectural safeguards
 - [[document-degradation]] — Silent corruption is why humans must own the verification contract
 - [[comprehension-debt]] — The cognitive cost of losing the human lever
+- [[plan-vs-review]] — The quantified tradeoff between planning depth and review burden
 
 ## Related
 
@@ -182,4 +192,5 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Automation bias, "valuable garbage" insight, deliberate friction, "refactor mercilessly" practice, prompt request refinement.
 - `raw/slowing-the-fuck-down.md` — Write architecture by hand; friction as understanding; agents are merchants of complexity; agentic search recall.
 - `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — First-person account of losing the human lever and recovering it through teaching mode; Anthropic RCT on inquiry vs. delegation.
+- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Quantified planning/review tradeoff, planning as the human lever in action.
 

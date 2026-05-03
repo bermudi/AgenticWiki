@@ -8,6 +8,7 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
+  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 ---
 
@@ -98,6 +99,19 @@ Pi was born from Mario's frustration with Claude Code silently injecting context
 ### Malleability as the Escape Valve
 The risk of minimalism is rigidity. Zechner's answer: [[malleable-agents]]. Both the user and the agent should be able to create new tools mid-session. The core stays small; the periphery is emergent. This resolves the tension between Zanie's "tools need richer interfaces" and Zechner's "keep the core minimal" — the core is minimal, but agents extend it on demand by composing the primitives.
 
+## Layer 4: The Parallel Management Interface
+
+As agents cross the 5-minute execution threshold (see [[the-agent-workflow|Focus Maxing / Parallel Agent Management]]), the tooling challenge shifts: the human isn't working with one agent at a time, but managing multiple concurrent streams of agent outputs.
+
+[[louis-knight-webb|Louis Knight-Webb]]'s Vibe Kanban demo illustrates several features that point toward a parallel management interface: multiple workspaces with isolated working trees, diffs on demand for async review, and live preview. Synthesizing from his talk and the [[the-agent-workflow|focus maxing]] pattern, the design requirements for this new mode are:
+
+- **Isolated agent streams**: Each agent run needs its own workspace, logs, and diffs. Mixing outputs between runs creates confusion — Knight-Webb's sidebar of separate workspaces is one approach.
+- **Async review**: Completed work must be reviewable without watching the agent execute. Diffs, previews, and test results available on demand, not streamed in real-time.
+- **Task queuing and dispatch**: The human queues tasks and dispatches them to available agent instances. The tool manages parallelism; the human manages priority.
+- **Review continuity**: When feedback is sent back to a specific agent stream, it must be routed to the correct instance and workspace — a natural consequence of the multi-stream model.
+
+This is a departure from the assumptions behind both CLI tools (single process, synchronous output) and MCP servers (stateless tool calls). The parallel management interface treats agent execution as an **async job queue with human gates at review points** — a fundamentally different interaction model that existing tools don't support.
+
 ## Concepts in this thread
 
 - [[agent-friendly-tooling]] — The practice: speed, observability, misuse resistance, daemon patterns
@@ -121,3 +135,4 @@ The risk of minimalism is rigidity. Zechner's answer: [[malleable-agents]]. Both
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Zechner on minimalism, malleability, four-tool core, Terminal-Bench results
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — MCP vs CLI structural analysis, Pi origin story, OpenClaw as hidden coding agent, context transparency
 - `raw/slowing-the-fuck-down.md` — Agentic search recall as a fundamental tool limitation; low recall as the root cause of slop.
+- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Parallel management interface design requirements, agent runtime thresholds as a tool design constraint.

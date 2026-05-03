@@ -15,6 +15,7 @@ sources:
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
+  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -74,6 +75,26 @@ Agents cannot reliably judge their own output. They don't experience confusion, 
 - [[backpressure]] must be mechanical (test failures, type errors), not vibes-based ("this looks good").
 - [[verification-loop|Verification loops]] are non-negotiable infrastructure, not optional quality gates.
 - The human's role in HITL isn't to read every line — it's to own the tests and types that automate the assessment.
+
+## Planning Depth: The Plan-Vs-Review Axis
+
+[[louis-knight-webb|Louis Knight-Webb]] adds a crucial operational dimension: **how much planning depth should you invest before executing?** The two modes exist on a spectrum:
+
+- **Plan-heavy**: Write a comprehensive spec. Interrogate the agent until it exhausts all questions. Produces fewer review rounds, but requires more upfront thinking.
+- **Review-heavy**: Give the agent a rough goal. Let it iterate. More back-and-forth, higher total human time because review is interrupt-driven.
+
+The quantified heuristic: **5 minutes of planning saves 30 minutes of reviewing.** Switching back and forth with a half-finished agent output is more taxing than doing the thinking upfront.
+
+### The Feature Type Matrix
+
+Knight-Webb provides concrete guidance for which approach works where:
+
+| | Features | Refactoring / Migrations |
+|---|---|---|
+| **Frontend** | Review-heavy — too stateful, too many edge cases | Plan-heavy — well-defined transformations |
+| **Backend** | Plan-heavy — TDD works naturally | Plan-heavy — fully hands-off |
+
+Frontend feature development is the hardest case for plan-heavy because stateful UIs resist exhaustive specification. The human stays in the loop, reviewing outputs iteratively. Everything else can and should be plan-heavy.
 
 ## Managing Context
 
@@ -173,6 +194,23 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 
 Peter Steinberger's idea: instead of sending code (pull requests), send the prompt that generated it. [[armin-ronacher|Armin Ronacher]] refines this: the prompt is valuable because the act of creating clarifies what you really wanted to build. Once intent is understood, the senior engineer often starts fresh rather than fixing the agent's implementation. [[mario-zechner|Mario Zechner]] values seeing the terrible implementation anyway — it reveals the problem space without costing his own time ("valuable garbage").
 
+## Focus Maxing / Parallel Agent Management
+
+As agents run for longer — Copilot (seconds per line) → Cursor (~30s per file) → Claude Code (1-2 min in 2024, 5-10 min in 2025) — the 5-minute mark is a behavioral threshold. Below it, humans can wait and watch. Above it, they must change how they work.
+
+[[louis-knight-webb|Louis Knight-Webb]] calls the new operating mode **"focus maxing"**: run multiple agents in parallel, review one output while others are still running. The pattern:
+
+1. Send off several agent tasks simultaneously
+2. When one finishes, review the output (tests, diff, preview)
+3. Send corrections or approve while others keep running
+4. Repeat
+
+This is a fundamentally different mode from traditional software engineering, where the human locks into one piece of deep work at a time. Focus maxing treats the human as a manager of multiple concurrent streams of work, each in different stages of the plan-execute-review lifecycle.
+
+The key design constraint: agents must run for **long enough** that context-switching doesn't fry the human. Shifting attention every 30 seconds between agent outputs is unsustainable. The ideal is sessions of 5+ minutes where the agent produces a complete, reviewable unit — not incremental partial outputs that require constant mid-stream intervention.
+
+This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipeline: the human runs multiple agents during the day (each in different stages), not just one overnight batch. The [[verification-loop]] becomes a parallel concern — different streams may need different verification gates.
+
 ## Concepts in this thread
 
 - [[hallucination]] — The machine's failure mode: lossy compression masquerading as knowledge
@@ -193,6 +231,7 @@ Peter Steinberger's idea: instead of sending code (pull requests), send the prom
 - [[deliberate-friction]] — Intentional friction at high-stakes decision points in the HITL phase
 - [[document-degradation]] — Silent document corruption undermines AFK delegation viability
 - [[comprehension-debt]] — Teaching mode as inquiry-based workflow; the cognitive cost of delegation-only workflows
+- [[plan-vs-review]] — The quantified tradeoff between planning depth and review burden
 
 ## Related
 
@@ -213,4 +252,5 @@ Peter Steinberger's idea: instead of sending code (pull requests), send the prom
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Architecture review as a distinct, cadenced workflow phase.
 - `raw/slowing-the-fuck-down.md` — Good agent task criteria; Karpathy auto-research as example; agentic search recall problem.
+- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Plan-vs-review tradeoff, feature type matrix, time horizon shift, focus maxing / parallel agent management.
 

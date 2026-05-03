@@ -1,8 +1,8 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-04-29
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md]
+updated: 2026-05-02
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"]
 tags: [concept, workflow, agents]
 ---
 
@@ -42,6 +42,14 @@ A key pattern from Matt's workflow: **QA runs concurrently with AFK implementati
 
 This creates a temporal parallelism — sometimes called the **"day shift / night shift"** pattern (coined by Jamon on Twitter): the human does the day shift (grilling, PRD writing, QA) while the agent does the night shift (implementation). The human's work queues tasks for the agent; the agent's work provides material for the human's QA.
 
+### Focus Maxing: Parallel AFK Streams
+
+As agents run for longer (crossing the 5-minute execution threshold), the single-AFK-agent model extends to **multiple concurrent AFK streams** — what [[louis-knight-webb|Louis Knight-Webb]] calls "focus maxing." The human dispatches several tasks simultaneously to different agent instances. When one finishes, the human reviews the output (tests, diff, preview), sends corrections or approval, and moves to the next completion while remaining agents keep running.
+
+This is distinct from the day-shift/night-shift pattern: instead of one agent session per day, the human runs multiple agents **in parallel during the same work session**, each in different stages of the plan-execute-review lifecycle. The tooling challenge shifts from "how do I execute one AFK task" to "how do I manage a queue of AFK streams with review gates."
+
+See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full pattern.
+
 ## Thread
 - [[the-agent-workflow]] — AFK is the "execution" phase of the modern agentic workflow.
 - [[the-human-lever]] — The human shifts from implementation to QA and design; AFK agents execute under human-owned boundaries.
@@ -57,9 +65,12 @@ This creates a temporal parallelism — sometimes called the **"day shift / nigh
 - [[ralph-loop]] — The canonical AFK implementation (Ralph Wiggum loop).
 - [[the-agent-workflow]] — The full pipeline from grilling through QA.
 - [[improve-codebase-architecture]] — The skill produces GitHub issues for AFK agents to implement.
+- [[plan-vs-review]] — Plan-heavy specs are the prerequisite for effective AFK execution.
+- [[louis-knight-webb]] — Articulated focus maxing / parallel AFK management.
 
 ## Sources
 
 - `raw/yt-claude-code-feature-build.md` — Demonstration of using an AFK agent to implement a multi-issue feature.
 - `raw/how-to-ralph-wiggum.md` — The Ralph Wiggum autonomous loop pattern.
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology.
+- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Focus maxing / parallel AFK management as agents cross the 5-minute execution threshold.
