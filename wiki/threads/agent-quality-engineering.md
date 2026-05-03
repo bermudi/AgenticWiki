@@ -6,6 +6,7 @@ sources:
   - "raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md"
   - "raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md"
   - "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"
+  - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 ---
 
@@ -70,6 +71,34 @@ This flywheel makes agents shippable because it provides:
 - **Compounding regression prevention**: Every fixed failure becomes a permanent test case
 - **Aggregate quality signals**: Sampling (25% in production) catches drift without full-cost evals on every run
 
+## A Counterpoint: Dex Horthy's Skepticism
+
+[[dex-horthy|Dex Horthy]] offers a different perspective that complicates the Galarza framework. He's skeptical of LLM-as-judge and advocates for a simpler, more pragmatic eval approach. His views don't contradict the thread's thesis — evals still matter — but they argue for a different implementation strategy.
+
+### LLM-as-Judge Doesn't Work Well
+
+Both Dex Horthy and Jeff Huber (Chroma CEO) converge on a shared skepticism. Huber states that "these models are optimized, optimized, optimized to tell us what we want to hear" — ask a model to review code and say "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. Horthy adds that the only reliable way to get honest critique is to frame it as helping a friend ("my friend sent me this, what should I tell them?"). Both agree: LLM-as-judge is unreliable for substantive evaluation.
+
+### Never Send an AI to Do a Linter's Job
+
+Jeff Huber explains the principle (citing a post by "Kyle"): anything that can be evaluated deterministically should be — "never send an AI to do a linter's job." Horthy strongly agrees, and elaborates with his own practice: "I don't trust a model to read code and tell me if it's good or not." The shared principle: save LLM evaluation for the parts that genuinely need it, and use deterministic checks for everything else. This aligns with the thread's component-level eval layer, but goes further — both are skeptical of even outcome-level LLM-as-judge for most use cases.
+
+### Snapshot-Based Evals
+
+The conversation (attribution is unclear whether this is Dex describing his HumanLayer approach or Jeff describing Chroma's system) describes a pragmatic eval approach: run the workflow end-to-end on a set of test questions, store the output as a snapshot, then diff against it on subsequent runs. It's snapshot testing for agent behavior. When a change produces a different output, the CLI shows the diff and the human accepts or rejects it.
+
+This is simpler than the full 4-layer eval stack. It trades granularity for practicality. The key insight: evals are primarily a **regression prevention mechanism** — "a way to prevent regressions," in the source's words. If you know your agent was working yesterday, you want to know if your changes broke it today. Snapshot-based evals serve this purpose with less infrastructure.
+
+### Vibes-First Eval Strategy
+
+Before you know what your agent should look like, you can't write good evals. Dex Horthy's advice: "the first layer is vibes. Vibes is very high leverage especially if you don't know what you're building yet and you don't know what you want it to look like." He describes Ben Stein's flow from AI Engineer World's Fair: build the thing first, have a product manager play with it for a few days, identify the behaviors that matter, *then* write evals against those behaviors. This inverts the BDD approach — define behaviors as you discover them, not upfront.
+
+This creates a tension with the thread's "quality must be designed in from day one" thesis. The reconciliation is the wiki author's synthesis, not stated by Horthy: design the *infrastructure* for evals from day one (logging, structured output, snapshots), but design the *specific eval criteria* after you've built enough to know what quality looks like for your use case.
+
+### AI-Native Eval Architecture from HumanLayer
+
+Horthy describes building a logging proxy that intercepts every request/response pair, creating a complete trace of agent behavior from day one. "Whenever anything happens we can say, 'hey, go look in the logs — here's the exact response from Anthropic'." This observability-first approach means the infrastructure for understanding failures exists before the eval criteria are defined — the observability layer comes before the measurement layer.
+
 ## Relationship to Existing Threads
 
 ### Extends
@@ -105,9 +134,11 @@ This flywheel makes agents shippable because it provides:
 - [[damian-galarza]] — Author of the three-part series that forms this thread
 - [[round-trip-relay]] — Reference-free eval methodology powering long-horizon benchmarks
 - [[jagged-frontier]] — Evals must be domain-specific because capability is uneven
+- [[context-engineering]] — The eval infrastructure (logging proxies, snapshots) is a context engineering concern
 
 ## Sources
 
 - `raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md` — The 4-layer eval framework and 4 quality dimensions
 - `raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md` — Logs/traces/metrics, the Emma/invoice debugging story, OpenTelemetry
 - `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — The flywheel in practice: groundedness eval, Mastra walkthrough
+- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Snapshot-based evals, LLM-as-judge skepticism, vibes-first eval strategy, logging proxy infrastructure

@@ -150,6 +150,7 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - [[jagged-frontier]] — Capability varies by domain, so slop risk varies too
 - [[round-trip-relay]] — Reference-free eval method that reveals how slop accumulates over long workflows
 - [[comprehension-debt]] — The cognitive dimension of slop: code multiplies, understanding doesn't
+- [[instruction-severity-inflation]] — Too many competing instructions cause the model to miss constraints, producing slop
 
 ## Related
 
@@ -170,3 +171,4 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Agents don't feel pain; training data ceiling; "slow the f down" math; 30-team interview findings; deliberate friction removal as slop accelerant.
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; agentic search low recall; untrustworthy tests; write architecture by hand; friction as understanding.
 - `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Comprehension debt as cognitive slop; Anthropic RCT on comprehension loss; "let me ask Claude" as cultural diagnostic.
+- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors, sparse critical failures driving document degradation.

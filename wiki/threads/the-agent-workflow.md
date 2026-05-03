@@ -16,12 +16,17 @@ sources:
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
+  - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
 # The Agent Workflow
 
 > How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software.
+
+## Thesis
+
+The agent workfkow consists of two interdependent phases — human-in-the-loop design (HITL) and away-from-keyboard execution (AFK) — joined by a tight feedback cycle. The HITL phase owns the [[shared-design-concept]] and tests; the AFK phase executes within those boundaries. Success depends on three supporting layers: [[context-engineering|context hygiene]] (keeping the model in the [[smart-zone-dumb-zone|Smart Zone]]), [[tool-design-for-agents|tool design]] (outputs that agents can consume), and [[verification-loop|verification infrastructure]] (mechanical backpressure that rejects wrong outputs). Without any of these, the workflow degrades into [[the-slop-problem|slop]].
 
 ## The Two Phases
 
@@ -106,6 +111,24 @@ The fix isn't bigger context windows — it's **ruthless context hygiene**:
 - **Deep modules as context boundaries**: A well-designed deep module is naturally context-complete — the agent needs the interface, not the entire call graph.
 
 [[mario-zechner|Mario Zechner]] designed [[pi]] around this insight. Pi's minimal core (four tools: `read`, `write`, `edit`, `bash`) and session-based model make it easy to reset context and stay in the Smart Zone. The design philosophy — [[malleable-agents|malleability]] — means the agent itself can create new tools mid-session to reduce its own context load.
+
+## Model Switching Strategy: Stick With One
+
+[[dex-horthy|Dex Horthy]] makes a strong case against tool-switching: people who constantly swap between Claude Code, Cursor, Codex, and Deep Research "are only going to get to like 80% of the possible level of intuition" compared to focused practice. The engineers who get the best results have spent 1-2 months intensively with a single model family and tool.
+
+The intuition isn't about prompt syntax — it's about behavioral nuance:
+- Different models respond differently to instruction style (all caps helps Opus but de-tunes Codex)
+- Opus follows 6-step workflows; Sonnet forgets steps 4-6 mid-workflow
+- Prompts optimized for one model need complete rework for another
+- Maintaining multiple prompt sets means updating all of them every time models change
+
+This creates a tension with multi-model architectures: if specialization across models is valuable, but deep intuition requires focus, the right strategy may be to develop deep intuition with one primary model/tool, and only bring in secondary models for well-defined, eval-gated sub-tasks.
+
+### Fast Orchestrator + Smart Oracle Pattern
+
+The AMP Code team pioneered an architecture that resolves the multi-model tension differently: instead of switching models across different sessions, delegate within a single session. The fast model (Sonnet) handles navigation, tool calling, and routing. When heavy reasoning is needed — 50 files to analyze for a race condition — the fast model batches the context and hands it to a slower, smarter "oracle" (Opus, o3) as a single prompt.
+
+Key insight: **smart models are bad at tool calling.** If you have the fast orchestrator determine relevance, then batch everything into one prompt for the oracle, you avoid the oracle wasting time on tool calls. The oracle gets a dense, curated context — the essence of [[context-engineering]].
 
 ## Tracer Bullets
 
@@ -232,6 +255,7 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 - [[document-degradation]] — Silent document corruption undermines AFK delegation viability
 - [[comprehension-debt]] — Teaching mode as inquiry-based workflow; the cognitive cost of delegation-only workflows
 - [[plan-vs-review]] — The quantified tradeoff between planning depth and review burden
+- [[context-engineering]] — The practice of maximizing information-per-token density; the infrastructure of the workflow
 
 ## Related
 
@@ -252,5 +276,7 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Architecture review as a distinct, cadenced workflow phase.
 - `raw/slowing-the-fuck-down.md` — Good agent task criteria; Karpathy auto-research as example; agentic search recall problem.
+- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Context management, malleability, Pi origin story, one-task-per-iteration sidesteps Dumb Zone.
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Plan-vs-review tradeoff, feature type matrix, time horizon shift, focus maxing / parallel agent management.
+- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Context engineering definition, model switching strategy, fast orchestrator + smart oracle pattern, personal productivity systems.
 

@@ -18,7 +18,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[philippe-laban]] — Researcher at Microsoft Research; lead author of DELEGATE-52 benchmark on LLM document corruption.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
 - [[damian-galarza]] — Multi-agent system operator and author of the three-part agent quality series (evals, observability, quality loop).
-- [[dex-horthy]] — CTO of Sourcegraph and advocate for "No Vibes" engineering.
+- [[dex-horthy]] — Creator of "12 Factor Agents," co-creator of [[context-engineering]], and advocate for agentic engineering over vibe coding.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum technique for autonomous agent loops.
 - [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
@@ -64,6 +64,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[strategic-vs-tactical-programming]] — Prioritizing long-term health over immediate tactical fixes.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
+- [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
+- [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.

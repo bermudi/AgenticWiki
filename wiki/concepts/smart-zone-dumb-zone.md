@@ -1,8 +1,12 @@
 ---
 title: Smart Zone vs. Dumb Zone
 created: 2026-04-25
-updated: 2026-04-26
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-building-pi-in-a-world-of-slop.md", "raw/yt-how-agents-use-dev-tools.md"]
+updated: 2026-05-02
+sources:
+  - raw/yt-ai-coding-for-real-engineers.md
+  - raw/yt-building-pi-in-a-world-of-slop.md
+  - raw/yt-how-agents-use-dev-tools.md
+  - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
 tags: ["ai-limitations", "context-management", "tool-design"]
 ---
 
@@ -50,9 +54,11 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[plan-disposability]] — Plan resets as a Smart Zone recovery strategy.
 - [[ralph-loop]] — One-task-per-iteration sidesteps the Dumb Zone entirely.
 - [[agent-friendly-tooling]] — Verbose tool output is a primary cause of Dumb Zone drift.
+- [[instruction-severity-inflation]] — The same attention limits that create the Dumb Zone for context also constrain instruction following
 
 ## Sources
 
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-how-agents-use-dev-tools.md`
+- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Dex Horthy describing the Smart Zone/Dumb Zone in the context of context engineering

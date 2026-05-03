@@ -52,8 +52,14 @@ This is where **LLM-as-Judge** comes in: a second language model evaluates the a
 > [!warning] Limitation
 > Automated evals don't catch everything. Regularly reading production traces directly surfaces the subtle failures no rubric anticipated.
 
-> [!warning] Contradiction: LLM-as-Judge Inadequacy
-> This page and the [[agent-quality-engineering]] thread treat LLM-as-Judge as a viable outcome-scoring mechanism. [[philippe-laban|Laban]] et al. (2026) found that even GPT 5.4 as judge captures **at most 25% of the variance** of domain-specific parsing metrics in [[delegate-52|DELEGATE-52]]. Generic rubrics and LLM judges failed to detect nuanced semantic corruption in documents — only domain-specific parsers (e.g., parsing a recipe into ingredients, steps, and tips, then comparing structurally) caught real degradation. This suggests that for complex document editing and delegation tasks, evals need **structured, domain-aware scoring** rather than generic LLM-as-judge. The outcome eval layer may be less reliable than this framework assumes.
+> [!warning] Contradiction: LLM-as-Judge Inadequacy (Two Sources)
+> This page and the [[agent-quality-engineering]] thread treat LLM-as-Judge as a viable outcome-scoring mechanism. Two independent sources challenge this:
+>
+> 1. **DELEGATE-52** ([[philippe-laban|Laban]] et al., 2026): Even GPT 5.4 as judge captures **at most 25% of the variance** of domain-specific parsing metrics. Generic rubric and LLM judges failed to detect nuanced semantic corruption — only structured, domain-aware scoring caught real degradation.
+>
+> 2. **[[dex-horthy|Dex Horthy]]** (practitioner): Models are "optimized to tell you what you want to hear." Ask a model to review code as "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. His maxim: **"Never send an AI to do a linter's job."** Anything deterministic should be checked deterministically.
+>
+> Together, these suggest the outcome eval layer is significantly weaker than the framework assumes. Horthy's alternative: snapshot-based evals (run, store, diff) and vibes-first exploration before defining eval criteria.
 
 ### 4. System Monitoring
 Watching for quality degrading in production at scale — not individual failures, but patterns across real usage over time. This is where evals and [[agent-observability|observability]] overlap.
@@ -90,3 +96,4 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 
 - `raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md` — The framework: four layers, four dimensions, CI for probabilistic systems
 - `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — LLM-as-judge in practice: groundedness scoring, prompt iteration from eval feedback
+- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon

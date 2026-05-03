@@ -43,6 +43,7 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 
 ## Thread
 - [[the-slop-problem]] — Compounding booboos as the mechanism of degradation
+- [[agent-quality-engineering]] — The quality loop catches production booboos and turns them into permanent eval cases
 
 ## Related
 
@@ -68,3 +69,4 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/slowing-the-fuck-down.md`
+- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors across 52 domains

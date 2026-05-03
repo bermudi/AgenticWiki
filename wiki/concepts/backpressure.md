@@ -52,6 +52,7 @@ This is backpressure in the literal sense — the human's testing activity *push
 - [[the-agent-workflow]] — Backpressure as the convergence mechanism in the AFK loop
 - [[the-slop-problem]] — Backpressure as the primary defense against slop in autonomous mode
 - [[the-human-lever]] — Engineering backpressure as the human's new role
+- [[agent-quality-engineering]] — Quality scores as soft backpressure in the feedback flywheel
 
 ## Related
 
@@ -69,3 +70,5 @@ This is backpressure in the literal sense — the human's testing activity *push
 
 - `raw/how-to-ralph-wiggum.md` — Backpressure as the core principle of the Ralph loop
 - `raw/ralph-wiggum-playbook.md` — Three layers of backpressure (downstream, upstream, LLM-as-judge)
+- `raw/yt-claude-code-feature-build.md` — Human-generated backpressure via UI feedback button → GitHub issues
+- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Social backpressure: auto-close filter for agent-generated PRs
