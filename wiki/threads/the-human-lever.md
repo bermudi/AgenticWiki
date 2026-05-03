@@ -153,6 +153,7 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 ## Concepts in this thread
 
 - [[agent-experience]] — Converging DX and AX
+- [[agent-friendly-tooling]] — Fast, observable tools as infrastructure for the human-to-agent handoff
 - [[grey-box-engineering]] — Owning interfaces, delegating implementation
 - [[strategic-vs-tactical-programming]] — Human as strategist, AI as tactician
 - [[shared-design-concept]] — The "theory of the code" both human and agent must share
@@ -172,6 +173,7 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[document-degradation]] — Silent corruption is why humans must own the verification contract
 - [[comprehension-debt]] — The cognitive cost of losing the human lever
 - [[plan-vs-review]] — The quantified tradeoff between planning depth and review burden
+- [[ubiquitous-language]] — Defining the language is a high-leverage human task; the glossary is the artifact the human owns personally.
 
 ## Related
 

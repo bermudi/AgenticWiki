@@ -1,14 +1,17 @@
 ---
 title: Agent Experience (AX)
 created: 2026-04-25
-updated: 2026-04-26
-sources: ["raw/yt-reinventing-software-panel.md", "raw/yt-how-agents-use-dev-tools.md", "raw/agentic-coding-recommendations.md"]
-tags: ["concept", "dx", "ax", "software-design", "tool-design"]
+updated: 2026-05-02
+sources:
+  - raw/yt-reinventing-software-panel.md
+  - raw/yt-how-agents-use-dev-tools.md
+  - raw/agentic-coding-recommendations.md
+tags: [concept, dx, ax, software-design, tool-design]
 ---
 
 # Agent Experience (AX)
 
-> The ease with which an AI agent can understand, navigate, and modify a codebase.
+> The ease with which an AI agent can understand, navigate, and modify a codebase — and the infrastructure that surrounds it. AX converges with DX at the code level, then extends to language choice, tool interfaces, and logging design: everything the agent interacts with shapes its effectiveness.
 
 ## Overview
 
@@ -28,6 +31,8 @@ As suggested by Martin Fowler and Kent Beck (see `raw/yt-reinventing-software-pa
 [[armin-ronacher|Armin Ronacher]] adds a concrete, language-specific dimension: Go's structural interfaces, explicit context system, and fast test caching make it inherently more agent-friendly than Python (slow boot, fixture magic, async event loop issues) or JavaScript (high ecosystem churn). Language choice is an AX decision.
 
 He also extends AX from code structure to **infrastructure design**: Makefile targets, dual-output logging, and pidfile-protected process managers are all AX optimizations. The codebase isn't just the source code — it's everything the agent interacts with.
+
+Concrete AX failure: TanStack Router's `$param.tsx` filenames. The dollar sign triggers shell interpolation when the agent invokes bash to edit the file — `$param` expands to empty, so the agent edits `.tsx` instead. A naming convention harmless to humans becomes a persistent, confusing error mode for agents. This is the kind of AX failure that only emerges when the consumer is an agent invoking tools through a shell.
 
 ## Why AX Matters
 
@@ -52,9 +57,10 @@ As software development shifts toward agentic workflows, the "usability" of a co
 - [[agent-friendly-tooling]] — The practical craft: speed, observability, misuse resistance.
 - [[armin-ronacher]] — Language choice and infrastructure as AX optimization.
 - [[code-intelligence]] — Code intelligence provides the high-fidelity context that enables good AX.
+- [[agent-observability]] — Designing for observability is an AX principle: the agent must expose its decision chain for the human to build trust.
 
 ## Sources
 
-- `raw/yt-reinventing-software-panel.md`
-- `raw/yt-how-agents-use-dev-tools.md`
-- `raw/agentic-coding-recommendations.md`
+- `raw/yt-reinventing-software-panel.md` — AX/DX convergence insight from Fowler, Beck
+- `raw/yt-how-agents-use-dev-tools.md` — Zanie Blue extending AX from codebases to tool design
+- `raw/agentic-coding-recommendations.md` — Language choice and infrastructure as AX optimization

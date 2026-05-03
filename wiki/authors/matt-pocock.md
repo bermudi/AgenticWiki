@@ -1,14 +1,14 @@
 ---
 title: Matt Pocock
 created: 2026-04-24
-updated: 2026-04-29
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md"]
+updated: 2026-05-02
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/yt-slop-watch-ideation.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
 # Matt Pocock
 
-> TypeScript expert turned AI-engineering advocate. Champions a return to software fundamentals — deep modules, shared design concepts, and verification loops — as the key to making AI-assisted development actually work.
+> TypeScript expert turned AI-engineering advocate. Champions a return to software fundamentals — deep modules, shared design concepts, and verification loops — as the key to making AI-assisted development actually work. Creator of Slop Watch, a self-hosted coding agent observability platform.
 
 Matt Pocock is a TypeScript expert, educator, and developer advocate known for his deep dives into the TypeScript type system. Recently, he has focused on the intersection of AI and software engineering, advocating for the return to fundamentals as a way to manage the complexity introduced by LLMs.
 
@@ -22,6 +22,8 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[improve-codebase-architecture]] — Systematic scans for deepening opportunities.
 - [[seams-and-adapters]] — Where modules meet and how they can be substituted.
 - [[locality-and-leverage]] — The two payoff properties of deep modules.
+- [[slop-watch]] — His self-hosted coding agent observability platform.
+- [[agent-observability]] — Sessions as DAGs of turns, per-session listener pattern, per-agent adapters.
 
 ## Related
 
@@ -36,10 +38,12 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[improve-codebase-architecture]] — Created the skill for systematic architecture review.
 - [[seams-and-adapters]] — Introduced seams and adapters as the architecture vocabulary for de-slopping.
 - [[locality-and-leverage]] — Defined locality and leverage as the goals of deepening.
+- [[slop-watch]] — His real-time-streamed ideation process: parallel research via sub-agents, DDD-driven ubiquitous language definition, per-session listener architecture.
 
 ## Sources
-- `raw/yt-software-fundamentals-matter-more-than-ever.md`
-- `raw/yt-ai-coding-for-real-engineers.md`
-- `raw/yt-why-llms-hallucinate.md`
-- `raw/yt-claude-code-feature-build.md`
+- `raw/yt-software-fundamentals-matter-more-than-ever.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop
+- `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK split, tracer bullets, context management
+- `raw/yt-why-llms-hallucinate.md` — Intrinsic/extrinsic hallucination taxonomy
+- `raw/yt-claude-code-feature-build.md` — Ubiquitous language workflow, AFK agents (Ralph), PRD to Issues pipeline
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — The improve-codebase-architecture skill, general/sergeant metaphor, seams/adapters vocabulary.
+- `raw/yt-slop-watch-ideation.md` — Greenfield project ideation: parallel research agents, Grill Me, DDD domain modeling, Slop Watch architecture decisions.

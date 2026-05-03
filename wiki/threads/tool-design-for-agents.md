@@ -132,6 +132,8 @@ This is a departure from the assumptions behind both CLI tools (single process, 
 - [[wide-events]] — OTEL SDKs and observability instrumentation as tools agents must wield correctly
 - [[context-engineering]] — Tool output design is a context engineering concern; verbose tool output is a primary source of context bloat
 - [[multi-tier-action-space]] — The tool tier is about agent-first tool design; tool definitions belong in the computer tier, not the system prompt
+- [[agent-observability]] — Agent observability is a tool design concern: listener/sidecar pattern, per-agent adapters, and hook surfaces determined by tool output interfaces.
+- [[slop-watch]] — Slop Watch's per-agent listener architecture is tool design for agent observability in practice.
 
 ## Sources
 

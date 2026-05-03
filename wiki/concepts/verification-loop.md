@@ -75,6 +75,7 @@ The paper's implication: verification must be **domain-aware and semantic**, not
 - [[strategic-vs-tactical-programming]] — Strategic programming requires verification to prove design intent.
 - [[agent-quality-engineering]] — Evals + observability + flywheel: the quality framework for agentic systems
 - [[seams-and-adapters]] — Testing at seams is how the verification loop proves correctness.
+- [[agent-observability]] — Traces as the input to the verification loop: you can only verify what you can see.
 - `raw/yt-how-agents-use-dev-tools.md` — Source on tools as the engine of verification.
 
 ## Sources

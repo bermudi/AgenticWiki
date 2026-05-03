@@ -64,6 +64,7 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 - [[critical-failure]] — Sparse catastrophic errors explain ~80% of observed degradation
 - [[round-trip-relay]] — The relay method quantifies how errors compound over long workflows
 - [[comprehension-debt]] — Comprehension debt is compounding booboos applied to the human's mental model
+- [[agent-observability]] — Tracing catches booboos in their decision context, not as isolated log lines; the trace tree tells the story the log feed can't.
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: Armin Ronacher
 created: 2026-04-26
-updated: 2026-05-01
+updated: 2026-05-02
 sources:
   - raw/agentic-coding-recommendations.md
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
@@ -23,9 +23,11 @@ Worked on computer games in London (2013-2014), then spent 10 years at Sentry. L
 - **Go over Python for agentic coding**: Despite his Python pedigree (Flask, Sentry), recommends Go for new backend projects. Python's magic (pytest fixtures, async event loops) and slow boot time make it hostile to agent loops.
 - **Tooling minimalism**: Prefers plain shell scripts and Makefiles over MCP servers. MCP is a last resort when the alternative is unreliable.
 - **Speed is the meta-constraint**: Agent loop quality is bounded by tool response time. Fast compilation, fast test execution, and fast tooling response are more important than feature richness.
-- **[[deliberate-friction]]**: His strongest new contribution — companies racing to remove all friction for agent autonomy are removing safety gates that were deliberately designed. Cites a "ship without friction" company that had a security incident from agent-generated config changes.
+- **[[deliberate-friction]]**: His strongest new contribution — companies racing to remove all friction for agent autonomy are removing safety gates that were deliberately designed. Cites a "ship without friction" company that had a security incident Armin believes was related to agentic engineering practices.
 - **Conservative upgrades**: Agent-cheapened upgrades degrade codebase quality. Be *more* conservative about library upgrades in agentic workflows.
 - **Simple code**: Functions over classes, plain SQL over ORMs, local permission checks. "The dumbest possible thing that will work."
+- **IDE does not matter**: With AFK-style workflow (assign job → wait for completion), the IDE's role is "greatly diminished" — he mostly uses it for final edits. This revived his usage of Vim, which lacks AI integration.
+- **Token-efficient tooling**: Avoids screenshots and browser interactions. Every image adds tokens without proportional value.
 - **More code generation, fewer dependencies**: Generated code the agent can maintain beats library sprawl the agent can't control.
 
 ## The 30-Team Interview

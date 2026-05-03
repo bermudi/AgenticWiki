@@ -56,6 +56,7 @@ You don't trust the agent's code; you trust the **[[verification-loop]]**.
 - [[pi]] — Pi's observability enables grey box engineering in practice.
 - [[mario-zechner]] — Creator of pi, advocate for grey box engineering.
 - [[comprehension-debt]] — Grey box requires holding architecture in your head; comprehension debt is what happens when you stop.
+- [[matt-pocock]] — Originator: human owns the interface, agent owns the implementation; the general/sergeant metaphor.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

@@ -87,6 +87,8 @@ A mental model articulated by the host (Dex Horthy) and engaged with by Lance Ma
 - [[evolving-context]] — Context engineering extended into the temporal dimension
 - [[lance-martin]] — Catalogued the operational techniques
 - [[ralph-loop]] — The Ralph Loop applies context isolation (sub-agent spawning) to serial tasks; each iteration gets a clean context window
+- [[ubiquitous-language]] — The context.md ub-lang file is the human-trusted artifact that survives context resets.
+- [[slop-watch]] — Matt's research compaction workflow (parallel sub-agents → research doc → reset) is context engineering applied to greenfield ideation.
 
 ## Sources
 

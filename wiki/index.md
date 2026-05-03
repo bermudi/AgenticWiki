@@ -84,5 +84,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
+- [[slop-watch]] — Self-hosted coding agent observability platform; sessions, tokens, traces, and quality metrics for agent-driven teams.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
 

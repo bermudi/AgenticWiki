@@ -1,7 +1,7 @@
 ---
 title: Slop
 created: 2026-04-25
-updated: 2026-04-30
+updated: 2026-05-02
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/agentic-coding-recommendations.md
@@ -12,7 +12,7 @@ tags: [concept, ai, ethics, code-quality]
 
 # Slop
 
-> Low-quality, AI-generated content (including code) that provides little value and degrades the signal-to-noise ratio of a system or repository.
+> Low-quality, AI-generated content (including code) that provides little value and degrades the signal-to-noise ratio of a system or repository. Its mechanisms include agent-cheapened upgrades, error over-recovery, tooling speed as a slop factor, and the untrustworthy test suite — and its trajectory is slowly improving as models and practices mature.
 
 ## Overview
 
@@ -53,9 +53,13 @@ The quality ceiling for agent output is bounded by training data. [[mario-zechne
 
 [[mario-zechner|Mario Zechner]] identifies a compounding trap: when agents write both code and tests, the tests become as compromised as the code. "You realize that the gazillions of unit, snapshot, and e2e tests you had your clankers write are equally untrustworthy." Tests pass but test the wrong things. The only remaining reliable measure is manual testing. This is particularly dangerous because tests are supposed to be the safety net — when the safety net is slop too, you've lost your last [[verification-loop|verification mechanism]].
 
-## Armin's Curse Word Metric
+## The Curse Word Metric
 
-A novel (if tongue-in-cheek) slop indicator: Armin reports that the frequency of curse words in his agent sessions increases over the lifetime of a project, as the agent starts messing up more because it can't deal with the complexity it added. A measurable proxy for the compounding-slop feedback loop.
+A novel (if tongue-in-cheek) slop indicator, observed on the Pragmatic Engineer podcast: the frequency of curse words in an agent session increases over the lifetime of a project, as the agent starts messing up more because it can't deal with the complexity it added. A measurable proxy for the compounding-slop feedback loop.
+
+## Slop Trajectory Improvement
+
+Ronacher observes that agent-generated code quality is improving: "Already today the code looks nothing like the terrible slop from a few months ago." This doesn't mean slop is solved — it means the baseline is rising as models, tools, and practices mature. The goal remains producing "better, more maintainable, and resilient code," not just faster code.
 
 ## Thread
 
@@ -77,10 +81,11 @@ A novel (if tongue-in-cheek) slop indicator: Armin reports that the frequency of
 - [[backpressure]] — Lack of backpressure produces slop in autonomous loops.
 - [[deliberate-friction]] — Removing deliberate friction accelerates slop production.
 - [[comprehension-debt]] — Slop degrades the human's mental model too: code multiplies, understanding doesn't.
+- [[slop-watch]] — The observability platform built to measure and combat slop: sessions, traces, DRI review.
 
 ## Sources
 
-- `raw/yt-building-pi-in-a-world-of-slop.md`
-- `raw/agentic-coding-recommendations.md`
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — "Slow the f down" math, agents don't feel pain, training data quality, curse word metric
+- `raw/yt-building-pi-in-a-world-of-slop.md` — Core slop concept, agents don't feel pain
+- `raw/agentic-coding-recommendations.md` — Agent-cheapened library upgrades, tooling speed as slop prevention, code quality trajectory improvement
+- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — "Slow the f down" math, agents don't feel pain, curse word metric, error over-recovery, training data quality
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; untrustworthy tests; agentic search low recall

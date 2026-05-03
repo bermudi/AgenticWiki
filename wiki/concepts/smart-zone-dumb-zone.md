@@ -55,6 +55,7 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[ralph-loop]] — One-task-per-iteration sidesteps the Dumb Zone entirely.
 - [[agent-friendly-tooling]] — Verbose tool output is a primary cause of Dumb Zone drift.
 - [[instruction-severity-inflation]] — The same attention limits that create the Dumb Zone for context also constrain instruction following
+- [[matt-pocock]] — The Memento Strategy (clear context, reload only what matters) is his operational response to the Dumb Zone.
 
 ## Sources
 

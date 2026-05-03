@@ -135,6 +135,7 @@ Horthy describes building a logging proxy that intercepts every request/response
 - [[round-trip-relay]] — Reference-free eval methodology powering long-horizon benchmarks
 - [[jagged-frontier]] — Evals must be domain-specific because capability is uneven
 - [[context-engineering]] — The eval infrastructure (logging proxies, snapshots) is a context engineering concern
+- [[slop-watch]] — Concrete architectural contribution to the observability layer: sessions as DAGs, listener/sidecar pattern, per-agent adapters
 
 ## Sources
 

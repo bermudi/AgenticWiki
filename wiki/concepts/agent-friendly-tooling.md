@@ -1,7 +1,7 @@
 ---
 title: Agent-Friendly Tooling
 created: 2026-04-26
-updated: 2026-04-26
+updated: 2026-05-02
 sources:
   - raw/agentic-coding-recommendations.md
 tags: [concept, tool-design, agent-speed, observability]
@@ -9,7 +9,7 @@ tags: [concept, tool-design, agent-speed, observability]
 
 # Agent-Friendly Tooling
 
-> Tools, scripts, and infrastructure designed specifically so that AI agents can operate effectively: fast to invoke, observable by design, protected against misuse, and deterministic in their output. The practical craft beneath the abstract [[tool-design-for-agents]] theory.
+> Tools, scripts, and infrastructure designed specifically so that AI agents can operate effectively: fast to invoke, observable by design, and protected against misuse. The practical craft beneath the abstract [[tool-design-for-agents]] theory.
 
 ## The Core Principle
 
@@ -21,12 +21,14 @@ Agent loop quality is bounded by tool response time and output clarity. A tool t
 A shell script, an MCP server, a log file — if the agent can interact with or observe it, it counts. [[armin-ronacher|Armin Ronacher]] uses Makefiles as the primary tool interface, with targets like `make dev` and `make tail-log`.
 
 ### Tools Must Be Fast
-Quick response time and minimal output are paramount. Crashes are tolerable (the agent gets a clear error); hangs are catastrophic (the agent waits indefinitely or times out with no signal).
+Quick response time and minimal output are paramount. Crashes are tolerable (the agent gets a clear error); hangs are problematic (the agent waits indefinitely or times out with no signal).
 
 ### Tools Must Be Misuse-Resistant
 The "LLM chaos monkey" will use tools in ways no human would. There is no such thing as user error — every misuse path must produce a clear, informative error that helps the agent recover.
 
 Example: Ronacher's process manager writes a pidfile. If spawned a second time, it errors with "services already running" instead of silently failing on a port conflict.
+
+Not just tooling — code itself must be misuse-resistant. Concrete example: TanStack Router uses dollar signs in filenames (`$param.tsx`). The agent tries to edit `$param.tsx` via bash but shell interpolation silently expands `$param` to empty, so it edits `.tsx` instead. A minor naming convention that's harmless to humans creates a persistent error mode for agents.
 
 ### Code Should Be Misuse-Resistant Too
 Ronacher extends the principle from tooling to code structure itself:
@@ -38,12 +40,15 @@ Ronacher extends the principle from tooling to code structure itself:
 ### Tools Must Provide Observability
 The agent needs to understand system state without human help. Dual-output logging (terminal + file) lets the agent read logs independently. Logged emails in debug mode let the agent complete auth flows autonomously — it reads the log for the magic link, no human intermediation needed.
 
+### Token Efficiency
+Ronacher optimizes tool usage to minimize context consumption: avoids screenshots and browser interactions wherever possible. Screenshots and browser sessions consume context window budget without proportional value — fast scripts that return a few lines of text are more token-efficient.
+
 ### Emergent Tools
 Agents write temporary scripts to evaluate code. These scripts must compile and run fast to be useful in the loop. For slow codebases, Ronacher's daemon pattern — a watcher that imports and executes modules from a filesystem location and writes output to a log — gives the agent a fast evaluation path within the application context.
 
 ## Speed Optimization Strategies
 
-1. **Choose fast languages**: Go's fast compilation and test caching beat Python's interpreter boot time or Rust's compile cycles for the agent loop.
+1. **Choose fast languages**: Go's fast compilation and test caching beat Python's interpreter boot time for the agent loop. Rust's `cargo test` invocation syntax also trips up agents — not a speed issue, but a tool-usability one.
 2. **Daemon patterns**: For codebases where reload is expensive, provide a hot-reload sandbox the agent can push code into.
 3. **Log verbosity balancing**: Informative yet concise output. Provide knobs the agent can adjust.
 4. **Incremental testing**: Go's test caching means the agent doesn't need to figure out which tests to run — the tool does it automatically.

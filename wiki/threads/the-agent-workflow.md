@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-03
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -18,6 +18,7 @@ sources:
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md"
+  - raw/yt-slop-watch-ideation.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -206,9 +207,33 @@ The key difference from the feature loop: architecture review is **proactive ent
 
 AI-accelerated development means architecture drifts faster than human-written codebases. Small, frequent deepening (every few days) is cheaper than occasional large refactors.
 
+## Research Phase: Going From Zero to Greenfield
+
+Before an existing project has features to build, the workflow must start with **research**. Matt Pocock's Slop Watch stream is the most detailed real-time demonstration of how to go from a vague idea to a buildable concept.
+
+The process mirrors the feature pipeline but at a higher level of abstraction — instead of grilling a concrete feature, you're grilling the idea itself:
+
+1. **Constraint gathering**: Start with a few loose constraints (useful, complex, some front-end + back-end, AI-coding-related). Let the chat or audience validate the idea space.
+2. **Parallel research via sub-agents**: Launch multiple Claude Code sessions simultaneously — each investigates a different dimension of the problem. For Slop Watch, sub-agents researched five coding agents' observability surfaces (Claude Code, Codex, [[pi|Pi]], Copilot CLI, Open Code). The results are compacted into a research document.
+3. **Domain modeling**: Use a Grill Me or domain-model skill to define the project's ubiquitous language before writing any code. This is where the core entities (session, turn, model request, listener, server) are discovered and locked in.
+4. **Context compaction**: Create research documents that preserve the session's findings. Clear the context window and start fresh for the next phase. Matt creates these documents and immediately resets — he doesn't review them.
+5. **Ub-lang locking**: Review and edit the `context.md` glossary. This is the one artifact Matt reads personally — it's the boundary between "AI-owned research" and "human-owned design."
+
+### Trusted vs. Untrusted AI Artifacts
+
+A key procedural distinction revealed by the stream: Matt **does not read** the research documents. He trusts the AI to have compacted key findings correctly. But he **does read and edit** the ubiquitous language glossary (`context.md`).
+
+This split is an operational principle:
+- **Research documents** are AI-owned reference material — created by AI for AI. The human doesn't need to verify them because they're consumed by the implementing agent later, not by the human.
+- **Ubiquitous language** is human-owned design — the glossary defines the system's shared concepts. The human must verify and own this because every subsequent decision flows from it.
+
+### The "Bored of Talking" Signal
+
+When the domain modeling session starts producing diminishing returns — Matt's phrase was "I'm sort of sick of talking about the app now" — that's a signal to stop deciding and start building. "You can only make meaningful decisions when you're working with an actual asset. Working in this abstract space is not good." The stream ended with 8 resolved decisions, clear language, and a known architecture — precisely at the point where further abstraction would be wasteful.
+
 ## Pocock's Full Pipeline
 
-[[matt-pocock|Matt Pocock]] demonstrates the most operationally detailed version of this workflow in a real feature build:
+Once a project has been established, [[matt-pocock|Matt Pocock]] demonstrates the most operationally detailed version of this workflow in a real feature build:
 
 1. **Grill Me**: A 22-minute Q&A session where the agent asks increasingly precise questions about the feature. The agent explores the codebase via subagents (token-efficient — the parent only gets a summary). The human dictates rough ideas; the agent challenges framing, identifies gaps, and forces specificity.
 2. **Update Ubiquitous Language**: New terms from the grilling session are added to the glossary before proceeding. This ensures the vocabulary for the PRD and implementation is already agreed upon.
@@ -286,17 +311,21 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 - [[deliberate-friction]] — Intentional friction at high-stakes decision points in the HITL phase
 - [[document-degradation]] — Silent document corruption undermines AFK delegation viability
 - [[comprehension-debt]] — Teaching mode as inquiry-based workflow; the cognitive cost of delegation-only workflows
+- [[plan-disposability]] — Plans as ephemeral coordination state, regenerated each iteration to prevent drift
 - [[plan-vs-review]] — The quantified tradeoff between planning depth and review burden
+- [[shared-design-concept]] — The theory of the code that must be shared between human and agent for effective delegation
 - [[context-engineering]] — The practice of maximizing information-per-token density; the infrastructure of the workflow
 - [[multi-tier-action-space]] — The thin-tool-layer + computer architecture that dominates current agent harnesses
 - [[evolving-context]] — Continual learning in token space; the unsolved frontier of agents improving their own context over time
 - [[lance-martin]] — Catalogued the agent harness architecture and evolving context categories
+- [[agent-friendly-tooling]] — Fast, observable, misuse-resistant tools as the operational infrastructure of the workflow
 
 ## Related
 
 - [[the-slop-problem]] — What happens when you skip the planning phase
 - [[the-human-lever]] — The design authority that underpins the whole workflow
 - [[tool-design-for-agents]] — The tool layer that makes this workflow possible
+- [[agent-friendly-tooling]] — Fast tools keep the AFK execution loop tight and the agent in the Smart Zone
 
 ## Sources
 
@@ -315,4 +344,5 @@ This parallels the "day shift / night shift" pattern (Jamon) from Pocock's pipel
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Plan-vs-review tradeoff, feature type matrix, time horizon shift, focus maxing / parallel agent management.
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Context engineering definition, model switching strategy, fast orchestrator + smart oracle pattern, personal productivity systems.
 - `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Multi-tier action space architecture, evolving context categories, MCP lesson, context management techniques catalog, Ralph Loop context isolation framing.
+- `raw/yt-slop-watch-ideation.md` — Research phase workflow: parallel sub-agents, domain modeling, trusted vs. untrusted AI artifacts, the "bored of talking" signal.
 

@@ -1,7 +1,7 @@
 ---
 title: pi
 created: 2026-04-25
-updated: 2026-04-30
+updated: 2026-05-02
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
@@ -95,6 +95,7 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 - [[astral]] — Peer tool builder adapting for agentic use.
 - [[grey-box-engineering]] — Pi's observability enables grey box engineering.
 - [[deliberate-friction]] — Mario's auto-close workflow as deliberate friction against agent PR floods.
+- [[slop-watch]] — Slop Watch would observe Pi sessions too; Pi's extension/skill API is one of the per-agent adapter targets.
 
 ## Sources
 

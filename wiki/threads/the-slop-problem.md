@@ -14,12 +14,13 @@ sources:
   - raw/slowing-the-fuck-down.md
   - raw/2604.15597v1.pdf
   - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
+  - raw/yt-slop-watch-ideation.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
 # The Slop Problem
 
-> AI generates code faster than humans can review it. Without disciplined engineering, codebase quality degrades irreversibly — not through a single catastrophic failure, but through a thousand small compromises.
+> AI generates code faster than humans can review it. Without disciplined engineering, codebase quality degrades irreversibly — not through a single catastrophic failure, but through a thousand small compromises. Slop Watch — a self-hosted coding agent observability platform — is the concrete response to this problem.
 
 ## The Threat
 
@@ -139,6 +140,7 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - [[tool-design-for-agents]] — Tool design determines feedback loop efficiency
 - [[deliberate-friction]] — Removing intentional slowdowns accelerates slop production
 - [[backpressure]] — Engineering the environment to reject wrong outputs
+- [[agent-friendly-tooling]] — Fast, observable tools tighten the verification loop and reduce slop
 - [[ralph-loop]] — The loop that needs backpressure to converge
 - [[plan-disposability]] — Stale plans as a slop source
 - [[seams-and-adapters]] — Missing seams as a structural slop cause (parallel implementations diverge)
@@ -151,6 +153,7 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - [[round-trip-relay]] — Reference-free eval method that reveals how slop accumulates over long workflows
 - [[comprehension-debt]] — The cognitive dimension of slop: code multiplies, understanding doesn't
 - [[instruction-severity-inflation]] — Too many competing instructions cause the model to miss constraints, producing slop
+- [[slop-watch]] — The concrete observability platform built to measure and combat slop
 
 ## Related
 
@@ -158,6 +161,7 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - [[the-agent-workflow]] — The operational practices that keep agent output high-quality.
 - [[tool-design-for-agents]] — Tool feedback as the mechanical defense against quality degradation.
 - [[deliberate-friction]] — Removing friction as a slop accelerant.
+- [[slop-watch]] — The self-hosted observability platform named after, and built to address, this problem.
 
 ## Sources
 
@@ -172,3 +176,4 @@ The cultural signal is equally telling: experienced engineers joking "let me ask
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; agentic search low recall; untrustworthy tests; write architecture by hand; friction as understanding.
 - `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Comprehension debt as cognitive slop; Anthropic RCT on comprehension loss; "let me ask Claude" as cultural diagnostic.
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors, sparse critical failures driving document degradation.
+- `raw/yt-slop-watch-ideation.md` — Slop Watch: the concrete observability platform built to measure and combat slop.

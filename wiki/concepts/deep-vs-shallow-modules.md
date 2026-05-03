@@ -1,7 +1,7 @@
 ---
 title: Deep vs. Shallow Modules
 created: 2026-04-24
-updated: 2026-04-29
+updated: 2026-05-02
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md"]
 tags: ["software-architecture", "clean-code"]
 ---
@@ -38,6 +38,7 @@ In a [[grey-box-engineering]] workflow, the human owns the interface and the age
 - [[locality-and-leverage]] — The two payoff properties of deep modules.
 - [[seams-and-adapters]] — Deep modules have clear, minimal seams.
 - [[improve-codebase-architecture]] — The skill that finds deepening candidates.
+- [[matt-pocock]] — Primary advocate: deep modules as the ideal delegation unit for AI agents; general/sergeant metaphor.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

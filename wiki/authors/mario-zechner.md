@@ -1,7 +1,7 @@
 ---
 title: Mario Zechner
 created: 2026-04-25
-updated: 2026-05-01
+updated: 2026-05-02
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-ai-coding-for-real-engineers.md
@@ -67,6 +67,7 @@ Part of an Austrian engineering circle with [[armin-ronacher|Armin Ronacher]] (F
 - [[compounding-booboos]] — Pi's observability helps engineers catch booboos before they cascade.
 - [[tool-design-for-agents]] — His four-tool minimalism as an extreme position on tool design.
 - [[deliberate-friction]] — "Slow the f down" and auto-close workflows.
+- [[matt-pocock]] — Peer in AI-native engineering; complementary approaches: Pocock's DDD-driven ub-lang and Mario's merciless refactoring.
 
 ## Sources
 
