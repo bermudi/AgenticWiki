@@ -72,6 +72,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
+- [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.

@@ -1,13 +1,14 @@
 ---
 title: Slop
 created: 2026-04-25
-updated: 2026-05-03
+updated: 2026-05-04
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/agentic-coding-recommendations.md
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
   - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
+  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
 tags: [concept, ai, ethics, code-quality]
 ---
 
@@ -56,6 +57,23 @@ The quality ceiling for agent output is bounded by training data. [[mario-zechne
 
 A novel (if tongue-in-cheek) slop indicator, observed on the Pragmatic Engineer podcast: the frequency of curse words in an agent session increases over the lifetime of a project, as the agent starts messing up more because it can't deal with the complexity it added. A measurable proxy for the compounding-slop feedback loop.
 
+## Internal vs. External Slop
+
+A refinement that emerges from the Boundary AI livestream: not all slop is equally dangerous. The key variable is **scope containment**. The BEEPs team at Boundary ML builds their entire internal design doc toolchain with AI-generated code that nobody reviews — and this is a deliberate, productive choice. The slop is contained to a disposable, non-customer-facing context where its cost if it breaks is low.
+
+This introduces a spectrum:
+
+| Context | Slop tolerance | Example |
+|---------|---------------|---------|
+| Customer-facing production code | None | Agent loop, API, UI |
+| Internal infrastructure with data risk | Low | Database migration scripts |
+| Internal tooling (disposable) | High | Design doc system, build scripts |
+| Throwaway exploration | Total | Prototyping, one-off analyses |
+
+The [[fighting-slop-with-slop|fighting slop with slop]] approach accepts heavy slop at the bottom of this spectrum to produce clean output higher up. It's not an argument that slop is harmless — it's an argument that **where** the slop lives matters as much as **how much** slop there is.
+
+This aligns with [[mario-zechner|Mario Zechner]]'s practice of accepting slop in Pi's HTML export but guarding the core agent loop. The principle: know which parts of your system are disposable and which are sacred.
+
 ## Slop Trajectory Improvement
 
 Ronacher observes that agent-generated code quality is improving: "Already today the code looks nothing like the terrible slop from a few months ago." This doesn't mean slop is solved — it means the baseline is rising as models, tools, and practices mature. The goal remains producing "better, more maintainable, and resilient code," not just faster code.
@@ -65,6 +83,7 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - [[the-slop-problem]] — Slop as the central threat in AI-assisted engineering
 - [[the-human-lever]] — Slop accumulates when humans abdicate design authority
 - [[tool-design-for-agents]] — Slow, noisy tools produce more slop; tool design as a slop prevention mechanism
+- [[fighting-slop-with-slop]] — The controlled use of slop in disposable contexts
 
 ## Related
 
@@ -82,6 +101,7 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - [[deliberate-friction]] — Removing deliberate friction accelerates slop production.
 - [[comprehension-debt]] — Slop degrades the human's mental model too: code multiplies, understanding doesn't.
 - [[slop-watch]] — The observability platform built to measure and combat slop: sessions, traces, DRI review.
+- [[fighting-slop-with-slop]] — Accepting slop in disposable tooling to reduce slop where it matters
 
 ## Sources
 
@@ -90,3 +110,4 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — "Slow the f down" math, agents don't feel pain, curse word metric, error over-recovery, training data quality
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; untrustworthy tests; agentic search low recall
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Software entropy as the named mechanism; "code is not cheap" — bad code blocks AI's ability to help.
+- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Internal vs. external slop distinction; fighting slop with slop as a deliberate strategy

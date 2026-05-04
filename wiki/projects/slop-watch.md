@@ -1,7 +1,7 @@
 ---
 title: Slop Watch
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - raw/yt-slop-watch-ideation.md
 tags: [project, observability, coding-agents, self-hosted, matt-pocock]
@@ -102,6 +102,7 @@ The name "Slop Watch" came from a viewer named Eddie during the live stream. The
 - [[pi]] — A complementary agent harness; Slop Watch would observe Pi sessions too
 - [[claude-code]] — The primary agent Matt uses; Slop Watch's first adapter target
 - [[improve-codebase-architecture]] — The third leg of Matt's quality triage (alignment + architecture awareness + automated review)
+- [[fighting-slop-with-slop]] — Complementary production-side strategy: observability measures slop, fighting-slop-with-slop channels it into disposable tooling.
 
 ## Sources
 

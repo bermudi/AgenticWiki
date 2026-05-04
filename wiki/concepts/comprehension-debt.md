@@ -1,7 +1,7 @@
 ---
 title: Comprehension Debt
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
 tags: [concept, ai-engineering, cognitive-debt, code-quality]
@@ -95,6 +95,7 @@ That is the part the model cannot hold for you, because that is the part you are
 - [[compounding-booboos]] — Small comprehension losses compound like small code errors
 - [[addy-osmani]] — Coined the term
 - [[the-gray-cat]] — Personal account of living inside comprehension debt and recovering
+- [[slop]] — Slop degrades the human's mental model too; comprehension debt is the cognitive consequence.
 
 ## Sources
 

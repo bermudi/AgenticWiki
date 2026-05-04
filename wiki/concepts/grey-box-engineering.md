@@ -1,7 +1,7 @@
 ---
 title: Grey Box Engineering
 created: 2026-04-24
-updated: 2026-05-03
+updated: 2026-05-04
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["software-design", "ai-workflow"]
 ---
@@ -62,6 +62,7 @@ This is only safe when the interface is testable. The [[verification-loop]] must
 - [[mario-zechner]] — Creator of pi, advocate for grey box engineering.
 - [[comprehension-debt]] — Grey box requires holding architecture in your head; comprehension debt is what happens when you stop.
 - [[matt-pocock]] — Originator: human owns the interface, agent owns the implementation; the general/sergeant metaphor.
+- [[plan-vs-review]] — Planning defines the grey box boundary; review inspects the contents.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

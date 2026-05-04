@@ -1,7 +1,7 @@
 ---
 title: AI Design Loop
 created: 2026-04-24
-updated: 2026-05-03
+updated: 2026-05-04
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["ai-workflow", "software-design"]
 ---
@@ -48,6 +48,7 @@ The session produces not just requirements, but also updates the [[ubiquitous-la
 - [[malleable-agents]] — Agents can be adapted during the design loop.
 - [[improve-codebase-architecture]] — The skill that applies the design loop to architecture: explore, grill, propose.
 - [[matt-pocock]] — Originated the Grill Me skill and the Destination/Journey framework.
+- [[fighting-slop-with-slop]] — The BEEPs workflow extends the design loop to organizational scale: AI handles the tooling infrastructure around the design process.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

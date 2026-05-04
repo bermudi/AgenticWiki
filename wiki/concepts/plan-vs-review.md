@@ -1,9 +1,10 @@
 ---
 title: Plan vs Review
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
+  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
 tags: [concept, workflow, agent-design, human-in-the-loop]
 ---
 
@@ -20,6 +21,16 @@ The rise of capable coding agents doesn't eliminate human involvement — it dis
 **Review-heavy** — Give the agent a rough goal and let it iterate. Work through multiple rounds of corrections: style fixes, edge case handling, architectural drift. Benefits: faster start, less planning overhead. Cost: more total human time because review is interrupt-driven and requires context-switching between sessions.
 
 Knight-Webb's heuristic: investing in planning is always preferable because it saves human time — **5 minutes of planning saves 30 minutes of reviewing.** Switching back and forth with a half-finished agent output is more taxing than doing the thinking upfront.
+
+## Empirical Support: 50%+ Design Time
+
+The Boundary AI livestream provides real-world validation: the BAML team at Boundary ML spends **50%+ of their time on design docs** (BEEPs), not implementation. Fib, the BAML language engineer, describes spending 4 days of pure design on the threading system before writing any code. The implementation after a thorough design doc is often one-shot.
+
+This aligns directly with Knight-Webb's quantified heuristic. At Boundary ML, the plan-heavy approach is not just preferred — it's the default for all non-trivial features. The design doc is treated as the primary output; implementation is a downstream mechanical step that AI handles.
+
+> "I spend a lot of time writing design docs and plans for almost all of my work now. I would say it's more than 50%. Most of my time I spend writing docs, coming up with plans. I heer on the side of more detail." — Fib, Boundary AI
+
+The qualitative claim behind the quantitative allocation: good design enables one-shot implementation. The design doc absorbs complexity so the implementation doesn't have to.
 
 ## When to Use Each Mode
 
@@ -54,7 +65,10 @@ The distinction parallels [[grey-box-engineering]]: plan-heavy corresponds to ow
 - [[afk-agent]] — AFK execution depends on plan-heavy specs
 - [[verification-loop]] — The review side of the tradeoff
 - [[vibes-based-engineering]] — Review-heavy without structure is vibes; plan-heavy is the alternative
+- [[fighting-slop-with-slop]] — The BEEPs workflow (50%+ design time) empirically validates the plan-heavy approach.
+- [[the-slop-problem]] — Plan-heavy design is a direct slop prevention strategy; review-heavy without verification accelerates it.
 
 ## Sources
 
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — The full talk establishing the framework, quantified heuristic, and feature type matrix.
+- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Real-world validation: 50%+ design time at Boundary ML; 4 days of pure design on threading; one-shot implementation enabled by thorough design

@@ -1,7 +1,7 @@
 ---
 title: Vibes-Based Engineering
 created: 2026-04-25
-updated: 2026-05-03
+updated: 2026-05-04
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/2604.15597v1.pdf", "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
@@ -53,6 +53,7 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[jagged-frontier]] — Generalizing capabilities across domains is a vibes failure mode
 - [[comprehension-debt]] — The cognitive cost of vibes-based engineering: delegation mode scores below 40% on comprehension
 - [[matt-pocock]] — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
+- [[plan-vs-review]] — Review-heavy without structure is vibes-based engineering; plan-heavy is the structured alternative.
 
 ## Sources
 

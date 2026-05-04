@@ -1,7 +1,7 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-05-03
+updated: 2026-05-04
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
@@ -68,6 +68,7 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[tool-design-for-agents]] — Tool output design determines verification loop efficiency.
 - [[agent-friendly-tooling]] — Fast tools make verification loops tighter.
 - [[backpressure]] — Backpressure employs verification loops as its mechanism.
+- [[slop]] — The verification loop is the primary mechanical defense against slop production.
 - [[agent-evals]] — The probabilistic equivalent of the verification loop for agentic systems
 - [[delegate-52]] — Evidence that current tool-based verification is insufficient for long delegation
 - [[document-degradation]] — Silent corruption that bypasses standard verification
@@ -83,6 +84,8 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[seams-and-adapters]] — Testing at seams is how the verification loop proves correctness.
 - [[matt-pocock]] — "Outrunning your headlights" metaphor; TDD as the discipline for keeping agent speed proportional to verification ability.
 - [[agent-observability]] — Traces as the input to the verification loop: you can only verify what you can see.
+- [[fighting-slop-with-slop]] — The BEEPs workflow uses the verification loop differently: the design doc is the verification target, the tooling is the throwaway means.
+- [[plan-vs-review]] — The verification loop is the review side of the plan-vs-review tradeoff.
 
 ## Sources
 
