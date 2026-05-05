@@ -1,10 +1,11 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
   - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
+  - raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
 
@@ -71,6 +72,43 @@ Cache the invariant portion of chat history (system prompt, previous turns). Eac
 ### Context Layers
 A mental model articulated by the host (Dex Horthy) and engaged with by Lance Martin for thinking about where context comes from: **session context** (what's happening in the current agent session), **agent context** (multi-session — skills, memories, past sessions), **organizational context** (Slack, email, calendars, knowledge bases), **global context** (web search, external information). The goal: materialize a just-in-time view across these layers that enables the agent's best next action.
 
+## The Context Engine Pattern
+
+[[peter-werry|Peter Werry]] (Unblocked) provides the most detailed public architecture for a **context engine** — a productized system that operationalizes context engineering at organizational scale. A context engine sits between data sources and agents, acting as a curated context pipeline. It goes beyond individual session management to understand:
+
+- **Who you are**: What team you work on, what repos you own
+- **Who the experts are**: A social/expert graph built from SCM and communication data
+- **What decisions were made**: Distilled from PR comments, Slack conversations, and incident reports
+- **What was rejected**: Past approaches that were tried and failed
+
+The context engine addresses a core insight Werry identifies: **access doesn't equal understanding**. Just wiring up MCP servers or building a naive RAG system gives agents *access* to data but not the *understanding* of how it relates, why it's that way, or which sources to trust when they conflict.
+
+### The Three Myths
+
+Werry identifies three common misconceptions about context engines:
+
+1. **Naive RAG over docs is a context engine** — Vector search alone suffers from [[satisfaction-of-search]] (agents find the first plausible answer and stop), lacks personalization, and can't resolve conflicts in the data.
+2. **Connecting a bunch of MCPs is a context engine** — MCP servers provide access but not understanding. An agent wired to a set of MCP servers can find *something* related to the task, but without understanding the relationships between data sources, the historical context, or the organizational dynamics, it still gets the wrong answer.
+3. **A bigger context window will solve this** — Even if 10–50M token windows become feasible, most organizations have more context than that, and models still struggle to reason across all of it. The bottleneck shifts from token capacity to understanding what's true and what to select.
+
+### Organizational Memory & Expert Bottling
+
+A key mechanism Werry's team developed: **distilling expert context** from historical data. The process:
+
+1. A social/expert graph identifies who the experts are for each code area (based on PR contributions, reviews, and Slack activity)
+2. Historical context for each expert is distilled — decisions they've made, PR comments they've left, Slack conversations they've had
+3. When a new developer works on that code area, the distilled expert context is loaded as seed context, providing directional guidance
+
+This creates a three-layer retrieval strategy: vector search (layer 1), pre-built organizational memories (layer 2), and bottled expert context (layer 3). Werry reports this eliminates the need for agents to rediscover organizational knowledge from scratch.
+
+### Satisfaction of Search
+
+See [[satisfaction-of-search]] for the full treatment. Introduced by Werry from radiology: agents find the first plausible answer in their search and stop, missing richer information in Slack conversations, incident reports, or past rejected PRs. This is a context engineering failure — the agent's search strategy lacks the organizational awareness to know where the highest-signal context lives.
+
+### Performance Impact
+
+Werry's benchmark data shows the concrete impact of context engineering at organizational scale: implementing Anthropic's adaptive thinking mode took 2.5 hours and 21M tokens *without* a context engine vs. 25 minutes and 10M tokens *with* one. The improvement comes from eliminating doom loops — the agent gets the right context upfront and doesn't need to iterate through multiple wrong approaches.
+
 ## Thread
 
 - [[the-agent-workflow]] — Context engineering is the infrastructure layer beneath the agent workflow; managing information-per-token density is the operational skill the workflow depends on
@@ -89,8 +127,12 @@ A mental model articulated by the host (Dex Horthy) and engaged with by Lance Ma
 - [[ralph-loop]] — The Ralph Loop applies context isolation (sub-agent spawning) to serial tasks; each iteration gets a clean context window
 - [[ubiquitous-language]] — The context.md ub-lang file is the human-trusted artifact that survives context resets.
 - [[slop-watch]] — Matt's research compaction workflow (parallel sub-agents → research doc → reset) is context engineering applied to greenfield ideation.
+- [[satisfaction-of-search]] — A context engineering failure mode: agents stopping context retrieval too early
+- [[unblocked]] — A productized context engine architecture
+- [[peter-werry]] — Contributions to context engine architecture, satisfaction of search, and organizational context retrieval
 
 ## Sources
 
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Full interview defining context engineering origins, principles, and practices
 - `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Operational techniques catalog, context layers model, context isolation patterns
+- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine architecture, the three myths, satisfaction of search, organizational memory, and expert bottling

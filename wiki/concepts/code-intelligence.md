@@ -31,6 +31,7 @@ This prevents [[vibes-based-engineering]] by grounding the AI's suggestions in t
 - [[dex-horthy]] — Primary advocate for code intelligence in AI workflows.
 - [[the-human-lever]] — Code intelligence as the foundation for human design authority.
 - [[agent-experience]] — Code intelligence improves AX by providing high-fidelity context.
+- [[satisfaction-of-search]] — Code intelligence mitigates satisfaction of search by providing semantically grounded context instead of surface-level matches
 
 ## Sources
 

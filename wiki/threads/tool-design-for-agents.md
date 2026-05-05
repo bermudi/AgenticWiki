@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-05-03
+updated: 2026-05-04
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -9,12 +9,13 @@ sources:
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
+  - "raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md"
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 ---
 
 # Tool Design for Agents
 
-> Developer tools were built for human consumption. As agents become the primary consumer, the tool layer needs fundamental redesign — not more features, but different interface contracts, output formats, and design priorities. Three independent sources converge on the same conclusion: the tool is the bottleneck, and the agent's effectiveness is bounded by the quality of the tools it calls.
+> Developer tools were built for human consumption. As agents become the primary consumer, the tool layer needs fundamental redesign — not more features, but different interface contracts, output formats, and design priorities. Multiple independent sources converge on the same conclusion: the tool is the bottleneck, and the agent's effectiveness is bounded by the quality of the tools it calls.
 
 > [!note] Departure: Tool Use Can Harm
 > This thread argues that better tools → better agent outcomes. [[philippe-laban|Laban]] et al. (2026) complicate this assumption: in [[delegate-52|DELEGATE-52]], four LLMs given file reading, writing, and code execution tools performed **worse** than without tools, incurring an average additional degradation of 6%. The tools introduced overhead (2–5× more input tokens), and models favored regenerating entire files over targeted edits. This doesn't refute the thread's thesis — the paper tested a basic harness, not redesigned tools — but it does show that **adding tools without careful design can actively harm**. The "tools fix it" assumption is not automatically true for current models in long-horizon workflows.
@@ -115,15 +116,46 @@ As agents cross the 5-minute execution threshold (see [[the-agent-workflow|Focus
 
 This is a departure from the assumptions behind both CLI tools (single process, synchronous output) and MCP servers (stateless tool calls). The parallel management interface treats agent execution as an **async job queue with human gates at review points** — a fundamentally different interaction model that existing tools don't support.
 
-## Concepts in this thread
+## Layer 5: The Context Engine as a Meta-Tool
 
-- [[agent-friendly-tooling]] — The practice: speed, observability, misuse resistance, daemon patterns
+[[peter-werry|Peter Werry]]'s [[unblocked]] introduces a fifth layer to the tool design analysis: the **context engine** — a meta-tool that sits between all other tools and the agent, curating what context reaches the agent before it invokes any tool.
+
+This is distinct from the tool design layers above. Where Zanie focuses on individual tool output, Armin on language/infrastructure, Mario on minimalism, and Louis on parallel management, the context engine addresses a *pre-processing* concern: **what context should the agent even see before it starts calling tools?**
+
+### Why It's a Tool Design Problem
+
+Werry's key insight: agents spend ~90% of execution time collecting context, not writing code. The context collection phase is dominated by tool calls — searching Slack, reading docs, grepping code. A context engine is a tool that pre-emptively answers those searches so the agent doesn't need to make them:
+
+| Without context engine | With context engine |
+|---|---|
+| Agent searches multiple different sources | Context engine pre-collects the relevant context |
+| Agent finds plausible but wrong information | Context engine resolves conflicts before the agent sees data |
+| Agent misses organizational history | Context engine distills historical decisions as memories |
+| 2.5 hours, 21M tokens | 25 minutes, 10M tokens |
+
+### Tool Design Implications
+
+- **Context as a tool output**: The context engine's primary output is curated context — not a file, not an API response, but a distilled package of organizational knowledge. This shifts the tool design question from "how does this tool output information?" to "how does this system select and filter information?"
+- **Conflict resolution as a tool concern**: Where Zanie argues tools should suppress low-confidence signals for humans, a context engine does the opposite: it surfaces unresolved conflicts to the human for guidance, surfacing the tension rather than silently picking a wrong answer. This is tool feedback designed for a post-search world.
+- **Personalized retrieval as infrastructure**: Retrieval is no longer a per-tool concern. The context engine knows who you are, what you work on, and who the experts are. This level of personalization can't be achieved by individual tool design — it requires a system that understands the organization's social graph.
+
+### Relationship to Other Layers
+
+The context engine layer interacts with the other four layers:
+- **Layer 1 (output optimization)**: The context engine *is* the optimization — it reduces what tools need to output by pre-answering their questions
+- **Layer 2 (language/infrastructure)**: The context engine's expert graph and memory storage are themselves infrastructure decisions
+- **Layer 3 (minimalism)**: The context engine enables minimal tool cores by pushing context retrieval complexity into a separate system
+- **Layer 4 (parallel management)**: Context pre-collection matters more when managing multiple agents — each agent would otherwise independently discover the same organizational knowledge
+
+## Concepts in this thread — The practice: speed, observability, misuse resistance, daemon patterns
 - [[agent-experience]] — AX/DX convergence extends to tool design
 - [[malleable-agents]] — Minimal cores with emergent periphery
 - [[smart-zone-dumb-zone]] — Tool output as a context threat that pushes agents into the Dumb Zone
 - [[verification-loop]] — Tool feedback is the engine that drives verification
 - [[slop]] — Poor tool design → unverified output → slop
 - [[vibes-based-engineering]] — Absence of structured tool feedback enables vibes-based acceptance of outputs
+- [[satisfaction-of-search]] — The cognitive bias that context engines are designed to mitigate — agents stopping context retrieval too early
+- [[unblocked]] — A productized context engine architecture
 
 ## Related
 
@@ -135,6 +167,7 @@ This is a departure from the assumptions behind both CLI tools (single process, 
 - [[multi-tier-action-space]] — The tool tier is about agent-first tool design; tool definitions belong in the computer tier, not the system prompt
 - [[agent-observability]] — Agent observability is a tool design concern: listener/sidecar pattern, per-agent adapters, and hook surfaces determined by tool output interfaces.
 - [[slop-watch]] — Slop Watch's per-agent listener architecture is tool design for agent observability in practice.
+- [[peter-werry]] — Context engine architecture as a meta-tool design pattern
 
 ## Sources
 
@@ -144,3 +177,4 @@ This is a departure from the assumptions behind both CLI tools (single process, 
 - `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — MCP vs CLI structural analysis, Pi origin story, OpenClaw as hidden coding agent, context transparency
 - `raw/slowing-the-fuck-down.md` — Agentic search recall as a fundamental tool limitation; low recall as the root cause of slop.
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Parallel management interface design requirements, agent runtime thresholds as a tool design constraint.
+- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine as meta-tool: pre-curating context, satisfaction of search, expert graphs, and benchmark results

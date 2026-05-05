@@ -19,6 +19,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
 - [[damian-galarza]] — Multi-agent system operator and author of the three-part agent quality series (evals, observability, quality loop).
 - [[dex-horthy]] — Creator of "12 Factor Agents," co-creator of [[context-engineering]], and advocate for agentic engineering over vibe coding.
+- [[peter-werry]] — Founder of Unblocked; context engine architecture, satisfaction of search, and hard lessons building organizational context retrieval.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum technique for autonomous agent loops.
 - [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
@@ -58,6 +59,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
 - [[multi-tier-action-space]] — The thin tool layer + computer architecture converged on by Claude Code, Manis, AMP, and Deep Agents.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
+- [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
 - [[plan-vs-review]] — The quantified tradeoff: 5 minutes of planning saves 30 minutes of reviewing AI-generated code.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
@@ -87,4 +89,5 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
 - [[slop-watch]] — Self-hosted coding agent observability platform; sessions, tokens, traces, and quality metrics for agent-driven teams.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
+- [[unblocked]] — Context engine for engineering organizations; pre-curates organizational context for AI coding agents.
 

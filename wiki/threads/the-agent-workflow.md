@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-03
+updated: 2026-05-04
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -19,6 +19,7 @@ sources:
   - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md"
   - raw/yt-slop-watch-ideation.md
+  - "raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md"
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -328,6 +329,8 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[the-human-lever]] — The design authority that underpins the whole workflow
 - [[tool-design-for-agents]] — The tool layer that makes this workflow possible
 - [[agent-friendly-tooling]] — Fast tools keep the AFK execution loop tight and the agent in the Smart Zone
+- [[unblocked]] — A context engine that operationalizes the workflow at organizational scale; pre-curates context to prevent doom loops
+- [[peter-werry]] — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase
 
 ## Sources
 
@@ -347,4 +350,5 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Context engineering definition, model switching strategy, fast orchestrator + smart oracle pattern, personal productivity systems.
 - `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Multi-tier action space architecture, evolving context categories, MCP lesson, context management techniques catalog, Ralph Loop context isolation framing.
 - `raw/yt-slop-watch-ideation.md` — Research phase workflow: parallel sub-agents, domain modeling, trusted vs. untrusted AI artifacts, the "bored of talking" signal.
+- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase; benchmark data showing 10× improvement in wall-clock time.
 

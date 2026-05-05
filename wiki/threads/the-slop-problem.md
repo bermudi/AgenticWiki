@@ -189,6 +189,7 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - [[the-agent-workflow]] — The operational practices that keep agent output high-quality.
 - [[tool-design-for-agents]] — Tool feedback as the mechanical defense against quality degradation.
 - [[deliberate-friction]] — Removing friction as a slop accelerant.
+- [[satisfaction-of-search]] — Satisfaction of search is a cognitive bias that produces slop: agents stop context retrieval too early, generating outputs that are plausible but wrong
 - [[slop-watch]] — The self-hosted observability platform named after, and built to address, this problem.
 - [[fighting-slop-with-slop]] — The controlled use of slop in disposable tooling to produce higher quality where it matters
 - [[strategic-vs-tactical-programming]] — Tactical programming produces slop; strategic programming prevents it.

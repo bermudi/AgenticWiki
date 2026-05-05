@@ -50,6 +50,7 @@ A personal experiment in [[evolving-context|evolving context]]: after each Claud
 - [[multi-tier-action-space]] — The architecture pattern he describes
 - [[evolving-context]] — Continual learning in token space
 - [[dex-horthy]] — Fellow context engineering practitioner; their work on context rot and agent harnesses is complementary
+- [[peter-werry]] — Context engineer whose Unblocked product architecture complements Martin's theoretical framework
 - [[ralph-loop]] — Martin describes the Ralph Wiggum loop as a context isolation pattern for long-running tasks
 - [[claude-code]] — Reference implementation of the thin-tool-layer architecture
 

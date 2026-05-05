@@ -53,6 +53,7 @@ Advocates for snapshot-based evals: run the workflow end-to-end, store the outpu
 - [[agent-quality-engineering]] — His eval philosophy connects here
 - [[matt-pocock]] — Peer in AI-native engineering with a complementary focus
 - [[lance-martin]] — Fellow context engineering practitioner; Martin catalogued the operational techniques and identified the multi-tier action space architecture
+- [[peter-werry]] — Fellow context engineer; Werry's Unblocked productizes context engineering at organizational scale
 - [[multi-tier-action-space]] — The fast orchestrator + smart oracle pattern is a specific instantiation of the thin-tool-layer architecture
 - [[evolving-context]] — Dex's snapshot-based eval approach and model intuition philosophy provide the measurement framework for evolving context experiments
 

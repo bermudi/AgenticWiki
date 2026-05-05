@@ -100,6 +100,7 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - [[backpressure]] — Lack of backpressure produces slop in autonomous loops.
 - [[deliberate-friction]] — Removing deliberate friction accelerates slop production.
 - [[comprehension-debt]] — Slop degrades the human's mental model too: code multiplies, understanding doesn't.
+- [[satisfaction-of-search]] — Satisfaction of search is a precursor to slop: agents stop retrieving context too early, producing plausible-but-wrong output
 - [[slop-watch]] — The observability platform built to measure and combat slop: sessions, traces, DRI review.
 - [[fighting-slop-with-slop]] — Accepting slop in disposable tooling to reduce slop where it matters
 
