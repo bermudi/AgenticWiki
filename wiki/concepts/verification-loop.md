@@ -86,6 +86,7 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[agent-observability]] — Traces as the input to the verification loop: you can only verify what you can see.
 - [[fighting-slop-with-slop]] — The BEEPs workflow uses the verification loop differently: the design doc is the verification target, the tooling is the throwaway means.
 - [[plan-vs-review]] — The verification loop is the review side of the plan-vs-review tradeoff.
+- [[chris-parsons]] — Sub-agent validation with fresh contexts as a concrete verification technique
 
 ## Sources
 

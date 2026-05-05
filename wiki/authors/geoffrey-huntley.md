@@ -1,10 +1,11 @@
 ---
 title: Geoffrey Huntley
 created: 2026-04-26
-updated: 2026-04-26
+updated: 2026-05-04
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
+  - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
 tags: [author, autonomous-agents, ralph-wiggum, claude-code]
 ---
 
@@ -30,17 +31,24 @@ Clayton Farr documented and refined the technique into a full playbook. Huntley 
 
 Huntley's Ralph pattern is the most operationally detailed AFK implementation in the wiki. It grounds the abstract [[afk-agent]] and [[the-agent-workflow|HITL/AFK]] concepts in specific file structures, prompt templates, and bash scripts. His "backpressure beats direction" principle extends [[grey-box-engineering]] from interface design to environmental design.
 
+## Thread
+
+- [[the-agent-workflow]] — His Ralph Loop is the most operationally detailed AFK implementation in the wiki, grounding the HITL/AFK cycle in specific file structures and bash scripts
+- [[the-slop-problem]] — His "backpressure beats direction" principle is the primary slop defense mechanism in autonomous loops
+- [[tool-design-for-agents]] — The Ralph Loop design (plan file as shared state, AGENTS.md as interface) is a canonical example of designing tools for agentic consumption
+
 ## Related
 
-- `raw/ralph-wiggum-playbook.md` — The paddo.dev summary documenting his technique
 - [[afk-agent]] — The concept Ralph instantiates
 - [[the-agent-workflow]] — How Ralph fits the HITL/AFK loop
 - [[claude-code]] — The agent CLI Ralph wraps
 - [[ralph-loop]] — Originator of the Ralph Wiggum technique
 - [[backpressure]] — Originated "backpressure beats direction" principle
 - [[plan-disposability]] — Originated the plan disposability principle
+- [[chris-parsons]] — Independently extended the pattern into skills, worker loops, and sub-agent validation
 
 ## Sources
 
 - `raw/how-to-ralph-wiggum.md` — Huntley's fork of the Ralph Wiggum playbook
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary
+- `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons cites Huntley as originator of the technique

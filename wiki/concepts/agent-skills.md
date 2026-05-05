@@ -9,7 +9,7 @@ tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 
 # Agent Skills
 
-> A skill is a `skill.md` file in a folder that teaches an AI agent procedural knowledge — how to execute specific workflows, tasks, or jobs. Skills use progressive disclosure (metadata → instructions → resources) to stay context-efficient, and the format is an open standard (Apache 2.0) adopted across Claude Code, OpenAI Codex, and other major platforms.
+> A skill is a `skill.md` file in a folder that teaches an AI agent procedural knowledge — how to execute specific workflows, tasks, or jobs. Skills use progressive disclosure (metadata → instructions → resources) to stay context-efficient, and the format is an open standard (Apache 2.0) adopted across [[claude-code|Claude Code]], OpenAI Codex, and other major platforms.
 
 ## The Problem Skills Solve
 
@@ -86,7 +86,7 @@ Agent architectures are starting to mirror this cognitive taxonomy. Skills are p
 
 The `skill.md` format is an open standard published at [agent-skills.io](https://agent-skills.io), licensed under Apache 2.0. It was adopted across major AI platforms including:
 
-- Claude Code
+- [[claude-code|Claude Code]]
 - OpenAI Codex
 - Many other agent tools
 
@@ -107,6 +107,7 @@ Skills can include executable scripts with access to file systems, environment v
 
 - [[tool-design-for-agents]] — Skills are the procedural complement to tool access; MCP provides reach, skills provide judgment
 - [[the-agent-workflow]] — Skills operationalize the "how" of agent execution within the workflow
+- [[the-slop-problem]] — Skills reduce slop by replacing guesswork with defined procedures
 
 ## Related
 
@@ -117,6 +118,8 @@ Skills can include executable scripts with access to file systems, environment v
 - [[malleable-agents]] — Skills being just files means agents can create and modify them, making agents self-extending
 - [[multi-tier-action-space]] — Skills live on the file system tier, loaded on demand into the tool tier
 - [[hallucination]] — Skills reduce hallucination by replacing guesswork with defined procedures
+- [[ralph-loop]] — [[chris-parsons|Chris Parsons]] packages Ralph loops as skills: the skill provides the procedural knowledge, the loop provides the execution infrastructure
+- [[chris-parsons]] — Operationalized Ralph loops as skills with recovery states, git checking, and verification rules
 
 ## Sources
 

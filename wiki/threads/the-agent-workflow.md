@@ -267,6 +267,18 @@ During QA, he reviews **outputs** (does the feature work?), not code. Bugs are f
 
 The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requirements) is HITL, Phase 2 (Planning) is automated gap analysis, Phase 3 (Building) is AFK with backpressure.
 
+### Parsons' Evolution: From Dumb Loop to Skill-Driven Worker
+
+[[chris-parsons|Chris Parsons]] traced the Ralph Loop through three stages (building on Huntley's original and Pocock's ticket-picking evolution) and operationalized it as a [[agent-skills|skill]] — a version-controlled `skill.md` file containing recovery states, verification rules, and role definitions. His contributions extend the operational scope of the AFK phase:
+
+- **Skills as the loop package**: The Ralph loop becomes a skill. The [[agent-skills|skill]] provides the procedural knowledge; the loop provides the execution infrastructure. Skills are evolved via post-session reflection ("update the skill with anything you learned").
+- **Worker loop**: A skill that picks the next step on active projects from a vault of Markdown files. Each project has front matter context, decision trails, and status — the loop updates the project file as it works. This operationalizes [[evolving-context|evolving context]] in practice: the vault is both knowledge base and coordination state.
+- **Sub-agent validation**: Same-context validation suffers from confirmation bias. Using fresh sub-agents for verification catches real issues — mirroring the [[delegate-52]] insight that editing and verification must be separate sessions.
+- **Two modes**: Fully automatic (trusted specs + deterministic feedback) vs collaborative (Claude as thinking partner loading project files). This refines the HITL/AFK split into a spectrum.
+- **"Reversible without embarrassment"**: Safety heuristic that operationalizes [[deliberate-friction]] for autonomous operation boundaries.
+
+See [[chris-parsons]] for full details, and [[ralph-loop#Chris Parsons' Evolution of the Pattern]] for the complete mechanism.
+
 ## The Adoption Learning Curve
 
 [[armin-ronacher|Armin Ronacher]]'s interviews with ~30 engineering teams reveal a consistent pattern: agent adoption follows a 2-3 week learning curve that can't be mandated from above. Teams that adopted during vacation periods (summer, Thanksgiving, Christmas) developed genuine proficiency. Mandates ("you must use Cursor") didn't stick. The honeymoon period lasts ~2 months before engineers start feeling the complexity they introduced. This suggests patience rather than urgency in adoption strategy.
@@ -324,6 +336,7 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[grey-box-engineering]] — The core HITL/AFK handoff pattern that structures the workflow
 - [[agent-skills]] — Skills operationalize the "how" of agent execution; the skill.md format is the mechanism for reusable procedural knowledge within the workflow
 - [[procedural-knowledge]] — The knowledge type that skills implement; understanding the semantic/episodic/procedural triad informs workflow design
+- [[chris-parsons]] — Operationalized Ralph Loops as skills; introduced the worker loop pattern and sub-agent validation as a workflow refinement
 
 ## Related
 
@@ -351,4 +364,5 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Multi-tier action space architecture, evolving context categories, MCP lesson, context management techniques catalog, Ralph Loop context isolation framing.
 - `raw/yt-slop-watch-ideation.md` — Research phase workflow: parallel sub-agents, domain modeling, trusted vs. untrusted AI artifacts, the "bored of talking" signal.
 - `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase; benchmark data showing 10× improvement in wall-clock time.
+- `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: skills-as-loop-package, worker loop, sub-agent validation, two-mode work model, safety heuristics
 

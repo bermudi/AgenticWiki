@@ -79,6 +79,7 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 - [[lance-martin]] — Claude Diary, skill learning experiments, and the three-category breakdown
 - [[dex-horthy]] — His snapshot-based eval approach and model intuition philosophy are complementary: evals measure whether evolution is helping
 - [[ralph-loop]] — The plan file is a primitive form of evolving context — it's modified by each iteration and read by the next
+- [[chris-parsons]] — Worker loop skills evolved via post-session reflection; skill learning as evolving context in practice
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: Multi-Tier Action Space
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
 tags: [concept, architecture, context-engineering, agents, tool-design]
@@ -83,6 +83,7 @@ The file system also has collaboration limits: last-write-wins semantics don't s
 - [[ralph-loop]] — An application of context isolation for long-running serial tasks
 - [[lance-martin]] — Described and catalogued this architecture
 - [[dex-horthy]] — The fast orchestrator + smart oracle pattern is a specific multi-tier instantiation
+- [[agent-skills]] — Skills live on the file system tier, loaded on demand into the tool tier
 
 ## Sources
 

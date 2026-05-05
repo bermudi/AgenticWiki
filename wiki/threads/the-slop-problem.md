@@ -194,6 +194,9 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - [[fighting-slop-with-slop]] — The controlled use of slop in disposable tooling to produce higher quality where it matters
 - [[strategic-vs-tactical-programming]] — Tactical programming produces slop; strategic programming prevents it.
 - [[plan-vs-review]] — The 50%+ design time observed in the BEEPs workflow is empirical support for the plan-heavy end of this axis.
+- [[chris-parsons]] — Operationalized Ralph Loops as skills; the worker loop and sub-agent validation as slop defenses
+- [[geoffrey-huntley]] — Originator of the Ralph Wiggum loop; identified backpressure as the primary slop defense in autonomous loops
+- [[agent-skills]] — Skills reduce slop by replacing guesswork with defined procedures
 
 ## Sources
 

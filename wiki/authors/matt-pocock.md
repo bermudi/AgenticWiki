@@ -1,7 +1,7 @@
 ---
 title: Matt Pocock
 created: 2026-04-24
-updated: 2026-05-03
+updated: 2026-05-04
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/yt-slop-watch-ideation.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
@@ -44,6 +44,7 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[locality-and-leverage]] — Defined locality and leverage as the goals of deepening.
 - [[slop-watch]] — His real-time-streamed ideation process: parallel research via sub-agents, DDD-driven ubiquitous language definition, per-session listener architecture.
 - [[vibes-based-engineering]] — Identifies specs-to-code as "vibe coding by another name"; each recompilation degrades code quality.
+- [[chris-parsons]] — Extended Ralph loops into skills and ticket-based loops; converges on plan-heavy workflow philosophy
 
 ## Sources
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop, software entropy, outrunning headlights, Grill Me skill

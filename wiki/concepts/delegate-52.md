@@ -1,7 +1,7 @@
 ---
 title: DELEGATE-52
 created: 2026-05-02
-updated: 2026-05-03
+updated: 2026-05-04
 sources:
   - raw/2604.15597v1.pdf
 tags: [benchmark, eval, agents, delegation, long-horizon]
@@ -63,6 +63,9 @@ Key results: Python is the **only domain** (out of 52) where most models (17 of 
 - [[deliberate-friction]] — The compounding degradation supports preserving friction at delegation boundaries
 - [[verification-loop]] — Evidence that current tool-based verification is insufficient for long delegation
 - [[vibes-based-engineering]] — DELEGATE-52 quantifies the failure mode of accepting outputs that look correct per step
+- [[chris-parsons]] — Sub-agent validation mirrors DELEGATE-52's finding that separate verification sessions are more reliable
+- [[ralph-loop]] — Fresh-context-per-iteration is a practical response to same-context degradation
+- [[the-agent-workflow]] — DELEGATE-52's findings on long-horizon degradation inform the HITL/AFK handoff
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Full benchmark design, domain list, work environment construction, and evaluation protocol

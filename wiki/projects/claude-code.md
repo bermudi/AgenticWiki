@@ -1,7 +1,7 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-04
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"]
 tags: [tool, ai, agent, anthropic]
 ---
@@ -51,6 +51,7 @@ This experience directly motivated Mario to build [[pi]], founded on the princip
 - [[context-engineering]] — Claude Code's sub-agent spawning and context isolation are operational context engineering techniques
 - [[multi-tier-action-space]] — Claude Code is one of the four independent implementations (with Manis, AMP, Deep Agents) that converged on the thin-tool-layer + computer architecture
 - [[slop-watch]] — Claude Code is Slop Watch's first adapter target; hook surface and JSONL output as the primary ingestion path.
+- [[chris-parsons]] — Runs Ralph loops 24/7 through Claude Code; operationalized the worker loop pattern
 
 ## Sources
 

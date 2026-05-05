@@ -1,7 +1,7 @@
 ---
 title: Deliberate Friction
 created: 2026-04-30
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/2604.15597v1.pdf
@@ -71,6 +71,8 @@ Don't remove friction wholesale to enable agent autonomy. Audit which friction i
 - [[armin-ronacher]] — Primary source for this concept
 - [[pi]] — Mario's auto-close PR workflow as concrete deliberate friction: filtering agent-generated noise from human contributors
 - [[comprehension-debt]] — Teaching mode as deliberate friction: slowing down to build understanding instead of shipping faster
+- [[chris-parsons]] — "Reversible without embarrassment" as an operational instantiation of deliberate friction for safety boundaries
+- [[ralph-loop]] — Fresh-context-per-iteration and plan disposability as deliberate friction against compounding errors
 
 ## Sources
 

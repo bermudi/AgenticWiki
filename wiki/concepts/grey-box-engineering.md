@@ -63,6 +63,7 @@ This is only safe when the interface is testable. The [[verification-loop]] must
 - [[comprehension-debt]] — Grey box requires holding architecture in your head; comprehension debt is what happens when you stop.
 - [[matt-pocock]] — Originator: human owns the interface, agent owns the implementation; the general/sergeant metaphor.
 - [[plan-vs-review]] — Planning defines the grey box boundary; review inspects the contents.
+- [[geoffrey-huntley]] — "Backpressure beats direction" extends grey-box engineering from interface design to environmental design
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

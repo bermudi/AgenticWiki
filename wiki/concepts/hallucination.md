@@ -1,7 +1,7 @@
 ---
 title: Hallucination
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-04
 sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf]
 tags: [llm, reliability, engineering]
 ---
@@ -63,6 +63,7 @@ The corruption is driven by **sparse critical failures** — rare single interac
 - [[document-degradation]] — Silent structural corruption during long delegation workflows
 - [[delegate-52]] — Quantified measurement of corruption across 52 domains
 - [[critical-failure]] — Sparse catastrophic drops as the driver of silent corruption
+- [[agent-skills]] — Skills reduce hallucination by replacing guesswork with defined procedures
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations.

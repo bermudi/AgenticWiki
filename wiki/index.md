@@ -22,6 +22,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## ✍️ Authors
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
+- [[chris-parsons]] — Ex-CTO and AI adoption consultant; operationalized Ralph Loops as skills; introduced the worker loop pattern, sub-agent validation, and the "reversible without embarrassment" safety heuristic.
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
 - [[philippe-laban]] — Researcher at Microsoft Research; lead author of DELEGATE-52 benchmark on LLM document corruption.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.

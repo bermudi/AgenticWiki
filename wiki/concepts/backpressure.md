@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-05-01
+updated: 2026-05-04
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -65,6 +65,7 @@ This is backpressure in the literal sense — the human's testing activity *push
 - [[geoffrey-huntley]] — Originator of the "backpressure beats direction" principle
 - [[ralph-loop]] — The Ralph loop uses backpressure as its primary convergence mechanism
 - [[plan-disposability]] — Backpressure catches bad implementations; plan disposability catches bad plans
+- [[chris-parsons]] — "Reversible without embarrassment" as a practical safety backpressure heuristic
 
 ## Sources
 

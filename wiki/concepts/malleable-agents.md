@@ -1,7 +1,7 @@
 ---
 title: Malleable Agents
 created: 2026-04-25
-updated: 2026-04-30
+updated: 2026-05-04
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
@@ -59,6 +59,7 @@ Examples from practice:
 - [[zanie-blue]] — Advocate for plugins as agent memory and self-tooling.
 - [[astral]] — Tool builder actively adapting for agentic use.
 - [[armin-ronacher]] — Pi contributor and plan-mode experimenter.
+- [[agent-skills]] — Skills being just files means agents can create and modify them, making agents self-extending
 
 ## Sources
 

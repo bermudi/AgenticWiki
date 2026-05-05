@@ -56,6 +56,7 @@ A personal experiment in [[evolving-context|evolving context]]: after each Claud
 - [[peter-werry]] — Context engineer whose Unblocked product architecture complements Martin's theoretical framework
 - [[ralph-loop]] — Martin describes the Ralph Wiggum loop as a context isolation pattern for long-running tasks
 - [[claude-code]] — Reference implementation of the thin-tool-layer architecture
+- [[chris-parsons]] — Independently operationalized Ralph loops; sub-agent validation mirrors context isolation principles
 
 ## Sources
 

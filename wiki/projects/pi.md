@@ -97,6 +97,7 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 - [[deliberate-friction]] — Mario's auto-close workflow as deliberate friction against agent PR floods.
 - [[slop-watch]] — Slop Watch would observe Pi sessions too; Pi's extension/skill API is one of the per-agent adapter targets.
 - [[fighting-slop-with-slop]] — Mario's practice of accepting slop in Pi's HTML export is a case study of the fighting-slop-with-slop principle.
+- [[agent-skills]] — Pi's skill system follows the skill.md pattern; malleable agents create and modify skills mid-session
 
 ## Sources
 

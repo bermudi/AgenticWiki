@@ -170,6 +170,9 @@ The context engine layer interacts with the other four layers:
 - [[agent-observability]] — Agent observability is a tool design concern: listener/sidecar pattern, per-agent adapters, and hook surfaces determined by tool output interfaces.
 - [[slop-watch]] — Slop Watch's per-agent listener architecture is tool design for agent observability in practice.
 - [[peter-werry]] — Context engine architecture as a meta-tool design pattern
+- [[chris-parsons]] — Packaged Ralph loops as skills; the skill.md format as a minimal tool contract pattern
+- [[geoffrey-huntley]] — Originator of the Ralph Wiggum loop; plan-file-as-shared-state as minimal tool design
+- [[ralph-loop]] — Canonical example of minimal tool contracts and the loop pattern
 
 ## Sources
 
