@@ -155,6 +155,8 @@ The context engine layer interacts with the other four layers:
 - [[slop]] — Poor tool design → unverified output → slop
 - [[vibes-based-engineering]] — Absence of structured tool feedback enables vibes-based acceptance of outputs
 - [[satisfaction-of-search]] — The cognitive bias that context engines are designed to mitigate — agents stopping context retrieval too early
+- [[agent-skills]] — The skill.md format is the practical embodiment of minimal tool contracts; skills are loaded on demand, keeping the tool layer thin
+- [[procedural-knowledge]] — How-to knowledge (skills) is the complement to tool access (MCP) in the tooling stack
 - [[unblocked]] — A productized context engine architecture
 
 ## Related

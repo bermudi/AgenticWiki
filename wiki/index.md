@@ -1,3 +1,11 @@
+---
+title: Index
+created: 2026-04-25
+updated: 2026-05-04
+sources: []
+tags: [index, wiki]
+---
+
 # Index
 
 > A repository of software engineering wisdom and AI-native development patterns.
@@ -57,8 +65,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
+- [[agent-skills]] — Procedural knowledge for AI agents via skill.md files, progressive disclosure, and the open standard adopted across major platforms.
 - [[multi-tier-action-space]] — The thin tool layer + computer architecture converged on by Claude Code, Manis, AMP, and Deep Agents.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
+- [[procedural-knowledge]] — The cognitive science framing of procedural memory mapped to agent skill files; distinct from semantic (RAG) and episodic (conversation logs) knowledge.
 - [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
 - [[plan-vs-review]] — The quantified tradeoff: 5 minutes of planning saves 30 minutes of reviewing AI-generated code.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.

@@ -1,9 +1,10 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
+  - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
 tags: [concept, context-engineering, agents, memory, continual-learning]
 ---
 
@@ -28,7 +29,7 @@ Agents reflect over their own trajectories (what they did, what worked, what did
 Agents accumulate memories and preferences across sessions — things like coding style conventions, PR review preferences, and other durable patterns. Martin's **Claude Diary** is a crude but functional example: after each session, a plugin summarizes key decisions and preferences into a diary entry file. A reflection loop periodically reads all diary entries and proposes updates to CLAUDE.md (the agent's system prompt). The human can review and edit the proposed updates — a key advantage of token-space learning over weight-space.
 
 ### 3. Skill learning
-When an agent discovers a reusable standard operating procedure — a sequence of steps that solves a recurring problem — it should capture that as a skill file. The **Let paper** describes this: reflect over agent trajectories, identify patterns that look like SOPs, save them as skills to the file system. The skill is then available for future tasks via progressive disclosure.
+When an agent discovers a reusable standard operating procedure — a sequence of steps that solves a recurring problem — it should capture that as a skill file. This is the practical mechanism for agents to accumulate [[procedural-knowledge|procedural knowledge]]. The **Let paper** describes this: reflect over agent trajectories, identify patterns that look like SOPs, save them as skills to the file system. The skill is then available for future tasks via progressive disclosure.
 
 ## The Classifier Heuristic
 
@@ -68,12 +69,12 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 
 ## Thread
 
-- [[context-engineering]] — Evolving context is context engineering applied over time: curating the agent's persistent context, not just its per-session context
 - [[the-agent-workflow]] — Evolving context closes the loop between agent sessions, making the workflow improve with use
 
 ## Related
 
-- [[context-engineering]] — The practice that evolving context extends into the temporal dimension
+- [[context-engineering]] — Evolving context is context engineering applied over time: curating the agent's persistent context, not just its per-session context
+- [[agent-skills]] — Skill learning is a category of evolving context; the skill.md format is the practical mechanism for agents to capture and reuse procedural knowledge
 - [[multi-tier-action-space]] — Skills and memories live on the file system; the computer tier hosts evolving context
 - [[lance-martin]] — Claude Diary, skill learning experiments, and the three-category breakdown
 - [[dex-horthy]] — His snapshot-based eval approach and model intuition philosophy are complementary: evals measure whether evolution is helping
@@ -82,3 +83,4 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 ## Sources
 
 - `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Full interview detailing the three categories of evolving context, RLM, the classifier heuristic, and the token-space vs. weight-space tradeoff
+- `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video on the skill.md open standard, validating and extending the skill learning category of evolving context

@@ -113,13 +113,14 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 
 - [[the-agent-workflow]] — Context engineering is the infrastructure layer beneath the agent workflow; managing information-per-token density is the operational skill the workflow depends on
 - [[agent-quality-engineering]] — The eval infrastructure (logging proxies, snapshots) is a context engineering concern
+- [[tool-design-for-agents]] — Tool output design is a context engineering concern; verbose tool output is a primary source of context bloat
 
 ## Related
 
+- [[agent-skills]] — Progressive disclosure is the core context engineering technique that skills implement; skills are the canonical use case for tiered context loading
+- [[procedural-knowledge]] — Context engineering manages how procedural knowledge (skills) is loaded via progressive disclosure
 - [[dex-horthy]] — Co-creator of the term and practice
-- [[tool-design-for-agents]] — Context engineering overlaps with tool design; how tools present context to agents
 - [[smart-zone-dumb-zone]] — Context engineering operationalizes staying in the Smart Zone
-- [[the-agent-workflow]] — Context engineering is the infrastructure layer beneath the workflow
 - [[instruction-severity-inflation]] — Instruction density management is a core context engineering skill
 - [[multi-tier-action-space]] — Context engineering techniques enable the thin-tool-layer architecture
 - [[evolving-context]] — Context engineering extended into the temporal dimension

@@ -322,13 +322,13 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[agent-friendly-tooling]] — Fast, observable, misuse-resistant tools as the operational infrastructure of the workflow
 - [[deep-vs-shallow-modules]] — Deep modules as context boundaries and delegation units within the workflow
 - [[grey-box-engineering]] — The core HITL/AFK handoff pattern that structures the workflow
+- [[agent-skills]] — Skills operationalize the "how" of agent execution; the skill.md format is the mechanism for reusable procedural knowledge within the workflow
+- [[procedural-knowledge]] — The knowledge type that skills implement; understanding the semantic/episodic/procedural triad informs workflow design
 
 ## Related
 
 - [[the-slop-problem]] — What happens when you skip the planning phase
 - [[the-human-lever]] — The design authority that underpins the whole workflow
-- [[tool-design-for-agents]] — The tool layer that makes this workflow possible
-- [[agent-friendly-tooling]] — Fast tools keep the AFK execution loop tight and the agent in the Smart Zone
 - [[unblocked]] — A context engine that operationalizes the workflow at organizational scale; pre-curates context to prevent doom loops
 - [[peter-werry]] — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase
 

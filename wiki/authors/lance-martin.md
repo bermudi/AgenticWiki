@@ -1,9 +1,10 @@
 ---
 title: Lance Martin
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-04
 sources:
   - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
+  - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
 tags: [author, context-engineering, agents, langchain]
 ---
 
@@ -25,6 +26,8 @@ Martin identified the architectural convergence across Claude Code, Manis, AMP, 
 ### Skill system
 Martin built the skill system for Deep Agents, which embodies the [[context-engineering]] principle of progressive disclosure. Skills live as markdown files on the file system — standard operating procedures for using CLIs, writing code for specific tasks, or following domain-specific conventions (e.g., a writing skill based on Strunk & White's Elements of Style). Agents pull skills into context only when needed, rather than carrying them permanently.
 
+Separately, the `skill.md` format has since become an **open standard** (Apache 2.0, published at agent-skills.io), adopted by Claude Code, OpenAI Codex, and other major platforms. While Martin's skill system for Deep Agents was one independent implementation of the file-based skill pattern, the standard evolved in parallel and is not directly descended from his work.
+
 ### Claude Diary
 A personal experiment in [[evolving-context|evolving context]]: after each Claude Code session, a plugin creates a diary entry summarizing preferences, decisions, and learnings. A reflection loop periodically reviews accumulated diary entries and updates the agent's CLAUDE.md (system prompt). Crude but effective — it surfaces things like PR review preferences that would otherwise be lost between sessions.
 
@@ -42,11 +45,11 @@ A personal experiment in [[evolving-context|evolving context]]: after each Claud
 ## Thread
 
 - [[the-agent-workflow]] — Martin's architecture patterns and context management techniques are the operational layer of the workflow
-- [[context-engineering]] — Core contributor to the practice
 
 ## Related
 
-- [[context-engineering]] — The practice Martin helps define
+- [[context-engineering]] — Core contributor to the practice; catalogued the operational techniques
+- [[agent-skills]] — Martin's skill system for Deep Agents is an independent implementation of file-based skills, conceptually aligned with the skill.md open standard
 - [[multi-tier-action-space]] — The architecture pattern he describes
 - [[evolving-context]] — Continual learning in token space
 - [[dex-horthy]] — Fellow context engineering practitioner; their work on context rot and agent harnesses is complementary
@@ -57,3 +60,4 @@ A personal experiment in [[evolving-context|evolving context]]: after each Claud
 ## Sources
 
 - `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Full interview covering agent harness architecture, context engineering techniques, evolving context, memory management, and the RLM frontier
+- `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video on the skill.md open standard — the format and progressive disclosure mechanism are conceptually aligned with the skill system Martin built, though the video never mentions his work
