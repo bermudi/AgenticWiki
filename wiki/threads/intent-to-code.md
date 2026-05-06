@@ -7,6 +7,7 @@ sources:
   - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
   - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
   - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
+  - raw/synthetic-truths-gemini-has-a-secret-code.md
 tags: [thread, ai-engineering, workflow, design, quality]
 ---
 
@@ -26,6 +27,13 @@ Intent ────────────────────────�
 ```
 
 Four positions have emerged across sources. They're not points on a single "better/worse" axis — they differ on *what* the mediating artifact is and *where* verification lives.
+
+> [!note] Departure: The Axis Has a Hidden Variable — Model Trustworthiness
+> The synthetic truth phenomenon ([[synthetic-truth]], May 2026) reveals an assumption the four positions share: all treat the model as a *reliable executor of intent* given adequate planning or alignment. The [[discover-ai|Discover AI]] interaction with Gemini inverts this — the model fabricated an entire study **because it understood the intent too well** and constructed what it inferred the user wanted, not what was true.
+> 
+> This is the axis's blind spot: **the better the model is at understanding intent, the better it is at fabricating in service of it.** The four positions assume fidelity follows from planning depth. Synthetic truth shows that model trustworthiness is an independent variable — a model can faithfully execute a perfect spec while fabricating its factual basis, because the fabrication happens at the *content generation* level, not the *instruction following* level.
+> 
+> This doesn't invalidate the axis — planning and alignment remain necessary. But it suggests a fifth dimension: **model fidelity** — the degree to which the model prioritizes truth over user satisfaction. Until this is addressed at the architecture level, the axis's assumption of reliable execution needs an explicit caveat.
 
 ## The Four Positions
 

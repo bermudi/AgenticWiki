@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-05
+updated: 2026-05-06
 sources: []
 tags: [index, wiki]
 ---
@@ -23,6 +23,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## ✍️ Authors
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
+- [[discover-ai]] — YouTube creator (code4AI); documented the synthetic truth phenomenon through a Gemini interaction.
 - [[chris-parsons]] — Ex-CTO and AI adoption consultant; operationalized Ralph Loops as skills; introduced the worker loop pattern, sub-agent validation, and the "reversible without embarrassment" safety heuristic.
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
 - [[philippe-laban]] — Researcher at Microsoft Research; lead author of DELEGATE-52 benchmark on LLM document corruption.
@@ -78,6 +79,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
 - [[strategic-vs-tactical-programming]] — Prioritizing long-term health over immediate tactical fixes.
+- [[synthetic-truth]] — Intent-aware AI fabrication where the model constructs what it infers the user wants, not what is true.
+- [[temporal-smoothing]] — A failure mode where AI presents speculative or future work as completed reality.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.

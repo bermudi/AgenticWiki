@@ -8,6 +8,7 @@ sources:
   - raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md
   - raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md
   - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
+  - raw/synthetic-truths-gemini-has-a-secret-code.md
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
 
@@ -30,6 +31,14 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 1. **High-Fidelity Context**: Using [[code-intelligence]] to feed the LLM accurate symbol information.
 2. **Deterministic Verification**: Building a [[verification-loop]] into the AI workflow.
 3. **Structured Reasoning**: Forcing the AI (and the human) to reason about the system's architecture before writing code.
+
+## Case Study: Synthetic Truth
+
+The [[discover-ai|Discover AI]] interaction with Gemini (May 2026) is a definitive case study of why vibes-based engineering is dangerous — applied to *information* rather than *code*. The creator asked for a peer-reviewed psychology article about AI. Gemini returned a complete, authoritative, perfectly formatted study that didn't exist. The only thing that prevented disaster was the creator's deliberate verification.
+
+As the creator puts it, the AI "succeeded perfectly, almost 99%" — it was authoritative, satisfying, and would have been accepted without the "nagging thought" to verify. The fabricated study was structurally coherent, cited a real grant and real researchers, and was accompanied by a convincing critique. This is vibes-based acceptance at its most seductive — not merely a plausible function signature, but an entire academic argument that is rhetorically flawless and factually empty.
+
+The case reinforces the core argument: verification is not just about tests and linters. It extends to **source-level fact-checking** — checking whether the cited sources exist, whether the timeline is consistent, whether the authority structures are real. See [[synthetic-truth]] and [[temporal-smoothing]].
 
 ## Thread
 - [[the-slop-problem]] — Vibes-based engineering as the root cause of slop
@@ -60,13 +69,17 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[comprehension-debt]] — The cognitive cost of vibes-based engineering: delegation mode scores below 40% on comprehension
 - [[matt-pocock]] — Specs-to-code as vibe coding by another name; each recompilation degrades code quality. Note: Pocock's critique is specific to specs-as-compilation-target, not planning in general — his own workflow produces a PRD.
 - [[plan-vs-review]] — Review-heavy without structure is vibes-based engineering; plan-heavy is the structured alternative.
+- [[synthetic-truth]] — Synthetic truth as the definitive case study of why vibes-based acceptance is dangerous: the output was structurally perfect and entirely fabricated
+- [[temporal-smoothing]] — Temporal smoothing exploits the same verification gap as vibe coding: it looks correct unless you check the timeline
 
 > [!note] Departure: Specs-to-Code ≠ Plan-Heavy
 > [[matt-pocock|Matt Pocock]]'s critique of specs-to-code is specific: it's about treating the spec as a **compilation target** where the code is never read — if something breaks, fix the spec and recompile. This is distinct from [[plan-vs-review|plan-heavy]], which also produces specs but treats code as the battleground. See [[intent-to-code]] for the full axis.
 
 ## Sources
 
-- `raw/yt-no-vibes-allowed-dex-horthy.md`
+- `raw/yt-no-vibes-allowed-dex-horthy.md` — Origin of the "No Vibes" term; definition of vibes-based engineering as an anti-pattern.
 - `raw/2604.15597v1.pdf` — Single-step myopia: documents can lose 25–50% of semantic content over 20 interactions even when each step looks correct.
 - `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Delegation mode scores below 40% on comprehension; cognitive cost of vibes-based engineering.
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
+- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Practical workflow that contrasts with and replaces vibes-based engineering.
+- `raw/synthetic-truths-gemini-has-a-secret-code.md` — Case study: synthetic truth as vibes-based acceptance applied to information; the definitive example of why verification matters.

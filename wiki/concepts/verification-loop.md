@@ -89,6 +89,8 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[plan-vs-review]] — The verification loop is the review side of the plan-vs-review tradeoff.
 - [[chris-parsons]] — Sub-agent validation with fresh contexts as a concrete verification technique
 - [[doc-rot]] — Verification loops make stale documentation visible; tests are the living specification that replaces rotted docs
+- [[synthetic-truth]] — Synthetic truth bypasses standard verification loops because its errors are temporal, not factual
+- [[temporal-smoothing]] — Temporal smoothing is invisible to static verification; requires timeline-aware checks
 
 ## Sources
 
