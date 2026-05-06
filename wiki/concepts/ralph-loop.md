@@ -1,12 +1,13 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-05-04
+updated: 2026-05-05
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
+  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
 tags: [concept, autonomous-agents, agent-loops, claude-code, workflow, skills]
 ---
 
@@ -133,18 +134,19 @@ Parsons' operational philosophy: all knowledge work cadences are loops.
 - **Worker loop** (continuous): pick next step on active projects
 - **Startup skill loop** (experimental): runs an entire startup framework as a loop
 
-## Matt Pocock's Issue-Based Variant
+## Matt Pocock's Sandcastle: The Parallel Variant
 
-[[matt-pocock|Matt Pocock]] uses a Docker-based variant (provisionally named "Sandcastle") that replaces the plan file with **GitHub issues as the task queue**. Instead of `IMPLEMENTATION_PLAN.md`, the agent pulls open GitHub issues, picks one, implements it, commits with a descriptive message, and closes the issue. Each iteration closes issues until none remain.
+[[matt-pocock|Matt Pocock]] evolved the sequential Ralph Loop into [[sandcastle|Sandcastle]], a TypeScript library that parallelizes issue execution across multiple Docker-sandboxed agents. Key differences from Huntley's original and Chris Parsons' ticket-based loops:
 
-Key differences from Huntley's original:
-- **Issues as plan**: GitHub issues replace the plan file. Blocked-by relationships encode execution order.
-- **PRD as parent issue**: The PRD lives as a GitHub issue, with child issues linking to it.
-- **PRD-to-Issues as a skill**: A separate skill decomposes the PRD into issues while the PRD is still in context — token-efficient since the agent doesn't need to re-read the PRD.
-- **QA feedback as issues**: Matt files bugs and feature requests as GitHub issues during QA, which the next Ralph iteration picks up.
-- **Human-in-the-loop labels**: Issues labeled "AFK" are agent-pickable; human-labeled issues are skipped.
+- **Kanban DAG replaces sequential picking**: Issues have blocking relationships forming a directed acyclic graph. A **planner agent** identifies which issues can run in parallel and dispatches them simultaneously.
+- **Four-stage pipeline**: Planner → Implementer (parallel) → Reviewer (parallel) → Merger. Each stage runs with fresh context.
+- **Separate reviewer agents**: Each implementation branch gets its own reviewer (often using a stronger model like Opus for what Sonnet implemented). This is sub-agent validation at the pipeline level.
+- **Per-issue Docker sandboxes**: Each implementer runs in its own Docker container. Commits are extracted as patches, reviewed, then merged.
+- **Push vs Pull for instructions**: Implementers pull skills on demand (lean context); reviewers get coding standards pushed (all rules up front).
+- **PRD as parent issue**: The PRD lives as a GitHub issue, with child issues linking to it. PRD-to-Issues is a skill — token-efficient since the agent doesn't re-read the PRD.
+- **QA feedback as issues**: Matt files bugs as GitHub issues during QA, which feed back into the next cycle.
 
-Matt explicitly merges issues that are too small to avoid the overhead of spinning up a full agent session for trivial changes.
+The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sandcastle's multi-agent pipeline preserves the core principle — fresh context per task — while adding parallelism and structured review gates.
 
 ### Limitations
 

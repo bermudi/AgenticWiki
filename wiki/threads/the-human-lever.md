@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-05-04
+updated: 2026-05-05
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -17,12 +17,16 @@ sources:
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
   - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
   - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
+  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
 # The Human Lever
 
 > The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces. This is the core discipline that makes AI-assisted engineering work without degenerating into [[the-slop-problem|slop]].
+
+> [!note] Departure: Where to Apply the Lever
+> Sources disagree on where the human lever should be applied most forcefully. The [[plan-vs-review|plan-heavy]] camp says: invest leverage in **spec precision**. [[matt-pocock|Pocock]] says: invest leverage in **QA** — grilling aligns you, the PRD is a hint, quality enforcement happens against reality. See [[intent-to-code]] for the full fork.
 
 ## Thesis
 
@@ -205,6 +209,8 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[vibes-based-engineering]] — The anti-pattern the human lever replaces: abdication of design authority
 - [[slop]] — Slop accumulates when humans abdicate design authority
 - [[fighting-slop-with-slop]] — The controlled use of slop in disposable tooling to amplify human design authority
+- [[doc-rot]] — Stale documentation as an abdication of human leverage; the human must prune stale context that agents cannot detect
+- [[intent-to-code]] — The thread that traces the fork: plan-as-contract vs. alignment-first; both are human lever applications, differing on where to aim
 
 ## Related
 

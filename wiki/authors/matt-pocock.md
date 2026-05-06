@@ -1,8 +1,8 @@
 ---
 title: Matt Pocock
 created: 2026-04-24
-updated: 2026-05-04
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/yt-slop-watch-ideation.md"]
+updated: 2026-05-05
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/yt-slop-watch-ideation.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
@@ -28,6 +28,8 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[ai-design-loop]] — The Grill Me skill and Destination/Journey design process.
 - [[shared-design-concept]] — Making the "theory of the code" explicit for AI participation.
 - [[verification-loop]] — TDD and "outrunning your headlights" as verification discipline.
+- [[doc-rot]] — Completed PRDs become stale and mislead future agents; delete or mark as closed.
+- [[sandcastle]] — TypeScript library for parallel AFK agent loops in Docker sandboxes.
 
 ## Related
 
@@ -45,6 +47,8 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[slop-watch]] — His real-time-streamed ideation process: parallel research via sub-agents, DDD-driven ubiquitous language definition, per-session listener architecture.
 - [[vibes-based-engineering]] — Identifies specs-to-code as "vibe coding by another name"; each recompilation degrades code quality.
 - [[chris-parsons]] — Extended Ralph loops into skills and ticket-based loops; converges on plan-heavy workflow philosophy
+- [[sandcastle]] — His parallel AFK agent orchestration library (planner/implementer/reviewer/merger pipeline)
+- [[doc-rot]] — Primary advocate for deleting completed PRDs to prevent stale documentation from misdirecting agents
 
 ## Sources
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop, software entropy, outrunning headlights, Grill Me skill
@@ -53,3 +57,4 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - `raw/yt-claude-code-feature-build.md` — Ubiquitous language workflow, AFK agents (Ralph), PRD to Issues pipeline
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — The improve-codebase-architecture skill, general/sergeant metaphor, seams/adapters vocabulary.
 - `raw/yt-slop-watch-ideation.md` — Greenfield project ideation: parallel research agents, Grill Me, DDD domain modeling, Slop Watch architecture decisions.
+- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Full end-to-end workshop: Grill Me → PRD → Kanban DAG → Sandcastle parallel AFK loops → QA; doc rot, push vs pull agent instructions, AI defaults to shallow modules.

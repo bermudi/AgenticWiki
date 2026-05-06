@@ -40,6 +40,7 @@ This is only safe when the interface is testable. The [[verification-loop]] must
 ## Thread
 - [[the-human-lever]] — Grey box engineering as the core discipline of the human shift
 - [[the-agent-workflow]] — Operationalizing the HITL/AFK handoff
+- [[intent-to-code]] — Both plan-as-contract and alignment-first are expressions of grey box engineering, applied differently
 
 ## Related
 

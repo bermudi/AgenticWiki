@@ -1,8 +1,8 @@
 ---
 title: Deep vs. Shallow Modules
 created: 2026-04-24
-updated: 2026-05-03
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
+updated: 2026-05-05
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
 tags: ["software-architecture", "clean-code"]
 ---
 
@@ -28,6 +28,9 @@ In a [[grey-box-engineering]] workflow, the human owns the interface and the age
 
 [[matt-pocock|Matt Pocock]] visualizes the contrast as two diagrams: a shallow codebase is a scattering of many tiny blobs the AI must navigate — often struggling to find the right module in time or understand all dependencies. The same code restructured into deep modules becomes a small number of clearly bounded boxes with simple interfaces on top. The AI can work inside one box without needing to understand the others.
 
+> [!warning] AI Defaults to Shallow
+> Left unchecked, AI agents tend to produce **shallow modules** — lots of tiny files with tangled dependencies. Matt warns: "if you don't watch AI carefully, it's going to produce a codebase that looks like this." The AI has no instinct for module depth; it defaults to whatever is easiest to generate. The human must actively enforce deep module boundaries through interface design, PRD module specifications, and continuous architecture review (the [[improve-codebase-architecture]] skill).
+
 ### Deep Modules are Testable Modules
 A codebase of deep modules is a codebase that rewards TDD. You test at the interface, verify behavior through that interface, and don't need to worry about internals. This is what makes deep modules the ideal unit for [[verification-loop|verification loops]] — the boundary is narrow enough to test comprehensively.
 
@@ -50,3 +53,4 @@ A codebase of deep modules is a codebase that rewards TDD. You test at the inter
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Locality, leverage, seams, and adapters as the vocabulary of module depth.
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Visual contrast (blobs vs. bounded boxes), deep modules as testable modules, AI navigation difficulty in shallow architectures.
+- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Warning that AI defaults to producing shallow modules; deep modules require active human enforcement.

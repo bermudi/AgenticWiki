@@ -1,8 +1,13 @@
 ---
 title: Vibes-Based Engineering
 created: 2026-04-25
-updated: 2026-05-04
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/2604.15597v1.pdf", "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
+updated: 2026-05-05
+sources:
+  - raw/yt-no-vibes-allowed-dex-horthy.md
+  - raw/2604.15597v1.pdf
+  - raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md
+  - raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md
+  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
 
@@ -30,6 +35,7 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[the-slop-problem]] — Vibes-based engineering as the root cause of slop
 - [[the-human-lever]] — The human lever is what replaces vibes with design authority and verification
 - [[tool-design-for-agents]] — Absence of structured tool feedback enables vibes-based acceptance of outputs
+- [[intent-to-code]] — Specs-to-code occupies one position on the intent-to-code axis; plan-heavy and alignment-first are the structured alternatives
 
 ## Related
 
@@ -52,8 +58,11 @@ Proposed by [[dex-horthy]], the "No Vibes" approach replaces guesswork with:
 - [[critical-failure]] — Rare severe errors that pass vibe checks until it's too late
 - [[jagged-frontier]] — Generalizing capabilities across domains is a vibes failure mode
 - [[comprehension-debt]] — The cognitive cost of vibes-based engineering: delegation mode scores below 40% on comprehension
-- [[matt-pocock]] — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
+- [[matt-pocock]] — Specs-to-code as vibe coding by another name; each recompilation degrades code quality. Note: Pocock's critique is specific to specs-as-compilation-target, not planning in general — his own workflow produces a PRD.
 - [[plan-vs-review]] — Review-heavy without structure is vibes-based engineering; plan-heavy is the structured alternative.
+
+> [!note] Departure: Specs-to-Code ≠ Plan-Heavy
+> [[matt-pocock|Matt Pocock]]'s critique of specs-to-code is specific: it's about treating the spec as a **compilation target** where the code is never read — if something breaks, fix the spec and recompile. This is distinct from [[plan-vs-review|plan-heavy]], which also produces specs but treats code as the battleground. See [[intent-to-code]] for the full axis.
 
 ## Sources
 

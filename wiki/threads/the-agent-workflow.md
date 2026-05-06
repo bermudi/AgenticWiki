@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-04
+updated: 2026-05-05
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -16,6 +16,7 @@ sources:
   - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
   - raw/slowing-the-fuck-down.md
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
+  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md"
   - raw/yt-slop-watch-ideation.md
@@ -26,6 +27,9 @@ tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-
 # The Agent Workflow
 
 > How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software. The agent harness architecture has converged on a [[multi-tier-action-space]] pattern (thin tool layer + computer primitive), while [[evolving-context|evolving context]] — agents improving their own prompts, skills, and memories over time — is the major unsolved frontier.
+
+> [!note] Departure: Where Does Quality Live?
+> This thread's sources disagree on a fundamental question: does quality live in the spec or in QA? [[plan-vs-review|Plan-heavy]] says the spec IS the quality mechanism. [[matt-pocock|Pocock]]'s alignment-first says QA is where quality gets enforced — the PRD is a disposable hint. See [[intent-to-code]] for the full fork in the road.
 
 ## Thesis
 
@@ -337,6 +341,9 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[agent-skills]] — Skills operationalize the "how" of agent execution; the skill.md format is the mechanism for reusable procedural knowledge within the workflow
 - [[procedural-knowledge]] — The knowledge type that skills implement; understanding the semantic/episodic/procedural triad informs workflow design
 - [[chris-parsons]] — Operationalized Ralph Loops as skills; introduced the worker loop pattern and sub-agent validation as a workflow refinement
+- [[doc-rot]] — Stale documentation as a workflow hazard: completed PRDs mislead future agent sessions into following outdated assumptions
+- [[sandcastle]] — Matt Pocock's parallel AFK agent pipeline; operationalizes the AFK implementation phase at scale with Docker sandboxes
+- [[intent-to-code]] — The thread that traces the disagreement: where does quality enforcement live?
 
 ## Related
 

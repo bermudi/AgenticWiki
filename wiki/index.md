@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-04
+updated: 2026-05-05
 sources: []
 tags: [index, wiki]
 ---
@@ -19,6 +19,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
 - [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. Three sources converge on the tool as the bottleneck.
 - [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
+- [[intent-to-code]] — What stands between human intent and shipped code? Four philosophies — specs-as-compiler, plan-as-contract, alignment-first, and pure vibes — disagree on the artifact's weight and where quality enforcement lives.
 
 ## ✍️ Authors
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
@@ -86,6 +87,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
+- [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.
@@ -99,6 +101,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
 - [[slop-watch]] — Self-hosted coding agent observability platform; sessions, tokens, traces, and quality metrics for agent-driven teams.
+- [[sandcastle]] — Matt Pocock's TypeScript library for parallelizing AFK agent loops in Docker sandboxes.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
 - [[unblocked]] — Context engine for engineering organizations; pre-curates organizational context for AI coding agents.
 

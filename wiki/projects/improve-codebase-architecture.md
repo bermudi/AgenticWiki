@@ -1,7 +1,7 @@
 ---
 title: Improve Codebase Architecture
 created: 2026-04-29
-updated: 2026-05-03
+updated: 2026-05-05
 sources:
   - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
 tags: [project, skill, ai-engineering, refactoring, architecture]
@@ -54,6 +54,7 @@ Matt recommends running this skill **every couple of days**, especially in fast-
 - [[ubiquitous-language]] — The grilling phase establishes vocabulary for the implementing agent.
 - [[slop-watch]] — Slop Watch represents the third leg of Matt's quality triage: alignment + architecture awareness + automated review.
 - [[strategic-vs-tactical-programming]] — The skill operationalizes strategic programming as a recurring practice.
+- [[sandcastle]] — The parallel AFK pipeline that implements the GitHub issues this skill produces
 
 ## Thread
 

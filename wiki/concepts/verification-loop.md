@@ -1,7 +1,7 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-05-04
+updated: 2026-05-05
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
@@ -53,6 +53,7 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[the-agent-workflow]] — The verification step in every AFK execution cycle
 - [[tool-design-for-agents]] — Tool feedback is the engine that drives the verification loop
 - [[agent-quality-engineering]] — Evals as the probabilistic verification loop for agentic systems
+- [[intent-to-code]] — The quality mechanism that replaces trust in every position on the intent-to-code axis (except pure vibes)
 
 ## Related
 
@@ -87,6 +88,7 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[fighting-slop-with-slop]] — The BEEPs workflow uses the verification loop differently: the design doc is the verification target, the tooling is the throwaway means.
 - [[plan-vs-review]] — The verification loop is the review side of the plan-vs-review tradeoff.
 - [[chris-parsons]] — Sub-agent validation with fresh contexts as a concrete verification technique
+- [[doc-rot]] — Verification loops make stale documentation visible; tests are the living specification that replaces rotted docs
 
 ## Sources
 

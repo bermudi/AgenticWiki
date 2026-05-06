@@ -1,8 +1,8 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-05-02
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"]
+updated: 2026-05-05
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
 tags: [concept, workflow, agents]
 ---
 
@@ -28,13 +28,14 @@ tags: [concept, workflow, agents]
 
 ## Matt Pocock's "Sandcastle" Setup
 
-[[matt-pocock|Matt Pocock]] uses a Docker-based AFK runner (provisionally named "Sandcastle") that:
-1. Spins up a Docker container mounting the working directory
-2. Runs Claude Code inside the container to implement GitHub issues
-3. Extracts commits made inside Docker as patches
-4. Applies those patches to the local repo
+[[matt-pocock|Matt Pocock]] uses [[sandcastle|Sandcastle]], a TypeScript library for orchestrating parallel AFK agent loops. The pipeline has four stages:
 
-This approach provides isolation (the agent can't break the host environment) while keeping the full codebase available. Task selection is issue-based rather than plan-file-based: the agent pulls open GitHub issues, picks one, implements it, commits, and closes the issue.
+1. **Planner** — reads the issue backlog, identifies which issues can run in parallel based on blocking relationships (Kanban DAG), and selects a batch
+2. **Implementer** (per-issue, parallel) — each selected issue gets its own Docker-sandboxed agent that creates a work tree, implements, and commits
+3. **Reviewer** (per-issue, parallel) — each branch is reviewed by a separate agent; coding standards are pushed to the reviewer context
+4. **Merger** — merges all reviewed branches, resolving any conflicts with types and tests
+
+This is the parallelized evolution of the sequential Ralph Loop: instead of one agent picking the next task, multiple agents work on independent issues simultaneously. The Kanban DAG determines which issues can be parallelized.
 
 ## QA as Parallel Activity
 

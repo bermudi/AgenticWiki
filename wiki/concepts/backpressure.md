@@ -53,6 +53,7 @@ This is backpressure in the literal sense — the human's testing activity *push
 - [[the-slop-problem]] — Backpressure as the primary defense against slop in autonomous mode
 - [[the-human-lever]] — Engineering backpressure as the human's new role
 - [[agent-quality-engineering]] — Quality scores as soft backpressure in the feedback flywheel
+- [[intent-to-code]] — QA-as-backpressure is the alignment-first quality mechanism; spec-precision-as-backpressure is the plan-heavy one
 
 ## Related
 

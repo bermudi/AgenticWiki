@@ -1,11 +1,11 @@
 ---
 title: Plan vs Review
 created: 2026-05-02
-updated: 2026-05-04
+updated: 2026-05-05
 sources:
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
   - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
-tags: [concept, workflow, agent-design, human-in-the-loop]
+tags: [concept, workflow, agent-design, human-in-the-loop, departure]
 ---
 
 # Plan vs Review
@@ -21,6 +21,9 @@ The rise of capable coding agents doesn't eliminate human involvement — it dis
 **Review-heavy** — Give the agent a rough goal and let it iterate. Work through multiple rounds of corrections: style fixes, edge case handling, architectural drift. Benefits: faster start, less planning overhead. Cost: more total human time because review is interrupt-driven and requires context-switching between sessions.
 
 Knight-Webb's heuristic: investing in planning is always preferable because it saves human time — **5 minutes of planning saves 30 minutes of reviewing.** Switching back and forth with a half-finished agent output is more taxing than doing the thinking upfront.
+
+> [!note] Departure: Alignment-First Alternative
+> [[matt-pocock|Matt Pocock]]'s workflow represents a different philosophy: invest in conversational alignment (Grill Me), not document precision. The PRD is a destination hint; QA is where quality lives. See [[intent-to-code]] for the full comparison of plan-as-contract vs. alignment-first.
 
 ## Empirical Support: 50%+ Design Time
 
@@ -55,6 +58,7 @@ The distinction parallels [[grey-box-engineering]]: plan-heavy corresponds to ow
 
 - [[the-agent-workflow]] — The plan-vs-review decision is the first choice in every agent session
 - [[the-human-lever]] — The quantified planning investment is a concrete expression of human design authority
+- [[intent-to-code]] — The plan-as-contract position on the intent-to-code axis; see the thread for the alignment-first alternative
 
 ## Related
 
@@ -72,3 +76,4 @@ The distinction parallels [[grey-box-engineering]]: plan-heavy corresponds to ow
 
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — The full talk establishing the framework, quantified heuristic, and feature type matrix.
 - `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Real-world validation: 50%+ design time at Boundary ML; 4 days of pure design on threading; one-shot implementation enabled by thorough design
+- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Pocock's alignment-first departure: don't review the PRD, QA is where quality lives; the grilling session as planning investment, not document precision

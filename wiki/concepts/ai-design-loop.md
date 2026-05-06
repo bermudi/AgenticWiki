@@ -1,14 +1,17 @@
 ---
 title: AI Design Loop
 created: 2026-04-24
-updated: 2026-05-04
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
+updated: 2026-05-05
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
 tags: ["ai-workflow", "software-design"]
 ---
 
 # The AI Design Loop
 
 > The process of iterating with an agent to reach a shared understanding before delegating implementation.
+
+> [!note] Departure: Alignment-First vs Plan-as-Contract
+> [[matt-pocock|Matt Pocock]] departs from [[plan-vs-review|plan-heavy]] workflows: the PRD is a disposable destination hint, not a contract. He does not review the PRD — the grilling session produced alignment. Quality lives in QA, not spec precision. See [[intent-to-code]] for the full comparison.
 
 ## The Strategy: Destination and Journey
 [[matt-pocock|Matt Pocock]] defines the design process in two phases:
@@ -21,23 +24,46 @@ tags: ["ai-workflow", "software-design"]
 
 - **HITL Planning**: Be Human-In-The-Loop during the Destination and Journey phases.
 - **AFK Execution**: Once the Journey is clear, let the agent work Away-From-Keyboard.
-- **Clearing Context**: Instead of compacting history (which leads to "Doc Rot"), clear the session and restart with the PRD and the current Kanban task.
+- **Clearing Context**: Instead of compacting history (which leads to [[document-degradation|document degradation]] — the LLM silently corrupting prior decisions), clear the session and restart with the PRD and the current Kanban task. This also avoids [[doc-rot|doc rot]]: if you left the old PRD in the repo, the agent might treat it as authoritative even after the code has diverged.
 
 ## The Grill-Me Session in Practice
 
 [[matt-pocock|Matt Pocock]] demonstrates the "Destination" phase as a structured Q&A session using a `grill-me` skill. The mechanics:1. **Human dictates rough ideas**: No polish needed — woolly, half-formed requirements are fine. The human explains both the *what* and the *why* (the why is critical — without it, the agent can't suggest alternatives).
 2. **Agent explores the codebase**: Uses subagents to read schemas, services, and tests. The parent agent receives only a summary — token-efficient exploration.
-3. **Agent asks precise questions**: Challenges framing ("the code already handles this — is the gap in the UI?"), forces binary choices ("option A or B?"), and surfaces edge cases ("what happens when all real lessons are deleted?").
+3. **Agent asks precise questions**: Pushes for specificity on ambiguous requirements, surfaces edge cases the human hasn't considered (e.g., "should points be retroactive?"), and forces decisions (e.g., "what's the progression curve for levels?"). The agent may ask 20–80 questions before reaching alignment.
 4. **Human drives or agent drives**: The skill is flexible — sometimes the agent leads with questions, sometimes the human directs with specific decisions.
-5. **Convergence on 8 bullet points**: After ~22 minutes of Q&A, the session converges to a concise scope document. The hard part is extracting ideas from the human brain; the LLM does the synthesis.
+5. **Convergence to a PRD**: The session produces a Product Requirements Document with user stories (typically 15–20), implementation decisions, and testing decisions. The hard part is extracting ideas from the human brain; the LLM does the synthesis.
 
 The session produces not just requirements, but also updates the [[ubiquitous-language]] with new terms — ensuring the vocabulary for implementation is agreed before any code is written.
+
+## Don't Review the PRD — QA Is Where Taste Enters
+
+Matt makes a deliberate choice: **he does not review the PRD** after the grilling session produces it. His reasoning:
+
+- **Alignment was already achieved** during the grilling session. He already shares the design concept with the agent.
+- **Summarization is LLMs' strongest capability**. Reviewing the PRD is just testing the LLM's summarization ability — low value.
+- **The real work happens at QA**. The PRD is a destination hint; QA is where the human imposes taste, finds bugs, and files corrective issues. Over-indexing on the PRD is optimizing the wrong stage.
+
+This is a deliberate inversion of the specs-to-code philosophy: instead of refining the spec until it's perfect and then compiling to code, you get aligned quickly, move to implementation, and put your verification energy into QA.
+
+## Push vs Pull for Agent Instructions
+
+Matt distinguishes two strategies for instructing agents during the design loop:
+
+- **Pull** (for implementers): [[agent-skills|Skills]] are repo-side resources the agent discovers and loads when needed. Like a developer reaching for documentation. Keeps implementer context lean.
+- **Push** (for reviewers): Coding standards are pre-loaded into the reviewer agent's context. The reviewer needs all rules up front to compare against the implementation.
+
+## Doc Rot in the Design Loop
+
+Keeping completed PRDs in the repo creates [[doc-rot|doc rot]]: future agent sessions discover stale PRDs and pattern-match against outdated assumptions. The code has moved on; the old PRD hasn't. Matt marks PRDs as closed (or deletes them) after implementation to prevent this.
 
 ## Thread
 - [[the-agent-workflow]] — The design loop as the planning phase of the agent workflow
 - [[the-slop-problem]] — Skipping the design loop is a primary source of slop
+- [[intent-to-code]] — The alignment-first position on the intent-to-code axis
 
 ## Related
+
 - [[grey-box-engineering]] — The implementation phase of the loop.
 - [[smart-zone-dumb-zone]] — Managing the technical limits of the loop.
 - [[tracer-bullets]] — The first "Journey" step for any new feature.
@@ -49,8 +75,11 @@ The session produces not just requirements, but also updates the [[ubiquitous-la
 - [[improve-codebase-architecture]] — The skill that applies the design loop to architecture: explore, grill, propose.
 - [[matt-pocock]] — Originated the Grill Me skill and the Destination/Journey framework.
 - [[fighting-slop-with-slop]] — The BEEPs workflow extends the design loop to organizational scale: AI handles the tooling infrastructure around the design process.
+- [[doc-rot]] — The risk of keeping completed PRDs in the repo; why the design loop produces ephemeral artifacts.
+- [[sandcastle]] — The parallel AFK implementation pipeline that consumes the Kanban board produced by the design loop.
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-claude-code-feature-build.md`
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Grill Me skill as the mechanism for building a shared design concept; the skill went viral (13k stars) by turning the AI into an adversarial interviewer.
+- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Full workshop demonstrating Grill Me → PRD → Kanban; "don't review the PRD" philosophy; push vs pull instruction strategy; doc rot in the design loop.
