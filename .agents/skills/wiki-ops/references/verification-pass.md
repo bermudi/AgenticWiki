@@ -144,6 +144,13 @@ delegate({
 
 ## Step 5: Aggregate Findings
 
+**Before aggregating, filter source-verifier findings for actual inaccuracies.** The verifier will flag synthesis, paraphrases, and logical inferences as WARNINGs because they go beyond the source text. These are not inaccuracies — the wiki is a synthetic artifact that draws connections between sources. Only fix findings that represent factual errors:
+
+- **Fix**: Misattributions (wrong person credited), fabricated quotes, made-up numbers, claims contradicted by the source, concepts attributed to a source that doesn't contain them
+- **Skip**: Reasonable paraphrases, logical inferences from stated premises, analytical synthesis that connects multiple sources, wiki-specific framing of source ideas
+
+Apply this filter when building the aggregate summary below.
+
 Read the verification reports from the source-verifier delegate responses and aggregate them into a single summary:
 
 ```
