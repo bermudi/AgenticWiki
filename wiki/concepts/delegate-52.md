@@ -66,6 +66,7 @@ Key results: Python is the **only domain** (out of 52) where most models (17 of 
 - [[chris-parsons]] — Sub-agent validation mirrors DELEGATE-52's finding that separate verification sessions are more reliable
 - [[ralph-loop]] — Fresh-context-per-iteration is a practical response to same-context degradation
 - [[the-agent-workflow]] — DELEGATE-52's findings on long-horizon degradation inform the HITL/AFK handoff
+- [[hallucination]] — Document corruption shares structural mechanisms with hallucination: lossy compression driving plausible-but-wrong content
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Full benchmark design, domain list, work environment construction, and evaluation protocol

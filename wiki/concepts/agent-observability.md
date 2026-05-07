@@ -1,7 +1,7 @@
 ---
 title: Agent Observability
 created: 2026-04-27
-updated: 2026-05-02
+updated: 2026-05-07
 sources:
   - raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md
   - raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md
@@ -108,6 +108,8 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - [[compounding-booboos]] — Tracing catches booboos in their decision context, not as isolated log lines
 - [[tool-design-for-agents]] — Tool output design determines what's observable
 - [[matt-pocock]] — Slop Watch stream: real-time observability platform ideation from DDD domain modeling through architecture decisions.
+- [[execution-apathy]] — Execution apathy is invisible to system metrics; only trace-level observability can detect the missing execution steps
+- [[blind-panic]] — Blind panic produces expensive failure traces that observability must distinguish from productive execution
 
 ## Thread
 

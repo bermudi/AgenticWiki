@@ -1,7 +1,7 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-05-05
+updated: 2026-05-07
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
@@ -91,6 +91,8 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[doc-rot]] — Verification loops make stale documentation visible; tests are the living specification that replaces rotted docs
 - [[synthetic-truth]] — Synthetic truth bypasses standard verification loops because its errors are temporal, not factual
 - [[temporal-smoothing]] — Temporal smoothing is invisible to static verification; requires timeline-aware checks
+- [[execution-apathy]] — Execution apathy produces plausible-looking outputs that pass superficial verification but haven't done the work
+- [[blind-panic]] — Blind panic's looping behavior burns verification budget without making progress
 
 ## Sources
 

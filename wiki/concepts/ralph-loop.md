@@ -1,7 +1,7 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-05-05
+updated: 2026-05-07
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -179,6 +179,7 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - [[evolving-context]] — Parsons evolves his Ralph loop skills via post-session reflection; skill learning is a category of evolving context
 - [[delegate-52]] — Sub-agent validation mirrors DELEGATE-52's finding that separate verification sessions are architecturally more reliable
 - [[deliberate-friction]] — "Reversible without embarrassment" is an operational instantiation of deliberate friction for safety boundaries
+- [[model-routing]] — One-task-per-iteration sidesteps the tier E ceiling that model routing cannot fix; the Ralph loop is the decomposition strategy model routing depends on
 
 ## Sources
 

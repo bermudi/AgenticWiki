@@ -71,6 +71,7 @@ The case reinforces the core argument: verification is not just about tests and 
 - [[plan-vs-review]] — Review-heavy without structure is vibes-based engineering; plan-heavy is the structured alternative.
 - [[synthetic-truth]] — Synthetic truth as the definitive case study of why vibes-based acceptance is dangerous: the output was structurally perfect and entirely fabricated
 - [[temporal-smoothing]] — Temporal smoothing exploits the same verification gap as vibe coding: it looks correct unless you check the timeline
+- [[hallucination]] — Hallucinations are the atomic content that vibes-based acceptance normalizes: plausible but unverified
 
 > [!note] Departure: Specs-to-Code ≠ Plan-Heavy
 > [[matt-pocock|Matt Pocock]]'s critique of specs-to-code is specific: it's about treating the spec as a **compilation target** where the code is never read — if something breaks, fix the spec and recompile. This is distinct from [[plan-vs-review|plan-heavy]], which also produces specs but treats code as the battleground. See [[intent-to-code]] for the full axis.

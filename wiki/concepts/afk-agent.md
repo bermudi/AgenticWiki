@@ -1,7 +1,7 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-05-05
+updated: 2026-05-07
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
 tags: [concept, workflow, agents]
 ---
@@ -68,6 +68,9 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[improve-codebase-architecture]] — The skill produces GitHub issues for AFK agents to implement.
 - [[plan-vs-review]] — Plan-heavy specs are the prerequisite for effective AFK execution.
 - [[louis-knight-webb]] — Articulated focus maxing / parallel AFK management.
+- [[execution-apathy]] — Execution apathy is particularly dangerous for AFK agents: they report completion without having done the work
+- [[blind-panic]] — Blind panic manifests as an AFK agent that runs its full budget producing confused, looping traces
+- [[model-routing]] — Model routing enables cheaper, more scalable AFK execution by routing subtasks to the cheapest capable model
 
 ## Sources
 

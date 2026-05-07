@@ -1,7 +1,7 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-07
 sources:
   - raw/2604.15597v1.pdf
 tags: [concept, llm-capabilities, domain-variance, delegation]
@@ -44,6 +44,8 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[document-degradation]] — Degradation severity follows the jagged frontier pattern
 - [[vibes-based-engineering]] — Generalizing capabilities across domains is a vibes failure mode
 - [[the-human-lever]] — Humans must own domain boundary decisions because models can't
+- [[agent-floor]] — AgentFloor demonstrates the jagged frontier empirically: small models match GPT-5 on some tiers but all collapse at the same planning ceiling
+- [[model-routing]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems

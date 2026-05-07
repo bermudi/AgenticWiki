@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-05-04
+updated: 2026-05-07
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -10,6 +10,7 @@ sources:
   - raw/slowing-the-fuck-down.md
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
   - "raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md"
+  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 ---
 
@@ -19,6 +20,9 @@ tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 
 > [!note] Departure: Tool Use Can Harm
 > This thread argues that better tools → better agent outcomes. [[philippe-laban|Laban]] et al. (2026) complicate this assumption: in [[delegate-52|DELEGATE-52]], four LLMs given file reading, writing, and code execution tools performed **worse** than without tools, incurring an average additional degradation of 6%. The tools introduced overhead (2–5× more input tokens), and models favored regenerating entire files over targeted edits. This doesn't refute the thread's thesis — the paper tested a basic harness, not redesigned tools — but it does show that **adding tools without careful design can actively harm**. The "tools fix it" assumption is not automatically true for current models in long-horizon workflows.
+
+> [!note] Departure: Model Capability as an Independent Bottleneck
+> This thread argues that tool design is the primary bottleneck for agent effectiveness. The Harvard AgentFloor study (May 2026) adds an independent constraint: **model capability**. At AgentFloor's tier E (8-12 step planning), all models collapse — including GPT-5 at ~10% task completion. This collapse occurs even with perfectly clean, deterministic tool interfaces that eliminate every confounding variable the thread identifies. At high planning complexity, the bottleneck is the model's architectural planning horizon, not the tool layer. Tool design and model capability are two independent axes — fixing both is necessary, and at the upper bounds, model capability becomes the binding constraint regardless of tool quality. See [[agent-floor]] for the empirical data.
 
 > [!note] Departure: Feature-Rich vs. Minimal, Both Can Work
 > This thread argues that minimal tools with clean contracts outperform feature-rich ones. [[dex-horthy|Dex Horthy]] provides a counterexample: he achieves exceptional results with Claude Code — a feature-rich, opinionated tool with thousands of open issues and a complex prompting model. His success doesn't come from tool minimalism but from **deep intuition built over months of intensive use with a single tool** ("pick one model, one tool, work with it for 1-2 months"). This suggests that **deep tool familiarity** can compensate for tool complexity, and that the minimalism vs. feature-richness axis may be secondary to the **consistency of use** axis. Both approaches converge on a shared principle: the agent's effectiveness is bounded by how well the human understands the tool's failure modes, not by the tool's feature count.
@@ -157,6 +161,10 @@ The context engine layer interacts with the other four layers:
 - [[satisfaction-of-search]] — The cognitive bias that context engines are designed to mitigate — agents stopping context retrieval too early
 - [[agent-skills]] — The skill.md format is the practical embodiment of minimal tool contracts; skills are loaded on demand, keeping the tool layer thin
 - [[procedural-knowledge]] — How-to knowledge (skills) is the complement to tool access (MCP) in the tooling stack
+- [[agent-floor]] — The Harvard benchmark that isolates tool-use capability from tool design confounds; provides empirical basis for model capability as a tool design constraint
+- [[model-routing]] — Complements tool design by routing tasks to the cheapest capable model; tool design and model selection are jointly optimized
+- [[execution-apathy]] — A failure mode at the upper bounds of tool-use capability; relevant to understanding tool design limitations under planning load
+- [[blind-panic]] — The complementary failure mode; different architectures fail differently under the same tool-use ceiling
 - [[unblocked]] — A productized context engine architecture
 
 ## Related
@@ -169,10 +177,13 @@ The context engine layer interacts with the other four layers:
 - [[multi-tier-action-space]] — The tool tier is about agent-first tool design; tool definitions belong in the computer tier, not the system prompt
 - [[agent-observability]] — Agent observability is a tool design concern: listener/sidecar pattern, per-agent adapters, and hook surfaces determined by tool output interfaces.
 - [[slop-watch]] — Slop Watch's per-agent listener architecture is tool design for agent observability in practice.
+- [[agent-floor]] — Tool-use capability as a dimension of tool design: the model's capacity bounds what tools it can effectively use
+- [[model-routing]] — Model capability tier as a tool design input: different tools may be needed for different routing tiers
 - [[peter-werry]] — Context engine architecture as a meta-tool design pattern
 - [[chris-parsons]] — Packaged Ralph loops as skills; the skill.md format as a minimal tool contract pattern
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum loop; plan-file-as-shared-state as minimal tool design
 - [[ralph-loop]] — Canonical example of minimal tool contracts and the loop pattern
+- [[agent-quality-engineering]] — Quality measurement depends on observable tools; tool design determines what's measurable
 
 ## Sources
 
@@ -183,3 +194,4 @@ The context engine layer interacts with the other four layers:
 - `raw/slowing-the-fuck-down.md` — Agentic search recall as a fundamental tool limitation; low recall as the root cause of slop.
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Parallel management interface design requirements, agent runtime thresholds as a tool design constraint.
 - `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine as meta-tool: pre-curating context, satisfaction of search, expert graphs, and benchmark results
+- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: model capability tier as a tool design constraint; open-weight models matching GPT-5 on tool use tasks at 15× lower cost

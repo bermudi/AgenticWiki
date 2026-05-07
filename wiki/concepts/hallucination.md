@@ -1,7 +1,7 @@
 ---
 title: Hallucination
 created: 2026-04-25
-updated: 2026-05-05
+updated: 2026-05-07
 sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf, raw/synthetic-truths-gemini-has-a-secret-code.md]
 tags: [llm, reliability, engineering]
 ---
@@ -76,6 +76,9 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 - [[agent-skills]] — Skills reduce hallucination by replacing guesswork with defined procedures
 - [[synthetic-truth]] — Intent-aware fabrication distinct from random hallucination
 - [[temporal-smoothing]] — The mechanism of presenting future work as completed reality
+- [[agent-floor]] — AgentFloor's tier E reveals tool hallucination (F1) as a specific failure mode at the planning ceiling
+- [[execution-apathy]] — GPT-5's failure mode at tier E: resigns without executing, producing plausible-looking outputs
+- [[blind-panic]] — Gemma 4's failure mode at tier E: tool hallucination as a desperation behavior under planning load
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.

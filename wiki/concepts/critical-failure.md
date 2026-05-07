@@ -58,6 +58,7 @@ This means the reliability problem is not about reducing average error rate — 
 - [[verification-loop]] — Spot-checking is insufficient; critical failures are rare and severe
 - [[agent-evals]] — Long-horizon evals are necessary because short runs miss critical failures
 - [[vibes-based-engineering]] — Critical failures pass vibe checks; spot-checking a few steps gives false confidence
+- [[hallucination]] — Critical failures in document degradation are a structural form of hallucination: silent corruption at scale
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Critical failure analysis, Table 9, and discussion of dynamics in Section 5

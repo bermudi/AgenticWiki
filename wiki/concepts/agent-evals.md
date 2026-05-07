@@ -1,7 +1,7 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-05-02
+updated: 2026-05-07
 sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf"]
 tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 ---
@@ -91,6 +91,8 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - [[round-trip-relay]] — Reference-free eval methodology for long workflows
 - [[document-degradation]] — The failure mode long-horizon evals are designed to surface
 - [[critical-failure]] — Long-horizon evals are necessary because short runs miss critical failures
+- [[agent-floor]] — The Harvard 6-tier benchmark that provides the eval methodology for isolating cognitive complexity from environmental confounds
+- [[model-routing]] — Model routing depends on evals to validate which model tier handles which complexity class
 
 ## Sources
 

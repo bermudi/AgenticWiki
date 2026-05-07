@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-05
+updated: 2026-05-07
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -21,6 +21,7 @@ sources:
   - "raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md"
   - raw/yt-slop-watch-ideation.md
   - "raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md"
+  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -118,6 +119,9 @@ The fix isn't bigger context windows — it's **ruthless context hygiene**:
 - **Deep modules as context boundaries**: A well-designed deep module is naturally context-complete — the agent needs the interface, not the entire call graph.
 
 [[mario-zechner|Mario Zechner]] designed [[pi]] around this insight. Pi's minimal core (four tools: `read`, `write`, `edit`, `bash`) and session-based model make it easy to reset context and stay in the Smart Zone. The design philosophy — [[malleable-agents|malleability]] — means the agent itself can create new tools mid-session to reduce its own context load.
+
+> [!note] Departure: Decomposition as Capability Ceiling Workaround
+> The Harvard AgentFloor study (May 2026) adds a dimension to the context management argument. Task decomposition isn't just a context hygiene strategy — it's a **capability ceiling workaround**. The study found that all models, regardless of size, collapse at tier E (8-12 step planning). Decomposition into simpler subtasks keeps each individual call at tier A0-B, where even 2B-8B models match GPT-5 performance. The [[model-routing|model routing]] pattern that follows — route decomposed subtasks to the cheapest capable model — is a natural extension of the decomposition emphasis already in this thread, but with a new justification: not just context management, but capability management.
 
 ## Model Switching Strategy: Stick With One
 
@@ -342,7 +346,13 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[procedural-knowledge]] — The knowledge type that skills implement; understanding the semantic/episodic/procedural triad informs workflow design
 - [[chris-parsons]] — Operationalized Ralph Loops as skills; introduced the worker loop pattern and sub-agent validation as a workflow refinement
 - [[doc-rot]] — Stale documentation as a workflow hazard: completed PRDs mislead future agent sessions into following outdated assumptions
+- [[model-routing]] — Decompose tasks by complexity and route to the cheapest capable model; the workflow's cost optimization layer
+- [[agent-floor]] — The complexity tier framework (A0-E) that provides the decomposition vocabulary for task routing
+- [[execution-apathy]] — The failure mode that prevents successful HITL-to-AFK handoff at high planning complexity
+- [[blind-panic]] — The complementary failure mode; persistent but dysfunctional AFK execution
 - [[sandcastle]] — Matt Pocock's parallel AFK agent pipeline; operationalizes the AFK implementation phase at scale with Docker sandboxes
+- [[model-routing]] — The cost optimization counterpart to the decomposition workflow: route subtasks to the cheapest capable model
+- [[agent-floor]] — Provides the empirical basis for the decomposition heuristic: which complexity tiers can small models handle
 - [[intent-to-code]] — The thread that traces the disagreement: where does quality enforcement live?
 
 ## Related
@@ -351,6 +361,8 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[the-human-lever]] — The design authority that underpins the whole workflow
 - [[unblocked]] — A context engine that operationalizes the workflow at organizational scale; pre-curates context to prevent doom loops
 - [[peter-werry]] — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase
+- [[execution-apathy]] — The failure mode that prevents successful HITL-to-AFK handoff at high planning complexity
+- [[blind-panic]] — The complementary failure mode: persistent but dysfunctional AFK execution at the planning ceiling
 
 ## Sources
 
@@ -372,4 +384,5 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - `raw/yt-slop-watch-ideation.md` — Research phase workflow: parallel sub-agents, domain modeling, trusted vs. untrusted AI artifacts, the "bored of talking" signal.
 - `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase; benchmark data showing 10× improvement in wall-clock time.
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: skills-as-loop-package, worker loop, sub-agent validation, two-mode work model, safety heuristics
+- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: model routing by complexity tier, cost optimization framework; supports the decomposition emphasis in the workflow
 

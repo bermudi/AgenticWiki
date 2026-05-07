@@ -43,37 +43,46 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
 
 ## 🧠 Concepts
-- [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as the practical craft of tooling for agents.
-- [[backpressure]] — Engineering the environment so wrong agent outputs are mechanically rejected.
-- [[ralph-loop]] — Minimalist autonomous agent loop: dumb bash loop, plan file as shared state, one task per iteration.
-- [[plan-disposability]] — Treat plans as ephemeral coordination state, not contracts.
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
 - [[agent-evals]] — CI for probabilistic systems: the 4-layer eval stack for AI agents.
+- [[agent-floor]] — Harvard 6-tier benchmark isolating tool-use complexity from real-world confounds; small models match frontier through tier C, all collapse at long-horizon planning.
+- [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as the practical craft of tooling for agents.
 - [[agent-observability]] — Logs, traces, and metrics for agent decision chains.
 - [[agent-quality-loop]] — The flywheel: traces → evals → scorers → code.
+- [[agent-skills]] — Procedural knowledge for AI agents via skill.md files, progressive disclosure, and the open standard adopted across major platforms.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
+- [[backpressure]] — Engineering the environment so wrong agent outputs are mechanically rejected.
+- [[blind-panic]] — Failure mode where an LLM executes persistently but degenerates into looping and tool hallucination when pushed beyond its planning horizon.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
+- [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
+- [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
 - [[deliberate-friction]] — Intentional engineering slowdowns at high-stakes decision points. Not all friction is bad DX.
-- [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
+- [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
-- [[jagged-frontier]] — LLM capabilities are unevenly distributed; strong in some domains, severely error-prone in others.
-- [[round-trip-relay]] — Reference-free evaluation method chaining reversible edits to measure long-horizon degradation.
+- [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
+- [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
+- [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
+- [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
+- [[jagged-frontier]] — LLM capabilities are unevenly distributed; strong in some domains, severely error-prone in others.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
-- [[agent-skills]] — Procedural knowledge for AI agents via skill.md files, progressive disclosure, and the open standard adopted across major platforms.
+- [[model-routing]] — Decomposing tasks by complexity and routing each subtask to the cheapest model capable of handling it; up to 15× cost savings.
 - [[multi-tier-action-space]] — The thin tool layer + computer architecture converged on by Claude Code, Manis, AMP, and Deep Agents.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
-- [[procedural-knowledge]] — The cognitive science framing of procedural memory mapped to agent skill files; distinct from semantic (RAG) and episodic (conversation logs) knowledge.
-- [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
+- [[plan-disposability]] — Treat plans as ephemeral coordination state, not contracts.
 - [[plan-vs-review]] — The quantified tradeoff: 5 minutes of planning saves 30 minutes of reviewing AI-generated code.
+- [[procedural-knowledge]] — The cognitive science framing of procedural memory mapped to agent skill files; distinct from semantic (RAG) and episodic (conversation logs) knowledge.
+- [[ralph-loop]] — Minimalist autonomous agent loop: dumb bash loop, plan file as shared state, one task per iteration.
+- [[round-trip-relay]] — Reference-free evaluation method chaining reversible edits to measure long-horizon degradation.
+- [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
@@ -83,14 +92,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[temporal-smoothing]] — A failure mode where AI presents speculative or future work as completed reality.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
-- [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
-- [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
-- [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
-- [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
-- [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.

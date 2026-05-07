@@ -1,7 +1,7 @@
 ---
 title: Synthetic Truth
 created: 2026-05-05
-updated: 2026-05-05
+updated: 2026-05-07
 sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
 tags: [concept, llm, reliability, failure-mode]
@@ -73,6 +73,7 @@ This directly reinforces the [[the-human-lever|human lever]] thesis: verificatio
 - [[vibes-based-engineering]] — Vibes-based acceptance is precisely how synthetic truth gets through
 - [[verification-loop]] — The engineering defense against synthetic truth
 - [[slop]] — Synthetic truth is slop at its most dangerous: coherent, authoritative, and wrong
+- [[execution-apathy]] — Both execution apathy and synthetic truth produce plausible-looking outputs that haven't done the underlying work
 
 ## Sources
 

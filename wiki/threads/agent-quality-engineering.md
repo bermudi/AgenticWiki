@@ -1,12 +1,13 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-05-02
+updated: 2026-05-06
 sources:
   - "raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md"
   - "raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md"
   - "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
+  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 ---
 
@@ -115,6 +116,9 @@ Horthy describes building a logging proxy that intercepts every request/response
 - [[vibes-based-engineering]] — Evals are the structural antidote to shipping agents on vibes. Galarza's core complaint: "Most teams build the agent, ship it, and then ask, how do we test this?" That's vibes-based agent engineering. The quality loop replaces "looks right to me" with "score 0.83, here's what failed."
 - [[malleable-agents]] — The quality loop provides the guardrails that make malleability safe. If an agent can modify its own tools, the eval set catches regressions.
 
+> [!note] Departure: A Quality Ceiling That Infrastructure Cannot Fix
+> The [[agent-floor|AgentFloor]] finding that all models collapse at tier E (long-horizon planning) introduces a quality ceiling that no amount of eval infrastructure, observability, or feedback loops can address. If the model cannot perform 8-12 sequential tool steps regardless of the quality infrastructure around it, the quality problem shifts from "how do we measure this?" to "how do we avoid needing this?" — task decomposition and [[model-routing|model routing]] become quality strategies as much as architectural ones. This doesn't contradict the thread's thesis (quality infrastructure remains essential for tiers A0-D), but it establishes an upper bound on what infrastructure alone can achieve.
+
 ## Concepts in this thread
 
 - [[agent-evals]] — The 4-layer eval stack: CI for probabilistic systems
@@ -123,6 +127,9 @@ Horthy describes building a logging proxy that intercepts every request/response
 - [[delegate-52]] — Long-horizon benchmark quantifying agent reliability across 52 domains
 - [[document-degradation]] — The failure mode long-horizon evals are designed to surface
 - [[critical-failure]] — Sparse catastrophic errors that only long-horizon evals can catch
+- [[agent-floor]] — The Harvard benchmark that demonstrates the tier E ceiling; provides an eval methodology for isolating cognitive complexity
+- [[execution-apathy]] — A quality failure mode quantified by AgentFloor: the model resigns without executing
+- [[blind-panic]] — A quality failure mode quantified by AgentFloor: the model loops and degenerates
 
 ## Related
 
@@ -133,6 +140,9 @@ Horthy describes building a logging proxy that intercepts every request/response
 - [[tool-design-for-agents]] — Tool design determines what's observable
 - [[damian-galarza]] — Author of the three-part series that forms this thread
 - [[round-trip-relay]] — Reference-free eval methodology powering long-horizon benchmarks
+- [[agent-floor]] — The 6-tier benchmark methodology for isolating tool-use quality from environmental confounds
+- [[execution-apathy]] — GPT-5's quality failure at tier E: plans without executing
+- [[blind-panic]] — Gemma 4's quality failure at tier E: loops and hallucinates tools
 - [[jagged-frontier]] — Evals must be domain-specific because capability is uneven
 - [[context-engineering]] — The eval infrastructure (logging proxies, snapshots) is a context engineering concern
 - [[slop-watch]] — Concrete architectural contribution to the observability layer: sessions as DAGs, listener/sidecar pattern, per-agent adapters
@@ -143,3 +153,4 @@ Horthy describes building a logging proxy that intercepts every request/response
 - `raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md` — Logs/traces/metrics, the Emma/invoice debugging story, OpenTelemetry
 - `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — The flywheel in practice: groundedness eval, Mastra walkthrough
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Snapshot-based evals, LLM-as-judge skepticism, vibes-first eval strategy, logging proxy infrastructure
+- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: reproducible benchmark methodology, failure mode taxonomy, demonstrates the quality ceiling at tier E

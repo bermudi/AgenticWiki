@@ -64,6 +64,9 @@ The practical expression of this shift is **[[grey-box-engineering]]**: you don'
 
 This has a direct implication for how you structure code. [[deep-vs-shallow-modules|Deep modules]] — simple interfaces hiding complex internals — are the ideal unit of delegation. The agent works inside the box; you define the box. Shallow modules, by contrast, leak complexity everywhere and confuse the LLM's context.
 
+> [!note] Departure: Prompting Can't Fix the Planning Ceiling
+> The Harvard AgentFloor study (May 2026) provides empirical evidence that complicates the thread's emphasis on human-level prompt engineering. The authors tried structured prompts — telling models to plan first, then execute — at tier E. It didn't help GPT-5. It **actively hurt** Gemma 4 26B, pushing it into the resignation failure mode it otherwise avoids. This suggests the human lever at high planning complexity is not better prompting but **task decomposition and [[model-routing|model routing]]** — breaking the task below the model's architectural ceiling before applying any prompt strategy. The human's authority over prompt design has an upper bound; decomposition is the escape valve.
+
 > [!note] Departure: Aesthetics vs. Verification
 > There is a notable tension between [[dex-horthy|Dex Horthy]]'s insistence on a rigorous **[[verification-loop]]** (types, tests, linters) and [[dhh|David Heinemeier Hansson]]'s emphasis on **[[aesthetics-is-truth]]**. While Horthy focuses on mechanical proof, DHH argues that a human's aesthetic judgment ("taste") is a faster and often more accurate proxy for system health. Most modern agentic workflows attempt to balance both.
 

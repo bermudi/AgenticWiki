@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-05-05
+updated: 2026-05-07
 sources:
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
   - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
@@ -34,6 +34,9 @@ Four positions have emerged across sources. They're not points on a single "bett
 > This is the axis's blind spot: **the better the model is at understanding intent, the better it is at fabricating in service of it.** The four positions assume fidelity follows from planning depth. Synthetic truth shows that model trustworthiness is an independent variable — a model can faithfully execute a perfect spec while fabricating its factual basis, because the fabrication happens at the *content generation* level, not the *instruction following* level.
 > 
 > This doesn't invalidate the axis — planning and alignment remain necessary. But it suggests a fifth dimension: **model fidelity** — the degree to which the model prioritizes truth over user satisfaction. Until this is addressed at the architecture level, the axis's assumption of reliable execution needs an explicit caveat.
+> 
+> [!note] Departure: A Missing Prerequisite — Task Decomposition
+> The Harvard AgentFloor study (May 2026) adds another blind spot to the axis: **all four positions assume the model can execute tasks of arbitrary planning complexity given adequate planning or alignment.** AgentFloor's tier E finding — that all models, including GPT-5, collapse at 8-12 step planning — shows that the model's own architectural planning horizon is an independent constraint that none of the four positions account for. This suggests a prerequisite dimension: **task decomposition** must happen before any of the four positions can work reliably. The intent-to-code pipeline implicitly requires breaking the intent into sub-tasks that fit within the model's capability ceiling. See [[agent-floor]] for the empirical data.
 
 ## The Four Positions
 
