@@ -1,8 +1,8 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-05-08
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
+updated: 2026-05-09
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
 
@@ -48,6 +48,7 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 
 ## Thread
 
+- [[the-verifiability-thesis]] — Verification loops are the mechanical instantiation of the verifiability thesis
 - [[the-human-lever]] — Verification as the contract between human design authority and agent implementation
 - [[the-slop-problem]] — The verification loop as the primary defense against slop
 - [[the-agent-workflow]] — The verification step in every AFK execution cycle
@@ -55,8 +56,16 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - [[agent-quality-engineering]] — Evals as the probabilistic verification loop for agentic systems
 - [[intent-to-code]] — The quality mechanism that replaces trust in every position on the intent-to-code axis (except pure vibes)
 
+## Verifiability as the Economic Driver
+
+[[andrej-karpathy|Karpathy]] provides the economic framework that explains *why* verification loops work where they do: [[verifiability]]. Traditional computers automate what you can specify in code; LLMs automate what you can verify. The verification loop is the mechanical instantiation of this principle — it operationalizes verifiability as a workflow discipline.
+
+Karpathy's framing adds context: the verification loop is most effective in domains where the model was RL-trained on similar verification signals (code, math). In domains outside those RL circuits, even a well-designed verification loop may struggle because the model lacks the underlying capability to converge on correct output given feedback.
+
 ## Related
 
+- [[verifiability]] — The economic theory that explains why verification loops work: LLMs automate what you can verify
+- [[andrej-karpathy]] — Originator of the verifiability framework that contextualizes verification loops
 - [[grey-box-engineering]] — Emphasizes the loop as a replacement for trust.
 - [[ai-design-loop]] — The broader process of which the verification loop is a part.
 - [[tracer-bullets]] — A technique often used within a verification loop to prove a vertical slice works.
@@ -101,3 +110,4 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 - `raw/yt-how-agents-use-dev-tools.md`
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: agentic tool use does not improve document fidelity; verification must be domain-aware and semantic.
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — "Outrunning your headlights" as the Pragmatic Programmer metaphor for why AI does too much at once; TDD as the discipline that enforces small steps.
+- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: verifiability as the economic driver of AI capability; the RL circuits framework that explains when verification loops work and when they don't.

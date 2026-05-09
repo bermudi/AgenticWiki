@@ -1,7 +1,7 @@
 ---
 title: Grey Box Engineering
 created: 2026-04-24
-updated: 2026-05-08
+updated: 2026-05-09
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
 tags: ["software-design", "ai-workflow"]
 ---
@@ -66,6 +66,7 @@ This is only safe when the interface is testable. The [[verification-loop]] must
 - [[plan-vs-review]] — Planning defines the grey box boundary; review inspects the contents.
 - [[geoffrey-huntley]] — "Backpressure beats direction" extends grey-box engineering from interface design to environmental design
 - [[agent-quality-engineering]] — The quality framework (evals + observability + flywheel) is how you maintain the grey-box model at scale: aggregate quality metrics tell you where to look
+- [[agentic-engineering]] — Karpathy's professional discipline that formalizes the grey-box handoff between human design authority and agent implementation
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`

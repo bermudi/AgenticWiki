@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-08
+updated: 2026-05-09
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -22,12 +22,27 @@ sources:
   - raw/yt-slop-watch-ideation.md
   - "raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md"
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
 # The Agent Workflow
 
 > How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software. The agent harness architecture has converged on a [[multi-tier-action-space]] pattern (thin tool layer + computer primitive), while [[evolving-context|evolving context]] — agents improving their own prompts, skills, and memories over time — is the major unsolved frontier.
+
+## Agentic Engineering: The Origin Story
+
+This thread describes the operational layer for what [[andrej-karpathy|Karpathy]] calls [[agentic-engineering]]. He coined the term to distinguish professional agent use from [[vibe-coding|vibe coding]]:
+
+> "Vibe coding is about raising the floor for everyone. Agentic engineering is about preserving the quality bar of what existed before in professional software. You're not allowed to introduce vulnerabilities due to vibe coding. You're still responsible for your software just as before, but can you go faster?"
+
+His central metaphor — agents as "intern entities" — directly informs the workflow's HITL/AFK split:
+
+- Agents are remarkably capable but make weird mistakes (his MenuGen example: the agent tried to match email addresses across Google and Stripe instead of using a user ID)
+- The human owns the spec, the design, the aesthetics — "you're doing some of the design and development and the engineers are doing the fill in the blanks"
+- The speed-up is dramatic: "people who are very good at this peak a lot more than 10x"
+
+Karpathy's hiring proposal — give candidates a big project ("build a Twitter clone"), make it secure, then have agents try to break it — operationalizes the principle that agentic engineering proficiency is measurable. "Agent proficiency is a core skill of the 21st century."
 
 > [!note] Departure: The Combinatorial Collapse Threshold
 > The ManyIH study ([[instruction-hierarchy]], Zhang et al. 2026) reveals a structural limit on parallel agent management: **4+ agents with multi-step reasoning chains create the 12-tier instruction conflict scenarios that cause combinatorial collapse in all current models.** Focus maxing, AFK swarms, and multi-agent coordination — all strategies this thread advocates — generate heterogeneous outputs that must be resolved by privilege. Even with a perfectly designed trust hierarchy, the orchestrating model fails to correctly resolve conflicts ~60% of the time. The practical ceiling: decompose agent swarms so any single trust resolution decision involves ≤3 privilege tiers. Below that threshold, models operate in the 2-tier regime they're trained for; above it, they collapse.
@@ -317,6 +332,10 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 
 ## Concepts in this thread
 
+- [[the-verifiability-thesis]] — The causal chain that explains why HITL/AFK works: verifiability determines which phase a task belongs in
+- [[agentic-engineering]] — The professional discipline Karpathy coined; the workflow is its operational layer
+- [[vibe-coding]] — The floor-raising counterpart that agentic engineering builds upon
+- [[andrej-karpathy]] — Originator of the terms and the intern entity metaphor
 - [[hallucination]] — The machine's failure mode: lossy compression masquerading as knowledge
 - [[smart-zone-dumb-zone]] — Why context hygiene matters, grounded in transformer architecture; managing LLM reasoning quality
 - [[afk-agent]] — Agents that implement features in the background
@@ -365,9 +384,15 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[the-human-lever]] — The design authority that underpins the whole workflow
 - [[unblocked]] — A context engine that operationalizes the workflow at organizational scale; pre-curates context to prevent doom loops
 - [[peter-werry]] — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase
+- [[verifiability]] — The economic theory that explains why HITL and AFK map to verifiable and unverifiable domains respectively
+- [[software-1-2-3]] — The paradigm progression that makes the agent workflow possible; agentic engineering is the professional discipline for Software 3.0
+- [[jagged-frontier]] — The structural reality that the workflow must navigate: capability varies by domain, so delegation strategy must vary too
+
+- [[the-verifiability-thesis]] — The causal chain behind the entire workflow: verifiability determines HITL vs AFK, where context matters, and why verification loops work
 
 ## Sources
 
+- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: origin of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm for agentic proficiency
 - `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK, tracer bullets, Smart Zone
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Context management, malleability, minimalism
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — AI design loop, shared design concept, outrunning headlights, software entropy, code is not cheap

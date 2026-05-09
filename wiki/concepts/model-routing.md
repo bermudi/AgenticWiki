@@ -1,7 +1,7 @@
 ---
 title: Model Routing
 created: 2026-05-06
-updated: 2026-05-08
+updated: 2026-05-09
 sources:
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
 tags: [workflow, cost-optimization, architecture, model-selection]
@@ -74,6 +74,7 @@ Model routing integrates naturally with the [[the-agent-workflow|agent workflow]
 - [[afk-agent]] — Model routing enables cheaper, more scalable AFK execution
 - [[discover-ai]] — The source that presented the model routing framework
 - [[dynamic-trust]] — Parallel concept: model routing routes to the cheapest capable model; dynamic trust routes authority to the most verifiable output
+- [[verifiability]] — Model routing depends on knowing which domains are verifiable for which models; verifiability is the economic driver behind the capability heat map
 
 ## Sources
 

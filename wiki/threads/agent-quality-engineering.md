@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-05-08
+updated: 2026-05-09
 sources:
   - "raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md"
   - "raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md"
@@ -142,9 +142,8 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 > [!note] Departure: A Quality Ceiling That Infrastructure Cannot Fix
 > The [[agent-floor|AgentFloor]] finding that all models collapse at tier E (long-horizon planning) introduces a quality ceiling that no amount of eval infrastructure, observability, or feedback loops can address. If the model cannot perform 8-12 sequential tool steps regardless of the quality infrastructure around it, the quality problem shifts from "how do we measure this?" to "how do we avoid needing this?" — task decomposition and [[model-routing|model routing]] become quality strategies as much as architectural ones. This doesn't contradict the thread's thesis (quality infrastructure remains essential for tiers A0-D), but it establishes an upper bound on what infrastructure alone can achieve.
 
-## Concepts in this thread
-
-- [[agent-evals]] — The 4-layer eval stack: CI for probabilistic systems
+> [!warning] Contradiction: The RL Distribution Ceiling
+> [[andrej-karpathy|Karpathy]]'s [[verifiability|verifiability thesis]] introduces a structural ceiling on the quality loop. If a capability is outside the model's RL training distribution — not rewarded during training — no amount of eval infrastructure, observability, or feedback flywheels can create it. The quality loop can measure and improve behavior *within* the model's trained circuits, but it can't extend beyond them. Karpathy: "If you're not in the circuits, then you have to really look at fine-tuning." This doesn't invalidate the quality infrastructure — it remains necessary — but it establishes that quality engineering is bounded by the model's training distribution. See [[the-verifiability-thesis]] for the full argument. — The 4-layer eval stack: CI for probabilistic systems
 - [[agent-observability]] — Logs/traces/metrics for agent decision chains
 - [[agent-quality-loop]] — The flywheel: production failures → eval cases → continuous improvement
 - [[delegate-52]] — Long-horizon benchmark quantifying agent reliability across 52 domains
@@ -154,6 +153,28 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - [[execution-apathy]] — A quality failure mode quantified by AgentFloor: the model resigns without executing
 - [[blind-panic]] — A quality failure mode quantified by AgentFloor: the model loops and degenerates
 - [[instruction-hierarchy]] — ManyIH reveals a missing quality dimension: trust resolution across heterogeneous instruction sources under privilege conflict
+- [[agentic-engineering]] — The professional discipline whose quality bar agent quality engineering is designed to preserve
+- [[verifiability]] — The economic theory that explains why evals work: LLMs automate what you can verify
+
+## Concepts in this thread
+
+- [[agent-evals]] — The 4-layer eval stack: CI for probabilistic systems
+- [[agent-observability]] — Logs/traces/metrics for agent decision chains
+- [[agent-quality-loop]] — The flywheel: production failures → eval cases → continuous improvement
+- [[delegate-52]] — Long-horizon benchmark quantifying agent reliability across 52 domains
+- [[document-degradation]] — The failure mode long-horizon evals are designed to surface
+- [[critical-failure]] — Sparse catastrophic errors that only long-horizon evals can catch
+- [[agent-floor]] — The Harvard benchmark demonstrating the tier E ceiling; eval methodology for isolating cognitive complexity
+- [[execution-apathy]] — A quality failure mode quantified by AgentFloor: the model resigns without executing
+- [[blind-panic]] — A quality failure mode quantified by AgentFloor: the model loops and degenerates
+- [[instruction-hierarchy]] — Trust resolution as a missing quality dimension
+- [[verification-loop]] — The deterministic sibling; evals as the probabilistic equivalent
+- [[vibes-based-engineering]] — The anti-pattern the quality framework replaces
+- [[jagged-frontier]] — Evals must be domain-specific because capability is uneven
+- [[agentic-engineering]] — The discipline whose quality bar is being measured
+- [[verifiability]] — The economic theory that explains when the quality loop works and where it hits its ceiling
+- [[vibe-coding]] — The floor-raising capability shift that creates the quality preservation problem
+- [[software-1-2-3]] — The paradigm shift that makes agentic quality engineering necessary
 
 ## Related
 
@@ -170,8 +191,12 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - [[jagged-frontier]] — Evals must be domain-specific because capability is uneven
 - [[context-engineering]] — The eval infrastructure (logging proxies, snapshots) is a context engineering concern
 - [[slop-watch]] — Concrete architectural contribution to the observability layer: sessions as DAGs, listener/sidecar pattern, per-agent adapters
-- [[dynamic-trust]] — Proposed quality infrastructure for the trust dimension: dynamic trust middleware that recalculates scores at inference time
+- [[the-verifiability-thesis]] — The causal chain that explains why quality engineering works and where it hits its ceiling: verifiability → RL training → capability peaks where evals work, gaps where they can't reach
 - [[discover-ai]] — Coverage of AgentFloor, ManyIH, and model routing all feed the quality engineering thesis: measure, observe, improve
+- [[agentic-engineering]] — The professional discipline that agent quality engineering makes measurable and provable
+- [[verifiability]] — The economic driver that explains why quality infrastructure works: it creates verifiable domains
+- [[vibe-coding]] — The floor-raising capability shift that creates the quality preservation problem agent quality engineering solves
+- [[software-1-2-3]] — Software 3.0 is the paradigm shift that creates the quality problem; agent quality engineering is the infrastructure that makes it professionally viable
 
 ## Sources
 

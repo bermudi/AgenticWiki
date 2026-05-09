@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-05-08
+updated: 2026-05-09
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -18,6 +18,7 @@ sources:
   - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
   - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
+  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
@@ -42,6 +43,14 @@ It used to be writing code. Now it's **reviewing** code. AI can produce hundreds
 > "AI has simply accelerated software entropy. Code bases are falling apart faster than they ever have before. Because every time that you make a change that doesn't take into account the entire codebase, you are likely to introduce little things, weird things that make the codebase harder to change."
 
 AI doesn't create new failure modes — it accelerates existing ones. The same entropy that human-written codebases accumulate over years happens in months or weeks with AI, because the tactical speed of generation outpaces the strategic work of maintaining coherence.
+
+## Vibe Coding → Agentic Engineering: The Arc
+
+[[andrej-karpathy|Karpathy]]'s framing gives the slop problem its full narrative arc. [[vibe-coding|Vibe coding]] became possible in December 2024 when models crossed a capability threshold — outputs stopped needing correction. This raised the floor: everyone can build anything. But raising the floor without preserving the ceiling introduces slop at scale.
+
+Karpathy's proposed answer is [[agentic-engineering]]: the professional discipline of coordinating agents without sacrificing quality. "You're not allowed to introduce vulnerabilities due to vibe coding." The slop problem is the gap between these two modes — between what's newly possible and what's professionally acceptable.
+
+His observation that the speed-up is "a lot more than 10x" cuts both ways: it means the gains are enormous, but the asymmetry between generation speed and verification speed (the core mechanism of slop) is even larger than previously estimated.
 
 ## How It Happens
 
@@ -173,6 +182,10 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 
 ## Concepts in this thread
 
+- [[the-verifiability-thesis]] — The causal chain behind the slop problem: verifiability gaps create the conditions where slop flourishes
+- [[vibe-coding]] — The capability shift that made slop at scale possible
+- [[agentic-engineering]] — Karpathy's proposed discipline for closing the gap between possibility and quality
+- [[andrej-karpathy]] — Originator of the vibe coding → agentic engineering arc
 - [[slop]] — Low-quality AI output that degrades system health
 - [[compounding-booboos]] — Small errors accumulating into systemic failure
 - [[hallucination]] — The technical mechanism for generating false info
@@ -203,6 +216,10 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - [[malleable-agents]] — Malleability as the alternative to feature-bloat driven by slop
 - [[fighting-slop-with-slop]] — Productive tension: slop is not uniformly harmful when contained
 - [[agent-skills]] — Skills reduce slop by replacing guesswork with defined procedures
+- [[software-1-2-3]] — Software 3.0 (prompting as programming) without discipline is the production line for slop
+- [[verifiability]] — Slop flourishes where verification is hard; verifiability is the structural defense against it
+
+- [[the-verifiability-thesis]] — The causal chain behind the slop problem: verifiability gaps create the conditions where slop flourishes
 
 ## Related
 
@@ -222,9 +239,12 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - [[temporal-smoothing]] — Temporal displacement as a slop mechanism
 
 - [[discover-ai]] — The creator whose synthetic truth interaction with Gemini is the definitive case study of information slop in action
+- [[verifiability]] — The economic theory that explains why slop concentrates in unverifiable domains
+- [[software-1-2-3]] — The paradigm progression that makes slop at scale possible
 
 ## Sources
 
+- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: the vibe coding → agentic engineering arc; the capability threshold of December 2024; the structural gap between floor-raising and quality-preserving
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Defines slop and compounding booboos
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Diagnosis of vibes-based engineering in complex codebases
 - `raw/yt-ai-coding-for-real-engineers.md` — The design-loop failure mode and context management

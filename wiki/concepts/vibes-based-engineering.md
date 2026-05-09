@@ -1,7 +1,7 @@
 ---
 title: Vibes-Based Engineering
 created: 2026-04-25
-updated: 2026-05-05
+updated: 2026-05-09
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/2604.15597v1.pdf
@@ -9,12 +9,18 @@ sources:
   - raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md
   - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
+  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
 
 # Vibes-Based Engineering
 
 > An engineering anti-pattern where an LLM's output is accepted based on a superficial sense of correctness ("it looks right") rather than rigorous verification and deep context.
+
+## Relationship to Vibe Coding
+
+> [!note] Departure: Karpathy's "Vibe Coding" Is Not an Anti-Pattern
+> [[andrej-karpathy|Andrej Karpathy]] coined "vibe coding" in December 2024 as a descriptive term for a genuine capability shift — models reached a threshold where outputs stopped needing correction. His framing is neutral, even positive: vibe coding "raises the floor for everyone." [[dex-horthy|Dex Horthy]] and others later developed "vibes-based engineering" as a critique of what happens when that capability is used without discipline. Karpathy himself draws the boundary: vibe coding raises the floor, but professional software needs [[agentic-engineering]] to preserve quality. The two terms are related but not synonymous — [[vibe-coding|vibe coding]] describes what's newly possible, vibes-based engineering describes the failure mode of doing it carelessly.
 
 ## Characteristics
 
@@ -48,6 +54,10 @@ The case reinforces the core argument: verification is not just about tests and 
 
 ## Related
 
+- [[vibe-coding]] — The neutral concept Karpathy coined; the capability shift that vibes-based engineering misuses
+- [[agentic-engineering]] — The professional discipline Karpathy proposes as the successor to undisciplined vibe coding
+- [[andrej-karpathy]] — Originator of the terms "vibe coding" and "agentic engineering"
+- [[verifiability]] — The economic driver that explains why vibes-based engineering works in some domains and fails catastrophically in others
 - [[slop]] — Vibes-based engineering often leads to the generation of "slop."
 - [[grey-box-engineering]] — The rigorous alternative that emphasizes the [[verification-loop]].
 - [[strategic-vs-tactical-programming]] — Vibes-based engineering is the extreme end of tactical programming.
@@ -84,3 +94,4 @@ The case reinforces the core argument: verification is not just about tests and 
 - `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
 - `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Practical workflow that contrasts with and replaces vibes-based engineering.
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Case study: synthetic truth as vibes-based acceptance applied to information; the definitive example of why verification matters.
+- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: origin of "vibe coding" as a neutral term, the December 2024 capability threshold, and the distinction between vibe coding (raising the floor) and agentic engineering (preserving quality).

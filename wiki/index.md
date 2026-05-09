@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-08
+updated: 2026-05-09
 sources: []
 tags: [index, wiki]
 ---
@@ -20,9 +20,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. Three sources converge on the tool as the bottleneck.
 - [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
 - [[intent-to-code]] — What stands between human intent and shipped code? Four philosophies — specs-as-compiler, plan-as-contract, alignment-first, and pure vibes — disagree on the artifact's weight and where quality enforcement lives.
+- [[the-verifiability-thesis]] — Karpathy's unified theory: verifiability drives RL training, which creates the jagged frontier, which makes vibe coding possible on the peaks and demands agentic engineering to manage the boundary.
 
 ## ✍️ Authors
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
+- [[andrej-karpathy]] — AI researcher and educator; co-founder of OpenAI, led Autopilot at Tesla; coined "vibe coding" and "agentic engineering."
 - [[discover-ai]] — YouTube creator (code4AI); documented the synthetic truth phenomenon through a Gemini interaction.
 - [[chris-parsons]] — Ex-CTO and AI adoption consultant; operationalized Ralph Loops as skills; introduced the worker loop pattern, sub-agent validation, and the "reversible without embarrassment" safety heuristic.
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
@@ -46,6 +48,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
+- [[agentic-engineering]] — The professional discipline of coordinating AI agents without sacrificing quality; 10x is the floor, not the ceiling.
 - [[agent-evals]] — CI for probabilistic systems: the 4-layer eval stack for AI agents.
 - [[agent-floor]] — Harvard 6-tier benchmark isolating tool-use complexity from real-world confounds; small models match frontier through tier C, all collapse at long-horizon planning.
 - [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as the practical craft of tooling for agents.
@@ -87,6 +90,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
+- [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
 - [[strategic-vs-tactical-programming]] — Prioritizing long-term health over immediate tactical fixes.
@@ -95,6 +99,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
+- [[verifiability]] — Karpathy's framework: LLMs automate what you can verify; the driver of jagged AI capability.
+- [[vibe-coding]] — The term Karpathy coined: coding where you fully trust the LLM's output. Raises the floor for everyone.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
 

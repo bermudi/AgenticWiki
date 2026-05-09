@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-05-07
+updated: 2026-05-09
 sources:
   - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
   - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
@@ -105,6 +105,7 @@ Different projects and teams will land at different points. The wiki's job is to
 
 ## Concepts in this thread
 
+- [[the-verifiability-thesis]] — The causal chain that reveals the axis's hidden variable: verifiability determines which positions work and where they fail
 - [[plan-vs-review]] — The plan-heavy camp: Knight-Webb's quantified heuristic, the feature type matrix, the BEEPs validation
 - [[ai-design-loop]] — The alignment-first camp: Grill Me, PRD as destination hint, don't review the PRD
 - [[vibes-based-engineering]] — The pure-vibes camp and specs-to-code as vibe coding's cousin
@@ -120,6 +121,10 @@ Different projects and teams will land at different points. The wiki's job is to
 - [[the-slop-problem]] — Both positions exist to prevent slop; they disagree on the best mechanism
 - [[plan-disposability]] — Aligns with alignment-first: plans as ephemeral, not contracts
 - [[fighting-slop-with-slop]] — The BEEPs workflow is the strongest empirical evidence for plan-as-contract
+- [[vibe-coding]] — The pure-vibes position on the axis is vibe coding taken to its logical extreme
+- [[agentic-engineering]] — Both plan-as-contract and alignment-first are strategies within agentic engineering's discipline of coordinating agents without sacrificing quality
+
+- [[the-verifiability-thesis]] — The causal chain behind the axis: the four positions are different verification strategies, and verifiability determines their viability
 
 ## Sources
 

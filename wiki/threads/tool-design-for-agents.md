@@ -185,6 +185,8 @@ The context engine layer interacts with the other four layers:
 - [[ralph-loop]] — Canonical example of minimal tool contracts and the loop pattern
 - [[agent-quality-engineering]] — Quality measurement depends on observable tools; tool design determines what's measurable
 
+- [[the-verifiability-thesis]] — Agent-native tooling maximizes verifiability; the thesis explains why this matters
+
 ## Sources
 
 - `raw/yt-how-agents-use-dev-tools.md` — Zanie Blue's systematic treatment: feedback qualities, scale effects, output optimization, self-tooling

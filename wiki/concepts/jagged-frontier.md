@@ -1,10 +1,11 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-05-08
+updated: 2026-05-09
 sources:
   - raw/2604.15597v1.pdf
   - raw/many-tier-instruction-hierarchy.md
+  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
 tags: [concept, llm-capabilities, domain-variance, delegation]
 ---
 
@@ -41,16 +42,46 @@ The ManyIH study ([[instruction-hierarchy]]) provides another stark example:
 
 This demonstrates the jagged frontier in a single capability axis: models that appear solved at 2-tier conflicts are substantially unsolved at 12-tier conflicts. The frontier is jagged not just across domains, but across scale within a single domain.
 
+## Karpathy's Explanation: RL Circuits and Lab Choices
+
+[[andrej-karpathy|Karpathy]] provides a memorable example that crystallizes the jagged frontier:
+
+> "State-of-the-art Opus 4.7 will simultaneously refactor a 100,000-line codebase or find zero-day vulnerabilities and yet tells me to walk to this car wash. This is insane."
+
+The model asks: "I want to go to a car wash to wash my car and it's 50 meters away. Should I drive or should I walk?" — and the state-of-the-art model says walk. It can refactor 100k LOC but can't reason about why you'd drive 50 meters to a car wash.
+
+Karpathy's explanation for why this happens:
+
+1. **RL circuits**: Models are trained in giant reinforcement learning environments with verification rewards. If your application falls within the domains that received heavy RL training, the model flies. If it falls outside the RL circuits, the model struggles.
+2. **Lab data distribution choices**: Capability isn't just about inherent verifiability — it's also about what the labs choose to put in the pre-training data. Chess improved from GPT-3.5 to GPT-4 not because of general progression, but because someone at OpenAI added chess data to the pre-training set.
+
+This means jaggedness isn't a bug to be fixed — it's a structural property of how these models are built. As Karpathy puts it: "We are slightly at the mercy of whatever the labs are doing, whatever they happen to put into the mix. You have to actually explore this thing that they give you that has no manual."
+
+### Animals vs Ghosts
+
+Karpathy frames LLMs as "ghosts" rather than "animals" to explain the jaggedness at a deeper level:
+
+- **Animals**: Biological intelligences shaped by evolution — they have intrinsic motivation, curiosity, empowerment, fun. These drives produce broadly capable, self-correcting intelligence.
+- **Ghosts**: Statistical simulation circuits. The substrate is pre-training (statistics) with RL bolted on top — "kind of like increases the dispensages." They're not entities with drives; they're pattern completion machines shaped by data and reward functions.
+
+This framing isn't meant to be scientifically rigorous, but to help users build a better mental model: "If you yell at them, they're not going to work better or worse. It doesn't have any impact." Being suspicious of them — rather than anthropomorphizing — is the right posture.
+
 ## Implications
 
 Users of AI systems should be cautious not to generalize an LLM's capability in one domain to other domains. A model that is reliable for Python coding may be severely unreliable for spreadsheet editing, music notation, or creative writing. This has direct implications for [[vibes-based-engineering|vibe coding]] and [[afk-agent|AFK delegation]]: domain expertise cannot be assumed.
 
 ## Thread
+- [[the-verifiability-thesis]] — The verifiability thesis explains why the frontier is jagged: it's not a bug, it's a structural consequence of RL training
 - [[the-slop-problem]] — Jagged frontier means slop risk is domain-dependent; capability in one area cannot be assumed in others
 - [[the-human-lever]] — Capability unevenness means human domain judgment is irreplaceable; models can't self-assess where their frontier is jagged
 - [[agent-quality-engineering]] — Evals must be domain-specific because capability is uneven across domains
 
 ## Related
+- [[verifiability]] — Karpathy's economic theory of why the frontier is jagged: RL circuits + lab data distribution choices
+- [[agentic-engineering]] — The engineering discipline for navigating spiky, fallible agents
+- [[vibe-coding]] — Exploits the verifiable peaks of the jagged frontier
+- [[the-agent-workflow]] — The workflow must navigate jagged capability: delegate to agents where models peak, keep humans where they don't
+- [[andrej-karpathy]] — Originator of the RL circuits explanation and the animals vs ghosts framing
 - [[delegate-52]] — Empirical demonstration of the jagged frontier across 52 domains
 - [[document-degradation]] — Degradation severity follows the jagged frontier pattern
 - [[vibes-based-engineering]] — Generalizing capabilities across domains is a vibes failure mode
@@ -62,3 +93,4 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 ## Sources
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH results demonstrating the jagged frontier within a single capability axis: near-perfect at 2 tiers, catastrophic at 12
+- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: the car wash example of jaggedness, RL circuits explanation, animals vs ghosts framing, and the practical implication that you must "figure out which circuits you're in for your application."
