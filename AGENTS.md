@@ -281,6 +281,8 @@ git commit -m "ingest: <source title> — <brief summary of what was created/upd
 
 **Never use `git add -A`** — it sweeps up untracked raw/ files that haven't been ingested yet. Only stage `wiki/` (all changed + new wiki pages) plus the specific `raw/` source file you ingested. If you ingested multiple sources in a batch, add each one explicitly.
 
+**Raw/ files are committed ONLY at ingest time.** Never commit a `raw/` file during meta/ changes, skill edits, or any other operation. The sole moment a `raw/` file enters git is when you commit the ingest that consumed it — alongside the wiki pages it produced. If you move a file to `raw/` as preparation for later ingest, leave it uncommitted until the ingest happens.
+
 The commit message should be useful in `git log` — include the source name and the scope of changes. If contradictions were flagged, mention them. Include verification status.
 
 ## Rules
