@@ -3,9 +3,50 @@
 ## Pipeline
 
 ```
-Phase 1: Filing     →  Phase 2: Analysis  →  Phase 3: Verification  →  Commit
-     (editing)           (critical re-read)      (separate audit)
+Step 0: Triage (GATE)  →  Phase 1: Filing  →  Phase 2: Analysis  →  Phase 3: Verification  →  Commit
+                             (editing)            (critical re-read)      (separate audit)
 ```
+
+## Step 0: Relevance Triage (GATE)
+
+**Who:** Main agent. **When:** After reading the source, before any wiki editing.
+
+This step exists because not every source the human hands you is worth a full three-phase ingest. Some are product demos, some are surface-level rehashes, some are parallel interests that don't intersect with the wiki's theory. The default should be to protect the wiki from dilution — the human can always override upward.
+
+### Procedure
+
+1. Read the source fully.
+2. Map it against the existing wiki: which threads does it touch? What pages exist already that cover this ground?
+3. Classify into one of three outcomes:
+
+| Outcome | Signal |
+|---|---|
+| **Full ingest** | Introduces a genuinely new idea, framework, or empirical result. Would create at least one new page that stands on its own (>10 lines of substantive content). Connects to existing threads. |
+| **Marginal** | Adds useful color or anecdotes to existing pages but doesn't warrant new pages. A few sentences of source-backed context on 1-2 existing pages. |
+| **Skip** | Product demo, surface-level summary, rehash of known territory, or entirely outside the wiki's domain. |
+
+4. Present the triage to the human:
+   - What the source is (1 sentence)
+   - Where it fits (which existing threads/pages)
+   - Your recommendation and why
+   - What you'd do for each outcome (concrete scope)
+5. Wait for approval. Do not proceed until the human says go.
+
+### Marginal outcome procedure
+
+If the human approves marginal:
+
+1. Add `raw/<filename>` to the `sources` frontmatter of the target page(s)
+2. Add an entry in the `## Sources` section annotating what the source contributed
+3. Add a sentence or short paragraph to the body citing the source where it fits
+4. Update the `updated` date
+5. Commit with message: `ingest (marginal): <source title> — folded into <page-names>`
+
+No new pages. No editors. No Phase 2 or 3. This is a lightweight operation.
+
+### Skip outcome
+
+File stays in `raw/` as archive. No wiki changes. Done.
 
 ## Phase 1 — Filing (main agent + 3 editors)
 

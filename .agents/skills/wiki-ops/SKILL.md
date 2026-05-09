@@ -16,7 +16,28 @@ For wiki structure and conventions, see `AGENTS.md` in the project root.
 
 ## Ingest
 
-Processing a new source into the wiki. **Three-phase operation: filing, then analysis, then verification.**
+Processing a new source into the wiki. Starts with a relevance gate — not every source warrants full ingestion.
+
+### Step 0: Relevance Triage (GATE)
+
+**Before any wiki editing begins**, read the source and evaluate whether it's worth ingesting. See the detailed procedure in [ingest-flow.md](references/ingest-flow.md), "Step 0: Relevance Triage."
+
+Present the triage to the human. Three outcomes:
+
+| Outcome | What happens |
+|---|---|
+| **Full ingest** | Proceed to Phase 1. Create/update pages, run editors, verify, commit. |
+| **Marginal** | Add the raw file as a source reference on 1-2 existing pages. Annotate what the source contributed. No new pages, no editors, no verification pass. Update `updated` date on touched pages. Commit with message `ingest (marginal): <source> — folded into <pages>`. |
+| **Skip** | File stays in `raw/` as archive. No wiki changes. Done. |
+
+**Triage criteria:**
+- Does the source introduce a genuinely new idea, framework, or empirical result? Or is it a product demo, surface-level summary, or rehash of known territory?
+- Would it create at least one new wiki page that can stand on its own (>10 lines of substantive content)? Or would it only add color to existing pages?
+- Does it connect to existing threads, or is it parallel interests that don't intersect with the wiki's theory?
+
+**Be opinionated.** A source that's a live product demo thinly disguised as a talk is probably marginal. A source that's entirely outside the wiki's domain (e.g., a biology paper in a software engineering wiki) is probably a skip. The human can always override, but the default should be to protect the wiki from dilution.
+
+**After triage is approved**, proceed accordingly.
 
 ### Phase 1: Filing
 
