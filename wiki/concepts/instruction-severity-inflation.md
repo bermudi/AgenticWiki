@@ -1,7 +1,7 @@
 ---
 title: Instruction Severity Inflation
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-08
 sources:
   - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
 tags: ["concept", "prompts", "context-engineering", "llm-limits"]
@@ -44,6 +44,7 @@ The dynamic:
 - [[context-engineering]] — Managing instruction density is a core context engineering skill
 - [[tool-design-for-agents]] — The parallel to tool bloat and tool selection degradation
 - [[smart-zone-dumb-zone]] — The underlying constraint driving instruction limits
+- [[instruction-hierarchy]] — The formal framework for what severity inflation undermines: when all instructions claim maximum privilege, the hierarchy collapses to a single flat tier
 
 ## Sources
 

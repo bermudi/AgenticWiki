@@ -1,8 +1,8 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-05-07
-sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf"]
+updated: 2026-05-08
+sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md"]
 tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 ---
 
@@ -93,9 +93,11 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - [[critical-failure]] — Long-horizon evals are necessary because short runs miss critical failures
 - [[agent-floor]] — The Harvard 6-tier benchmark that provides the eval methodology for isolating cognitive complexity from environmental confounds
 - [[model-routing]] — Model routing depends on evals to validate which model tier handles which complexity class
+- [[instruction-hierarchy]] — MANYIH-BENCH adds a third axis to the long-horizon eval landscape: conflict tier scaling ([[delegate-52]] measures domain breadth, [[agent-floor]] measures planning depth, ManyIH measures privilege complexity)
 
 ## Sources
 
 - `raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md` — The framework: four layers, four dimensions, CI for probabilistic systems
 - `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — LLM-as-judge in practice: groundedness scoring, prompt iteration from eval feedback
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon
+- `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH: 853-sample benchmark for instruction conflict resolution across up to 12 privilege tiers

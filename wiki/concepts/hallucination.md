@@ -1,7 +1,7 @@
 ---
 title: Hallucination
 created: 2026-04-25
-updated: 2026-05-07
+updated: 2026-05-08
 sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf, raw/synthetic-truths-gemini-has-a-secret-code.md]
 tags: [llm, reliability, engineering]
 ---
@@ -79,6 +79,7 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 - [[agent-floor]] — AgentFloor's tier E reveals tool hallucination (F1) as a specific failure mode at the planning ceiling
 - [[execution-apathy]] — GPT-5's failure mode at tier E: resigns without executing, producing plausible-looking outputs
 - [[blind-panic]] — Gemma 4's failure mode at tier E: tool hallucination as a desperation behavior under planning load
+- [[instruction-hierarchy]] — Semantic arithmetic failure is a related phenomenon: the model doesn't understand numbers, it pattern-matches them — same mechanism as hallucination applied to structured conflict resolution
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.

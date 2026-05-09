@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-05-06
+updated: 2026-05-08
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -220,6 +220,8 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - [[agent-skills]] — Skills reduce slop by replacing guesswork with defined procedures
 - [[synthetic-truth]] — Information slop: intent-aware fabrication that requires verification beyond code review
 - [[temporal-smoothing]] — Temporal displacement as a slop mechanism
+
+- [[discover-ai]] — The creator whose synthetic truth interaction with Gemini is the definitive case study of information slop in action
 
 ## Sources
 

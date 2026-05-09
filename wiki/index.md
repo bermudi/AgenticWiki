@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-06
+updated: 2026-05-08
 sources: []
 tags: [index, wiki]
 ---
@@ -59,6 +59,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
+- [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
@@ -70,6 +71,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
+- [[instruction-hierarchy]] — The mechanism by which LLMs resolve conflicting instructions from heterogeneous sources; current models fail at >3 privilege tiers.
 - [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
 - [[jagged-frontier]] — LLM capabilities are unevenly distributed; strong in some domains, severely error-prone in others.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.

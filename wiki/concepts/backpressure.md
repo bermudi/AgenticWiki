@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-05-07
+updated: 2026-05-08
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -68,6 +68,7 @@ This is backpressure in the literal sense — the human's testing activity *push
 - [[plan-disposability]] — Backpressure catches bad implementations; plan disposability catches bad plans
 - [[chris-parsons]] — "Reversible without embarrassment" as a practical safety backpressure heuristic
 - [[blind-panic]] — Blind panic's step budget exhaustion is a form of built-in backpressure: the environment stops the agent when it runs out of allowed moves
+- [[dynamic-trust]] — Dynamic trust scores as soft backpressure: low-trust outputs are mechanically deprioritized before they influence decisions
 
 ## Sources
 

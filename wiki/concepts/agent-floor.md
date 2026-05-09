@@ -1,7 +1,7 @@
 ---
 title: AgentFloor
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-05-08
 sources:
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
 tags: [benchmark, agent-evals, tool-use, model-evaluation]
@@ -84,6 +84,7 @@ The authors tried structured prompting — telling models to plan first and then
 - [[jagged-frontier]] — AgentFloor demonstrates the jaggedness: small models can match frontier on some tiers, but all collapse at the same ceiling
 - [[tool-design-for-agents]] — The benchmark isolates tool-use capability from tool design confounds
 - [[discover-ai]] — The source that covered the Harvard AgentFloor study
+- [[instruction-hierarchy]] — ManyIH also demonstrates complexity-scaling collapse: models break at 12-tier conflicts, just as AgentFloor reveals break at 8-12 step planning
 
 ## Sources
 

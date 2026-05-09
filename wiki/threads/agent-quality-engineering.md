@@ -1,13 +1,14 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-05-06
+updated: 2026-05-08
 sources:
   - "raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md"
   - "raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md"
   - "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"
   - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/many-tier-instruction-hierarchy.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 ---
 
@@ -112,6 +113,19 @@ Horthy describes building a logging proxy that intercepts every request/response
 - [[shared-design-concept]] — "Design so quality is measurable" is a shared-design principle. If the human and agent don't share the quality concept, the eval scores become meaningless.
 - [[grey-box-engineering]] — The eval/observability layer is how you maintain the grey-box model at scale. You can't read every trace, but aggregate quality metrics tell you where to look.
 
+## A Missing Quality Dimension: Trust Resolution
+
+The ManyIH study ([[instruction-hierarchy]]) reveals a quality dimension absent from existing agent quality frameworks: **can the agent correctly resolve conflicts among instructions from heterogeneous trusted sources?**
+
+This is not covered by the four quality dimensions (effectiveness, efficiency, robustness, safety) or the four eval layers. An agent can produce correct code (effectiveness), do it in few steps (efficiency), handle malformed input (robustness), and stay within bounds (safety) — yet still execute a low-trust web scrape over a high-trust internal database instruction because it cannot track privilege across 12 conflicting tiers.
+
+Key findings that quality infrastructure must account for:
+- All frontier models degrade monotonically as privilege tiers increase beyond training distribution (2 → 12), with drops up to 24%
+- Models are representation-sensitive: format changes alone cause ≥8% accuracy drops in GPT-5.4 and Opus 4.6, and perturbing privilege values by ±3 flips outcomes on 8–17% of tasks depending on model (GPT-5.4: 16.4% overall flip rate)
+- Reasoning effort is model-dependent: GPT improves monotonically; Claude has a dead zone at "low"
+
+This suggests trust resolution should join effectiveness, efficiency, robustness, and safety as a fifth quality dimension — or at minimum, multi-agent systems should benchmark privilege conflict handling as a first-class eval target.
+
 ### Tensions
 - [[vibes-based-engineering]] — Evals are the structural antidote to shipping agents on vibes. Galarza's core complaint: "Most teams build the agent, ship it, and then ask, how do we test this?" That's vibes-based agent engineering. The quality loop replaces "looks right to me" with "score 0.83, here's what failed."
 - [[malleable-agents]] — The quality loop provides the guardrails that make malleability safe. If an agent can modify its own tools, the eval set catches regressions.
@@ -130,6 +144,7 @@ Horthy describes building a logging proxy that intercepts every request/response
 - [[agent-floor]] — The Harvard benchmark that demonstrates the tier E ceiling; provides an eval methodology for isolating cognitive complexity
 - [[execution-apathy]] — A quality failure mode quantified by AgentFloor: the model resigns without executing
 - [[blind-panic]] — A quality failure mode quantified by AgentFloor: the model loops and degenerates
+- [[instruction-hierarchy]] — ManyIH reveals a missing quality dimension: trust resolution across heterogeneous instruction sources under privilege conflict
 
 ## Related
 
@@ -146,6 +161,8 @@ Horthy describes building a logging proxy that intercepts every request/response
 - [[jagged-frontier]] — Evals must be domain-specific because capability is uneven
 - [[context-engineering]] — The eval infrastructure (logging proxies, snapshots) is a context engineering concern
 - [[slop-watch]] — Concrete architectural contribution to the observability layer: sessions as DAGs, listener/sidecar pattern, per-agent adapters
+- [[dynamic-trust]] — Proposed quality infrastructure for the trust dimension: dynamic trust middleware that recalculates scores at inference time
+- [[discover-ai]] — Coverage of AgentFloor, ManyIH, and model routing all feed the quality engineering thesis: measure, observe, improve
 
 ## Sources
 
@@ -154,3 +171,4 @@ Horthy describes building a logging proxy that intercepts every request/response
 - `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — The flywheel in practice: groundedness eval, Mastra walkthrough
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Snapshot-based evals, LLM-as-judge skepticism, vibes-first eval strategy, logging proxy infrastructure
 - `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: reproducible benchmark methodology, failure mode taxonomy, demonstrates the quality ceiling at tier E
+- `raw/many-tier-instruction-hierarchy.md` — ManyIH study: combinatorial collapse of LLM trust resolution, representation sensitivity, evidence for trust resolution as a missing quality dimension

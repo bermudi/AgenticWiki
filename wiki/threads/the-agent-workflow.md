@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-07
+updated: 2026-05-08
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -28,6 +28,9 @@ tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-
 # The Agent Workflow
 
 > How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software. The agent harness architecture has converged on a [[multi-tier-action-space]] pattern (thin tool layer + computer primitive), while [[evolving-context|evolving context]] — agents improving their own prompts, skills, and memories over time — is the major unsolved frontier.
+
+> [!note] Departure: The Combinatorial Collapse Threshold
+> The ManyIH study ([[instruction-hierarchy]], Zhang et al. 2026) reveals a structural limit on parallel agent management: **4+ agents with multi-step reasoning chains create the 12-tier instruction conflict scenarios that cause combinatorial collapse in all current models.** Focus maxing, AFK swarms, and multi-agent coordination — all strategies this thread advocates — generate heterogeneous outputs that must be resolved by privilege. Even with a perfectly designed trust hierarchy, the orchestrating model fails to correctly resolve conflicts ~60% of the time. The practical ceiling: decompose agent swarms so any single trust resolution decision involves ≤3 privilege tiers. Below that threshold, models operate in the 2-tier regime they're trained for; above it, they collapse.
 
 > [!note] Departure: Where Does Quality Live?
 > This thread's sources disagree on a fundamental question: does quality live in the spec or in QA? [[plan-vs-review|Plan-heavy]] says the spec IS the quality mechanism. [[matt-pocock|Pocock]]'s alignment-first says QA is where quality gets enforced — the PRD is a disposable hint. See [[intent-to-code]] for the full fork in the road.
@@ -351,9 +354,10 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[execution-apathy]] — The failure mode that prevents successful HITL-to-AFK handoff at high planning complexity
 - [[blind-panic]] — The complementary failure mode; persistent but dysfunctional AFK execution
 - [[sandcastle]] — Matt Pocock's parallel AFK agent pipeline; operationalizes the AFK implementation phase at scale with Docker sandboxes
-- [[model-routing]] — The cost optimization counterpart to the decomposition workflow: route subtasks to the cheapest capable model
-- [[agent-floor]] — Provides the empirical basis for the decomposition heuristic: which complexity tiers can small models handle
 - [[intent-to-code]] — The thread that traces the disagreement: where does quality enforcement live?
+- [[instruction-hierarchy]] — Multi-agent workflows inherently create instruction conflicts; the hierarchy determines whose output wins in AFK execution
+- [[dynamic-trust]] — Dynamic trust extends the workflow: agents don't just execute, they continuously verify and re-rank whose output to trust
+- [[agent-quality-engineering]] — The quality infrastructure thread: how you know whether your agents actually work when executing this workflow
 
 ## Related
 
@@ -361,8 +365,6 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - [[the-human-lever]] — The design authority that underpins the whole workflow
 - [[unblocked]] — A context engine that operationalizes the workflow at organizational scale; pre-curates context to prevent doom loops
 - [[peter-werry]] — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase
-- [[execution-apathy]] — The failure mode that prevents successful HITL-to-AFK handoff at high planning complexity
-- [[blind-panic]] — The complementary failure mode: persistent but dysfunctional AFK execution at the planning ceiling
 
 ## Sources
 

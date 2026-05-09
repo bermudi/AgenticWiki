@@ -1,9 +1,10 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-05-07
+updated: 2026-05-08
 sources:
   - raw/2604.15597v1.pdf
+  - raw/many-tier-instruction-hierarchy.md
 tags: [concept, llm-capabilities, domain-variance, delegation]
 ---
 
@@ -30,6 +31,16 @@ In the [[delegate-52|DELEGATE-52]] benchmark, the jagged frontier is stark:
 - **Non-monotonic with scale**: Larger or newer models do not uniformly improve across all domains
 - **Task-structure dependent**: Performance is higher where documents have high repetitiveness and structural density, and lower where vocabulary is rich and unrepeated
 
+## Evidence from Instruction Hierarchy
+
+The ManyIH study ([[instruction-hierarchy]]) provides another stark example:
+
+- The GPT-5 system card reports **>99% accuracy** on standard 2-tier instruction hierarchy evaluations, yet GPT 5.4 specifically achieves only **39.5% accuracy** on MANYIH-BENCH with up to 12 tiers
+- The capability degrades consistently as tiers increase — near-perfect at the trained 2-tier regime, declining to ~40% at 12 tiers, far beyond training distribution
+- Even the representation format matters: switching from ordinal to scalar notation drops accuracy by ≥8% for frontier models (GPT 5.4: 8.4%, Opus 4.6: 8.0%)
+
+This demonstrates the jagged frontier in a single capability axis: models that appear solved at 2-tier conflicts are substantially unsolved at 12-tier conflicts. The frontier is jagged not just across domains, but across scale within a single domain.
+
 ## Implications
 
 Users of AI systems should be cautious not to generalize an LLM's capability in one domain to other domains. A model that is reliable for Python coding may be severely unreliable for spreadsheet editing, music notation, or creative writing. This has direct implications for [[vibes-based-engineering|vibe coding]] and [[afk-agent|AFK delegation]]: domain expertise cannot be assumed.
@@ -46,6 +57,8 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[the-human-lever]] — Humans must own domain boundary decisions because models can't
 - [[agent-floor]] — AgentFloor demonstrates the jagged frontier empirically: small models match GPT-5 on some tiers but all collapse at the same planning ceiling
 - [[model-routing]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
+- [[instruction-hierarchy]] — The 2-tier → 12-tier gap is a single-axis case study of the jagged frontier: >99% at training distribution, ~40% one step beyond
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems
+- `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH results demonstrating the jagged frontier within a single capability axis: near-perfect at 2 tiers, catastrophic at 12

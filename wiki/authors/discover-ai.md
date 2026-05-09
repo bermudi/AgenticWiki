@@ -1,10 +1,11 @@
 ---
 title: Discover AI
 created: 2026-05-05
-updated: 2026-05-06
+updated: 2026-05-08
 sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/yt-agent-trust-vector-study-2026.md
 tags: [author, youtube]
 ---
 
@@ -14,7 +15,7 @@ tags: [author, youtube]
 
 - YouTube: https://www.youtube.com/@code4AI
 
-## Coverage
+## Covered Concepts
 
 - [[synthetic-truth]] — Discovered and named the phenomenon through a May 2026 interaction
 - [[temporal-smoothing]] — Documented the specific mechanism of AI presenting future work as completed reality
@@ -22,6 +23,14 @@ tags: [author, youtube]
 - [[execution-apathy]] — Documented GPT-5's failure mode at the planning ceiling
 - [[blind-panic]] — Documented Gemma 4's complementary failure mode
 - [[model-routing]] — Presented the cost-optimization framework for routing tasks by complexity
+- [[instruction-hierarchy]] — Covered the Johns Hopkins ManyIH study: combinatorial collapse, semantic arithmetic, representation fragility, reasoning effort paradox
+- [[dynamic-trust]] — Proposed extending static source-based trust to dynamic source + context + provability
+
+## Thread
+
+- [[the-slop-problem]] — The synthetic truth interaction is a definitive case study of information slop in action
+- [[the-human-lever]] — The synthetic truth interaction demonstrates verification as the non-negotiable human act; the Gemini interaction could only be spotted by active verification
+- [[agent-quality-engineering]] — Coverage of AgentFloor, ManyIH, and model routing all feed the quality engineering thesis: measure, observe, improve
 
 ## Related
 
@@ -34,3 +43,4 @@ tags: [author, youtube]
 
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The synthetic truth interaction with Gemini
 - `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Walkthrough of the Harvard AgentFloor study: 6-tier benchmark, 16 open-weight models vs GPT-5, failure mode taxonomy, and model routing cost framework
+- `raw/yt-agent-trust-vector-study-2026.md` — Analysis of the Johns Hopkins ManyIH study: combinatorial collapse of LLMs facing 12-tier instruction conflicts, semantic arithmetic failure, dynamic trust proposal

@@ -1,7 +1,7 @@
 ---
 title: Malleable Agents
 created: 2026-04-25
-updated: 2026-05-04
+updated: 2026-05-08
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
@@ -60,6 +60,7 @@ Examples from practice:
 - [[astral]] — Tool builder actively adapting for agentic use.
 - [[armin-ronacher]] — Pi contributor and plan-mode experimenter.
 - [[agent-skills]] — Skills being just files means agents can create and modify them, making agents self-extending
+- [[agent-quality-engineering]] — The quality loop provides the guardrails that make malleability safe: if an agent can modify its own tools, the eval set catches regressions
 
 ## Sources
 

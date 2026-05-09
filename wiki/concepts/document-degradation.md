@@ -1,7 +1,7 @@
 ---
 title: Document Degradation
 created: 2026-05-02
-updated: 2026-05-05
+updated: 2026-05-08
 sources:
   - raw/2604.15597v1.pdf
 tags: [llm, reliability, delegation, failure-mode, long-horizon]
@@ -82,6 +82,7 @@ A small-scale extension to image generation models shows degradation is **far mo
 - [[philippe-laban]] — Lead author of the study that quantified document degradation
 - [[deliberate-friction]] — Preserving friction at delegation boundaries acts as a circuit breaker for degradation
 - [[doc-rot]] — Staleness (not corruption); the complementary failure mode where completed docs mislead future agents
+- [[agent-evals]] — Long-horizon evals (DELEGATE-52) are built specifically to surface document degradation; the eval methodology that revealed this failure mode
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Quantitative results across 19 LLMs, domain breakdowns, critical failure analysis, deletion vs. corruption decomposition, and factor experiments

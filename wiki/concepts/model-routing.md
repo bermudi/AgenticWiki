@@ -1,7 +1,7 @@
 ---
 title: Model Routing
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-05-08
 sources:
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
 tags: [workflow, cost-optimization, architecture, model-selection]
@@ -73,6 +73,7 @@ Model routing integrates naturally with the [[the-agent-workflow|agent workflow]
 - [[jagged-frontier]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
 - [[afk-agent]] — Model routing enables cheaper, more scalable AFK execution
 - [[discover-ai]] — The source that presented the model routing framework
+- [[dynamic-trust]] — Parallel concept: model routing routes to the cheapest capable model; dynamic trust routes authority to the most verifiable output
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: Shared Design Concept
 created: 2026-04-25
-updated: 2026-05-03
+updated: 2026-05-08
 sources:
   - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
   - "Peter Naur, Programming as Theory Building (1985)"
@@ -46,6 +46,8 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[comprehension-debt]] — What happens when the shared design concept erodes: code exists but nobody holds the theory.
 - [[matt-pocock]] — Primary advocate for making the design concept explicit in AI workflows.
 - [[vibes-based-engineering]] — Specs-to-code bypasses building a shared design concept; the user never develops a theory of the code.
+- [[agent-evals]] — Evals operationalize the shared design concept: "design so quality is measurable" means the quality criteria are part of the shared concept
+- [[agent-quality-engineering]] — The quality engineering thread treats the shared design concept as infrastructure: quality must be designed in from day one
 
 ## Thread
 - [[the-human-lever]] — The shared design concept as the core of human design authority

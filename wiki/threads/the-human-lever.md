@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-05-06
+updated: 2026-05-08
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -66,6 +66,9 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 > [!note] Departure: Prompting Can't Fix the Planning Ceiling
 > The Harvard AgentFloor study (May 2026) provides empirical evidence that complicates the thread's emphasis on human-level prompt engineering. The authors tried structured prompts — telling models to plan first, then execute — at tier E. It didn't help GPT-5. It **actively hurt** Gemma 4 26B, pushing it into the resignation failure mode it otherwise avoids. This suggests the human lever at high planning complexity is not better prompting but **task decomposition and [[model-routing|model routing]]** — breaking the task below the model's architectural ceiling before applying any prompt strategy. The human's authority over prompt design has an upper bound; decomposition is the escape valve.
+
+> [!note] Departure: The Trust Hierarchy Ceiling
+> The ManyIH study ([[instruction-hierarchy]], Zhang et al. 2026) reveals a second capability ceiling: **the human can design the perfect privilege hierarchy, but the model still fails to follow it 60% of the time when tiers exceed 2-3.** The human lever — define which sources to trust, assign privilege levels — works exactly as intended at the design level. The failure is at the execution level: the model resolves 12-tier combinatorial conflicts as semantic pattern-matching, not arithmetic. This parallels the AgentFloor planning ceiling: the human's design authority is bounded by the model's architectural limitations, and no amount of better hierarchy design or privilege tagging fixes the underlying combinatorial collapse. The escape valve is the same: keep conflict tiers low by decomposing agent swarms so any single resolution decision involves ≤3 privilege tiers.
 
 > [!note] Departure: Aesthetics vs. Verification
 > There is a notable tension between [[dex-horthy|Dex Horthy]]'s insistence on a rigorous **[[verification-loop]]** (types, tests, linters) and [[dhh|David Heinemeier Hansson]]'s emphasis on **[[aesthetics-is-truth]]**. While Horthy focuses on mechanical proof, DHH argues that a human's aesthetic judgment ("taste") is a faster and often more accurate proxy for system health. Most modern agentic workflows attempt to balance both.
@@ -243,6 +246,9 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[slop]] — Slop accumulates when humans abdicate design authority; the lever prevents it
 - [[synthetic-truth]] — Information slop as the strongest argument for the human lever: verification is the only defense
 - [[temporal-smoothing]] — Timeline verification as a specific human-lever skill
+
+- [[discover-ai]] — The creator whose synthetic truth interaction with Gemini is the definitive case study for why verification is the non-negotiable human act
+- [[agent-quality-engineering]] — Quality engineering operationalizes the human lever: define quality criteria (evals), verify they're met (observability), and close the loop (flywheel)
 
 ## Sources
 

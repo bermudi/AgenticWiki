@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-05-04
+updated: 2026-05-08
 sources:
   - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
   - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
@@ -131,6 +131,7 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - [[satisfaction-of-search]] — A context engineering failure mode: agents stopping context retrieval too early
 - [[unblocked]] — A productized context engine architecture
 - [[peter-werry]] — Contributions to context engine architecture, satisfaction of search, and organizational context retrieval
+- [[dynamic-trust]] — Real-time context injection is the mechanism for the "time-specific context" component of dynamic trust; context engineering enables it
 
 ## Sources
 
