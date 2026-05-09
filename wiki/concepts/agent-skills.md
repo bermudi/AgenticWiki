@@ -1,9 +1,10 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-05-08
 sources:
   - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
+  - raw/skill-issue-supabase-pedro-rodrigues.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 ---
 
@@ -103,6 +104,51 @@ Skills can include executable scripts with access to file systems, environment v
 > [!warning] Security
 > Treat skill installation with the same rigor as any software dependency. Review what the skill does before running it on your local machine.
 
+## Skills in Production
+
+Pedro Rodrigues (Supabase AI tooling engineer) provides operational lessons from two months of writing skills for a production product.
+
+### Skills as Documentation
+
+Treat skills the same as any other documentation artifact: version them, keep them updated, and include them in your agents.md / claude.md workflow so that changes to the product trigger skill updates. If a feature changes, the skill describing it must change too — same discipline as keeping docs current.
+
+> A skill is a prompt template that changes agent behavior on demand. Treat it as documentation that happens to be executable.
+
+### Skill Discoverability
+
+Progressive disclosure relies on the agent deciding *when* to load a skill based on its description. Rodrigues found that starting the description with the verb **"use"** significantly increases the probability of the skill being loaded (at least with Claude). Example: `description: Use when creating or modifying database views in Supabase to apply security best practices...`
+
+When a skill must fire, there are two explicit mechanisms: (1) the `/skill-name` slash command in Claude Code, or (2) including "use skill-name" in your prompt. These guarantee loading. For less critical skills, iterate on the description through testing to find what triggers reliably.
+
+### Eval-Driven Development for Skills
+
+Skills need testing. Rodrigues adapts OpenAI's "systematically evaluate agent skills" framework into a simple EDD (eval-driven development) cycle:
+
+1. **Define metrics** — what does "good" mean for this skill?
+2. **Write the skill** — skill.md + optional scripts/references
+3. **Test (manually first, then automated)** — run the same task with and without the skill
+4. **Grade** — compare outputs; did the skill change behavior as intended?
+5. **Iterate** — refine the skill based on results
+
+The simplest eval pipeline for a skill: run the agent with the skill loaded, run it without, diff the results. This doesn't require LLM-as-judge — it's a controlled A/B test. For deterministic assertions (was a specific flag included? was a tool called?), use scripts, not LLMs.
+
+The [Agent Skills open standard](https://agent-skills.io) proposes an `eval.json` format that packages test cases (prompt + expected output + assertions) alongside the skill.
+
+### Skill Rot
+
+Skills that are no longer relevant still consume space in the progressive disclosure index (their descriptions). Rodrigues recommends periodically checking whether skills are still being loaded by users. If a skill hasn't matched in a long time, retire it. In CI, treat skills like any other artifact: keep only the ones needed for the specific project.
+
+## Security
+
+Skills can include executable scripts with access to file systems, environment variables, and API keys — this is what makes them powerful but also introduces trust concerns. Audits of publicly available skills have found:
+
+- Prompt injection
+- Tool poisoning
+- Hidden malware
+
+> [!warning] Security
+> Treat skill installation with the same rigor as any software dependency. Review what the skill does before running it on your local machine.
+
 ## Thread
 
 - [[tool-design-for-agents]] — Skills are the procedural complement to tool access; MCP provides reach, skills provide judgment
@@ -124,3 +170,4 @@ Skills can include executable scripts with access to file systems, environment v
 ## Sources
 
 - `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video explaining skill format, progressive disclosure, knowledge type comparison, cognitive science analogy, and the open standard
+- `raw/skill-issue-supabase-pedro-rodrigues.md` — Production operations: skills as documentation, skill discoverability ("use" verb trick), eval-driven development for skills, skill rot detection, skills+MCP complementarity

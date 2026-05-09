@@ -2,7 +2,7 @@
 title: Agent Evals
 created: 2026-04-27
 updated: 2026-05-08
-sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md"]
+sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md", "raw/skill-issue-supabase-pedro-rodrigues.md"]
 tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 ---
 
@@ -88,6 +88,7 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - [[verification-loop]] — Evals are the probabilistic equivalent of the verification loop
 - [[vibes-based-engineering]] — Evals are the structural antidote to shipping agents on vibes
 - [[shared-design-concept]] — "Design so quality is measurable" is a shared-design principle
+- [[agent-skills]] — Skills introduce a simple eval pattern: run with vs without the skill, diff the results
 - [[compounding-booboos]] — The eval flywheel catches booboos before they compound in production
 - [[delegate-52]] — Long-horizon benchmark for delegated document editing
 - [[round-trip-relay]] — Reference-free eval methodology for long workflows
@@ -104,3 +105,4 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH: 853-sample benchmark for instruction conflict resolution across up to 12 privilege tiers
 - `raw/playground-in-prod-samuel-colvin.md` — Practitioner confirmation: most teams don't eval at all; deterministic evals strongly preferred over LLM-as-judge
+- `raw/skill-issue-supabase-pedro-rodrigues.md` — Skill-specific eval pattern: A/B test with/without the skill, deterministic assertions over LLM-as-judge
