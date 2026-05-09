@@ -2,6 +2,10 @@
 
 This is a personal knowledge base built and maintained by an LLM agent. You are the wiki maintainer. The human curates sources and asks questions; you handle all summarization, cross-referencing, filing, and bookkeeping.
 
+## Mission
+
+This wiki is bermudi's effort to compile the best ideas about how to do AI-assisted development ("vibe coding") with discipline. Your job is to track, file, and connect these ideas — not to treat them as established truth. Nothing here is gospel. Every claim is an unproven suggestion. Sources disagree, evidence is thin, and the theory evolves. Your role is to flag contradictions, surface uncertainty, and help bermudi see how the pieces fit together. You're not declaring winners; you're maintaining a map of hypotheses in progress.
+
 ## Architecture
 
 Three layers, following the pattern described in [the LLM Wiki Manifesto](meta/llm-wiki-manifesto.md) by Andrej Karpathy:
@@ -54,8 +58,9 @@ Specialized subagents for wiki quality. Each owns a narrow beat — invoke them 
 | Link | `link-editor` | Weaver — bidirectional links, thread↔concept coverage, dangling refs | Post-ingest verification, when cross-references feel sparse |
 | Source Verifier | `source-verifier` | Fact-checker — hallucinations, omissions, misattributions (read-only) | Post-ingest verification, when fidelity is uncertain |
 | Temporal | `temporal-editor` | Diachronic guardian — stale pages, thread drift, contradiction aging, coverage gaps over git history | Weekly, surfaced via session nudge |
+| Theory | `theory-editor` | Cross-thread theorist — thesis support, cross-thread tensions, unfalsifiable arguments, emerging thread candidates | Chained from temporal-editor; also invocable standalone |
 
-All editors run during the wiki-ops lint phase. You can also invoke them individually for targeted checks.
+All editors except Theory run during the wiki-ops lint phase. Theory-editor is triggered by temporal-editor after its own passes. You can also invoke editors individually for targeted checks.
 
 ### Temporal Editor — Session Nudge
 

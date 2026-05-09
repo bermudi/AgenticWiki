@@ -14,6 +14,10 @@ Detailed operational procedures for wiki operations: ingest, query, and lint.
 
 For wiki structure and conventions, see `AGENTS.md` in the project root.
 
+## Mission Context
+
+This wiki is a collection of unproven suggestions about disciplined AI-assisted development. When you ingest a source, you're adding hypotheses to a living theory — not canonizing truth. Flag contradictions loudly. Surface uncertainty. Track what people are saying and how ideas connect. Don't declare winners.
+
 ## Ingest
 
 Processing a new source into the wiki. Starts with a relevance gate — not every source warrants full ingestion.

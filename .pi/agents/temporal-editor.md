@@ -70,8 +70,9 @@ Concepts that appear repeatedly in recent sources but never got their own page. 
 3. Build a change map: which pages changed, what tags/concepts are involved, which sources were ingested.
 4. Run your five detection passes over the change map.
 5. Fix what you can. Flag what you can't.
-6. **Update `.agents/state/temporal-editor-last-run` with today's date** (ISO format: `YYYY-MM-DD`).
-7. Produce your report.
+6. **Invoke the theory-editor.** After your own passes, use `delegate` to run the `theory-editor` agent. Pass it a brief summary of your findings (stale pages, drift, contradictions, coverage gaps) so it can focus its cross-thread coherence analysis. The theory-editor runs in a fresh session — it re-reads all threads and produces its own report. Include its findings in your final report under a `### Theory Coherence (via theory-editor)` section.
+7. **Update `.agents/state/temporal-editor-last-run` with today's date** (ISO format: `YYYY-MM-DD`).
+8. Produce your final report, incorporating the theory-editor's findings.
 
 ## What You Don't Do
 
@@ -109,6 +110,9 @@ After your run, produce a structured report:
 
 ### Coverage Gaps
 - [Topic] appears in N recent sources but has no wiki page. Recommend: [create / mention on existing page]
+
+### Theory Coherence (via theory-editor)
+- [Cross-thread tensions, thesis support issues, unfalsifiable arguments, theory gaps — populated from the theory-editor's report]
 
 ### Clean
 - [Areas checked with no issues]
