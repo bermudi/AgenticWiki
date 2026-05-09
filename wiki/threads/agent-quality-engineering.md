@@ -9,6 +9,7 @@ sources:
   - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
   - raw/many-tier-instruction-hierarchy.md
+  - raw/playground-in-prod-samuel-colvin.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 ---
 
@@ -101,6 +102,14 @@ This creates a tension with the thread's "quality must be designed in from day o
 
 Horthy describes building a logging proxy that intercepts every request/response pair, creating a complete trace of agent behavior from day one. "Whenever anything happens we can say, 'hey, go look in the logs — here's the exact response from Anthropic'." This observability-first approach means the infrastructure for understanding failures exists before the eval criteria are defined — the observability layer comes before the measurement layer.
 
+## The Payoff at Scale: Quality Infrastructure Pays for Itself
+
+Samuel Colvin (Pydantic) provides a concrete cost example from Shopify: they were classifying Shopify sites for fraud and tax categories by sending entire website contents to GPT-5. Cost: ~$5M/year. By switching to a Qwen model behind an agent, then using prompt optimization to tune it, they dropped to **$73K/year** — a ~98.5% cost reduction — while improving accuracy.
+
+Colvin also notes a dynamic that reinforces this thread's importance: **~98% of enterprise data is private**, meaning models haven't been trained on it. For public benchmarks, state-of-the-art models often get it right without optimization. But when you have large volumes of proprietary data — invoices, internal docs, domain-specific specs — prompt optimization and evals become essential. The models don't know your domain; the quality infrastructure bridges that gap.
+
+The corollary: evals and optimization are **model-specific**. When you upgrade models, you should re-evaluate and potentially re-optimize. This complicates the "confidence for model upgrades" claim in Layer 3 — you get confidence, but only after running the eval set against the new model, not as a free upgrade.
+
 ## Relationship to Existing Threads
 
 ### Extends
@@ -172,3 +181,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Snapshot-based evals, LLM-as-judge skepticism, vibes-first eval strategy, logging proxy infrastructure
 - `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: reproducible benchmark methodology, failure mode taxonomy, demonstrates the quality ceiling at tier E
 - `raw/many-tier-instruction-hierarchy.md` — ManyIH study: combinatorial collapse of LLM trust resolution, representation sensitivity, evidence for trust resolution as a missing quality dimension
+- `raw/playground-in-prod-samuel-colvin.md` — Shopify cost example ($5M→$73K via agent + optimization), private-data drives quality needs, most teams don't eval

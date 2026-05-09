@@ -2,7 +2,7 @@
 title: Agent Evals
 created: 2026-04-27
 updated: 2026-05-08
-sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md"]
+sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md"]
 tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 ---
 
@@ -52,12 +52,14 @@ This is where **LLM-as-Judge** comes in: a second language model evaluates the a
 > [!warning] Limitation
 > Automated evals don't catch everything. Regularly reading production traces directly surfaces the subtle failures no rubric anticipated.
 
-> [!warning] Contradiction: LLM-as-Judge Inadequacy (Two Sources)
-> This page and the [[agent-quality-engineering]] thread treat LLM-as-Judge as a viable outcome-scoring mechanism. Two independent sources challenge this:
+> [!warning] Contradiction: LLM-as-Judge Inadequacy (Three Sources)
+> This page and the [[agent-quality-engineering]] thread treat LLM-as-Judge as a viable outcome-scoring mechanism. Three independent sources challenge this:
 >
 > 1. **DELEGATE-52** ([[philippe-laban|Laban]] et al., 2026): Even GPT 5.4 as judge captures **at most 25% of the variance** of domain-specific parsing metrics. Generic rubric and LLM judges failed to detect nuanced semantic corruption — only structured, domain-aware scoring caught real degradation.
 >
 > 2. **[[dex-horthy|Dex Horthy]]** (practitioner): Models are "optimized to tell you what you want to hear." Ask a model to review code as "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. His maxim: **"Never send an AI to do a linter's job."** Anything deterministic should be checked deterministically.
+>
+> 3. **Samuel Colvin** (Pydantic creator, practitioner): Calls LLM-as-judge "the lunatics running the asylum" — a model judging another model's output introduces circular unreliability. His preference: deterministic evals comparing structured output against a golden dataset. He also notes that most teams **don't run evals at all** — they write a prompt, eyeball it, and ship. Optimization and evals are the exception, not the norm.
 >
 > Together, these suggest the outcome eval layer is significantly weaker than the framework assumes. Horthy's alternative: snapshot-based evals (run, store, diff) and vibes-first exploration before defining eval criteria.
 
@@ -101,3 +103,4 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — LLM-as-judge in practice: groundedness scoring, prompt iteration from eval feedback
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH: 853-sample benchmark for instruction conflict resolution across up to 12 privilege tiers
+- `raw/playground-in-prod-samuel-colvin.md` — Practitioner confirmation: most teams don't eval at all; deterministic evals strongly preferred over LLM-as-judge
