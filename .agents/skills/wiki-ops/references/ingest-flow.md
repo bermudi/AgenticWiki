@@ -95,8 +95,8 @@ File stays in `raw/` as archive. No wiki changes. Done.
 **Who:** Main agent, switching to critical mode.
 
 - Re-read every thread page
-- Check: contradictions, departures, tensions
-- Present theory summary: what gained support, what took a hit
+- Check: contradictions, departures, tensions, panorama-level reframes
+- Present theory summary: what gained support, what took a hit, and recommended theory action
 
 ## Phase 3 — Verification (separate agents, separate sessions)
 

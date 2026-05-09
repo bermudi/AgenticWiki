@@ -258,7 +258,12 @@ Threads are not just filing — they are the wiki's living theory. During ingest
 
 1. **Discuss before you write.** After reading the source, pause and tell the human what you found — key claims, where it fits, anything surprising. Let them guide emphasis before you touch any wiki pages. The human owns what matters; you own the filing.
 2. **Actively look for theory.** Don't just extract concepts — identify recurring claims, workflows, and principles across sources. When multiple sources converge on the same idea, that's a thread. When a new source reinforces an existing thread, deepen it.
-3. **Highlight contradictions and departures.** When a source disagrees with an existing thread or concept, don't silently reconcile. Flag it explicitly with a `> [!warning] Contradiction` callout on both the concept page and the thread, and surface it to the human in your ingest summary so they can decide which direction to take.
+3. **Track theory pressure, not just contradictions.** When a source stresses the existing theory — by contradicting a claim, reframing a failure mode, shifting a human/agent boundary, or suggesting a framework is transitional — don't silently reconcile it. Classify the pressure:
+   - **Local caveat**: add a `> [!warning] Theory pressure` or `> [!note] Departure` callout on the affected page.
+   - **Thread-level tension**: add or update the thread's `## Tensions` section.
+   - **Panorama-level reframe**: propose a new thread or major thread section if the source reorganizes multiple existing pages.
+
+   Surface the pressure in the ingest summary so the human can decide whether to preserve, deepen, or resolve it.
 4. **Propose new threads when themes emerge.** If a source introduces a coherent argument that doesn't fit any existing thread, propose a new one. Explain how it relates to existing threads (supports, contradicts, extends).
 5. **Present the state of the theory.** After ingestion, summarize not just what was added but how the overall picture changed — which threads gained support, which took a hit, where the tensions are.
 

@@ -22,11 +22,15 @@ Read the existing concept pages that are most related to the new source's claims
 2. Does it add nuance or a different angle?
 3. Does it contradict?
 
-If you find a contradiction or departure:
+If you find theory pressure — contradiction, departure, boundary shift, reframing, or evidence that an existing framework may be transitional — classify its scope before editing:
 
-- Add a `> [!warning] Contradiction` callout on **both** the concept page and the thread page where it's relevant
-- Add a `> [!note] Departure` callout for novel-but-not-contradictory positions
-- Do not silently reconcile. Flag it explicitly so the human can decide.
+| Scope | Action |
+|---|---|
+| **Local caveat** | Add a `> [!warning] Theory pressure` callout or `> [!note] Departure` callout on the affected page. |
+| **Thread-level tension** | Add/update the thread's `## Tensions` section and link the affected concepts. |
+| **Panorama-level reframe** | Propose a new thread or major section in an existing thread. Do not bury it as only a callout. |
+
+Do not silently reconcile. Preserve the disagreement or departure as part of the theory map.
 
 ## Step 3: Theory summary
 
@@ -37,6 +41,7 @@ Present this to the human:
 - **Contradictions found**: List them with the conflicting claims and pages
 - **Departures found**: List novel positions that don't fit the existing theory
 - **Emerging themes**: Is a new thread brewing? Are there tensions that need resolution?
+- **Recommended theory action**: Should this remain a local callout, become a thread tension, expand an existing thread, or become a provisional new thread?
 
 Don't just list what was added. Tell the human how the theory changed.
 
