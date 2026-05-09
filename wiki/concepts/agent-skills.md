@@ -5,6 +5,7 @@ updated: 2026-05-08
 sources:
   - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
+  - raw/skills-at-scale-workos-nisi-proser.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 ---
 
@@ -93,16 +94,47 @@ The `skill.md` format is an open standard published at [agent-skills.io](https:/
 
 A skill built for one platform works on any platform that supports the spec.
 
-## Security
+## Skill Design Craft
 
-Skills can include executable scripts with access to file systems, environment variables, and API keys — this is what makes them powerful but also introduces trust concerns. Audits of publicly available skills have found:
+Nick Nisi and Zack Proser (WorkOS) articulate the craft of writing effective skills — the difference between a skill that helps and one that gets in the way.
 
-- Prompt injection
-- Tool poisoning
-- Hidden malware
+### Constraints Over Prescription
 
-> [!warning] Security
-> Treat skill installation with the same rigor as any software dependency. Review what the skill does before running it on your local machine.
+The most powerful skill-design insight: **provide constraints, not step-by-step instructions**. Tell the agent what *not* to do, what conventions to follow, what boundaries to respect — and let the LLM determine the right approach at runtime. Overly prescriptive skills produce worse results because they constrain the model's native competence.
+
+> Closing off the solution space is more effective than prescribing the path through it.
+
+Example: instead of "run `git log --format=...` then pipe through `awk` then..." write "never present a finding without git evidence backing it; we follow conventional commits." The model figures out the mechanics.
+
+### Script Interpolation
+
+Claude Code supports a `!` backtick pattern that executes a command and interpolates the deterministic result directly into the prompt. Instead of "go find the latest commits and analyze them," write:
+
+```
+Here are the latest 10 commits:
+!`git log --oneline -10`
+
+Analyze them for...
+```
+
+This saves tokens (no spinning on git docs), eliminates guesswork, and ensures the agent starts from a deterministic base every time. Ideal for injecting real data — git status, file listings, API responses — before the LLM reasoning begins.
+
+### Confidence Scoring in Skills
+
+Skills can include a confidence rubric that forces the agent to verify it understands the task before executing. Nisi's ideation skill defines five dimensions (problem clarity, goal definition, success criteria, scope boundaries, consistency) scored 0–100, and refuses to proceed until confidence exceeds 95%. This triggers a clarifying dialogue: the agent asks targeted questions instead of guessing.
+
+> The math isn't airtight. The value is in the iterative loop of clarifying your own thinking by responding.
+
+The same pattern applies to skill execution: "after analyzing the repo, score your confidence that you identified all stale TODOs — if below 80%, re-scan."
+
+### The Anti-Pattern: Over-Prescription
+
+Nisi discovered through evals that his Next.js installer skill was making Claude **30% less accurate**. The model was already competent with Next.js; his dogmatic instructions were overriding its native knowledge. The skill made things worse.
+
+> [!warning] A skill can make the agent worse
+> Not every workflow needs a skill. If the model already handles a task well, a skill can degrade performance by being too prescriptive. Always eval with vs. without.
+
+This is why the "constraints over prescription" principle matters: skills should fill gaps in the model's knowledge, not replace its competence.
 
 ## Skills in Production
 
@@ -138,6 +170,46 @@ The [Agent Skills open standard](https://agent-skills.io) proposes an `eval.json
 
 Skills that are no longer relevant still consume space in the progressive disclosure index (their descriptions). Rodrigues recommends periodically checking whether skills are still being loaded by users. If a skill hasn't matched in a long time, retire it. In CI, treat skills like any other artifact: keep only the ones needed for the specific project.
 
+## Skills at Team Scale
+
+Skills start as personal tools, but at team scale they need distribution, versioning, and curation. Nisi and Proser (WorkOS) describe the patterns that emerge.
+
+### Sharing Tiers
+
+Effective skill sharing stratifies into three tiers:
+
+| Tier | Audience | Examples |
+|---|---|---|
+| **Public** | Anyone | WorkOS public skills repo; installed via `npx skills add` |
+| **Internal** | Company engineers | WorkOS-specific skills (OAuth, SDK, internal tools) |
+| **Personal** | Individual | Nisi's ideation plugin, Proser's Slack→Linear bridge |
+
+Public skills need the most polish (they represent the brand). Personal skills can be experimental. Internal skills sit in between — shared via private repos or plugin marketplaces, reviewed but less formal.
+
+### Plugin Marketplaces
+
+Plugin systems (Claude Code plugins, Cursor plugins, Vercel's `skills` CLI) provide the packaging layer: versioning, installation, updates. A skill shipped as a plugin can be installed with a single command and updated like any dependency. This solves the "whose version of the frontend skill?" problem — the marketplace is the source of truth.
+
+Non-technical distribution is even simpler: zip the skill folder, rename `.zip` → `.skill`, and anyone can drag it into Claude Desktop.
+
+### Non-Technical Users
+
+Skills are not just for developers. Proser's recruiting team uses Claude Desktop skills to format candidate information, build reports, and pull data from Slack/Notion — without writing code. The skill format is markdown; the interface is natural language. Blog posts, sales outreach, internal reports — any repeatable knowledge-work task is fair game.
+
+> The power is defining the discrete work block once, then sharing it with anyone who needs it — engineering, sales, recruiting, docs.
+
+### Skills Driving CLIs
+
+WorkOS's own CLI is a thin wrapper around skills. The `workos install` command uses the Claude Agent SDK behind the scenes; all the intelligence — what frameworks to detect, what migration guides to load, what OAuth providers to configure — lives in skills. The CLI is just a distribution channel.
+
+> Build the skill, make it good, then prove it's good by having the CLI run it.
+
+### Context as Gold
+
+In the pre-LLM era, failed conversations were disposable. In the agentic era, they're the richest input for skill refinement. Nisi and Proser recommend mining JSONL conversation transcripts: what did the agent get wrong? What questions did it keep asking? What was frustrating? Feed those patterns back into the skill — or ask Claude's built-in skill-creator skill to do it for you.
+
+The full development loop: **build → use for a week → mine transcripts → refine → repeat**. Skills get better over time if you treat every failure as training data.
+
 ## Security
 
 Skills can include executable scripts with access to file systems, environment variables, and API keys — this is what makes them powerful but also introduces trust concerns. Audits of publicly available skills have found:
@@ -171,3 +243,4 @@ Skills can include executable scripts with access to file systems, environment v
 
 - `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video explaining skill format, progressive disclosure, knowledge type comparison, cognitive science analogy, and the open standard
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Production operations: skills as documentation, skill discoverability ("use" verb trick), eval-driven development for skills, skill rot detection, skills+MCP complementarity
+- `raw/skills-at-scale-workos-nisi-proser.md` — Skill design craft: constraints over prescription, confidence scoring, script interpolation, anti-patterns; skills at team scale: sharing tiers, plugin marketplaces, non-technical users, CLI-driven skills, context mining
