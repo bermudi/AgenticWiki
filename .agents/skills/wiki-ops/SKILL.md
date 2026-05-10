@@ -51,8 +51,9 @@ The mechanical work of extracting knowledge from the source and filing it into t
 
 If the user provided a URL and no file exists in `raw/` yet:
 1. Use the web-content skill to fetch the content
-2. Save to `raw/` following the appropriate template (see AGENTS.md "Web Sources" or "YouTube Videos" sections)
-3. Proceed with the filed source
+2. Slugify the title to produce a filename: `./scripts/slugify "Article Title Here"` — prepend `yt-` for YouTube sources. The result is your `raw/` filename.
+3. Save to `raw/` following the appropriate template (see AGENTS.md "Web Sources" or "YouTube Videos" sections)
+4. Proceed with the filed source
 
 If the source is already in `raw/`, skip this step.
 
@@ -130,39 +131,37 @@ Work through each item and report findings:
 
 ### How to check
 
+Use the utility scripts in `scripts/` for mechanical checks, then do judgment checks yourself:
+
 ```bash
-# List all wiki pages
-find wiki/ -name "*.md" ! -name "index.md" | sort
+# Mechanical checks (fast, run first)
+./scripts/check-links        # Broken wiki-links, dangling raw/ refs, unreferenced raw files
+./scripts/check-frontmatter  # Missing YAML fields, missing summary blockquotes, missing ## Related
+./scripts/orphans            # Pages with no inbound links, pages missing from index.md
 
-# Check for wiki-links that don't resolve (searches subdirectories)
-grep -roh '\[\[[a-z0-9-]*\]\]' wiki/ | sort -u | while read link; do
-  clean="${link//[[/}"; clean="${clean//]]/}"
-  found=$(find wiki/ -name "${clean}.md")
-  [ -z "$found" ] && echo "BROKEN: $link"
-done
+# Judgment checks (read and reason)
+# Thread coverage, contradictions, stale claims, thin pages — these need human judgment
+```
 
-# Check thread↔concept bidirectional links
+For the judgment checks, read the relevant pages and reason about them.
+Thread<->concept bidirectional coverage can be partially checked mechanically:
+
+```bash
+# Check thread<->concept bidirectional links
 echo '=== Concepts missing Thread section ==='
 for f in wiki/concepts/*.md; do
   name=$(basename "$f" .md)
   if ! grep -q "## Thread" "$f"; then
-    # Check if this concept is linked from any thread body
     if grep -rq "\[\[${name}\]\]" wiki/threads/; then
       echo "  MISSING: ${name} is linked from a thread but has no ## Thread section"
     fi
   fi
 done
 
-echo '=== Threads referenced from concepts but not found ==='
-grep -rh 'Thread' wiki/concepts/ | grep -oP '\[\[([a-z0-9-]+)\]\]' | sort -u | while read link; do
-  clean="${link//[[/}"; clean="${clean//]]/}"
-  [ ! -f "wiki/threads/${clean}.md" ] && echo "  MISSING: thread ${clean} does not exist"
-done
-
 # Check for pages needing marginal audit
 echo '=== Pages needing marginal audit (unaudited_marginal >= 5) ==='
 for f in $(find wiki/ -name '*.md' ! -name 'index.md'); do
-  count=$(grep -oP '^unaudited_marginal: \\K\\d+' "$f" 2>/dev/null || echo 0)
+  count=$(grep -oP '^unaudited_marginal: \K\d+' "$f" 2>/dev/null || echo 0)
   [ "$count" -ge 5 ] && echo "  AUDIT NEEDED: $f (unaudited_marginal: $count)"
 done
 ```

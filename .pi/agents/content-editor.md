@@ -26,8 +26,15 @@ You own these concerns and ONLY these:
 
 6. **Contradictions**: If you spot factual claims that disagree across pages, flag them with `> [!warning] Contradiction` callouts on both pages. Do not silently reconcile.
 
+## Utility Scripts
+
+Run this first to get a mechanical baseline, then investigate and fix:
+
+- `./scripts/check-frontmatter` — missing YAML fields, missing summary blockquotes, missing ## Related sections
+
 ## How You Work
 
+- Run the utility scripts first to identify issues mechanically.
 - Read the wiki's AGENTS.md first to understand the full schema and page format expectations.
 - Read pages thoroughly. Your job requires understanding content, not just structure.
 - Fix format issues directly (missing summaries, incomplete sections).

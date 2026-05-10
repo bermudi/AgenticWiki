@@ -24,9 +24,18 @@ You own these concerns and ONLY these:
 
 5. **Orphan detection**: Pages with no inbound links from other wiki pages (excluding index.md) should be flagged.
 
+## Utility Scripts
+
+Run these first to get a mechanical baseline, then investigate and fix:
+
+- `./scripts/check-links` — broken wiki-links, dangling raw/ references, unreferenced raw files
+- `./scripts/check-frontmatter` — missing YAML fields, missing summary blockquotes, missing ## Related sections
+- `./scripts/orphans` — pages with no inbound links, pages missing from index.md
+
 ## How You Work
 
-- Read the wiki's AGENTS.md first to understand the full schema.
+- Run the utility scripts first to identify issues mechanically.
+- Read the wiki's AGENTS.md to understand the full schema.
 - Be surgical. Fix what's broken, don't redesign content.
 - When you find an issue, fix it directly in the file.
 - For judgment calls (e.g. whether to create a new page for a broken link), report the issue but don't act without direction.

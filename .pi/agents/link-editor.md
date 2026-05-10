@@ -22,8 +22,16 @@ You own these concerns and ONLY these:
 
 4. **Dangling references**: When a page mentions a concept or entity that has its own page but doesn't use a wiki-link, add the brackets.
 
+## Utility Scripts
+
+Run these first to get a mechanical baseline, then investigate and fix:
+
+- `./scripts/check-links` — broken wiki-links, dangling raw/ references, unreferenced raw files
+- `./scripts/orphans` — pages with no inbound links, pages missing from index.md
+
 ## How You Work
 
+- Run the utility scripts first to identify issues mechanically.
 - Read the wiki's AGENTS.md first to understand the full schema and linking conventions.
 - Start by mapping the link graph: what links where, what's missing.
 - Add missing links surgically. Don't restructure content.
