@@ -32,6 +32,8 @@ This prevents [[vibes-based-engineering]] by grounding the AI's suggestions in t
 - [[the-human-lever]] — Code intelligence as the foundation for human design authority.
 - [[agent-experience]] — Code intelligence improves AX by providing high-fidelity context.
 - [[satisfaction-of-search]] — Code intelligence mitigates satisfaction of search by providing semantically grounded context instead of surface-level matches
+- [[unblocked]] — Productized code intelligence with a context engine architecture
+- [[sourcegraph]] — Code intelligence pioneer; Unblocked's Cody integration
 
 ## Sources
 

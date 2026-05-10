@@ -81,6 +81,8 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 - [[ralph-loop]] — The plan file is a primitive form of evolving context — it's modified by each iteration and read by the next
 - [[chris-parsons]] — Worker loop skills evolved via post-session reflection; skill learning as evolving context in practice
 
+- [[procedural-knowledge]] — Capturing procedural knowledge from experience is a form of evolving context
+
 ## Sources
 
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Full interview detailing the three categories of evolving context, RLM, the classifier heuristic, and the token-space vs. weight-space tradeoff

@@ -74,3 +74,4 @@ Part of an Austrian engineering circle with [[armin-ronacher|Armin Ronacher]] (F
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Full biography, Pi origin story, agents-don't-feel-pain argument, training data quality, Austrian circle, OpenClaw relationship
+- `raw/slowing-the-fuck-down.md` — "Slow the f down" math (agent at 10x code = 10x bugs), dark factory analysis, good agent task criteria, merchants of learned complexity

@@ -229,6 +229,8 @@ Skills can include executable scripts with access to file systems, environment v
 
 ## Related
 
+- [[agent-evals]] — Eval-driven development for skills: run with/without the skill, diff results, iterate
+- [[ai-design-loop]] — Skills are the tools that execute the implementation phase of the design loop
 - [[context-engineering]] — Progressive disclosure is a core context engineering technique, and skills are its canonical implementation
 - [[evolving-context]] — Skill learning (agents capturing SOPs as skills from their own trajectories) is a category of evolving context
 - [[lance-martin]] — Built the skill system for Deep Agents; his work on evolving context includes skill learning
@@ -238,6 +240,8 @@ Skills can include executable scripts with access to file systems, environment v
 - [[hallucination]] — Skills reduce hallucination by replacing guesswork with defined procedures
 - [[ralph-loop]] — [[chris-parsons|Chris Parsons]] packages Ralph loops as skills: the skill provides the procedural knowledge, the loop provides the execution infrastructure
 - [[chris-parsons]] — Operationalized Ralph loops as skills with recovery states, git checking, and verification rules
+- [[sandcastle]] — Matt Pocock's Docker-based Ralph loop variant that uses the skill.md pattern
+- [[procedural-knowledge]] — Skills are the canonical format for packaging procedural knowledge for agents
 
 ## Sources
 

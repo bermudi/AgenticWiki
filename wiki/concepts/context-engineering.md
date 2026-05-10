@@ -133,6 +133,7 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - [[peter-werry]] — Contributions to context engine architecture, satisfaction of search, and organizational context retrieval
 - [[dynamic-trust]] — Real-time context injection is the mechanism for the "time-specific context" component of dynamic trust; context engineering enables it
 - [[agentic-engineering]] — Context engineering is a core proficiency of agentic engineering; the discipline demands mastery of what to put in the context window
+- [[claude-code]] — The primary agent substrate that context engineering techniques are applied to; Claude Code's sub-agents, file-based tools, and AGENTS.md are context engineering surface area
 
 ## Sources
 

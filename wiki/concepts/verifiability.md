@@ -77,6 +77,8 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[the-agent-workflow]] — The workflow that operationalizes the verifiable/unverifiable boundary: HITL for unverifiable design decisions, AFK for verifiable implementation
 - [[model-routing]] — Routes complex tasks to the cheapest capable model; depends on knowing which domains are verifiable for which models
 
+- [[vibes-based-engineering]] — Verifiability explains the boundary where vibes-based engineering works vs. fails
+
 ## Sources
 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the chess example, the car wash example, and practical implications for founders and developers.

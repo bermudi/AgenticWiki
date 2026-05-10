@@ -91,6 +91,8 @@ The key insight: **the system around the model matters as much as the model itse
 - [[dynamic-trust]] — Parallel concept: model routing routes to the cheapest capable model; dynamic trust routes authority to the most verifiable output
 - [[verifiability]] — Model routing depends on knowing which domains are verifiable for which models; verifiability is the economic driver behind the capability heat map
 
+- [[ralph-loop]] — The Ralph loop decomposes tasks into routable sub-tasks
+
 ## Sources
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's walkthrough of the AgentFloor results, the cost comparison framework, the capability heat map, and the practical guidance for sorting tasks by complexity tier

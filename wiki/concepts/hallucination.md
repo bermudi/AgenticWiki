@@ -81,6 +81,8 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 - [[blind-panic]] — Gemma 4's failure mode at tier E: tool hallucination as a desperation behavior under planning load
 - [[instruction-hierarchy]] — Semantic arithmetic failure is a related phenomenon: the model doesn't understand numbers, it pattern-matches them — same mechanism as hallucination applied to structured conflict resolution
 
+- [[procedural-knowledge]] — Skills reduce hallucination by replacing guesswork with defined procedures
+
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: document degradation and silent corruption as a related failure mode distinct from classical hallucination.

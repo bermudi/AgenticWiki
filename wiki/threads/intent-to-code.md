@@ -109,3 +109,4 @@ Different projects and teams will land at different points. The wiki's job is to
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Empirical validation: 50%+ design time at Boundary ML, one-shot implementation from thorough design docs
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Alignment-first in practice: Grill Me → PRD → Kanban → Sandcastle AFK → QA; "don't review the PRD"
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Specs-to-code critique: vibe coding by another name, code is the battleground
+- `raw/synthetic-truths-gemini-has-a-secret-code.md` — The axis's blind spot: synthetic truth shows model trustworthiness is an independent variable; fabrication happens at content generation level, not instruction-following level

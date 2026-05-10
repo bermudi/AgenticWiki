@@ -60,5 +60,7 @@ This means the reliability problem is not about reducing average error rate — 
 - [[vibes-based-engineering]] — Critical failures pass vibe checks; spot-checking a few steps gives false confidence
 - [[hallucination]] — Critical failures in document degradation are a structural form of hallucination: silent corruption at scale
 
+- [[deliberate-friction]] — Deliberate friction at safety boundaries prevents critical failures from compounding
+
 ## Sources
 - `raw/2604.15597v1.pdf` — Critical failure analysis, Table 9, and discussion of dynamics in Section 5

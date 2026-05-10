@@ -57,3 +57,5 @@ This experience directly motivated Mario to build [[pi]], founded on the princip
 
 - `raw/yt-claude-code-feature-build.md` — Demonstration of complex feature building with Claude Code.
 - `raw/how-to-ralph-wiggum.md` — Ralph Wiggum autonomous loop pattern using Claude Code.
+- `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology, Claude Code's role as the agent CLI in the loop.
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Mario's grievances with Claude Code (silent context injection, system prompt manipulation); the "should I just build my own" origin story that led to Pi.

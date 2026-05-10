@@ -73,6 +73,7 @@ The authors tried structured prompting — telling models to plan first and then
 - [[tool-design-for-agents]] — Isolates tool-use capability from tool design; model capability as a tool design constraint
 - [[the-agent-workflow]] — Provides the complexity tier vocabulary for task decomposition
 - [[agent-quality-engineering]] — Demonstrates the tier E quality ceiling; eval methodology for isolating cognitive complexity
+- [[intent-to-code]] — The tier E planning ceiling (8-12 steps) is a hidden constraint on all four positions
 
 ## Related
 

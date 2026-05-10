@@ -86,6 +86,8 @@ The case reinforces the core argument: verification is not just about tests and 
 > [!note] Departure: Specs-to-Code ≠ Plan-Heavy
 > [[matt-pocock|Matt Pocock]]'s critique of specs-to-code is specific: it's about treating the spec as a **compilation target** where the code is never read — if something breaks, fix the spec and recompile. This is distinct from [[plan-vs-review|plan-heavy]], which also produces specs but treats code as the battleground. See [[intent-to-code]] for the full axis.
 
+- [[shared-design-concept]] — Shared design concept erodes under vibes-based engineering; each fresh agent session drifts from the architecture
+
 ## Sources
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Origin of the "No Vibes" term; definition of vibes-based engineering as an anti-pattern.

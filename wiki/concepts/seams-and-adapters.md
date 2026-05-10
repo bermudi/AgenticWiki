@@ -20,7 +20,7 @@ In a well-architected codebase:
 - Seams are where you insert mocks, fakes, or stubs for testing.
 - Seams are where you swap implementations (e.g., real database → in-memory database for tests).
 
-In a sloppy codebase, seams are implicit or nonexistent — modules are tightly coupled, making isolated testing impossible. [[matt-pocock|Matt Pocock]]'s `improve-codebase-architecture` skill specifically hunts for "concepts without a single seam" — parallel implementations that should be unified behind one interface.
+In a sloppy codebase, seams are implicit or nonexistent — modules are tightly coupled, making isolated testing impossible. [[matt-pocock|Matt Pocock]]'s [[improve-codebase-architecture]] skill specifically hunts for "concepts without a single seam" — parallel implementations that should be unified behind one interface.
 
 ## Adapters
 

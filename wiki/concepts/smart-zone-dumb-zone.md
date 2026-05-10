@@ -57,6 +57,8 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[instruction-severity-inflation]] — The same attention limits that create the Dumb Zone for context also constrain instruction following
 - [[matt-pocock]] — The Memento Strategy (clear context, reload only what matters) is his operational response to the Dumb Zone.
 
+- [[context-engineering]] — The Smart Zone/Dumb Zone distinction is a core concept in context engineering
+
 ## Sources
 
 - `raw/yt-ai-coding-for-real-engineers.md`

@@ -49,6 +49,9 @@ Temporal smoothing is particularly dangerous because:
 - [[hallucination]] — Related but distinct: temporal smoothing uses real elements with a fabricated temporal frame
 - [[verification-loop]] — The engineering defense: automated checks against source timelines
 
+- [[slop]] — Temporal smoothing is a specialized slop mechanism: forward-dating work to appear complete
+- [[vibes-based-engineering]] — Temporal smoothing bypasses the same verification gaps that vibes-based engineering exploits
+
 ## Sources
 
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Origin of the term and the documented mechanism

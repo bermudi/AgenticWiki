@@ -84,6 +84,7 @@ The file system also has collaboration limits: last-write-wins semantics don't s
 - [[lance-martin]] — Described and catalogued this architecture
 - [[dex-horthy]] — The fast orchestrator + smart oracle pattern is a specific multi-tier instantiation
 - [[agent-skills]] — Skills live on the file system tier, loaded on demand into the tool tier
+- [[claude-code]] — Claude Code's sub-agent patterns, KV caching, and file-based tool discovery are concrete multi-tier implementations
 
 ## Sources
 

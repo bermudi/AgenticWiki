@@ -1,7 +1,8 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-05-09
+updated: 2026-05-10
+unaudited_marginal: 1
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -20,6 +21,8 @@ sources:
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+  - raw/karpathy-llm-knowledge-bases.md
+  - raw/karpathy-farzapedia-explicit-memory.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -109,7 +112,7 @@ Delegation without design authority is abdication. The human isn't less importan
 
 Information still has to make it into the human brain. The human becomes the bottleneck — knowing what to build, why it's worth doing, and how to direct agents. As Karpathy puts it: "I'm still part of the system and information still has to make it into my brain. I feel like I'm becoming a bottleneck of just even knowing what are we trying to build, why is it worth doing, how do I direct my agents."
 
-This is why Karpathy is excited about LLM knowledge bases — they're tools to enhance understanding, not replace it. "Anytime I see a different projection onto information, I always feel like I gain insight." The LLM can recompile and reorganize knowledge, but "the LLM certainly doesn't excel at understanding — you still are uniquely in charge of that."
+This is why Karpathy is excited about LLM knowledge bases — they're tools to enhance understanding, not replace it. "Anytime I see a different projection onto information, I always feel like I gain insight." The LLM can recompile and reorganize knowledge, but "the LLM certainly doesn't excel at understanding — you still are uniquely in charge of that." In a follow-up tweet elaborating his own workflow, Karpathy added operational specifics: Obsidian as the frontend IDE, Marp for slides, a vibecoded CLI search engine for querying the wiki, and routine health checks to find inconsistencies and article candidates. He also endorsed Farza's "Farzapedia" — a personal Wikipedia built from diary entries and messages — as a concrete demonstration of explicit, portable, provider-independent memory.
 
 ### Taste and Judgment as Enduring Human Skills
 
@@ -277,4 +280,6 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full walkthrough of the grey box workflow; human lever in action with the General/Sergeant model
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The last-mile verification case study: synthetic truth as the definitive demonstration that verification is the non-negotiable human act
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: "outsource thinking, not understanding"; taste and judgment as enduring human skills outside the RL circuits; LLM knowledge bases as tools for enhancing understanding; the intern entity metaphor for agent limitations
+- `raw/karpathy-llm-knowledge-bases.md` — Karpathy's original tweet codifying the raw/ → compile → Q&A → lint workflow; operational details (Obsidian IDE, Marp slides, CLI search engine, health checks).
+- `raw/karpathy-farzapedia-explicit-memory.md` — Karpathy's follow-up tweet endorsing Farza's personal Wikipedia as an instantiation of explicit memory; file over app, BYOAI, and agent proficiency as core skills.
 

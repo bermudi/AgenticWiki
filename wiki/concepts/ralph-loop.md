@@ -181,9 +181,12 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - [[deliberate-friction]] — "Reversible without embarrassment" is an operational instantiation of deliberate friction for safety boundaries
 - [[model-routing]] — One-task-per-iteration sidesteps the tier E ceiling that model routing cannot fix; the Ralph loop is the decomposition strategy model routing depends on
 
+- [[multi-tier-action-space]] — The Ralph loop structures execution across multiple action-space tiers
+
 ## Sources
 
 - `raw/how-to-ralph-wiggum.md` — The canonical implementation
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the methodology
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Context isolation framing of the Ralph Loop pattern
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: loop evolution, sub-agent validation, skills-as-loop-package, worker loop, safety heuristics
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle as the parallelized Ralph Loop variant: Kanban DAG, four-stage pipeline, Docker sandboxes, separate reviewer agents

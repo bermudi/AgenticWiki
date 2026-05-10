@@ -1,9 +1,12 @@
 ---
 title: Andrej Karpathy
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-10
+unaudited_marginal: 1
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+  - raw/karpathy-llm-knowledge-bases.md
+  - raw/karpathy-farzapedia-explicit-memory.md
 tags: [author, ai-researcher, educator]
 ---
 
@@ -50,6 +53,10 @@ Karpathy frames LLMs as "ghosts" rather than "animals" — statistical simulatio
 
 Karpathy uses LLMs to build personal knowledge bases — `raw/` sources compiled into a markdown wiki, with Q&A against it, linting, and incremental enhancement. He describes this as a software 3.0 exemplar: something that couldn't exist before because there was no code that could compile a knowledge base from raw documents.
 
+In a follow-up tweet (April 2026), Karpathy refined the workflow with more operational detail: he uses Obsidian Web Clipper to ingest articles, Obsidian as the frontend IDE, and Marp for slides. He runs health checks (linting) to find inconsistencies and generate new article candidates. He also vibecoded a small search engine over the wiki, used both directly and as a CLI tool for the LLM. His TLDR: collect raw data, compile into a markdown wiki, operate on it via CLIs, view it in Obsidian — and never write or edit the wiki manually.
+
+He also endorsed Farza's "Farzapedia" — a personal Wikipedia built from 2,500 diary entries and messages — as a concrete example of the pattern. Karpathy highlighted four properties that make this approach superior to implicit personalization: **explicit** (navigable, inspectable artifact), **yours** (local, provider-independent), **file over app** (universal formats, interoperable), and **BYOAI** (bring your own AI — swap models freely, or finetune an open model on your wiki).
+
 ### "Outsource Thinking, Not Understanding"
 
 A tweet Karpathy keeps returning to: "You can outsource your thinking but you can't outsource your understanding." Information still has to make it into the human brain — the human remains the bottleneck for knowing what to build, why it's worth doing, and how to direct agents.
@@ -74,3 +81,5 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 ## Sources
 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Sequoia Capital interview covering the full arc from vibe coding to agentic engineering, software 1.0/2.0/3.0, verifiability, animals vs ghosts, LLM knowledge bases, and what remains worth learning.
+- `raw/karpathy-llm-knowledge-bases.md` — Original tweet describing the raw/ → compile → Q&A → lint workflow; Obsidian frontend, Marp slides, CLI search engine, and manual-free wiki maintenance.
+- `raw/karpathy-farzapedia-explicit-memory.md` — Follow-up tweet endorsing Farza's personal Wikipedia as a concrete example; explicit memory, file over app, BYOAI philosophy.

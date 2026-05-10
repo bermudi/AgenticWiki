@@ -23,6 +23,7 @@ sources:
   - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+  - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -350,6 +351,7 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Multi-tier action space architecture, evolving context categories, MCP lesson, context management techniques catalog, Ralph Loop context isolation framing.
 - `raw/yt-slop-watch-ideation.md` — Research phase workflow: parallel sub-agents, domain modeling, trusted vs. untrusted AI artifacts, the "bored of talking" signal.
 - `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase; benchmark data showing 10× improvement in wall-clock time.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Pocock's full pipeline demonstration: Grill Me → PRD → Kanban → Sandcastle AFK → QA; interface review discipline; day shift / night shift pattern
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: skills-as-loop-package, worker loop, sub-agent validation, two-mode work model, safety heuristics
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: model routing by complexity tier, cost optimization framework; supports the decomposition emphasis in the workflow
 

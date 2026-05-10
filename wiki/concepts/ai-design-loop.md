@@ -78,6 +78,8 @@ Keeping completed PRDs in the repo creates [[doc-rot|doc rot]]: future agent ses
 - [[doc-rot]] — The risk of keeping completed PRDs in the repo; why the design loop produces ephemeral artifacts.
 - [[sandcastle]] — The parallel AFK implementation pipeline that consumes the Kanban board produced by the design loop.
 
+- [[agent-skills]] — Skills are the tools that execute the implementation phase of each design loop iteration
+
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-claude-code-feature-build.md`

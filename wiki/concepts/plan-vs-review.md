@@ -5,6 +5,7 @@ updated: 2026-05-05
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
 tags: [concept, workflow, agent-design, human-in-the-loop, departure]
 ---
 

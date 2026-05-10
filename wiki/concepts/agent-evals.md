@@ -99,6 +99,7 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 
 - [[agent-observability]] — Evals depend on observability; you can only score what you can see
 - [[agent-quality-loop]] — Evals feed the flywheel: production failures → eval cases → improvement
+- [[mastra]] — Mastra provides eval infrastructure with LLM-as-judge scoring, groundedness checks, and prompt iteration from eval feedback
 - [[verification-loop]] — Evals are the probabilistic equivalent of the verification loop
 - [[vibes-based-engineering]] — Evals are the structural antidote to shipping agents on vibes
 - [[shared-design-concept]] — "Design so quality is measurable" is a shared-design principle

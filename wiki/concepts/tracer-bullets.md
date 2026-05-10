@@ -27,6 +27,7 @@ A term popularized by *The Pragmatic Programmer* and championed by [[matt-pocock
 - [[grey-box-engineering]] — Using vertical slices to validate human designs.
 - [[verification-loop]] — Tracer bullets are verified within the loop.
 - [[ai-design-loop]] — The first "Journey" step after the design loop completes.
+- [[agent-quality-loop]] — Tracer bullet results feed back into eval design and quality metrics.
 - [[matt-pocock]] — Primary advocate in the AI engineering context.
 
 ## Sources

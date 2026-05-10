@@ -47,7 +47,7 @@ The quality ceiling for agent output is bounded by training data. [[mario-zechne
 
 - **Agent-cheapened library upgrades**: When upgrades are "free," stale comments and decision breadcrumbs persist. The agent builds on outdated assumptions — slop that passes tests.
 - **Tooling speed**: Slow tools mean fewer verification cycles per session. More code between checks = more uncaught errors.
-- **Error over-recovery**: Agents catch exceptions and add recovery paths instead of failing cleanly, creating geometric explosions of possible states — what Armin calls "emergence state machines" from his experience fixing the Halo MCC matchmaking.
+- **Error over-recovery**: Agents catch exceptions and add recovery paths instead of failing cleanly, creating geometric explosions of possible states — what Mario Zechner calls "emergence state machines" from his experience fixing the Halo MCC matchmaking (recounted on the Pragmatic Engineer podcast).
 
 ## The Untrustworthy Test Suite
 
@@ -105,6 +105,8 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - [[fighting-slop-with-slop]] — Accepting slop in disposable tooling to reduce slop where it matters
 - [[synthetic-truth]] — Sophisticated information slop: structurally perfect, rhetorically persuasive, factually empty
 - [[temporal-smoothing]] — Temporal displacement as a slop mechanism: presenting future work as completed reality
+
+- [[verification-loop]] — The verification loop is the primary mechanical defense against slop production
 
 ## Sources
 

@@ -70,6 +70,9 @@ This is backpressure in the literal sense — the human's testing activity *push
 - [[blind-panic]] — Blind panic's step budget exhaustion is a form of built-in backpressure: the environment stops the agent when it runs out of allowed moves
 - [[dynamic-trust]] — Dynamic trust scores as soft backpressure: low-trust outputs are mechanically deprioritized before they influence decisions
 
+- [[agent-quality-loop]] — The quality loop uses backpressure as a flywheel mechanism
+- [[wide-events]] — Wide events serve as backpressure by making invisible degradation visible
+
 ## Sources
 
 - `raw/how-to-ralph-wiggum.md` — Backpressure as the core principle of the Ralph loop

@@ -77,4 +77,5 @@ Don't remove friction wholesale to enable agent autonomy. Audit which friction i
 ## Sources
 
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Armin's analysis of deliberate vs. accidental friction, the "ship without friction" incident
+- `raw/2604.15597v1.pdf` — DELEGATE-52 paper: degradation compounds multiplicatively with interaction length; deliberate friction at delegation boundaries as a circuit breaker
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Teaching mode as deliberate friction; inquiry vs. delegation in the Anthropic RCT

@@ -29,6 +29,7 @@ His three-part series on agent quality covers the full stack: [[agent-evals|what
 - [[agent-observability]] — The observability layer from part two
 - [[agent-quality-loop]] — The flywheel from part three
 - [[agent-quality-engineering]] — The thread his series forms
+- [[mastra]] — Galarza is CTO of Mastra; the quality loop, evals, and observability infrastructure he describes are Mastra's product
 
 ## Sources
 

@@ -72,9 +72,12 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[blind-panic]] — Blind panic manifests as an AFK agent that runs its full budget producing confused, looping traces
 - [[model-routing]] — Model routing enables cheaper, more scalable AFK execution by routing subtasks to the cheapest capable model
 
+- [[wide-events]] — Wide events make AFK agent behavior inspectable without constant human attention
+
 ## Sources
 
 - `raw/yt-claude-code-feature-build.md` — Demonstration of using an AFK agent to implement a multi-issue feature.
 - `raw/how-to-ralph-wiggum.md` — The Ralph Wiggum autonomous loop pattern.
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology.
 - `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Focus maxing / parallel AFK management as agents cross the 5-minute execution threshold.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle: the parallelized AFK pipeline (planner → implementer → reviewer → merger), Docker sandboxing, Kanban DAG for parallelization

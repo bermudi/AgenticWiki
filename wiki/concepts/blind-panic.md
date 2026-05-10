@@ -62,6 +62,8 @@ The key insight: both failure modes consume roughly the same token budget, but i
 - [[model-routing]] — The upper bounds of model routing are defined by where blind panic emerges
 - [[discover-ai]] — The source that documented Gemma 4's blind panic failure mode
 
+- [[afk-agent]] — AFK agents with poor backpressure are susceptible to blind panic looping
+
 ## Sources
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's breakdown of Gemma 4's failure distribution at tier E, including the "blind panic" characterization and the contrast with GPT-5's "execution apathy"

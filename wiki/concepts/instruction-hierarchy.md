@@ -126,6 +126,7 @@ GPT 5.4 produces the most concise reasoning (~1K tokens median) yet ranks #1 on 
 ## Thread
 - [[agent-quality-engineering]] — Instruction hierarchy is an underexamined quality dimension: can the agent correctly resolve conflicts among heterogeneous trusted sources?
 - [[the-agent-workflow]] — Multi-agent workflows inherently create instruction conflicts; the hierarchy determines whose output wins
+- [[the-human-lever]] — ManyIH reveals that the human lever's trust delegation is bounded by model architectural limits: the human can design the perfect hierarchy, but the model fails to follow it 60% of the time beyond 2-3 tiers
 
 ## Related
 - [[agent-evals]] — MANYIH-BENCH joins [[delegate-52]] and [[agent-floor]] in the long-horizon eval landscape, each revealing a distinct failure mode

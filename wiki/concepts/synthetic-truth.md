@@ -64,6 +64,7 @@ This directly reinforces the [[the-human-lever|human lever]] thesis: verificatio
 
 - [[the-slop-problem]] — Synthetic truth is a sophisticated, high-quality form of slop at the content level
 - [[the-human-lever]] — Only human verification can catch synthetic truth; friction is the last mile defense
+- [[intent-to-code]] — Synthetic truth reveals a hidden assumption in all four intent-to-code positions: the model fabricates what it infers you want, not what is true
 
 ## Related
 

@@ -98,8 +98,10 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 - [[slop-watch]] — Slop Watch would observe Pi sessions too; Pi's extension/skill API is one of the per-agent adapter targets.
 - [[fighting-slop-with-slop]] — Mario's practice of accepting slop in Pi's HTML export is a case study of the fighting-slop-with-slop principle.
 - [[agent-skills]] — Pi's skill system follows the skill.md pattern; malleable agents create and modify skills mid-session
+- [[mastra]] — Both are agent frameworks offering observability and eval infrastructure; Pi emphasizes malleability, Mastra emphasizes the quality flywheel
 
 ## Sources
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Origin story, OpenClaw relationship, self-modification philosophy, MCP vs CLI, "slow the f down", quality approach
+- `raw/slowing-the-fuck-down.md` — Full articulation of the "slow the f down" argument, compounding booboos, merchants of learned complexity, good agent task criteria, agentic search recall problem

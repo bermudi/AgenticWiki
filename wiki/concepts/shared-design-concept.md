@@ -53,6 +53,7 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[the-human-lever]] — The shared design concept as the core of human design authority
 - [[the-slop-problem]] — Without a shared concept, each agent session drifts from the architecture
 - [[the-agent-workflow]] — The design concept must be explicit for the agent to participate in it
+- [[intent-to-code]] — The shared design concept is what erodes in the specs-to-code position; each recompilation drifts further
 
 ## Sources
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Matt Pocock on making the design concept explicit for AI agents; Grill Me skill as the mechanism for building shared understanding

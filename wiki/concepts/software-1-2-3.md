@@ -56,7 +56,7 @@ Karpathy speculates about the long arc: "You could imagine completely neural com
 - [[verifiability]] — The mechanism that makes software 3.0 possible: RL over verifiable domains
 - [[agent-quality-engineering]] — Software 3.0 without quality infrastructure produces slop; evals and observability are the quality mechanisms for the new paradigm
 - LLM knowledge bases — Karpathy's favorite example of a software 3.0-native application (concept page TBD)
-- Prompting-as-programming — Related concept from the intent-to-code thread (concept page TBD)
+- [[intent-to-code]] — Prompting-as-programming as the pure-vibes position on the intent-to-code axis
 
 ## Sources
 

@@ -58,6 +58,8 @@ The AgentFloor study found that system prompts designed to prevent this (e.g., "
 - [[model-routing]] — The upper bounds of model routing are defined by where execution apathy emerges
 - [[discover-ai]] — The source that documented GPT-5's execution apathy failure mode
 
+- [[afk-agent]] — AFK agents may exhibit execution apathy: plausible plans with no real work behind them
+
 ## Sources
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's breakdown of GPT-5's failure distribution at tier E, including the "execution apathy" characterization and the contrast with Gemma 4's "blind panic"
