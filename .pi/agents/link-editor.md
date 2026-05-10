@@ -16,6 +16,8 @@ You own these concerns and ONLY these:
 
 1. **Bidirectional links**: When page A links to page B via `[[page-b]]`, page B should have a link back to page A (via body wiki-links or `## Related` section). Find and fix one-directional links.
 
+   **Exception — Concept-to-Author links are intentionally one-way.** Concept pages should link to author pages to credit sources. But author pages should NOT reciprocate with backlinks to every concept that cites them — authors linked from 8+ concept pages would accumulate link farms that bury their actual contributions. Only add an author→concept backlink when the author *originated* the concept (not just got cited on it). If uncertain, leave the one-way link alone.
+
 2. **Thread↔Concept coverage**: Every concept page that is linked from a thread's body must have a `## Thread` section linking back. Both directions must exist.
 
 3. **Related section completeness**: Every non-thread wiki page (concepts, authors, projects) should have a `## Related` section with links to at least 2-3 other wiki pages. Thread pages use body wiki-links instead. Flag pages with sparse or missing Related sections.

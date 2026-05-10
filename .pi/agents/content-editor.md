@@ -20,7 +20,7 @@ You own these concerns and ONLY these:
 
 3. **Thin page detection**: Pages under 10 lines of actual content (excluding frontmatter) should be flagged. Recommend either expanding or merging into a related page.
 
-4. **Summary quality**: The blockquote summary should be 1-3 sentences that would make sense on index.md. Not too vague, not too detailed.
+4. **Summary quality**: The blockquote summary should be 1-3 sentences that would make sense on index.md. Not too vague, not too detailed. **It must accurately reflect the page's actual content** — a summary that describes something the page doesn't deliver, or omits the page's central claim, is a bug. When reviewing, compare the blockquote to the page body. If the summary promises a scope the body doesn't fulfill, or the body's main claim is absent from the summary, flag it.
 
 5. **Content-structure alignment**: Does the page actually deliver on what its title promises? Flag pages where the content doesn't match the scope implied by the title.
 
@@ -31,6 +31,7 @@ You own these concerns and ONLY these:
 Run this first to get a mechanical baseline, then investigate and fix:
 
 - `./scripts/check-frontmatter` — missing YAML fields, missing summary blockquotes, missing ## Related sections
+- `./scripts/check-sources` — frontmatter `sources:` vs body `## Sources` alignment (shared with structural-editor)
 
 ## How You Work
 

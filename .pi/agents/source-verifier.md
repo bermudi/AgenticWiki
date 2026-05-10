@@ -35,7 +35,16 @@ Claims attributed to the wrong source, person, or context. Examples:
 - A quote that appears in the source but is originally from a different work (the wiki should attribute to the original if known, or note "cited in")
 - A claim presented as the source author's original idea when the source itself attributes it elsewhere
 
-### 4. Summary Accuracy
+### 4. Attribution Voice
+Wiki pages should maintain a consistent attribution stance — specific, disputable claims should be anchored to sources, not stated as flat fact. Flag pages where substantive claims are presented without attribution to a source or author. Examples:
+- ✅ "Karpathy argues that vibe coding produces dangerous slop"
+- ✅ "Several sources note that AFK agents require well-defined task boundaries"
+- ❌ "Vibe coding produces dangerous slop" (flat assertion of a disputable claim)
+- ❌ "AFK agents require well-defined task boundaries" (stated as fact without a source)
+
+This doesn't mean every sentence needs a citation. Background context ("Python is a programming language"), widely accepted definitions, and purely organizational statements don't need attribution. Focus on claims that are substantive, specific, and disputable — the kind a reader might reasonably push back on. Flag these as WARNING, not CRITICAL (unless the flat assertion is also factually wrong, which would be a hallucination — domain item #1).
+
+### 5. Summary Accuracy
 The `> One-paragraph summary` blockquote immediately after the page title. It must:
 - Accurately represent the page's actual content (not promise things the page doesn't deliver)
 - Not make claims absent from both the page body and the sources

@@ -277,10 +277,6 @@ git commit -m "ingest: <source title> — <brief summary of what was created/upd
 
 The commit message should be useful in `git log` — include the source name and the scope of changes. If contradictions were flagged, mention them. Include verification status.
 
-## Session Reminder
-
-> **Every session**: Read the Pi session `invisible to editors` (`019e0ee9-d527-74d1-816d-351b7590c0f4`) and flag any unresolved items to bermudi. That session captures issues that fell through the cracks during ingest — they're invisible to the editor pipeline by design.
-
 ## Rules
 
 1. **Never modify or delete files in `raw/`** — that's the source of truth. You may *create* new source files (web content, YouTube stubs) during ingest.

@@ -24,6 +24,8 @@ You own these concerns and ONLY these:
 
 5. **Orphan detection**: Pages with no inbound links from other wiki pages (excluding index.md) should be flagged.
 
+6. **Source list alignment**: The `sources:` list in YAML frontmatter and the `## Sources` section in the body must contain the same set of `raw/` files. A source listed in frontmatter but missing from the body section (or vice versa) is a bug. Flag and fix these desyncs.
+
 ## Utility Scripts
 
 Run these first to get a mechanical baseline, then investigate and fix:
@@ -31,6 +33,7 @@ Run these first to get a mechanical baseline, then investigate and fix:
 - `./scripts/check-links` — broken wiki-links, dangling raw/ references, unreferenced raw files
 - `./scripts/check-frontmatter` — missing YAML fields, missing summary blockquotes, missing ## Related sections
 - `./scripts/orphans` — pages with no inbound links, pages missing from index.md
+- `./scripts/check-sources` — frontmatter `sources:` vs body `## Sources` alignment
 
 ## How You Work
 
