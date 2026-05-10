@@ -126,6 +126,7 @@ Work through each item and report findings:
 - [ ] **Thin pages**: Pages with only a few sentences that could be merged or expanded
 - [ ] **Missing frontmatter**: Pages without proper frontmatter (title, created, updated, sources, tags)
 - [ ] **Index accuracy**: Every page in the wiki directory is listed in `index.md`, and every entry in `index.md` points to an existing page
+- [ ] **Unaudited marginal accumulation**: Pages where `unaudited_marginal >= 5` in frontmatter need a source verification audit. Run `source-verifier`, fix issues, reset counter to 0.
 
 ### How to check
 
@@ -156,6 +157,13 @@ echo '=== Threads referenced from concepts but not found ==='
 grep -rh 'Thread' wiki/concepts/ | grep -oP '\[\[([a-z0-9-]+)\]\]' | sort -u | while read link; do
   clean="${link//[[/}"; clean="${clean//]]/}"
   [ ! -f "wiki/threads/${clean}.md" ] && echo "  MISSING: thread ${clean} does not exist"
+done
+
+# Check for pages needing marginal audit
+echo '=== Pages needing marginal audit (unaudited_marginal >= 5) ==='
+for f in $(find wiki/ -name '*.md' ! -name 'index.md'); do
+  count=$(grep -oP '^unaudited_marginal: \\K\\d+' "$f" 2>/dev/null || echo 0)
+  [ "$count" -ge 5 ] && echo "  AUDIT NEEDED: $f (unaudited_marginal: $count)"
 done
 ```
 

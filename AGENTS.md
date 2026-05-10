@@ -91,6 +91,7 @@ title: Page Title
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 sources: []
+unaudited_marginal: 0
 tags: []
 ---
 
@@ -118,6 +119,8 @@ The actual content. Use headings, lists, tables, code blocks as appropriate.
 The `> blockquote` immediately after the title is the page summary — it must exist on every page because `index.md` uses it. Keep it to 1-3 sentences.
 
 Frontmatter `sources` is a machine-readable list of `raw/` filenames. The body `## Sources` section is the human-readable annotated version — each entry notes what the source contributed. Both must stay in sync. When adding a source to a page, update both places.
+
+Frontmatter `unaudited_marginal` tracks how many marginal ingests have touched this page without a verification pass. Increment on each marginal ingest. When it reaches 5, trigger a source verification audit (re-read all sources, check all claims, reset to 0). Full ingest resets it to 0 automatically. Pages created before this field was introduced are treated as 0.
 
 ### Thread page format
 

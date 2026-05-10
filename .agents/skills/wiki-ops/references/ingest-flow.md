@@ -40,9 +40,22 @@ If the human approves marginal:
 2. Add an entry in the `## Sources` section annotating what the source contributed
 3. Add a sentence or short paragraph to the body citing the source where it fits
 4. Update the `updated` date
-5. Commit with message: `ingest (marginal): <source title> — folded into <page-names>`
+5. **Increment the `unaudited_marginal` counter** in frontmatter (add it if not present, starting at 1)
+6. If `unaudited_marginal >= 5`, warn the human that this page has accumulated enough marginal ingests to warrant a verification audit
+7. Commit with message: `ingest (marginal): <source title> — folded into <page-names>`
 
 No new pages. No editors. No Phase 2 or 3. This is a lightweight operation.
+
+### Marginal audit
+
+Pages that accumulate 5+ marginal ingests without a verification pass carry unaudited claims. When `unaudited_marginal >= 5`:
+
+1. Run `source-verifier` on the page (re-reads all `raw/` sources, checks all claims)
+2. Fix any issues surfaced
+3. Reset `unaudited_marginal` to 0 in frontmatter
+4. Commit with message: `audit: <page-name> — source verification after N marginal ingests`
+
+A full ingest that touches the page also resets the counter to 0 (Phase 3 verification already ran).
 
 ### Skip outcome
 
