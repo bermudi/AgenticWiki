@@ -1,11 +1,12 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-05-09
+updated: 2026-05-10
 sources:
   - raw/2604.15597v1.pdf
   - raw/many-tier-instruction-hierarchy.md
   - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
 tags: [concept, llm-capabilities, domain-variance, delegation]
 ---
 
@@ -66,6 +67,10 @@ Karpathy frames LLMs as "ghosts" rather than "animals" to explain the jaggedness
 
 This framing isn't meant to be scientifically rigorous, but to help users build a better mental model: "If you yell at them, they're not going to work better or worse. It doesn't have any impact." Being suspicious of them — rather than anthropomorphizing — is the right posture.
 
+## Evidence from Model Regression
+
+The jagged frontier isn't just about different domains — it appears **within a single model generation on a single task**. Nate B Jones (2026) found that GPT 5.5, while dramatically better than its predecessor at catching semantically obvious traps in a data migration test (rejecting "Mickey Mouse" and "ASDF ASDF" as fake customers, flagging a planted $25,000 fake payment), **regressed on backend hygiene** that GPT 5.4 had handled better: missing service code conflicts, leaving payment statuses unnormalized (29 distinct raw values), and building a review UI where different panels disagreed on flagged item counts. The model advanced on semantic intuition while retreating on boring structural discipline — a jagged frontier within the same task, the same model family, the same release.
+
 ## Implications
 
 Users of AI systems should be cautious not to generalize an LLM's capability in one domain to other domains. A model that is reliable for Python coding may be severely unreliable for spreadsheet editing, music notation, or creative writing. This has direct implications for [[vibes-based-engineering|vibe coding]] and [[afk-agent|AFK delegation]]: domain expertise cannot be assumed.
@@ -94,3 +99,4 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH results demonstrating the jagged frontier within a single capability axis: near-perfect at 2 tiers, catastrophic at 12
 - `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: the car wash example of jaggedness, RL circuits explanation, animals vs ghosts framing, and the practical implication that you must "figure out which circuits you're in for your application."
+- `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Within-model jaggedness: 5.5 advanced on semantic traps but regressed on backend hygiene vs its predecessor, demonstrating non-monotonic capability even within the same task

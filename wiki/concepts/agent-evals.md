@@ -1,8 +1,8 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-05-08
-sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md", "raw/skill-issue-supabase-pedro-rodrigues.md"]
+updated: 2026-05-10
+sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md", "raw/skill-issue-supabase-pedro-rodrigues.md", "raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md"]
 tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 ---
 
@@ -13,6 +13,20 @@ tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 Agents don't fail like deterministic software. Output can look correct, logs can look clean, but the agent made the wrong decision somewhere in the middle. Unit tests assume same input → same output. Integration tests assume predictable interfaces, but an agent's interface is natural language. End-to-end tests assume a fixed happy path, but an agent might take 3 steps or 25.
 
 Evals are not tests. They are quality measurement over time.
+
+## Private Bench Design Philosophy
+
+Nate B Jones (2026) advocates for **designing tests that make models fail** — private benchmarks that stress generalization rather than measuring performance on tasks models were explicitly trained to handle. The key principles:
+
+1. **Aim above the frontier**: Design every test so that any frontier model will fail. If models saturate your eval, the eval has become useless.
+
+2. **Test orthogonal capabilities**: Run multiple tests that check different failure modes. A single test can give the wrong story — one test might make a model look like a runaway winner, another reveals dangerous gaps. Together they produce a more complete picture.
+
+3. **Use messy, real-world task shapes**: Under-specified briefs, contradictory source material, messy files in multiple formats, planted traps (obvious and subtle). The eval should test whether the model can "carry" the work — hold context, preserve uncertainty, produce real artifacts, and maintain correct posture across a long task.
+
+4. **Evolve the tests**: As models improve, the tests must get harder. Part of the value of a private bench is that it doesn't publish scores that models can train to saturate.
+
+This philosophy complements [[delegate-52|DELEGATE-52]]'s long-horizon benchmark approach: both argue that easy, public evals systematically overestimate model readiness for real work.
 
 ## Long-Horizon Evals: DELEGATE-52
 
@@ -106,3 +120,4 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH: 853-sample benchmark for instruction conflict resolution across up to 12 privilege tiers
 - `raw/playground-in-prod-samuel-colvin.md` — Practitioner confirmation: most teams don't eval at all; deterministic evals strongly preferred over LLM-as-judge
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Skill-specific eval pattern: A/B test with/without the skill, deterministic assertions over LLM-as-judge
+- `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve

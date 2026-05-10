@@ -1,9 +1,10 @@
 ---
 title: Model Routing
 created: 2026-05-06
-updated: 2026-05-09
+updated: 2026-05-10
 sources:
   - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
 tags: [workflow, cost-optimization, architecture, model-selection]
 ---
 
@@ -58,6 +59,20 @@ Model routing integrates naturally with the [[the-agent-workflow|agent workflow]
 - **The ceiling remains**: No amount of routing fixes tier E planning — that requires architectural changes or external scaffolding (decomposition, human-in-the-loop planning, [[ralph-loop]]-style one-task-per-iteration)
 - **System prompts are not routing**: Telling a model to "plan first then execute" does not change its fundamental capability ceiling and can sometimes make things worse
 
+## Routing by Task Shape
+
+Beyond cost-optimized tier routing, there's a complementary routing dimension: **task shape**. Not just "how complex is this?" but "what kind of work is this?" Nate B Jones (2026) proposes a practical routing table based on three orthogonal tests:
+
+| Task Shape | Route To | Why
+|---|---|---|
+| Complex multi-step execution | Strongest execution model | Carries more of the task before dropping the thread |
+| Blank-canvas visual/front-end | Model with strongest taste | Inventing visual style from nothing is a distinct capability |
+| UI implementation (with reference) | Execution model + reference image | "Inventing taste is hard; implementing to a target is easier" — generate a mockup first, then hand to the execution model |
+| Data work / migration | Execution model with validation harness | Good at semantic intuition (catching obviously fake records), weaker at backend hygiene (enum normalization, schema completeness) |
+| Planning / critique | Model strongest at reasoning about shape of work | Different from execution — this is about seeing the whole picture, not carrying the work through |
+
+The key insight: **the system around the model matters as much as the model itself.** Tools, file access, browser control, memory, computer use, and execution environment combine with model weights into something that can actually get work done. A model this strong trapped inside a chat window is underused. This aligns with the [[multi-tier-action-space]] convergence on model + execution environment as the unit of value.
+
 ## Thread
 - [[the-agent-workflow]] — Model routing is the cost optimization layer of the decomposition workflow
 - [[tool-design-for-agents]] — Model selection as a tool design input; different routing tiers may need different tool interfaces
@@ -79,3 +94,4 @@ Model routing integrates naturally with the [[the-agent-workflow|agent workflow]
 ## Sources
 
 - `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Discover AI's walkthrough of the AgentFloor results, the cost comparison framework, the capability heat map, and the practical guidance for sorting tasks by complexity tier
+- `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Task-shape routing table (execution vs taste vs research vs data), the "inventing taste is hard, implementing to a target is easier" insight, and the system-over-model argument that execution environment multiplies model capability
