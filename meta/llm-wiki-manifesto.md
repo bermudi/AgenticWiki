@@ -41,6 +41,16 @@ There are three layers:
 
 **The schema** — a document (e.g. CLAUDE.md for Claude Code or AGENTS.md for Codex) that tells the LLM how the wiki is structured, what the conventions are, and what workflows to follow when ingesting sources, answering questions, or maintaining the wiki. This is the key configuration file — it's what makes the LLM a disciplined wiki maintainer rather than a generic chatbot. You and the LLM co-evolve this over time as you figure out what works for your domain.
 
+## Design Principles
+
+Two principles from the Farzapedia instantiation of this pattern reinforce the architectural choices above:
+
+**File over app.** Your data is a collection of files in universal formats (markdown, images) on your local computer — not locked in any provider's system. This means every tool (LLM CLI, Obsidian, grep, Unix pipelines, custom scripts) can read and write it. The wiki survives its tools. When a better LLM or frontend appears, your data moves with you.
+
+**Explicit over implicit.** The wiki artifact is navigable and inspectable — you can see exactly what the LLM does and does not know. The knowledge of you or your topic is not a hidden vector somewhere; it's viewable markdown you can read, edit, and reason about. This is the opposite of an AI that "gets better the more you use it" through opaque personalization. Explicitness means you retain authority over what the wiki claims.
+
+These principles converge on the same outcome: the wiki is decoupled from any single AI. You own the data in universal formats. You can swap LLMs, finetune an open model on the wiki, or let the LLM hand your search tool off to another LLM. The files are the durable layer; everything else is a transient interface.
+
 ## Operations
 
 **Ingest.** You drop a new source into the raw collection and tell the LLM to process it. An example flow: the LLM reads the source, discusses key takeaways with you, writes a summary page in the wiki, updates the index, updates relevant entity and concept pages across the wiki, and appends an entry to the log. A single source might touch 10-15 wiki pages. Personally I prefer to ingest sources one at a time and stay involved — I read the summaries, check the updates, and guide the LLM on what to emphasize. But you could also batch-ingest many sources at once with less supervision. It's up to you to develop the workflow that fits your style and document it in the schema for future sessions.
