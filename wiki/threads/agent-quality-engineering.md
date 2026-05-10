@@ -3,11 +3,11 @@ title: Agent Quality Engineering
 created: 2026-04-27
 updated: 2026-05-09
 sources:
-  - "raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md"
-  - "raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md"
-  - "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"
-  - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
+  - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
+  - "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md"
+  - "raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md"
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/many-tier-instruction-hierarchy.md
   - raw/playground-in-prod-samuel-colvin.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
@@ -158,10 +158,10 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 
 ## Sources
 
-- `raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md` — The 4-layer eval framework and 4 quality dimensions
-- `raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md` — Logs/traces/metrics, the Emma/invoice debugging story, OpenTelemetry
-- `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — The flywheel in practice: groundedness eval, Mastra walkthrough
-- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Snapshot-based evals, LLM-as-judge skepticism, vibes-first eval strategy, logging proxy infrastructure
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: reproducible benchmark methodology, failure mode taxonomy, demonstrates the quality ceiling at tier E
+- `raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md` — The 4-layer eval framework and 4 quality dimensions
+- `raw/yt-the-observability-layer-your-ai-agent-is-missing.md` — Logs/traces/metrics, the Emma/invoice debugging story, OpenTelemetry
+- `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — The flywheel in practice: groundedness eval, Mastra walkthrough
+- `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Snapshot-based evals, LLM-as-judge skepticism, vibes-first eval strategy, logging proxy infrastructure
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: reproducible benchmark methodology, failure mode taxonomy, demonstrates the quality ceiling at tier E
 - `raw/many-tier-instruction-hierarchy.md` — ManyIH study: combinatorial collapse of LLM trust resolution, representation sensitivity, evidence for trust resolution as a missing quality dimension
 - `raw/playground-in-prod-samuel-colvin.md` — Shopify cost example ($5M→$73K via agent + optimization), private-data drives quality needs, most teams don't eval

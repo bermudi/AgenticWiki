@@ -2,7 +2,7 @@
 title: AI Design Loop
 created: 2026-04-24
 updated: 2026-05-05
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
 tags: ["ai-workflow", "software-design"]
 ---
 
@@ -81,5 +81,5 @@ Keeping completed PRDs in the repo creates [[doc-rot|doc rot]]: future agent ses
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-claude-code-feature-build.md`
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Grill Me skill as the mechanism for building a shared design concept; the skill went viral (13k stars) by turning the AI into an adversarial interviewer.
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Full workshop demonstrating Grill Me → PRD → Kanban; "don't review the PRD" philosophy; push vs pull instruction strategy; doc rot in the design loop.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Grill Me skill as the mechanism for building a shared design concept; the skill went viral (13k stars) by turning the AI into an adversarial interviewer.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full workshop demonstrating Grill Me → PRD → Kanban; "don't review the PRD" philosophy; push vs pull instruction strategy; doc rot in the design loop.

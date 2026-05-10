@@ -3,7 +3,7 @@ title: Andrej Karpathy
 created: 2026-05-09
 updated: 2026-05-09
 sources:
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [author, ai-researcher, educator]
 ---
 
@@ -73,4 +73,4 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 
 ## Sources
 
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Sequoia Capital interview covering the full arc from vibe coding to agentic engineering, software 1.0/2.0/3.0, verifiability, animals vs ghosts, LLM knowledge bases, and what remains worth learning.
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Sequoia Capital interview covering the full arc from vibe coding to agentic engineering, software 1.0/2.0/3.0, verifiability, animals vs ghosts, LLM knowledge bases, and what remains worth learning.

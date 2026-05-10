@@ -5,7 +5,7 @@ updated: 2026-05-02
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-ai-coding-for-real-engineers.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
 tags: [people, engineering, ai, game-development, austria]
 ---
@@ -73,4 +73,4 @@ Part of an Austrian engineering circle with [[armin-ronacher|Armin Ronacher]] (F
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-ai-coding-for-real-engineers.md`
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Full biography, Pi origin story, agents-don't-feel-pain argument, training data quality, Austrian circle, OpenClaw relationship
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Full biography, Pi origin story, agents-don't-feel-pain argument, training data quality, Austrian circle, OpenClaw relationship

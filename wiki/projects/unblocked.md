@@ -3,7 +3,7 @@ title: Unblocked
 created: 2026-05-04
 updated: 2026-05-04
 sources:
-  - raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md
+  - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
 tags: [project, context-engine, tool, agent-infrastructure]
 ---
 
@@ -101,4 +101,4 @@ Usage breakdown across Unblocked's user base: **Claude Code** (most used), **Cur
 
 ## Sources
 
-- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Full talk transcript covering architecture, hard lessons, social graphs, and benchmark results
+- `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Full talk transcript covering architecture, hard lessons, social graphs, and benchmark results

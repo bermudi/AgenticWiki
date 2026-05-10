@@ -2,7 +2,7 @@
 title: Strategic vs. Tactical Programming
 created: 2026-04-25
 updated: 2026-05-03
-sources: ["raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "John Ousterhout, *A Philosophy of Software Design*", "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"]
+sources: ["raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "John Ousterhout, *A Philosophy of Software Design*", "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"]
 tags: ["software-design", "ai-engineering", "strategy"]
 ---
 
@@ -62,7 +62,7 @@ Pocock's core message: "code is not cheap" — bad code is the most expensive it
 - [[the-human-lever]] — Strategic programming as the human's primary job in the age of AI
 
 ## Sources
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Matt Pocock applying Ousterhout's strategic/tactical distinction to AI workflows; code is not cheap thesis; Kent Beck's "invest in design every day"; specs-to-code as divestment from design
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — The general/sergeant metaphor and strategic architecture review as a recurring practice.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Matt Pocock applying Ousterhout's strategic/tactical distinction to AI workflows; code is not cheap thesis; Kent Beck's "invest in design every day"; specs-to-code as divestment from design
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — The general/sergeant metaphor and strategic architecture review as a recurring practice.
 - John Ousterhout, *A Philosophy of Software Design* — The original strategic vs. tactical programming framework
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Comprehension debt as the long-term cost of going all-tactical: shipping fast without understanding
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Comprehension debt as the long-term cost of going all-tactical: shipping fast without understanding

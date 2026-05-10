@@ -2,7 +2,7 @@
 title: Claude Code
 created: 2026-04-25
 updated: 2026-05-04
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"]
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"]
 tags: [tool, ai, agent, anthropic]
 ---
 

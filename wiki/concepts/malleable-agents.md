@@ -5,7 +5,7 @@ updated: 2026-05-08
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
 tags: [concept, ai-agents, design-patterns, plugins, self-modifying-software]
 ---
 
@@ -66,4 +66,4 @@ Examples from practice:
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-how-agents-use-dev-tools.md`
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Self-modifying software as paradigm, non-technical users modifying Pi, extension points, Armin's plan-mode experiments
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Self-modifying software as paradigm, non-technical users modifying Pi, extension points, Armin's plan-mode experiments

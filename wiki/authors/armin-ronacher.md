@@ -4,7 +4,7 @@ created: 2026-04-26
 updated: 2026-05-02
 sources:
   - raw/agentic-coding-recommendations.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
 tags: [author, python, flask, go, agentic-coding, austria]
 ---
 
@@ -86,4 +86,4 @@ Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and 
 ## Sources
 
 - `raw/agentic-coding-recommendations.md` — Agentic coding practices and language recommendations
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — 30-team interviews, agentic regret, deliberate friction, industrial revolution parallel, MCP analysis, Austrian circle
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — 30-team interviews, agentic regret, deliberate friction, industrial revolution parallel, MCP analysis, Austrian circle

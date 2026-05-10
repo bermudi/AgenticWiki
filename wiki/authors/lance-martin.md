@@ -3,8 +3,8 @@ title: Lance Martin
 created: 2026-05-02
 updated: 2026-05-04
 sources:
-  - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
-  - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
+  - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
+  - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
 tags: [author, context-engineering, agents, langchain]
 ---
 
@@ -60,5 +60,5 @@ A personal experiment in [[evolving-context|evolving context]]: after each Claud
 
 ## Sources
 
-- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Full interview covering agent harness architecture, context engineering techniques, evolving context, memory management, and the RLM frontier
-- `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video on the skill.md open standard — the format and progressive disclosure mechanism are conceptually aligned with the skill system Martin built, though the video never mentions his work
+- `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Full interview covering agent harness architecture, context engineering techniques, evolving context, memory management, and the RLM frontier
+- `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video on the skill.md open standard — the format and progressive disclosure mechanism are conceptually aligned with the skill system Martin built, though the video never mentions his work

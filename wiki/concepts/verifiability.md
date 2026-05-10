@@ -3,7 +3,7 @@ title: Verifiability
 created: 2026-05-09
 updated: 2026-05-09
 sources:
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [concept, ai-capability, reinforcement-learning]
 ---
 
@@ -79,4 +79,4 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 
 ## Sources
 
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the chess example, the car wash example, and practical implications for founders and developers.
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the chess example, the car wash example, and practical implications for founders and developers.

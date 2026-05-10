@@ -4,7 +4,7 @@ created: 2026-04-25
 updated: 2026-05-02
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
-  - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
+  - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
 tags: ["engineer", "agent-engineering", "context-engineering"]
 ---
 
@@ -60,4 +60,4 @@ Advocates for snapshot-based evals: run the workflow end-to-end, store the outpu
 ## Sources
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Talk at the AI Engineer Code Summit on "No Vibes Allowed" engineering.
-- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Full interview covering context engineering origins, model switching strategy, markdown storage, evals, and agent memory.
+- `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Full interview covering context engineering origins, model switching strategy, markdown storage, evals, and agent memory.

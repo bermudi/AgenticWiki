@@ -2,7 +2,7 @@
 title: Verification Loop
 created: 2026-04-25
 updated: 2026-05-09
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"]
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 ---
 
@@ -109,5 +109,5 @@ Karpathy's framing adds context: the verification loop is most effective in doma
 - `raw/yt-no-vibes-allowed-dex-horthy.md`
 - `raw/yt-how-agents-use-dev-tools.md`
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: agentic tool use does not improve document fidelity; verification must be domain-aware and semantic.
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — "Outrunning your headlights" as the Pragmatic Programmer metaphor for why AI does too much at once; TDD as the discipline that enforces small steps.
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: verifiability as the economic driver of AI capability; the RL circuits framework that explains when verification loops work and when they don't.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — "Outrunning your headlights" as the Pragmatic Programmer metaphor for why AI does too much at once; TDD as the discipline that enforces small steps.
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: verifiability as the economic driver of AI capability; the RL circuits framework that explains when verification loops work and when they don't.

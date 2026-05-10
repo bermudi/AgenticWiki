@@ -3,8 +3,8 @@ title: Plan vs Review
 created: 2026-05-02
 updated: 2026-05-05
 sources:
-  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
-  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
+  - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
+  - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
 tags: [concept, workflow, agent-design, human-in-the-loop, departure]
 ---
 
@@ -74,6 +74,6 @@ The distinction parallels [[grey-box-engineering]]: plan-heavy corresponds to ow
 
 ## Sources
 
-- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — The full talk establishing the framework, quantified heuristic, and feature type matrix.
-- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Real-world validation: 50%+ design time at Boundary ML; 4 days of pure design on threading; one-shot implementation enabled by thorough design
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Pocock's alignment-first departure: don't review the PRD, QA is where quality lives; the grilling session as planning investment, not document precision
+- `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — The full talk establishing the framework, quantified heuristic, and feature type matrix.
+- `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Real-world validation: 50%+ design time at Boundary ML; 4 days of pure design on threading; one-shot implementation enabled by thorough design
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Pocock's alignment-first departure: don't review the PRD, QA is where quality lives; the grilling session as planning investment, not document precision

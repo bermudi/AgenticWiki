@@ -3,7 +3,7 @@ title: Seams and Adapters
 created: 2026-04-29
 updated: 2026-04-29
 sources:
-  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
+  - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
 tags: [software-architecture, testing, hexagonal-architecture, ai-engineering]
 ---
 
@@ -54,4 +54,4 @@ Adapters make deep modules testable without coupling tests to infrastructure. Th
 
 ## Sources
 
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Seams and adapters as the architectural vocabulary for de-slopping.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — Seams and adapters as the architectural vocabulary for de-slopping.

@@ -3,7 +3,7 @@ title: Satisfaction of Search
 created: 2026-05-04
 updated: 2026-05-04
 sources:
-  - raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md
+  - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
 tags: [concept, agents, context-retrieval, cognitive-bias]
 ---
 
@@ -57,4 +57,4 @@ Unblocked's approach to mitigating satisfaction of search in context retrieval:
 
 ## Sources
 
-- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Introduction and treatment of satisfaction of search as an agent context retrieval problem
+- `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Introduction and treatment of satisfaction of search as an agent context retrieval problem

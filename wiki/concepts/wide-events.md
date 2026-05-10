@@ -2,7 +2,7 @@
 title: Wide Events
 created: 2026-04-28
 updated: 2026-04-28
-sources: ["raw/You're logging wrong - youtube.com.md"]
+sources: ["raw/yt-youre-logging-wrong.md"]
 tags: ["observability", "logging", "production-engineering", "opentelemetry", "patterns"]
 ---
 
@@ -120,4 +120,4 @@ This is the same shape as the [[agent-quality-loop]] — production failures dri
 
 ## Sources
 
-- `raw/You're logging wrong - youtube.com.md` — Theo (t3.gg) reacting to Boris's article on wide events, canonical log lines, OTEL, and tail sampling
+- `raw/yt-youre-logging-wrong.md` — Theo (t3.gg) reacting to Boris's article on wide events, canonical log lines, OTEL, and tail sampling

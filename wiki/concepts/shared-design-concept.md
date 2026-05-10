@@ -3,7 +3,7 @@ title: Shared Design Concept
 created: 2026-04-25
 updated: 2026-05-08
 sources:
-  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
+  - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - "Peter Naur, Programming as Theory Building (1985)"
 tags: ["design", "ai-engineering", "mental-models"]
 ---
@@ -55,5 +55,5 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[the-agent-workflow]] — The design concept must be explicit for the agent to participate in it
 
 ## Sources
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Matt Pocock on making the design concept explicit for AI agents; Grill Me skill as the mechanism for building shared understanding
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Matt Pocock on making the design concept explicit for AI agents; Grill Me skill as the mechanism for building shared understanding
 - Peter Naur, *Programming as Theory Building* (1985) — The theoretical origin: programming as building a shared theory of the system

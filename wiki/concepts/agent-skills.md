@@ -3,7 +3,7 @@ title: Agent Skills
 created: 2026-05-04
 updated: 2026-05-08
 sources:
-  - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
+  - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/skills-at-scale-workos-nisi-proser.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
@@ -241,6 +241,6 @@ Skills can include executable scripts with access to file systems, environment v
 
 ## Sources
 
-- `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video explaining skill format, progressive disclosure, knowledge type comparison, cognitive science analogy, and the open standard
+- `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video explaining skill format, progressive disclosure, knowledge type comparison, cognitive science analogy, and the open standard
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Production operations: skills as documentation, skill discoverability ("use" verb trick), eval-driven development for skills, skill rot detection, skills+MCP complementarity
 - `raw/skills-at-scale-workos-nisi-proser.md` — Skill design craft: constraints over prescription, confidence scoring, script interpolation, anti-patterns; skills at team scale: sharing tiers, plugin marketplaces, non-technical users, CLI-driven skills, context mining

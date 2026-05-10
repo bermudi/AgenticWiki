@@ -2,7 +2,7 @@
 title: Grey Box Engineering
 created: 2026-04-24
 updated: 2026-05-09
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"]
 tags: ["software-design", "ai-workflow"]
 ---
 
@@ -70,4 +70,4 @@ This is only safe when the interface is testable. The [[verification-loop]] must
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — "Design the interface, delegate the implementation" as the distillation of grey box engineering; treating module internals as grey boxes to save cognitive load.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — "Design the interface, delegate the implementation" as the distillation of grey box engineering; treating module internals as grey boxes to save cognitive load.

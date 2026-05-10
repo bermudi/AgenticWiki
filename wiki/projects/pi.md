@@ -4,7 +4,7 @@ created: 2026-04-25
 updated: 2026-05-04
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
 tags: [tool, ai-agents, open-source, self-modifying-software]
 ---
@@ -102,4 +102,4 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 ## Sources
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Origin story, OpenClaw relationship, self-modification philosophy, MCP vs CLI, "slow the f down", quality approach
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Origin story, OpenClaw relationship, self-modification philosophy, MCP vs CLI, "slow the f down", quality approach

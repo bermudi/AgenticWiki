@@ -3,7 +3,7 @@ title: The Gray Cat
 created: 2026-05-02
 updated: 2026-05-02
 sources:
-  - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
+  - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
 tags: [author, youtube, ai-engineering]
 ---
 
@@ -31,4 +31,4 @@ His work is notable for its honesty — he admits to barely reading diffs, testi
 
 ## Sources
 
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Full video transcript
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Full video transcript

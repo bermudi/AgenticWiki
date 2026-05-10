@@ -5,9 +5,9 @@ updated: 2026-05-07
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
-  - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
+  - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
-  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
 tags: [concept, autonomous-agents, agent-loops, claude-code, workflow, skills]
 ---
 
@@ -185,5 +185,5 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 
 - `raw/how-to-ralph-wiggum.md` — The canonical implementation
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the methodology
-- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Context isolation framing of the Ralph Loop pattern
+- `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Context isolation framing of the Ralph Loop pattern
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: loop evolution, sub-agent validation, skills-as-loop-package, worker loop, safety heuristics

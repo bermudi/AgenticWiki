@@ -2,7 +2,7 @@
 title: Mastra
 created: 2026-04-27
 updated: 2026-04-27
-sources: ["raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"]
+sources: ["raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md"]
 tags: ["project", "agent-framework", "typescript", "observability", "evals"]
 ---
 
@@ -44,4 +44,4 @@ A local and hosted UI for:
 
 ## Sources
 
-- `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — Walkthrough of Mastra's observability, evals, and scoring
+- `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — Walkthrough of Mastra's observability, evals, and scoring

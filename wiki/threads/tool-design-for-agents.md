@@ -6,11 +6,11 @@ sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
   - raw/yt-building-pi-in-a-world-of-slop.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
-  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
-  - "raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md"
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
+  - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 ---
 
@@ -156,8 +156,8 @@ The context engine layer interacts with the other four layers:
 - `raw/yt-how-agents-use-dev-tools.md` — Zanie Blue's systematic treatment: feedback qualities, scale effects, output optimization, self-tooling
 - `raw/agentic-coding-recommendations.md` — Ronacher on Go, Makefiles, misuse resistance, daemon patterns, speed
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Zechner on minimalism, malleability, four-tool core, Terminal-Bench results
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — MCP vs CLI structural analysis, Pi origin story, OpenClaw as hidden coding agent, context transparency
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — MCP vs CLI structural analysis, Pi origin story, OpenClaw as hidden coding agent, context transparency
 - `raw/slowing-the-fuck-down.md` — Agentic search recall as a fundamental tool limitation; low recall as the root cause of slop.
-- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Parallel management interface design requirements, agent runtime thresholds as a tool design constraint.
-- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine as meta-tool: pre-curating context, satisfaction of search, expert graphs, and benchmark results
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: model capability tier as a tool design constraint; open-weight models matching GPT-5 on tool use tasks at 15× lower cost
+- `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Parallel management interface design requirements, agent runtime thresholds as a tool design constraint.
+- `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine as meta-tool: pre-curating context, satisfaction of search, expert graphs, and benchmark results
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: model capability tier as a tool design constraint; open-weight models matching GPT-5 on tool use tasks at 15× lower cost

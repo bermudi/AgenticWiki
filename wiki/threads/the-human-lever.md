@@ -10,16 +10,16 @@ sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
-  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
-  - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
-  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
-  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
-  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
-  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
+  - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
+  - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
+  - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
+  - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -267,14 +267,14 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/yt-how-agents-use-dev-tools.md` — Trust models, confidence levels, and constraining agents
 - `raw/how-to-ralph-wiggum.md` — Backpressure over direction, environmental design
 - `raw/ralph-wiggum-playbook.md` — Human roles shift to engineering conditions for good outcomes
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — General/sergeant metaphor and periodic architecture review as an operational rhythm.
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Automation bias, "valuable garbage" insight, deliberate friction, "refactor mercilessly" practice, prompt request refinement.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — General/sergeant metaphor and periodic architecture review as an operational rhythm.
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Automation bias, "valuable garbage" insight, deliberate friction, "refactor mercilessly" practice, prompt request refinement.
 - `raw/slowing-the-fuck-down.md` — Write architecture by hand; friction as understanding; agents are merchants of complexity; agentic search recall.
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — First-person account of losing the human lever and recovering it through teaching mode; Anthropic RCT on inquiry vs. delegation.
-- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Quantified planning/review tradeoff, planning as the human lever in action.
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — "Code is not cheap" thesis; Kent Beck's "invest in design every day"; grey box as treating modules as boxes you don't look inside.
-- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — BEEPs workflow as a case study of the human lever; 50%+ design time allocation; AI-generated tooling as infrastructure for design authority
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Full walkthrough of the grey box workflow; human lever in action with the General/Sergeant model
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — First-person account of losing the human lever and recovering it through teaching mode; Anthropic RCT on inquiry vs. delegation.
+- `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Quantified planning/review tradeoff, planning as the human lever in action.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — "Code is not cheap" thesis; Kent Beck's "invest in design every day"; grey box as treating modules as boxes you don't look inside.
+- `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — BEEPs workflow as a case study of the human lever; 50%+ design time allocation; AI-generated tooling as infrastructure for design authority
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full walkthrough of the grey box workflow; human lever in action with the General/Sergeant model
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The last-mile verification case study: synthetic truth as the definitive demonstration that verification is the non-negotiable human act
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: "outsource thinking, not understanding"; taste and judgment as enduring human skills outside the RL circuits; LLM knowledge bases as tools for enhancing understanding; the intern entity metaphor for agent limitations
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: "outsource thinking, not understanding"; taste and judgment as enduring human skills outside the RL circuits; LLM knowledge bases as tools for enhancing understanding; the intern entity metaphor for agent limitations
 

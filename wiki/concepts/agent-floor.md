@@ -3,7 +3,7 @@ title: AgentFloor
 created: 2026-05-06
 updated: 2026-05-08
 sources:
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [benchmark, agent-evals, tool-use, model-evaluation]
 ---
 
@@ -88,4 +88,4 @@ The authors tried structured prompting — telling models to plan first and then
 
 ## Sources
 
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Discover AI's summary of the Harvard AgentFloor study, including the tier framework, comparative results, failure mode analysis, and cost implications
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's summary of the Harvard AgentFloor study, including the tier framework, comparative results, failure mode analysis, and cost implications

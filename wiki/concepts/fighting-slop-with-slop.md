@@ -3,7 +3,7 @@ title: Fighting Slop With Slop
 created: 2026-05-04
 updated: 2026-05-04
 sources:
-  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
+  - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
 tags: [concept, tool-design, workflow, ai-engineering]
 ---
 
@@ -71,4 +71,4 @@ The approach is not without failure modes:
 
 ## Sources
 
-- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Full discussion of the "fighting slop with slop" concept, the BEEPs design doc workflow, and the threading design process
+- `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Full discussion of the "fighting slop with slop" concept, the BEEPs design doc workflow, and the threading design process

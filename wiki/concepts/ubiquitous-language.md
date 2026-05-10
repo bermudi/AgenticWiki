@@ -4,9 +4,9 @@ created: 2026-04-25
 updated: 2026-05-03
 sources:
   - raw/yt-claude-code-feature-build.md
-  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
+  - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
   - raw/yt-slop-watch-ideation.md
-  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
+  - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
 tags: [concept, ddd, ai-native, design]
 ---
 
@@ -107,6 +107,6 @@ Matt updates the ubiquitous language document after each grill-me session, addin
 ## Sources
 
 - `raw/yt-claude-code-feature-build.md` — Matt Pocock's use of a Ubiquitous Language document to guide a feature build.
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Glossary as the protocol for precision between human and AI.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — Glossary as the protocol for precision between human and AI.
 - `raw/yt-slop-watch-ideation.md` — Greenfield DDD: domain modeling from scratch, terms emerged and road-tested via scenarios, ub-lang locked before PRD.
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Ubiquitous language as a compression mechanism for AI reasoning; shared terms reduce verbosity and align implementation with planning.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Ubiquitous language as a compression mechanism for AI reasoning; shared terms reduce verbosity and align implementation with planning.

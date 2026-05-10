@@ -4,7 +4,7 @@ created: 2026-05-05
 updated: 2026-05-08
 sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-agent-trust-vector-study-2026.md
 tags: [author, youtube]
 ---
@@ -42,5 +42,5 @@ tags: [author, youtube]
 ## Sources
 
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The synthetic truth interaction with Gemini
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Walkthrough of the Harvard AgentFloor study: 6-tier benchmark, 16 open-weight models vs GPT-5, failure mode taxonomy, and model routing cost framework
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Walkthrough of the Harvard AgentFloor study: 6-tier benchmark, 16 open-weight models vs GPT-5, failure mode taxonomy, and model routing cost framework
 - `raw/yt-agent-trust-vector-study-2026.md` — Analysis of the Johns Hopkins ManyIH study: combinatorial collapse of LLMs facing 12-tier instruction conflicts, semantic arithmetic failure, dynamic trust proposal

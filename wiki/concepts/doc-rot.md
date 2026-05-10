@@ -3,7 +3,7 @@ title: Doc Rot
 created: 2026-05-05
 updated: 2026-05-05
 sources:
-  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
 tags: [documentation, agent-workflow, anti-pattern]
 ---
 
@@ -45,4 +45,4 @@ The real artifact that persists is the **code**. The tests encode the requiremen
 - [[matt-pocock]] — Primary advocate of deleting completed PRDs
 
 ## Sources
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — The doc rot argument: stale PRDs mislead agents, the code IS the documentation, mark PRDs as closed/done.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — The doc rot argument: stale PRDs mislead agents, the code IS the documentation, mark PRDs as closed/done.

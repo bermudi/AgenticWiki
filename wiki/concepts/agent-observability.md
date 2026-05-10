@@ -3,8 +3,8 @@ title: Agent Observability
 created: 2026-04-27
 updated: 2026-05-07
 sources:
-  - raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md
-  - raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md
+  - raw/yt-the-observability-layer-your-ai-agent-is-missing.md
+  - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
   - raw/yt-slop-watch-ideation.md
 tags: ["agents", "observability", "tracing", "monitoring", "opentelemetry"]
 ---
@@ -117,6 +117,6 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 
 ## Sources
 
-- `raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md` — The Emma/invoice story, logs vs traces vs metrics, OpenTelemetry connection
-- `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — Mastra Studio traces in practice: span trees, agent runs, tool calls
+- `raw/yt-the-observability-layer-your-ai-agent-is-missing.md` — The Emma/invoice story, logs vs traces vs metrics, OpenTelemetry connection
+- `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — Mastra Studio traces in practice: span trees, agent runs, tool calls
 - `raw/yt-slop-watch-ideation.md` — Slop Watch architecture: sessions as DAGs of turns, per-session listener pattern, per-agent adapters, DRI-first UX

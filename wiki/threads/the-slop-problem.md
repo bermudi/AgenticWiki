@@ -9,16 +9,16 @@ sources:
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-why-llms-hallucinate.md
   - raw/yt-how-agents-use-dev-tools.md
-  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
   - raw/2604.15597v1.pdf
-  - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
+  - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/yt-slop-watch-ideation.md
-  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
-  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
+  - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
+  - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 ---
 
@@ -182,19 +182,19 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 
 ## Sources
 
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: the vibe coding → agentic engineering arc; the capability threshold of December 2024; the structural gap between floor-raising and quality-preserving
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the vibe coding → agentic engineering arc; the capability threshold of December 2024; the structural gap between floor-raising and quality-preserving
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Defines slop and compounding booboos
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Diagnosis of vibes-based engineering in complex codebases
 - `raw/yt-ai-coding-for-real-engineers.md` — The design-loop failure mode and context management
 - `raw/yt-why-llms-hallucinate.md` — The technical causes of hallucination as the source of slop.
 - `raw/yt-dhh-ai-pilled.md` — DHH's critique of the "AI as autocomplete" paradigm as a source of slop.
 - `raw/yt-how-agents-use-dev-tools.md` — Tool design as a factor in slop production.
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — AI as entropy accelerator; de-slopping via deep modules and periodic architecture review.
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Agents don't feel pain; training data ceiling; "slow the f down" math; 30-team interview findings; deliberate friction removal as slop accelerant.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — AI as entropy accelerator; de-slopping via deep modules and periodic architecture review.
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Agents don't feel pain; training data ceiling; "slow the f down" math; 30-team interview findings; deliberate friction removal as slop accelerant.
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; agentic search low recall; untrustworthy tests; write architecture by hand; friction as understanding.
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Comprehension debt as cognitive slop; Anthropic RCT on comprehension loss; "let me ask Claude" as cultural diagnostic.
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Comprehension debt as cognitive slop; Anthropic RCT on comprehension loss; "let me ask Claude" as cultural diagnostic.
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors, sparse critical failures driving document degradation.
 - `raw/yt-slop-watch-ideation.md` — Slop Watch: the concrete observability platform built to measure and combat slop.
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Software entropy as the named mechanism from The Pragmatic Programmer; specs-to-code as a named movement that accelerates entropy; "code is not cheap" thesis.
-- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Fighting slop with slop concept, BEEPs design doc workflow, threading design process
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Software entropy as the named mechanism from The Pragmatic Programmer; specs-to-code as a named movement that accelerates entropy; "code is not cheap" thesis.
+- `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Fighting slop with slop concept, BEEPs design doc workflow, threading design process
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Synthetic truth and temporal smoothing as high-grade information slop; Gemini's self-analysis of narrative coherence vs. temporal reality

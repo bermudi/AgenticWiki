@@ -2,7 +2,7 @@
 title: Axiom
 created: 2026-04-28
 updated: 2026-04-28
-sources: ["raw/You're logging wrong - youtube.com.md"]
+sources: ["raw/yt-youre-logging-wrong.md"]
 tags: ["observability", "logging", "platforms", "production-engineering"]
 ---
 
@@ -34,4 +34,4 @@ For agent-produced code, Axiom (or equivalent columnar-backend observability pla
 
 ## Sources
 
-- `raw/You're logging wrong - youtube.com.md` — Theo's tour of T3 Chat's Axiom setup: 5.8B rows, 59 fields, cost structure
+- `raw/yt-youre-logging-wrong.md` — Theo's tour of T3 Chat's Axiom setup: 5.8B rows, 59 fields, cost structure

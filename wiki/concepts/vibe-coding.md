@@ -3,7 +3,7 @@ title: Vibe Coding
 created: 2026-05-09
 updated: 2026-05-09
 sources:
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [concept, ai-engineering, coding]
 ---
 
@@ -70,4 +70,4 @@ This tension — vibe coding raises the floor (everyone can build) but the defau
 
 ## Sources
 
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: coinage of "vibe coding," the December 2024 capability threshold, and the distinction between vibe coding and agentic engineering.
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: coinage of "vibe coding," the December 2024 capability threshold, and the distinction between vibe coding and agentic engineering.

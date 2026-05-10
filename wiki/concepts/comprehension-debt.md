@@ -3,7 +3,7 @@ title: Comprehension Debt
 created: 2026-05-02
 updated: 2026-05-04
 sources:
-  - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
+  - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
 tags: [concept, ai-engineering, cognitive-debt, code-quality]
 ---
 
@@ -99,4 +99,4 @@ That is the part the model cannot hold for you, because that is the part you are
 
 ## Sources
 
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Core source: definition, Anthropic RCT, inquiry-vs-delegation, personal drift and recovery, cultural signal
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Core source: definition, Anthropic RCT, inquiry-vs-delegation, personal drift and recovery, cultural signal

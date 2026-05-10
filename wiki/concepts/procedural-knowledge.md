@@ -3,7 +3,7 @@ title: Procedural Knowledge
 created: 2026-05-04
 updated: 2026-05-04
 sources:
-  - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
+  - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
 tags: [concept, knowledge, memory, agents, cognitive-science]
 ---
 
@@ -60,4 +60,4 @@ Procedural knowledge being file-based (not weight-based) has several important p
 
 ## Sources
 
-- `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video explaining the cognitive science framing of procedural memory, the knowledge type comparison, and how skills implement procedural knowledge for agents
+- `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video explaining the cognitive science framing of procedural memory, the knowledge type comparison, and how skills implement procedural knowledge for agents

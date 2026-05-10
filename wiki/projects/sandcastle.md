@@ -3,7 +3,7 @@ title: Sandcastle
 created: 2026-05-05
 updated: 2026-05-05
 sources:
-  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
 tags: [project, agent-orchestration, afk, parallelization]
 ---
 
@@ -46,4 +46,4 @@ Sandcastle is the parallelized, Docker-sandboxed evolution of the [[ralph-loop|R
 - [[matt-pocock]] — Creator
 
 ## Sources
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Full demonstration of the pipeline: planner, implementer, reviewer, merger stages.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full demonstration of the pipeline: planner, implementer, reviewer, merger stages.

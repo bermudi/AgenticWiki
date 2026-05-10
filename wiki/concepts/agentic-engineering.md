@@ -3,7 +3,7 @@ title: Agentic Engineering
 created: 2026-05-09
 updated: 2026-05-09
 sources:
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [concept, ai-engineering, discipline]
 ---
 
@@ -65,4 +65,4 @@ The evaluation is: can you build something large using agents that withstands ag
 
 ## Sources
 
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: coining of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm, and the distinction from vibe coding.
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: coining of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm, and the distinction from vibe coding.

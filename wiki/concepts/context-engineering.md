@@ -3,9 +3,9 @@ title: Context Engineering
 created: 2026-05-02
 updated: 2026-05-09
 sources:
-  - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
-  - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
-  - raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md
+  - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
+  - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
+  - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
 
@@ -136,6 +136,6 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 
 ## Sources
 
-- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Full interview defining context engineering origins, principles, and practices
-- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Operational techniques catalog, context layers model, context isolation patterns
-- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine architecture, the three myths, satisfaction of search, organizational memory, and expert bottling
+- `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Full interview defining context engineering origins, principles, and practices
+- `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Operational techniques catalog, context layers model, context isolation patterns
+- `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine architecture, the three myths, satisfaction of search, organizational memory, and expert bottling

@@ -3,7 +3,7 @@ title: Instruction Severity Inflation
 created: 2026-05-02
 updated: 2026-05-08
 sources:
-  - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
+  - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
 tags: ["concept", "prompts", "context-engineering", "llm-limits"]
 ---
 
@@ -48,4 +48,4 @@ The dynamic:
 
 ## Sources
 
-- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Dex Horthy describing the 100-200 instruction limit and instruction severity inflation
+- `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Dex Horthy describing the 100-200 instruction limit and instruction severity inflation

@@ -5,7 +5,7 @@ updated: 2026-05-10
 sources:
   - raw/2604.15597v1.pdf
   - raw/many-tier-instruction-hierarchy.md
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
 tags: [concept, llm-capabilities, domain-variance, delegation]
 ---
@@ -98,5 +98,5 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 ## Sources
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH results demonstrating the jagged frontier within a single capability axis: near-perfect at 2 tiers, catastrophic at 12
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: the car wash example of jaggedness, RL circuits explanation, animals vs ghosts framing, and the practical implication that you must "figure out which circuits you're in for your application."
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the car wash example of jaggedness, RL circuits explanation, animals vs ghosts framing, and the practical implication that you must "figure out which circuits you're in for your application."
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Within-model jaggedness: 5.5 advanced on semantic traps but regressed on backend hygiene vs its predecessor, demonstrating non-monotonic capability even within the same task

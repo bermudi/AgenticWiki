@@ -3,7 +3,7 @@ title: Model Routing
 created: 2026-05-06
 updated: 2026-05-10
 sources:
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
 tags: [workflow, cost-optimization, architecture, model-selection]
 ---
@@ -93,5 +93,5 @@ The key insight: **the system around the model matters as much as the model itse
 
 ## Sources
 
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Discover AI's walkthrough of the AgentFloor results, the cost comparison framework, the capability heat map, and the practical guidance for sorting tasks by complexity tier
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's walkthrough of the AgentFloor results, the cost comparison framework, the capability heat map, and the practical guidance for sorting tasks by complexity tier
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Task-shape routing table (execution vs taste vs research vs data), the "inventing taste is hard, implementing to a target is easier" insight, and the system-over-model argument that execution environment multiplies model capability

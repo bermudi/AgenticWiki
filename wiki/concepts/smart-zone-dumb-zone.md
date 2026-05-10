@@ -6,7 +6,7 @@ sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
-  - raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md
+  - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
 tags: ["ai-limitations", "context-management", "tool-design"]
 ---
 
@@ -62,4 +62,4 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-how-agents-use-dev-tools.md`
-- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Dex Horthy describing the Smart Zone/Dumb Zone in the context of context engineering
+- `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Dex Horthy describing the Smart Zone/Dumb Zone in the context of context engineering

@@ -3,7 +3,7 @@ title: The Verifiability Thesis
 created: 2026-05-09
 updated: 2026-05-09
 sources:
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 ---
 
@@ -117,4 +117,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 
 ## Sources
 
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the RL circuits framework, the chess example, the car wash example, the vibe coding → agentic engineering arc, and the uncertainty about whether taste can enter the RL distribution.
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the RL circuits framework, the chess example, the car wash example, the vibe coding → agentic engineering arc, and the uncertainty about whether taste can enter the RL distribution.

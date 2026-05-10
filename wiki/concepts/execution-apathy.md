@@ -3,7 +3,7 @@ title: Execution Apathy
 created: 2026-05-06
 updated: 2026-05-06
 sources:
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [llm, failure-mode, agent-quality, planning]
 ---
 
@@ -60,4 +60,4 @@ The AgentFloor study found that system prompts designed to prevent this (e.g., "
 
 ## Sources
 
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Discover AI's breakdown of GPT-5's failure distribution at tier E, including the "execution apathy" characterization and the contrast with Gemma 4's "blind panic"
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's breakdown of GPT-5's failure distribution at tier E, including the "execution apathy" characterization and the contrast with Gemma 4's "blind panic"

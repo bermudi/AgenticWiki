@@ -3,7 +3,7 @@ title: Peter Werry
 created: 2026-05-04
 updated: 2026-05-04
 sources:
-  - raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md
+  - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
 tags: [author, context-engine, unblocked]
 ---
 
@@ -45,4 +45,4 @@ Borrowed the concept from radiology: agents find the first plausible answer and 
 
 ## Sources
 
-- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Full talk transcript covering context engine architecture, myths, social graphs, satisfaction of search, and hard lessons
+- `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Full talk transcript covering context engine architecture, myths, social graphs, satisfaction of search, and hard lessons

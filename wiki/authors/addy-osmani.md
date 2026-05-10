@@ -3,7 +3,7 @@ title: Addy Osmani
 created: 2026-05-02
 updated: 2026-05-02
 sources:
-  - "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"
+  - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
 tags: [author, engineering]
 ---
 
@@ -27,4 +27,4 @@ Addy Osmani published an article titled "Comprehension Debt" that named the phen
 
 ## Sources
 
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Referenced as the source of the term
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Referenced as the source of the term

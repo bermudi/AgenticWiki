@@ -2,7 +2,7 @@
 title: Agent Evals
 created: 2026-04-27
 updated: 2026-05-10
-sources: ["raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md", "raw/skill-issue-supabase-pedro-rodrigues.md", "raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md"]
+sources: ["raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md", "raw/skill-issue-supabase-pedro-rodrigues.md", "raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md"]
 tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
 ---
 
@@ -114,8 +114,8 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 
 ## Sources
 
-- `raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md` — The framework: four layers, four dimensions, CI for probabilistic systems
-- `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — LLM-as-judge in practice: groundedness scoring, prompt iteration from eval feedback
+- `raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md` — The framework: four layers, four dimensions, CI for probabilistic systems
+- `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — LLM-as-judge in practice: groundedness scoring, prompt iteration from eval feedback
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH: 853-sample benchmark for instruction conflict resolution across up to 12 privilege tiers
 - `raw/playground-in-prod-samuel-colvin.md` — Practitioner confirmation: most teams don't eval at all; deterministic evals strongly preferred over LLM-as-judge

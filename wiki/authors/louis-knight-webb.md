@@ -3,7 +3,7 @@ title: Louis Knight-Webb
 created: 2026-05-02
 updated: 2026-05-02
 sources:
-  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
+  - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
 tags: [author, ai-engineering, agent-workflow]
 ---
 
@@ -54,4 +54,4 @@ As agents run for longer (Copilot: seconds → Claude Code 2025: 5-10 minute exe
 
 ## Sources
 
-- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Full talk transcript covering the plan-vs-review framework, feature type matrix, time horizon shift, and focus maxing.
+- `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Full talk transcript covering the plan-vs-review framework, feature type matrix, time horizon shift, and focus maxing.

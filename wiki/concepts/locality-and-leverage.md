@@ -3,7 +3,7 @@ title: Locality and Leverage
 created: 2026-04-29
 updated: 2026-04-29
 sources:
-  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
+  - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
 tags: [software-architecture, ai-engineering, module-design]
 ---
 
@@ -56,4 +56,4 @@ These criteria keep the human's judgment focused during the grilling phase. Inst
 
 ## Sources
 
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Locality and leverage defined as the two payoff properties of deep modules.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — Locality and leverage defined as the two payoff properties of deep modules.

@@ -2,7 +2,7 @@
 title: Damian Galarza
 created: 2026-04-27
 updated: 2026-04-27
-sources: ["raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md", "raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md", "raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"]
+sources: ["raw/yt-the-observability-layer-your-ai-agent-is-missing.md", "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md"]
 tags: ["author", "agent-quality", "observability", "evals"]
 ---
 
@@ -32,6 +32,6 @@ His three-part series on agent quality covers the full stack: [[agent-evals|what
 
 ## Sources
 
-- `raw/AI Agent Evals The 4 Layers Most Teams Skip - youtube.com.md`
-- `raw/The Observability Layer Your AI Agent Is Missing - youtube.com.md`
-- `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md`
+- `raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md`
+- `raw/yt-the-observability-layer-your-ai-agent-is-missing.md`
+- `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md`

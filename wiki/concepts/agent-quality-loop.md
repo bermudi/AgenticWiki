@@ -2,7 +2,7 @@
 title: Agent Quality Loop
 created: 2026-04-27
 updated: 2026-04-27
-sources: ["raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md"]
+sources: ["raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md"]
 tags: ["agents", "quality", "evals", "observability", "feedback-loop"]
 ---
 
@@ -69,4 +69,4 @@ Not every production run needs to go through full LLM-as-judge evals. Sampling (
 
 ## Sources
 
-- `raw/The Quality Loop Your AI Agent Is Missing (Evals + Tracing) - youtube.com.md` — The Mastra walkthrough: groundedness eval, prompt iteration, the flywheel
+- `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — The Mastra walkthrough: groundedness eval, prompt iteration, the flywheel

@@ -3,7 +3,7 @@ title: Improve Codebase Architecture
 created: 2026-04-29
 updated: 2026-05-05
 sources:
-  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
+  - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
 tags: [project, skill, ai-engineering, refactoring, architecture]
 ---
 
@@ -64,4 +64,4 @@ Matt recommends running this skill **every couple of days**, especially in fast-
 
 ## Sources
 
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Full walkthrough of the skill in action on the course-video-manager repo.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — Full walkthrough of the skill in action on the course-video-manager repo.

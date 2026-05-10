@@ -3,7 +3,7 @@ title: Multi-Tier Action Space
 created: 2026-05-02
 updated: 2026-05-04
 sources:
-  - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
+  - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
 tags: [concept, architecture, context-engineering, agents, tool-design]
 ---
 
@@ -87,4 +87,4 @@ The file system also has collaboration limits: last-write-wins semantics don't s
 
 ## Sources
 
-- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Full interview detailing the multi-tier architecture, supporting patterns, and the MCP lesson
+- `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Full interview detailing the multi-tier architecture, supporting patterns, and the MCP lesson

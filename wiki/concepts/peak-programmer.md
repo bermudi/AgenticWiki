@@ -2,7 +2,7 @@
 title: Peak Programmer
 created: 2026-04-25
 updated: 2026-05-02
-sources: [raw/yt-dhh-ai-pilled.md, "raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md"]
+sources: [raw/yt-dhh-ai-pilled.md, "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"]
 tags: [future-of-work, economics, ai]
 ---
 
@@ -36,4 +36,4 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 ## Sources
 
 - `raw/yt-dhh-ai-pilled.md` — Central topic of the interview between DHH and Gergely Orosz.
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — The senior engineer who fails the coding interview as the personal face of peak programmer
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — The senior engineer who fails the coding interview as the personal face of peak programmer

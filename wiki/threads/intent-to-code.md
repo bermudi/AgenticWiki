@@ -3,10 +3,10 @@ title: Intent-to-Code
 created: 2026-05-05
 updated: 2026-05-09
 sources:
-  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
-  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
-  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
-  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
+  - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
+  - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
+  - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
 tags: [thread, ai-engineering, workflow, design, quality]
 ---
@@ -105,7 +105,7 @@ Different projects and teams will land at different points. The wiki's job is to
 
 ## Sources
 
-- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Plan-heavy framework: quantified heuristic, feature type matrix, focus maxing
-- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Empirical validation: 50%+ design time at Boundary ML, one-shot implementation from thorough design docs
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Alignment-first in practice: Grill Me → PRD → Kanban → Sandcastle AFK → QA; "don't review the PRD"
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Specs-to-code critique: vibe coding by another name, code is the battleground
+- `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Plan-heavy framework: quantified heuristic, feature type matrix, focus maxing
+- `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Empirical validation: 50%+ design time at Boundary ML, one-shot implementation from thorough design docs
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Alignment-first in practice: Grill Me → PRD → Kanban → Sandcastle AFK → QA; "don't review the PRD"
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Specs-to-code critique: vibe coding by another name, code is the battleground

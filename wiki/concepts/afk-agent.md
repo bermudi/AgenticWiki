@@ -2,7 +2,7 @@
 title: AFK Agent
 created: 2026-04-25
 updated: 2026-05-07
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
 tags: [concept, workflow, agents]
 ---
 
@@ -77,4 +77,4 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - `raw/yt-claude-code-feature-build.md` — Demonstration of using an AFK agent to implement a multi-issue feature.
 - `raw/how-to-ralph-wiggum.md` — The Ralph Wiggum autonomous loop pattern.
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology.
-- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Focus maxing / parallel AFK management as agents cross the 5-minute execution threshold.
+- `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Focus maxing / parallel AFK management as agents cross the 5-minute execution threshold.

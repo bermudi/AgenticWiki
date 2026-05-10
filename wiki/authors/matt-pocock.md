@@ -2,7 +2,7 @@
 title: Matt Pocock
 created: 2026-04-24
 updated: 2026-05-05
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/yt-slop-watch-ideation.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-slop-watch-ideation.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
@@ -51,10 +51,10 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[doc-rot]] — Primary advocate for deleting completed PRDs to prevent stale documentation from misdirecting agents
 
 ## Sources
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop, software entropy, outrunning headlights, Grill Me skill
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop, software entropy, outrunning headlights, Grill Me skill
 - `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK split, tracer bullets, context management
 - `raw/yt-why-llms-hallucinate.md` — Intrinsic/extrinsic hallucination taxonomy
 - `raw/yt-claude-code-feature-build.md` — Ubiquitous language workflow, AFK agents (Ralph), PRD to Issues pipeline
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — The improve-codebase-architecture skill, general/sergeant metaphor, seams/adapters vocabulary.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — The improve-codebase-architecture skill, general/sergeant metaphor, seams/adapters vocabulary.
 - `raw/yt-slop-watch-ideation.md` — Greenfield project ideation: parallel research agents, Grill Me, DDD domain modeling, Slop Watch architecture decisions.
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Full end-to-end workshop: Grill Me → PRD → Kanban DAG → Sandcastle parallel AFK loops → QA; doc rot, push vs pull agent instructions, AI defaults to shallow modules.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full end-to-end workshop: Grill Me → PRD → Kanban DAG → Sandcastle parallel AFK loops → QA; doc rot, push vs pull agent instructions, AI defaults to shallow modules.

@@ -5,24 +5,24 @@ updated: 2026-05-09
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
-  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
+  - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-claude-code-feature-build.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
-  - raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
-  - "raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md"
-  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
-  - "raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md"
-  - "raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md"
+  - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
+  - "raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md"
+  - "raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md"
   - raw/yt-slop-watch-ideation.md
-  - "raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md"
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 ---
 
@@ -332,24 +332,24 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 
 ## Sources
 
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: origin of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm for agentic proficiency
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: origin of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm for agentic proficiency
 - `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK, tracer bullets, Smart Zone
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Context management, malleability, minimalism
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — AI design loop, shared design concept, outrunning headlights, software entropy, code is not cheap
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — AI design loop, shared design concept, outrunning headlights, software entropy, code is not cheap
 - `raw/yt-dhh-ai-pilled.md` — DHH on the shift from manual implementation to agentic workflows
 - `raw/yt-claude-code-feature-build.md` — Ubiquitous Language, AFK agents (Ralph), PRD to Issues pipeline
 - `raw/yt-how-agents-use-dev-tools.md` — Tool design as workflow infrastructure, scale effects, context reduction
 - `raw/agentic-coding-recommendations.md` — Go for agents, Makefile interfaces, parallelization, refactor timing
 - `raw/how-to-ralph-wiggum.md` — Ralph Wiggum loop: one task per iteration, backpressure, plan disposability
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Architecture review as a distinct, cadenced workflow phase.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — Architecture review as a distinct, cadenced workflow phase.
 - `raw/slowing-the-fuck-down.md` — Good agent task criteria; Karpathy auto-research as example; agentic search recall problem.
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — Context management, malleability, Pi origin story, one-task-per-iteration sidesteps Dumb Zone.
-- `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Plan-vs-review tradeoff, feature type matrix, time horizon shift, focus maxing / parallel agent management.
-- `raw/Chroma Context Engineering Episode 1 - Dex Horthy (@dexhorthy) - youtube.com.md` — Context engineering definition, model switching strategy, fast orchestrator + smart oracle pattern, personal productivity systems.
-- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Multi-tier action space architecture, evolving context categories, MCP lesson, context management techniques catalog, Ralph Loop context isolation framing.
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Context management, malleability, Pi origin story, one-task-per-iteration sidesteps Dumb Zone.
+- `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Plan-vs-review tradeoff, feature type matrix, time horizon shift, focus maxing / parallel agent management.
+- `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Context engineering definition, model switching strategy, fast orchestrator + smart oracle pattern, personal productivity systems.
+- `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Multi-tier action space architecture, evolving context categories, MCP lesson, context management techniques catalog, Ralph Loop context isolation framing.
 - `raw/yt-slop-watch-ideation.md` — Research phase workflow: parallel sub-agents, domain modeling, trusted vs. untrusted AI artifacts, the "bored of talking" signal.
-- `raw/Mergeable by default Building the context engine to save time and tokens — Peter Werry, Unblocked - youtube.com.md` — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase; benchmark data showing 10× improvement in wall-clock time.
+- `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine architecture as workflow infrastructure; satisfaction of search as a design constraint on the planning phase; benchmark data showing 10× improvement in wall-clock time.
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: skills-as-loop-package, worker loop, sub-agent validation, two-mode work model, safety heuristics
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Harvard AgentFloor study: model routing by complexity tier, cost optimization framework; supports the decomposition emphasis in the workflow
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: model routing by complexity tier, cost optimization framework; supports the decomposition emphasis in the workflow
 

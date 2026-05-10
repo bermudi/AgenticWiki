@@ -2,7 +2,7 @@
 title: Deep vs. Shallow Modules
 created: 2026-04-24
 updated: 2026-05-05
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md", "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md", "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"]
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
 tags: ["software-architecture", "clean-code"]
 ---
 
@@ -51,6 +51,6 @@ A codebase of deep modules is a codebase that rewards TDD. You test at the inter
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
-- `raw/How To De-Slop A Codebase Ruined By AI (with one skill) - youtube.com.md` — Locality, leverage, seams, and adapters as the vocabulary of module depth.
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Visual contrast (blobs vs. bounded boxes), deep modules as testable modules, AI navigation difficulty in shallow architectures.
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Warning that AI defaults to producing shallow modules; deep modules require active human enforcement.
+- `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — Locality, leverage, seams, and adapters as the vocabulary of module depth.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Visual contrast (blobs vs. bounded boxes), deep modules as testable modules, AI navigation difficulty in shallow architectures.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Warning that AI defaults to producing shallow modules; deep modules require active human enforcement.

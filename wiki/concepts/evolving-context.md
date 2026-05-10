@@ -3,8 +3,8 @@ title: Evolving Context
 created: 2026-05-02
 updated: 2026-05-04
 sources:
-  - raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md
-  - raw/what-ai-agent-skills-are-and-how-they-work-youtube.md
+  - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
+  - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
 tags: [concept, context-engineering, agents, memory, continual-learning]
 ---
 
@@ -83,5 +83,5 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 
 ## Sources
 
-- `raw/Chroma Context Engineering Episode 3 - Lance Martin - LangChain - youtube.com.md` — Full interview detailing the three categories of evolving context, RLM, the classifier heuristic, and the token-space vs. weight-space tradeoff
-- `raw/what-ai-agent-skills-are-and-how-they-work-youtube.md` — IBM Technology video on the skill.md open standard, validating and extending the skill learning category of evolving context
+- `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Full interview detailing the three categories of evolving context, RLM, the classifier heuristic, and the token-space vs. weight-space tradeoff
+- `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video on the skill.md open standard, validating and extending the skill learning category of evolving context

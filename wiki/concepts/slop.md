@@ -5,10 +5,10 @@ updated: 2026-05-05
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/agentic-coding-recommendations.md
-  - "raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md"
+  - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
-  - "raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md"
-  - "raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md"
+  - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
+  - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
 tags: [concept, ai, ethics, code-quality]
 ---
 
@@ -110,7 +110,7 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Core slop concept, agents don't feel pain
 - `raw/agentic-coding-recommendations.md` — Agent-cheapened library upgrades, tooling speed as slop prevention, code quality trajectory improvement
-- `raw/Building Pi, and what makes self-modifying software so fascinating - youtube.com.md` — "Slow the f down" math, agents don't feel pain, curse word metric, error over-recovery, training data quality
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — "Slow the f down" math, agents don't feel pain, curse word metric, error over-recovery, training data quality
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; untrustworthy tests; agentic search low recall
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Software entropy as the named mechanism; "code is not cheap" — bad code blocks AI's ability to help.
-- `raw/Can an AI Out-Plan a Senior Engineer - youtube.com.md` — Internal vs. external slop distinction; fighting slop with slop as a deliberate strategy
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Software entropy as the named mechanism; "code is not cheap" — bad code blocks AI's ability to help.
+- `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Internal vs. external slop distinction; fighting slop with slop as a deliberate strategy

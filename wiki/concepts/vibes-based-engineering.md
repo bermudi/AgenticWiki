@@ -5,11 +5,11 @@ updated: 2026-05-09
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/2604.15597v1.pdf
-  - raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md
-  - raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md
-  - "raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md"
+  - raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md
+  - raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md
+  - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
-  - "raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md"
+  - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
 
@@ -90,8 +90,8 @@ The case reinforces the core argument: verification is not just about tests and 
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Origin of the "No Vibes" term; definition of vibes-based engineering as an anti-pattern.
 - `raw/2604.15597v1.pdf` — Single-step myopia: documents can lose 25–50% of semantic content over 20 interactions even when each step looks correct.
-- `raw/The Comprehension Debt Trap Every AI Dev Falls Into - youtube.com.md` — Delegation mode scores below 40% on comprehension; cognitive cost of vibes-based engineering.
-- `raw/Software Fundamentals Matter More Than Ever — Matt Pocock - youtube.com.md` — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
-- `raw/Full Walkthrough Workflow for AI Coding — Matt Pocock - youtube.com.md` — Practical workflow that contrasts with and replaces vibes-based engineering.
+- `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Delegation mode scores below 40% on comprehension; cognitive cost of vibes-based engineering.
+- `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
+- `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Practical workflow that contrasts with and replaces vibes-based engineering.
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Case study: synthetic truth as vibes-based acceptance applied to information; the definitive example of why verification matters.
-- `raw/Andrej Karpathy From Vibe Coding to Agentic Engineering - youtube.com.md` — Karpathy's Sequoia interview: origin of "vibe coding" as a neutral term, the December 2024 capability threshold, and the distinction between vibe coding (raising the floor) and agentic engineering (preserving quality).
+- `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: origin of "vibe coding" as a neutral term, the December 2024 capability threshold, and the distinction between vibe coding (raising the floor) and agentic engineering (preserving quality).

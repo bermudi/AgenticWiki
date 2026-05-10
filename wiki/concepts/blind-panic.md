@@ -3,7 +3,7 @@ title: Blind Panic
 created: 2026-05-06
 updated: 2026-05-06
 sources:
-  - raw/When to use Small LM for AI Agents New Insights - youtube.com.md
+  - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [llm, failure-mode, agent-quality, planning]
 ---
 
@@ -64,4 +64,4 @@ The key insight: both failure modes consume roughly the same token budget, but i
 
 ## Sources
 
-- `raw/When to use Small LM for AI Agents New Insights - youtube.com.md` — Discover AI's breakdown of Gemma 4's failure distribution at tier E, including the "blind panic" characterization and the contrast with GPT-5's "execution apathy"
+- `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's breakdown of Gemma 4's failure distribution at tier E, including the "blind panic" characterization and the contrast with GPT-5's "execution apathy"
