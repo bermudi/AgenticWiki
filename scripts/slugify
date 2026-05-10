@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# slugify — normalize a filename for raw/
+# Strips spaces, special chars, lowercases, collapses dashes.
+# Usage: slugify "My Cool Article Title (2024)"
+#   => my-cool-article-title-2024
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "usage: slugify <filename>" >&2
+  exit 1
+fi
+
+echo "$1" \
+  | tr '[:upper:]' '[:lower:]' \
+  | sed 's/[^a-z0-9._-]/-/g' \
+  | sed 's/-\+/-/g' \
+  | sed 's/^-//;s/-$//'

@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# migrate-filenames — rename raw/ files to slugified yt- prefixed format
+# and update all references in wiki/ threads.
+
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+declare -A mapping
+
+for f in raw/*' '*; do
+  base=$(basename "$f")
+  
+  # Strip the trailing " - youtube.com" or " — youtube.com" before slugifying
+  clean="${base// - youtube.com.md/}"
+  clean="${clean// — youtube.com.md/}"
+  clean="${clean// - youtube.com/}"
+  clean="${clean// — youtube.com/}"
+  
+  # Remove apostrophes entirely (don't turn "you're" into "you-re")
+  clean="${clean//\'/}"
+  
+  # Slugify
+  new=$(echo "$clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9._-]/-/g' | sed 's/-\+/-/g' | sed 's/^-//;s/-$//')
+  
+  # Add yt- prefix for youtube sources
+  if [[ "$base" =~ youtube\.com ]] && [[ ! "$base" =~ ^yt- ]]; then
+    new="yt-${new}"
+  fi
+  
+  # Add .md extension back
+  if [[ ! "$new" =~ \.md$ ]]; then
+    new="${new}.md"
+  fi
+  
+  mapping["$base"]="$new"
+done
+
+# Show the plan
+echo "=== Rename plan ==="
+for old in "${!mapping[@]}"; do
+  new="${mapping[$old]}"
+  echo "  $old"
+  echo "  -> $new"
+  echo ""
+done
+
+# Rename files
+echo "=== Renaming files ==="
+for old in "${!mapping[@]}"; do
+  new="${mapping[$old]}"
+  if [[ -f "raw/$old" ]]; then
+    mv "raw/$old" "raw/$new"
+    echo "  renamed: $old -> $new"
+  fi
+done
+
+# Update references in all wiki/ files
+echo ""
+echo "=== Updating wiki references ==="
+for old in "${!mapping[@]}"; do
+  new="${mapping[$old]}"
+  # Replace all occurrences in wiki files (threads, concepts, authors, projects)
+  find wiki/ -name '*.md' -exec sed -i "s|raw/$old|raw/$new|g" {} +
+  # Also handle quoted versions (YAML frontmatter)
+  find wiki/ -name '*.md' -exec sed -i "s|\"raw/$old\"|\"raw/$new\"|g" {} +
+  echo "  updated refs: $old -> $new"
+done
+
+echo ""
+echo "Done. Verify with: git diff --stat"

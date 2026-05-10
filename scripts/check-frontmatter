@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# check-frontmatter — verify required frontmatter fields and page structure
+# Usage: check-frontmatter
+
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+echo "=== Missing required frontmatter fields ==="
+for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
+  missing=""
+  for field in title created updated sources tags; do
+    if ! awk "/^---\$/{n++; next} n==1 && /^${field}:/{found=1; exit} END{exit !found}" "$f"; then
+      missing="$missing $field"
+    fi
+  done
+  [ -n "$missing" ] && echo "  $f: missing$missing"
+done
+
+echo ""
+echo "=== Missing summary blockquote after # title ==="
+for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
+  # Use a temp var — awk END block overrides exit code
+  result=$(awk '
+    /^---$/{fm++; next}
+    fm<2{next}
+    /^# /{found_title=1; next}
+    found_title && /^$/{next}
+    found_title && /^> /{print "ok"; exit}
+    found_title{exit}
+    END{if(!found_title) print "notitle"}
+  ' "$f")
+  [ "$result" != "ok" ] && echo "  $f"
+done
+
+echo ""
+echo "=== Pages without ## Related section ==="
+for f in $(find wiki/ -name "*.md" ! -name "index.md" ! -path "wiki/threads/*" | sort); do
+  grep -q '^## Related' "$f" || echo "  $f"
+done
+
+echo ""
+echo "Done."

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# orphans — find wiki pages with no inbound links from other wiki pages
+# Usage: orphans
+
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+echo "=== Orphan pages (no inbound [[links]] from other wiki pages) ==="
+for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
+  slug=$(basename "$f" .md)
+  # Count how many OTHER pages link to this one
+  hits=$(grep -rl "\[\[${slug}\]\]" wiki/ --include='*.md' 2>/dev/null | grep -v "$f" | wc -l)
+  if [ "$hits" -eq 0 ]; then
+    echo "  ORPHAN: $f (no inbound links)"
+  fi
+done
+
+echo ""
+echo "=== index.md coverage check ==="
+for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
+  slug=$(basename "$f" .md)
+  if ! grep -q "\[\[${slug}\]\]" wiki/index.md; then
+    echo "  NOT IN INDEX: $f"
+  fi
+done
+
+echo ""
+echo "Done."

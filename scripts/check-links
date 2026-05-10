@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# check-links — find broken [[wiki-links]] and dangling raw/ references
+# Usage: check-links
+
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+echo "=== Broken [[wiki-links]] ==="
+grep -roh '\[\[[a-z0-9-]*\]\]' wiki/ 2>/dev/null | sort -u | while read -r link; do
+  clean="${link//[[/}"; clean="${clean//]]/}"
+  found=$(find wiki/ -name "${clean}.md" 2>/dev/null)
+  [ -z "$found" ] && echo "  BROKEN: $link (no wiki/${clean}.md)"
+done
+
+echo ""
+echo "=== Dangling raw/ references ==="
+grep -roh 'raw/[^] ")'"'"'\`]*' wiki/ 2>/dev/null | sort -u | while read -r ref; do
+  ref="${ref%%[.,;:]}"
+  # Skip bare raw/ (prose mentions, not actual file references)
+  [ "$ref" = "raw/" ] || [ "$ref" = "raw" ] && continue
+  [ ! -f "$ref" ] && echo "  MISSING: $ref"
+done
+
+echo ""
+echo "=== raw/ files not referenced from wiki ==="
+for f in raw/*; do
+  [ -d "$f" ] && continue
+  base=$(basename "$f")
+  hits=$(grep -rl "raw/$base" wiki/ 2>/dev/null | wc -l)
+  [ "$hits" -eq 0 ] && echo "  UNREFERENCED: raw/$base"
+done
+
+echo ""
+echo "Done."
