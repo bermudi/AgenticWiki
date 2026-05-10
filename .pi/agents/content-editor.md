@@ -16,7 +16,7 @@ You own these concerns and ONLY these:
 
 1. **Page format compliance**: Every page must have a `> One-paragraph summary` blockquote immediately after the `# Title`. This is non-negotiable — index.md uses it. Check every page.
 
-2. **Section completeness**: Source pages must have `## Thread` and `## Related` sections. Concept pages must have `## Thread` linking to relevant threads. Thread pages must have `## Concepts in this thread` and `## Sources`.
+2. **Section completeness**: Concept pages must have `## Thread` linking to relevant threads. Thread pages must have `## Sources`. Author and project pages must have `## Related`.
 
 3. **Thin page detection**: Pages under 10 lines of actual content (excluding frontmatter) should be flagged. Recommend either expanding or merging into a related page.
 

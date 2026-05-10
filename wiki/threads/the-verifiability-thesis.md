@@ -107,15 +107,6 @@ Karpathy speculates that the verifiability thesis may have an expiration date. I
 
 But "the labs haven't done it yet" has been true for years, and the domains where verification is inherently hard (aesthetics, common sense, judgment) may resist RL training indefinitely. The thesis may describe not just the current transition but a durable structural property of how these systems work.
 
-## Concepts in this thread
-
-- [[verifiability]] — The root mechanism: what's verifiable gets automated
-- [[jagged-frontier]] — The structural consequence: capability peaks and gaps
-- [[vibe-coding]] — Exploiting the verifiable peaks; trusting outputs where models were RL-trained
-- [[agentic-engineering]] — Managing the verifiable/unverifiable boundary in professional software
-- [[software-1-2-3]] — The paradigm progression that makes verifiability-driven capability possible
-- [[andrej-karpathy]] — Originator of the causal chain connecting these concepts
-
 ## Tensions
 
 > [!warning] Can Taste Become Verifiable?
@@ -123,15 +114,6 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 
 > [!warning] Quality Infrastructure Has a Ceiling
 > The [[agent-quality-engineering]] thread argues that evals + observability + flywheel make agents shippable. The verifiability thesis adds a boundary condition: the quality loop works within RL-trained circuits but can't extend beyond them. If a capability is structurally absent from the model's training distribution, measurement alone cannot create it — only fine-tuning (or lab-level RL training) can. The quality infrastructure is necessary but not sufficient.
-
-## Related
-
-- [[the-slop-problem]] — Slop is the verifiability gap manifested as code degradation
-- [[the-human-lever]] — The human operates where verifiability ends
-- [[the-agent-workflow]] — HITL/AFK operationalizes the verifiability boundary
-- [[agent-quality-engineering]] — Evals are artificial verification rewards; bounded by RL training distribution
-- [[intent-to-code]] — The four positions are different verification strategies along the verifiability axis
-- [[tool-design-for-agents]] — Agent-native tooling maximizes verifiability in the tool layer
 
 ## Sources
 

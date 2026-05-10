@@ -31,7 +31,7 @@ For each thread: does the thesis have sufficient support in the concept pages an
 ### 3. Unthreaded Concepts
 Concepts that are rich enough to warrant their own thread but aren't linked from any. Or, concepts that implicitly form a thread (same theme, overlapping sources) but no thread page exists.
 
-**How to detect**: Look at concept pages that share tags and source overlap but appear in no thread's `## Concepts in this thread`. Look for clusters — 3+ concepts converging on the same idea without a unifying thread.
+**How to detect**: Look at concept pages that share tags and source overlap but are not linked from any thread's body. Look for clusters — 3+ concepts converging on the same idea without a unifying thread.
 
 **Action**: Flag as an emerging thread. Propose a thesis and scope. Do not create the thread page — the human decides.
 

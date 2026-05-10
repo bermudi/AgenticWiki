@@ -103,29 +103,6 @@ The intent-to-code axis isn't academic. It determines:
 
 Different projects and teams will land at different points. The wiki's job is to make the options explicit and traceable.
 
-## Concepts in this thread
-
-- [[the-verifiability-thesis]] — The causal chain that reveals the axis's hidden variable: verifiability determines which positions work and where they fail
-- [[plan-vs-review]] — The plan-heavy camp: Knight-Webb's quantified heuristic, the feature type matrix, the BEEPs validation
-- [[ai-design-loop]] — The alignment-first camp: Grill Me, PRD as destination hint, don't review the PRD
-- [[vibes-based-engineering]] — The pure-vibes camp and specs-to-code as vibe coding's cousin
-- [[verification-loop]] — The quality mechanism that replaces trust in every position (except vibes)
-- [[grey-box-engineering]] — Both plan-as-contract and alignment-first are expressions of grey box engineering, applied differently
-- [[doc-rot]] — Pocock's specific argument against plan-as-contract: specs left in the repo become stale and mislead agents
-- [[backpressure]] — QA-as-backpressure is the alignment-first quality mechanism; spec-precision-as-backpressure is the plan-heavy one
-
-## Related
-
-- [[the-agent-workflow]] — The operational thread where both positions are practiced
-- [[the-human-lever]] — Both are applications of the human lever, differing on where to aim it
-- [[the-slop-problem]] — Both positions exist to prevent slop; they disagree on the best mechanism
-- [[plan-disposability]] — Aligns with alignment-first: plans as ephemeral, not contracts
-- [[fighting-slop-with-slop]] — The BEEPs workflow is the strongest empirical evidence for plan-as-contract
-- [[vibe-coding]] — The pure-vibes position on the axis is vibe coding taken to its logical extreme
-- [[agentic-engineering]] — Both plan-as-contract and alignment-first are strategies within agentic engineering's discipline of coordinating agents without sacrificing quality
-
-- [[the-verifiability-thesis]] — The causal chain behind the axis: the four positions are different verification strategies, and verifiability determines their viability
-
 ## Sources
 
 - `raw/Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban - youtube.com.md` — Plan-heavy framework: quantified heuristic, feature type matrix, focus maxing

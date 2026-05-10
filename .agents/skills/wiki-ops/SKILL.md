@@ -120,7 +120,7 @@ Work through each item and report findings:
 - [ ] **Broken links**: Check all `[[wiki-links]]` resolve to existing pages
 - [ ] **Orphan pages**: Pages with no inbound links from other wiki pages (check index — every page should be linked from at least one other page besides index)
 - [ ] **Missing pages**: Concepts or entities mentioned across multiple pages but without their own page
-- [ ] **Thread coverage**: Every concept referenced in a thread's `## Concepts in this thread` section must have a `## Thread` section linking back. Check both directions.
+- [ ] **Thread coverage**: Every concept page that discusses a thread must have a `## Thread` section linking back to it.
 - [ ] **Contradictions**: Claims on different pages that disagree
 - [ ] **Stale claims**: Information that has been superseded by newer sources (check the `updated` dates and source timelines)
 - [ ] **Thin pages**: Pages with only a few sentences that could be merged or expanded
@@ -141,11 +141,14 @@ grep -roh '\[\[[a-z0-9-]*\]\]' wiki/ | sort -u | while read link; do
 done
 
 # Check thread↔concept bidirectional links
-echo '=== Concepts missing Thread section (but linked from a thread) ==='
-grep -roh '\[\[[a-z0-9-]*\]\]' wiki/threads/ | sort -u | while read link; do
-  clean="${link//[[/}"; clean="${clean//]]/}"
-  if [ -f "wiki/concepts/${clean}.md" ]; then
-    grep -q "## Thread" "wiki/concepts/${clean}.md" || echo "  MISSING: ${clean} has no ## Thread section"
+echo '=== Concepts missing Thread section ==='
+for f in wiki/concepts/*.md; do
+  name=$(basename "$f" .md)
+  if ! grep -q "## Thread" "$f"; then
+    # Check if this concept is linked from any thread body
+    if grep -rq "\[\[${name}\]\]" wiki/threads/; then
+      echo "  MISSING: ${name} is linked from a thread but has no ## Thread section"
+    fi
   fi
 done
 

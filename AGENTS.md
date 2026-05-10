@@ -142,19 +142,9 @@ tags: [thread, relevant-tags]
 
 The core argument. May span multiple sections with headings as needed.
 
-## Concepts in this thread
-
-- [[concept-name]] — how it connects to the thesis
-- [[concept-name]] — how it connects
-
 ## Tensions
 
 Where the theory is unsettled. Contradictions between sources, open questions.
-
-## Related
-
-- [[other-thread]] — how the threads relate
-- [[concept-page]] — relationship
 
 ## Sources
 
@@ -162,16 +152,15 @@ Where the theory is unsettled. Contradictions between sources, open questions.
 - `raw/source-two.md` — what this source contributed
 ```
 
-The `## Concepts in this thread` section is required — it lists every concept linked from this thread. Each concept must have a `## Thread` section linking back. The `## Tensions` section is optional but encouraged when sources disagree.
+The `## Tensions` section is optional but encouraged when sources disagree.
 
 ## Cross-References
 
 - Use Obsidian wiki-links: `[[page-name]]` (no `.md` extension)
 - Always add a brief note explaining the relationship: `[[page-name]] — why it's linked`
 - When creating a new page, add links to it from at least 2-3 existing pages that relate to it
-- When updating a page, check if other pages need updating too (follow the `## Related` and `## Thread` links)
+- When updating a page, check if other pages need updating too (follow the body wiki-links and the `## Thread` section on concept pages)
 - Concepts that belong to a thread must have a `## Thread` section linking back to it
-- Thread pages link down to concepts; concept pages link up to threads. This bidirectional weave is the navigation backbone.
 
 ## index.md
 
@@ -285,11 +274,15 @@ git commit -m "ingest: <source title> — <brief summary of what was created/upd
 
 The commit message should be useful in `git log` — include the source name and the scope of changes. If contradictions were flagged, mention them. Include verification status.
 
+## Session Reminder
+
+> **Every session**: Read the Pi session `invisible to editors` (`019e0ee9-d527-74d1-816d-351b7590c0f4`) and flag any unresolved items to bermudi. That session captures issues that fell through the cracks during ingest — they're invisible to the editor pipeline by design.
+
 ## Rules
 
 1. **Never modify or delete files in `raw/`** — that's the source of truth. You may *create* new source files (web content, YouTube stubs) during ingest.
 2. **Always update `index.md`** when creating or significantly updating pages.
-3. **Always add a `## Related` section** to new pages with links to existing pages.
+3. **Always add a `## Related` section** to new pages (concepts, authors, projects) with links to existing pages. Thread pages use inline wiki-links in the body instead.
 4. **Always update the `updated` date** in frontmatter when editing a page.
 5. **Prefer creating a page over leaving knowledge in chat history.** Good answers, comparisons, and analyses should be filed as wiki pages.
 6. **Note contradictions explicitly.** If a new source contradicts an existing claim, flag it with a `> [!warning]` callout, not a silent overwrite. Surface contradictions in the ingest summary and in the relevant thread page so the human can decide.

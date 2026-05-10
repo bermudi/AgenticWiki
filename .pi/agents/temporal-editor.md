@@ -28,7 +28,7 @@ Pages whose `updated` date is old relative to recently-ingested sources with ove
 A thread's thesis was written around sources A, B, C. Sources D, E, F have since been ingested touching the same concepts. Does the thesis still hold? Has the framing become incomplete?
 
 **How to detect**:
-- For each thread page, read its `## Thesis` and `## Concepts in this thread`.
+- For each thread page, read its `## Thesis` and the body wiki-links to understand which concepts it draws on.
 - Check `git log` for commits touching those concept pages after the thread was last updated.
 - Read the diffs: did the concepts shift in ways the thread doesn't reflect?
 
@@ -59,7 +59,7 @@ Concepts that appear repeatedly in recent sources but never got their own page. 
 **How to detect**:
 - Scan recent commit messages and changed files for recurring topics.
 - Check if those topics have wiki pages. If not, flag them as coverage gaps.
-- For threads, check if `## Concepts in this thread` has grown significantly since the last thesis update.
+- For threads, check if the set of concepts linked in the thread body has grown significantly since the last thesis update.
 
 **Action**: Flag coverage gaps with a recommendation (create page, expand thread, etc.). Don't create new pages unilaterally — that's a human decision.
 

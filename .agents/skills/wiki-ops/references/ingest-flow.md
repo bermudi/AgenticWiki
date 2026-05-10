@@ -58,8 +58,8 @@ File stays in `raw/` as archive. No wiki changes. Done.
    - Populate YAML frontmatter: `title`, `created` (new pages only), `updated` (always), `sources` (list of `raw/` filenames), `tags`
    - Write the blockquote summary (1-3 sentences immediately after the `# Title` heading)
    - For concept pages: add `## Thread` section linking to relevant threads
-   - For thread pages: add `## Concepts in this thread` section listing all linked concepts
-   - Add `## Related` section with links to 2-3 existing pages
+   - For thread pages: cross-references live in body wiki-links, no separate link section needed
+   - Add `## Related` section (concept/author/project pages) with links to 2-3 existing pages
    - Add `## Sources` section with annotated entries (must match frontmatter `sources` list)
    - Update `wiki/index.md` with any new pages
 
