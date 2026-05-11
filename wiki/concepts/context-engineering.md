@@ -8,7 +8,8 @@ sources:
   - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
   - raw/2602.11988v1.txt
   - raw/2601.20404v1.txt
-unaudited_marginal: 0
+  - raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md
+unaudited_marginal: 1
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
 
@@ -21,6 +22,8 @@ tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 Context engineering sits between prompt engineering and agent harness design. It's not about crafting better prompts — it's about engineering the entire context environment the model receives: what information is included, how it's structured, what's excluded, and how dense the signal is.
 
 The core heuristic: **information-per-token density**. Two prompts at the same token count can have dramatically different effectiveness depending on how densely they pack relevant signal. The hard part is knowing what to exclude — every extraneous token degrades attention on the relevant ones.
+
+A clean formulation from practitioner Sally-Ann Delucia (Arise): **context decides what the model sees, memory decides what survives.** They are distinct concerns that must be built together — separating them conceptually prevents conflating session-level context management with long-term knowledge retention. She also argues context management is a product and UX problem, not just an engineering one: bad context produces bad answers, and bad answers drive users away. The engineering strategies matter, but the ultimate test is whether the user gets the right answer.
 
 ## Key Principles
 
@@ -65,6 +68,18 @@ Don't dump all tools, skills, or instructions into the system prompt. Pull conte
 
 ### Context Offloading
 Save tool results to the file system instead of accumulating them in chat history. Give the agent a pointer and summary; let it retrieve the full result if needed. This avoids both context bloat and the destructiveness of compaction (summarizing history loses precision). Anthropic's "context editing" SDK feature formalizes this. A variant: offload the agent's plan to a scratchpad file and re-read it for "recitation" — reinforcing objectives mid-task.
+
+### Smart Truncation + Memory
+A production-validated technique from the Arise team (building Alex, an AI agent for observability data analysis). The team went through a real failure progression before landing on this:
+
+1. **Naive truncation**: Keep the first N characters, drop the rest. Simple, but broke reasoning — follow-up queries looked like new conversations because the agent couldn't remember what was discussed. Over-truncation destroys the model's ability to connect turns.
+2. **Summarization**: Use an LLM to compress context into fewer tokens. Too inconsistent — no control over what the model decided was important. The summarizer would drop crucial details while preserving irrelevant ones.
+3. **Smart truncation + memory** (what worked): Keep the head (first ~100 characters) and tail (last ~100 characters) of the conversation; store the middle in a retrievable memory store. The agent can query the memory store if it needs to recall something from the truncated middle. This preserves recent context while keeping the working window small, and gives the agent agency over what context it retrieves.
+
+The team reports this strategy has been stable in production for months. The Claude Code code leak later confirmed that Anthropic independently converged on a similar truncation-and-compression approach — validating the pattern through convergent design.
+
+### Long Session Evals
+A specific eval technique for detecting context degradation in long conversations. As sessions grow, failures appear late and silently — users don't restart chats, so conversations accumulate turns until the agent starts forgetting. The Arise team's technique: **load 10 turns, test the 11th**. By systematically testing what the agent remembers at N+1 turns, context degradation becomes testable rather than waiting for user reports. This is a structured eval signal for context management quality, complementary to per-turn accuracy metrics.
 
 ### Sub-Agent Isolation
 For atomic, parallelizable tasks, spawn sub-agents with clean context windows. Prevents task A's tool results from polluting task B's reasoning. Claude Code uses sub-agents for code review, migrations, and lint rules. The [[ralph-loop]] extends this to serial tasks: each iteration is a fresh context window, with a plan file as shared state between otherwise isolated executions.
@@ -146,3 +161,4 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine architecture, the three myths, satisfaction of search, organizational memory, and expert bottling
 - `raw/2602.11988v1.txt` — Gloaguen et al. (2026). Context files as context engineering surface area; the first empirical validation that information-per-token density (minimal, operational-only files) outperforms verbose, LLM-generated alternatives.
 - `raw/2601.20404v1.txt` — Lulla et al. (2026). Efficiency evidence that well-designed context files reduce agent runtime and token consumption, consistent with context engineering goals.
+- `raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md` — Practitioners' report from Arise: failure progression from naive truncation through summarization to smart truncation + memory, long session evals technique, context-vs-memory distinction, and context management as a product/UX problem.
