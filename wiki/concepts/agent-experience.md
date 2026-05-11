@@ -1,11 +1,12 @@
 ---
 title: Agent Experience (AX)
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-10
 sources:
   - raw/yt-reinventing-software-panel.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
+unaudited_marginal: 0
 tags: [concept, dx, ax, software-design, tool-design]
 ---
 
@@ -58,6 +59,7 @@ As software development shifts toward agentic workflows, the "usability" of a co
 - [[armin-ronacher]] — Language choice and infrastructure as AX optimization.
 - [[code-intelligence]] — Code intelligence provides the high-fidelity context that enables good AX.
 - [[agent-observability]] — Designing for observability is an AX principle: the agent must expose its decision chain for the human to build trust.
+- [[context-files]] — Context files are part of the AX surface area; their design directly affects agent navigation and comprehension of a codebase.
 
 ## Sources
 

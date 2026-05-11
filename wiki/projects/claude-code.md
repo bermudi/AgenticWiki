@@ -1,9 +1,10 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-05-04
+updated: 2026-05-10
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"]
 tags: [tool, ai, agent, anthropic]
+unaudited_marginal: 0
 ---
 
 # Claude Code
@@ -40,6 +41,7 @@ This experience directly motivated Mario to build [[pi]], founded on the princip
 
 ## Related
 
+- [[agent-skills]] — Claude Code's skill system (the `/skill-name` slash command and progressive disclosure) is the primary platform for skill execution; Claude Code also uses skills internally for the Ralph loop pattern
 - [[pi]] — Built as a reaction to Claude Code's context manipulation and instability.
 - [[the-agent-workflow]] — The primary workflow pattern enabled by tools like Claude Code.
 - [[afk-agent]] — Claude Code can spawn AFK agents (e.g., "Ralph").

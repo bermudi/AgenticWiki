@@ -1,11 +1,16 @@
 ---
 title: Instruction Hierarchy
 created: 2026-05-08
-updated: 2026-05-08
+updated: 2026-05-10
 sources:
   - raw/many-tier-instruction-hierarchy.md
   - raw/yt-agent-trust-vector-study-2026.md
+  - raw/2311.04235v3.txt
+  - raw/2407.08440v4.txt
+  - raw/2504.21625v6.txt
+  - raw/2603.00822v2.txt
 tags: [concept, agents, instruction-following, trust, safety, benchmarks]
+unaudited_marginal: 0
 ---
 
 # Instruction Hierarchy
@@ -123,10 +128,29 @@ GPT 5.4 produces the most concise reasoning (~1K tokens median) yet ranks #1 on 
 
 5. **Until models natively handle ManyIH, keep conflict tiers minimal in practice.** The paper finds models are trained on ≤5 fixed role-based tiers and performance degrades consistently beyond that. A practical defensive implication: decompose agent swarms so any single trust-resolution decision involves as few privilege tiers as feasible. The paper's tier-scaling experiment shows that going from 6 tiers (no conflicts) to 12 tiers (up to 11 conflicts) drops accuracy from ~60% to as low as ~15–25% on coding tasks depending on model.
 
+## An Alternative: Mechanical Enforcement Bypasses the Hierarchy Problem
+
+[[contextcov|ContextCov]] (Sharma, 2026) offers a complementary approach that sidesteps the instruction hierarchy's fundamental limitation: **if the model can't reliably resolve instruction conflicts, don't ask it to — enforce mechanically instead.**
+
+Where ManyIH tries to make the model better at resolving trust-tier conflicts, ContextCov compiles instructions into executable checks that operate outside the model's reasoning loop:
+
+| Problem | ManyIH approach | ContextCov approach |
+|---|---|---|
+| Conflicting style rules | Assign privilege tiers; model resolves | Tree-sitter query detects violations deterministically |
+| Contradictory process constraints | Highest-privilege instruction wins | PATH shim blocks the forbidden command before the model runs it |
+| Design principle violations | LLM-as-judge evaluates with hierarchical context | Architectural validator catches layer breaches via graph analysis |
+
+This bypass has a critical architectural implication: **the enforcement itself is not subject to ManyIH's combinatorial collapse.** The checks don't reason about privilege — they mechanically detect violations. Whether you have 2 tiers or 12 tiers of instructions, the Tree-sitter query or PATH shim behaves identically.
+
+However, ContextCov's approach has its own limitation: it only works for constraints that can be *operationalized* as executable checks. Semantic constraints ("don't use another component's storage keys") still require LLM-as-judge, and that judge is subject to the same instruction hierarchy limitations the paper documents. ContextCov acknowledges this by producing WARNING verdicts (not hard blocks) for semantic checks.
+
+The two approaches are complementary rather than competing: ManyIH addresses how the model resolves instruction conflicts in its reasoning; ContextCov addresses how the environment enforces constraints that can be made deterministic. In practice, combining both — use ManyIH for in-reasoning conflict resolution, use ContextCov's executable checks for constraints that can be mechanically enforced — would provide more robust coverage than either alone.
+
 ## Thread
 - [[agent-quality-engineering]] — Instruction hierarchy is an underexamined quality dimension: can the agent correctly resolve conflicts among heterogeneous trusted sources?
 - [[the-agent-workflow]] — Multi-agent workflows inherently create instruction conflicts; the hierarchy determines whose output wins
 - [[the-human-lever]] — ManyIH reveals that the human lever's trust delegation is bounded by model architectural limits: the human can design the perfect hierarchy, but the model fails to follow it 60% of the time beyond 2-3 tiers
+- [[contextcov]] — Mechanical enforcement as an alternative to instruction hierarchy resolution; executable checks bypass the combinatorial collapse problem for operationalized constraints
 
 ## Related
 - [[agent-evals]] — MANYIH-BENCH joins [[delegate-52]] and [[agent-floor]] in the long-horizon eval landscape, each revealing a distinct failure mode
@@ -136,7 +160,15 @@ GPT 5.4 produces the most concise reasoning (~1K tokens median) yet ranks #1 on 
 - [[dynamic-trust]] — The video author's proposed extension: trust as source + context + provability rather than static source-based assignment
 - [[hallucination]] — Semantic arithmetic failure is a related phenomenon: the model doesn't understand numbers, it pattern-matches them
 - [[discover-ai]] — The creator whose video brought accessible explanation and personal corroboration to the paper's findings
+- [[rule-following]] — RuLES finds system messages provide negligible benefit for rule enforcement — the hierarchy mechanism isn't working in practice
+- [[inferential-rule-following]] — RuleBench formalizes the hierarchy problem in the reasoning domain: given rules should outrank parametric knowledge, but don't
+- [[iterative-self-correction]] — Meeseeks shows iterative feedback can partially compensate for hierarchy failures, but with a hard sub-91% ceiling
+- [[contextcov]] — Mechanical enforcement that doesn't depend on the model resolving instruction conflicts; complementary to ManyIH for deterministic constraint types
 
 ## Sources
 - `raw/many-tier-instruction-hierarchy.md` — The ManyIH paper (Zhang et al., JHU, April 2026): paradigm definition, Privilege Prompt Interface design, MANYIH-BENCH construction, experimental results and analysis
 - `raw/yt-agent-trust-vector-study-2026.md` — Discover AI's video analysis: accessible explanation of the study, personal experience with multi-agent trust failures, critique of static trust assignment, dynamic trust proposal
+- `raw/2311.04235v3.txt` — RuLES (Mu et al.): empirical evidence that system messages don't reliably enforce rules; alignment tuning degrades rule-following
+- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): inferential rule-following as a distinct capability; counterfactual collapse shows models don't actually follow given rules
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): iterative feedback-driven self-correction; multi-constraint scenarios as a flattened hierarchy problem
+- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): mechanical enforcement as an alternative to in-model instruction hierarchy resolution; fail-closed philosophy; PATH shims, Tree-sitter checks, and architectural validators bypass the combinatorial collapse problem for deterministically enforceable constraints

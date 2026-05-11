@@ -1,13 +1,15 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-05-07
+updated: 2026-05-10
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
+  - raw/2504.21625v6.txt
+unaudited_marginal: 0
 tags: [concept, autonomous-agents, agent-loops, claude-code, workflow, skills]
 ---
 
@@ -73,6 +75,10 @@ project/
 ```
 
 - **AGENTS.md**: Operational only — build commands, test commands, validation steps. ~60 lines. Status and progress belong in `IMPLEMENTATION_PLAN.md`.
+
+> [!note] Empirical support confirmed
+> The [[context-files]] empirical studies (Gloaguen et al., Lulla et al., 2026) later validated this design: short (~60 lines), operational-only, human-written context files outperform LLM-generated alternatives. The Ralph Loop pattern anticipated the evidence by converging on minimalism through practice.
+
 - **specs/**: Source of truth for requirements. The agent gap-analyzes against these.
 
 ## Advanced Patterns
@@ -114,7 +120,7 @@ Parsons' most ambitious application: a **worker loop** that picks the next step 
 4. Updates the project file with a decision trail
 5. Loops
 
-This is a pure instantiation of the LLM Wiki pattern (see [[index|index.md]]) — the vault is both the human's knowledge base and the agent's coordination state.
+This is a pure instantiation of the LLM Wiki pattern (see `index.md`) — the vault is both the human's knowledge base and the agent's coordination state.
 
 ### "Reversible Without Embarrassment"
 
@@ -180,6 +186,7 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - [[delegate-52]] — Sub-agent validation mirrors DELEGATE-52's finding that separate verification sessions are architecturally more reliable
 - [[deliberate-friction]] — "Reversible without embarrassment" is an operational instantiation of deliberate friction for safety boundaries
 - [[model-routing]] — One-task-per-iteration sidesteps the tier E ceiling that model routing cannot fix; the Ralph loop is the decomposition strategy model routing depends on
+- [[iterative-self-correction]] — Meeseeks's feedback-driven self-correction loop is structurally identical to a Ralph Loop with automated constraint evaluation replacing human review — the same pattern at the per-response level
 
 - [[multi-tier-action-space]] — The Ralph loop structures execution across multiple action-space tiers
 
@@ -190,3 +197,4 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Context isolation framing of the Ralph Loop pattern
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: loop evolution, sub-agent validation, skills-as-loop-package, worker loop, safety heuristics
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle as the parallelized Ralph Loop variant: Kanban DAG, four-stage pipeline, Docker sandboxes, separate reviewer agents
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): iterative self-correction as a micro-scale Ralph Loop — automated evaluation replaces human review at the per-response level

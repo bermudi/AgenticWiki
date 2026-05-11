@@ -1,10 +1,11 @@
 ---
 title: Doc Rot
 created: 2026-05-05
-updated: 2026-05-05
+updated: 2026-05-10
 sources:
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
 tags: [documentation, agent-workflow, anti-pattern]
+unaudited_marginal: 0
 ---
 
 # Doc Rot
@@ -38,6 +39,7 @@ The real artifact that persists is the **code**. The tests encode the requiremen
 
 ## Related
 
+- [[context-files]] — Stale context files (AGENTS.md, CLAUDE.md) are a form of doc rot; the empirical evidence shows that agent behavior is shaped by context files, making stale files actively harmful
 - [[document-degradation]] — Distinct concept: LLMs silently corrupting documents during editing (not staleness)
 - [[plan-disposability]] — Plans as ephemeral coordination state; doc rot is why disposability matters
 - [[ai-design-loop]] — The PRD lives within the design loop; it should not outlive it

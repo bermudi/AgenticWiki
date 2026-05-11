@@ -1,12 +1,14 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-05-08
+updated: 2026-05-10
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/skills-at-scale-workos-nisi-proser.md
+  - raw/2407.08440v4.txt
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
+unaudited_marginal: 0
 ---
 
 # Agent Skills
@@ -232,6 +234,7 @@ Skills can include executable scripts with access to file systems, environment v
 - [[agent-evals]] — Eval-driven development for skills: run with/without the skill, diff results, iterate
 - [[ai-design-loop]] — Skills are the tools that execute the implementation phase of the design loop
 - [[context-engineering]] — Progressive disclosure is a core context engineering technique, and skills are its canonical implementation
+- [[context-files]] — Skills (procedural knowledge for agents) and context files (repository context for agents) are complementary: skills say how to do things, context files say what to know about this project
 - [[evolving-context]] — Skill learning (agents capturing SOPs as skills from their own trajectories) is a category of evolving context
 - [[lance-martin]] — Built the skill system for Deep Agents; his work on evolving context includes skill learning
 - [[pi]] — This wiki's own skill system follows the skill.md pattern
@@ -242,9 +245,11 @@ Skills can include executable scripts with access to file systems, environment v
 - [[chris-parsons]] — Operationalized Ralph loops as skills with recovery states, git checking, and verification rules
 - [[sandcastle]] — Matt Pocock's Docker-based Ralph loop variant that uses the skill.md pattern
 - [[procedural-knowledge]] — Skills are the canonical format for packaging procedural knowledge for agents
+- [[inferential-rule-following]] — IRFT (Inferential Rule-Following Tuning) is structurally analogous to skills: synthetic procedural training data that generalizes across domains
 
 ## Sources
 
 - `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video explaining skill format, progressive disclosure, knowledge type comparison, cognitive science analogy, and the open standard
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Production operations: skills as documentation, skill discoverability ("use" verb trick), eval-driven development for skills, skill rot detection, skills+MCP complementarity
 - `raw/skills-at-scale-workos-nisi-proser.md` — Skill design craft: constraints over prescription, confidence scoring, script interpolation, anti-patterns; skills at team scale: sharing tiers, plugin marketplaces, non-technical users, CLI-driven skills, context mining
+- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): IRFT demonstrates the same pattern as skills — abstract procedural capability (rule-following) learned from synthetic data and generalized to real tasks

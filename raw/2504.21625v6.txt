@@ -1,0 +1,1823 @@
+arXiv:2504.21625v6 [cs.CL] 22 Oct 2025
+
+
+
+
+
+
+
+
+
+
+       Meeseeks: A Feedback-Driven, Iterative Self-Correction Benchmark
+                                                       evaluating LLMs’ Instruction Following Capability
+
+    Jiaming Wang¹, Yunke Zhao¹, Peng Ding, Jun Kuang¹, Yibin Shen¹, Zhe Tang¹, Yilin Jin,
+                                                      Zongyu Wang¹, Xiaoyu Li¹, Xuezhi Cao¹, Xunliang Cai¹
+
+                                                                            1Meituan
+                                                                  {wangjiaming15}@meituan.com
+
+                        Abstract                          expands, the instructions users provide are often
+       The capability to precisely adhere to instruc-     complex and multifaceted, posing challenges for
+       tions is a cornerstone for Large Language          accurate execution (Ouyang et al., 2022; Zeng et al.,
+       Models (LLMs) to function as dependable            2024; Stolfo et al., 2025; Hou et al., 2025; Zhao
+       agents in real-world scenarios.        However,    et al., 2025b; Zhang et al., 2024). Instruction fol-
+       confronted  with complex  prompts,         LLMs    lowing, or the ability to execute tasks based on
+       frequently  encounter  difficulties in fulfill-    natural language commands accurately, is critical
+       ing all specified requirements within a sin-       for LLMs to be reliable in real-world scenarios.
+       gle response.    Drawing  inspiration      from    For instance, in healthcare, an LLM might need
+       recent    advancements in      Chain-of-Thought    to generate reports with specific word counts or
+       (CoT) prompting and self-correction method-        mention key terms multiple times. Misinterpreting
+       ologies, we introduce Meeseeks1, a fully au-       such instructions could lead to errors with serious
+       tomated iterative instruction-following bench-
+       mark equipped with an integrated feedback          consequences (Li et al., 2023b; Qiu et al., 2024b).
+       mechanism.        Meeseeks identifies erroneous    Similarly, in finance, precise adherence to instruc-
+       components in model responses and provides         tions ensures compliance and accuracy, avoiding
+       corresponding feedback accurately, thereby         potential risks (Arun et al., 2023; Kim et al., 2025).
+       iteratively guiding the model toward self-         These content creation tasks require LLMs to have
+       correction. The dataset contains over 700 cu-      strong text instruction-following capability.      To
+       rated instances annotated by 32 distinct ca-       evaluate the instruction-following ability of today’s
+       pability tags in Chinese and English. Exten-
+       sive experimental results reveal that different    LLMs, researchers employ instruction-following
+       state-of-the-art commercial and open-source        benchmarks to determine how effectively LLMs
+       LLMs exhibit vastly disparate performance,         can align with human intentions.        This research
+       and even after 20 turns of iterative feedback-     indicates that models are unable to address prob-
+       driven self-correction, nearly all models demon-   lems flawlessly in scenarios where prompts contain
+       strate suboptimal performance. We conducted        numerous constraints.
+       comprehensive analysis and uncovered numer-                    Chain-of-Thought (CoT) prompting has been
+       ous common issues prevalent in current state-      primarily developed to enhance the reasoning ca-
+       of-the-art models, as well as several coun-
+       terintuitive phenomena.       Meeseeks has been    pabilities of LLMs in mathematical and logical
+       open-sourced on https://anonymous.4open.           tasks by guiding them to generate intermediate
+       science/r/Meeseeks-156A.                           steps (Wei et al., 2022; Wang et al., 2023; Yu et al.,
+    1  Introduction                                       2023; Zhang et al., 2022). Building upon CoT, self-
+        correction techniques enable LLMs to identify and
+LLM agents have become essential tools in var- rectify errors in their reasoning processes. (Kumar
+ious applications, from customer service to con- et al., 2024; Huang et al., 2024; Liu et al., 2024a;
+tent creation (Minaee et al., 2025; Wulf and Meier- Ganguli et al., 2023; Liu et al., 2024b). While
+hofer, 2024; Pandya and Holia, 2023; Lee et al., existing self-correction methods are primarily eval-
+2023; Qian et al., 2024). However, as their use uated on mathematical or logical problems, we ex-
+        tend this approach to multi-constraint instruction-
+   1The name is inspired by Mr. Meeseeks from “Rick and following tasks to probe the upper limits of LLMs’
+Morty,” a character renowned for efficiently accomplishing instruction-following capabilities.
+assigned tasks. See: https://en.wikipedia.org/wiki/Mr.
+    _Meeseeks                                                        Therefore, we introduce Meeseeks, a multi-
+
+                                                                               1
+
+           turn automatic instruction-following benchmark         tinct limitations among these models, thereby
+    with feedback system.           The framework enables       contributing valuable insights and establishing
+        Meeseeks to fully automatically identify specific        reference benchmarks for future model develop-
+    constraints that the LLM fails to meet and explicitly    ment and optimization efforts.
+explain the reasons for such failures. The system 2 Related Works
+operates in successive rounds, where Meeseeks
+evaluates the LLM response, provides feedback, IF-Eval (Zhou et al., 2023) pioneered compre-
+and then assesses the resulting self-correction. hensive instruction-following evaluation by intro-
+Moreover, Meeseeks applies a more challenging ducing rule-verifiable instructions (e.g., “Include
+dataset embedding 32 capability tags and 3 cog- keyword1, keyword2 in your response”). While
+nitive evaluation dimensions (intent recognition, this approach enables automatic verification, the
+granular content validation and output structure dataset’s simplicity and synthetic nature limit its
+validation), examining the entire thought process applicability to real-world scenarios. Subsequent
+of the model to establish an integrated instruction- benchmarks, such as InFoBench (Qin et al., 2024),
+following ability evaluation system. Furthermore, CELLO (He et al., 2024a), FollowBench (Jiang
+due to the high cost of single to multiple turns et al., 2024), and COLLIE (Yao et al., 2023), ad-
+evaluation and more challenging data, Meeseeks vanced the field by employing constraint-based
+introduces a code-guided, rule-augmented LLM- frameworks to handle more complex data. How-
+based evaluation to reduce cost and raise accuracy ever, these methods still rely on specific format
+of the evaluation workflow. Meeseeks reveals nu- constraints for evaluation. Complexbench (Wen
+anced patterns in LLMs’ multi-turn self-correction et al., 2024) effectively addresses these limitations
+abilities that challenge conventional understand- by leveraging rule-augmented, LLM-based eval-
+ing of instruction following as well as a signifi- uation processes. This approach eliminates the
+cant gap between different LLMs’ single-attempt need for extensive prompt restrictions, allowing for
+instruction-following performance and their upper- more flexible response formats from the evaluated
+limit instruction-following capability. Even after LLMs. Current instruction-following benchmarks
+20 rounds of self-correction, all prevailing LLMs are predominantly designed for single-turn interac-
+still fail to provide responses that satisfy all con- tions and fail to capture the complexity of multi-
+straints. In conclusion, our main contributions are: turn conversational scenarios, thereby limiting their
+• We introduce Meeseeks, a challenging multi- effectiveness in comprehensively evaluating mod-
+  turn automatic instruction-following benchmark els’ instruction-following capabilities. Parrot (Sun
+  that operates in successive evaluation-feedback- et al., 2024) introduced a framework for collecting
+  correction cycles across 32 capability tags and human-like multi-turn instructions that mimic nat-
+  3 evaluation dimensions. The framework accu- ural dialogue patterns. Multi-IF (He et al., 2024b)
+  rately identifies constraint violations, provides extended IF-Eval to multi-turn sequences across
+  targeted feedback, and evaluates LLMs’ self- multiple languages, revealing performance degra-
+     correction attempts.                                   dation in later turns and in non-Latin scripts. Struct-
+            • We present an enhanced automatic evaluation   FlowBench (Li et al., 2025a) proposed a structured
+       pipeline by introducing a novel code-guided, rule-   framework with six types of inter-turn relation-
+                augmented LLM-based evaluation framework.   ships to evaluate dialogue coherence and contextual
+           Experimental results demonstrate that our pro-   understanding. However, these multi-turn bench-
+          posed method significantly outperforms existing   marks typically allow LLMs only a single attempt
+          approaches, delivering substantial improvements   at each turn, introducing new requirements in sub-
+            in evaluation accuracy, raising accuracy from   sequent turns. In contrast, Meeseeks allows models
+     78.7% to 98.4%.                                        self-correct their response as the turn iterates.
+         • We conduct experiments across 17 state-of-the-
+         art models and observe that despite implementing   3
+         20 iterations of feedback-driven self-correction    Meeseeks
+  mechanisms, both leading commercial and open- Meeseeks implements an iterative self-correction
+  source LLMs consistently failed to achieve ac- framework comprising response collection, evalua-
+  curacy rates exceeding 91%. Through system- tion, and feedback prompting (Figure 1). More
+  atic analysis, we identify both common and dis- specifically, given questions with multiple con-
+
+         2
+
+straints, each iteration follows three steps: (1) col- constraint-specific scripts. These evaluation results
+lecting responses from the model while enforcing and corresponding feedback are integrated into the
+all constraints, (2) evaluating the response against tested LLM’s chat template for subsequent turns,
+each constraint, and (3) providing constraint- serving as targeted guidance for its self-correction.
+specific evaluation results and explanations as feed- The framework monitors improvement after each
+back to prompt the model for self-correction in self-correction iteration.
+the subsequent iteration. The following sections
+provide a comprehensive overview of Meeseeks. 3.3 Code-guided, Rule-augmented
+    Section 3.1 and Section 3.2 provide details of eval-      LLM-based Evaluation
+    uation and feedback prompting respectively; Sec-        Addressing the limitations of rule-verifiable instruc-
+    tion 3.3 explains our code-guided, rule-augmented,      tions and format constraints problem mentioned
+    LLM-based evaluation addressing cost and accu-          in Section 2, the prevailing method is to employ
+    racy challenges in multi-turn frameworks, serving       an LLM-based approach to eliminate redundant
+    the evaluation; Section 3.4 presents the quality con-   prompt constraints. This approach identifies and
+    trol and the structure of our dataset; Section 3.5      retains core content by eliminating auxiliary text,
+    elaborates on metrics used in our experiments.          followed by rule-based evaluation to ensure com-
+    3.1 Evaluation                                          pliance with specific constraints.                 Consider the
+                                                            Prompt: Write me a research report about LLM,
+    Due to hallucinations in LLM, directly relying          make sure the report should include less than 2000
+    on them to determine whether each constraint is         words, and the example problem shown in Table 1.
+    satisfied by the tested model’s response is unre-
+    liable (Huang et al., 2025; Li et al., 2023a; Zhu        ◦ Raw Model Response
+    et al., 2024; Gu et al., 2024; Qiu et al., 2024a; Chen   Response: Okay, I will write you a 2000-word essay. LLM is...(1998 words). I hope you
+                                                             like the answer.
+    et al., 2024; Hao et al., 2025; Bang et al., 2025; Yan   Check: Word count: 2014 > 2000 → Constraints unmet [INCORRECT]
+    et al., 2024). Therefore, our primary method for         ◦ Formatted Model Response
+    judging constraints consists of two steps: first, use    Response: Okay, I will write you a 2000-word essay. LLM is...(1998 words) I hope you
+                                                             like the answer.
+    an LLM evaluator to format the model’s response          Check: Word count: 1998 < 2000 → Constraints met [CORRECT]
+    (typically by converting it into a Python list); sec-             Table 1: Raw model responses can introduce evaluation
+    ond, employ a Python script to assess whether each      errors during Python script execution. The prevailing
+    constraint is correctly satisfied. To facilitate the    method regenerates the model response and cleans the
+                                                            redundant texts.
+    format section, the framework integrates a dual for-
+    mat mechanism: the coding format, which activates                         However, this approach encounters significant
+the code-specific pipeline when coding flags are challenges in both computational efficiency and
+present (flag detail: Appendix D; coding format de- accuracy. For long model responses (such as
+tail: Section 3.3), and the regenerate format, which extended essays) and large-scale multi-element
+formats model responses through regeneration. The generation, the LLM-based format extraction re-
+evaluation procedure is bifurcated according to the quires regenerating entire clean texts to remove
+rule labels associated with each constraint. For non-essential components, resulting in substantial
+constraints with null rule labels (see Appendix D), computational overhead. Furthermore, format ac-
+the LLM evaluator assesses the response directly, curacy degrades considerably as the complexity
+without any formatting. When specific rule labels of model responses increases, creating a scalabil-
+are present, corresponding rule-based Python judg- ity bottleneck for practical applications. To ad-
+ment scripts are invoked to verify the validity of dress these issues, we propose a code-guided, rule-
+    the formatted content.                                  augmented LLM-based evaluation.                   Specifically,
+    3.2 Feedback Prompting                                  we use prompts to guide the LLM to format model
+                                                            response by coding, rather than having the model
+    After evaluation, each constraint is accompanied        regenerate all context. By applying the function
+    by a judgment explanation; if a constraint is un-       created by the LLM Evaluator, the necessary in-
+    met, the feedback specifies the reason for failure.     formation can be formatted efficiently without the
+    With the exception of a small portion of feedback       regeneration step Table 2). Through experimental
+    generated directly by the LLM evaluator, the ma-        validation, we demonstrate that our code-guided
+    jority of feedback is automatically produced by the     formatting delivers substantial improvements in
+
+        3
+
+    Figure 1: One complete Meeseeks iteration includes response collection, evaluation, and feedback prompting.
+
+    evaluation accuracy with performance gains reach-                                                     expertise in data annotation, and conducted com-
+    ing 97.46%, while achieving up to 71.08% reduc-                                                      prehensive reviews of every data instance and its
+    tion in token consumption compared to prevailing                                                    associated constraints, rigorously verifying their
+    formatting approaches (See Section 4.1).                                                            validity and consistency. For instance, they iden-
+                                                                                                       tified and resolved logical contradictions, such as
+    3.4 Data collection, Taxonomy and Quality                                                            cases where one constraint required the inclusion
+    Meeseeks comprises over 700 meticulously curated                                                     of an "idea" while another simultaneously prohib-
+    instances in Chinese and English, annotated with                                                   ited a "great idea," thereby ensuring the integrity
+    32 distinct capability tags, and with a substantially   and coherence of the synthesized data.
+    greater difficulty compared to existing datasets in      ◦ LLM Response
+    the domain. The dataset is collected from our            Due to the length of the report, the following is a simplified version of the research report
+    business log and rigorously formatted to templates                     outline, which you can further expand as needed:—# Research Report: System Spam
+                                                                             Problems and Solutions Faced by Ordinary Users## Summary This report collects
+    (Appendix F), wherein all constraints are manu-                 data for ordinary users in..... (2000 words omitted). —Please note that this is only a
+                                                             simplified version of the report outline.
+    ally annotated by professional annotators to ensure      ◦ Prevailing Formatting
+    both precision and contextual relevance. Similar to                          System Spam Problems and Solutions Faced by Ordinary Users## Summary This
+    prevailing instruction following benchmarks, the         report collects data for ordinary users in..... (2000 words omitted).
+                                                             2,754 Tokens
+    prompts from our log also contain multiple out-          ◦ Code-guided Formatting
+    put constraints, and we use a cognitive-inspired         def extract_info_list(model_response):
+    framework that decomposes instruction-following           """
+                                                              Because the object to be captured is the entire
+    into three fundamental dimensions (Figure 1): In-         research report outline. Therefore: After capturing
+                                                              "[# Research report: ]", the content between "
+    tent Recognition, Granular Content Validation, and        [.---Please note that]" is enough.
+                                                              """
+    Output Structure Validation. This framework em-           cleaned_text = re.sub(
+                                                                 r'^.*# Research Report: |.---Please note that.*$', '',
+    ploys hierarchical capability tags across 3 levels           model_response,
+                                                                 flags=re.DOTALL)
+    and 32 capability tags in total, with lower levels        return [cleaned_text]
+    subordinate to higher ones (Appendix E). Data in-        98 Tokens
+    stances are systematically generated by varying                                                    Table 2: Our code-guided, rule-based evaluation in-
+    template parameters and synchronously updating                                                      structs LLMs to generate code for formatting model
+    the associated constraint variables, with NO in-                                               response, thereby replacing the regeneration techniques
+    volvement of LLM at any stage of data gener-            employed in existing methodologies.
+    ation. To further enhance the reliability and ob-                                                          We conduct a comprehensive evaluation accu-
+jectivity of the evaluation, all subjective capabil- racy on Meeseeks’ own dataset. We have our
+ity constraints—such as those assessing emotional annotators independently assess responses gener-
+intelligence in model responses—are deliberately ated by Claude-3.7-Sonnet, GPT-4o-20241120, and
+excluded from the dataset. For quality assurance, DeepSeek-R1. Given the straightforward nature
+we recruit three experienced annotators, each hold- of the evaluation tasks for human assessors, we
+ing at least a bachelor’s degree with professional are confident in the annotators’ ability to provide
+
+                                                         4
+
+accurate evaluations of the LLM responses. Fol- gumentative essay, objective and neutral language
+lowing the collection of evaluation results, we ana- style, no less than 800 characters. Similarly, we
+lyze inter-annotator agreement and observed over set the required character count from 50 to 5000 (in
+99% consensus among the three annotators, demon- increments of 100, and rather than use "less than",
+strating strong reliability in our human evaluation output length is required in a certain range), gener-
+framework. Any remaining discrepancies were ating synthetic data and answers. The ratio of cor-
+manually reviewed to ensure final quality assur- rect to incorrect answers in both scenarios is set to
+ance. Through this rigorous evaluation process, 1:1, and employed Qwen2.5-32B + Qwen2.5-32B-
+we achieve a substantial improvement in end-to- Coder (Qwen et al., 2025) as the evaluator (also
+end accuracy from 78.7% (The prevailing format for main experiments). Subsequently, we conduct
+    accuracy on the Meeseeks dataset) to 98.4%.               a comparative analysis of the accuracy and token
+    3.5  Metrics                                              consumption patterns exhibited by the code-guided
+                                                              and prevailing formatting methods (Figure 2).
+    Serving as trustworthy agents, LLMs must fulfill all        In large-scale multi-element scenarios, the code-
+    requirements specified in the user’s prompt for the       guided formatting approach exhibited substantial
+    responses to be considered usable. Utility rate re-       performance gains over the prevailing method. It
+    flects the ratio of usable responses to total evaluated   attained an average end-to-end accuracy of 0.994
+    responses and is essential for evaluating an LLM’s        with an average token usage of 252.94, compared
+    effectiveness as a practical and professional agent.      to the prevailing formatting’s accuracy of 0.684
+    Additionally, to help researchers identify subtle dif-    and token usage of 874.65—yielding a 45.32% im-
+    ferences in instruction-following abilities between       provement in accuracy and a 71.08% reduction in
+    different LLMs, we propose the Meeseeks score,            token consumption. In scenarios with long single
+    which indicates the overall capability tag accuracy       element, code-guided formatting sustained high ef-
+    of the LLM (see formula in Appendix C). Further-          ficacy, achieving an end-to-end accuracy of 0.998
+    more, Meeseeks generates a capability report with         and average token usage of 98.73, whereas the pre-
+    accuracy statistics across various capability levels,     vailing approach encountered severe hallucinations
+    enabling researchers to understand the instruction-       and often misidentified core content, resulting in
+    following proficiency of LLMs from different per-         an accuracy drop to the baseline level of 0.5 and
+    spectives (sample report in Appendix H). The ac-          token usage of 191.99; this translated to a 97.46%
+    curacy metric denotes the utility rate hereafter.         accuracy enhancement for code-guided formatting.
+                                                              The limitations of prevailing formatting primar-
+    4    Experiments                                          ily arose from its token-saving strategy, which de-
+    4.1   Experiments on Code-guided,                         faulted to outputting merely the "thinking process"
+          Rule-augmented LLM-based Evaluation                 and "ALL" without supplementary context ("ALL"
+        indicates that the evaluator considers the model’s
+To evaluate the effectiveness of our code-guided, response to be free of redundancy). Efforts to ad-
+rule-based evaluation, we conduct experiments in dress this by employing advanced evaluators such
+two distinct scenarios: long single element gener- as GPT-4o yielded no discernible benefits, suggest-
+ation, where the model is tasked with producing ing that the underlying issue resides in the few-
+a complete article, and large-scale multi-element shot prompt architecture of the prevailing method.
+response generation, where the model is required to These outcomes highlight the enhanced robustness
+generate a substantial number of comments (These and resource efficiency of code-guided formatting
+two frequently used scenarios are utilized and mod- in varied and demanding contexts.
+ified from Complexbench’s dataset). For long sin-
+gle element scenarios, we choose the question: A 4.2 Main Experiments
+man is performing on stage for the audience, ... We evaluate 17 representative LLMs over 20 turns
+Please continue and expand this passage with at and find models from commercial APIs consis-
+least 20 sentences. We vary the required number tently demonstrate superior performance in both
+of sentences from 0 to 500 with an increment of single-turn and multi-turn dialogue settings (When
+1, generating synthetic data. For large-scale multi- the input length surpasses the maximum context
+element scenarios, we choose the question: People window capacity of the evaluated LLM, the in-
+are ... Please write an essay. Requirements: Ar- stance is automatically classified as failed). No-
+
+              5
+
+    tably, o3-mini (high) achieves the highest perfor-                  relation with the initial ranking in the first turn
+    mance from turn 1 through turn 5. In subsequent                     progressively weakens. We calculate the Pearson
+    turns, Claude Sonnet 4 Thinking surpasses other                     and Spearman correlation coefficients between the
+    models, establishing itself as the best-performing                  model rankings in Turn 1 and those in each subse-
+    system in extended interactions.     However, de-                   quent turn. The results reveal that the correlation
+    spite 20 turns of feedback-guided self-correction,                  between a model’s performance in a single attempt
+    the performance of most models remained sub-                        and its upper limit of instruction-following abil-
+    optimal.                    In the following sections, we provide   ity initially diminishes rapidly and subsequently
+    a systematic interpretation of the phenomena pre-                   plateaus as the number of turns increases (Figure 3).
+    sented in Table 3.               Further analysis is provided       This further reinforces our earlier conclusion: the
+    in following sections.                 (anthropic, 2025; Yang       disparity between a model’s single-turn instruction-
+    et al., 2025; Bytedance, 2025; DeepSeek-AI, 2024;                   following performance and its ultimate capability
+    Google DeepMind, 2025; Team et al., 2025a; Ope-                     ceiling is more significant than initially anticipated.
+    nAI, 2025a; Team et al., 2025b; OpenAI, 2025b)
+     Model ↓     Turn →         1-5              6-10  11-15  16-20               Accuracy trend (Multi-                       Token-used trend (Multi-
+                                avg              avg avg       avg                 element extraction)                           element extraction)
+                                                                                  Code-guided formatting                        Code-guided formatting
+     DeepSeek-V3.1*             .567             .745   .783   .789                   Traditional formatting baseline           Traditional formatting
+     zai-org/GLM-4.5*           .637             .805    .84   .854              1.0                                      900
+     Doubao Seed 1.6            .531             .695   .744   .766              0.9                                      800
+                                                                                 0.8                                      700
+     Kimi-K2-Instruct*          .510             .595   .619   .623              0.7                                      600
+     google/Gemini 2.5 Flash    .522             .636   .668   .671              0.6                                      500
+                                                                                 0.5                                      400
+     openai/GPT 4.1             .550             .634   .673   .689              0.4                                      300
+                                                                                                                          200
+     o3-mini (high)      .715†                   .813   .831   .842                  Sentence Number                               Sentence Number
+     Claude Sonnet 4            .584             .747   .783   .791
+     Claude Sonnet 4 Thinking   .656            .832†   .88†  .899†               Accuracy trend (Single-                      Accuracy trend (Single-
+     Claude Opus 4              .622             .787   .822   .837                 element extraction)                          element extraction)
+     Claude Opus 4 Thinking     .670             .814   .858   .871                Code-guided formatting                      Code-guided formatting
+     Qwen3-235B-A22B*           .567             .697   .727   .734                   Traditional formatting baseline          Traditional formatting
+     Qwen3-235B-A22B-think*     .663             .826   .852   .866
+     Qwen3-32B*                 .479             .55    .565   .57                1.0                                     200
+                                                                                  0.9                                     150
+     Qwen3-32B-think*                            .617   .642   .657               0.8
+                                .500                                              0.7                                     100
+     Qwen3-14B*                 .418             .462    .47   .47                0.6                                      50
+                                                                                  0.5
+     Qwen3-14B-think*           .466             .549   .567   .573               0.4
+     * All values omit leading zero (average on 3 runs). Mod-                        Word Number (10×)                         Word Number (10×)
+      els marked with * are open-source.                                Figure 2: Our code-guided formatting demonstrates
+     † Indicates the highest score in each turn.                        remarkably consistent performance in both token uti-
+    Table 3: Utility rate over 20 turns (Complete result                lization and accuracy metrics.
+    in Appendix B)                                                      5.2                                    Performance Gap Across Capability Tags
+    5    Analysis                                                       To further elucidate the underlying reasons for sub-
+    5.1                    Performance Gap On First and Last Turn       optimal model performance, we examine the iden-
+    We design the experiment such that models were                      tified issues through the lens of constraint satis-
+    only required to correct questions they had pre-                    faction. Specifically, we analyze these challenges
+    viously answered incorrectly in subsequent turns.                   from the perspective of our three top-level capabil-
+    Theoretically, as the pool of questions that can be                 ity tags along with some additional findings.
+    answered correctly diminishes, the performance                                    Standard deviation                      Pearson correlation
+    gap between different models should gradually nar-                  0.030
+    row. However, our findings indicate the opposite:                   0.025                                                 Spearman's correlation
+                                                                        0.020
+    the disparity between models actually widens with                   0.015                                          1.0
+                                                                                                                       0.8
+                                                                        0.010                                          0.9
+    an increasing number of turns.               Through this it-       0.005                                          0.7
+                                                                                                                       0.5
+                                                                        0.000                                          0.6
+    erative process of correction over multiple turns,                  Figure 3: As the turns iterate, the standard deviation
+    we can progressively approach the upper limit of a                  of utility rates gradually increases; The correlation be-
+    model’s instruction-following capability. This phe-                 tween subsequent round rankings and turn 1 rankings
+    nomenon suggests that the difference in the upper                   shows a declining trend.
+    limits of instruction-following abilities among vari-
+    ous models is substantially greater than the single-                Output Structure Validation                                       When models
+    turn performance differences might suggest (Fig-                    are tasked with generating multiple contexts (e.g.,
+    ure 3). Concurrently, we observe that the rankings                  producing numerous titles or names), their outputs
+    of the models evolve across turns, and their cor-                   exhibit substantial redundancy, with minimal im-
+
+                                    6
+
+
+
+
+
+
+
+
+
+
+Cumulative
+end-to-end     Cumulative end-
+  accuracy     to-end accuracy
+
+
+
+
+
+
+
+
+
+
+ Cumulative
+ token-used    token-used (by
+ (by GPT2     GPT2 tokenizer)
+ tokenizer)      Cumulative
+
+
+
+
+
+
+
+
+
+
+                                                                                  10  40  70  100 130 160 190 220 250 280 310 340 370 400 430 460 490  10  40  70  100 130 160 190 220 250 280 310 340 370 400 430 460 490
+
+
+
+
+
+
+
+
+
+                                                                                  10     40  70  100 130 160  190 220 250 280 310 340 370 400 430 460 490  10  40  70  100 130 160 190 220 250 280 310 340 370 400 430 460 490
+
+
+
+
+
+
+
+
+
+
+                                                                                  1 2 3     5 6     7     8 9 11  13  15  17  19  1 2 3 4 5 6     7 8 9     11  13  15  17      19
+
+    provement following feedback interventions. De-         (Figure 4). These results demonstrate that models
+    spite explicit feedback indicating which content ele-   exhibit markedly superior adherence to word count
+    ments are duplicated, virtually all evaluated models    constraints at smaller magnitudes.
+    demonstrate limited capacity to rectify such exten-     Intent Recognition         In this dimension, we im-
+sive redundancy issues (Figure 4). In more demand- plement a particularly challenging task requiring
+ing scenarios, when models are required to gener- models to modify prompts. Specifically, we de-
+ate content adhering to specific proportional con- limit prompts using different special notation and
+straints—for instance, producing 20 pieces of copy instruct models to modify the enclosed prompt con-
+with a long-form to short-form ratio of 3:2—we tent either at the beginning or end of the interaction.
+observe that most models fail to accurately deter- We observe that the majority of models fail to com-
+mine the requisite quantities of long-form versus prehend our requirement for prompt modification
+short-form content. However, reasoning contents on the initial attempt. Instead, they erroneously
+in reasoning models help predetermine the quanti- execute the tasks specified within the bracketed
+ties of long and short content within their reasoning prompt content. Even reasoning-capable models
+    processes, thereby mitigating such failures.            demonstrate this misinterpretation during their ini-
+   Granular Content Validation Within this di- tial cognitive processes, despite their enhanced rea-
+mension, model deficiencies are predominantly soning capabilities. Subsequently, we employ feed-
+concentrated on word count accuracy. We ob- back mechanisms to explicitly reveal our actual
+serve that models fundamentally lack precise word intention and emphasize the prompt modification
+counting capabilities; however, they should the- requirement. However, we find that a substantial
+oretically possess a general awareness of output proportion of models remain unable to success-
+length (Hiraoka and Okazaki, 2024; Zhao et al., fully modify the designated prompt content even
+2025a; Kaplan et al., 2025; Vieira et al., 2025). after clarification. We attribute this limitation to
+Indeed, our experiment shows that models would fundamental optimization challenges inherent in
+adjust their output length to align with specified re- multi-turn dialogue systems, suggesting that cur-
+quirements through our feedback mechanism (Fig- rent model architectures may possess insufficient
+ure 4). Nevertheless, we identify a critical phe- capacity for maintaining and adapting to task clari-
+nomenon: when models receive feedback indi- fication across conversational iterations.
+cating that their output word count fails to meet
+    requirements—accompanied by the actual word             Additional Findings        For regional knowledge
+count—they frequently exhibit severe overcorrec- requirements, we observe that broad constraints
+tion behaviors. For instance, when the requirement such as rhyming patterns and traditional-simplified
+specifies approximately 400 words (with accep- Chinese character restrictions pose relatively man-
+tance criteria of 360-440 words), and the model’s ageable challenges for models. However, when
+initial output contains 300 words, upon receiving confronted with more specialized linguistic require-
+feedback regarding the word count deficiency, most ments—such as generating content adhering to spe-
+models initially make modest upward adjustments cific tonal pattern (pingze) constraints—models en-
+(e.g., to 330 words). However, upon receiving counter substantial difficulties. Given that virtually
+subsequent feedback indicating continued insuffi- all evaluated models lack a comprehensive under-
+ciency, catastrophic overcorrection occurs: outputs standing of tonal pattern principles, they demon-
+may abruptly escalate to 600 words. This adjust- strate near-universal failure in completing pingze-
+ment momentum exhibits bidirectional persistence, related generation tasks. Notably, we identify
+with subsequent iterations potentially plummeting a particularly intriguing phenomenon: Our feed-
+to 100 words. While we observe that certain mod- back mechanism provides models with pingze in-
+els can gradually resolve some questions through formation corresponding to their generated con-
+sustained iterative feedback, a substantial propor- tent. Among all evaluated models, o3-mini (high)
+tion of models remain unable to address this fun- emerges as the sole exception capable of leverag-
+damental issue even after 20 rounds of feedback- ing the pingze information provided in feedback to
+guided iterations. To provide more granular analy- reconstruct content that satisfies the specified tonal
+sis, we introduce detailed capability tags spanning: pattern requirements. This capability represents a
+0-10 words (precise), 10-50 words (precise/range), remarkably encouraging discovery, demonstrating
+50-200 words (range), and above 200 words (range) the big in-context learning gap among models.
+
+        7
+
+        Figure 4: Performance trends varied significantly across models and capability tags.
+
+5.3 Reasoning/Non-reasoning Models Gap reasoning contents, reasoning models proactively
+Either in single-turn or multi-turn scenarios, most calculate required content length and proportions
+reasoning models generally outperform their non- for tasks requiring inferential steps, leading to im-
+reasoning counterparts. These findings challenge proved task execution. For "Generate with certain
+the prevailing consensus that thinking models are number of word X" tasks, reasoning models con-
+less effective in instruction-following tasks (Li sistently verify word occurrence within their rea-
+et al., 2025b). Our analysis reveals that reason- soning context, eliminating the "random guessing"
+ing models demonstrate consistent improvements behaviors observed in non-reasoning models.
+over non-reasoning models across five capability 6
+tags in the final evaluation round (Generate with Conclusion
+certain number of word X; Generate in 50-200 We introduce Meeseeks, a multi-turn instruction-
+words; Generate in 10-50 words; Generate in X following benchmark that evaluates LLMs’ ca-
+times word number of reference text; Generate pability to satisfy multi-constraint instructions
+Chinese-English-mixed article). While individual through iterative feedback. Facing accuracy drop
+reasoning models exhibit minor performance degra- in complex scenarios, we propose code-guided
+dations on specific metrics, these decreases are rule-augmented LLM-based evaluation framework,
+neither substantial nor systematic across models. raising the evaluation accuracy from 78.7% to
+Notably, most reasoning models show significant 98.4%. Through our experiments across 17 pop-
+performance gains through feedback-driven self- ular models, we find even after 20 turns of self-
+correction that substantially exceed those of non- correction, almost all LLMs fail to exceed 90%
+reasoning models, even when the reasoning models accuracy, highlighting fundamental limitations in
+already demonstrate initial advantages in single- LLMs’ instruction-following capabilities. The sub-
+turn evaluations. More specifically, we find reason- stantial performance gaps between single-turn capa-
+ing models demonstrate superior sensitivity to word bilities and multi-turn upper bounds reveal that dif-
+number, whether for Chinese characters or English ferent LLMs exhibit varying instruction-following
+words. They exhibit greater robustness in both ceilings. Consequently, we provide rigorous analy-
+range-based and precise numerical outputs, effec- sis of the self-correction mechanisms and offer new
+tively mitigating the catastrophic adjustment mo- insights for developing more reliable instruction-
+mentum issues previously identified. Moreover, in following systems in future LLM research.
+
+        8
+
+    Limitations                                            Kedi Chen, Qin Chen, Jie Zhou, Yishen He, and Liang
+    In the comparison between reasoning and non-            He. 2024. Diahalu: A dialogue-level hallucination
+                                                            evaluation benchmark for large language models.
+    reasoning models, while adding "Think step by           Preprint, arXiv:2403.00896.
+step" prompting to non-reasoning models might po- DeepSeek-AI. 2024. Deepseek-v3 technical report.
+    tentially improve their performance scores, we de-      Preprint, arXiv:2412.19437.
+    liberately refrained from employing this approach.
+    We did not explicitly restrict models from out-        Deep Ganguli, Amanda Askell, Nicholas Schiefer,
+    putting auxiliary reasoning content, and our ratio-     Thomas I. Liao, Kamil˙e Lukoši¯ut˙e, Anna Chen,
+    nale for this decision stems from the benchmark’s       Anna Goldie, Azalia Mirhoseini, Catherine Ols-
+    fundamental purpose of reflecting authentic model       son, Danny Hernandez, Dawn Drain, Dustin Li,
+                                                            Eli Tran-Johnson, Ethan Perez, Jackson Kernion,
+    capabilities. Considering that users typically lack     Jamie Kerr, Jared Mueller, Joshua Landau, Kamal
+    professional prompting expertise and would expe-        Ndousse, and 30 others. 2023. The capacity for moral
+    rience suboptimal user experience when extracting       self-correction in large language models. Preprint,
+    answers from extensive reasoning contexts, reason-      arXiv:2302.07459.
+    ing models prove more suitable for end-users under     Google DeepMind. 2025. Gemini flash. Visited date:
+    our experimental conclusions. Consequently, we          2025-09-15.
+    did not conduct such granular ablation studies.        Zishan Gu, Changchang Yin, Fenglin Liu, and Ping
+     Instruction-following evaluation is inherently         Zhang. 2024. Medvh: Towards systematic evaluation
+    constrained by its design to disregard answer cor-      of hallucination for large vision language models in
+    rectness. Even with increased task complexity, es-      the medical context. Preprint, arXiv:2407.02730.
+    tablishing a direct correlation between model per-     Yijie Hao, Haofei Yu, and Jiaxuan You. 2025. Beyond
+    formance and user experience remains challenging.       facts: Evaluating intent hallucination in large lan-
+    In our future work, we aspire to bridge the gap         guage models. Preprint, arXiv:2506.06539.
+    between instruction-following capabilities and real-   Qianyu He, Jie Zeng, Wenhao Huang, Lina Chen, Jin
+    world applications, enabling benchmarks to tran-        Xiao, Qianxi He, Xunzhe Zhou, Lida Chen, Xin-
+    scend specific capability boundaries and instead        tao Wang, Yuncheng Huang, Haoning Ye, Zihan Li,
+    integrate multiple competencies, thereby linking        Shisong Chen, Yikai Zhang, Zhouhong Gu, Jiaqing
+    benchmark scores more directly to enhanced user         Liang, and Yanghua Xiao. 2024a. Can large language
+    experience.                                             models understand real-world complex instructions?
+                                                            Preprint, arXiv:2309.09150.
+     Meeseeks currently contains a relatively limited
+    dataset, necessitating multiple evaluation runs to     Yun He, Di Jin, Chaoqi Wang, Chloe Bi, Karishma
+    obtain stable performance scores. However, this         Mandyam, Hejia Zhang, Chen Zhu, Ning Li, Tengyu
+    represents a continuously evolving benchmark, and       Xu, Hongjiang Lv, Shruti Bhosale, Chenguang Zhu,
+                                                            Karthik Abinav Sankararaman, Eryk Helenowski,
+    the present work primarily focuses on the novel         Melanie Kambadur, Aditya Tayade, Hao Ma, Han
+    perspective of multi-turn feedback evaluation. The      Fang, and Sinong Wang. 2024b.   Multi-if: Bench-
+    work has been open-sourced, and we are commit-          marking llms on multi-turn and multilingual instruc-
+    ted to ongoing updates, with plans to substantially     tions following. Preprint, arXiv:2410.15553.
+    expand the Meeseeks dataset in the near future.        Tatsuya Hiraoka and Naoaki Okazaki. 2024. Knowl-
+                                                            edge of pretrained language models on surface infor-
+                                                            mation of tokens. Preprint, arXiv:2402.09808.
+    References                                             Bairu Hou, Qibin Chen, Jianyu Wang, Guoli Yin, Chong
+    anthropic. 2025. Claude sonnet 4. Visited date: 2025-   Wang, Nan Du, Ruoming Pang, Shiyu Chang, and
+     09-15.                                                 Tao Lei. 2025. Instruction-following pruning for
+        large language models. Preprint, arXiv:2501.02086.
+Abhinav Arun, Ashish Dhiman, Mehul Soni, and Yibei
+   Hu. 2023. Numerical reasoning for financial reports. Jie Huang, Xinyun Chen, Swaroop Mishra,
+     Preprint, arXiv:2312.14870.                            Huaixiu Steven Zheng, Adams Wei Yu,     Xiny-
+                                                            ing Song, and Denny Zhou. 2024. Large language
+    Yejin Bang,    Ziwei Ji, Alan   Schelten, Anthony       models cannot self-correct reasoning yet. Preprint,
+     Hartshorn, Tara Fowler, Cheng Zhang, Nicola Can-       arXiv:2310.01798.
+     cedda, and Pascale Fung. 2025. Hallulens: Llm hal-
+     lucination benchmark. Preprint, arXiv:2504.17550.     Lei Huang, Weijiang Yu, Weitao Ma, Weihong Zhong,
+                                                            Zhangyin Feng, Haotian Wang, Qianglong Chen,
+    Bytedance. 2025. Doubao-ai. Visited date: 2025-09-15.   Weihua Peng, Xiaocheng Feng, Bing Qin, and Ting
+
+         9
+
+   Liu. 2025. A survey on hallucination in large lan- Shervin Minaee, Tomas Mikolov, Narjes Nikzad,
+    guage models: Principles, taxonomy, challenges, and         Meysam Chenaghlu, Richard Socher, Xavier Am-
+    open questions. ACM Transactions on Information             atriain, and Jianfeng Gao. 2025.   Large language
+    Systems, 43(2):1–55.                                        models: A survey. Preprint, arXiv:2402.06196.
+              Yuxin Jiang, Yufei Wang, Xingshan Zeng, Wanjun   OpenAI. 2025a. Gpt-4.1. Visited date: 2025-09-15.
+   Zhong, Liangyou Li, Fei Mi, Lifeng Shang, Xin
+  Jiang, Qun Liu, and Wei Wang. 2024. Follow- OpenAI. 2025b. o3-mini. Visited date: 2025-09-15.
+   bench: A multi-level fine-grained constraints follow-
+   ing benchmark for large language models. Preprint,
+    arXiv:2310.20410.                                          Long Ouyang, Jeff Wu, Xu Jiang, Diogo Almeida, Car-
+                                                                roll L. Wainwright, Pamela Mishkin, Chong Zhang,
+               Guy Kaplan, Matanel Oren, Yuval Reif, and Roy    Sandhini Agarwal, Katarina Slama, Alex Ray, John
+    Schwartz. 2025. From tokens to words: On the inner          Schulman, Jacob Hilton, Fraser Kelton, Luke Miller,
+    lexicon of llms. Preprint, arXiv:2410.05864.                Maddie Simens, Amanda Askell, Peter Welinder,
+             Alex Kim, Maximilian Muhn, and Valeri Nikolaev.    Paul Christiano, Jan Leike, and Ryan Lowe. 2022.
+    2025.       Financial statement analysis with large lan-    Training language models to follow instructions with
+    guage models. Preprint, arXiv:2407.17866.                   human feedback. Preprint, arXiv:2203.02155.
+       Aviral Kumar, Vincent Zhuang, Rishabh Agarwal, Yi Su,   Keivalya Pandya and Mehfuza Holia. 2023. Automating
+    John D Co-Reyes, Avi Singh, Kate Baumli, Shariq             customer service using langchain: Building custom
+    Iqbal, Colton Bishop, Rebecca Roelofs, Lei M Zhang,         open-source gpt chatbot for organizations. Preprint,
+    Kay McKinney, Disha Shrivastava, Cosmin Paduraru,           arXiv:2310.05421.
+    George Tucker, Doina Precup, Feryal Behbahani, and
+    Aleksandra Faust. 2024. Training language models           Cheng Qian, Chi Han, Yi R. Fung, Yujia Qin, Zhiyuan
+    to self-correct via reinforcement learning. Preprint,       Liu, and Heng Ji. 2024. Creator: Tool creation for
+    arXiv:2409.12917.                                           disentangling abstract and concrete reasoning of large
+        language models. Preprint, arXiv:2305.14318.
+Dong-Ho Lee, Jay Pujara, Mohit Sewak, Ryen W.
+  White, and Sujay Kumar Jauhar. 2023. Making Yiwei Qin, Kaiqiang Song, Yebowen Hu, Wenlin Yao,
+    large language models better data creators. Preprint,       Sangwoo Cho, Xiaoyang Wang, Xuansheng Wu, Fei
+    arXiv:2310.20111.                                           Liu, Pengfei Liu, and Dong Yu. 2024.    Infobench:
+      Jinnan Li, Jinzhe Li, Yue Wang, Yi Chang, and Yuan Wu.    Evaluating instruction following ability in large lan-
+    2025a. Structflowbench: A structured flow bench-            guage models. Preprint, arXiv:2401.03601.
+    mark for multi-turn instruction following. Preprint,       Han Qiu, Jiaxing Huang, Peng Gao, Qin Qi, Xi-
+    arXiv:2502.14494.                                           aoqin Zhang, Ling Shao, and Shijian Lu. 2024a.
+           Junyi Li, Xiaoxue Cheng, Wayne Xin Zhao, Jian-Yun    Longhalqa: Long-context hallucination evaluation
+    Nie, and Ji-Rong Wen. 2023a. Halueval: A large-             for multimodal large language models.   Preprint,
+    scale hallucination evaluation benchmark for large          arXiv:2410.09962.
+    language models. Preprint, arXiv:2305.11747.               J. Qiu, K. Lam, G. Li, and 1 others. 2024b. Llm-based
+             Xiaomin Li, Zhou Yu, Zhiwei Zhang, Xupeng Chen,    agentic systems in medicine and healthcare. Nature
+    Ziji Zhang, Yingying Zhuang, Narayanan Sadagopan,           Machine Intelligence, 6(12):1418–1420.
+    and Anurag Beniwal. 2025b. When thinking fails:
+    The pitfalls of reasoning for instruction-following in     Qwen, :, An Yang, Baosong Yang, Beichen Zhang,
+    llms. Preprint, arXiv:2505.11423.                           Binyuan Hui, Bo Zheng, Bowen Yu, Chengyuan
+        Yunxiang Li, Zihan Li, Kai Zhang, Ruilong Dan, Steve    Li, Dayiheng Liu, Fei Huang, Haoran Wei, Huan
+    Jiang, and You Zhang. 2023b. Chatdoctor: A medical          Lin, Jian Yang, Jianhong Tu, Jianwei Zhang, Jianxin
+    chat model fine-tuned on a large language model             Yang,  Jiaxi Yang, Jingren   Zhou, and   25  oth-
+    meta-ai (llama) using medical domain knowledge.             ers. 2025.   Qwen2.5 technical report.  Preprint,
+    Preprint, arXiv:2303.14070.                                 arXiv:2412.15115.
+         Dancheng Liu, Amir Nassereldine, Ziming Yang, Chen-   Alessandro Stolfo, Vidhisha Balachandran, Safoora
+    hui Xu, Yuting Hu, Jiajie Li, Utkarsh Kumar, Chang-         Yousefi, Eric Horvitz, and Besmira Nushi. 2025.
+    jae Lee, Ruiyang Qin, Yiyu Shi, and Jinjun Xiong.           Improving  instruction-following   in    language
+    2024a. Large language models have intrinsic self-           models through   activation  steering.  Preprint,
+    correction ability. Preprint, arXiv:2406.15673.             arXiv:2410.12877.
+              Guangliang Liu, Haitao Mao, Bochuan Cao, Zhiyu   Yuchong Sun, Che Liu, Kun Zhou, Jinwen Huang,
+    Xue, Xitong Zhang, Rongrong Wang, Jiliang Tang,             Ruihua Song, Wayne Xin Zhao, Fuzheng Zhang,
+    and Kristen Johnson. 2024b. On the intrinsic self-          Di Zhang, and Kun Gai. 2024. Parrot: Enhancing
+    correction capability of llms: Uncertainty and latent       multi-turn instruction following for large language
+    concept. Preprint, arXiv:2406.02378.                        models. Preprint, arXiv:2310.07301.
+
+        10
+
+5 Team, Aohan Zeng, Xin Lv, Qinkai Zheng, Zhenyu Zihan Yu, Liang He, Zhen Wu, Xinyu Dai, and
+    Hou, Bin Chen, Chengxing Xie, Cunxiang Wang,             Jiajun Chen. 2023.  Towards     better      chain-of-
+    Da Yin, Hao Zeng, Jiajie Zhang, Kedong Wang,             thought prompting strategies: A survey.     Preprint,
+    Lucen Zhong, Mingdao Liu, Rui Lu, Shulin Cao,            arXiv:2310.04959.
+  Xiaohan Zhang, Xuancheng Huang, Yao Wei, and
+  152 others. 2025a. Glm-4.5: Agentic, reason- Zhiyuan Zeng, Jiatong Yu, Tianyu Gao, Yu Meng, Tanya
+    ing, and coding (arc) foundation models. Preprint,       Goyal, and Danqi Chen. 2024.         Evaluating large
+    arXiv:2508.06471.                                         language models at evaluating instruction following.
+                                                             Preprint, arXiv:2310.07641.
+     Kimi Team, Yifan Bai, Yiping Bao, Guanduo Chen, Jia-
+    hao Chen, Ningxin Chen, Ruijue Chen, Yanru Chen,            Shengyu Zhang, Linfeng Dong, Xiaoya Li, Sen Zhang,
+    Yuankun Chen, Yutian Chen, Zhuofu Chen, Jialei              Xiaofei Sun, Shuhe Wang, Jiwei Li, Runyi Hu, Tian-
+    Cui, Hao Ding, Mengnan Dong, Angang Du, Chen-            wei Zhang, Fei Wu, and Guoyin Wang. 2024.         In-
+    zhuang Du, Dikang Du, Yulun Du, Yu Fan, and 150          struction tuning for large language models: A survey.
+    others. 2025b. Kimi k2: Open agentic intelligence.       Preprint, arXiv:2308.10792.
+    Preprint, arXiv:2507.20534.
+     Tim Vieira, Ben LeBrun, Mario Giulianelli, Juan Luis            Zhuosheng Zhang, Aston Zhang, Mu Li, and Alex
+    Gastaldi, Brian DuSell, John Terilla, Timothy J.         Smola. 2022.     Automatic     chain of       thought
+    O’Donnell, and Ryan Cotterell. 2025.     From lan-       prompting in large language models.         Preprint,
+    guage models over tokens to language models over         arXiv:2210.03493.
+    characters. Preprint, arXiv:2412.03719.                      Chenzhuo Zhao, Xinda Wang, Yue Huang, Junting Lu,
+         Boshi Wang, Sewon Min, Xiang Deng, Jiaming Shen,         and Ziqian Liu. 2025a. Tase: Token awareness and
+    You Wu, Luke Zettlemoyer, and Huan Sun. 2023.             structured evaluation for multilingual language mod-
+           Towards understanding chain-of-thought prompt-    els. Preprint, arXiv:2508.05468.
+    ing: An empirical study of what matters. Preprint,            Wayne Xin Zhao, Kun Zhou, Junyi Li, Tianyi Tang,
+    arXiv:2212.10001.                                              Xiaolei Wang, Yupeng Hou, Yingqian Min, Beichen
+         Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten          Zhang, Junjie Zhang, Zican Dong, Yifan Du, Chen
+    Bosma, Brian Ichter, Fei Xia, Ed Chi, Quoc Le, and              Yang, Yushuo Chen, Zhipeng Chen, Jinhao Jiang,
+    Denny Zhou. 2022. Chain-of-thought prompting elic-          Ruiyang Ren, Yifan Li, Xinyu Tang, Zikang Liu, and
+    its reasoning in large language models.     Preprint,      3 others. 2025b. A survey of large language models.
+    arXiv:2201.11903.                                        Preprint, arXiv:2303.18223.
+            Bosi Wen, Pei Ke, Xiaotao Gu, Lindong Wu, Hao   Jeffrey Zhou, Tianjian Lu, Swaroop Mishra, Siddhartha
+    Huang, Jinfeng Zhou, Wenchuang Li, Binxin Hu,                     Brahma, Sujoy Basu, Yi Luan, Denny Zhou, and
+    Wendy Gao, Jiaxin Xu, Yiming Liu, Jie Tang, Hongn-          Le Hou. 2023. Instruction-following evaluation for
+    ing Wang, and Minlie Huang. 2024.          Benchmark-       large language models. Preprint, arXiv:2311.07911.
+    ing complex instruction-following with multiple con-
+    straints composition. Preprint, arXiv:2407.03978.             Zhiying Zhu, Yiming Yang, and Zhiqing Sun. 2024.
+                                                              Halueval-wild: Evaluating hallucinations of language
+    Jochen Wulf and Juerg Meierhofer. 2024.       Explor-    models in the wild. Preprint, arXiv:2403.04307.
+  ing the potential of large language models for au-
+  tomation in technical customer service. Preprint, A Supplementary Materials
+  arXiv:2405.09161.
+Bei Yan, Jie Zhang, Zheng Yuan, Shiguang Shan, and A.1 Ethics Statement
+  Xilin Chen. 2024. Evaluating the quality of halluci- Our method and algorithm do not involve any ad-
+  nation benchmarks for large vision-language models. versarial attack, and will not endanger human se-
+    Preprint, arXiv:2406.17115.                                   curity. All our experiments are performed in the
+An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, simulation environment, which does not involve
+  Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, ethical and fair issues.
+  Chengen Huang, Chenxu Lv, Chujie Zheng, Day-
+  iheng Liu, Fan Zhou, Fei Huang, Feng Hu, Hao A.2 The Use of LLM
+  Ge, Haoran Wei, Huan Lin, Jialong Tang, and 41
+  others. 2025. Qwen3 technical report. Preprint, We used a large language model as a general-
+    arXiv:2505.09388.                                          purpose assistant for text editing, including gram-
+        Shunyu Yao, Howard Chen, Austin W. Hanjie, Runzhe            mar correction, wording and tone adjustments,
+    Yang, and Karthik Narasimhan. 2023. Collie: Sys-           punctuation, and stylistic consistency. We used llm
+    tematic construction of constrained text generation       auto-fill function to accelerate our coding progress
+    tasks. Preprint, arXiv:2307.08689.                      when developing the evaluation pipeline.
+
+        11
+
+    A.3  Reproducibility Statement                          C Metric
+The source code of this paper is available C.1 Utility Rate
+    at            https://anonymous.4open.science/r/        To evaluate LLMs as trustworthy agents, we adopt
+    Meeseeks-156A. We specify all the implementa-           and generalize IF-Eval (Zhou et al., 2023) ’s strict
+    tion details of our methods in Section 4.               "is followed" metric, introducing it as Utility Rate
+                                                            - the proportion of responses that fully satisfy all
+                                                            prompt requirements. This intuitive metric mea-
+    A.4  Artifacts use                                      sures the ratio of truly usable responses, serving
+        as a crucial indicator of an LLM’s capability to
+The paper follows all corresponding open- function as a reliable professional agent.
+    sourced/commercial license LLM used in this pa-                                     Pₙ
+    per. All existing artifacts in the paper was consis-                 Utility Rate = i=1 Ui
+    tent with their intended use.                                        (              n
+                                                                            1,   if response is usable
+    A.5   Data source                                         Ui =          0,   if response is not usable
+Our dataset do not contain and personal identify- C.2 Meeseeks Score
+ing info or offensive content. We hire professional To help researchers identify subtle differences in
+annotators check out the data completely and find instruction-following abilities between different
+no such info. All data were collected and revised LLMs, we propose Meeseeks Score, which in-
+by our internal business department, who have con- dicates the overall capability tag accuracy of the
+firmed their willingness to provide the data and LLM. Meeseeks Score averages the scores of all
+        the level 1 capability tags associated with the user
+granted permission for open-source publication and prompt.
+    academic submission, and the data collection proto-                              Pₘ Score
+    col follows ACL Guidelines for Ethics Reviewing.          Meeseeks Score =          j=1 m     tagj
+    A.6  Running Budget                                         where m is the total number of level 1 capability
+    The evaluation framework can be executed without        tags associated with the current issue.
+                                                                 The score for each individual level 1 capability
+    requiring local GPU resources by utilizing commer-      tag is the average of the scores of its respective
+    cial APIs as an alternative. For researchers with       requirements.
+    access to sufficient computational resources, we                             Pₙ  Score
+    recommend deploying Qwen2.5-32B-Instruct and              Scoretag =         i=1    n requirementⁱ
+    Qwen2.5-32B-Coder models, which necessitate ap-               where n is the total number of requirements for
+proximately 80 GB of GPU memory for optimal the capability tag.
+performance. The computational time required for
+a complete execution is approximately 45 minutes. D Data Structure
+    A.7  Recruitment And Payment                            In this section, we delineate the composition of a
+Our annotators are employed under contractual singular data, providing a comprehensive overview
+agreements, with compensation details maintained of its constituent elements. The general arrange-
+under strict confidentiality. We ensure that all com- ment and interrelations of all components within
+pensation has been fully disbursed to all participat- a data are visually represented in Figure 6 and a
+ing annotators. The annotators are all professional sample data is provided in Table 8.
+annotators from China and all hold bachelor de- E Capability Tags
+gree.
+        Meeseeks is equipped with a systematic evaluation
+    B    Complete Evaluation Result                         system. Each sub-question is mounted with one
+                                                            or more capability tags, which represent the most
+    Due to space constraints, the experimental results      granular level of evaluation. All capability tags are
+    presented in the main text are abbreviated. Compre-     enumerated in Table 6, with the count of capability
+    hensive results are provided in Table 4 and Table 5.    tags indicated in parentheses following each tag.
+    Radar graphic display the model performance on          Detailed explanations and definitions for each ca-
+    each capability tag is shown in Figure 5.               pability tag will be provided on GitHub, ensuring
+
+             12
+
+    Model ↓ Turn index →                      1      2      3           4      5      6     7     8     9    10
+
+    deepseek-ai/DeepSeek-V3.1*             .371    .52   .602        .654   .687   .721  .729  .746  .756  .771
+    zai-org/GLM-4.5*                       .455   .602   .662        .724   .741   .784  .796  .806  .816  .823
+    bytedance/Doubao Seed 1.6              .338   .475   .572        .627   .644   .664  .692  .701  .706  .714
+    moonshotai/Kimi-K2-Instruct*           .425   .483   .532         .55   .562   .572  .585  .600  .609  .609
+    google/Gemini 2.5 Flash                .358   .507   .557        .587     .6   .612  .629  .637  .644  .659
+    openai/GPT 4.1                         .425    .55   .572        .592   .609   .617  .624  .629  .644  .657
+    openai/o3-mini (high)                 .567†  .694†  .744†       .776†  .794†  .803†  .811  .816  .816  .818
+    anthropic/Claude Sonnet 4              .351   .555   .637        .674   .704   .719  .731  .749  .764  .774
+anthropic/Claude Sonnet 4 Thinking .438 .617 .701 .744 .779 .801 .828† .833† .843† .856†
+    anthropic/Claude Opus 4                .408    .58   .662        .719   .741   .769  .781  .789  .794  .803
+    anthropic/Claude Opus 4 Thinking        .49   .637   .697        .754   .771   .789  .801  .821  .828  .833
+    qwen/Qwen3-235B-A22B*                  .386   .515   .614        .652   .669   .674  .692  .694  .709  .716
+    qwen/Qwen3-235B-A22B-think*            .520   .619   .682        .734   .761   .803  .816  .833  .836  .843
+    qwen/Qwen3-32B*                        .398   .468   .495         .51   .525   .607  .607  .619  .627  .627
+    qwen/Qwen3-32B-think*                  .331   .473   .527         .57     .6   .530  .545  .552  .557  .565
+    qwen/Qwen3-14B*                        .348   .413   .433        .445   .453   .455  .463  .463  .465  .465
+    qwen/Qwen3-14B-think*                  .371    .44   .483        .507  .53     .540  .545  .552  .552  .557
+        Table 4: Utility rate from turn 1 - 10
+    * All values omit leading zero. Models marked with * are open-source.
+    † Indicates the highest score in each turn.
+
+
+
+
+
+
+
+
+
+
+    Model ↓ Turn index →                       11     12     13          14     15     16    17    18    19    20
+
+    deepseek-ai/DeepSeek-V3.1*               .776   .784   .784        .784   .786   .789  .789  .789  .789  .791
+    zai-org/GLM-4.5*                         .836   .838   .841        .843   .843   .851  .851  .853  .856  .861
+    bytedance/Doubao Seed 1.6                .721   .736   .746        .754   .764   .764  .764  .766  .766  .769
+    moonshotai/Kimi-K2-Instruct*             .617   .619   .619        .619   .619   .619  .624  .624  .624  .624
+    google/Gemini 2.5 Flash                  .664   .667   .669        .669   .669   .669  .672  .672  .672  .672
+    openai/GPT 4.1                           .662   .667   .674        .679   .682   .684  .687  .689  .689  .694
+    openai/o3-mini (high)                    .823   .828   .831        .836   .836   .838  .841  .843  .843  .846
+    anthropic/Claude Sonnet 4                .779   .784   .784        .784   .784   .789  .789  .791  .794  .794
+anthropic/Claude Sonnet 4 Thinking .866† .871† .881† .891† .893† .896† .898† .898† .898† .905†
+    anthropic/Claude Opus 4                  .813   .816   .821        .828   .833   .833  .833  .838  .873  .876
+    anthropic/Claude Opus 4 Thinking         .841   .858   .861        .863   .868   .868  .868  .868  .873  .876
+    qwen/Qwen3-235B-A22B*                    .721   .726   .729        .729   .729   .731  .734  .734  .734  .739
+    qwen/Qwen3-235B-A22B-think*              .843   .848   .853        .858   .858   .861  .866  .866  .868  .871
+    qwen/Qwen3-32B*                          .629   .637   .647        .649   .649   .649  .652  .657  .662  .664
+    qwen/Qwen3-32B-think*                    .565   .565   .565        .565   .565   .565  .570  .570  .572  .572
+    qwen/Qwen3-14B*                          .468   .470   .470        .470   .470   .470  .470  .470  .470  .470
+    qwen/Qwen3-14B-think*                    .565   .567   .567        .567   .567   .570  .570  .572  .575  .580
+        Table 5: Utility rate from turn 11 - 20
+    * All values omit leading zero. Models marked with * are open-source.
+    † Indicates the highest score in each turn.
+
+
+
+
+
+
+
+    13
+
+Figure 5: Models exhibit varying levels of self-correction capabilities across different dimensions, consequently
+demonstrating differential degrees of improvement in distinct areas.
+
+
+
+
+
+14
+
+clarity and accessibility for researchers utilizing     Question Context is the first turn prompt to the
+this system for evaluating model capabilities.        under-evaluation LLM.
+Unlike existing tag-based evaluations (Table 7),      Corresponding Part Prompt             is an prompt
+Meeseeks establishes a direct mapping between         guiding the LLM-Extractor to extract the to-be-
+instruction-following abilities and benchmark per-    evaluated part from the under-evaluation LLM’s
+formance through this systematic framework.           response. An example is shown below.
+Table 6 includes all general constraints in Chi-      Sub-Question:          The Question Context gener-
+nese and English. Special language constraints will   ally contains more than one requirements. Each
+soon be released in our next project.                 requirement is corresponding to one Sub-Question.
+                                                      An example is shown below.
+                                                             Sub-Question Context is the prompt input to
+                                                      the LLM Evaluator to judge if the under-evaluation
+                                                      LLM’s response meets the corresponding require-
+                                                      ment.
+                                                      Rule     Label is  a special label      projecting
+                                                      to different rule-based evaluation function in-
+                                                      side the Meeseeks framework.          For example,
+                                                      "item_count:[80,80]" checks whether the num-
+                                                      ber of the elements(comments in the given exam-
+                                                      ple) is exact 80.
+                                                              Dependency shows the error propagation be-
+                                                      tween some of the sub-questions.      For example,
+                                                      sub-question 2 relies on sub-question 0.    If the
+                                                      under-evaluation LLM fails on sub-question 0, it
+                                                      automatically fails on the sub-question 2.
+                                                         Capability Tag   reflects certain capability of
+                                                      under-evaluation LLM. It is attached with the sub-
+                                                      question.    This will be further explained in Ap-
+                                                      pendix E.
+
+
+
+
+
+
+
+
+
+
+15
+
+     Level 3         Level 2                 Level 1
+
+     任务意图理解:         在干扰下完成指令:
+Intent Recognition   Follow instruction under
+       (10)          distraction (10)
+
+                     主题约束: Theme
+                     requirement (922)
+
+                     文体约束: Stylistic         生成特定文案: Generate in certain style (17)
+                     requirement (29)        生成名字/标题: Generate names/titles (12)
+
+                     语言约束: Language          中英文混杂: Generate Chinese-English-mixed article (8)
+                     requirement (8)
+    单元细节合规:          格式约束: Format            特定格式: Generate in other format (479)
+ Granular Content    requirement (529)       日期格式: Generate result in date-format (50)
+Validation (2718)
+                                             精确: Generate at accurate word number (12)
+                                             范围: Generate in rough/range word number (437)
+                                             倍数: Generate in X times word number of reference text
+                     字数约束: Word count        (96)
+                     requirement (871)       0～10字: Generate in 0∼10 words (49)
+                                             10～50字: Generate in 10∼50 words (145)
+                                             50～200字: Generate in 50∼200 words (30)
+                                             200字以上: Generate in above 200 words (102)
+
+                                             押韵: Generate rhyming content (16)
+                                             关键词: Generate with certain keywords (34)
+                                             重复: Generate repeat/non-repeat content (61)
+                     其他特殊规则: Other           写作手法: Generate with certain rhetoric (40)
+                     granular requirements
+                     (359)                   词频: Generate with certain number of word X (208)
+  整体结构合规: 模版合规: Output format JSON格式: Generate in JSON format (1255)
+ Output Structure requirement (1255)
+ Validation (1346) 单元数量合规: Element
+        number requirement (71)
+
+                     答题逻辑合规: Output          答题结构合规: Generate by certain steps (20)
+                     logic requirement (20)
+                         Table 6: Capability tag system
+
+
+
+
+
+
+
+
+    Meeseeks                      Complexbench          CELLO                     IF-Eval
+    Intent Recognition            Format Constraint     Task-prescribed Phrases   Keywords
+    Granular Content Validation   Lexical Constraint    Count Limit               Language
+    Output Structure Validation   Semantic Constraint   Input-dependent Query     Length Constraints
+                                  Utility Constraint    Answer Format             Detectable Content
+                                                                                  Detectable Format...
+        Table 7: Instruction-following benchmarks evaluation system comparison
+
+
+
+
+                                             16
+
+Figure 6: data-structure
+
+
+
+
+
+
+
+
+
+
+Question Context              Sub-Question      Sub-Question 0   Sub-Question 1    Sub-Question 2   Sub-Question 3
+                              Attributions
+Chinese                       Sub-Question ID   0                1                 2                3
+在美团外卖神券短
+视 频 的 评 论 区 ，                                   Chinese
+以 消 费 者 角 度 生                                   生成的内容是           Chinese
+成80条 用 户 口 语 化                                  否为美团外卖           是 否 生 成           Chinese          Chinese
+                                                                     80条   用户口     所有评论是否           评论是否不重
+评 论.               每 条 评 论                      神券的评论？           了
+为10个 字 ， 不 允 许                                  English          语化评论              为10个字            复
+重复.                           Sub-Question      Are the gener-   English           English          English
+备注:字数只计中文                     Context           ated  contents   Are  there 80     Are  all  com-   Are     the
+字符                                              comments         colloquial user   ments 10 char-   comments
+English                                         about Meituan    comments          acters long?     non-repetitive?
+Generate 80 colloquial                          takeaway         generated?
+user comments from a                            coupons?
+consumer perspective          Rule Label        Null             item_count:       each_length:     non_repeat
+in the comments sec-                                             [80, 80]          [10,10]
+tion of Meituan take-         Dependency        []               [0]               [0]              [0]
+away    coupon       short
+videos. Each comment                                                               0～10字
+should be 10 charac-                                                               Generate    in
+ters long and not re-                           主题约束             单元数量合规            0~10 words       重复
+peated.    Note:      Only    Capability Tag    Theme require-   Element           精确               Generate
+count Chinese charac-                           ment             number    re-                      repeat/non-
+ters                                                             quirement         Generate    at   repeat content
+                                                                                   accurate  word
+                                                                                   number
+                              Corresponding     Null             comments          comments         comments
+                              Part
+                                  Table 8: Breakdown of sub-questions
+
+
+
+
+
+
+                                                17
+
+F      Sample Data Parameterized Template                                            "dep": [0],
+                                                                                     "能力项": "###字数1###字、范围",
+Below is a template example used in our work,                                    },  "被依赖": False
+without understanding the Chinese embedding in                                   {
+the template and the complicated data architecture,                                  "point_id": 2,
+                                                                                     "question": "文案是否在###字数2###字左右",
+researchers only need to follow the instruction to                                   "corresponding_part": "文案",
+generate more data:                                                                  "rule": "each_length:[###字数2*0.9###,###字
+                                                                                     "dep": [0],数2*1.1###]",
+"""                                                                                  "能力项": "###字数2###字、范围",
+Data Generation Template for Text Evaluation                                         "被依赖": False
+============================================                                     }
+This script generates test data for evaluating text generation                ]
+             models,                                                     }]
+specifically for scenic spot recommendation tasks.
+                                                                         # Utility Functions
+Author: Demo Template                                                    # =================
+Version: 1.1
+"""                                                                      def  convert_text_to_json(text: str) -> Dict[str, Any]:
+                                                                              """
+import json                                                                   Convert string representation of dictionary back to JSON
+import ast                                                                          object
+import random
+import re                                                                     Args:
+from typing import List, Dict, Any, Tuple                                        text (str): String representation of a dictionary
+
+# Configuration Section                                                       Returns:
+# =====================                                                          Dict[str, Any]: Parsed dictionary object
+                                                                              """
+# Word count pairs for generating different test cases                        return ast.literal_eval(text)
+# Format: [title_word_count, content_word_count]
+WORD_COUNT_PAIRS = [
+       [7, 200], [10, 300], [12, 300], [13, 300],                        def  calculate_mathematical_expressions(text: str) -> str:
+       [9, 280], [10, 270], [11, 200], [8, 210]                               """
+]                                                                             Find and evaluate mathematical expressions in the format
+                                                                                   ###expression###
+# Output file path - modify this to change where the generated
+           data is saved                                                      Args:
+OUTPUT_FILE_PATH = "YOUR_OUTPUT_FILEPATH"                                        text (str): Text containing mathematical expressions
+
+# Template Data Definition                                                    Returns:
+# ========================                                                       str: Text with expressions replaced by calculated
+                                                                                      results
+# Base template for generating test cases
+# This template will be used to create multiple variations                    Example:
+BASE_TEMPLATE_DATA = [{                                                          Input: "###10*0.9###" -> Output: "9.0"
+       "category": "general_single",                                          """
+       "question": "Recommend the scenic spot Grand Canyon, with              # Regular expression to find patterns like ###A*B*C###
+                   the title needing to be exactly ###字                       pattern = r'###(.*?)###'
+                   数1### words, and the content around ###字
+                   数2### words. The title should be attractive and can        def evaluate_single_expression(match):
+                   use trending vocabulary, hot memes, and popular               """Helper function to evaluate a single mathematical
+                   expressions from social media platforms like                       expression"""
+                   Instagram, TikTok, Twitter, etc. It should make               expression = match.group(1)
+                   people have a strong desire to click. Remember, the           try:
+                   word number only counts the English words.\nNote:                 # Calculate the expression value using eval (safe
+                   Please only include English words.",                                  for controlled input)
+       "corresponding_parts": {                                                      result = eval(expression)
+             "标题": "请你按照python list的格式，抓取模型回复中，给                                     # Format result with at most 1 decimal place
+                     出的title部分. 同时不要提取任何注释只提取内容（例                                    formatted_result = "{:.1f}".format(result)
+                     如不要提取注释：【标题】）. 比如[\"Epic Canyon                                 return formatted_result
+                     Vibes: Nature's Ultimate Flex\"]",                          except Exception as e:
+             "文案": "请你按照python list的格式，抓取模型回复中，给                                     # If evaluation fails, return the original
+                     出的content部分. 同时不要提取任何注释只提取内容                                        expression
+                     （例如不要提取注释：【标题】）. 比                                              print(f"Warning: Could not evaluate expression '{
+                     如[\"The Grand Canyon isn't just a destination,
+                     it's literally the main character of America's                      expression}': {e}")
+                     natural wonders, and honestly, it hits different                return match.group(0)
+                     every single time you visit. This geological
+                     masterpiece in Arizona serves up the most                # Replace all mathematical expressions with calculated
+                     incredible views that will have you questioning                results
+                     if you're still on planet Earth.\"]"                     processed_text = re.sub(pattern,
+       },                                                                            evaluate_single_expression, text)
+       "sub_questions": [                                                     return processed_text
+             {
+                    "point_id": 0,
+                    "question": "是否给出了title和content",        def generate_test_variations(template_item: Dict[str, Any],
+                    "rule": None,                                              word_pairs: List[Tuple[int, int]]) -> List[Dict[str, Any
+                    "dep": [],                                                 ]]:
+                    "被依赖": True                                               """
+             },                                                               Generate multiple test case variations from a template
+             {                                                                        using different word count pairs
+                    "point_id": 1,
+                    "question": "标题是否刚好###字数1###个字",                          Args:
+                    "corresponding_part": "标题",                                  template_item (Dict[str, Any]): Base template item to
+                    "rule": "each_length:[###字数1###,###字数1###]",                      generate variations   from
+
+                         18
+
+            word_pairs (List[Tuple[int, int]]): List of [                                                                    as a number
+                   title_words, content_words] pairs                                                                       print(f"Warning: Could not parse word
+                                                                                                                             count from tag '{tag}'")
+     Returns:                                                                                                              continue
+            List[Dict[str, Any]]: List of generated test case
+                 variations
+     """                                def                                 save_generated_data(data: List[Dict[str, Any]],
+     generated_variations = []                                                  output_path: str) -> None:
+                                                                            """
+     for title_word_count, content_word_count in word_pairs:                Save the generated test data to a JSON file
+            # Convert template to string for placeholder
+                         replacement                                        Args:
+            template_string = str(template_item)                                                              data (List[Dict[str, Any]]): Generated test data to
+                                                                                                               save
+            # Replace word count placeholders with actual values                                              output_path (str): Path where the JSON file should be
+            # Replace ###字数1### with title word count                                                          saved
+            updated_template = template_string.replace("###字                """
+                 数1###", str(title_word_count))                             try:
+            updated_template = updated_template.replace("字                                                    with open(output_path, "w", encoding='utf-8') as
+                 数1", str(title_word_count))                                                                   output_file:
+                                                                                                               json.dump(data, output_file, indent=4, ensure_ascii
+            # Replace ###字数2### with content word count                                                        =False)
+            updated_template = updated_template.replace("###字                                                 print(f"Successfully saved {len(data)} test cases to: {
+                    数2###", str(content_word_count))                                                           output_path}")
+            updated_template = updated_template.replace("字                  except Exception                       as e:
+                 数2", str(content_word_count))                                                                print(f"Error saving data to {output_path}: {e}")
+
+            # Calculate any mathematical expressions in the
+                 template                                               # Main Execution
+            updated_template = calculate_mathematical_expressions(      # ==============
+                 updated_template)
+            # Convert back to dictionary and add to results             def main():
+            variation_dict = convert_text_to_json(updated_template)         """
+            generated_variations.append(variation_dict)                     Main function to orchestrate the data generation process
+                                                                            """
+     return generated_variations                                            print("Starting data generation process...")
+                                                                            print(f"Using {len(WORD_COUNT_PAIRS)} word count pairs")
+
+def  categorize_word_count_capabilities(generated_data: List[               # Generate test case variations from the base template
+                  Dict[str, Any]]) -> None:                                 all_generated_data = []
+     """                                                                    # Process the first (and currently only) template item
+     Categorize word count capabilities into predefined ranges              base_template = BASE_TEMPLATE_DATA[0]
+     Args:                                                                  generated_variations = generate_test_variations(
+            generated_data (List[Dict[str, Any]]): Generated test                                              base_template, WORD_COUNT_PAIRS)
+                 data to categorize                                         all_generated_data.extend(generated_variations)
+     Modifies the input data in-place by updating capability                # Additional templates can be processed here:
+              categories.                                                   # if len(BASE_TEMPLATE_DATA) > 1:#
+     """                                                                    #                                  second_template = BASE_TEMPLATE_DATA[1]
+     for    test_item  in generated_data:                                                                      more_variations = generate_test_variations(
+            for  sub_question in test_item["sub_questions"]:                #                                  second_template, WORD_COUNT_PAIRS)
+                 # Check if this sub-question has capability tags                                              all_generated_data.extend(more_variations)
+                 if "能力项" in sub_question:                                  # Categorize the word count capabilities for better
+                  capability_text = sub_question["能力项"]                                                        organization
+                  capability_tags = capability_text.split("、")              categorize_word_count_capabilities(all_generated_data)
+
+                  for  tag   in capability_tags:                            # Display generation summary
+                       # Process word count related capabilities            print(f"Generated {len(all_generated_data)} test cases")
+                       if tag.endswith("字"):
+                           try:                                             # Save the generated data to file
+                             # Extract numeric value from the               save_generated_data(all_generated_data, OUTPUT_FILE_PATH)
+                                    capability tag
+                             word_count = float(tag[:-1])                   print("Data generation process completed successfully!")
+
+                             # Categorize into predefined ranges
+                             if 0 <= word_count < 10:                   # Script Entry Point
+                                       replacement_category = "0~10字"   # ==================
+                             elif 10 <= word_count < 50:
+                                 replacement_category = "10~50字"        if __name__ == "__main__":
+                             elif 50 <= word_count < 200:                   main()
+                                 replacement_category = "50~200字"
+                             elif word_count >= 200:
+                                        replacement_category = "200字以
+                             else:         上"                           G       Prompts
+                                     continue                           To maintain conciseness, only the English prompts
+                             # Replace the specific word count          are presented in this paper. The Chinese version
+                                    with the category
+                             sub_question["能力                           is available in the GitHub repository referenced in
+                                    项"] = capability_text.replace(
+                                    tag, replacement_category)          the abstract.
+
+                           except ValueError:
+                             # Skip if word count cannot be parsed      G.1                                   Single Element Coding Extract Prompt
+
+                                        19
+
+You are a Python data processing expert. You will receive [       The article is more rational analysis, but emotional
+  model_response] and [target_object] as input. Please            rendering is insufficient, lacking expression of deep
+  write Python code to remove non-[target_object]                 feelings about the theme. Overall score: Based on the
+  information from [model_response] based on the [                above analysis, this essay has complete content and
+  target_object].                                                 clear structure, but is slightly insufficient in
+                                                                  innovation and argumentative strength. If the full score
+Step 1. Find and remove non-[target_object] information at the     is 60 points, I would give this article about 45 points.
+  beginning and end                                                It is a well-structured article, but needs more unique
+Please check if there is non-[target_object] information at       insights and specific examples to improve the score. Try
+  the beginning or end of model_response. If it doesn't            writing a perfect college entrance examination essay: [
+  exist, skip this step; if it exists, use the re.sub             Title] Radiant Light, Brilliant Because of You [Main
+  method to remove unwanted non-[target_object]                   Text] In a vast sea of flowers, each flower blooms in
+  information from model_response to ensure the output            its unique posture, together composing the chapter of
+  only contains the specified content of [target_object].         spring. As General Secretary Xi Jinping said, one person
+                                                                  's brilliance may illuminate a corner, but only when
+Step 2. Find and remove non-[target_object] information in the    stars surround the moon can the entire night sky be
+  middle                                                          illuminated. In the long river of human history, those
+Please check if there is non-[target_object] information          behaviors that try to dominate and be self-admiring are
+  nested in the middle of model_response. If it exists,           ultimately fleeting. The wheel of history rolls forward,
+  use the replace method to remove it.                             driven by those who understand cooperation and sharing.
+                                                                   They understand that blowing out others' lights not
+Common non-[target_object] information includes: "Here is the     only fails to illuminate their own path, but makes the
+  perfect essay:", "Above is all the content, hope you are        world darker.
+  satisfied"                                                    [target_object]
+Step 3. Output data                                             Main text content
+Output the data from model_response in Python list format       [extract function]
+  after removing non-[target_object] information.               **Please note: Only output the function: extract_info_list(
+#Output Format#:                                                  model_response), only output code! Do not output any
+Assuming you already have "model_response":                       other content!**
+Your code format must strictly follow the below: ensure your    def extract_info_list(model_response):
+  function name is extract_info_list. Your return result         # Because the target object is main text content,
+  should be a list. Please only output the function:                therefore: extract content after "[Main Text]"
+  extract_info_list(model_response)                              cleaned_text = re.sub(r'^.*\[Main Text\]', '',
+                                                                    model_response, flags=re.DOTALL)
+Detailed format:                                                 return [cleaned_text]
+def extract_info_list(model_response):                          ---example2---
+ # 1. First check if non-[target_object] information exists     [model_response]
+            at the beginning and end. If not, skip this step    Due to the lengthy content, the following is a simplified
+   directly.                                                      version of the research report outline, which you can
+ # If [xxxxx] is beginning non-[target_object] info and [         further expand as needed: ---# Research Report: System
+   yyyyy] is ending non-[target_object] info, use sub to          Garbage Problems Faced by Ordinary Users and Solutions##
+   delete [xxxxx] and [yyyyy]                                      Abstract This report investigates system garbage
+ # For example: cleaned_text = re.sub(r'^.*xxxxx|yyyyy.*$',       problems encountered by ordinary users in daily use of
+   '', model_response, flags=re.DOTALL)                           computers and mobile devices. It aims to understand in
+ # 2. If non-[target_object] information is nested within [       what scenarios users encounter system garbage problems,
+   target_object] information, use replace method to              explore simple and effective cleaning methods, and
+   remove non-[target_object] information                         evaluate the feasibility of developing foolproof
+ # If non-[target_object] information is zzzzzz, remove it        cleaning software. ## Introduction System garbage
+   as follows: model_response = model_response.replace("          problems refer to temporary files, cache, useless
+   zzzzzz", "")                                                   programs and file fragments generated during the use of
+                                                                  computers and mobile devices. These garbage occupy
+ # In many cases, there is actually no non-[target_object]        storage space, affect device performance, and may even
+   information, so Step1 and Step2 can be skipped,                cause privacy leaks. Ordinary users often lack
+   directly assign model_response to cleaned_text                 professional knowledge to effectively manage these
+ # For example: cleaned_text = model_response                     system garbage. ## Research Methods - Online
+                                                                  questionnaire: Distribute questionnaires to ordinary
+ # 3. Output data after removing extra information in             users to collect data. ---Please note, this is only a
+   python list format                                             simplified version of the report outline. The actual
+ return [cleaned_text]                                            research report needs to be written based on research
+                                                                  data and analysis results, including detailed
+**Please note: Only output the function: extract_info_list(       methodology, data analysis, user feedback and software
+  model_response), only output code! Do not output any            design plans, etc., to meet the 3000-word requirement.
+  other content!**                                              [target_object]
+---example1---                                                  The entire research report outline.
+[model_response]                                                [extract function]
+Evaluating student essay: Advantages: 1. Clear intent: The      **Please note: Only output the function: extract_info_list(
+  article closely follows the material theme, emphasizes          model_response), only output code! Do not output any
+  the importance of cooperation and sharing, and develops         other content!**
+  arguments around this core. 2. Clear structure: The           def extract_info_list(model_response):
+  article transitions from introduction to main body to          # Because the target object is the entire research report
+  conclusion with distinct levels and clear logic. 3.               outline, therefore: extract content after "[#
+  Fluent language: The article uses some rhetorical                 Research Report:]" and before "[. ---Please note]"
+  techniques such as metaphor and parallelism, making it         cleaned_text = re.sub(r'^.*# Research Report:|\.---Please
+  literary. 4. Wide scope: The author elaborates from               note.*$', '', model_response, flags=re.DOTALL)
+  three levels: national, commercial, and personal, making       return [cleaned_text]
+  the content rich and multi-angled. Disadvantages: 1.
+  Lack of innovation: Although the article has a complete       ---your turn---
+  structure, it lacks unique insights and deep thinking,        [model_response]
+  and the content is somewhat mediocre. 2. Examples not         {model_response}
+  specific enough: Although national cooperation,
+  corporate cooperation and personal sharing are mentioned,     [target_object]
+         no specific examples are given, making the argument    {instruction}
+  less powerful. 3. Emotional expression slightly weak:
+
+
+   20
+
+                                                                    other content!**
+[extract function]
+**Please note: Only output the function: extract_info_list(       ---example1---
+    model_response), only output code! Do not output any          #model_response#: Comments below: 1. This suggestion is
+    other content!**                                                absolutely fantastic 2. I totally agree with this view (
+                                                                    I think this one is not particularly good) 3. Very
+                                                                    insightful, worth pondering 4. This deserves a big
+G.2  Multiple Element Coding Extract Prompt                         thumbs up 5. Great suggestion, hope it gets adopted 6. I
+                                                                     100% agree with this view 7. You're absolutely right, I
+                                                                     think so too 8. This idea is amazing, giving it a like
+You are a Python data processing expert responsible for             9. This view is very profound, giving it a like, above
+    writing Python code to extract and format information           is all content, if you have any dissatisfaction, please
+    from model_response according to different requirements.        continue our conversation.
+Step 1. Remove header and footer extra remarks according to       #instruction#: Please remove non-comment information or
+    instruction                                                     remarks, then output comments from model_response in
+Please check if there are header or footer extra remarks in         python list format, split output.
+    model_response. If not, skip this step. If yes, use re.       **Important: Only output function: extract_info_list(
+    sub method to remove unwanted header and footer extra           model_response), only output code! Do not output any
+    remarks from model_response to ensure output only               other content!**
+    contains specified content from instruction. Use re.sub
+    to remove header and footer extra remarks.                    #extract function#:
+Step2. Remove middle extra remarks according to instruction       def extract_info_list(model_response):
+Please check if there are nested extra remarks in the middle       # 1. Detected header remark [Comments below:], use "^.*
+    of model_response. If yes, use replace method to remove           below:" to remove header remark; footer extra remark
+    them.                                                             [, above is all content, if you have any
+                                                                      dissatisfaction, please continue our conversation.],
+Common extra remarks include: [Comments below:] [Above is all         use "|, above.*$" to remove footer remark. Only use
+    content] [Note: Due to space limitations, only 40                 few characters after header remark and few characters
+    comment examples are provided here.] [Sorry, the above            before footer remark to ensure regex works properly.
+    content may be duplicated, please ignore duplicate             cleaned_text = re.sub(r'^.*below:|, above.*$', '',
+    content]                                                          model_response, flags=re.DOTALL)
+Step 3. Data splitting                                             # 2. [(I think this one is not particularly good)] does
+You need to split data using re.findall according to                  not belong to comment content, is extra remark, use
+    instruction, using appropriate splitting methods (such            replace to remove
+    as by index, space, punctuation, etc.) to ensure each          cleaned_text = cleaned_text.replace("(I think this one is
+    information piece is independent. You must ensure                 not particularly good)", "")
+    complete extraction. For example: model_response="1.           if cleaned_text:
+    This suggestion is really good\n. 2. Strongly agree with         # 3. Detected index exists in model_response, use regex
+     this view.\n", should extract all information including              to extract index+comment content
+     index and content, not just index or content. Ideal             comments = re.findall(r'(\d+\.\s*.*?)(?=\d+\.|$)',
+    result: ["1. This suggestion is really good","2.                      cleaned_text, re.DOTALL)
+    Strongly agree with this view"]. Therefore, never use            return comments
+    code like dishes = re.findall(r'\d+\. \*\*(.*?)\*\*',          return []
+    model_response), but use dishes = re.findall(r'(\d+\.\s
+    *.*?)(?=\d+\.|$)', model_response, re.DOTALL) to include      ---example2---
+     content with index as output.                                #model_response#: 1. The environment in the video looks very
+Output format: Assuming you already have "model_response":          comfortable, elderly people will definitely like such a
+    Your code format must strictly follow: ensure your              place. Above are all comments
+    function name is extract_info_list. Your return result        #instruction#: Please remove non-comment information or
+    should be a list. Only output function:                         remarks, then output comments from model_response in
+    extract_info_list(model_response), no other information.        python list format, split output.
+def extract_info_list(model_response):                            **Important: Only output function: extract_info_list(
+ # 1. First check if header and footer have extra remarks.          model_response), only output code! Do not output any
+      If not, skip this step. If [xxxxx] is header extra            other content!**
+      remark and [yyyyy] is footer extra remark, use sub to
+      delete [xxxxx] and [yyyyy]                                  #extract function#:
+ # Example: cleaned_text = re.sub(r'^.*xxxxx|yyyyy.*$', '',       def extract_info_list(model_response):
+      model_response, flags=re.DOTALL)                             # 1. No header remark detected; detected footer remark [
+ # 2. If there are some middle nested extra remarks [zzzzzz           Above are all comments], use "| Above.*$" to remove
+      ] not required by instruction, use replace method to            footer remark. Only use few characters before footer
+      remove                                                          remark in sub to ensure regex works properly.
+ # Example: model_response = model_response.replace("zzzzzz        cleaned_text = re.sub(r'| Above.*$', '', model_response,
+      ", "")                                                          flags=re.DOTALL)
+                                                                   if cleaned_text:
+ # If no extra information exists, skip Step1 and Step2,             # 3. Detected index exists in model_response, use regex
+      directly assign model_response to cleaned_text                      to extract index+comment content
+ # Example: cleaned_text = model_response                            comments = re.findall(r'(\d+\.\s*.*?)(?=\d+\.|$)',
+                                                                          cleaned_text, re.DOTALL)
+ if cleaned_text:                                                    return comments
+     # 3. According to model response format, use regex to         return []
+              extract comments within matched range, capture      ---example3---
+              all content including index. If original text has   #model_response#: Below is a comment: 1. The environment in
+                index, must capture corresponding index: Example    the video looks very comfortable, elderly people will
+              : comments = re.findall(r'(\d+\.\s*.*?)(?=\d+\.|$     definitely like such a place.
+              )', cleaned_text, re.DOTALL)
+     # Please fill in this part of code                           #instruction#: Please remove non-comment information or
+     # ...                                                          remarks, then output comments from model_response in
+ return []                                                          python list format, split output.
+**Important: Only output function: extract_info_list(
+    model_response), only output code! Do not output any
+
+
+              21
+
+**Important: Only output function: extract_info_list(              and output it.
+    model_response), only output code! Do not output any
+    other content!**                                            If the evaluation object is an entire paragraph, output ALL.
+                                                                   Try to output ALL to reduce the number of output tokens.
+#extract function#:
+def extract_info_list(model_response):                          **Please only output a valid Python list evaluation object or
+ # 1. No footer remark detected; detected header remark [          ALL, do not output any other notes or any other content
+      Below is a comment:], use "^.*comment:" to remove            !**
+      header remark. Don't extract complete header extra
+      remark to ensure regex works properly. Only use few       ---example1---
+      characters after header remark to ensure regex works
+      properly.                                                 [Input Instruction]
+ cleaned_text = re.sub(r'^.*comment:', '', model_response,
+      flags=re.DOTALL)                                          Market operations qualitative description of the overall
+ if cleaned_text:                                                  situation: clearly explain what key performance results
+     # 3. Detected index exists in model_response, use regex       have been achieved, with both quantitative analysis and
+          to extract index+comment content                         qualitative summary, avoiding falling into data piling
+     comments = re.findall(r'(\d+\.\s*.*?)(?=\d+\.|$)',            without explaining the meaning behind the data, 200-word
+          cleaned_text, re.DOTALL)                                 summary
+     return comments
+ return []                                                      [Model Response]
+
+---example4---                                                  In this quarter, the market operations team successfully drove
+#model_response#: beef roasted duck, pork braised carp,            user growth rate to 18% and improved brand awareness
+    chicken fried shrimp, mutton stewed tofu, fish steamed         and market share through innovative marketing activities
+    pumpkin                                                        and precise market positioning strategies.
+                                                                   Quantitatively, through data analysis, we ensured
+#instruction#: Please remove all non-name information, then        optimization of marketing input and return rates, while
+    split and output all model-generated names                     improvements in user activity and engagement also
+                                                                   directly reflected the effectiveness of market
+**Important: Only output function: extract_info_list(              operations. Qualitatively, our market operations not
+    model_response), only output code! Do not output any           only enhanced users' brand identification but also
+    other content!**                                               improved user engagement through social media and online
+                                                                   interaction, strengthening the interaction and
+#extract function#:                                                emotional connection between brand and consumers. These
+def extract_info_list(model_response):                             achievements are not just numerical growth, but
+ # No header, footer or middle extra remarks detected,             represent solid steps we have taken in understanding and
+      directly use original text                                   meeting consumer needs and building long-term brand
+ cleaned_text = model_response                                     value.
+ if cleaned_text:
+     # Use comma to split all dish names                        [Extraction Target]
+     dishes = re.findall(r'[^、]+', cleaned_text)
+     # Remove possible whitespace characters                    Please extract the part that qualitatively describes the
+     dishes = [dish.strip() for dish in dishes]                    overall situation from the model response in Python list
+     return dishes                                                 format.
+ return []
+                                                                **Please only output a valid Python list evaluation object or
+---your turn---                                                    ALL, do not output any other notes or any other content
+#model_response#: {model_response}                                 !**
+
+#instruction#: {instruction}                                    [Evaluation Object]
+
+**Important: Only output function: extract_info_list(           ALL
+    model_response), only output code! Do not output any
+    other content!**                                            ---example2---
+
+#extract function#:                                             [Input Instruction]
+
+                                                                The college entrance exam essay topic is: Extinguishing others
+G.3  Single Element General Extract Prompt                         ' lights will not make yourself brighter; blocking
+                                                                   others' paths will not make you go further. "One flower
+                                                                   blooming alone is not spring, a hundred flowers blooming
+You are an information extraction expert. You will be provided     together fills the garden with spring." If there were
+     with an [Input Instruction] and corresponding [Model          only one kind of flower in the world, no matter how
+    Response]. Additionally, you will be given an [                beautiful this flower is, it would still be monotonous.
+    Extraction Target] designed to evaluate whether the [          The above two materials are from General Secretary Xi
+    Model Response] meets certain requirements of the [Input       Jinping's speeches, using vivid and figurative language
+     Instruction]. Now, you need to extract the evaluation         to express universal truths. Please write an article
+    target from the [Model Response] that corresponds to the       based on this, reflecting your understanding and
+     [Extraction Target].                                          thinking. Requirements: Choose the right angle,
+                                                                   determine the theme, clarify the style, draft your own
+**Note: You should completely copy continuous original text        title; do not copy templates, do not plagiarize; do not
+    segments from the [Model Response], strictly prohibiting       reveal personal information; no less than 800 words.
+     any modification, addition, deletion, or splicing, only       Below is an essay written by a student based on the
+     copying is allowed. Even if it doesn't meet the [             topic: All Flowers Fade but One Blooms Alone - The Power
+    Extraction Target] requirements. You don't need to care        of Common Development [Essay content follows...]
+    about what the specific requirements of the [Extraction        Evaluate the pros and cons, how many points would it get
+    Target] are, nor do you need to evaluate whether the [         out of 60? And try to write a perfect college entrance
+    Model Response] meets the [Extraction Target]                  exam essay.
+    requirements.**                                             [Model Response]
+Your purpose is to remove those extra generated auxiliary       Evaluation of student essay: Advantages: 1. Clear theme: The
+    reading information, such as "Here is the information I        article closely follows the material theme, emphasizing
+    provide:", "Great question!"                                   the importance of cooperation and sharing, and develops
+It is known that there is only one evaluation object in the [      arguments around this core. 2. Clear structure: The
+    Model Response]. Please format it in Python list format        article transitions from introduction to body to
+
+          22
+
+ conclusion, with clear levels and logic. 3. Fluent             Junk Problems Faced by Ordinary Users and Solutions ##
+ language: The article uses some rhetorical devices such        Abstract This report investigates system junk problems
+ as metaphor and parallelism, making the article literary.      encountered by ordinary users in daily computer and
+  4. Wide scope: The author elaborated from three levels:       mobile device usage. It aims to understand scenarios
+  national, commercial, and personal, making the content        where users encounter system junk problems, explore
+ rich and multi-angled. Disadvantages: 1. Insufficient          simple and effective cleaning methods, and evaluate the
+ innovation: Although the article has a complete                feasibility of developing a fool-proof cleaning software.
+ structure, it lacks unique insights and deep thinking,          ## Introduction System junk problems refer to temporary
+ with content being somewhat mediocre. 2. Insufficient           files, caches, useless programs and file fragments
+ specific examples: Although it mentions national               generated during computer and mobile device usage. These
+ cooperation, enterprise cooperation and personal sharing,       junks occupy storage space, affect device performance,
+  it doesn't provide specific examples, making the              and may even lead to privacy leaks. Ordinary users often
+ argumentation less powerful. 3. Weak emotional                  lack professional knowledge to effectively manage these
+ expression: The article is more rational analysis but           system junks. ## Research Methods - Online
+ lacks emotional rendering and deep emotional expression        questionnaire: Distribute questionnaires to ordinary
+ of the theme. Comprehensive score: Based on the above          users to collect data. - In-depth interviews: Select
+ analysis, this essay has complete content and clear            some users for in-depth interviews to understand
+ structure, but is slightly insufficient in innovation          specific usage scenarios. - Market analysis: Research
+ and argumentation strength. If the full score is 60            the market situation of existing cleaning tools. ##
+ points, I would give this article about 45 points. It is       Scenarios Where Users Encounter System Junk - Software
+  a well-structured article but needs more unique               installation and uninstallation: Temporary files
+ insights and specific evidence to improve the score.           generated during program installation, configuration
+ Attempt to write a perfect college entrance exam essay:        information left after uninstallation. - Web browsing:
+ [Title] Brilliant Light, Shining Because of You [Body]         Browser cache and cookies, etc. - System updates: Old
+ In a vast sea of flowers, each flower blooms in its            system files not cleaned properly. - Daily use:
+ unique posture, together composing the movement of             Temporary files generated during document editing and
+ spring. As General Secretary Xi Jinping said, one person       application usage. ## User Requirements for Cleaning
+ 's brilliance may illuminate a corner, but only when           Methods Users generally hope for a simple and intuitive
+ stars surround the moon can the entire night sky be            cleaning method, such as: - One-click cleaning function
+ illuminated. In the long river of human history, those         that automatically scans and cleans junk. - Regular
+ behaviors of trying to monopolize and admire oneself in        cleaning reminders to help users develop good habits. ---
+ isolation are ultimately ephemeral. The wheels of               Please note that this is only a simplified version of
+ history roll forward, driven by those who understand           the report outline. The actual research report needs to
+ cooperation and sharing. They understand that                  be written based on research data and analysis-derived
+ extinguishing others' lights not only fails to                 specific content, including detailed methodology, data
+ illuminate their own path but makes the world darker. In       analysis, user feedback, and software design solutions,
+  international relations, we witness the power of              etc., to meet the 3000-word requirement.
+ cooperation. When we look back at the Silk Road, it was
+ not only an exchange of goods but also a fusion of            [Extraction Target]
+ cultures and mutual learning of wisdom.
+                                                               Please extract the entire report from the model response in
+[Extraction Target]                                             Python list format.
+
+Please extract the perfect essay example part from the model   **Please only output a valid Python list evaluation object or
+ response in Python list format.                                ALL, do not output any other notes or any other content
+                                                                !**
+**Please only output a valid Python list evaluation object or
+ ALL, do not output any other notes or any other content       [Evaluation Object]
+ !**
+                                                               ["Research Report: System Junk Problems Faced by Ordinary
+[Evaluation Object]                                             Users and Solutions ## Abstract This report investigates
+                                                                 system junk problems encountered by ordinary users in
+["[Title] Brilliant Light, Shining Because of You [Body] In a   daily computer and mobile device usage. It aims to
+ vast sea of flowers, each flower blooms in its unique          understand scenarios where users encounter system junk
+ posture, together composing the movement of spring. As         problems, explore simple and effective cleaning methods,
+ General Secretary Xi Jinping said, one person's                 and evaluate the feasibility of developing a fool-proof
+ brilliance may illuminate a corner, but only when stars         cleaning software. ## Introduction System junk problems
+ surround the moon can the entire night sky be                   refer to temporary files, caches, useless programs and
+ illuminated. In the long river of human history, those         file fragments generated during computer and mobile
+ behaviors of trying to monopolize and admire oneself in        device usage. These junks occupy storage space, affect
+ isolation are ultimately ephemeral. The wheels of              device performance, and may even lead to privacy leaks.
+ history roll forward, driven by those who understand           Ordinary users often lack professional knowledge to
+ cooperation and sharing. They understand that                  effectively manage these system junks. ## Research
+ extinguishing others' lights not only fails to                 Methods - Online questionnaire: Distribute
+ illuminate their own path but makes the world darker. In       questionnaires to ordinary users to collect data. - In-
+  international relations, we witness the power of              depth interviews: Select some users for in-depth
+ cooperation. When we look back at the Silk Road, it was        interviews to understand specific usage scenarios. -
+ not only an exchange of goods but also a fusion of             Market analysis: Research the market situation of
+ cultures and mutual learning of wisdom."]                      existing cleaning tools. ## Scenarios Where Users
+                                                                Encounter System Junk - Software installation and
+---example3---                                                  uninstallation: Temporary files generated during program
+                                                                 installation, configuration information left after
+[Input Instruction]                                             uninstallation. - Web browsing: Browser cache and
+                                                                cookies, etc. - System updates: Old system files not
+The problem of cleaning system junk has always troubled         cleaned properly. - Daily use: Temporary files generated
+ ordinary users. I want to write a research report on            during document editing and application usage. ## User
+ this issue, mainly to understand in what scenarios             Requirements for Cleaning Methods Users generally hope
+ ordinary users encounter this problem; what simple             for a simple and intuitive cleaning method, such as: -
+ cleaning methods are for them; and whether it's possible       One-click cleaning function that automatically scans and
+  to design a fool-proof software to benefit the public.         cleans junk. - Regular cleaning reminders to help users
+ Help me write such a research report, within 3000 words.        develop good habits."]
+
+[Model Response]                                               ---your turn---
+
+Due to length constraints, the following is a simplified       [Input Instruction]
+ version of the research report outline, which you can
+ further expand as needed: --- # Research Report: System       {input_instruction}
+
+
+
+  23
+
+                                                                  active and social. 14. The nursing team seems very
+[Model Response]                                                  experienced, which is crucial for elderly health. 15.
+                                                                  Seeing so many happy smiles shows the atmosphere here is
+{model_response}                                                   very friendly! 16. For elderly people who need care,
+                                                                  such service is indeed a good choice.
+[Extraction Target]
+                                                                 [Extraction Target]
+{extraction_prompt}                                              Please extract all long comments from the model_response in
+                                                                  python list format.
+**Please only output a valid Python list evaluation object or
+    ALL, do not output any other notes or any other content      **Please only output a valid python list of evaluation objects,
+    !**                                                            do not output any other explanations, remarks or any
+                                                                  other content!**
+[Evaluation Object]
+                                                                 [Evaluation Objects]
+                                                                 ["The environment in the video looks very comfortable, elderly
+G.4   Multiple Element General Extract                             people would definitely like such a place.", "I think
+      Prompt                                                      this elderly care service pays special attention to
+                                                                  details, making people feel very secure.", "Activities
+                                                                  are well arranged, can keep elderly people active and
+You are an information extraction expert. You will be provided    social.", "The nursing team seems very experienced,
+     with an [Input Instruction] and corresponding [Model         which is crucial for elderly health.", "Seeing so many
+    Response]. Additionally, you will be given an [               happy smiles shows the atmosphere here is very friendly
+    Extraction Target]. The ultimate purpose of this task is      !", "For elderly people who need care, such service is
+     to evaluate whether the [Model Response] meets certain       indeed a good choice."]
+    requirements of the [Input Instruction]. However, for        ---example2---
+    now, you don't need to complete the final evaluation -
+    you only need to extract the evaluation objects from the     [Input Instruction]
+     [Model Response] that correspond to the [Extraction         Now suppose you are applying for the part-time MPA program at
+    Target].                                                      Beihang University and are currently in the interview
+**Note 1: You should completely copy continuous original text     stage. Your personal information: undergraduate graduate
+    segments from the [Model Response], strictly prohibiting       from Northwest A&F University, main work experience at
+     any modifications, additions, deletions, or                  KaiShu Stories and FenBi Civil Service Exam, position as
+    concatenations - only copying is allowed. Even if it           product operations. You need to answer these questions
+    doesn't meet the [Extraction Target] requirements. You        in Chinese, providing three different answers for each
+    don't need to care about what the specific requirements       question. ##1. You work so busy, how do you balance work
+    of the [Extraction Target] are, nor do you need to             and studies ##2. How does our school's MPA help your
+    evaluate whether the [Model Response] meets the [             current work ##3. How does our school's MPA help you
+    Extraction Target] requirements.**                            achieve future career goals ##4. What will you do if you
+                                                                   are not admitted this time
+**Note 2: You only need to extract content, not any formal       [Model Response]
+    additional information, unless there are special             ## 1. You work so busy, how do you balance work and studies
+    requirements in the [Extraction Target]: Common               Answer One: To balance work and studies, I have
+    additional information includes: [1. Hello], then only        developed a detailed time management plan and will use
+    extract "Hello", not "1."; [Answer One: Hello], then          spare time for learning. At the same time, I believe
+    only extract "Hello", not "Answer One:"; [The wind will       practical problems encountered at work can provide vivid
+    break the waves,], then only extract "The wind will            cases for my learning, so work and study can complement
+    break the waves", not ","; [A. Hello], then only extract       each other. Answer Two: I believe good self-management
+     "Hello", not "A."**                                          ability is key to handling the balance between work and
+It is known that there are multiple evaluation objects in the     studies. I will prioritize and plan my work tasks to
+    [Model Response]. Please use the following python list        ensure work quality while leaving enough time to focus
+    format to separate and output them.                           on learning. I will also actively communicate with
+                                                                  supervisors to seek flexible learning arrangements.
+["Object1", "Object2", "Object3"]                                 Answer Three: I plan to use the flexibility advantages
+                                                                  of part-time MPA by adjusting work plans, such as
+**Please only output a valid python list of evaluation objects,   completing work tasks in advance and utilizing weekends
+     do not output any other remarks or any other content!**      and holidays, to ensure sufficient time for learning.
+                                                                  Additionally, I will try to bring practical cases and
+---example1---                                                    problems from work into learning to achieve organic
+                                                                  integration of work and study. ## 2. How does our school
+[Input Instruction]                                               's MPA help your current work Answer One: Your school's
+When you browse short videos about elderly care services, from    MPA program will provide me with professional knowledge
+     a consumer perspective, output 50 colloquial comments        in public administration, which is very beneficial for
+    on elderly care service videos. The comments should be        my current product operations work. Especially in
+    mixed in length with half each of long and short              understanding policy backgrounds, improving user service
+    comments. Please output long and short comments                quality, and optimizing product strategies, MPA
+    separately. Short comments should be 1-6 words, long          learning will directly enhance my professional
+    comments should be 10-30 words. Each comment cannot use       capabilities at work. Answer Two:
+    the same vocabulary and style. Don't ask repeated            [Extraction Target]
+    similar questions; cannot contain words like "this", "       Please extract all answers to "#1. You work so busy, how do
+    you guys", "independent", "gift"; question-type comments      you balance work and studies#" from the model_response
+     should account for 50% of total comments.                    in python list format.
+[Model Response]                                                 **Please only output a valid python list of evaluation objects,
+### Short Comments (1-6 words) 1. Really good! 2. Service is       do not output any other explanations, remarks or any
+    so caring. 3. Environment looks elegant. 4. Looks very        other content!**
+    warm. 5. Seems quite professional. 6. Suitable for
+    elderly living. 7. Interesting activities! 8. Nursing        [Evaluation Objects]
+    staff are enthusiastic. 9. Feel reassured inside. 10.        ["To balance work and studies, I have developed a detailed
+    Facilities are complete. ### Long Comments (10-30 words)      time management plan and will use spare time for
+     11. The environment in the video looks very comfortable,     learning. At the same time, I believe practical problems
+     elderly people would definitely like such a place. 12.        encountered at work can provide vivid cases for my
+    I think this elderly care service pays special attention      learning, so work and study can complement each other.",
+     to details, making people feel very secure. 13.               "I believe good self-management ability is key to
+    Activities are well arranged, can keep elderly people
+
+
+      24
+
+    handling the balance between work and studies. I will           comments 14 to 100 all adopt similar formats like "
+    prioritize and plan my work tasks to ensure work quality        Moving service, do you have XX moving service?", only
+     while leaving enough time to focus on learning. I will         differing in item names. Therefore, these comment
+    also actively communicate with supervisors to seek              formats are not unique.
+    flexible learning arrangements.", "I plan to use the        Judgment: No
+    flexibility advantages of part-time MPA by adjusting
+    work plans, such as completing work tasks in advance and    ---example2---
+    utilizing weekends and holidays, to ensure sufficient
+    time for learning. Additionally, I will try to bring        [Original Question]
+    practical cases and problems from work into learning to     Please create 20 multiple choice questions and 15 multiple
+    achieve organic integration of work and study."]                selection questions based on the following content. The
+                                                                    questions need to meet comprehensiveness and mass appeal.
+---your turn---                                                        Pay attention to format as I need to copy to a table,
+                                                                    and include correct answers. Content: Online delivery
+[Input Instruction]                                                 worker professional code...
+{input_instruction}
+                                                                [Model Response]
+[Model Response]                                                ### Single Choice Questions 1. What should online delivery
+{model_response}                                                    workers comply with? A. National laws and regulations
+                                                                    and company rules B. Personal preferences C. Customer
+[Extraction Target]                                                 demands D. Work habits #Answer# A 2. How should online
+{extraction_prompt}                                                 delivery workers treat their profession? A. Respect B.
+                                                                    Despise C. Ignore D. Look down on #Answer# A...
+**Please only output a valid python list of evaluation objects,
+    do not output any other remarks or any other content!**     [Sub-question]:
+                                                                Did the model generate questions?
+[Evaluation Objects]
+                                                                [Your Analysis and Judgment]:
+                                                                Note, please strictly follow this format for output:
+G.5     Evaluate Prompt                                         Analysis: CORRECT/WRONG xxx
+                                                                Judgment: Yes/No
+
+EVALUATION_PROMPT = """                                         Please strictly follow the rule: only consider the [Sub-
+Please act as an objective and fair judge, analyze the content      question].
+     of the [Model Response], and choose "Yes" or "No" to       Please strictly follow the rule: output in English.
+    answer whether the subsequent [Sub-question] holds true.    Analysis: CORRECT The original question required generating 20
+You will be given: [Original Question], [Model Response], [Sub         single choice and 15 multiple choice questions, which
+    -question], where the [Original Question] is only for           the model answer clearly did not fulfill completely.
+    reference and not as a judgment criterion. Please note          However, since we only need to consider the [Sub-
+    that you only need to consider the [Sub-question].              question], the model response does satisfy the
+                                                                    requirement.
+Please strictly follow this format for output:                  Judgment: Yes
+Analysis: CORRECT/WRONG xxx                                     ---your turn---
+Judgment: Yes/No
+Please strictly follow the rule: only consider the [Sub-        [Original Question]:
+    question].                                                  {input}
+Please strictly follow the rule: output in English.             [Model Response]
+---example1---                                                  {output}
+[Original Question]:                                            [Sub-question]:
+Generate 100 user colloquial comments in the comment section    {question}
+    of moving service short videos, including praise,           [Your Analysis and Judgment]:
+    confusion, questions, etc.; comments cannot contain the     Note, please strictly follow this format for output:
+    word "including"; 2-12 words, each comment format must      Analysis: CORRECT/WRONG xxx
+    be unique                                                   Judgment: Yes/No
+[Model Response]:                                               Please strictly follow the rule: only consider the [Sub-
+1. Service is super great! 2. Moving speed is fast, high            question].
+    efficiency. 3. Fair price, good value. 4. Careful           Please strictly follow the rule: output in English.
+    packaging, items safe. 5. Door-to-door service,
+    convenient and fast. 6. One-stop solution for moving        """
+    problems. 7. Furniture arranged neatly, satisfied. 8.
+    Easy moving, strong workers. 9. Quality guaranteed,
+    trustworthy. 10. Wide service coverage, good. 11. Will
+    recommend to friends. 12. Staff professional, reliable!     H   Sample Capability Report
+    13. Rich service content, meets needs. 14. How to book
+    moving? 15. How to arrange service time? 16. How about
+    door-to-door estimation? 17. Is after-sales service good    {
+    ?                                                              "round": 1,
+                                                                   "meeseeks_score": 0.64526276543322,
+[Sub-question]:                                                    "utility_score": 0.4049586776859504,
+Are the comments each in a unique format?                          "capability_stats": {
+                                                                       "Intent Recognition": {
+[Your Analysis and Judgment]:                                             "percentage": 0.0,
+Note, please strictly follow this format for output:                      "correct": 0,
+Analysis: CORRECT/WRONG xxx                                               "wrong": 10,
+Judgment: Yes/No                                                          "total": 10,
+                                                                          "children": {
+Please strictly follow the rule: only consider the [Sub-                      "Follow instruction under distraction": {
+    question].                                                                  "percentage": 0.0,
+Please strictly follow the rule: output in English.                             "correct": 0,
+                                                                                "wrong": 10,
+Analysis: WRONG There are format repetitions in the 100                         "total": 10,
+    comments provided in the model response. For example,                       "children": {}
+
+
+    25
+
+           }                                                            "children": {}
+      }                                                               },
+},                                                                    "Generate in rough/range word number": {
+"Granular Content Validation": {                                        "percentage": 0.44357976653696496,
+      "percentage": 0.71640625,                                         "correct": 114,
+      "correct": 1834,                                                  "wrong": 143,
+      "wrong": 726,                                                     "total": 257,
+      "total": 2560,                                                    "children": {}
+      "children": {                                                   },
+           "Theme requirement": {                                     "Generate in X times word number of
+                 "percentage": 0.9793103448275862,                      reference text": {
+                 "correct": 994,                                        "percentage": 0.05660377358490566,
+                 "wrong": 21,                                           "correct": 6,
+                 "total": 1015,                                         "wrong": 100,
+                 "children": {}                                         "total": 106,
+           },                                                           "children": {}
+           "Stylistic requirement": {                                 },
+                 "percentage": 0.7575757575757576,                    "Generate in 0~10 words": {
+                 "correct": 25,                                         "percentage": 0.5517241379310345,
+                 "wrong": 8,                                            "correct": 16,
+                 "total": 33,                                           "wrong": 13,
+                 "children": {                                          "total": 29,
+                      "Generate in certain style": {                    "children": {}
+                            "percentage": 1.0,                        },
+                            "correct": 21,                            "Generate in 10~50 words": {
+                            "wrong": 0,                                 "percentage": 0.6857142857142857,
+                            "total": 21,                                "correct": 24,
+                            "children": {}                              "wrong": 11,
+                      },                                                "total": 35,
+                      "Generate names/titles": {                        "children": {}
+                            "percentage": 0.3333333333333333,         },
+                            "correct": 4,                             "Generate in 50~200 words": {
+                            "wrong": 8,                                 "percentage": 0.47368421052631576,
+                            "total": 12,                                "correct": 18,
+                            "children": {}                              "wrong": 20,
+                      }                                                 "total": 38,
+                 }                                                      "children": {}
+           },                                                         },
+           "Language requirement": {                                  "Generate in above 200 words": {
+                 "percentage": 0.0,                                     "percentage": 0.05263157894736842,
+                 "correct": 0,                                          "correct": 6,
+                 "wrong": 8,                                            "wrong": 108,
+                 "total": 8,                                            "total": 114,
+                 "children": {                                          "children": {}
+                      "Generate Chinese-English-mixed article":       }
+                            {                                        }
+                            "percentage": 0.0,                     },
+                            "correct": 0,                          "Other granular requirements": {
+                            "wrong": 8,                              "percentage": 0.26420454545454547,
+                            "total": 8,                              "correct": 93,
+                            "children": {}                           "wrong": 259,
+                      }                                              "total": 352,
+                 }                                                   "children": {
+           },                                                         "Generate rhyming content": {
+           "Granular format requirement": {                             "percentage": 0.25,
+                 "percentage": 0.9590017825311943,                      "correct": 4,
+                 "correct": 538,                                        "wrong": 12,
+                 "wrong": 23,                                           "total": 16,
+                 "total": 561,                                          "children": {}
+                 "children": {                                        },
+                      "Generate in other format": {                   "Generate with certain keywords": {
+                            "percentage": 0.9549902152641878,           "percentage": 0.0,
+                            "correct": 488,                             "correct": 0,
+                            "wrong": 23,                                "wrong": 42,
+                            "total": 511,                               "total": 42,
+                            "children": {}                              "children": {}
+                      },                                              },
+                      "Generate result in date-format": {             "Generate repeat/non-repeat content": {
+                            "percentage": 1.0,                          "percentage": 0.6056338028169014,
+                            "correct": 50,                              "correct": 43,
+                            "wrong": 0,                                 "wrong": 28,
+                            "total": 50,                                "total": 71,
+                            "children": {}                              "children": {}
+                      }                                               },
+                 }                                                    "Generate with certain rhetoric": {
+           },                                                           "percentage": 1.0,
+           "Word count requirement": {                                  "correct": 15,
+                 "percentage": 0.311336717428088,                       "wrong": 0,
+                 "correct": 184,                                        "total": 15,
+                 "wrong": 407,                                          "children": {}
+                 "total": 591,                                        },
+                 "children": {                                        "Generate with certain number of word X":
+                      "Generate at accurate word number": {             {
+                            "percentage": 0.0,                          "percentage": 0.14903846153846154,
+                            "correct": 0,                               "correct": 31,
+                            "wrong": 12,                                "wrong": 177,
+                            "total": 12,                                "total": 208,
+
+
+
+                            26
+
+                   "children": {}
+         }
+        }
+      }
+     }
+   },
+   "Output Structure Validation": {
+     "percentage": 0.9072,
+     "correct": 1134,
+     "wrong": 116,
+     "total": 1250,
+     "children": {
+      "Output format requirement": {
+        "percentage": 0.9463203463203463,
+        "correct": 1093,
+        "wrong": 62,
+        "total": 1155,
+        "children": {
+         "JSON format": {
+                   "percentage": 0.9463203463203463,
+                   "correct": 1093,
+                   "wrong": 62,
+                   "total": 1155,
+                   "children": {}
+         }
+        }
+      },
+      "Element number requirement": {
+        "percentage": 0.38666666666666666,
+        "correct": 29,
+        "wrong": 46,
+        "total": 75,
+        "children": {}
+      },
+      "Output logic requirement": {
+        "percentage": 0.6,
+        "correct": 12,
+        "wrong": 8,
+        "total": 20,
+        "children": {
+         "Generate by certain steps": {
+                   "percentage": 0.6,
+                   "correct": 12,
+                   "wrong": 8,
+                   "total": 20,
+                   "children": {}
+         }
+        }
+      }
+     }
+   }
+ },
+ "total_items": 363
+}
+
+
+
+
+
+
+
+
+
+
+                   27

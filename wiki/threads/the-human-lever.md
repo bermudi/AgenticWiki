@@ -85,6 +85,8 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 [[mario-zechner|Mario Zechner]] reinforces this from the tooling side: [[pi]] is designed around **observability** so the human can always see what the agent is doing and intervene before small errors compound. Minimalism in tooling isn't an aesthetic choice — it's a structural safeguard against the speed-review bottleneck.
 
+A deeper challenge for the verification contract: even when rules are explicitly given, models may not follow them. [[inferential-rule-following|RuleBench]] demonstrates that when rules contradict a model's parametric knowledge (e.g., counterfactual kinship rules), performance collapses — GPT-4o drops from 99.7% to 8.2%. The model isn't following the rule; it's pattern-matching it to training data. This means the human's verification responsibility extends beyond testing outputs to testing *whether the model actually used the rules you gave it* — a far harder problem.
+
 ## Agent Experience (AX) is Developer Experience (DX)
 
 A major insight from [[martin-fowler|Martin Fowler]] and [[kent-beck|Kent Beck]] is the convergence of human and agent needs. The same architectural patterns that make code easier for humans to understand (modularity, low coupling, strong contracts) are precisely what allow AI agents to operate effectively. High **[[agent-experience|AX]]** is not a separate goal from good **DX**; they are the same thing. Writing code for an AI isn't about learning "prompt engineering"—it's about doubling down on the fundamentals of the software craft.

@@ -1,13 +1,16 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-05-08
+updated: 2026-05-10
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/yt-claude-code-feature-build.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
+  - raw/2504.21625v6.txt
+  - raw/2603.00822v2.txt
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
+unaudited_marginal: 0
 ---
 
 # Backpressure
@@ -32,6 +35,18 @@ For subjective criteria (tone, aesthetics, UX quality), use another LLM call wit
 ## Start With Hard Gates
 
 Tests and builds are deterministic. Start there. Add LLM-as-judge for subjective criteria only after the mechanical backpressure is working.
+
+## ContextCov: Executable Guardrails as Backpressure
+
+[[contextcov|ContextCov]] (Sharma, 2026) implements mechanical backpressure at three layers simultaneously, making it one of the most complete examples of the backpressure principle in action:
+
+- **Process Interceptor**: PATH shims intercept prohibited shell commands (e.g., `npm run compile`) before they execute. The agent receives a deterministic block with a message explaining the violation and suggesting the correct action. This is pure mechanical backpressure — the environment physically prevents the wrong command from running.
+- **Universal Static Linter**: Tree-sitter queries detect source-level violations (style inconsistencies, forbidden API usage) and report them with precise file and line numbers. The agent self-corrects before the change is committed.
+- **Architectural Validator**: Dependency graph analysis detects layer violations, cyclic dependencies, and module placement errors. The agent can't accidentally erode architecture because the environment catches structural violations automatically.
+
+ContextCov's fail-closed philosophy aligns with the principle that backpressure should err on the side of blocking: false positives are refinable (by updating the Agent Instructions), while false negatives let violations accumulate as [[compounding-booboos|technical debt]]. The paper's evaluation shows this approach achieves 88.3% constraint compliance — deterministic backpressure at the command level is more effective than either passive instructions (67.0%) or LLM-based reflection (50.3%).
+
+See [[contextcov|ContextCov project page]] for the full architecture and empirical results.
 
 ## Human-Generated Backpressure
 
@@ -72,6 +87,8 @@ This is backpressure in the literal sense — the human's testing activity *push
 
 - [[agent-quality-loop]] — The quality loop uses backpressure as a flywheel mechanism
 - [[wide-events]] — Wide events serve as backpressure by making invisible degradation visible
+- [[iterative-self-correction]] — Meeseeks's code-guided constraint evaluation is automated mechanical backpressure: correct-by-construction verification at 98.4% accuracy
+- [[contextcov]] — ContextCov implements mechanical backpressure at process, source, and architectural levels via PATH shims, Tree-sitter, and dependency graph analysis
 
 ## Sources
 
@@ -79,3 +96,5 @@ This is backpressure in the literal sense — the human's testing activity *push
 - `raw/ralph-wiggum-playbook.md` — Three layers of backpressure (downstream, upstream, LLM-as-judge)
 - `raw/yt-claude-code-feature-build.md` — Human-generated backpressure via UI feedback button → GitHub issues
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Social backpressure: auto-close filter for agent-generated PRs
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided rule-augmented evaluation as automated mechanical backpressure at the constraint level
+- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): executable guardrails as mechanical backpressure at process, source, and architectural levels; fail-closed philosophy; 88.3% compliance rate

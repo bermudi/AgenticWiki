@@ -1,19 +1,21 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-05-09
+updated: 2026-05-10
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
+  - raw/2603.00822v2.txt
 tags: [thread, ai-engineering, workflow, design, quality]
+unaudited_marginal: 0
 ---
 
 # Intent-to-Code
 
-> How much should stand between a human's intent and the code that ships? This thread traces a central disagreement in AI-assisted engineering: what mediates the intent→code gap, and where does quality enforcement actually live? The answers define four distinct philosophies — specs-to-code compilation, plan-as-contract, alignment-first, and pure vibes — each with different answers about the artifact's weight and the verification mechanism.
+> How much should stand between a human's intent and the code that ships? This thread traces a central disagreement in AI-assisted engineering: what mediates the intent→code gap, and where does quality enforcement actually live? Five positions have emerged across sources — specs-to-code compilation, plan-as-contract, alignment-first, enforcement-as-code, and pure vibes — each with different answers about the artifact's weight and the verification mechanism.
 
 ## Thesis
 
@@ -92,6 +94,10 @@ Both agree on **upfront investment**. Both agree on **verification** (just diffe
 
 This isn't a settled question — it's an active fork in the road. The wiki doesn't take a side; it documents both positions and their reasoning.
 
+Both positions rely on a [[verification-loop]] — they just disagree on what to verify against: the spec or the running application. The verification loop is the structural constant; the target is the variable.
+
+See [[plan-vs-review]] for the complete framework.
+
 ## Why This Matters
 
 The intent-to-code axis isn't academic. It determines:
@@ -103,6 +109,48 @@ The intent-to-code axis isn't academic. It determines:
 
 Different projects and teams will land at different points. The wiki's job is to make the options explicit and traceable.
 
+## Position 5: Enforcement-as-Code (ContextCov)
+
+[[contextcov|ContextCov]] (Sharma, 2026) introduces a fifth position on the intent-to-code axis that the original four didn't anticipate. Instead of asking "what artifact mediates intent → code?", it asks "what mechanically prevents the agent from producing code that violates intent?"
+
+### The Position
+
+**What stands between intent and code**: Executable guardrails — deterministic checks compiled from instructions. **Quality enforcement**: Runtime enforcement at process, source, and architectural levels.
+
+The mediating artifact isn't a document (spec, plan, PRD) or a process (alignment session, QA) — it's an *executable specification* that operates at the environment level, catching violations before they reach the codebase.
+
+```
+Intent ────────────────────────────────────────────────→ Code
+        │                                              │
+        Spec (compiler)    Plan (contract)    PRD (hint)    Guardrails (enforce)
+        Quality = spec     Quality = spec     Quality = QA  Quality = mechanical rejection
+```
+
+### How It Differs
+
+| Dimension | Specs-to-Code | Plan-as-Contract | Alignment-First | Enforcement-as-Code |
+|---|---|---|---|---|
+| Artifact | Formal spec | Plan doc | PRD (disposable) | Executable checks |
+| Quality mechanism | Spec precision | Spec verification | QA against reality | Mechanical enforcement |
+| Failure mode | Architecture drift on regeneration | Spec incomplete → wrong code | QA misses edge case | Constraint not operationalizable |
+| Human role | Fix spec | Verify against spec | Test against reality | Refine instructions, audit checks |
+| Verification target | Code = spec | Code matches plan | App works | Constraints aren't violated |
+
+### Why It's Distinct
+
+Enforcement-as-Code is not a replacement for the other positions — it's complementary. It operates at a different layer:
+
+- **Specs-to-Code** says "the spec IS the truth" — ContextCov adds "and the spec is mechanically enforceable"
+- **Plan-as-Contract** says "verify against the plan" — ContextCov adds "and the plan's constraints are checked at runtime"
+- **Alignment-First** says "QA catches everything" — ContextCov adds "some things should be caught before the agent even tries them"
+- **Pure Vibes** says "trust the model" — ContextCov says "don't"
+
+Its unique contribution is that it doesn't depend on the model's ability to follow instructions or on the human's ability to catch every error in review. The enforcement operates at the environment level, treating the agent as an unprivileged process that must satisfy environmental constraints before its changes are accepted. This is a concrete implementation of the [[backpressure]] principle — mechanical rejection of wrong outputs at the environment level, rather than trying to direct the agent more precisely.
+
+### Limitations
+
+Enforcement-as-Code can only operationalize constraints that are *deterministically checkable*. Semantic constraints ("design principles," "aesthetic consistency," "clean architecture") resist mechanical enforcement and still require human judgment or LLM-as-judge. The paper acknowledges this — semantic architectural checks produce WARNING verdicts, not hard blocks. The position is strongest for process constraints (commands, tools) and weakest for design intent.
+
 ## Sources
 
 - `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Plan-heavy framework: quantified heuristic, feature type matrix, focus maxing
@@ -110,3 +158,4 @@ Different projects and teams will land at different points. The wiki's job is to
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Alignment-first in practice: Grill Me → PRD → Kanban → Sandcastle AFK → QA; "don't review the PRD"
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Specs-to-code critique: vibe coding by another name, code is the battleground
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The axis's blind spot: synthetic truth shows model trustworthiness is an independent variable; fabrication happens at content generation level, not instruction-following level
+- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): introduces a fifth position on the intent-to-code axis — Enforcement-as-Code; executable guardrails as the mediating artifact; mechanical enforcement at the environment level

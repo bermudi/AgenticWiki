@@ -2,8 +2,16 @@
 title: Agent Evals
 created: 2026-04-27
 updated: 2026-05-10
-sources: ["raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md", "raw/2604.15597v1.pdf", "raw/many-tier-instruction-hierarchy.md", "raw/playground-in-prod-samuel-colvin.md", "raw/skill-issue-supabase-pedro-rodrigues.md", "raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md"]
-tags: ["agents", "evals", "testing", "quality", "probabilistic-systems"]
+sources:
+  - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
+  - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
+  - raw/2604.15597v1.pdf
+  - raw/many-tier-instruction-hierarchy.md
+  - raw/playground-in-prod-samuel-colvin.md
+  - raw/skill-issue-supabase-pedro-rodrigues.md
+  - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
+  - raw/2603.25133v1.txt
+tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
 
 # Agent Evals
@@ -66,8 +74,8 @@ This is where **LLM-as-Judge** comes in: a second language model evaluates the a
 > [!warning] Limitation
 > Automated evals don't catch everything. Regularly reading production traces directly surfaces the subtle failures no rubric anticipated.
 
-> [!warning] Contradiction: LLM-as-Judge Inadequacy (Three Sources)
-> This page and the [[agent-quality-engineering]] thread treat LLM-as-Judge as a viable outcome-scoring mechanism. Three independent sources challenge this:
+> [!warning] Contradiction: LLM-as-Judge Inadequacy (Four Sources)
+> This page and the [[agent-quality-engineering]] thread treat LLM-as-Judge as a viable outcome-scoring mechanism. Four independent sources challenge this:
 >
 > 1. **DELEGATE-52** ([[philippe-laban|Laban]] et al., 2026): Even GPT 5.4 as judge captures **at most 25% of the variance** of domain-specific parsing metrics. Generic rubric and LLM judges failed to detect nuanced semantic corruption — only structured, domain-aware scoring caught real degradation.
 >
@@ -75,7 +83,9 @@ This is where **LLM-as-Judge** comes in: a second language model evaluates the a
 >
 > 3. **Samuel Colvin** (Pydantic creator, practitioner): Calls LLM-as-judge "the lunatics running the asylum" — a model judging another model's output introduces circular unreliability. His preference: deterministic evals comparing structured output against a golden dataset. He also notes that most teams **don't run evals at all** — they write a prompt, eyeball it, and ship. Optimization and evals are the exception, not the norm.
 >
-> Together, these suggest the outcome eval layer is significantly weaker than the framework assumes. Horthy's alternative: snapshot-based evals (run, store, diff) and vibes-first exploration before defining eval criteria.
+> 4. **RUBRICEVAL** (Pan et al., 2026): The first rubric-level meta-evaluation benchmark finds that even GPT-4o achieves only **55.97% balanced accuracy** on hard rubric-level judgments (Claude-Sonnet-4.5: 55.65%) — quantified evidence at the granularity agent evals operate at. The paradigm choice (rubric-level + reasoning vs. checklist-level direct) changes results by 7–12 points, and judge selection alone shifts scores by up to 25 points. See [[rubric-evaluation]] for the full analysis.
+>
+> Together, these suggest the outcome eval layer is significantly weaker than the framework assumes. Horthy's alternative: snapshot-based evals (run, store, diff) and vibes-first exploration before defining eval criteria. The RUBRICEVAL findings add that even when LLM-as-judge is necessary, the evaluation paradigm (granularity, reasoning) must be carefully designed.
 
 ### 4. System Monitoring
 Watching for quality degrading in production at scale — not individual failures, but patterns across real usage over time. This is where evals and [[agent-observability|observability]] overlap.
@@ -98,6 +108,8 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 ## Related
 
 - [[agent-observability]] — Evals depend on observability; you can only score what you can see
+- [[verifiability]] — Karpathy's thesis explains why evals work: LLMs automate what you can verify; evals make agent quality verifiable
+- [[the-verifiability-thesis]] — The causal chain from verifiability through RL training to capability peaks; evals are the attempt to make agent behavior verifiable
 - [[agent-quality-loop]] — Evals feed the flywheel: production failures → eval cases → improvement
 - [[mastra]] — Mastra provides eval infrastructure with LLM-as-judge scoring, groundedness checks, and prompt iteration from eval feedback
 - [[verification-loop]] — Evals are the probabilistic equivalent of the verification loop
@@ -122,3 +134,4 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - `raw/playground-in-prod-samuel-colvin.md` — Practitioner confirmation: most teams don't eval at all; deterministic evals strongly preferred over LLM-as-judge
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Skill-specific eval pattern: A/B test with/without the skill, deterministic assertions over LLM-as-judge
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve
+- `raw/2603.25133v1.txt` — RUBRICEVAL benchmark: first rubric-level meta-evaluation for instruction following; finds LLM judges unreliable at fine granularity (GPT-4o: 55.97% HARD BAcc); paradigm comparison (rubric-level vs. checklist-level, with/without reasoning); rubric taxonomy of failure modes

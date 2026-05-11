@@ -1,9 +1,10 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-09
+updated: 2026-05-10
 sources: []
 tags: [index, wiki]
+unaudited_marginal: 0
 ---
 
 # Index
@@ -43,6 +44,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[lance-martin]] — Engineer at LangChain who built the Deep Agents harness and skill system; catalogued context engineering techniques and evolving context
 - [[the-gray-cat]] — YouTube creator; personal essay on living inside comprehension debt and recovering via teaching mode.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
+- [[thibaud-gloaguen]] — Lead author of the first rigorous evaluation of AGENTS.md files on coding agent performance; found LLM-generated context files degrade agent performance.
+- [[martin-vechev]] — Professor at ETH Zurich and LogicStar.ai co-founder; senior author of the AGENTS.md evaluation study.
+- [[christoph-treude]] — Professor at SMU; co-author of the first empirical study on AGENTS.md efficiency impact.
 
 ## 🧠 Concepts
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
@@ -61,6 +65,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
+- [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks, verbose LLM-generated files hurt.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
 - [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
@@ -74,8 +79,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
+- [[inferential-rule-following]] — Applying abstract conditional rules to concrete reasoning problems; models pattern-match against training data rather than following given rules.
 - [[instruction-hierarchy]] — The mechanism by which LLMs resolve conflicting instructions from heterogeneous sources; current models fail at >3 privilege tiers.
 - [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
+- [[iterative-self-correction]] — Feedback-driven multi-turn correction loops; even with perfect feedback, models hit a sub-91% ceiling and exhibit catastrophic overcorrection.
 - [[jagged-frontier]] — LLM capabilities are unevenly distributed; strong in some domains, severely error-prone in others.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
@@ -86,7 +93,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[plan-vs-review]] — The quantified tradeoff: 5 minutes of planning saves 30 minutes of reviewing AI-generated code.
 - [[procedural-knowledge]] — The cognitive science framing of procedural memory mapped to agent skill files; distinct from semantic (RAG) and episodic (conversation logs) knowledge.
 - [[ralph-loop]] — Minimalist autonomous agent loop: dumb bash loop, plan file as shared state, one task per iteration.
+- [[rubric-evaluation]] — Evaluating LLM outputs at the rubric level; RUBRICEVAL finds even frontier models struggle with fine-grained LLM-as-judge (GPT-4o: 55.97% on hard cases).
 - [[round-trip-relay]] — Reference-free evaluation method chaining reversible edits to measure long-horizon degradation.
+- [[rule-following]] — Obeying developer-specified rules across conversations; alignment tuning often hurts, and performance has zero correlation with standard benchmarks.
 - [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
@@ -111,6 +120,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.
 - [[axiom]] — Observability platform for high-cardinality, high-dimensionality log data at scale.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.
+- [[contextcov]] — Framework that transforms passive AGENTS.md instructions into executable guardrails; 88.3% constraint compliance on SWE-bench Lite.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
 - [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.

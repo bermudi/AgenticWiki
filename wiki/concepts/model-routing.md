@@ -5,7 +5,9 @@ updated: 2026-05-10
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
+  - raw/2504.21625v6.txt
 tags: [workflow, cost-optimization, architecture, model-selection]
+unaudited_marginal: 0
 ---
 
 # Model Routing
@@ -73,6 +75,14 @@ Beyond cost-optimized tier routing, there's a complementary routing dimension: *
 
 The key insight: **the system around the model matters as much as the model itself.** Tools, file access, browser control, memory, computer use, and execution environment combine with model weights into something that can actually get work done. A model this strong trapped inside a chat window is underused. This aligns with the [[multi-tier-action-space]] convergence on model + execution environment as the unit of value.
 
+## Routing by Reasoning Requirement
+
+Meeseeks ([[iterative-self-correction]]) reveals a distinct routing signal: **reasoning models improve more over multiple self-correction turns**. The gap between reasoning and non-reasoning models *widens* with iteration — non-reasoning models suffer from catastrophic overcorrection (wild oscillation on precise constraints like word count), while reasoning models dampen the oscillation by pre-calculating required content length and proportions in their reasoning traces —
+
+Practical routing rule: **for constraint-dense prompts, route to reasoning models.** The payoff compounds — what starts as a small advantage on turn 1 becomes a significant gap by turn 10. This is distinct from the complexity-tier routing above: a prompt can be simple (tier A-B) but involve precise word counts or proportion constraints, and the routing signal from Meeseeks is constraint type, not planning depth.
+
+Conversely, for single-constraint or loose-constraint prompts where the model has high base accuracy, the reasoning overhead provides no benefit and the cheaper model is the correct route.
+
 ## Thread
 - [[the-agent-workflow]] — Model routing is the cost optimization layer of the decomposition workflow
 - [[tool-design-for-agents]] — Model selection as a tool design input; different routing tiers may need different tool interfaces
@@ -83,6 +93,7 @@ The key insight: **the system around the model matters as much as the model itse
 - [[agent-evals]] — Evals are needed to measure whether a routing decision was correct
 - [[tool-design-for-agents]] — Tools must be designed for agentic consumption to make routing practical at scale
 - [[the-agent-workflow]] — Task decomposition is the workflow foundation; routing is the execution layer
+- [[context-files]] — Context files affect how different models respond to instruction styles; the empirical evidence shows that context file design must account for model-specific behavior differences
 - [[execution-apathy]] — The failure mode that frontier models exhibit at model-routing's upper bounds
 - [[blind-panic]] — The failure mode that open-weight models exhibit at model-routing's upper bounds
 - [[jagged-frontier]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
@@ -92,8 +103,10 @@ The key insight: **the system around the model matters as much as the model itse
 - [[verifiability]] — Model routing depends on knowing which domains are verifiable for which models; verifiability is the economic driver behind the capability heat map
 
 - [[ralph-loop]] — The Ralph loop decomposes tasks into routable sub-tasks
+- [[iterative-self-correction]] — Meeseeks shows reasoning models improve more over multiple turns; constraint-type (word counts, proportions, mixed-language) is a routing signal distinct from complexity tier
 
 ## Sources
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's walkthrough of the AgentFloor results, the cost comparison framework, the capability heat map, and the practical guidance for sorting tasks by complexity tier
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Task-shape routing table (execution vs taste vs research vs data), the "inventing taste is hard, implementing to a target is easier" insight, and the system-over-model argument that execution environment multiplies model capability
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): reasoning vs. non-reasoning model divergence over self-correction turns; routing signal for constraint-type tasks (word counts, proportions, mixed-language)

@@ -1,10 +1,11 @@
 ---
 title: Sandcastle
 created: 2026-05-05
-updated: 2026-05-05
+updated: 2026-05-10
 sources:
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
 tags: [project, agent-orchestration, afk, parallelization]
+unaudited_marginal: 0
 ---
 
 # Sandcastle
@@ -40,6 +41,7 @@ Sandcastle is the parallelized, Docker-sandboxed evolution of the [[ralph-loop|R
 
 ## Related
 - [[ralph-loop]] — The sequential ancestor; Sandcastle parallelizes and sandboxes it
+- [[agent-skills]] — Sandcastle uses skills for its implementer agents (pull model) and pushes coding standards to reviewer agents — two different patterns for skill integration in a parallel pipeline
 - [[afk-agent]] — Sandcastle is the orchestration layer for parallel AFK agents
 - [[ai-design-loop]] — The PRD-to-Kanban phase that feeds Sandcastle's planner
 - [[improve-codebase-architecture]] — Produces the architectural issues Sandcastle implements

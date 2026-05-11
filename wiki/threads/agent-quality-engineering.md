@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-05-09
+updated: 2026-05-10
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -10,7 +10,9 @@ sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/many-tier-instruction-hierarchy.md
   - raw/playground-in-prod-samuel-colvin.md
+  - raw/2603.25133v1.txt
 tags: [thread, agent-quality, evals, observability, feedback-loop]
+unaudited_marginal: 0
 ---
 
 # Agent Quality Engineering
@@ -47,7 +49,9 @@ And four quality dimensions:
 
 ## Layer 2: Observability — The Decision Narrative
 
-[[agent-observability|Agent observability]] uses the same primitives as distributed tracing (OpenTelemetry spans, trace IDs, parent-child relationships) but applies them to a different object: a decision chain instead of a request path.
+[[agent-observability|Agent observability]] uses the same primitives as distributed tracing (OpenTelemetry spans, trace IDs, parent-child relationships) but applies them to a different object: a decision chain instead of a request path. Observability is itself a [[context-engineering]] concern — the agent's decision chain, tool calls, and intermediate reasoning are contextual information that must be engineered for density and signal, not accumulated as raw dumps.
+
+[[context-files|Context files]] (AGENTS.md, CLAUDE.md) are an observability surface too: the empirical evidence shows that well-designed context files change agent behavior in measurable ways (more testing, better instruction following), making their design a quality concern that belongs in the eval framework.
 
 The Emma/invoice failure is the illustrative case: an agent finalized an invoice but never sent it. Every system metric was green. Every log line looked correct. Only the trace tree revealed the truth — the agent called `finalize_invoice` but never `send_invoice`, then misinterpreted the `open` status as "completed" and reported "sent successfully." The logs had the data; the trace had the story.
 
@@ -80,11 +84,11 @@ This flywheel makes agents shippable because it provides:
 
 ### LLM-as-Judge Doesn't Work Well
 
-Both Dex Horthy and Jeff Huber (Chroma CEO) converge on a shared skepticism. Huber states that "these models are optimized, optimized, optimized to tell us what we want to hear" — ask a model to review code and say "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. Horthy adds that the only reliable way to get honest critique is to frame it as helping a friend ("my friend sent me this, what should I tell them?"). Both agree: LLM-as-judge is unreliable for substantive evaluation.
+The Chroma podcast conversation (host Jeff Huber and guest [[dex-horthy|Dex Horthy]]) converges on a shared skepticism. The speakers argue that "these models are optimized, optimized, optimized to tell us what we want to hear" — ask a model to review code and say "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. A speaker adds that the only reliable way to get honest critique is to frame it as helping a friend ("my friend sent me this, what should I tell them?"). Both agree: LLM-as-judge is unreliable for substantive evaluation.
 
 ### Never Send an AI to Do a Linter's Job
 
-Jeff Huber explains the principle (citing a post by "Kyle"): anything that can be evaluated deterministically should be — "never send an AI to do a linter's job." Horthy strongly agrees, and elaborates with his own practice: "I don't trust a model to read code and tell me if it's good or not." The shared principle: save LLM evaluation for the parts that genuinely need it, and use deterministic checks for everything else. This aligns with the thread's component-level eval layer, but goes further — both are skeptical of even outcome-level LLM-as-judge for most use cases.
+The conversation (citing a post by "Kyle") establishes the principle: anything that can be evaluated deterministically should be — "never send an AI to do a linter's job." The speakers elaborate with Dex Horthy's practice: "I don't trust a model to read code and tell me if it's good or not." The shared principle: save LLM evaluation for the parts that genuinely need it, and use deterministic checks for everything else. This aligns with the thread's component-level eval layer, but goes further — both are skeptical of even outcome-level LLM-as-judge for most use cases.
 
 ### Snapshot-Based Evals
 
@@ -100,7 +104,22 @@ This creates a tension with the thread's "quality must be designed in from day o
 
 ### AI-Native Eval Architecture from HumanLayer
 
-Horthy describes building a logging proxy that intercepts every request/response pair, creating a complete trace of agent behavior from day one. "Whenever anything happens we can say, 'hey, go look in the logs — here's the exact response from Anthropic'." This observability-first approach means the infrastructure for understanding failures exists before the eval criteria are defined — the observability layer comes before the measurement layer.
+Horthy describes building a logging proxy that intercepts every Claude Code request/response pair, creating a complete trace for reverse-engineering the closed-source tool. "Whenever anything happens we can say, 'hey, go look in the logs — here's the exact response from Anthropic'." This observability-first approach means the infrastructure for understanding failures exists before the eval criteria are defined — the observability layer comes before the measurement layer.
+
+### Quantified Evidence: RUBRICEVAL
+
+The skepticism about LLM-as-judge above is rooted in practitioner experience and structural reasoning. The RUBRICEVAL benchmark (Pan et al., 2026) provides the first quantified evidence specifically at rubric-level granularity — the level at which agent evals actually operate.
+
+Key findings directly relevant to agent quality engineering:
+
+- **GPT-4o achieves only 55.97% balanced accuracy** on the HARD subset of rubric judgments — near-chance performance for a judge widely used as the evaluator in instruction-following benchmarks. Claude-Sonnet-4.5 gets 55.65%.
+- **Rubric-level evaluation outperforms checklist-level** by 7–12 points. Evaluating each rubric independently (separate call per rubric) beats evaluating all rubrics in a single pass — directly relevant to how evals should be structured.
+- **Reasoning (CoT) improves accuracy** by 6–9 points across settings, but adds token cost.
+- **Inter-judge variance is dramatic**: judge selection alone shifts scores by 25 points under the vanilla paradigm. Rubric-level evaluation with reasoning reduces this to 12 points, but non-trivial gaps remain from inherent capability differences.
+
+These results strengthen the thread's existing skepticism with concrete numbers. The principle "never send an AI to do a linter's job" extends to: even when you must use an LLM judge, the paradigm choice (rubric-level + reasoning vs. checklist-level direct) and judge selection can change results by 12–25 points. Evals need to specify not just what to measure but how to measure it — and acknowledge the measurement error.
+
+See [[rubric-evaluation]] for the full analysis.
 
 ## The Payoff at Scale: Quality Infrastructure Pays for Itself
 
@@ -143,7 +162,9 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 > The [[agent-floor|AgentFloor]] finding that all models collapse at tier E (long-horizon planning) introduces a quality ceiling that no amount of eval infrastructure, observability, or feedback loops can address. If the model cannot perform 8-12 sequential tool steps regardless of the quality infrastructure around it, the quality problem shifts from "how do we measure this?" to "how do we avoid needing this?" — task decomposition and [[model-routing|model routing]] become quality strategies as much as architectural ones. This doesn't contradict the thread's thesis (quality infrastructure remains essential for tiers A0-D), but it establishes an upper bound on what infrastructure alone can achieve.
 
 > [!warning] Contradiction: The RL Distribution Ceiling
-> [[andrej-karpathy|Karpathy]]'s [[verifiability|verifiability thesis]] introduces a structural ceiling on the quality loop. If a capability is outside the model's RL training distribution — not rewarded during training — no amount of eval infrastructure, observability, or feedback flywheels can create it. The quality loop can measure and improve behavior *within* the model's trained circuits, but it can't extend beyond them. Karpathy: "If you're not in the circuits, then you have to really look at fine-tuning." This doesn't invalidate the quality infrastructure — it remains necessary — but it establishes that quality engineering is bounded by the model's training distribution. See [[the-verifiability-thesis]] for the full argument. — The 4-layer eval stack: CI for probabilistic systems
+> [[andrej-karpathy|Karpathy]]'s [[verifiability|verifiability thesis]] introduces a structural ceiling on the quality loop. If a capability is outside the model's RL training distribution — not rewarded during training — no amount of eval infrastructure, observability, or feedback flywheels can create it. The quality loop can measure and improve behavior *within* the model's trained circuits, but it can't extend beyond them. Karpathy: "If you're not in the circuits, then you have to really look at fine-tuning." This doesn't invalidate the quality infrastructure — it remains necessary — but it establishes that quality engineering is bounded by the model's training distribution. See [[the-verifiability-thesis]] for the full argument.
+>
+> The Meeseeks benchmark ([[iterative-self-correction]]) provides direct empirical evidence for this ceiling. Its code-guided evaluation achieves 98.4% accuracy — near-perfect verification. Yet even after 20 rounds of precise feedback, no model exceeds ~91% utility rate. The catastrophic overcorrection phenomenon (models oscillating wildly on word counts despite precise feedback) shows that even when the quality infrastructure is effectively perfect, the model's underlying capability gap cannot be fully closed within a single session. The quality loop is necessary but not sufficient. — The 4-layer eval stack: CI for probabilistic systems
 - [[agent-observability]] — Logs/traces/metrics for agent decision chains
 - [[agent-quality-loop]] — The flywheel: production failures → eval cases → continuous improvement
 - [[delegate-52]] — Long-horizon benchmark quantifying agent reliability across 52 domains
@@ -155,6 +176,7 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - [[instruction-hierarchy]] — ManyIH reveals a missing quality dimension: trust resolution across heterogeneous instruction sources under privilege conflict
 - [[agentic-engineering]] — The professional discipline whose quality bar agent quality engineering is designed to preserve
 - [[verifiability]] — The economic theory that explains why evals work: LLMs automate what you can verify
+- [[contextcov]] — ContextCov's empirical framework (compliance metrics, feedback cost, functional correctness) is a quality engineering methodology for deterministic enforcement; its finding that LLM reflection degrades compliance is a cautionary result for eval design
 
 ## Sources
 
@@ -165,3 +187,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: reproducible benchmark methodology, failure mode taxonomy, demonstrates the quality ceiling at tier E
 - `raw/many-tier-instruction-hierarchy.md` — ManyIH study: combinatorial collapse of LLM trust resolution, representation sensitivity, evidence for trust resolution as a missing quality dimension
 - `raw/playground-in-prod-samuel-colvin.md` — Shopify cost example ($5M→$73K via agent + optimization), private-data drives quality needs, most teams don't eval
+- `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): quantified evidence for LLM-as-judge reliability limits at rubric-level granularity; paradigm comparison (rubric-level vs. checklist-level, with/without reasoning — 7–12 point gap); inter-judge variance analysis (judge selection shifts scores by up to 25 points)

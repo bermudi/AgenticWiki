@@ -1,10 +1,13 @@
 ---
 title: Instruction Severity Inflation
 created: 2026-05-02
-updated: 2026-05-08
+updated: 2026-05-10
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
+  - raw/2311.04235v3.txt
+  - raw/2504.21625v6.txt
 tags: ["concept", "prompts", "context-engineering", "llm-limits"]
+unaudited_marginal: 0
 ---
 
 # Instruction Severity Inflation
@@ -45,7 +48,11 @@ The dynamic:
 - [[tool-design-for-agents]] — The parallel to tool bloat and tool selection degradation
 - [[smart-zone-dumb-zone]] — The underlying constraint driving instruction limits
 - [[instruction-hierarchy]] — The formal framework for what severity inflation undermines: when all instructions claim maximum privilege, the hierarchy collapses to a single flat tier
+- [[rule-following]] — RuLES confirms severity inflation isn't the root cause: alignment tuning hurts rule-following even without competing emphasis, suggesting a deeper architectural deficit
+- [[iterative-self-correction]] — Meeseeks shows that even with perfect constraint-level feedback, models hit a ceiling — the problem isn't just instruction formatting, it's a fundamental capability gap
 
 ## Sources
 
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Dex Horthy describing the 100-200 instruction limit and instruction severity inflation
+- `raw/2311.04235v3.txt` — RuLES (Mu et al.): alignment tuning degrades rule-following, suggesting the problem is architectural, not just formatting
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): multi-constraint scenarios reveal a hard capability ceiling even with iterative feedback

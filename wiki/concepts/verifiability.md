@@ -1,10 +1,15 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-10
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+  - raw/2311.04235v3.txt
+  - raw/2407.08440v4.txt
+  - raw/2504.21625v6.txt
+  - raw/2603.25133v1.txt
 tags: [concept, ai-capability, reinforcement-learning]
+unaudited_marginal: 0
 ---
 
 # Verifiability
@@ -53,6 +58,14 @@ Karpathy qualifies his own thesis: he ultimately believes that "almost everythin
 
 This creates a tension: jaggedness is a structural feature of today's models, but verifiability itself is extensible. Labs could build RL environments for aesthetics, taste, or simplification — the microGPT problem (models can't simplify code) is a training gap, not a fundamental limit. The jagged frontier may smooth over time as labs expand what they train on.
 
+> [!warning] Theory pressure: The Verifier's Capability Bounds Verifiability
+> The [[rubric-evaluation|RUBRICEVAL benchmark]] (Pan et al., 2026) adds a second-order constraint to the thesis: even in domains that are structurally verifiable via structured rubrics, the *verifier* (LLM judge) may be unreliable at the required granularity. GPT-4o achieves only 55.97% balanced accuracy on hard rubric-level judgments; Claude-Sonnet-4.5 gets 55.65%. Karpathy's "council of LLM judges" vision for making writing verifiable assumes the judges themselves are competent evaluators at fine granularity — an assumption this benchmark challenges with concrete numbers. The verifiability bottleneck has two dimensions: task verifiability and judge capability. Both must be addressed.
+
+### Why Verifiability Is Not Sufficient
+
+> [!warning] Theory pressure
+> The Meeseeks benchmark ([[iterative-self-correction]]) demonstrates that even near-perfect verification (98.4% accuracy) does not guarantee convergence. After 20 rounds of precise feedback, no model exceeds ~91% utility rate. Karpathy acknowledged this boundary in his original framing: "If you're in the circuits that were part of the RL, you fly. And if you're in the circuits that are out of the data distribution, you're going to struggle." The Meeseeks result operationalizes this: you can build a near-perfect evaluator, but if the underlying capability (instruction-following with precise constraints) isn't in the model's RL-trained circuits, feedback alone cannot fully bridge the gap. Verifiability enables improvement; it does not guarantee it.
+
 Threads like [[the-human-lever]] and [[agent-quality-engineering]] each take a different stance on how much of this ceiling is permanent vs. temporary — see their respective tension callouts.
 
 ## Relationship to Verification Loops
@@ -78,7 +91,15 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[model-routing]] — Routes complex tasks to the cheapest capable model; depends on knowing which domains are verifiable for which models
 
 - [[vibes-based-engineering]] — Verifiability explains the boundary where vibes-based engineering works vs. fails
+- [[rule-following]] — RuLES's programmatic evaluation is a case study: make rule-following verifiable via deterministic checks, and performance becomes measurable and improvable
+- [[inferential-rule-following]] — RuleBench's counterfactual collapse is the negative case: when rules contradict parametric knowledge, the model ignores them — verifiability of the rule text doesn't guarantee the model follows it
+- [[iterative-self-correction]] — Meeseeks's code-guided evaluation makes constraint satisfaction verifiable at 98.4% accuracy; the paper shows that even near-perfect verification doesn't guarantee convergence — verifiability is necessary but not sufficient
+- [[agent-evals]] — Evals are the practical attempt to make agent behavior verifiable; the quality loop operationalizes verifiability as a measurement discipline
 
 ## Sources
 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the chess example, the car wash example, and practical implications for founders and developers.
+- `raw/2311.04235v3.txt` — RuLES (Mu et al.): programmatic evaluation makes rule-following verifiable, enabling measurement and improvement
+- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual rules reveal that verifiability of the rule text doesn't guarantee the model follows it — parametric knowledge dominates
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided evaluation demonstrates that near-perfect verification is achievable, but convergence remains elusive
+- `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): rubric-level meta-evaluation showing that even in structurally verifiable domains with structured rubrics, the LLM judge (verifier) may be unreliable at fine granularity (GPT-4o: 55.97% on hard cases) — adds a second-order constraint to the verifiability thesis: verifier capability bounds verifiability

@@ -1,14 +1,15 @@
 ---
 title: Hallucination
 created: 2026-04-25
-updated: 2026-05-08
-sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf, raw/synthetic-truths-gemini-has-a-secret-code.md]
+updated: 2026-05-10
+sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf, raw/synthetic-truths-gemini-has-a-secret-code.md, raw/2407.08440v4.txt]
 tags: [llm, reliability, engineering]
+unaudited_marginal: 0
 ---
 
 # Hallucination
 
-> The phenomenon where an LLM generates text that is factually incorrect, nonsensical, or contradictory to its provided context.
+> The phenomenon where an LLM generates text that is factually incorrect, nonsensical, or contradictory to its provided context. The wiki distinguishes intrinsic hallucination (ignoring provided context), extrinsic hallucination (inventing from thin air), intent-aware synthetic truth (constructing what the user wants to hear), and silent document corruption (degrading structured documents over repeated editing interactions).
 
 ## Taxonomy
 
@@ -80,10 +81,11 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 - [[execution-apathy]] — GPT-5's failure mode at tier E: resigns without executing, producing plausible-looking outputs
 - [[blind-panic]] — Gemma 4's failure mode at tier E: tool hallucination as a desperation behavior under planning load
 - [[instruction-hierarchy]] — Semantic arithmetic failure is a related phenomenon: the model doesn't understand numbers, it pattern-matches them — same mechanism as hallucination applied to structured conflict resolution
-
+- [[inferential-rule-following]] — Counterfactual rule collapse is intrinsic hallucination in reasoning form: given rules are overridden by parametric knowledge, just as context is overridden by training priors
 - [[procedural-knowledge]] — Skills reduce hallucination by replacing guesswork with defined procedures
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: document degradation and silent corruption as a related failure mode distinct from classical hallucination.
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Synthetic truth and temporal smoothing as related but distinct failure modes; Gemini's self-analysis of intent-aware fabrication.
+- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual rule collapse demonstrates training-data override of given context — a structural form of intrinsic hallucination

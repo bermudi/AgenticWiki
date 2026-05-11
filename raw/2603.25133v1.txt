@@ -1,0 +1,1068 @@
+arXiv:2603.25133v1 [cs.AI] 26 Mar 2026
+
+
+
+
+
+
+
+
+
+
+RUBRICEVAL: A Rubric-Level Meta-Evaluation Benchmark for LLM
+        Judges in Instruction Following
+
+        Tianjun Pan1, Xuan Lin 3, Wenyan Yang3, Qianyu He1, Shisong Chen1
+        Licai Qi3, Wanqing Xu3, Hongwei Feng1†, Bo Xu2†, Yanghua Xiao1†
+       1 College of Computer Science and Artificial Intelligence, Fudan University
+        2 Donghua University, 3 Ant Group
+
+
+
+           Abstract
+
+          Rubric-based evaluation has become a prevail-
+         ing paradigm for evaluating instruction follow-
+       ing in large language models (LLMs).     De-
+        spite its widespread use, the reliability of these
+         rubric-level evaluations remains unclear, call-
+          ing for meta-evaluation. However, prior meta-
+         evaluation efforts largely focus on the response
+         level, failing to assess the fine-grained judg-
+          ment accuracy that rubric-based evaluation re-     Figure 1: Existing rubric-based instruction-following
+       lies on.    To bridge this gap, we introduce          evaluation and our rubric-level meta-evaluation task.
+             RUBRICEVAL. Our benchmark features: (1)
+          the first rubric-level meta-evaluation bench-
+         mark for instruction following, (2) diverse in-
+         structions and responses spanning multiple cat-     precision, they are restricted to a narrow set of
+         egories and model sources, and (3) a substantial    verifiable constraints.      To handle open-ended in-
+         set of 3,486 quality-controlled instances, along    structions with semantically complex constraints,
+           with EASY/HARD subsets that better differen-      recent benchmarks (Qin et al., 2024b; Zhang et al.,
+          tiates judge performance. Our experiments re-      2025a; Wen et al., 2024; Zhang et al., 2025b) de-
+         veal that rubric-level judging remains far from     compose instructions into fine-grained rubrics and
+           solved: even GPT-4o, a widely adopted judge       use LLM judges to verify each rubric, as illustrated
+          in instruction-following benchmarks, achieves
+       only 55.97% on HARD subset.      Considering          in Figure 1(a). While widely used for evaluation,
+           evaluation paradigm, rubric-level evaluation      potential errors in per-rubric judgments may propa-
+         outperforms checklist-level, explicit reasoning     gate through score aggregation and bias subsequent
+           improves accuracy, and both together reduce       applications, such as model training (Gunjal et al.,
+          inter-judge variance. Through our established      2025; Huang et al., 2025; Peng et al., 2025; An
+           rubric taxonomy, we further identify common       et al., 2025), self-evolving(Wang et al., 2025; An
+         failure modes and offer actionable insights for     et al., 2025), and benchmark scoring, making judge
+       reliable instruction-following evaluation.            reliability a critical concern.
+    1  Introduction                                                   Consequently, meta-evaluating LLM judges be-
+Instruction following (IF) is a fundamental capabil- comes indispensible. However, existing meta-
+ity of large language models (LLMs), as it directly evaluation efforts for instruction following (Zeng
+affects task completion quality and user experi- et al., 2023; Malik et al., 2025; Zhou et al., 2025)
+ence(Ouyang et al., 2022; Achiam et al., 2023). exhibit several critical limitations: (1) Coarse
+       In this context, reliable evaluation of instruction   granularity: Prior work evaluates judges at the
+    following becomes equally critical.                      response level, assessing only their ability to distin-
+      Accordingly, a central question is how to reliably     guish overall response quality, which is misaligned
+         evaluate instruction-following behavior in LLMs.    with the modern rubric-based evaluation paradigm
+         While rule-based evaluation methods such as IFE-    and fails to measure fine-grained judgment accu-
+        val (Zhou et al., 2023) offer scalability and high   racy. (2) Limited instruction coverage: Existing
+                                                             benchmarks rely on relatively simple instructions
+      †Corresponding author                                  with narrow type diversity, limiting their ability
+
+to assess judge performance across varied scenar- 2 Related Work
+ios. (3) Lack of realistic failures: They rely on
+synthetic or curated failure cases rather than real Benchmarks and Evaluation for Instruction
+model-generated responses, unable to capture re- Following Evaluating instruction-following in
+alistic failure modes and thus may not faithfully LLMs has received growing attention. Early bench-
+    reflect judge performance in practice.                   marks such as IFEval (Zhou et al., 2023) rely on
+  To address these limitations, we introduce rule-based evaluation over verifiable constraints,
+RUBRICEVAL, a fine-grained meta-evaluation later extended to multilingual and more complex
+benchmark that evaluates LLM judges at the rubric real-world settings by Multi-IF (He et al., 2024b)
+level. Our benchmark offers three key advan- and CELLO (He et al., 2024a). IFBench (Pyatkin
+tages: (1) Fine granularity: it evaluates judges at et al., 2025) further introduces more constraint
+the rubric level, directly aligned with the prevail- types. While objective, rule-based evaluation is
+ing rubric-based instruction following evaluation limited to verifiable constraints. Alternatively, In-
+paradigm; (2) Diverse and realistic data: diverse foBench (Qin et al., 2024b) proposes a decomposed
+instruction types combined with real model out- evaluation method and leverages LLM judges for
+puts, reflecting realistic evaluation scenarios; and fine-grained verification. ComplexBench (Wen
+(3) Reliable reference labels: reference labels are et al., 2024) adopts a hybrid strategy combining
+obtained through a multi-stage framework with hu- rule-based and model-based method to enhance
+    man verification, ensuring high reliability.             reliability. Beyond benchmarking, several recent
+     As illustrated in Figure 1(b), RUBRICEVAL fo-           works improve instruction-following via RL with
+           cuses on binary rubric-judgment tasks: given an   rubric-based rewards(Peng et al., 2025; Qin et al.,
+    instruction, a response, and a target rubric, a candi-   2025; Viswanathan et al., 2025; Liu et al., 2025a),
+        date judge predicts whether the response satisfies   where open-source LLM judges perform rubric-
+        the rubric. By comparing judge predictions against   level verification to derive reward signals. Despite
+          our curated high-confidence reference labels, we   the widespread use of LLM judges in rubric-level
+    assess their fine-grained evaluation capability.         instruction following evaluation, the reliablity of
+  Overall, RUBRICEVAL comprises 3,486 rubric- these judgments remains largely underexplored.
+level judgment instances across four instruction
+categories, with 2,034 EASY and 1,452 HARD in- Meta-Evaluation for LLM Judges As LLMs
+stances, enabling finer differentiation of judge ca- are increasingly used as evaluators, recent work
+    pabilities, especially on challenging cases.             has begun to meta-evaluate LLM judge reliabil-
+  Our contributions can be summarized as follows: ity. RewardBench2(Malik et al., 2025) evalu-
+• The first fine-grained meta-evaluation bench- ates reward models on diverse preference pair.
+  mark for instruction following: We intro- JudgeBench(Tan et al., 2024) benchmarks LLM
+  duce RUBRICEVAL, the first rubric-level meta- judges on challenging response pairs. JETTS(Zhou
+  evaluation benchmark with 3,486 instances span- et al., 2025) measures how reliably judges can se-
+  ning diverse instruction types and real model out- lect higher-quality responses during inference-time.
+     puts, capturing realistic evaluation scenarios.         VerifyBench(Li et al., 2025b) assesses reasoning
+        verifiers across domains. In instruction follow-
+• A scalable rubric annotation framework: ing, LLMBar(Zeng et al., 2023) is the first meta-
+  We propose the Rubric Arbitration Framework evaluation benchmark. It constructs evaluation
+  (RAF), which addresses the challenge of obtain- sets where one response follows the instruction
+  ing reliable rubric-level labels at scale. RAF and the other deviates subtly. ReIFE(Liu et al.,
+  achieves high agreement with human annotations 2025b) scales analysis to different judge configura-
+     while significantly reducing annotation cost.           tions. Meta-evaluation also appears in some other
+        works(Ferraz et al., 2024; Qin et al., 2025), but
+• Systematic evaluation and analysis: We bench- the lack of open-sourced data makes them opaque.
+  mark a diverse set of LLM judges on RUBRICE- Overall, existing efforts all evaluate LLM judge
+  VAL and introduce a rubric taxonomy for struc- only at the response level, yielding a coarse-grained
+  tured analysis of judge robustness and failure reliability assessment. We fills this gap with the
+  modes. Our study provides actionable insights first rubric-level meta-evaluation benchmark for
+     for improving instruction-following evaluation.         instruction following.
+
+    Instruction & Rubric Collection                                       Rubric Arbitration Framework (RAF)             Judges
+                                                       STEP1: Coarse-grained Filtering
+                                                        Judge 1                  Judge 2      Judge 3        Judge 4
+                                                        •   R1                  •   R1        •  R1         •   R1
+      Diverse Instructions      Rubrics                 •   R2                  •   R2        •  R2         •   R2
+                                                        •   ...                 •  ...        •   ...       •  ...
+                                                        •   Rk                  •   Rk        •  Rk         •   Rk
+                                                                           Disagreement Router     Consensus         Discard
+      Response Generation                              STEP2: Fine-grained Re-evaluation
+      Model Pool Samping                                Judge 1            Judge 2      Judge 3      Judge 4
+                                                        •   Ri               •      Ri        •  Ri         •   Ri
+                                                        •   Rationale        •     Rationale  •  Rationale  • Rationale
+  *1. Instruction: Create a table to compare the
+  culture of 3 different ethnic groups from a                                           Router        RubricEval-
+  respectful and unbiased perspective. The ......                          Disagreement            Consensus      Easy
+  *2. Rubrics:                                         STEP3: Meta-Judges Arbitration
+  - R1: Is the generated text formatted as a table?                                         ··
+  - R2: Does the generated table compare the                                        Rationales      Meta Judge 2
+  cultures of 3 different ethnic groups?                          Meta Judge 1
+  - ......                                                      Ri:                 Ri                                          Ri:
+  *3. Response:                                                                         Router        RubricEval-
+  Here is a table comparing the culture of 3                                                       Consensus      Hard
+  different ethnic groups from a respectful and
+  unbiased perspective:\n\n......                               Discard   Disagreement
+
+                                                     Figure 2: Overview of our data construction pipeline.
+
+3   RubricEval                                                            focus on benchmarks that simultaneously provide
+This section details our data collection process, the                     instructions and corresponding rubrics.
+annotation framework, and benchmark statistics.                                                           For each category, we also collect instructions
+                                                                          from multiple benchmarks when feasible (see Ap-
+3.1 Task Formulation                                                      pendix J for the detailed source information and
+                                                                          statistics). We believe this helps reduce source-
+In rubric-based instruction-following evaluation, a                       specific bias. We directly derive rubrics from these
+judge is prompted with an instruction x, a response                       benchmarks to ensure high rubric quality. These
+y, a rubric r, and is required to produce a binary                        rubrics are all human-written or human-verified.
+judgment j indicating whether y satisfies r.                              Appendix B reports summary statistics of the col-
+                        Formally, we define the rubric-level evaluation   lected instructions and rubrics.
+task as:
+                                                                          Response Generation            To ensure response di-
+      j     = IF_Rubric_Judge( x ⊕ y ⊕ r ),                         (1)   versity, we randomly sample a model from an
+                                                                          open-source LLM pool for each instruction. Prior
+where j ∈ {0, 1} denotes the judge’s binary judg-                         work (Zeng et al., 2023; Ren et al., 2025; Malik
+ment (1 if y satisfies r, and 0 otherwise), x is the                      et al., 2025) creates failure instances via synthetic
+instruction,                        y is the model response, and r is a   instruction–response mismatches. While efficient,
+rubric—a specific criterion decomposed from the                           these failures are artificial and may not generalize
+instruction to verify a particular aspect of instruc-                     to real-world settings.           Instead, we use the orig-
+tion following.                           The operator ⊕ denotes prompt   inal model responses so that failures arise natu-
+concatenation of x, y, and r into a single input.                         rally. This captures realistic failure modes and
+                                                                          reflects more realistic evaluation scenarios in
+3.2 Data Collection                                                       practice. Details of the LLM pool are provided in
+Instruction and Rubric Collection                         To ensure di-   Appendix F.
+verse instruction coverage, we consider four widely                       3.3      Label Annotation
+used instruction categories in prior instruction-
+following benchmarks:     Constrained,                         Composi-   The task of judging whether a response satisfies a
+tional, Multi-turn, and System. Appendix A pro-                           rubric is quite challenging, as instruction-following
+vides detailed definitions of the categories. We only                     judgments are often subjective. In addition, am-
+
+                                                                                                                      Category       Benchmark         Easy   Hard  Total
+                                            Accuracy (%)         Cohen's Kappa
+                      Set 1                      Set 2                     High-Confidence                                           InfoBench_hard      72     47    119
+               100    96.60.93                                             Subset of Set 2    1.0                     Constrained    ComplexBench        54     46    100
+                                                                           85.4                                                      CFBench             54     71    125
+                80
+                                                                                                                                     Subtotal           368    316    684
+    Accuracy (%)          64.6                      69.5         79.90.60      0.69           0.8Cohen's Kappa                       AdvancedIF         188    152    340
+                60                                                                            0.6                     Compositional  ComplexBench       130    110    240
+                40        0.31                                      0.39                      0.4                     Multi-Turn     StructFlowBench    186     95    281
+                                                                                                                                     AdvancedIF         477    336    813
+                20                                                                            0.2                                    Subtotal           663    431  1,094
+                 0    Four Judges                                                             0.0                                    SysBench           160    217    377
+                      consensus     DeepSeek-R1  Majority Voting o3        Meta Judges                                System         AdvancedIF         713    378  1,091
+                                                 (Four Judges)             consensus
+                                                                                                                                     Subtotal           873    595  1,468
+    Figure 3: Preliminary experiments and results on human                                                            Total                           2,034  1,452  3,486
+    reference set.
+                                                                                                                     Table 1: Statistics of RUBRICEVAL by instruction cate-
+    biguities in either the response or the rubric may                                                               gory and source benchmark.
+    lead to borderline cases. As a result, fully manual
+    rubric-level annotation is hard to scale to the full                                                             Wu et al., 2025), we introduce a meta-review stage
+    benchmark. In this subsection, we aim to develop                                                                 in which two meta-judges assess the rationales
+    an automated labeling framework that is efficient at                                                             from multiple base judges and make their final
+    scale while producing high-confidence rubric-level                                                               judgment. We further enforce a consensus-based
+    labels.                                                                                                          judgment rule to ensure high-quality labels. This
+                                                                                                                     strategy raises accuracy to 85.4% (κ=0.69) on dis-
+    3.3.1             Human-Annotated Set                                                                            puted cases.
+    To design an automated labeling framework and                                                                          Based on these findings, we propose the Rubric
+validate its effectiveness, we construct a human- Arbitration Framework (RAF), a three stage
+annotated reference set. It contains 506 instruction– pipeline prioritizing label reliability over cover-
+response–rubric triplets sampled from LLM judges age—ambiguous instances are discarded rather
+disagreement cases to ensure non-triviality. Then than force-labeled. See Appendix M for case study.
+two human annotators label each triplet indepen- Coarse-grained Filtering Given the large num-
+dently and resolve conflicts through discussion. ber of rubrics, evaluating each one individually is
+The set is balanced across positive and negative costly. In this stage, four base judges evaluate the
+labels. See Appendix D for construction details full rubric checklist for each instruction–response
+    and statistics.                                                                                                  pair in a single pass. Rubrics with unanimous agree-
+    3.3.2                                               Rubric Arbitration Framework                                 ment are discarded; only disputed ones proceed to
+We first evaluate a range of candidate judge mod- finer-grained stages. This procedure substantially
+els on reference set. Considering overall perfor- alleviates the annotation burden in later stages
+mance and practical trade-offs, we select four high- Fine-grained Re-evaluation For disputed
+performance models spanning multiple model fam- rubrics, we perform targeted rubric-level re-
+ilies as base judges. We then compare different evaluation. Four base judge evaluates every
+labeling strategies built on these base judges. Dif- disputed rubric in a single pass, providing
+ferent model performance and selection strategy both a judgment and supporting rationale.
+    are in Appendix K.                                                                                               Rubrics    reaching     unanimous  agreement    form
+                                                                       As shown in Figure 3, when four base judges   RUBRICEVAL-EASY; others proceed to arbitration.
+unanimously agree, their consensus achieves 96.6% This stage forces judges focus evaluation on every
+accuracy (κ=0.93). However, for disputed cases, rubric, reducing cross-rubric interference.
+majority voting yields only 69.5% (κ=0.39), and
+even the best-performing single judge (o3) achieves Meta-Judges Arbitration For persistently dis-
+just 79.9% (κ=0.60). Motivated by prior work puted rubrics, we invoke two meta-judges with
+showing that collaboration and meta-judging can strong reasoning capabilities.* Two meta-judges ar-
+    improve evaluation reliability (Qian et al., 2025;                                                                               *We use OpenAI o3 and DeepSeek-R1 as meta-judges.
+
+     500                                                      E show the t-SNE visualization of rubric instances.
+                                                                     The detailed category definitions and categoriza-
+     400                                                      tion procedure are provided in Appendix L. Ap-
+                                                              pendix I further summarizes the distribution by
+     300                                                      high-level dimensions (and their proportions).
+
+     200                                                      4   Experiments
+     100                                                      4.1 Experimental Setup
+                                                              Metrics.        Rubric-level judging is a binary classi-
+       0                                                      fication task. We report Balanced Accuracy and
+                                                              Macro F1 to account for class imbalance.
+                                                              Protocol.             When conducting evaluation, we ask
+    Figure 4: Distribution of instances across rubric cate-   judges to first provide a rationale, then give the final
+    gories in our taxonomy.                                   judgment. We think this protocol better reflects the
+                                                              judge’s true evaluation capability. We follow the
+                                                              original evaluation prompting guidelines provided
+    bitrate by reviewing the base judges’ rationales and      by the corresponding source benchmarks. Prompt
+    render independent judgments. When both agree,            for evaluating Constrained rubric is in Appendix
+    their consensus forms RUBRICEVAL-HARD; oth-               N.
+    ers are discarded.                                        Evaluated Models.           We evaluate a diverse set of
+    3.4     Human Validation                                  judge models covering both open-source and pro-
+To verify the quality of our RAF-annotated labels, prietary LLMs, spanning multiple model families
+we conduct a human validation on a random sample and parameter scales. We report results on both the
+of 160 rubric instances across subsets and instruc- EASY and HARD splits, with an overlapping subset
+tion types. Two annotators independently label of models evaluated on both for direct comparison.
+each instance, resolving disagreements through dis- 4.2 Main Results
+    cussion.                                                  Table 2 reports the main results on R
+             Human-RAF agreement reaches 85.0% accu-                                                        UBRICEVAL.
+racy with Cohen’s κ = 0.702, indicating substan- Overall Performance. The results reveal a wide
+tial agreement. This confirms that RAF reliably performance spectrum across evaluated models.
+approximates human judgment and can serve as On the EASY subset, small open-source models
+    trustworthy ground truth for meta-evaluation.             such as Qwen2.5-7B-Instruct achieves only around
+    3.5     Dataset Statistics                                65% balanced accuracy, while stronger models
+                                                              like Qwen3-235B and gpt-oss-120b reach around
+    Table 1 summarizes the overall statistics of our          90%. On the HARD split, even commercial mod-
+    constructed RUBRICEVAL. In total, the benchmark           els struggle considerably. For instance, GPT-4o
+    contains 1,989 instructions and 3,486 rubric-level        achieves merely 55.97% balanced accuracy, and
+    instances, including 2,034 EASY and 1,452 HARD            Claude-Sonnet-4.5 reaches 55.65%, indicating that
+    instances. A detailed breakdown by source bench-          hard rubric cases remain challenging even for
+    mark is provided in Appendix G.                           strong LLMs. These findings underscore the neces-
+  To support fine-grained analysis of rubric-level sity of rubric-level meta-evaluation: rubric-level
+judge performance, we construct a rubric taxonomy judging remains far from solved. Practically, de-
+for RUBRICEVAL. This rubric taxonomy has 13 ploying small open-source models as judges(Qin
+fine-grained categories, organized into 4 high-level et al., 2025) may produce noisy or misleading sig-
+dimensions: Content, Form, Quality, and Style. nals in applications like rubric-based RL. Mean-
+This taxonomy helps us view finer-grained rubric while, GPT-4o, the widely-adopted evaluator in
+    distributions.                                            instruction-following benchmarks(Wen et al., 2024;
+       As shown in Figure 4, the distribution of in-          Li et al., 2025a), may introduce systematic biases,
+    stances exhibits a long-tail pattern reflecting a natu-   potentially affecting the reliability of the reported
+    ral distribution of real-world tasks. And Appendix        scores.
+
+
+
+
+
+
+
+
+
+
+Count
+
+
+
+
+
+
+
+
+
+
+    Style ToneLanguage LinguisticsTask CompletionRole Persona
+    Content Inclusion  Content ExclusionConditional LogicTopic ScopeMulti-turn Coherence  Ordering Sequence
+    Quality RequirementsFormat Structure
+    Quantity Limit
+
+     Model                   Constrained              Compositional  Multi-turn    System        Overall
+        BAcc mF1 BAcc mF1 BAcc mF1 BAcc mF1 BAcc mF1
+  RUBRICEVAL-EASY
+     Llama-3.1-8B-Instruct   65.71             61.18  57.52  48.21   65.80  58.25  66.12  64.59  63.79  58.06
+ Llama-3.3-70B-Instruct 80.48 81.83 81.65 83.42 82.82 83.83 86.83 87.24 82.94 84.08
+     Qwen2.5-7B-Instruct     63.70             63.05  69.85  62.46   60.06  55.04  67.11  65.89  65.18  61.61
+     Qwen2.5-32B-Instruct    75.78             76.26  75.64  70.01   75.72  76.96  79.38  79.17  76.63  75.60
+     QwQ-32B                 85.26             85.67  79.17  73.80   77.00  77.12  80.29  80.38  80.43  79.24
+     Qwen3-8B                79.22             80.51  84.06  81.68   83.40  83.65  80.27  80.74  81.74  81.65
+ Qwen3-235B-A22B-2507 87.24 88.56 93.98 92.44 90.59 90.84 87.65 87.81 89.87 89.91
+     gpt-oss-120b            89.84             87.24  86.24  81.65   91.29  89.65  90.83  90.02  89.55  87.14
+     GPT-4o-2024-11-20       82.15             80.88  85.34  81.42   85.80  82.77  84.33  83.37  84.41  82.11
+     o3-mini                 85.66             84.67  85.26  84.63   88.63  89.40  89.12  89.15  87.17  86.96
+  RUBRICEVAL-HARD
+ Qwen3-235B-A22B-2507 62.68 53.31 60.95 49.37 69.28 61.80 62.48 57.28 63.85 55.44
+     gpt-oss-120b            80.00             76.81  61.83  54.78   82.32  79.74  79.39  78.57  75.89  72.48
+     GPT-4o-2024-11-20       48.51             41.04  67.99  53.27   57.85  56.20  49.54  48.21  55.97  49.68
+     o3-mini                 71.88             64.78  69.97  55.86   76.63  70.03  62.48  57.28  70.24  61.99
+     GPT-4.1                 64.91             55.67  52.92  44.60   74.39  71.24  60.09  57.31  63.08  57.21
+     GPT-5.1                 71.90             69.48  74.92  63.43   72.26  71.75  70.03  68.27  72.28  68.23
+     o3                      87.35             82.22  80.97  67.09   88.50  87.20  82.42  79.89  84.81  79.10
+     Claude-Sonnet-4.5       58.70             50.63  52.04  39.39   59.75  55.76  52.11  47.88  55.65  48.41
+     Gemini-3-Flash          77.91             75.30  84.43  75.18   82.43  81.06  74.93  76.14  79.93  76.92
+     Gemini-3-Pro            81.56             78.08  83.93  76.22   87.77  84.53  78.89  79.22  83.04  79.51
+     Deepseek-v3.2           53.48             50.08  59.85  52.28   64.41  60.90  58.95  55.67  59.17  54.73
+     Deepseek-r1-0528        68.62             62.41  80.47  66.13   71.92  66.76  73.18  69.95  73.55  66.31
+
+    Table 2: Main results on RUBRICEVAL. We report performance on the EASY (top) and HARD (bottom) splits of
+    RUBRICEVAL across four instruction types and Overall. Each setting is evaluated with balanced accuracy (BAcc)
+    and macro-F1 (mF1). Bold indicates the best score in each column within the same split, and underline indicates
+    the second-best.
+
+From EASY to HARD: A Significant Perfor- categories. This indicates that rubric verification
+mance Gap. We evaluate the same four models difficulty depends strongly on the type of the un-
+on both EASY and HARD subsets†, enabling a di- derlying instruction. Compositional instructions
+rect comparison of subset difficulty. Consistently, prove most challenging, with most models show-
+all four exhibit substantial performance drop from ing their lowest mF1 on this type. This is likely
+EASY to HARD: GPT-4o declines by 28.4 BAcc because judges are required to accurately parse
+(84.41% → 55.97%), Qwen3-235B by 26.0 points the underlying structure and ground each rubric to
+(89.87% → 63.85%), and even the relatively robust specific parts of the response, which is more error-
+gpt-oss-120b drops by 13.7 points. This perfor- prone than checking surface-level constraints. Con-
+mance degradation confirms that our data construc- versely, Multi-turn instructions tend to be easier,
+tion pipeline produces two practical subsets that possibly because conversational history provides
+vary in difficulty. HARD subset genuinely captures additional cues for rubric verification. Constrained
+challenging cases. The two-tier design also facili- and System instructions show moderate difficulty,
+tates more fine-grained evaluation across a broader though some models underperform notably.
+set of judges.
+Performance Varies Across Instruction Types. 5 Analysis
+Judge performance also varies across instruction In this section, we study different evaluation
+   †We evaluate these four models: Qwen3-235B-A22B- paradigms that vary in granularity and reasoning,
+    2507, gpt-oss-120b, GPT-4o, and o3-mini                  as well as common error patterns.
+
+     Granularity       Reasoning   Constrained     Compositional     Multi-turn     System      Overall
+                                   Qwen    GPT     Qwen    GPT     Qwen     GPT     Qwen    GPT        Qwen            GPT
+     Rubric-level      ✗           62.55   69.99   75.62   78.37  68.09     74.62   69.55   78.89     68.95           75.47
+                       ✓           74.19   82.90   83.17   80.83  76.80     83.48   75.34   81.45  77.38(+8.4)     82.17(+6.7)
+     Checklist-level   ✗           54.06   60.80   72.38   68.21  53.39     56.11   63.98   68.48     60.95           63.40
+                       ✓           66.71   69.59   77.06   74.60  60.90     57.88   74.94   79.67  69.90(+9.0)     70.44(+7.0)
+
+    Table 3: Comparison of evaluation paradigms on a subset of RUBRICEVAL, sampled from both EASY and HARD
+    subsets. We vary granularity and reasoning during evaluation, reporting Balanced Accuracy (BAcc) for Qwen
+    (Qwen2.5-32B-Instruct) and GPT (GPT-4.1). Green values show improvement from reasoning. Bold indicates the
+    best score in Overall column. Results on Easy and Hard subsets are in Appendix H.
+
+    5.1 Does Evaluation Paradigm Matter?                            85
+    Table 3 compares four evaluation paradigms along                80
+    two dimensions: granularity and reasoning. For                  75
+    granularity, checklist-level evaluates all rubrics in a
+    single pass, while rubric-level verifies each rubric            70
+    independently with a separate call. For reasoning,              65
+    we compare direct judgment versus generating a                  60
+    rationale before the final verdict.                             55
+    Rubric-Level Evaluation is More Accurate.           As          50
+    shown in Table 3, rubric-level evaluation consis-                Checklist      Rubric      Checklist          Rubric
+                                                                  (w/o reasoning)* (w/o reasoning) (w reasoning)   (w reasoning)
+    tently outperforms checklist-level evaluation across                    GPT4o           Qwen3-235B             GPT5.1
+    both models and all instruction types. With reason-
+    ing enabled, rubric-level achieves 77.38% (Qwen)              Figure 5: Inter-judge analysis on CFBench. Judge vari-
+    and 82.17% (GPT) BAcc, while checklist-level                  ance decreases from vanilla (*) to rubric-level with rea-
+    achieves only 69.90% and 70.44%—a gap of 7–12                 soning.
+    points.      This pattern holds across all instruction
+    types and on both E ASY and HARD subsets (see                                 However, both rubric-level evaluation and rea-
+    Appendix H).                                                  soning come at a cost.                 Rubric-level evaluation
+Reasoning Consistently Helps. Explicit reason- requires a separate API call for each rubric, signifi-
+ing also significantly enhances judging accuracy. cantly increasing latency and expense. Reasoning
+Across both granularity settings and all model further adds to output token costs. This creates
+types, enabling reasoning consistently leads to per- a reliability–efficiency trade-off: checklist-level
+formance gains. Specifically, in the rubric-level without reasoning is fast and cheap but less accu-
+setting, Qwen and GPT achieve absolute improve- rate, while rubric-level with reasoning is more reli-
+ments of 8.4% and 6.7% in BAcc, respectively. able but costlier. Some existing benchmarks and re-
+Similar trends are observed in the checklist-level ward methods adopt the former for efficiency—our
+    setting, with gains of 9.0% and 7.0%.                         results suggest this may compromise evaluation
+                                                                  reliability.
+    5.2 Trade-offs
+    For the first finding, a likely explanation is that           5.3 Inter-Judge Analysis
+    checklist-level evaluation forces judges to verify            We further investigate whether evaluation paradigm
+    multiple rubrics in a single pass, increasing cogni-          affects   inter-judge    consistency.            Using     CF-
+    tive load and the risk of missing individual rubrics.         Bench(Zhang et al., 2025a) as a testbed, we evalu-
+    Rubric-level evaluation isolates each decision, re-           ate responses from Qwen2.5-7B-Instruct with three
+    ducing interference and improving precision.                  judges of varying performance levels on our bench-
+         For the second finding, reasoning likely helps by        mark (GPT-4o, Qwen3-235B, and GPT-5.1) under
+    forcing judges to ground their decisions in evidence          four evaluation paradigms.
+    rather than relying on intuition, thereby reducing                              As shown in Figure 5, the vanilla evaluation
+    unreliable judgments.                                         paradigm (checklist-level without reasoning) ex-
+
+
+
+
+
+
+
+
+
+
+CSR (Constraint Satisfaction Rate)
+
+    Rubric Type               Qwen3 gpt-oss GPT-4o o3-mini   Scope, Format Structure, Quality Requirements,
+    Content                   76.9   86.1   72.2   81.0      Task Completion, and Role Persona. These rubrics
+     Content Inclusion        77.1   86.8   72.3   80.6      typically require strict evidence checking or involve
+     Content Exclusion        80.4   87.8   71.4   83.9      subjective interpretation.
+     Topic Scope              72.9   83.5   72.9   78.4              Format Structure and Role Persona are consis-
+    Form                      77.6   87.5   67.0   87.3
+     Quantity Limit           78.6   86.6   68.7   88.6      tently difficult across all judges—the former re-
+     Format Structure         75.9   86.1   66.8   84.9      veals that format structure verification is relatively
+     Ordering Sequence        80.0   94.7   61.3   89.3      hard for llm judges and may benefit from rule-
+    Quality                   75.6   84.5   70.8   76.6      based verification methods.      While the latter in-
+     Quality Requirements     74.8   83.2   72.5   75.2
+     Conditional Logic        78.0   84.8   71.8   80.9      dicates that persona maintenance remains ambigu-
+     Task Completion          73.5   86.6   66.3   72.4      ous for judges to assess, where correctness is not
+    Style                     79.2   86.6   74.7   78.5      always clearly defined and borderline cases may
+     Style Tone               79.4   87.0   79.0   79.0      exist. The other three types (Topic Scope, Quality
+     Language Linguistics     75.8   89.4   70.2   83.9      Requirements, Task Completion) all lack clear-cut
+     Multi-turn Coherence     91.0   89.0   75.6   74.2
+     Role Persona             71.1   81.6   72.0   77.6      criteria, making consistent judgment difficult.
+    Overall                   77.5   86.2   71.2   81.4      Model-Specific Observations.          We also observe
+Table 4: Judges accuracy (%) by rubric type. clear model-specific strengths and weaknesses.
+    Underlined values are below the dimension average for    GPT-4o performs poorly on Form rubrics (67.0%),
+    that model.                                              especially on Ordering/Sequence (61.3%), sug-
+                                                             gesting difficulty in verifying strict ordering re-
+    hibits substantial inter-judge variance: CSR scores      quirements. In contrast, Qwen3 performs strongly
+    range from 55% (GPT-5.1) to 80% (GPT-4o)—a               on Multi-turn Coherence (91.0%), indicating bet-
+    gap of 25 points for the same model responses.           ter handling of dialogue consistency across turns.
+    This suggests that judge selection alone can dra-        The gpt-oss judge shows the most balanced perfor-
+    matically affect benchmark scores and potentially        mance across dimensions overall, although it still
+    lead to conflicting conclusions about model perfor-      underperforms on Role Persona, which remains
+    mance.                                                   challenging across models.
+                   As we move toward more fine-grained and   6 Conclusion
+    reasoning-augmented paradigms, inter-judge vari-
+    ance decreases. With rubric-level evaluation and
+    reasoning, the three judges converge noticeably:         We present RUBRICEVAL, the first rubric-level
+    scores range from 62% to 74%, reducing the gap           meta-evaluation benchmark for instruction follow-
+    to 12 points. However, non-trivial differences still     ing, covering four instruction categories with EASY
+    remain, reflecting inherent capability gaps among        and HARD splits. We design and use the Rubric
+    judges. This suggests that rubric-level evaluation       Arbitration Framework (RAF) to produce high-
+with reasoning improves both accuracy and inter- confidence labels at scale. Our experiments re-
+judge consistency, but cannot fully eliminate vari- veal that rubric-level judging remains challeng-
+ance introduced by judge capability differences, ing. Even widely adopted judges like GPT-4o
+    highlighting the importance of our rubric-level          and Claude-4.5 struggle on hard instances, rais-
+    meta-evaluation efforts.                                 ing concerns about current rubric-based evaluation
+                                                             practices. We also find that rubric-level evaluation
+    5.4     Error Analysis                                   outperforms checklist-level evaluation, explicit rea-
+    Table 4 presents the accuracy of four judges across      soning improves judging accuracy, and both to-
+    fine-grained rubric types in RUBRICEVAL, grouped         gether enhance inter-judge consistency. Through
+    into four high-level dimensions.                         error analysis with our rubric taxonomy, we iden-
+                                                             tify common failure modes, providing guidance for
+    Common Failure Modes.          We identify five rubric   future judge development and benchmark design.
+types where most judges underperform: Topic We hope RUBRICEVAL serves as a foundation for
+   †Qwen3 refers to Qwen3-235B-A22B-Instruct-2507, gpt- developing more reliable LLM judges for instruc-
+oss refers to gpt-oss-120b, and GPT-4o refers to GPT-4o-2024- tion following, ultimately advancing trustworthy
+    11-20.                                                   evaluation in both research and practice.
+
+ Limitations                                                   Anisha Gunjal, Anthony Wang, Elaine Lau, Vaskar
+                                                         Nath, Yunzhong He, Bing Liu, and Sean Hendryx.
+      Our work has several limitations: (1) RUBRICEVAL   2025. Rubrics as rewards:        Reinforcement learn-
+    focuses on four main instruction categories, which   ing beyond verifiable domains.         arXiv preprint
+    may not fully cover all instruction-following sce-   arXiv:2507.17746.
+  narios in practice. Other instruction types, such as       Qianyu He, Jie Zeng, Wenhao Huang, Lina Chen, Jin
+    agent-related or domain-specific instructions, are   Xiao, Qianxi He, Xunzhe Zhou, Jiaqing Liang, and
+       not included. (2) The Rubric Arbitration Frame-   Yanghua Xiao. 2024a. Can large language models
+         work (RAF) relies on LLM judges and reasoning   understand real-world complex instructions? In Pro-
+       models to produce high-confidence reference la-   ceedings of the AAAI Conference on Artificial Intelli-
+                                                         gence, volume 38, pages 18188–18196.
+     bels. Although human validation shows high agree-
+         ment with RAF labels, the remaining cases may         Yun He, Di Jin, Chaoqi Wang, Chloe Bi, Karishma
+ still contain annotation noise. Additionally, rubrics   Mandyam, Hejia Zhang, Chen Zhu, Ning Li, Tengyu
+      that fail to reach consensus between meta-judges   Xu, Hongjiang Lv, and 1 others. 2024b.         Multi-
+                                                         if: Benchmarking llms on multi-turn and mul-
+ are discarded to prioritize label quality.  While       tilingual instructions following.      arXiv preprint
+    the resulting benchmark remains sufficiently large   arXiv:2410.15553.
+     and discriminative, some genuinely hard cases may    Yun He, Wenzhe Li, Hejia Zhang, Songlin Li, Karishma
+   still be excluded. (3) We focus on rubric-level bi-   Mandyam, Sopan Khosla, Yuanhao Xiong, Nanshu
+      nary judgments, which is the most common setting   Wang, Xiaoliang Peng, Beibin Li, and 1 others. 2025.
+      in current benchmarks. Other evaluation formats,   Advancedif: Rubric-based benchmarking and rein-
+     such as Likert-scale ratings or comparative judg-   forcement learning for advancing llm instruction fol-
+ ments, are beyond the scope of our work.                lowing. arXiv preprint arXiv:2511.10507.
+                                                             Zenan Huang, Yihong Zhuang, Guoshan Lu, Zeyu Qin,
+                                                         Haokai Xu, Tianyu Zhao, Ru Peng, Jiaqi Hu, Zhan-
+ References                                              ming Shen, Xiaomeng Hu, and 1 others. 2025. Re-
+                                                         inforcement learning with rubric anchors.       arXiv
+     Josh Achiam, Steven Adler, Sandhini Agarwal, Lama   preprint arXiv:2508.12790.
+  Ahmad, Ilge Akkaya,          Florencia Leoni Aleman,
+        Diogo Almeida, Janko Altenschmidt, Sam Altman,  Jinnan Li, Jinzhe Li, Yue Wang, Yi Chang, and Yuan Wu.
+    Shyamal Anadkat, and 1 others. 2023. Gpt-4 techni-   2025a. Structflowbench: A structured flow bench-
+  cal report. arXiv preprint arXiv:2303.08774.           mark for multi-turn instruction following.      arXiv
+                                                         preprint arXiv:2502.14494.
+     Kaikai An, Li Sheng, Ganqu Cui, Shuzheng Si, Ning
+      Ding, Yu Cheng, and Baobao Chang. 2025. Ultraif:       Xuzhao Li, Xuchen Li, Shiyu Hu, Yongzhen Guo, and
+  Advancing instruction following from the wild. arXiv   Wentao Zhang. 2025b. Verifybench: A systematic
+  preprint arXiv:2502.04153.                             benchmark for evaluating reasoning verifiers across
+                                                         domains. arXiv preprint arXiv:2507.09884.
+  Rahul K Arora, Jason Wei, Rebecca Soskin Hicks, Pre-  Gili Lior, Asaf Yehudai, Ariel Gera, and Liat Ein-Dor.
+        ston Bowman, Joaquin Quiñonero-Candela, Foivos   2025. Wildifeval: Instruction following in the wild.
+        Tsimpourlas, Michael Sharman, Meghan Shah, An-   arXiv preprint arXiv:2503.06573.
+drea Vallone, Alex Beutel, and 1 others. 2025.
+Healthbench: Evaluating large language models Wenhao Liu, Zhengkang Guo, Mingchen Xie, Jingwen
+  towards improved human health.        arXiv preprint   Xu, Zisu Huang, Muzhao Tian, Jianhan Xu, Muling
+  arXiv:2505.08775.                                      Wu, Xiaohua Wang, Changze Lv, and 1 others. 2025a.
+       Ge Bai, Jie Liu, Xingyuan Bu, Yancheng He, Jia-   Recast: Strengthening llms’ complex instruction fol-
+        heng Liu, Zhanhui Zhou, Zhuoran Lin, Wenbo Su,   lowing with constraint-verifiable data. arXiv preprint
+  Tiezheng Ge, Bo Zheng, and 1 others. 2024.       Mt-   arXiv:2505.19030.
+    bench-101: A fine-grained benchmark for evaluating  Yixin Liu, Kejian Shi, Alexander Richard Fabbri, Yilun
+  large language models in multi-turn dialogues. arXiv   Zhao, Peifeng Wang, Chien-Sheng Wu, Shafiq Joty,
+  preprint arXiv:2402.14762.                             and Arman Cohan. 2025b.          Reife: Re-evaluating
+  Thomas Palmeira Ferraz, Kartik Mehta, Yu-Hsiang Lin,   instruction-following evaluation. In Proceedings of
+     Haw-Shiuan Chang, Shereen Oraby, Sijia Liu, Vivek   the 2025 Conference of the Nations of the Americas
+        Subramanian, Tagyoung Chung, Mohit Bansal, and   Chapter of the Association for Computational Lin-
+  Nanyun Peng. 2024.   Llm self-correction with de-      guistics: Human Language Technologies (Volume 1:
+    crim: Decompose, critique, and refine for enhanced   Long Papers), pages 12247–12287.
+  following of instructions with multiple constraints.  Saumya Malik, Valentina Pyatkin, Sander Land, Ja-
+  arXiv preprint arXiv:2410.06458.                       cob Morrison, Noah A Smith, Hannaneh Hajishirzi,
+
+   and Nathan Lambert. 2025. Rewardbench 2: Ad- Bosi Wen, Pei Ke, Xiaotao Gu, Lindong Wu, Hao
+     vancing reward model evaluation.        arXiv preprint    Huang, Jinfeng Zhou, Wenchuang Li, Binxin Hu,
+     arXiv:2506.01937.                                         Wendy Gao, Jiaxing Xu, and 1 others. 2024. Bench-
+          Long Ouyang, Jeffrey Wu, Xu Jiang, Diogo Almeida,    marking complex instruction-following with multiple
+     Carroll Wainwright, Pamela Mishkin, Chong Zhang,          constraints composition. Advances in Neural Infor-
+     Sandhini Agarwal, Katarina Slama, Alex Ray, and 1         mation Processing Systems, 37:137610–137645.
+     others. 2022. Training language models to follow in-     Tianhao Wu, Weizhe Yuan, Olga Golovneva, Jing Xu,
+     structions with human feedback. Advances in neural        Yuandong Tian, Jiantao Jiao, Jason E Weston, and
+     information processing systems, 35:27730–27744.           Sainbayar Sukhbaatar. 2025.   Meta-rewarding lan-
+        Hao Peng, Yunjia Qi, Xiaozhi Wang, Bin Xu, Lei Hou,    guage models: Self-improving alignment with llm-
+     and Juanzi Li. 2025. Verif: Verification engineering      as-a-meta-judge. In Proceedings of the 2025 Con-
+     for reinforcement learning in instruction following.      ference on Empirical Methods in Natural Language
+     arXiv preprint arXiv:2506.09942.                          Processing, pages 11548–11565.
+Valentina Pyatkin, Saumya Malik, Victoria Graf, Zhiyuan Zeng, Jiatong Yu, Tianyu Gao, Yu Meng, Tanya
+     Hamish Ivison, Shengyi Huang, Pradeep Dasigi,             Goyal, and Danqi Chen. 2023.     Evaluating large
+     Nathan Lambert, and Hannaneh Hajishirzi. 2025.            language models at evaluating instruction following.
+     Generalizing verifiable instruction following.   arXiv    arXiv preprint arXiv:2310.07641.
+     preprint arXiv:2507.02833.                               Tao Zhang, Chenglin Zhu, Yanjun Shen, Wenjing Luo,
+            Yiyue Qian, Shinan Zhang, Yun Zhou, Haibo Ding,    Yan Zhang, Hao Liang, Fan Yang, Mingan Lin,
+     Diego Socolinsky, and Yi Zhang. 2025. Enhancing           Yujing Qiao, Weipeng Chen, and 1 others. 2025a.
+     llm-as-a-judge via multi-agent collaboration.             Cfbench:    A comprehensive constraints-following
+                                                               benchmark for llms. In Proceedings of the 63rd An-
+          Yanzhao Qin, Tao Zhang, Yanjun Shen, Wenjing Luo,    nual Meeting of the Association for Computational
+     Haoze Sun, Yan Zhang, Yujing Qiao, Weipeng Chen,          Linguistics (Volume 1: Long Papers), pages 32926–
+     Zenan Zhou, Wentao Zhang, and 1 others. 2024a.            32944.
+     Sysbench: Can large language models follow system
+     messages? arXiv preprint arXiv:2408.10943.               Xinghua Zhang, Haiyang Yu, Cheng Fu, Fei Huang,
+                                                               and Yongbin Li. 2025b.      Iopo: Empowering llms
+          Yiwei Qin, Kaiqiang Song, Yebowen Hu, Wenlin Yao,    with complex instruction following via input-output
+     Sangwoo Cho, Xiaoyang Wang, Xuansheng Wu, Fei             preference optimization. In Proceedings of the 63rd
+     Liu, Pengfei Liu, and Dong Yu. 2024b. Infobench:          Annual Meeting of the Association for Computational
+     Evaluating instruction following ability in large lan-    Linguistics (Volume 1: Long Papers), pages 22185–
+     guage models. arXiv preprint arXiv:2401.03601.            22200.
+       Yulei Qin, Gang Li, Zongyi Li, Zihan Xu, Yuchen Shi,   Zhihan Zhang, Shiyang Li, Zixuan Zhang, Xin Liu,
+     Zhekai Lin, Xiao Cui, Ke Li, and Xing Sun. 2025.          Haoming Jiang, Xianfeng Tang, Yifan Gao, Zheng
+     Incentivizing reasoning for advanced instruction-         Li, Haodong Wang, Zhaoxuan Tan, and 1 others.
+     following of large language models. arXiv preprint        2025c. Iheval: Evaluating language models on fol-
+     arXiv:2506.01413.                                         lowing the instruction hierarchy.  arXiv preprint
+            Qingyu Ren, Jie Zeng, Qianyu He, Jiaqing Liang,    arXiv:2502.08745.
+  Yanghua Xiao, Weikang Zhou, Zeye Sun, and Fei Jeffrey Zhou, Tianjian Lu, Swaroop Mishra, Sid-
+     Yu. 2025. Step-by-step mastery: Enhancing soft con-       dhartha Brahma, Sujoy Basu, Yi Luan, Denny Zhou,
+     straint following ability of large language models.       and Le Hou. 2023.    Instruction-following evalu-
+     arXiv preprint arXiv:2501.04945.                          ation for large language models.   arXiv preprint
+    Sijun Tan, Siyuan     Zhuang,  Kyle         Montgomery,    arXiv:2311.07911.
+  William Y Tang, Alejandro Cuadron, Chenguang Yilun Zhou, Austin Xu, Peifeng Wang, Caiming
+     Wang, Raluca Ada Popa, and Ion Stoica. 2024.             Xiong, and Shafiq Joty. 2025.    Evaluating judges
+           Judgebench: A benchmark for evaluating llm-based    as evaluators: The jetts benchmark of llm-as-judges
+     judges. arXiv preprint arXiv:2410.12784.                  as test-time scaling evaluators.   arXiv preprint
+           Vijay Viswanathan, Yanchao Sun, Shuang Ma, Xiang    arXiv:2504.15253.
+     Kong, Meng Cao, Graham Neubig, and Tongshuang
+     Wu. 2025. Checklists are better than reward mod-
+     els for aligning language models.       arXiv preprint
+     arXiv:2507.18624.
+    Chenyang Wang, Liang Wen,      Shousheng Jia,       Xi-
+     angzheng Zhang, and Liang Xu. 2025. Light-if: En-
+     dowing llms with generalizable reasoning via preview
+     and self-checking for complex instruction following.
+     arXiv preprint arXiv:2508.03178.
+
+    A    Instruction Category Definitions                    dle cross-turn references and ensure coherence
+We collect instructions in RUBRICEVAL from four throughout the conversation.
+widely used categories. Below we provide detailed System Instructions. System instructions in-
+    definitions for each category.                           clude a system prompt that defines the model’s
+Constrained Instructions. Constrained instruc- behavior, role, or constraints at the conversation
+tions are single-turn instructions that contain multi- level. The model is expected to strictly adhere to
+ple constraints that model must satisfy simultane- the system prompt throughout its responses.
+    ously during generation. For example, an instruc-           This type of instruction is prevalent in deployed
+    tion may require the response to simultaneously          AI systems, where system prompts are used to cus-
+    include specific content, follow a specified format,     tomize model behavior for specific applications.
+    and output in a style.                                   Benchmarks such as SysBench (Qin et al., 2024a)
+             This type of instruction is widely used in      and IHEval(Zhang et al., 2025c) focus on system-
+    instruction-following evaluation, as it directly tests   prompt following evaluation.
+    a model’s ability to handle multiple requirements               Evaluation difficulty varies depending on the
+in parallel. Representative benchmarks include specificity of the system prompt. Verifying ad-
+InfoBench (Qin et al., 2024b), CFBench (Zhang herence to abstract role definitions (e.g., “act as a
+et al., 2025a), TRACE (Zhang et al., 2025b) and helpful assistant”) is harder than checking concrete
+    Wildifeval(Lior et al., 2025).                           constraints (e.g., “always respond in JSON”).
+   Evaluation difficulty for constrained instructions B Statistics of the original instructions
+    is moderate to high, as judges must verify each con-       and rubrics
+    straint independently while ensuring no constraint
+    is overlooked.
+    Compositional Instructions.       Compositional in-       Type            Benchmark    #Inst. #Rub.  R/I   H.
+    structions contain complex topological structures         Constrained   InfoBench_hard  228   1,453  6.37  ✓
+                                                                             ComplexBench   238   1,027  4.32  ✓
+    with logical  dependencies     among   constraints,                        CFBench      243   1,035  4.26  ✓
+    such as conditional branches(Selection), sequen-                          AdvancedIF    243   1,816  7.47  ✓
+    tial chains(Chain), and conjunctive relations(And).       Compositional  ComplexBench   435   1,651  4.49  ✓
+    This type of instruction tests a model’s ability to       Multi-Turn   StructFlowBench  643   1,775  2.76  ✓
+    parse and execute logically structured requirements,                      AdvancedIF    736   4,478  6.08  ✓
+    which is essential for complex real-world tasks.          System           SysBench    1,000  2,478  2.48  ✓
+    ComplexBench (Wen et al., 2024) is the primary                            AdvancedIF    507   4,972  9.81  ✓
+    benchmark focusing on this instruction type.              Total                        4,273 20,685 4.84   ✓
+   Evaluation difficulty is high, as judges must cor- Table 5: Instruction sources and rubric statistics in
+rectly parse the underlying logical structure and RUBRICEVAL. Statistics are computed over the bench-
+ground each rubric to the corresponding part of the mark subsets used in our experiments. #Inst.: instruc-
+    response.                                                tions; #Rub.: rubrics; R/I: rubrics per instruction; H.:
+        human-crafted/verified.
+Multi-turn Instructions. Multi-turn instructions
+involve conversational interactions spanning mul- Table 5 summarizes the instruction and rubric
+tiple dialogue turns. The model must maintain sources used in R
+    consistency, track context, and follow constraints                                 UBRICEVAL. We collect from
+    that may evolve or accumulate across turns.              multiple benchmarks across four instruction cat-
+   This type of instruction reflects realistic conver- egories, totaling 4,273 instructions and 20,685
+sational AI scenarios, where users interact with rubrics. All rubrics are human-crafted or human-
+models through extended dialogues. Related bench- verified.
+marks include MT-Bench-101 (Bai et al., 2024) and C Rubric-based Evaluation
+StructFlowBench(Li et al., 2025a).
+   Evaluation difficulty is moderate, as conversa- Rubric-based evaluation has been widely adopted
+tional history provides additional context for rubric across various domains beyond instruction follow-
+verification. However, judges must correctly han- ing. For example, HealthBench (Arora et al., 2025)
+
+    employs rubric-level verification to evaluate med-        Subset      Samples   Judge Inst.   Pos.          Neg.
+    ical question answering, and similar approaches           Right-to-Wrong   120   240          120            120
+    have been applied to code generation, summariza-          Wrong-to-Right   133   266          133            133
+    tion, and other complex tasks. In this paradigm,          Total            253   506          253            253
+    complex evaluation criteria are decomposed into a
+    set of fine-grained rubrics, each specifying a par-       Table 6: Human-annotated reference set statistics.
+    ticular requirement. An LLM judge then verifies
+    whether the response satisfies each rubric indepen-      mentation strategy. Specifically, for a triplet labeled
+    dently, and the results are aggregated into an overall   as True (1) under a given rubric, we prompt GPT-
+    score.                                                   4.1 to minimally edit the response to violate that
+         Beyond benchmarking, rubric-level judgments         rubric; for a triplet labeled as False (0), we prompt
+    are increasingly used as supervision or reward sig-      GPT-4.1 to minimally edit the response to satisfy
+    nals in model training (Gunjal et al., 2025; Huang       the rubric. The rewriting prompt is conditioned on
+    et al., 2025; Peng et al., 2025; An et al., 2025).       the rubric type to ensure the edit targets the relevant
+    Compared to binary or scalar response-level re-          requirement.
+    wards, rubric-based rewards enable models to re-                All rewritten responses are manually verified by
+    ceive fine-grained feedback and partial credit for       annotators to ensure that the edit is effective and
+    partially correct responses, which can lead to more      valid with respect to the target rubric. We retain
+    effective learning.                                      only the verified rewritten examples in the final
+   Compared to holistic response-level evaluation, augmented reference set.
+rubric-based evaluation offers several advantages.
+First, it is particularly well-suited for tasks that are E T-SNE visualization of rubrics
+inherently subjective or multi-faceted. By breaking Figure 6 shows that several categories form rela-
+down holistic evaluation into smaller, more focused tively compact clusters—e.g., [Multi-turn Coher-
+decisions, rubric-based evaluation reduces ambigu- ence] (light green), [Quantity Limit] (purple), and
+ity and provides more interpretable feedback, as it [Format Structure] (light orange)—indicating con-
+explicitly identifies which requirements are satis- sistent patterns within these rubric types.
+fied and which are not.
+   However, this paradigm also introduces new
+challenges. The reliability of the final score de-
+pends on the accuracy of each individual rubric
+judgment. Errors in rubric-level verification can
+propagate through aggregation and bias down-
+stream applications, making judge reliability a crit-
+ical concern. This motivates the need for rigorous
+meta-evaluation of LLM judges at the rubric level,
+which is the focus of our work.
+
+    D          Human Set Construction and Statistics
+
+    We construct a human-labeled reference set by col-
+    lecting instances on which four LLM judges dis-
+    agree during evaluation, as such cases are typically
+    non-trivial.  Two annotators independently label
+    each triplet by examining the instruction, the re-
+    sponse, and the target rubric. For triplets with con-
+    flicting annotations, the annotators discuss the case
+    and reach a consensus label, which we treat as the
+    final ground truth.
+    To further increase the dataset size while main-
+    taining a balanced distribution of positive and neg-
+    ative labels, we apply a rewriting-based data aug-
+
+    40
+
+
+
+    20
+
+
+
+    0
+
+
+
+    20
+
+
+
+    40
+
+
+
+    60
+
+
+
+       80
+
+         80      60  40      20            0      20              40  60      80
+                      t-SNE Dimension 1
+                  Conditional Logic        Multi-turn Coherence       Role Persona
+                  Content Exclusion        Ordering Sequence          Style Tone
+                  Content Inclusion        Quality Requirements       Task Completion
+                  Format Structure         Quantity Limit             Topic Scope
+                  Language Linguistics
+
+       Figure 6: T-SNE visualization of rubric instances in the embedding space, colored by rubric category.
+
+    F  Model Pool for Response Generation     G Dataset Statistics
+We list the models used to generate responses in Table 8 provides a detailed breakdown of
+RUBRICEVAL. The pool spans diverse model fam- RUBRICEVAL statistics by source benchmark, in-
+ilies, scales, and architectures to ensure response cluding the number of instructions and rubric in-
+    diversity.                                stances in each split.
+
+
+
+
+
+
+
+
+
+
+t-SNE Dimension 2
+
+        Model                             Family                  Total   Active  Arch.    Mode
+        Qwen3-4B-Instruct-2507            Qwen                    4B    4B        Dense  Instruct
+        Qwen3-4B-Thinking-2507            Qwen                    4B    4B        Dense  Thinking
+        Qwen2.5-7B-Instruct               Qwen                    7B    7B        Dense  Instruct
+        Llama-3.1-8B-Instruct             Llama                   8B    8B        Dense  Instruct
+        DeepSeek-R1-0528-Qwen3-8B                  Qwen+DeepSeek  8B    8B        Dense  Thinking
+        Qwen3-30B-A3B-Instruct-2507       Qwen                   30B    3B          MoE  Instruct
+        Qwen3-30B-A3B-Thinking-2507       Qwen                   30B    3B          MoE  Thinking
+        Qwen2.5-32B-Instruct              Qwen                   32B   32B        Dense  Instruct
+        Llama-3.3-70B-Instruct            Llama                  70B   70B        Dense  Instruct
+
+    Table 7: Model pool for response generation, covering 3 families, scales from 4B to 70B, Dense and MoE
+    architectures, and Instruct/Thinking inference modes.
+
+      Category        Source Benchmark           # Instr.  # Rubric-Level Labels  Category Summary
+                                                            Easy   Hard    Total   Easy   Hard    Total
+                      InfoBench_hard                   95     72     47      119
+      Constrained     ComplexBench                     80     54     46      100    368    316      684
+                      CFBench                         112     54     71      125
+                      AdvancedIF                      219    188    152      340
+      Compositional   ComplexBench                    188    130    110      240    130    110      240
+      Multi-Turn      StructFlowBench                 229    186     95      281    663    431    1,094
+                      AdvancedIF                      424    477    336      813
+      System          SysBench                        282    160    217      377    873    595    1,468
+                      AdvancedIF                      360    713    378    1,091
+      Total           RUBRICEVAL (Ours)             1,989  2,034  1,452    3,486  2,034  1,452    3,486
+
+                          Table 8: Statistics of the RUBRICEVAL Benchmark.
+
+H Evaluation Paradigm Performance on J Benchmark Sources and Statistics
+       Easy and Hard Split                                 Table 10 lists the source benchmarks for each in-
+    Table 9 reports evaluation paradigm comparison         struction category along with detailed statistics. All
+    results separately on EASY and H ARD splits, com-      rubrics are human-crafted or human-verified.
+    plementing the combined results in the main text.
+
+    I Rubric Statistics
+    Figure 7 shows the distribution of rubric types in
+    RUBRICEVAL according to our 13-category taxon-
+    omy across four high-level dimensions.
+
+    Granularity       Reasoning   Constrained     Compositional   Multi-turn      System          Overall
+                                  Qwen    GPT     Qwen    GPT     Qwen    GPT     Qwen    GPT     Qwen    GPT
+    Easy Subset
+    Rubric-level      w/o CoT     70.01   84.05   81.50   85.49   82.28   85.74   84.81   90.71   79.65   86.50
+                      w/ CoT      86.44   97.89   91.65   96.99   88.75   94.88   85.13   93.13   87.99   95.72
+    Checklist-level   w/o CoT     53.07   67.45   79.17   72.86   56.83   56.82   74.83   79.07   65.98   69.05
+                      w/ CoT      76.18   81.08   80.60   86.99   67.86   61.88   84.08   89.04   77.18   79.75
+    Hard Subset
+    Rubric-level      w/o CoT     58.45   58.42   47.85   52.31   52.18   54.24   45.56   58.97   51.01   55.99
+                      w/ CoT      64.19   70.87   62.93   51.93   65.75   66.92   58.31   63.18   62.80   63.23
+    Checklist-level   w/o CoT     56.57   53.99   43.75   42.01   46.54   52.79   48.97   53.20   48.96   50.50
+                      w/ CoT      60.58   59.80   54.51   56.77   50.92   52.21   64.42   67.35   57.61   59.03
+
+        Table 9: Evaluation paradigm comparison on EASY and HARD subsets.
+
+K  Judge Model Performance and
+   Selection
+Figure 8. reports the accuracy of different judge
+models on our human-annotated reference set. We
+observe non-trivial performance gaps across mod-
+els, indicating that judge model choice can substan-
+tially affect labeling quality. Considering the accu-
+racy and practical trade-offs on the reference set,
+we select the following four models as base judges:
+GPT-4.1, Claude-Sonnet-4.5, Gemini-2.5-Flash,
+and Deepseek-v3.2-exp.
+
+L  Rubric Taxonomy
+To categorize each rubric, we write prompt and use
+GPT-5.1 for rubric categorization. When the source
+benchmark provides category for the rubric, we use
+them as guidance in the prompt rather than directly
+adopting them. This leads to more accurate catego-
+rization. If no predefined categories are provided,
+we perform the categorization directly.
+
+M  Case Study
+Figure 9 illustrates a case study of our automated
+labeling framework, demonstrating strong labeling
+quality and scalability.
+
+N  Evaluation Prompt
+
+Role Persona
+Multi-turn Coherence
+    Content Inclusion
+Language Linguistics
+
+
+4.4%
+    13.9%
+Style Tone  3.6%
+
+
+
+6.8%
+
+Task Completion     Style    Content Exclusion
+                    17.0%
+                    Content  9.6%
+                     30.8%
+
+
+Conditional Logic  7.9%             Total
+                                    3,486
+                           Quality
+                           23.3%        7.3%  Topic Scope
+
+
+
+12.5%               Form
+                    28.9%
+
+Quality Requirements
+                                    14.4%
+
+
+
+                                    Quantity Limit
+                           12.4%
+
+Ordering Sequence
+
+
+                           Format Structure
+
+
+
+
+
+
+
+
+
+
+Figure 7: Rubric taxonomy for RUBRICEVAL with 4 high-level dimensions and 13 fine-grained categories.
+
+    Type           Benchmark             Description                             Used Subset  Total      Used
+                                                                                              Inst.   Rub. Inst.   Rub.
+                   InfoBench (Qin        Breaks instructions into decomposed         Hard       500  2,250   228   1,453
+                   et al., 2024b)        questions;  evaluates     instruction-
+    Constrained                          following with DRFR metrics.
+       ComplexBench (Wen Tests multi-constraint, complex in- Multi-Constraint 1,150 5,297 238 1,027
+                   et al., 2024)         struction following using hierarchical
+                                         constraint types and combinations.
+                   CFBench (Zhang        Large-scale  Chinese       constraint-    Filtered   1,000  4,273   243   1,035
+                   et al., 2025a)        following benchmark spanning 200+
+                                         real scenarios and 50+ NLP tasks.
+                   AdvancedIF (He        Expert-rubric  benchmark for       ad-  Single-turn  1,645 12,442   243   1,816
+                   et al., 2025)         vanced instruction following (com-
+       plex, multi-turn, system-level); sup-
+       ports rubric-based RL.
+Compositional ComplexBench (Wen Tests multi-constraint, complex in- Compositonal 1,150 5,297 435 1,651
+                   et al., 2024)         struction following using hierarchical
+                                         constraint types and combinations.
+    Multi-Turn     StructFlowBench (Li   Multi-turn benchmark measuring dia-         Full     643    1,775   643   1,775
+                   et al., 2025a)        logue “structure-flow” understanding
+                                         across turn-to-turn relation types.
+                   AdvancedIF (He        Expert-rubric  benchmark for       ad-   Multi-turn  1,645 12,442   736   4,478
+                   et al., 2025)         vanced instruction following (com-
+                                         plex, multi-turn, system-level); sup-
+                                         ports rubric-based RL.
+    System         SysBench (Qin         Evaluates system-message adherence         Random    2,500  5,962 1,000   2,478
+                   et al., 2024a)        via violations, misclassification, and
+                                         multi-turn consistency.
+                   AdvancedIF (He        Expert-rubric  benchmark for       ad-     System    1,645 12,442   507   4,972
+                   et al., 2025)         vanced instruction following (com-
+                                         plex, multi-turn, system-level); sup-
+                                         ports rubric-based RL.
+    Total                                                                                         4,273 20,685
+
+   Table 10: Detailed source statistics for RUBRICEVAL. We list the descriptions, used subset, and the counts of
+   instructions/rubrics (Total available vs. Used).
+
+
+                          o3                                                                   87.94
+             Gemini2.5-Flash                                  86.56
+               Gemini2.5-Pro                                  86.49
+                     GPT-5.1                                  86.49
+                     GPT-4.1                                85.38
+           Claude Sonnet-4.5                           83.20
+           DeepSeek-v3.2-exp                 82.41
+    Qwen3-235B-A22B-Instruct             80.63
+                     GLM-4.6             79.84
+               DeepSeek-v3.1             79.05
+           GPT-4o-2024-11-20             75.89
+                       74                76     78 80 82  84  86                                  88
+                                                 Accuracy (%)
+
+                   Figure 8: Single-model Judge Performance on the Human-labeled Set (Accuracy)
+
+Dimension Rubric type          Definition                               Example
+           Content Inclusion   The response must include specific       For each destination in the itinerary,
+Content                        content elements (keywords, enti-        does the generated text include the
+                               ties, components).                       recommended duration of stay?
+           Content Exclusion   The response must NOT include            Does the generated text free of us-
+                               specific content elements.               ing the letter ’e’?
+           Topic Scope         The response must stay within a          Were four questions related to
+                               specified topic, domain, or area.        Greek mythology?
+           Quantity Limit      The response or its elements             Did the model cite at least 3 of the
+Form                           must meet explicit numeric lim-          clues in each explanation?
+                               its (counts, lengths, frequencies).
+           Format Structure    The output must follow a required        Is the generated text formatted as a
+                               format, structure, template, or          travelogue video script?
+                               match an exact output.
+           Ordering Se-        Elements in the response must fol-       Was the list appropriately organized
+           quence              low a specified order or arrange-        by publishing date, from oldest to
+                               ment.                                    newest?
+           Quality Require-    Requirements about response qual-        Does each sentence convey a clear,
+Quality    ments               ity rather than explicit content/form.   understandable meaning?
+           Conditional Logic   The response must make correct           Did the response include Ërror:
+                               judgments or branch based on con-        Cannot Complete Requestïf it can-
+                               ditions or context.                      not answer the query about R v
+                                                                        Bertrand Marchand?
+           Task Completion     The response must complete a spec-       Did the model change each instance
+                               ified task or produce a required         of ’God only knows’ to ’Nobody
+                               artifact.                                knows?’
+           Style Tone          The response must follow a spec-         Does the generated travelogue
+Style                          ified writing style, tone, or emo-       video script maintain a friendly
+                               tional stance.                           and engaging tone throughout?
+           Language Linguis-   Constraints on language choice,          Does every sentence in the gener-
+           tics                grammar, or linguistic properties.       ated text exclusively use the future
+    tense?
+    Multi-turn Coher- The response must correctly handle Does the model combine the two
+           ence                dependencies on previous conversa-       messages into a single one?
+                               tion turns.
+           Role Persona        The response must be produced            Did the model respond in a manner
+                               from a specified identity, role, or      consistent with the persona of a
+                               viewpoint.                               painfully shy 11 year old girl?
+
+               Table 11: Rubric taxonomy of RUBRICEVAL
+
+     Human annotator
+Help me prepare for a Psychology exam. Briefly explain the following 3 topics:             There are three multiple choices
+Behaviorism, Functionalism, and Structuralism. Name one notable psychologist for
+each one. I'm having the .......                                                           questions. Although i don’t know the
+......                                                                                     meaning of Behaviorism, Functionalism,
+At the end include three multiple choice questions, one for each topic.                    and Structuralism, but i see similar
+The answer for each multiple choice question should be found within the text you
+provide. Provide 3 incorrect answers along with the correct ......                         words in the question! That’s right!
+
+Sure, let's dive into the topics of Behaviorism, Functionalism, and Structuralism,
+along with some helpful analogies to make them easier to understand. ......
+......                                                                                      : .... Each question is clearly labeled ...
+### Multiple Choice Questions
+1. **Which school of thought focuses on observable behaviors and the                        : ... Only covered two of the three
+relationship between stimuli and responses?**                                               requested topics ...
+ - A) Psychoanalysis                                                                        : ... With no question addressing
+ - B) Behaviorism
+ - C) Cognitive Psychology                                                                  Structuralism ...
+ - **D) Behaviorism**                                                                       : ... The questions only cover Behaviorism
+2. **Which psychologist is known for his work on the adaptive function of mental
+processes?**                                                                                and     Functionalism ......
+ - A) B.F. Skinner
+ - B) John B. Watson
+ - C) William James
+ - **D) William James**        Rubric
+3. **Which of the following best describes the core idea of Behaviorism?**    Arbitration
+ - A) The study of mental states and consciousness                              Framework  O3        R1
+ - B) The focus on observable behaviors and environmental influences
+ - C) The analysis of mental processes and their structures                                 Let me see.                 In my view,
+ - **D) The focus on observable behaviors and environmental influences**                    ......                      ......
+The correct answers are:                                                                    <Think 1>                   <Think 2>
+1. **D) Behaviorism**                                                                       ......                      ......
+2. **D) William James**                                                                     That’s wrong!               It’s wrong!
+3. **D) The focus on observable behaviors and environmental influences**
+
+Rubric
+Are three multiple choice questions, one for each topic included?                               Final Label: False
+
+
+Figure 9: Case study on automated labeling. In some cases, we observe that our RAF framework produces more
+objective judgments than human annotators.
+
+
+
+
+
+Your job is to assess if the AI’s response correctly follows a specific requirement from the user’s instruction.
+## User’s Instruction
+————————————————————–
+{instruction}
+————————————————————–
+## AI’s Response to Evaluate
+————————————————————–
+{response}
+————————————————————–
+## The Rubric (Requirement to Check)
+————————————————————–
+{rubric_text}
+————————————————————–
+## Your Task
+Carefully analyze whether the AI’s response satisfies the above rubric.
+Important: First provide a brief reasoning explaining your thought process, then give your final judgment.
+Please use the following output format strictly (Give two parts: Reasoning and Judgment):
+Reasoning: [Your brief explanation here...]
+Judgment: [YES or NO]
+Here is an example of the expected format:
+Reasoning: The rubric asked for a poem, but the model responded with a code snippet. This violates the rubric.
+Judgment: NO
+Rules:
+
+ • Answer “YES” if the response clearly and fully satisfies the requirement.
+
+ • Answer “NO” if the response fails to meet the requirement or only partially meets it.
+
+ • Be objective and focus only on the given rubric, not other aspects of the response.
+
+ • Do not output anything after giving your final Judgment.
+
+Table 12: Prompt used in RUBRICEVAL to evaluate rubrics belong to Constrainted instruction category.

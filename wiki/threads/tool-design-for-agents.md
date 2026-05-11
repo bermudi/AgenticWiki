@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-05-07
+updated: 2026-05-10
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -11,7 +11,9 @@ sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
+  - raw/2603.00822v2.txt
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
+unaudited_marginal: 0
 ---
 
 # Tool Design for Agents
@@ -26,6 +28,9 @@ tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 
 > [!note] Departure: Feature-Rich vs. Minimal, Both Can Work
 > This thread argues that minimal tools with clean contracts outperform feature-rich ones. [[dex-horthy|Dex Horthy]] provides a counterexample: he achieves exceptional results with Claude Code — a feature-rich, opinionated tool with thousands of open issues and a complex prompting model. His success doesn't come from tool minimalism but from **deep intuition built over months of intensive use with a single tool** ("pick one model, one tool, work with it for 1-2 months"). This suggests that **deep tool familiarity** can compensate for tool complexity, and that the minimalism vs. feature-richness axis may be secondary to the **consistency of use** axis. Both approaches converge on a shared principle: the agent's effectiveness is bounded by how well the human understands the tool's failure modes, not by the tool's feature count.
+
+> [!note] Calibration: Bounded Returns on Interface Quality
+> The [[context-files]] empirical evidence adds a calibration to this thread's thesis that tool quality bounds agent outcomes. Developer-written context files (a well-designed tool interface) improve performance by only ~4% over none. LLM-generated files (a poorly-designed interface) degrade it by ~2%. The effect is real but bounded — past a minimal quality threshold, further tool interface refinement yields diminishing returns. This complements the AuthorFloor finding that task decomposition and [[model-routing|model routing]] may be higher-leverage interventions than tool design alone. The thesis is correct but its leverage is concentrated at the floor (preventing bad tools) rather than at the ceiling (perfecting good ones).
 
 ## The Core Thesis
 
@@ -43,6 +48,7 @@ The wiki already has the [[the-agent-workflow|workflow]] and [[the-human-lever|h
 Today's tools output for humans: verbose diagnostics, interactive TUIs, color-coded terminals. Agents need none of this. What they need:
 
 - **Context reduction built in**: The tool itself is best positioned to decide what's essential. Raw JSON isn't enough — it can be more verbose than human-readable output. The tool should return the minimal actionable signal and persist the rest to a file the agent can opt into reading.
+- **Agent Experience as a design dimension**: The same design principles apply to how agents navigate codebases and tool outputs — [[agent-experience|AX]] extends from code structure to tool interfaces, and well-designed tools reduce the cognitive load on the consuming agent just as they would for a human.
 - **Machine-parseable confidence levels**: Human-facing linters suppress low-confidence findings to avoid fatigue. Agents don't fatigue. They should receive more signals, including low-confidence ones, and decide for themselves whether to act.
 - **Restrictive trust models**: Escape hatches designed for humans (`noqa`, `--no-verify`, `--force`) enable bad agent behavior. The default for agents should be more constrained, not less.
 
@@ -50,7 +56,7 @@ Today's tools output for humans: verbose diagnostics, interactive TUIs, color-co
 Agents make it trivially easy to go from one agent to a hundred and back to zero. This means a 10-person team suddenly faces the problems of a 100-engineer organization: concurrency, git worktrees, reproducible environments, declarative dependency management. Tools designed for individual human use become insufficient at agent scale. As inference gets faster, tools — not model intelligence — become the bottleneck.
 
 ### Plugin Extensibility and Self-Tooling
-Research shows agents that construct their own tools outperform those with pre-built harnesses. This isn't theoretical — [[malleable-agents|agents that can modify their own tools]] are already emerging. Plugin extensibility becomes higher priority than it ever was for human-only use: an agent defining custom lint rules to prevent its own future mistakes is a form of agent memory. Language servers need re-prioritization too — autocomplete is high-effort but largely irrelevant to agents, while rename/find-references is genuinely valuable. The LSP protocol itself may not be the right abstraction for agents; new protocols may be needed.
+Research shows agents that construct their own tools outperform those with pre-built harnesses. The [[context-files|context file]] research by [[thibaud-gloaguen|Gloaguen et al.]] and [[christoph-treude|Lulla et al.]] (2026) provides empirical evidence for this: agents given well-designed [[context-files|context files]] (AGENTS.md, CLAUDE.md) behave differently — they follow instructions faithfully, explore more, and test more — but the quality of the tool interface (the context file itself) determines whether this behavioral change improves or degrades performance. [[martin-vechev|Vechev]]'s lab at ETH Zurich produced the rigorous evaluation framework. This isn't theoretical — [[malleable-agents|agents that can modify their own tools]] are already emerging. Plugin extensibility becomes higher priority than it ever was for human-only use: an agent defining custom lint rules to prevent its own future mistakes is a form of agent memory. Language servers need re-prioritization too — autocomplete is high-effort but largely irrelevant to agents, while rename/find-references is genuinely valuable. The LSP protocol itself may not be the right abstraction for agents; new protocols may be needed.
 
 ## Layer 2: Language and Infrastructure as Tooling
 
@@ -94,7 +100,7 @@ Both agree: for developer-facing agent tools, CLI composability (pipes, scripts)
 
 ## Layer 3: Minimalism as Performance
 
-[[mario-zechner|Mario Zechner]] approaches from a different angle. Rather than redesigning existing tools, he argues for fewer tools with simpler contracts. [[pi]]'s core is four tools: `read`, `write`, `edit`, `bash`. No MCP server, no protocol overhead, no feature negotiation.
+[[mario-zechner|Mario Zechner]] approaches from a different angle. Rather than redesigning existing tools, he argues for fewer tools with simpler contracts. [[pi]]'s core is four tools: `read`, `write`, `edit`, `bash`. No MCP server, no protocol overhead, no feature negotiation. This minimalism is echoed in the [[ralph-loop]] pattern, where a dumb bash loop and a plan file replace sophisticated orchestration — both converge on the same insight: fewer moving parts means fewer failure modes for the agent.
 
 The argument: complex tools create complex failure modes. A harness with 50 specialized tools gives the LLM 50 chances to pick the wrong one, misuse it, or get confused by overlapping functionality. A harness with 4 composable tools gives the LLM clarity and forces creativity into *how* the tools are composed, not *which* one to pick.
 
@@ -124,6 +130,8 @@ This is a departure from the assumptions behind both CLI tools (single process, 
 
 [[peter-werry|Peter Werry]]'s [[unblocked]] introduces a fifth layer to the tool design analysis: the **context engine** — a meta-tool that sits between all other tools and the agent, curating what context reaches the agent before it invokes any tool.
 
+This is a concrete instantiation of [[context-engineering]] principles — maximizing information-per-token density by having a dedicated system pre-answer the context questions the agent would otherwise search for. The context engine is the productized form of context engineering at organizational scale.
+
 This is distinct from the tool design layers above. Where Zanie focuses on individual tool output, Armin on language/infrastructure, Mario on minimalism, and Louis on parallel management, the context engine addresses a *pre-processing* concern: **what context should the agent even see before it starts calling tools?**
 
 ### Why It's a Tool Design Problem
@@ -151,6 +159,29 @@ The context engine layer interacts with the other four layers:
 - **Layer 3 (minimalism)**: The context engine enables minimal tool cores by pushing context retrieval complexity into a separate system
 - **Layer 4 (parallel management)**: Context pre-collection matters more when managing multiple agents — each agent would otherwise independently discover the same organizational knowledge
 
+## ContextCov: Executable Checks as Tool Feedback
+
+[[contextcov|ContextCov]] (Sharma, 2026) provides the strongest empirical validation of this thread's core thesis: **deterministic tool feedback outperforms LLM-based judgment for agent control.**
+
+The paper compares three approaches to enforcing AGENTS.md constraints:
+- **Passive instructions** (vanilla): The agent reads AGENTS.md in context but receives no active tool feedback. Compliance: 67.0%.
+- **LLM Reflection**: A critic LLM reviews patches against AGENTS.md and returns natural-language feedback in a macro-loop. Compliance: 50.3%.
+- **ContextCov's executable checks**: Deterministic PATH shims, Tree-sitter queries, and dependency graph analysis provide immediate, reproducible violation traces. Compliance: **88.3%**.
+
+The result that LLM reflection is *worse than nothing* is particularly striking for this thread. It confirms Zanie Blue's argument that tools must provide deterministic, specialized feedback — not because LLM-based feedback is useless in theory, but because in practice it "hallucination loops" (repeatedly failing to address the same issue) and introduces drift.
+
+### Design Choices That Validate the Thread's Predictions
+
+| ContextCov decision | Thread's prediction | Match |
+|---|---|---|
+| PATH shims for command interception | Zanie: "escape hatches designed for humans enable bad agent behavior" — ContextCov's shims have no escape hatch for the agent | ✓ |
+| Domain-routed code synthesis (separate generators for process/source/architectural checks) | Zanie: specialized feedback qualities — process=correctness, source=quality, architectural=safety/efficiency | ✓ |
+| Fail-closed interpretation of ambiguous instructions | Mario: restrictive trust models — the agent should be more constrained, not less | ✓ |
+| Generated checks stored as editable JSON files for human review | Zanie: "the tool should return the minimal actionable signal" — checks are inspectable Python code | ✓ |
+| Tree-sitter for static analysis vs LLM-based linting | Armin: fast, deterministic feedback keeps the agent loop tight | ✓ |
+
+ContextCov's evaluation provides empirical weight the thread previously lacked. The tool-design thesis — that better agent-facing tools produce better outcomes — now has a controlled experiment showing 21.3 percentage point improvement from deterministic tool feedback over passive instructions, and 38 points over LLM-based feedback.
+
 ## Sources
 
 - `raw/yt-how-agents-use-dev-tools.md` — Zanie Blue's systematic treatment: feedback qualities, scale effects, output optimization, self-tooling
@@ -161,3 +192,4 @@ The context engine layer interacts with the other four layers:
 - `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Parallel management interface design requirements, agent runtime thresholds as a tool design constraint.
 - `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine as meta-tool: pre-curating context, satisfaction of search, expert graphs, and benchmark results
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: model capability tier as a tool design constraint; open-weight models matching GPT-5 on tool use tasks at 15× lower cost
+- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): empirical validation of deterministic tool feedback over LLM reflection; fail-closed design; domain-routed code synthesis; PATH shims as lightweight enforcement

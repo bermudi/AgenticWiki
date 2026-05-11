@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-09
+updated: 2026-05-10
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -22,9 +22,14 @@ sources:
   - raw/yt-slop-watch-ideation.md
   - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
+  - raw/2504.21625v6.txt
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
+  - raw/2311.04235v3.txt
+  - raw/2407.08440v4.txt
+  - raw/2603.00822v2.txt
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
+unaudited_marginal: 0
 ---
 
 # The Agent Workflow
@@ -86,7 +91,7 @@ The workflow assumes you understand *what the machine actually does*. Treating t
 ### The Machine Is Lossy Compression
 An LLM is ~10TB of training data squeezed into ~140GB of weights. It does not contain facts — it contains statistical patterns that *resemble* facts. This has two consequences:
 
-1. **Extrinsic hallucination**: When the model "remembers" something, it's reconstructing a compressed approximation, not retrieving a record. It invents npm packages that don't exist, cites papers that were never written, and fabricates APIs with plausible signatures.
+1. **Extrinsic [[hallucination]]**: When the model "remembers" something, it's reconstructing a compressed approximation, not retrieving a record. It invents npm packages that don't exist, cites papers that were never written, and fabricates APIs with plausible signatures.
 2. **Fluency over accuracy**: The training objective is next-token prediction — producing the most *plausible* continuation, not the most *true* one. RLHF exacerbates this by rewarding confident, helpful-sounding answers over hedging or admitting ignorance.
 
 ### Attention Degrades Quadratically
@@ -97,7 +102,7 @@ The [[smart-zone-dumb-zone]] isn't a vague metaphor — it's a consequence of th
 
 ### Intrinsic vs. Extrinsic Tasks
 A practical distinction from [[matt-pocock|Matt Pocock]]:
-- **Extrinsic tasks** ask the model to reach into its weights for knowledge. "What's the API for React hooks?" — high hallucination risk.
+- **Extrinsic tasks** ask the model to reach into its weights for knowledge. "What's the API for React hooks?" — high [[hallucination]] risk.
 - **Intrinsic tasks** give the model everything it needs in context. "Given this file and these types, add a function that..." — much lower risk.
 
 The entire RAG strategy, the emphasis on providing source files in context, and the [[verification-loop]] all follow from this distinction: **engineer the workflow to make tasks intrinsic whenever possible.** Don't ask the model to remember; give it the reference.
@@ -107,6 +112,29 @@ Agents cannot reliably judge their own output. They don't experience confusion, 
 - [[backpressure]] must be mechanical (test failures, type errors), not vibes-based ("this looks good").
 - [[verification-loop|Verification loops]] are non-negotiable infrastructure, not optional quality gates.
 - The human's role in HITL isn't to read every line — it's to own the tests and types that automate the assessment.
+
+### The Machine Can't Follow Rules Reliably
+
+Two benchmarks establish the rule-following ceiling, and it's lower than most workflows assume:
+
+- **Behavioral rule-following** ([[rule-following|RuLES]]): Models fail to obey simple persistent rules like "never reveal the secret key" — and alignment tuning often makes performance *worse*. System messages provide negligible benefit. The model you're counting on to follow your skill file's constraints may be structurally incapable of doing so.
+- **Inferential rule-following** ([[inferential-rule-following|RuleBench]]): When rules contradict the model's parametric knowledge (e.g., counterfactual kinship rules), performance collapses — GPT-4o drops from 99.7% to 8.2% on SALAD (content moderation). The model isn't following your rule; it's pattern-matching it to training data.
+
+The practical implication: if your workflow's correctness depends on the agent consistently following developer-specified constraints, you need mechanical enforcement ([[backpressure]]), not trust. Rules the agent *can* violate will be violated, silently.
+
+### ContextCov: Making Rule-Following Mechanical
+
+[[contextcov|ContextCov]] (Sharma, 2026) is the practical answer to the rule-following ceiling. Instead of asking the model to remember and apply instructions reliably, ContextCov compiles them into executable checks that operate outside the model's reasoning loop:
+
+- **Process constraints** (commands, tools, environment) → PATH shims that physically block prohibited commands before they execute
+- **Source constraints** (coding style, naming, API usage) → Tree-sitter queries that detect violations at the AST level
+- **Architectural constraints** (module boundaries, dependency direction) → NetworkX dependency graph analysis
+
+The results are dramatic: 88.3% constraint compliance vs 67.0% for passive instructions and 50.3% for LLM reflection.
+
+The key workflow implication: **don't treat rule-following as a model capability problem. Treat it as an environment design problem.** If the environment physically prevents the action (PATH shim) or immediately catches the violation (Tree-sitter check), the agent doesn't need to be good at following rules — it only needs to be good at responding to error messages. And responding to error messages is something even weak models can do reliably, because the feedback is deterministic and the required correction is locally scoped.
+
+This shifts the workflow design burden from "how do we get the model to follow instructions?" to "which constraints can we convert to executable checks?" — a significantly more tractable engineering question.
 
 ## Planning Depth: The Plan-Vs-Review Axis
 
@@ -130,7 +158,7 @@ Frontend feature development is the hardest case for plan-heavy because stateful
 
 ## Managing Context
 
-Context management is the operational challenge nobody anticipated. The [[smart-zone-dumb-zone]] heuristic describes the problem: LLMs reason best in the first ~100k tokens of context. Beyond that, attention degrades quadratically. The model starts ignoring constraints, hallucinating APIs, and losing track of the design concept.
+Context management is the operational challenge nobody anticipated. The [[smart-zone-dumb-zone]] heuristic describes the problem: LLMs reason best in the first ~100k tokens of context. Beyond that, attention degrades quadratically. The model starts ignoring constraints, hallucinating APIs, and losing track of the design concept. The design of [[context-files|context files]] (AGENTS.md, CLAUDE.md) directly impacts this — empirical evidence shows well-designed, minimal context files reduce reasoning overhead while verbose, auto-generated ones increase it by 14–22%.
 
 The fix isn't bigger context windows — it's **ruthless context hygiene**:
 
@@ -209,6 +237,23 @@ Within the Journey phase, [[tracer-bullets]] are the first thing to ship: thin v
 4. **Exploratory**: Trying things you'd otherwise not have time for.
 
 Karpathy's auto-research is a good example — you give it a narrow evaluation function (startup time, loss), and it optimizes. But beware: the evaluation function only captures a narrow metric. The agent will happily ignore code quality, complexity, or correctness if your evaluation function doesn't capture them. The human is always the final quality gate.
+
+## Iterative Self-Correction: A Micro-Scale HITL Cycle
+
+The Meeseeks benchmark ([[iterative-self-correction]]) reveals a pattern structurally identical to the HITL→AFK cycle, but compressed to operate at the per-response level within a single conversation turn:
+
+1. **Response** (AFK): Model generates output against constraints
+2. **Evaluate** (HITL, automated): Code-guided evaluator checks constraint satisfaction at 98.4% accuracy
+3. **Feedback** (HITL → AFK handoff): Specific constraint violations and explanations fed back to model
+4. **Self-correct** (AFK): Model retries with feedback in context
+5. **Repeat** for up to 20 turns
+
+The pattern is the same: human (or automated evaluator) defines the verification criteria; the agent executes within those boundaries; feedback closes the loop. The key findings from Meeseeks add important boundary conditions to the workflow:
+
+- **The ceiling is low**: Even with perfect feedback, no model exceeds ~91% utility rate after 20 turns. Don't build workflows that assume convergence — there's a hard capability ceiling.
+- **Reasoning models are the right router target**: The gap between reasoning and non-reasoning models *widens* over multiple self-correction turns. Route constraint-dense prompts to reasoning models — the payoff compounds.
+- **Code-guided evaluation is production-ready**: The 98.4% accuracy at 71% token savings is a pattern worth adopting. Evaluators as code, not as LLM judges.
+- **Word count calibration is fundamentally broken**: Models can't control output length precisely — they oscillate wildly ("catastrophic overcorrection"). Post-process word counts rather than relying on the model.
 
 ## The Day-to-Day Loop
 
@@ -354,4 +399,8 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Pocock's full pipeline demonstration: Grill Me → PRD → Kanban → Sandcastle AFK → QA; interface review discipline; day shift / night shift pattern
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: skills-as-loop-package, worker loop, sub-agent validation, two-mode work model, safety heuristics
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: model routing by complexity tier, cost optimization framework; supports the decomposition emphasis in the workflow
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): iterative self-correction as micro-scale HITL cycle; reasoning model advantage compounds over turns; catastrophic overcorrection as a failure mode
+- `raw/2311.04235v3.txt` — RuLES (Mu et al.): behavioral rule-following failures as a fundamental machine limitation; alignment tuning degrades rule-following; system messages provide negligible enforcement benefit
+- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): inferential rule-following as distinct capability gap; counterfactual collapse proves models pattern-match rules rather than follow them
+- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): mechanical enforcement as a practical answer to the rule-following ceiling; PATH shims, Tree-sitter checks, and architectural validators that don't depend on model reasoning; 88.3% compliance rate
 

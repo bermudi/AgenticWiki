@@ -1,0 +1,1160 @@
+arXiv:2602.11988v1 [cs.SE] 12 Feb 2026
+
+
+
+
+
+
+
+
+
+
+                    Evaluating AGENTS.md:
+Are Repository-Level Context Files Helpful for Coding Agents?
+
+
+
+        Thibaud Gloaguen 1 Niels Mündler 1 Mark Müller 2 Veselin Raychev 2 Martin Vechev 1
+
+                                 Abstract                           dustry leaders (AGENTS.md, 2025; Anthropic, 2025b) rec-
+        A widespread practice in software development               ommending this approach to adapt their agents to specific
+        is to tailor coding agents to repositories using            repositories, context files are now supported by most pop-
+        context files, such as AGENTS.md, by either man-            ular agent frameworks, and included in over 60’000 open-
+        ually or automatically generating them.             Al-     source repositories at the time of writing, as reported by
+        though this practice is strongly encouraged by              AGENTS.md (2025).
+        agent developers,          there is currently no rigor-     These context files typically contain a repository overview
+        ous investigation into whether such context files           and information on relevant developer tooling, aiming to
+        are actually effective for real-world tasks.         In     help coding agents to navigate a given repository more ef-
+        this work, we study this question and evaluate              ficiently, run build and test commands correctly, adhere to
+        coding agents’ task completion performance in               style guides and design patterns, and ultimately to solve
+        two complementary settings: established SWE-                tasks to the user’s satisfaction more frequently. To date, de-
+        bench        tasks  from popular     repositories, with     spite their widespread adoption, the impact of context files
+        LLM-generated context files following agent-                on the coding agent’s ability to solve complex software en-
+        developer recommendations, and a novel col-                 gineering tasks has not been rigorously studied.        This is
+        lection of issues from repositories containing              due to two key challenges: i) because of their recent intro-
+        developer-committed context files.                          duction, context files are not available for instances of prior
+        Across multiple coding agents and LLMs, we                  benchmarks, and ii) popular, well-known repositories, typi-
+        find that context files tend to        reduce task suc-     cally used to create such benchmarks, are not representative
+        cess rates compared to providing no repository              of most codebases. As a result, a rigorous evaluation of the
+        context, while also increasing inference cost by            context files used in practice requires a new, complemen-
+        over 20%.              Behaviorally, both LLM-generated     tary benchmark that contains only issues from less popular
+        and developer-provided context files encourage              repositories with developer-committed context files.
+        broader exploration (e.g., more thorough testing
+        and file traversal), and coding agents tend to re-          This work: Benchmarking context files’ impact on re-
+        spect their instructions. Ultimately, we conclude           solving GitHub issues          In this work, we investigate the
+        that unnecessary requirements from context files            effect of actively used context files on the resolution of
+        make tasks harder, and human-written context                real-world coding tasks. We evaluate agents both in pop-
+        files should describe only minimal requirements.            ular and less-known repositories, and, importantly, with
+                                                                    context files provided by repository developers.       For this
+                                                                    purpose, we construct a novel benchmark (Figure 1, left),
+    1. Introduction                                                 AGENTBENCH, comprising Python software engineering
+                                                                    tasks, created specifically from real GitHub issues.        The
+    Coding agents are being rapidly adopted across the soft-        benchmark contains 138 unique instances, covering both
+    ware engineering industry (Sarkar, 2025), and providing         bug-fixing and feature addition tasks across 12 recent and
+    context files like AGENTS.md, a README specifically target-     niche repositories, which all feature developer-written con-
+    ing agents, has become common practice. With various in-        text files.                    AGENTBENCH complements SWE-BENCH
+                                                                    LITE, which we leverage for the evaluation of automati-
+    2   1Department         of   Computer    Science, ETH  Zurich   cally generated context files on popular repositories.       We
+       LogicStar.ai.     Correspondence   to: Thibaud    Gloaguen   evaluate coding agents in three settings (Figure 1, mid-
+    <thibaud.gloaguen@inf.ethz.ch>,      Niels            Mündler
+    <niels.mundler@inf.ethz.ch>.                                    dle): without any context file, with context files automat-
+                                                                    ically generated using agent-developer recommendations,
+    Preprint. February 13, 2026.                                    and with the developer-provided context file.          Our code
+
+                                     1
+
+Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+
+                                                                                 Ok lets see..
+          Repository                                                             ls -la
+               Developer              Dev-provided
+           src                        instruction                                I need to edit x.py
+                                                                                 sed xyz          Trace
+           tests                                                                                 analysis    Behavioral
+                                      No Instructions                            Now I should format         Changes
+           README.md                                              Autonomous     ruff  x.py
+           build.sh                                                  Task
+                             Coding   LLM-generated                Solving       + def foo():
+                             Agent    instructions                               +     return bar  Test
+                                                                                 - def fooz():  evaluation   Model
+          Task     Add support for chained comparison                            -     pass                  Performance
+
+Figure 1.            Overview of our evaluation pipeline. We begin with real-world repositories and tasks derived from past pull requests. For
+each repository state, we generate three settings: ⃝₁ If a developer-provided context file exists, we include it in the repository. In ⃝₂ , we
+omit the context file. ⃝₃         We use the coding agent’s recommended settings to generate the context file. Then we pass the repository and
+context file to the coding agent and instruct it to autonomously resolve the task. We finally analyze the trace for behavioral changes and
+apply the generated patch to check for task resolution success.
+
+           to generate AGENTBENCH instances and evaluate coding   2. Background and Related Work
+agents is available here.                                         Coding agents                            Coding agents are LLM-based systems
+    Surprisingly, we observe that developer-provided files only   designed for autonomous resolution of coding tasks (Yang
+marginally improve performance             compared to omitting   et al., 2024). Typically, they consist of a harness that al-
+       them entirely (an increase of 4% on average), while LLM-   lows an LLM to interact with its environment using spe-
+  generated context files have a small negative effect on agent   cialized tools for, e.g., executing bash commands, conduct-
+performance (a decrease of 3% on average).            These ob-   ing web searches, or reading, creating, or modifying files
+        servations are robust across different LLMs and prompts   (Wang et al., 2025; Yang et al., 2024).
+   used to generate the context files. In a more detailed anal-
+     ysis (Figure 1, right), we observe that context files lead   Their impressive performance on repository-level coding
+     to increased exploration, testing, and reasoning by coding   tasks like SWE-bench (Jimenez et al., 2024) led to rapid
+agents, and, as a result, increase costs by over 20%.        We   adoption in the software engineering community (Sarkar,
+     therefore suggest omitting LLM-generated context files for   2025) and the development of new agents by specialized
+      the time being, contrary to agent developers’ recommenda-   companies (Aider, 2024; Wang et al., 2025) and model
+     tions, and including only minimal requirements (e.g., spe-   providers (OpenAI, 2025c; Google, 2025; QwenLM, 2025;
+  cific tooling to use with this repository). We hope our eval-   Anthropic, 2025a). Model providers now train their LLMs
+        uation framework will aid agent and model developers to   to use the tools exposed by their harnesses (QwenLM,
+improve the helpfulness of LLM-generated context files.           2025), which can substantially improve coding ability rela-
+                                                                  tive to simpler harnesses (Lieret et al., 2025). Accordingly,
+Key contributions     Our key contributions are:                  in §4, we evaluate each LLM only within its corresponding
+                                                                  harness.
+
+             1. AGENTBENCH, a new curated benchmark for the im-
+      pact of actively used context files on agents’ ability to   Context files     As coding     agents were  more                    broadly
+ solve real-world software engineering tasks.                     adopted, a common need arose to provide the agent with
+                                                                  additional context about novel and little-known codebases
+          2. An extensive evaluation of different coding agents   (Boyina, 2025; Sewell, 2025). To address this issue, model
+                   and underlying models on AGENTBENCH and SWE-   and agent developers recommend including context files,
+                 BENCH LITE, showing that LLM-generated context   such as AGENTS.md or CLAUDE.md, with codebases (OpenAI,
+          files tend to decrease agent performance, across mod-   2025a; Anthropic, 2025b). Many agent harnesses provide
+         els or prompts used to generate them, while developer-   built-in commands to initialize such context files automat-
+ written context files tend to slightly improve it.               ically using the coding agent itself, e.g.,                   by providing a
+                                                                  dedicated /init command in the agent interface (OpenAI,
+      3. A detailed investigation of agent traces, showing that   2025c; QwenLM, 2025; Anthropic, 2025a). At the time of
+         context files lead to more thorough testing and explo-   writing, AGENTS.md (2025) report that over 60’000 pub-
+ ration by coding agents.                                         lic GitHub repositories include a context file.
+
+                                          2
+
+                                                                  Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+Evaluating context files             Prior work collected and cat-   such as resolving a bug or implementing a requested
+egorized the content of context files (Chatlatanagulchai             feature. We denote quadruples of (I, R, T , X∗) as           in-
+et al., 2025; Mohsenimofidi et al., 2025), deriving mostly           stances, where the coding agent is tasked with predicting
+descriptive metrics about their content without investigat-          a patch Xˆ given issue I        and repository state R such that
+ing their effectiveness (Nigh, 2025). While individual de-           execR◦Xˆ (T ) = PASS, and X ∗ is the golden patch for that
+velopers report anecdotal evidence of better alignment and           instance. We define the success rate S as the percentage of
+solution capabilities when providing context files (Sewell,          predicted patches Xˆi for instances (Ii, Ri, Ti, Xi∗) where
+2025; Sawers, 2025), we are the first to investigate the im-         execRi◦Xˆi(Ti) = PASS.
+pact of actively used context files on agent behavior and
+performance at scale.                                                3.2. Generation of AGENTBENCH Instances
+                                                                     To construct AGENTBENCH, we use a five-stage construc-
+Repository-level evaluation                 Spearheaded by Jimenez   tion process summarized below. We defer all the prompts
+et al. (2024), evaluating coding agents on the autonomous            used for this process to §B.
+resolution of real-world repository-level tasks quickly be-
+came the gold standard for assessing their capabilities.             Requirements           We aim to evaluate the impact of both au-
+While initial work focuses on issue resolution (Jimenez              tomatically generated context files and developer-written
+et al., 2024), follow-up work proposed benchmarks on fea-            context files on the success rate of coding agents on real-
+ture addition (Li et al., 2025; Du et al., 2025), unit test gen-     world tasks and codebases.          The primary source for real-
+eration (Mündler et al., 2024), function generation (Liang           world codebases is open-source projects and their publicly
+et al., 2024), code performance (He et al., 2025), and se-           tracked and documented changes, so-called pull requests
+curity (Chen et al., 2025). Our work evaluates whether au-           (PRs).   In order to obtain developer-written context files,
+tonomous issue resolution and feature addition capabilities          we need to source PRs from projects that adopted context
+improve with actively used context files.                            files. This is challenging, because context files have only
+Orthogonally, benchmarks have also been extended by                  been formalized in August 2025, and have not been fre-
+mining more recent and more difficult problems (Badert-              quently used before. Further, the adoption of context file is
+dinov et al., 2025; Zhang et al., 2025a), as well as in-             not uniform across the industry: even at the time of writing,
+stances focusing on end-user applications (Vergopoulos               many repositories do not include context files.
+et al., 2025). We follow their approaches to mining novel
+task instances to obtain a specialized set of tasks in reposi-       Finding repositories         We first use GitHub search to build
+tories that feature context files.                                   a list of potential candidate repositories to extract instances
+                                                                     from. Specifically, we select codebases that contain a con-
+3. AGENTBENCH                                                        text file such as AGENTS.md or         CLAUDE.md at the root di-
+                                                                     rectory. Next, we filter down to those using Python as the
+In this Section, we discuss the requirements for AGENT-              main language and featuring a test suite. Finally, we filter
+BENCH, a SWE-BENCH-like benchmark that targets the                   for projects with many publicly documented changes, re-
+evaluation of developer-provided context files, its genera-          quiring at least 400 PRs. This criterion allows us to select
+tion process, and its statistics.                                    codebases from which we can extract at least 10 instances
+                                                                     after our rigorous post-processing.
+3.1. Notation and Definitions
+We first introduce the notation to describe codebases, their         Filtering pull requests        Given a repository, we filter PRs
+test suites, and changes to these codebases in the form of           to retain those that are most likely to generate higher-
+patches. Following the notation of Mündler et al. (2024),            quality instances using a combination of rule-based checks
+we denote a codebase, or repository R after applying patch           and an LLM agent. We only keep PRs that satisfy the fol-
+X as R ◦ X . Several patches can be applied sequentially,            lowing two criteria: they should reference at least one is-
+i.e.,        R◦X ◦Y is the codebase R after applying a first patch   sue, and they should modify at least one Python file. Fur-
+X and then a second one Y .                                          ther, we filter for PRs that are assessed by the agent to intro-
+                                                                     duce deterministic, testable behaviors that are suitable for
+A test suite T      is a collection of tests that is used to vali-   SWE-BENCH LITE-like regression tests.            We notice that,
+date the functionality of code in the repository. Executing          because the use of context files is a recently emerging trend,
+a test suite T on repository state R returns execR(T )           ∈   most repositories containing context files are niche. These
+{PASS, FAIL}         either indicating that all tests in the suite   niche repositories have less strict rules regarding pull re-
+passed or that at least one test failed.     An issue I         is   quests, and thus most PRs may not include specific tests.
+a task for autonomous completion by the coding agent,                To enable building instances from these more niche repos-
+
+                                                                                                           3
+
+              Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+itories, we therefore do not require PRs to edit unit tests
+that validate the code changes, in contrast to SWE-BENCH                                                                         ragas (14)      tinygrad (13)
+LITE, which focused on large and popular repositories and                                                                                                        pdm (10)
+requires PRs to contain unit tests.                                              smolagents (16)
+                                                                                                                                                                   ansible (11)
+Environment Set-Up                  For every PR and corresponding
+repository state, we set up an execution environment such            openai-agents-python (17)                                                                     opshin (14)
+that its test suite can be run, using a coding agent. Specifi-
+cally, we ask the agent to produce a small script that i) sets                    transformers (6)
+up the execution environment, ii) runs the test suite and iii)                    pr-agent (10)                                                              wagtail (12)
+stores the results as a machine-readable dictionary at the                                                                       graphiti (3)    fastmcp (12)
+root of the repository.             We only keep PRs where the re-
+sulting dictionary contains at least one passing test, which         Figure 2.   Distribution of AGENT1                              BENCH instances across 12
+corresponds to 87% of the filtered instances.                        open-source GitHub repositories, each containing context files.
+
+Task Descriptions              Many of the smaller repositories we   Table 1.                                                Average, minimum, and maximum of key statistics of
+                                                                     AGENTBENCH across the 138 instances. For context files, a sec-
+used to source AGENTBENCH do not enforce strict re-                  tion is the content between Markdown headers.
+quirements on the quality of PR and issue descriptions. As
+a result, many issues are too imprecise and underspecified                                                                                           Mean   Min    Max
+to solve the task in a testable manner (e.g., in some cases,                  PR body                                            # words            415.3    5     4961
+the PR body is empty). Further, some PRs implement new                        Issue I                                            # words            211.6    96       500
+features, which would require detailed descriptions about                     Codebase                                           # files             3337    151   26602
+expected behavior and interfaces. We therefore use a third                                                                       # lines edited     118.9    12    1973
+LLM agent to produce a standardized and detailed task de-                     PR patch                                           # files edited      2.5     1         23
+scription I based on the PR description, associated issues if                 Test                                               Coverage            75%    2.5%   100%
+available, and the original patch X ∗. This standardized task                                                                    # words            641.0    24    2003
+description is divided into 6 sections: description, steps to                 Context file                                       # sections          9.7     1         29
+reproduce, expected behavior, observed behavior, specifi-
+cation, and additional information. Importantly, we ask the
+agent not to leak the solution in the generated task descrip-        Evaluation                                                          We thus obtain AGENTBENCH instances i,
+tion, and to provide precise specifications.           We randomly   each consisting of a task description                           Ii, a codebase                         Ri,
+sampled and inspected 10% of the generated instances, and            golden patch X ∗, and a set of tests Ti. During evaluation,
+found that none of them leaked the solution.                         we first set up the environment before prompting the codingi
+                                                                     agent with the task description Ii, retrieving the predicted
+Generating Unit Tests                 As most collected PRs do not   patch Xˆi, and measuring execRi◦Xˆi(Ti).
+modify or add unit tests that we could use to check the              Overview of AGENTBENCH                                                              Using this process, we
+correctness of any given implementation, we use an LLM               obtained 138 instances from a total of 5694 PRs from 12
+agent to generate such unit tests. We provide the agent with         repositories that meet our criteria, using GPT-5.2 with
+the standardized task description I , the test files modified
+by the PR, if available, the original code changes X ∗ made          CODEX as the agent.                                                     We visualize the distribution over
+by the PR, and the base state of the repository R. We then           repositories in Figure 2 and show key statistics of AGENT-
+ask it to generate tests that pass for any implementation            BENCH in Table 1. In comparison to SWE-BENCH LITE,
+that resolves the described task. We verify that the added           our dataset is both more evenly distributed over repositories
+tests fail on R and pass on R ◦ X ∗. Finally, we manually            and has otherwise similar statistics.
+improve tests that are over-specified (i.e., tests that check        4. Experimental Evaluation
+for implementation details not specified in the task descrip-
+tion), resulting in newly generated tests TiX .         We further   In this Section, we investigate what effect context files
+determine all tests of the repository test suite TiR that pass       have on the behavior of coding agents and how strong this
+on the patched code, i.e., the maximal set TiR∗ ⊆ TiR, such          effect is.                                                  To this end, we conduct an extensive evalua-
+that execRi◦X          T R∗) = PASS, and obtain the final test set
+     ∗(       i                                                      tion of various coding agents on SWE-BENCH LITE and
+T    i
+   i          = TiX ⊎ TiR∗. The resulting tests achieve an average   AGENTBENCH, considering both automatically generated
+coverage of 75% of the modified code (see Table 1).                  and developer-provided context files.
+
+                  4
+
+                                                                                                                                                                          Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+               60                                                                                                                                            None                                                                                      None
+                                                                                                                                                             LLM              70                                                                       LLM
+                                                                                                                                                                                                                                                       Human
+               50                                                                                                                                                             60
+
+                                                                                                                                                                              50
+               40
+                                                                                                                                                                              40
+
+               30                                                                                                                                                             30
+
+                   Sonnet-4.5  GPT-5.2                                                                                                         GPT-5.1 Mini  Qwen3-30B            Sonnet-4.5     GPT-5.2   GPT-5.1 Mini                                Qwen3-30B
+
+    Figure 3.  Resolution rate for 4 different models, without context files, with LLM-generated context files, and with developer-written1                                                              1
+    context files, on SWE-BENCH LITE                                                                                                           (left) and AGENTBENCH (right).
+
+    4.1. Experimental Setup                                                                                                                                                  Table 2.                           The average number of steps (lower is better) and exe-
+                                                                                                                                                                             cution cost (in USD — lower is better) per SWE-BENCH LITE
+    We describe the experimental setup below, deferring fur-                                                                                                                 and AGENTBENCH instance without context files (NONE), with
+    ther details to §A.1.                                                                                                                                                    LLM-generated context files (LLM), and with developer-written
+                                                                                                                                                                             context files (HUM). We bold the best setting.
+    Coding Agents                                                                                                                   We consider four coding agents, paired            Type   SONNET-4.5    GPT-5.2                              GPT-5.1 M.     QWEN3-30B
+    with suitable models: CLAUDE CODE (Anthropic, 2025a)                                                                                                                                     Steps   Cost  Steps                         Cost   Steps   Cost   Steps   Cost
+    with SONNET-4.5 (Anthropic, 2025), CODEX (OpenAI,                                                                                                                         SWE-    NONE   54.4    1.30   12.5                         0.32   40.9    0.18   29.7    0.12
+    2025c) with GPT-5.2 and GPT-5.1                                                                                                            MINI         (Singh et al.,   BLENCH
+                                                                                                                                                                              ITE     LLM    57.2    1.51   12.7                         0.43   45.2    0.22   32.2    0.13
+    2026), and QWEN CODE (QwenLM, 2025) with QWEN3-                                                                                                                                   NONE   40.7    1.15   12.1                         0.38   40.6    0.18   31.5    0.13
+    30B-CODER (Team, 2025).                                                                                                                        For CLAUDE CODE, we use   AGENT-   LLM    46.5    1.33   13.1                         0.57   46.9    0.20   34.2    0.15
+                                                                                                                                                                             BENCH
+    the default settings and set the temperature of SONNET-                                                                                                                           HUM.   45.3    1.30   13.6                         0.54   46.6    0.19   32.8    0.15
+    4.5 to 0.                                                                                                                Similarly, for CODEX, we also use the default
+    settings and set the temperature of GPT-5.2 and GPT-5.1
+    MINI to 0.                                                                                                                      For QWEN CODE, we enable chat compres-   HUMAN:                                             A developer-provided context file is avail-
+    sion upon reaching 60% of the total context limit (set to                                                                                                                 able. We use the context file of the pre-patch repos-
+    256K tokens), restrict shell outputs to 2000 tokens, and set                                                                                                              itory state R. Only available for AGENTBENCH.
+    the temperature of QWEN3-30B-CODER to 0.7 with top-p
+    sampling at 0.8. We deploy QWEN3-30B-CODER locally
+    using vLLM (Kwon et al., 2023). We sample completions                                                                                                                    Metrics                                          The main metric for agent performance is suc-
+    for each agent once. For all agents, the context file is fed                                                                                                             cess rate (§3.1), i.e., the portion of instances for which the
+    into their context, either by writing it to AGENTS.md                                                                                                              for   agent produces a patch that leads to all tests passing. We
+    CODEX and QWEN CODE, or to CLAUDE.md for CLAUDE                                                                                                                          additionally consider the number of steps the agent requires
+    CODE.                                                                                                                                                                    to complete a task.                                      Each step is one interaction with the
+                                                                                                                                                                             environment, e.g., calling a shell tool or modifying a file.
+    Datasets       We use SWE-BENCH LITE                                                                                                                  (Jimenez et al.,   Finally, we report the total cost of LLM inference required
+    2024), which consists of 300 tasks sourced from GitHub                                                                                                                   to complete a task. For QWEN3-30B-CODER, we estimate
+    issues across 11 popular Python repositories, none contain-                                                                                                              the cost from the average OpenRouter API price.
+    ing developer-written context files, and our novel AGENT-
+    BENCH, consisting of 138 instances from 12 repositories,                                                                                                                 4.2. Main Results
+    all containing developer-provided context files (see §3).                                                                                                                LLM-generated context files increase cost and reduce
+    Settings       We consider three context file settings:                                                                                                                  performance                                          LLM-generated context files cause perfor-
+                                                                                                                                                                             mance drops in 5 out of 8 settings across SWE-BENCH
+                                                                                                                     NONE: No context files are available, i.e., we remove   LITE and AGENTBENCH (see Figure 3). In more detail,
+     developer-provided files for AGENTBENCH.                                                                                                                                the average resolution rate is reduced by 0.5% and 2% on
+                                                                                                                                                                             average on SWE-BENCH LITE and AGENTBENCH, re-
+                                                                                                                          LLM: An LLM-generated context file is available.   spectively. Meanwhile, the context files increase the # steps
+                                                                                                                         We use the recommended initialization command and   in every setting on average by 2.45 and 3.92 steps, respec-
+                                                                                                                    model for each agent individually to generate the con-   tively, which leads to a cost increase of 20% and 23% on
+     text file using the pre-patch repository state R.                                                                                                                       average, respectively (see Table 2).
+
+                                                                                                                                                                                                                   5
+
+
+
+
+
+
+
+
+
+
+Success rate (%) −→
+
+
+
+
+
+
+
+
+
+
+Success rate (%) −→
+
+                      Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+                     None                                                                                                                                  None
+             20      LLM                                                                                                                                   LLM
+                                                                                                                                           15              Human
+             15
+                                                                                                                                           10
+             10
+
+              5                                                                                                                             5
+
+              0    Sonnet-4.5 GPT-5.2     GPT-5.1 Mini     Qwen3-30B                                                                        0        Sonnet-4.5 GPT-5.2 GPT-5.1 Mini                    Qwen3-30B
+    Figure 4.  Number of steps before the first interaction between the agent and a file included in the PR patch (lower is better)1                           1
+    is generally lower without context files than with LLM-generated context files or with developer-written context files (Human) on
+    SWE-BENCH LITE    (left) and AGENTBENCH (right).
+
+    Human context files increase cost and performance                                                                                                70                                                  None
+    We observe that the developer-provided context files out-                                                                                                                                            LLM
+    perform the LLM-generated ones for all four agents, de-                                                                                          60                                                  Human
+    spite not being agent-specific, and improve the perfor-
+    mance compared to no context files for all agents but                                                                                            50
+    CLAUDE CODE (see Figure 3 right). However, developer-                                                                                            40
+    provided context files also increase the average number of
+    steps and costs required to solve the task, on average by                                                                                        30
+    3.34 steps and at most 19%, respectively.                                                                                                              GPT-5.2 GPT-5.1 Mini                         Qwen3-30B
+    Context files do not provide effective overviews                                                                                 One   Figure 5. When removing all documentation-related files from1
+    recommendation for context files is to include a codebase                                                                              the codebase, LLM-generated context files tend to outperform
+    overview (AGENTS.md, 2025). Across the 12 developer-                                                                                   developer-provided (Human) ones on     AGENTBENCH .
+    provided context files in AGENTBENCH, 8 include a dedi-
+    cated codebase overview, with 4 explicitly enumerating and
+    describing the directories and subdirectories in the reposi-                                                                           in manual trace inspection that this increase is due to it (i)
+    tory.                                                                                   Similarly, both the CODEX and QWEN CODE con-   issuing multiple commands to find the context files and (ii)
+    text file generation prompts explicitly instruct the agent                                                                             reading them (multiple times) despite them being already
+    to include an overview section, while the CLAUDE CODE                                                                                  included in the agent’s context. Interestingly, we only ob-
+    prompt advocates for a high-level overview only and warns                                                                              served this behavior if context files were present at all. We
+    against listing components that are easily discoverable.                                                                               conclude that context files, even developer-provided ones,
+    We use GPT-OSS-120B to assess which of the LLM-                                                                                        are not effective at providing a repository overview.
+    generated context files contain codebase overviews.                                                                             Sur-
+    prisingly, 100% of SONNET-4.5-generated context files are                                                                              Context files are redundant documentation                      Our hy-
+    flagged for overviews, and 95% and 99% for QWEN3-30B-                                                                                  pothesis is that LLM-generated context files are highly
+    CODER and GPT-5.2 respectively.                                                                                    Only GPT-5.1 MINI   redundant with existing documentation, while developer-
+    has significantly fewer overviews (36%).                                                                                               provided context files add additional information. To con-
+    To assess the usefulness of these overviews, we measure                                                                                firm this, we manually remove all documentation (files end-
+    how quickly agents discover files relevant to the described                                                                            ing with                .md, example code, and the folder docs/) after
+    issue I .                                                                               Concretely, we measure the average number of   generating the context file, and before evaluating the cod-
+    steps before the coding agent interacts with any file mod-                                                                             ing agents.                 We show the results in Figure 5, excluding
+    ified in the original PR patch X ∗.     We exclude the                                                                            3%   CLAUDE CODE due to its hight cost. In this setting, where
+    of instances in which the agent never interacts with any                                                                               context files are the only source of documentation avail-
+    file modified in  X ∗.                                                                                    Both on SWE-BENCH LITE and   able, LLM-generated context files not only consistently im-
+    AGENTBENCH the presence of context files does not                                                                                      prove performance by 2.7% on average, but also outper-
+    meaningfully reduce this metric, as shown in Figure 4.                                                                                 form developer-written documentation. This may explain
+                                                                                                                                           anecdotal evidence reporting that coding agents perform
+    While context files appear to increase the number of re-                                                                               better after adding context files (Sewell, 2025), since many
+    quired steps significantly for GPT-5.1 MINI, we observe                                                                                less popular repositories contain little to no documentation.
+
+                          6
+
+
+
+
+
+
+
+
+
+
+                      ←− # Steps 1st Interaction
+
+
+
+
+
+
+
+
+
+
+Success rate (%) −→    ←− # Steps 1st Interaction
+
+        Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+          Edit  Sonnet-4.5        GPT-5.2                                                                                                GPT-5.1 Mini    Qwen3-30B
+         Write
+          Grep
+          Read
+     TodoWrite
+        pytest
+        python
+          find
+        shells                                                                                                                                                      LLM
+           git                                                                                                                                                      Human
+           pip
+     repo_tool
+            uv
+        0                1        0     2     4                                                                                          0  1      −0.5  0.0     0.5
+
+    Figure 6. Increase in average tool use when including LLM-generated (bright green) or developer-provided (dark green) context files,1
+    compared to the average tool use without context files. For tool names, we map CODEX and QWEN CODE tools to the CLAUDE CODE
+    equivalents (we detail the mapping in §A).
+
+
+    4.3. Trace analysis                                                              None
+    We now analyze the impact of context files on agent behav-              60,000   LLM
+    ior in more detail by analysing the frequency of agent tool             50,000   Human
+    calls and length of reasoning traces. We describe our setup             40,000   None
+    in more detail in §B.2.                                                 30,000   LLM
+    Context files lead to more testing and exploration            In        20,000
+    Figure 6, we show the increase in average tool use when                 10,000
+    including LLM-generated     (bright  green) or        developer-        0
+    provided (dark green) context files.         Negative values im-                                                                     GPT-5.2  GPT-5.1 Mini
+    ply a decrease in tool use.        We find that, across all mod-    Figure 7.                                                        Number of reasoning tokens spent on average by
+    els, when context files are present, the coding agents run          GPT-5.2 and GPT-5.1 MINI, without context files, with LLM-1
+    more tests. They also tend to navigate the repository more:         generated context files, and with developer-written context files,
+    they search more files (grep), read more files, and write           on  SWE-BENCH LITE                                               (left) and AGENTBENCH (right).
+    more files. Lastly, adding context files causes agents to use
+    more repository-specific tooling (e.g., uv and repo_tool).
+    In Figure 10 (§A), we perform a similar analysis using the          use more reasoning tokens for tasks that they deem harder.
+    intent of the tool call, leading to the same conclusion.            In Figure 7, we show that LLM-generated context files in-
+                                                                        deed increase the average number of reasoning tokens by
+    Instructions in context files are typically followed          We    22% for GPT-5.2 and 14% for GPT-5.1 MINI on SWE-
+    find that agents generally follow instructions present in the       BENCH LITE                                                                  (respectively 14% and 10% on AGENT-
+    context files. For instance, uv is used 1.6 times per instance      BENCH), and that developer-written context files increase
+    on average when mentioned in the context files, compared            the number of reasoning tokens by 20% and 2% for GPT-
+    to fewer than 0.01 times when it is not mentioned, and              5.2 and GPT-5.1 MINI, respectively.
+    repository-specific tools are used 2.5 times per instance
+    on average when mentioned, compared to fewer than 0.05              4.4. Ablations
+    times when they are not mentioned. This effect is observ-
+    able across almost all measured tools displayed in Figure 6,        In this Section we analyze differences between the context
+    as we show in a more in-depth analysis in §A. In particular,        files generated by different models, and the impact of the
+    this result implies that the absence of improvements with           prompt used to create the context files.
+    context files is not due to a lack of instruction-following.
+                                                                        Stronger models don’t generate better context files                                                          We
+    Following context files requires more thinking            We hy-    compare context files generated with GPT-5.2 + CODEX
+    pothesize that these additional instructions make the task          to those created by our standard agents in Figure 8. This
+    harder. To confirm this, we analyze the average number of           improves performance on SWE-BENCH LITE across all
+    reasoning tokens used by GPT-5.2 and GPT-5.1 MINI, as               models (2% on average), but degrades performance on
+    their adaptive reasoning (OpenAI, 2025b) allows them to             AGENTBENCH across all models (3% on average).                                                                We
+
+        7
+
+
+
+
+
+
+
+
+
+
+# of reasoning tokens
+
+                                                                                              Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+           70                                                        Instruction by:             knowledge about tooling, dependencies, and other reposi-
+                                                                      Own                        tory specifics might be present in the models’ parametric
+           60                                                         GPT-5.2                    knowledge, nullifying the effect of context files.     Future
+                                                                                                 work may investigate the effect of context files on more
+           50                                                                                    niche programming languages and toolchains that are less
+                                                                                                 represented in the training data, and known to be more diffi-
+           40                                                                                    cult for LLMs (Cassano et al., 2022; Orlanski et al., 2023).
+
+           30                                                                                    Context files beyond task resolution         In this work, we
+               Sonnet-4.5 GPT-5.1 Mini                                Qwen3-30B                  evaluate the impact of context files on task resolution rate.
+    Figure 8.    On                                  SWE-BENCH L1ITE , performance is improved   However, there are many other relevant aspects of coding
+    with context files generated by GPT-5.2 compared to using the                                agents, such as code efficiency (He et al., 2025) and secu-
+    model underlying the agent, while on                                    AGENTBENCH perfor-   rity (Chen et al., 2025), that we believe could be explored
+    mance is degraded.                                                                           in future work. Specifically, for security, prior work found
+                                                                                                 that prompting LLMs to generate secure code significantly
+                                                                                                 improves the security of generated code (Vero et al., 2025).
+     70                                                                   Prompt from:
+                                                                       Codex                     Improving context file generation         Another interesting
+     60                                                                Claude Code               avenue opened by this work is how to improve the auto-
+     50                                                                                          matic generation of useful context files. Here, human de-
+                                                                                                 velopers appear to dominate per our evaluation.       Several
+     40                                                                                          related works in the direction of planning and continuous
+                                                                                                 learning from prior tasks may be applicable for this task
+     30                                                                                          (Suzgun et al., 2025; Zhang et al., 2025b; Cheng et al.,
+              Sonnet-4.5  GPT-5.2    GPT-5.1 Mini                          Qwen3-30B             2025). By tackling this challenge, future agents could gain
+                                                                                                 a long-term capability at meaningful self-improvement.
+    Figure 9.    When generating context files using the prompt from1
+    CODEX or from CLAUDE CODE on                                     SWE-BENCH LITE        and   6. Conclusion
+    AGENTBENCH , there is no consistent impact on success rate.
+                                                                                                 We present an extensive evaluation of the impact of con-
+    thus conclude that stronger models do not necessarily gen-                                   text files on coding agent performance for four common
+    erate superior context files.                                                                coding agents on SWE-BENCH LITE and AGENTBENCH.
+                                                                                                 The latter is a new benchmark we built from recent GitHub
+                                                                                                 issues and less popular repositories containing developer-
+    No difference between the specific prompts                                         We com-   written context files. We find that all context files consis-
+    pare context files generated using the prompt of CODEX                                       tently increase the number of steps required to complete
+    and CLAUDE CODE across all agents and models in Fig-                                         tasks.       LLM-generated context files have a marginal neg-
+    ure 9.     Surprisingly, CLAUDE CODE                                       performs better   ative effect on task success rates, while developer-written
+    with context files generated using the CODEX                                       prompt,   ones provide a marginal performance gain.
+    while both GPT-5.2 and GPT-5.1 MINI perform better                                           Our trace analyses show that instructions in context files
+    on SWE-BENCH LITE with the CODEX prompt but worse                                            are generally followed and lead to more testing and a
+    on AGENTBENCH. Overall, neither the prompt matching                                          broader exploration, however they do not function as effec-
+    the underlying model and agent, nor a specific prompt per-                                   tive repository overviews. Overall, our results suggest that
+    forms consistently best, indicating that sensitivity to differ-                              context files have only marginal effect on agent behavior,
+    ent (good) prompts is generally small.                                                       and are likely only desirable when manually written. This
+    5. Limitations and Future Work                                                               highlights a concrete gap between current agent-developer
+                                                                                                 recommendations and observed outcomes, and motivates
+    While our work addresses important shortcomings in the                                       future work on principled ways to automatically generate
+    literature, exciting opportunities for future research remain.                               concise, task-relevant guidance for coding agents.
+
+    Niche programming languages                                      The current evaluation
+    is focused heavily on Python. Since this is a language that
+    is widely represented in the training data, much detailed
+
+                                                                                                                                       8
+
+
+
+
+
+
+
+
+
+
+Success rate (%) −→    Success rate (%) −→
+
+                                                          Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+References                                                          Du, Y., Cai, Y., Zhou, Y., Wang, C., Qian, Y., Pang, X.,
+AGENTS.md.           AGENTS.md - A simple, open format for    Liu, Q., Hu, Y., and Chen, S. SWE-Dev:                Evaluat-
+ guiding coding agents, 2025. URL https://agents.m            ing and Training Autonomous Feature-Driven Software
+ d/.                                                          Development.    arXiv preprint, 2025.          URL h t t p s :
+                                                              //arxiv.org/abs/2505.16975.
+    Aider. AI pair programming in your terminal, 2024. URL   Google. google-gemini/gemini-cli:             An open-source AI
+ https://aider.chat.                                          agent that brings the power of Gemini directly into your
+Anthropic. Claude Code overview, 2025a.         URL https:    terminal, 2025. URL https://github.com/google-g
+ //code.claude.com/docs/en/overview.                          emini/gemini-cli.
+      Anthropic. Using CLAUDE.md files: Customizing Claude       He, X., Liu, Q., Du, M., Yan, L., Fan, Z., Huang, Y., Yuan,
+ Code for your codebase, 2025b. URL https://claude            Z., and Ma, Z. SWE-Perf: Can Language Models Op-
+ .com/blog/using-claude-md-files.                             timize Code Performance on Real-World Repositories?
+      Anthropic. Claude Sonnet 4.5, 2025. URL https://www.    arXiv preprint, 2025. URL https://arxiv.org/abs/
+                                                              2507.12415.
+ anthropic.com/news/claude-sonnet-4-5.
+ Badertdinov, I., Golubev, A., Nekrashevich, M., Shevtsov,    Jimenez, C. E., Yang, J., Wettig, A., Yao, S., Pei, K., Press,
+ A., Karasik, S., Andriushchenko, A., Trofimova, M.,          O., and Narasimhan, K. R. SWE-bench: Can Language
+ Litvintseva, D., and Yangel, B. SWE-rebench: An Au-          Models Resolve Real-world Github Issues? In ICLR,
+ tomated Pipeline for Task Collection and Decontami-          2024. URL https://openreview.net/forum?id=VTF8
+ nated Evaluation of Software Engineering Agents. arXiv       yNQM66.
+ preprint, 2025. URL https://arxiv.org/abs/2505.2                    Kwon, W., Li, Z., Zhuang, S., Sheng, Y., Zheng, L., Yu,
+ 0411.                                                        C. H., Gonzalez, J. E., Zhang, H., and Stoica, I. Efficient
+Boyina, G.           Why I Created AGENTS.md: A Simple So-    Memory Management for Large Language Model Serv-
+ lution to a Growing Problem, 2025.        URL h t t p s :    ing with PagedAttention. In Proceedings of the ACM
+                                                              SIGOPS 29th Symposium on Operating Systems Princi-
+ //thegowtham.medium.com/why- i- created- agent               ples, 2023.
+ s-md-a-simple-solution-to-a-growing-problem-3
+ afc1f6211f7.                                                            Li, W., Zhang, X., Guo, Z., Mao, S., Luo, W., Peng,
+  Cassano, F., Gouwar, J., Nguyen, D., Nguyen, S., Phipps-    G., Huang, Y., Wang, H., and Li, S.               FEA-Bench: A
+ Costin, L., Pinckney, D., Yee, M.-H., Zi, Y., Anderson,      Benchmark for Evaluating Repository-Level Code Gen-
+ C. J., Feldman, M. Q., et al.       MultiPL-E: A Scalable    eration for Feature Implementation. In ACL, 2025. URL
+ and Extensible Approach to Benchmarking Neural Code          https://aclanthology.org/2025.acl-long.839/.
+ Generation.        arXiv preprint, 2022. URL https://arxi   Liang, S., Hu, Y., Jiang, N., and Tan, L.          Can Language
+ v.org/abs/2208.08227.                                        Models Replace Programmers for Coding? REPOCOD
+     Chatlatanagulchai, W., Li, H., Kashiwa, Y., Reid, B.,    Says ’Not Yet’. arXiv preprint, 2024.    URL https:
+ Thonglek, K., Leelaprute, P., Rungsawang, A., Man-           //arxiv.org/abs/2410.21647.
+ askasemsak, B., Adams, B., Hassan, A. E., et al. Agent      Lieret, K., Jimenez, C. E., Yang, J., Wettig, A., Yao, S., Pei,
+ READMEs: An Empirical Study of Context Files for             K., Press, O., and Narasimhan, K. R. SWE-bench Bash
+ Agentic Coding. arXiv preprint, 2025.          URL https:    Only, 2025. URL https://www.swebench.com/bash-o
+ //arxiv.org/abs/2511.12884.                                  nly.html.
+  Chen, J., Huang, H., Lyu, Y., An, J., Shi, J., Yang, C.,        Mohsenimofidi, S., Galster, M., Treude, C., and Baltes, S.
+ Zhang, T., Tian, H., Li, Y., Li, Z., et al.  SecureAgent-    Context Engineering for AI Agents in Open-Source Soft-
+ Bench:          Benchmarking Secure Code Generation under    ware. arXiv preprint, 2025. URL https://arxiv.org/
+ Realistic Vulnerability Scenarios.  arXiv preprint, 2025.    abs/2510.21413.
+ URL https://arxiv.org/abs/2509.22097.                                 Mündler, N., Müller, M. N., He, J., and Vechev, M. T.
+ Cheng, Y., Wang, Z., Ma, W., Zhu, W., Deng, Y., and Zhao,    SWT-Bench: Testing and Validating Real-World Bug-
+ J.     EvoCurr:    Self-evolving Curriculum with Behavior    Fixes with Code Agents.  In NeurIPS, 2024.                 URL
+ Code Generation for Complex Decision-making.        arXiv    http://papers.nips.cc/paper_files/paper/202
+ preprint, 2025. URL https://arxiv.org/abs/2508.0             4/hash/94f093b41fc2666376fb1f667fe282f3-Abstr
+ 9586.                                                        act-Conference.html.
+
+                                                                                                   9
+
+                                                               Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+Nigh, M. How to write a great agents.md: Lessons from Vergopoulos, K., Müller, M. N., and Vechev, M. Au-
+     over 2,500 repositories, 2025. URL https://github.b          tomated Benchmark Generation for Repository-Level
+     log/ai-and-ml/github-copilot/how-to-write-a-g                Coding Tasks. arXiv preprint, 2025.              URL https:
+     reat-agents-md-lessons-from-over-2500-reposit                //arxiv.org/abs/2503.07701.
+     ories/.                                                       Vero, M., Mündler, N., Chibotaru, V., Raychev, V., Baader,
+    OpenAI.          OpenAI co-founds the Agentic AI Foundation   M., Jovanovic, N., He, J., and Vechev, M. T. BaxBench:
+     under the Linux Foundation, 2025a. URL https://op            Can LLMs Generate Correct and Secure Backends?           In
+     enai.com/index/agentic-ai-foundation/.                       ICML, 2025.
+          OpenAI. GPT-5.1: A smarter, more conversational Chat-   Wang, X., Li, B., Song, Y., Xu, F. F., Tang, X., Zhuge, M.,
+     GPT, 2025b. URL https://openai.com/index/gpt-5               Pan, J., Song, Y., Li, B., Singh, J., et al. OpenHands: An
+     -1/.                                                         Open Platform for AI Software Developers as Generalist
+                                                                  Agents. In ICLR, 2025. URL https://openreview.n
+       OpenAI. openai/codex: Lightweight coding agent that runs   et/forum?id=OJd3ayDDoF.
+     in your terminal, 2025c. URL https://github.com/o             Yang, J., Jimenez, C. E., Wettig, A., Lieret, K., Yao, S.,
+     penai/codex.                                                 Narasimhan, K., and Press, O. SWE-agent:             Agent-
+      Orlanski, G., Xiao, K., Garcia, X., Hui, J., Howland, J.,   Computer Interfaces Enable Automated Software Engi-
+     Malmaud, J., Austin, J., Singh, R., and Catasta, M. Mea-     neering. In NeurIPS, 2024. URL http://papers.nips.
+     suring the Impact of Programming Language Distribu-          cc/paper_files/paper/2024/hash/5a7c947568c1b13
+     tion. In ICML, 2023. URL https://proceedings.mlr.            28ccc5230172e1e7c-Abstract-Conference.html.
+     press/v202/orlanski23a.html.                                    Zhang, L., He, S., Zhang, C., Kang, Y., Li, B., Xie, C.,
+                 QwenLM. QwenLM/Qwen3-Coder: Qwen3-Coder is the   Wang, J., Wang, M., Huang, Y., Fu, S., et al.          SWE-
+     code version of Qwen3, the large language model series       bench Goes Live!          arXiv preprint, 2025a. URL https:
+     developed by Qwen team, Alibaba Cloud, 2025.           URL   //arxiv.org/abs/2505.23419.
+     https://github.com/QwenLM/Qwen3-Coder.                           Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kama-
+    Sarkar, S. K.     Ai agents, productivity, and higher-order   nuru, V., Rainton, J., Wu, C., Ji, M., Li, H., et al. Agen-
+     thinking:        Early evidence from software development.   tic Context Engineering: Evolving Contexts for Self-
+     Available at SSRN 5713646, 2025.                             Improving Language Models.           arXiv preprint, 2025b.
+                                                                  URL https://arxiv.org/abs/2510.04618.
+         Sawers, P. The Rise of Agents.md, an Open Standard and
+     Single Source of Truth for AI Coding Agents, 2025.
+     URL https://tessl.io/blog/the- rise- of- agent
+     s-md-an-open-standard-and-single-source-of-t
+     ruth-for-ai-coding-agents/.
+
+          Sewell, S. Improve your AI code output with AGENTS.md
+     (+ my best tips), 2025. URL https://www.builder.io
+     /blog/agents-md.
+
+    Singh, A., Fry, A., Perelman, A., Tart, A., Ganesh, A., El-
+     Kishky, A., McLaughlin, A., Low, A., Ostrow, A., Anan-
+     thram, A., et al. OpenAI GPT-5 System Card.          arXiv
+     preprint, 2026. URL https://arxiv.org/abs/2601.0
+     3267.
+
+        Suzgun, M., Yuksekgonul, M., Bianchi, F., Jurafsky, D.,
+     and Zou, J.         Dynamic Cheatsheet: Test-Time Learning
+     with Adaptive Memory.         arXiv preprint, 2025. URL ht
+     tps://arxiv.org/abs/2504.07952.
+
+    Team, Q. Qwen3 Technical Report.      arXiv preprint, 2025.
+     URL https://arxiv.org/abs/2505.09388.
+
+                                                                                                        10
+
+                                                              Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+    A. Experimental Details
+    In this section, we provide additional details about our experiments from §4.
+
+    A.1. Additional Experimental Details
+    We now describe the remaining experimental details for the experiments in §4.2.
+
+    Coding environment                     For AGENTBENCH instances, we run the coding agent in a Docker container with basic tooling
+    (python, apt-get, uv, . . . ) and Internet access. Importantly, we remove the git commit history and all remotes. For SWE-
+    BENCH LITE, we use the Docker images provided by Jimenez et al. (2024). We let the coding agents access the web (either
+    via dedicated tools or through the command line) and manually checked that the agents do not cheat (e.g., looking at the PR
+    corresponding to the instance description). We find no such case of cheating, and web access represents a minority of the
+    tool calls (less than 1%). For CLAUDE CODE, we keep the Task tool enabled: it allows SONNET-4.5 to invoke sub-agents,
+    using HAIKU-4.5, to solve sub-tasks. For instance, a sub-task can be exploring the repository to find specific files.
+
+    A.2. Trace Analysis
+    Here, we detail the experiments from §4.3. In particular, we give the mapping used to aggregate tool names across coding
+    agents, analyze the correlation between the number of tool uses and whether the tool is mentioned in the context files, and
+    expand the trace analysis to the intent behind tool calls.
+
+    Experimental setup               We recall the experimental setup from §4.3. Given a list of tool calls from an agent, we analyze
+    the frequency of each tool call. For tools included in the agentic framework (e.g., Read, Write, or TodoWrite), we record
+    the name of the tool being called. For shell commands, we use an LLM to extract (from the command and its output)
+    the concrete command that was executed (e.g., uv, pytest, cat) and to categorize the intent of the tool call (e.g., install
+    dependencies, run tests, read files). We build the categories iteratively. We start with an empty set of categories, and for
+    each shell command, we ask the LLM to assign it to an existing category if possible and otherwise create a new category.
+    As the LLM, we use GPT-OSS-120B, and the prompt is given in §B.2. Finally, we manually merge duplicate and closely
+    adjacent categories.
+                                                                 Table 3. Equivalence classes used to group the different tool calls.
+    Refining the tool names           For Figure 6, we further   CLAUDE CODE tool   CODEX         QWEN CODE
+    manually refined the tool names for readability.        In
+    particular, in Table 3, we map tool names from other         Edit               sed           sed, edit
+    agents, namely CODEX and QWEN CODE, as well as               Write              apply_patch   write_file
+    some CLI tools, to CLAUDE CODE     tooling.        Lastly,   Grep               grep, rg      grep
+    for repository-specific tooling (e.g., pdm,    ansible, or   Read               cat           cat, read_file, search_file_content
+    opshin), we grouped them into the repo_tool category.        TodoWrite          update_plan   todo_write
+
+Correlation between the number of tool calls and context files In Figure 11, we show the average number of tool
+calls depending on whether the tool name is mentioned in the context file. We find that, if a tool name is mentioned
+in the context files, this increases its usage by the coding agents. For instance, uv, pytest, or repository-specific tools
+(repo_tool) are used almost exclusively if they are mentioned in the context file. This means that instructions in the
+context files are followed, and that a lack of instruction-following capabilities does not explain why we observe, in §4.2,
+no gain in accuracy when using context files.
+
+    Analyzing intents of tool calls         For the tool intents extracted by the LLM (334 different categories in total), we further
+    aggregate them into the following 10 categories:
+
+     •  git: Repository and version-control operations (e.g., commits, branches, diffs, checkout, stash, status).
+
+     •               model: Model lifecycle tasks such as downloading or loading models, inspecting configurations or parameters, and
+        running inference.
+
+     •  env_deps: Python environment and dependency management (virtualenv or venv, installations, versions, lockfiles).
+
+                                                                                                       11
+
+         Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+         Sonnet-4.5             GPT-5.2        GPT-5.1 Mini                                                                                                Qwen3-30B
+     system
+    run_exec
+     search
+     testing
+    file_ops
+    env_deps
+         git                                                                                                                                                          LLM
+       build                                                                                                                                                          Human
+     quality
+     model
+         0.0  0.5      1.0      0      1      2      0    .0      0.5                                                                                      0.0      0.2
+
+    Figure 10.  Increase in the average tool use (grouped into high-level categories) when including LLM-generated (bright green) or1
+    developer-provided (dark green) context files, compared to the average tool use without context files. For the high-level categories, we
+    use an LLM to categorize the various tool calls.
+
+     6  Qwen3-30B           7      Sonnet-4.5                                                                                      10    GPT-5.1 Mini   6      GPT-5.2
+     5                      6                                                                                                       8                   5       LLM
+                                                                                                                                                                Human
+     4                      5                                                                                                                           4       Mentioned
+                                                                                                                                    6                           Not mentioned
+     3                      4                                                                                                                           3
+                            3                                                                                                       4
+     2                      2                                                                                                                           2
+     1                      1                                                                                                       2                   1
+
+     0                      0                                                                                                       0                   0
+
+
+
+
+    Figure 11. Average number of tool calls depending on whether the tool name is mentioned in the context files. For tool names, we1
+    use the equivalence classes from Table 3, and consider a tool to be mentioned in the context file if any tool from the corresponding
+    equivalence class is mentioned in the context file.
+
+
+   • build: Building, compiling, or packaging code and producing artifacts or distribution packages.
+
+   • quality: Code quality and correctness checks (linting, formatting, type checking, validation or verification, schema
+     checks).
+
+   • testing: Running and reviewing tests (unit, integration, regression, sanity, pytest) and test results.
+
+   • run_exec: Executing workflows and scripts or commands (Python, shell, Django), including reproduction and debug-
+     ging runs.
+
+   • search: Discovery and inspection actions (search, find, grep, glob, list, view, show, display, inspect, parse).
+
+   • file_ops: Direct file and filesystem operations (read, write, edit, copy, move, delete, create, permissions, paths).
+
+   • system: System and miscellaneous utilities (processes, disk usage, environment variables, HTTP checks, checksums,
+     tool or device information, help).
+
+In Figure 10, we show the difference in frequency of these categories with and without context files. The conclusion is
+similar to that of §4.3: the presence of context files significantly increases the number of tests run by coding agents, as well
+as the extent of codebase exploration and code quality checks.
+        12
+
+
+
+
+
+
+
+
+
+
+         Avg. # calls
+
+     Read
+     Edit
+    Write
+TodoWrite
+   pytest
+   python
+repo_tool
+       uv
+      pip
+      git
+
+
+
+     Read
+TodoWrite
+     Edit
+    Write
+     Grep
+   pytest
+   python
+repo_tool
+     Glob
+     find
+
+
+
+     Edit
+    Write
+     Grep
+TodoWrite
+python ls
+
+     Read
+   pytest
+     find
+      git
+
+
+
+    Write
+     Grep
+     Edit
+   python
+repo_tool
+TodoWrite
+   pytest
+     uvls
+
+    shell
+
+        Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+        Sonnet-4.5             GPT-5.2  GPT-5.1 Mini  Qwen3-30B
+    astropy                                                                                None
+          django                                                                           LLM
+      matplotlib
+         seaborn
+           flask
+        requests
+          xarray
+          pylint
+          pytest
+    scikit-learn
+          sphinx
+           sympy
+                0   50 100 0      50    0  50     0      25     50
+     ansible    Sonnet-4.5    GPT-5.2   1  GPT-5.1 Mini  Qwen3-30B                     None
+    graphiti                                                                            LLM
+  smolagents                                                 Human
+transformers
+     fastmcp
+  oai-agents
+      opshin
+         pdm
+    pr-agent
+    tinygrad
+       ragas
+     wagtail
+                0   50 100 0   50     100 0  50      0   50
+
+Figure 12. Resolution rate grouped by repository for four different models: without context files, with LLM-generated context files, and1
+with developer-written context files on SWE-BENCH LITE (top) and AGENTBENCH (bottom). For SWE-BENCH LITE in particular,
+the majority of instances come from the same repository (django), making per-repository estimates of the success rate noisy.
+
+
+
+
+
+
+    A.3. Per-repository Success Rate
+    In Figure 12, we show the success rate of the different scenarios (NONE, LLM, and HUMAN) grouped by repository.
+    For both SWE-BENCH LITE and AGENTBENCH, there is no single repository where the presence of context files has a
+    significant impact. Nonetheless, for AGENTBENCH in particular, we see that the difficulty across instances is relatively
+    balanced, validating our approach to building the instances.
+    B. Prompts
+    In this section, we detail all prompts used throughout this work.
+    B.1. AGENTBENCH instances generation
+    We detail below the prompts used for filtering pull requests, setting up the instances, describing the instances, and generat-
+    ing the test cases.
+
+
+                                  13
+
+                Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+    Filtering pull requests
+
+You are evaluating pull request {pr_number} for suitability as a regression-test task in SWE-bench style datasets.
+Decide whether the PR primarily introduces deterministic, testable behaviour. Such behaviors typically include bug
+fixes, but can also include feature additions as long as it is possible to write a precise specification that allows testing
+the new feature independently of the implementation.
+Repository: {repo_full_name}
+Title: {title}
+Author: {author}
+Merged at: {merged_at}
+PR description
+ {body}
+
+    Diff excerpt
+    {excerpt}
+
+Deliverables
+ 1. Do not modify existing project code.
+ 2. Create the JSON file {decision_path} with UTF-8 encoded content describing your decision using this
+    schema:
+
+
+    1  {
+    2   "pr_number": <int>,
+    3   "suitable": <bool>,
+    4   "needs_manual_review": <bool>,
+    5   "decision": "include" | "exclude" | "manual_review",
+    6   "rationale": "<short explanation>",
+    7   "key_files": ["relative/file.py", "..."],
+    8   "risk_factors": ["<short string>", "..."]
+    9  }
+
+
+    • Set "decision" to "include" only when you are confident the PR is a self-contained bug fix that can be
+    validated via regression tests.
+    • Use "manual_review" if you are uncertain.
+    3. Stage the JSON file and finish. Do not stage anything else.
+
+
+     Setting up the instance
+
+    Your goal is to help developers set up their environment to run code in the repository and be able to run the current
+    tests. You should write a list of all commands needed to (i) set up the environment from scratch, and (ii) run the
+    existing tests. You need to make sure that the commands you provide actually work for you. The setup is considered
+    valid if most of the tests are passing after running exactly your setup commands and the test commands you provide.
+    Test runner requirement
+    To run the repository tests, create a file at the root of the repository called run_tests.py that:
+     • executes all tests,
+     • parses the test output,
+
+
+                14
+
+    Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+
+    • writes a JSON file at the repository root named test_results.json with schema:
+
+
+     1 {"test_name": <bool>, ...}
+
+where each test_name is the name of a test and the boolean indicates whether the test passed (true) or failed
+(false).
+Deliverables
+ 1. Create the JSON file {decision_path} with UTF-8 encoded content explaining the steps to set up the environ-
+    ment and run the tests (using the run_tests.py script you created):
+
+       1  {
+       2  "setup_commands": ["<command1>", "<command2>", "..."],
+       3   "test_commands": ["<command1>", "<command2>", "..."]
+       4  }
+
+    2. Create the script run_tests.py at the root of the repository.
+    3. Stage the JSON file and the script and finish. Do not stage anything else.
+
+    {example_files_section}
+
+
+     Describing the instance
+
+    You are given a pull request (PR) and the related issues for a given GitHub repository. Your goal is to format this
+    information into a clear GitHub Issue following the template below.
+
+     • For the Steps to Reproduce field, only write the steps you actually took to reproduce the issue in your specific
+     environment. Make those steps reproducible and minimal.
+     • Developers should be able to implement a solution similar to the one provided in the PR, but the Issue should
+     not leak the solution.
+     • Save your output in Markdown format in the file {metadata_relpath} .
+
+    Feature requests: Specification required
+    Additionally, for issues about adding a new feature (rather than fixing a bug), include a precise Specification
+    describing the desired behavior. It must be detailed enough to allow independent testing without relying on imple-
+    mentation details from the PR.
+
+     • Specify inputs (types, valid ranges, edge cases), outputs, side effects, and any required error handling.
+     • If the PR includes human-readable outputs (logs, UI text, error messages, . . . ), include them in the specification
+     and state that fixes must use exactly those messages.
+
+    Issue template (copy into your Markdown output)
+
+
+
+
+
+
+          15
+
+    Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+
+
+
+
+   1  ### Description
+   2  (Provide a clear and concise description of the problem.)
+   3
+   4  ### Steps to Reproduce
+   5  1. [Step 1]
+   6  2. [Step 2]
+   7  3. ...
+   8
+   9  ### Expected Behavior (if applicable)
+  10  (Explain what  you expected to happen.)
+  11
+  12  ### Actual Behavior (if applicable)
+  13  (Explain what  actually happened.)
+  14
+  15  ### Specification (if applicable)
+  16  (Provide a precise specification  of the desired behavior.)
+  17
+  18  ### Additional Information
+  19  (Add screenshots, logs, or other helpful details.)
+
+
+
+Data for PR # {pr_number} in repository {repo} at commit {commit_sha}
+PR description
+ {pr_description}
+
+    Referenced issues mentioned in the PR
+    {referenced_issues_text}
+
+    PR patch
+    {pr_patch}
+
+    PR test (if any)
+    {pr_test_patch}
+
+    Key files identified during triage
+    {key_files_text}
+
+
+
+    Generating the test cases
+
+You are generating regression tests for pull request {pr_number} in {repo} . The current checkout is the base
+(pre-fix) commit {commit_sha} .
+Problem description
+ {problem_description}
+
+    PR patch
+    {pr_patch}
+
+    PR test (if any)
+    {pr_test_patch}
+
+    Requirements
+     1. Focus on deterministic tests that expose the bug fixed by this PR. Tests should target expected behavior and
+    must not rely on internal implementation details (variables, hidden helpers, etc.). They should fail on the base
+
+
+      16
+
+    Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+
+     commit and pass on the merge commit (after applying the PR patch). You must verify this property. You may
+     apply the provided patch using git apply. If a specification is provided in the problem description, tests must
+     exactly align with it. Avoid tests that depend on incidental choices (variable names, function names, strings,
+     . . . ) unless explicitly required by the specification.
+    2. Create run_pr_tests.py at the repository root that executes only the tests you created, parses test output, and
+     writes JSON results to pr_test_results.json with schema:
+
+     1 {"test_name": <bool>, ...}
+
+     You may use run_tests.py as a reference. Note: your script should only run the tests you created for this PR.
+    3. Ensure new tests match the project’s existing test style and conventions. First review existing tests to understand
+     structure and framework. You may reuse tests from the PR if appropriate.
+    4. All new tests must be in new files created as part of this work. Do not modify any existing test files.
+    5. For test_commands, include any necessary steps (sourcing environments, setting variables, etc.) so tests run
+     correctly in a fresh shell.
+
+Deliverables
+ 1. Create the new test files with your proposed tests.
+ 2. Create the JSON file {metadata_relpath} with UTF-8 content explaining how to run the tests:
+
+
+        1 {
+        2 "test_commands": ["<command1>", "<command2>", "..."], # Commands to run the PR tests with `
+        run_pr_tests.py`
+        3 "test_files": ["path/to/test_file1", "path/to/test_file2", "..."]
+        4 }
+
+     3. Create the script run_pr_tests.py at the root of the repository.
+     4. Stage the JSON file and the script and finish. Do not stage anything else.
+
+    B.2. Analyzing Traces of Coding Agents
+    To analyze the tool calls made by the coding agents, we use GPT-OSS-120Bwith the prompt below.
+
+      Analyzing coding agent traces
+
+   You are labeling a tool call with a single intent category.
+   Goal: choose a category name that is:
+     • Right-sized granularity: more specific than “execute command” but not tied to exact arguments.
+     • Reusable: should apply to many future tool calls.
+     • Clean: do not include file paths, flags, quoted strings, IDs, repo names, or counts.
+     • Format: 2–5 words, lowercase, verb + object (e.g., run tests, search codebase). Avoid too-generic names
+       like run scripts; specify what the script does (e.g., compile code).
+
+
+      17
+
+    Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?
+
+
+    You must also explain which tool is being used (e.g., pytest, rg, . . . ) in a dedicated field.
+    You will be given
+      •  tool_call: the command or structured tool invocation
+      •  tool_output: optional output text
+
+    Existing categories (use one if it fits): {existing_tool_names}
+    Decision rules
+     1. If one existing category fits, use it exactly.
+     2. If none fit, create one new category that:
+          • is not tool-specific (avoid pytest, kubectl, terraform, etc.)
+          • would likely match 5+ future tool calls
+     3. If the tool call does multiple things, pick the primary intent as the category (mention secondary intents in
+         reasoning).
+
+    Return JSON only
+
+
+1 {
+2 "tool_name": "<category>",
+3 "tool_used": "<specific tool or executable being invoked>",
+4 "reasoning": "<1-3 sentences: why this is the primary intent; include key clues from call/
+       output; mention secondary intents if any>"
+5 }
+
+
+
+    Tool call {tool_call}
+
+    Tool output (if any) {tool_output}
+
+
+
+
+
+
+
+
+
+
+          18

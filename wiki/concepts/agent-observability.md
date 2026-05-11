@@ -1,12 +1,14 @@
 ---
 title: Agent Observability
 created: 2026-04-27
-updated: 2026-05-07
+updated: 2026-05-10
 sources:
   - raw/yt-the-observability-layer-your-ai-agent-is-missing.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
   - raw/yt-slop-watch-ideation.md
+  - raw/2504.21625v6.txt
 tags: ["agents", "observability", "tracing", "monitoring", "opentelemetry"]
+unaudited_marginal: 0
 ---
 
 # Agent Observability
@@ -112,6 +114,7 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - [[slop-watch]] — Slop Watch extends observability from plumbing to DRI-level accountability.
 - [[execution-apathy]] — Execution apathy is invisible to system metrics; only trace-level observability can detect the missing execution steps
 - [[blind-panic]] — Blind panic produces expensive failure traces that observability must distinguish from productive execution
+- [[iterative-self-correction]] — Meeseeks's evaluation-feedback cycle requires per-constraint observability to identify which constraints fail across turns
 
 ## Thread
 
@@ -122,3 +125,4 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - `raw/yt-the-observability-layer-your-ai-agent-is-missing.md` — The Emma/invoice story, logs vs traces vs metrics, OpenTelemetry connection
 - `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — Mastra Studio traces in practice: span trees, agent runs, tool calls
 - `raw/yt-slop-watch-ideation.md` — Slop Watch architecture: sessions as DAGs of turns, per-session listener pattern, per-agent adapters, DRI-first UX
+- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): constraint-level evaluation requires observability at the individual constraint granularity across multiple self-correction turns

@@ -1,0 +1,1320 @@
+arXiv:2407.08440v4 [cs.CL] 17 Oct 2024
+
+
+
+
+
+
+
+
+
+
+                                                                                    Beyond Instruction Following:
+       Evaluating Inferential Rule Following of Large Language Models
+                                                          Wangtao Sun1,2, Chenxiang Zhang¹, Xueyou Zhang¹, Xuanqing Yu3,7, Ziyang Huang1,2,
+                                                           1,2
+           Haotian Xu⁶, Pei Chen⁴, Shizhu He                  , Jun Zhao1,2, Kang Liu1,2,5*
+                                                             1The Laboratory of Cognition and Decision Intelligence for Complex Systems,
+                                                                 Institute of Automation, Chinese Academy of Sciences, Beijing, China
+                                                    2School of Artificial Intelligence, University of Chinese Academy of Sciences, Beijing, China
+                                                                    3CAS Engineering Laboratory for Intelligent Industrial Vision,
+                                                                 Institute of Automation, Chinese Academy of Sciences, Beijing, China
+                                                                4Department of Computer Science and Engineering, Texas A&M University
+                                                                             5Shanghai Artificial Intelligence Laboratory
+                                                                 6Xiaohongshu Inc 7AI Lab, AIGility Cloud Innovation, Beijing, China
+           sunwangtao2021@ia.ac.cn
+           Abstract                                                      Instruction Following
+       Although Large Language Models (LLMs)                 INST    Determine the kinship between James and Lynn.
+       have   demonstrated  strong instruction-
+       following ability, they are further supposed to     QUESTION  [Dolores] went to dinner with her daughter [Lynn],
+       be controlled and guided by inferential rules                 [James], brother of [Dolores], is out for shopping.
+       in real-world scenarios to be safe, accurate,        ANSWER   Father
+       and intelligent. This demands the possession of
+       inferential rule-following capability of LLMs.
+       However, no prior work has made a clear                       Inferential Rule Following
+       evaluation of the inferential rule-following          INST    Determine the kinship between James and Lynn.
+       capability of LLMs.     Previous studies that
+       try to evaluate the inferential rule-following        RULE    1. if A has a brother B, B has a daughter C,
+       capability of LLMs fail to distinguish the                    then A is the uncle of C.
+       inferential rule-following scenarios from the                 2. if A has a father B, B has a brother C, C
+       instruction-following scenarios. Therefore, this              has a daughter, then A is the cousin of D.
+       paper first clarifies the concept of inferential    QUESTION  [Dolores] went to dinner with her daughter [Lynn],
+       rule-following and proposes a comprehen-                      [James], brother of [Dolores], is out for shopping.
+       sive benchmark,      RuleBench, to evaluate a        ANSWER   Uncle
+       diversified range of inferential rule-following
+       abilities. Our experimental results on a variety
+       of LLMs show that they are still limited in         Figure 1: Beyond instruction-following, the task of in-
+       following rules.    Our analysis based on the       ferential rule-following orders the language model to
+       evaluation results provides insights into the       trigger the relevant rule based on the current question
+       improvements for   LLMs toward a       better       and apply that rule to the question for reasoning.
+       inferential rule-following intelligent agent. We
+       further propose Inferential Rule-Following
+       Tuning   (IRFT).   The experimental   results       real-world applications, people often expect LLMs
+       show that through IRFT, LLMs can learn              to generate outputs that conform to user-provided
+       abstract inferential rule-following abilities
+       from purely synthetic data and then generalize      rules. In this way, LLMs could easily be manip-
+       to RuleBench. The data and code can be found        ulated by users and quickly adapted to a specific
+       at: https://anonymous.4open.science/r/llm-rule-     (even unseen) domain. To fulfill this goal, we are
+       following-B3E3/                                     expecting LLMs to possess such inferential rule-
+    1  Introduction                                        following capabilities.
+        This leads to research on the inferential rule-
+Benefiting from a vast amount of pre-training data following of LLMs. Some recent studies (Yang
+and the enormous parameters, the Large Language et al., 2023; Sun et al., 2023; Zhu et al., 2023; Zhao
+Models (LLMs) can accomplish numerous Natu- et al., 2023) have noticed the importance and ef-
+ral Language Processing (NLP) tasks thanks to fectiveness of inferential rule-following of large
+their instruction-following ability. However, in language models, they have found that ordering
+
+                                                                                                  1
+
+                                   Triggering Rules                                    or one metal as the variables and verb phrases like
+                                                       #1.gpt-4-turbo                  is the father of    or can conduct electricity as the
+         Following                                     #2.gpt-3.5-turbo
+                                                       #3.gpt-4o
+      Formal Rules                                     #4.Llama-3-8B                   predicates inside it. For example, the “like rule”
+                                                       #5.Yi-1.5-6B-Chat
+                                                       #6.Mistral-7B-Instruct-v0.2     can be expressed as “if person A likes person B,
+                                                       #7.Llama-2-7b-chat
+                                                                                       then person B likes person A.”
+                                                       Executing Rules                  We thus distinguish previous rule-following
+                                                                                       from the inferential rule-following scenarios con-
+                                                                                       sidered in our work. Different from instructions,
+    Applying Rules                                                                     the primary characteristics of inferential rules are
+                                                                                       abstract, conditional, and instantiable. As shown
+                                   Following Counterfactual Rules                      in Figure 1, following inferential rules requires
+        LLMs to bind the entities in the question to the
+Figure 2: The inferential rule-following capabilities rules and verify if the rule applies to the current
+of some open-source and closed-source LLMs. The question. In this case, the LLMs need to find the
+inferential rule-following capabilities of LLMs are cate- binding {A/James, B/Dolores, C/Lynn} and
+gorized into 5 dimensions: Triggering Rules, Applying
+Rules, Executing Rules, Following Formal Rules, and trigger the first rule, then they could draw the cor-
+    Following Counterfactual Rules.                                                    rect conclusion “uncle”. In our proposed inferen-
+                                                                                       tial rule-following scenario, for each case, only one
+    LLMs to follow existing rules can achieve better                                   golden rule applies to the question. However, some
+    reasoning performances compared with the cur-                                      other noise rules, which are also correct rules in
+    rently widely used reasoning enhancement meth-                                     this task domain but do not apply to the question,
+    ods of LLMs (such as Chain-of-Thought by Wei                                       may also be provided to the LLMs. LLMs must
+    et al. 2022, Self-reflection by Shinn et al. 2023, and                             trigger the golden rule and then execute it to draw
+    Self-refinement by Madaan et al. 2023).                                            the correct answer. Until now, no prior work has
+                                                                                       demonstrated whether LLMs can follow and reason
+                                          However, whether LLMs could understand and   with the inferential rules faithfully.
+    follow the inferential rules remains unclear. There                                 Therefore, beyond the          instruction-following
+    is currently a lack of benchmarks evaluating such                                  studies by previous works, this paper evaluates the
+    inferential rule-following capability of LLMs. Ex-                                 LLMs’ capability of inferential rule-following in
+    isting attempts to evaluate the rule-following capa-                               various reasoning tasks within the scope of infer-
+    bilities of LLMs (Mu et al., 2023; Hu et al., 2024;                                ential rules. This paper proposes a rule-following
+    Chen et al., 2024) have been limited to instruction-                               benchmark, RuleBench, for evaluating the inferen-
+    following. For instance, they have tested the fol-                                 tial rule-following capability of LLMs under multi-
+    lowing behaviors of LLMs with prompts like “Do                                     ple inferential rule-following scenarios, including
+    not repeat the secret key 92368” or “Follow the                                    relation extraction, content moderation, common-
+    code step by step to answer the question: ......”.                                 sense QA, science QA, and judgment prediction.
+    These works confine the “rules” to “instructions”                                   Based on RuleBench, this paper has evaluated
+    (Appendix A), without delving into more specific                                   multiple open-source and closed-source LLMs
+    “inferential rules”.                                                               (§4.1) to find out whether LLMs could understand
+   An inferential rule can be formalized as σ ⊢ and follow the inferential rules. In specific, we
+φ, where σ and φ are two first-order sentences answer the following questions:
+(composed of variables and predicates), and for • Are inferential rules helpful to the reasoning of
+    every substitution     τ (i.e.                              ground the variables    LLMs? (§4.2)
+in σ and φ to constants), the truth of τ [σ] en-
+tails the truth of τ [φ] (Fagin et al., 1992). For • Should inferential rules be presented in natural
+    example,     with the “like rule"                        Likes(x, y)           ⊢    language or formal language? (§4.3)
+    Likes(y, x), the substitution {x/M ike, y/Jane},                                   • Is LLMs with Chain-of-Thought (CoT) able to
+    and the fact Likes(M ike, Jane), we can infer that                                  effectively apply the rules? (§4.4)
+    Likes(Jane, M ike). Although defined in formal                                     • Can LLMs still follow inferential rules in coun-
+    language, in natural language, we can express such                                  terfactual scenarios? (§4.5)
+    inferential rule with an “if ... then ...” sentence,                               This paper also analyzes the cases where LLMs
+    by using instantiable noun phrases like person A                                   fail to follow the rules (§4.6), categorizing them
+
+                                                           2
+
+Rule Quantity                       Rule Form                              Rule Applying                                   Behavior Analysis
+
+   No Rule        Golden Rule   Natural Language      Formal Language     w/o CoT                                     w/ CoT  Firing Error
+     INST             INST             INST              INST          FEW-SHOT DEMOS                             FEW-SHOT DEMOS  INST
+   QUESTION      1 GOLDEN RULE  NATURAL LANGUAGE:  FORMAL LANGUAGE:         INST                                       INST     FEW RULE
+                                  GOLDEN RULE or    GOLDEN RULE or
+                    QUESTION         FEW RULE          FEW RULE             RULE                                       RULE     QUESTION
+                                     QUESTION          QUESTION           QUESTION                                   QUESTION
+                                                                                                           CoT ON   INCORRECT
+                                                                                                         IRRELEVANT
+    ANSWER           ANSWER           ANSWER            ANSWER             ANSWER              CoT  ANSWER  RULE    ANSWER
+
+Few Rule      All Rule                                                 Factuality        Execution Error
+     INST             INST                        Factual                  Counterfactual                                         INST
+1 GOLDEN RULE    1 GOLDEN RULE
++ 2 NOISE RULE  + 30 NOISE RULE      INST             QUESTION             INST      QUESTION                                   FEW RULE
+  + SHUFFLE        + SHUFFLE                                                                                                    QUESTION
+                                RULE HEAD         FACTUAL RULE BODY      RULE HEAD  COUNTERFACTUAL                     RULE
+   QUESTION         QUESTION                                               BODY
+                                                                                                           CoT ON INCORRECT
+                                                                                                           GOLDEN
+    ANSWER           ANSWER         FACTUAL ANSWER                           COUNTERFACTUAL ANSWER      RULE        ANSWER
+
+                          Figure 3: The different settings evaluated in RuleBench, including rule quantities, rule forms, Chain-of-Thought
+(CoT) in applying rules, counterfactual rules, and behavior analysis.
+
+             into Triggering Error and Execution Error, which          rule-following intelligent agent.
+           stand for the cases where LLMs fail to trigger the                             • We propose the Inferential Rule-Following Tun-
+              golden rule and LLMs fail to execute the golden                             ing (IRFT) that enables LLMs to learn to trigger
+rule, respectively.                                                                    and apply the correct inferential rule based on the
+                Based on these results, as shown in Figure 2,                            current cases. The experimental results show that
+           we categorize the inferential rule-following capa-                               through IRFT, LLMs can learn abstract inferen-
+            bilities of LLMs into 5 dimensions (§4.7) to help                          tial rule-following abilities from purely synthetic
+          us intuitively grasp the inferential rule-following          data and then generalize to RuleBench.
+capabilities of these LLMs.                                          2
+            Finally, to further improve the inferential rule-            Related Work
+               following capabilities of LLMs, we propose the        2.1 Rule-enhanced LLM Reasoning
+            Inferential Rule-Following Tuning (IRFT) that en-                                     While LLMs have demonstrated remarkable zero-
+            ables LLMs to learn to trigger and apply the cor-                               shot reasoning capabilities in many downstream
+       rect inferential rule based on the current cases (§5).                          tasks, they still generate outputs that do not con-
+             The experimental results show that through IRFT,        form to logic or human preference.     Some re-
+           LLMs can learn abstract inferential rule-following                             search studies have found that compared with the
+         abilities from purely synthetic data and then gener-                                  reasoning enhancement methods based on LLMs
+            alize to RuleBench. In summary, the major contri-                                themselves like Chain-of-Thought (Wei et al.,
+butions of this paper are as follows:                                               2022), Self-reflection (Shinn et al., 2023), and Self-
+• We introduce inferential rule-following as a vi-                                        refinement (Madaan et al., 2023), providing LLMs
+               tal capability of LLMs and distinguish it from                            with relevant rules with Retrieval-Augmented Gen-
+the previous labors on instruction-following.                                             eration (RAG) paradigm do better in helping them
+            • We leverage and re-process the existing reason-                              conduct reasoning in the downstream tasks (Yang
+              ing benchmarks and propose an inferential rule-                            et al., 2023; Sun et al., 2023; Zhu et al., 2023;
+               following benchmark, RuleBench, for evaluating                           Zhao et al., 2023). However, the inferential rule-
+           the inferential rule-following capability of LLMs.                           following capability of LLMs is far from satisfac-
+         • We evaluated the capabilities of inferential rule-                            tory. No prior work has comprehensively evaluated
+                following of multiple open-source and closed-                             whether LLMs can benefit from the provided rules
+              source LLMs on various tasks and rule settings,                              under different scenarios and how LLMs can fol-
+             and categorized their inferential rule-following                          low the rules better. To make up for this gap, this
+           abilities into 5 dimensions. Based on the results,                             paper conducted a series of experiments to eval-
+               we analyze the possible reasons that limit the                          uate the inferential rule-following capabilities of
+           inferential rule-following capabilities of current                               several open-source and closed-source LLMs and
+                  LLMs and provide some insights into the im-                               provide some insights into how LLMs can follow
+              provements for LLMs toward a better inferential        rules better.
+
+                                                      3
+
+    2.2 LLMs Instruction-following                           4    Evaluation
+    Instruction-following has been generally consid-             To comprehensively evaluate the inferential rule-
+    ered an important capability of LLMs (Zhong et al.,          following capabilities of LLMs, based on the pro-
+    2021; Mishra et al., 2021; Wei et al., 2021; Yin               posed RuleBench, this paper has designed 5 main
+    et al., 2023), and some previous works have been         parts of experiments. We evaluate the effects of rule
+    done to evaluate the instruction-following capabil-         quantity (§4.2), rule form (§4.3), the presence of
+    ity of LLMs (Zhou et al., 2023; Qin et al., 2024).         CoT when applying rules (§4.4), and rule factuality
+    However, only a few works have cast their atten-         (§4.5). Besides, we analyzed the failure cases of in-
+    tion to the question of inferential rule-following.        ferential rule-following from a behavioral perspec-
+    Recent works focused on the rule-following capa-              tive, classifying them into Triggering Error and
+    bility of LLMs (Mu et al., 2023; Hu et al., 2024;            Execution Error (§4.6). Based on these evaluation
+    Chen et al., 2024) confined the rule-following to        results, we categorize the inferential rule-following
+    instruction-following. Instead, this paper proposes             capabilities into 5 dimensions and compare the
+    the scenario of inferential rule-following and sets            performances of 7 open-source and closed-source
+    up useful baselines for future works.                          LLMs (§4.7). The test-time prompts used in this
+                                                             section can be found in Appendix C.
+
+    3   RuleBench                                            4.1   Model Selections
+        For open-source LLMs, we adopt Llama-2-7b-
+To construct RuleBench, we have leveraged and re- chat (Touvron et al., 2023), Meta-Llama-3-8B
+processed the existing reasoning benchmarks for (AI@Meta, 2024), Mistral-7B-Instruct-v0.2 (Jiang
+different inferential rule-following scenarios, in- et al., 2023) and Yi (Young et al., 2024). For closed-
+cluding relation extraction (CLUTRR, Sinha et al. source LLMs, we adopt gpt-3.5-turbo, gpt-4-turbo
+2019), content moderation (SALAD, Li et al. 2024), (OpenAI, 2023), and gpt-4o from OpenAI. The
+commonsense QA (DEER, Yang et al. 2022 and comprehensive performance comparison of them is
+ULogic, Wang et al. 2024), mathematics QA (The- shown in Figure 2 and the explanation and analysis
+oremQa, Chen et al. 2023), and judgment predic- is in §4.7.
+tion (CAIL2018, Xiao et al. 2018; Zhong et al. 4.2 Inferential Rules Are Helpful for the
+    2018).      The details of the construction of each            Reasoning of LLMs
+    benchmark and the prompts used during construct-
+    ing RuleBench can be found in Appendix B.                    To evaluate whether inferential rules are helpful
+   Under the scenarios introduced above, As shown for the reasoning of LLMs, we adopt the following
+in Figure 3, RuleBench involves multiple settings settings to test the LLMs.
+of inferential rule-following, to comprehensively • No Rule. This setting simply prompts the LLMs
+    evaluate the LLMs from different perspectives. The         with the original question and without the infer-
+    settings include rule quantity (i.e. how many rules        ential rules.
+are provided to the LLMs while only one of them • Golden Rule. This setting prompts the LLMs
+    applies to the current case), rule form (i.e. which        with the golden rule (i.e. an inferential rule that
+    form the rules illustrated in, natural language or for-       should be applied to the question) together with
+    mal language), the presence of Chain-of-Thought            the original question.
+when applying rules (i.e. directly generate the an- • Few Rule. This setting prompts the LLMs with
+    swer based on the question and rules, or trying                 the golden rule and two random noise rules to-
+    verbally apply the rule to the question before an-         gether with the original question.
+swering it), and rule factuality (i.e. whether the • All Rule. This setting is similar to Few Rule
+    conclusion of the rule is factual or counterfactual).      while the number of noise rules increases to 30.
+    RuleBench allows us to analyze the failure cases                 This setting simulates a scenario where users
+    of inferential rule-following from a behavioral per-             prompt the LLMs with all possible inferential
+    spective, classifying them into Triggering Error              rules in the tasks instead of the relevant rules
+    (i.e. LLMs fail to trigger the golden rule) and Ex-        retrieved based on the query.
+    ecution Error (i.e.     LLMs success to trigger the              All these rule settings are tested in a zero-
+    golden rule but fail to execute the golden rule).        shot manner.            As shown in Figure 4, in most
+
+        4
+
+                                               No Rule  All Rule   Few Rule   Golden Rule
+
+         gpt-4o            Llama-2-7b-chat  gpt-3.5-turbo  Yi-1.5-6B-Chat        gpt-4-turbo          Llama-3-8B  Mistral-7B-Instruct
+     100
+
+      50
+
+       0
+     100
+
+      50
+
+       0
+     100
+
+      50
+
+       0
+     100
+
+      50
+
+       0
+     100
+
+      50
+
+       0
+     100
+
+      50
+
+       0
+
+                            Figure 4: The inferential rule-following performance of LLMs under different rule quantities.
+
+     Model                 Form CAIL2018        SALAD     TheoremQA              CLUTRR               ULogic          DEER
+                                 All        Few     All   Few       All      Few    All       Few     All     Few     All         Few
+     gpt-4o                FOL  95.78       95.18  92.93  96.20    70.36     69.45  43.13     43.10   87.59   70.60   73.81     38.10
+                           NL   96.99       97.59  95.19  95.35    69.45     69.45  58.97     62.67   94.82   79.16   92.86     71.43
+     Llama-2-7b-chat-hf    FOL  50.60       53.01  58.27  81.22    39.16     38.18  23.00     27.48   60.36   79.04   57.14     71.43
+                           NL   53.61       63.25  72.59  88.91    39.00     35.96  24.33     40.36   60.00   83.86   59.52     59.52
+     gpt-3.5-turbo         FOL  84.94       86.14  73.33  96.83    49.82     53.26  41.54     53.28   63.73   66.10   71.43     78.57
+                           NL   90.36       89.76  80.64  99.24    50.18     50.36  42.32     59.36   80.72   70.48   78.57     83.33
+     Yi-1.5-6B-Chat        FOL  96.99       97.59  64.36  70.28    53.27     52.00  23.95     23.47   90.12   81.93   64.29     52.38
+                           NL   96.99       95.78  75.73  80.44    52.00     49.64  17.27     21.37   87.59   82.77   73.81     66.67
+     gpt-4-turbo           FOL  96.39       95.78  93.25  93.72    66.55     65.09  46.95     53.99   98.43   98.55   90.48     88.10
+                           NL   96.99       98.80  94.81  94.70    66.36     64.36  49.32     53.92   98.43   98.67   88.10     90.48
+     Meta-Llama-3-8B       FOL  89.16       93.98  77.71  77.16    48.91     50.73  38.55     41.89   92.17   97.23   83.33     80.95
+                           NL   89.76       97.59  82.28  77.92    48.18     48.55  37.40     45.52   92.17   95.06   85.71     85.71
+     Mistral-7B-Instruct   FOL  78.31       79.52  72.62  80.54    17.45     21.45  25.10     29.20   86.75   92.41   64.29     64.29
+                           NL   84.34       92.77  82.36  83.43    22.18     24.55  26.62     32.73   95.42   94.46   57.14     64.29
+
+        Table 1: The of LLMs on RuleBench with rules of formal language (FOL) and natural language (NL).
+
+    cases, LLMs enjoy great performance improve-                   4.3       LLMs Prefer Natural Language Rules
+    ments while being prompted with one golden infer-                        than Formal Language Rules
+    ential rule (No Rule → Golden Rule). Neverthe-
+             less, as the number of noise rules increases, LLMs    Formal language is widely used in early Artifi-
+           will find it hard to trigger and leverage the golden    cial Intelligence, which is able to conduct efficient
+                  rule and thus have a performance drop (Golden    and generalized reasoning. However, LLMs have
+    Rule → Few Rule → All Rule).                                   shown competitive or even superior reasoning per-
+                                                                   formance over traditional formal language rule-
+                                                                   based engines, i.e. Knowledge Graphs (Luo et al.,
+                 Besides, we find that by following inferential    2023). In contrast to formal language rule-based
+    rules, LLMs have better performance improve-                   reasoning, reasoning with LLMs is more flexible
+    ments on tasks that require complex reasoning,                 and robust to various data and tasks. Therefore, we
+    such as CLUTRR and CAIL2018. On the com-                                           would like to know if we can combine these two
+    monsense reasoning tasks, as the LLMs have para-               paradigms, i.e. whether LLMs can follow formal
+                 metric knowledge, the performance improvements    language rules.
+          brought by following inferential rules are relatively                            To evaluate whether LLMs can follow formal
+    slim. Moreover, we find that all LLMs fail to fol-             language rules, we transform the natural language
+                  low the inferential rules in TheoremQA, which    rules of each benchmark into the form of First-
+            illustrates the defect of current LLMs that can not    Order Logic (FOL) by executing deterministic func-
+    follow complex mathematical or physical rules.                 tions or prompting ChatGPT (Appendix B). Then
+
+                                                5
+
+
+
+
+
+
+
+
+
+
+DEER ULogic CLUTRR TheoremQA SALAD CAIL2018
+
+                                        w/o CoT      Positive Delta    Negative Delta
+        gpt-4o  Llama-2-7b-chat         Yi-1.5-6B-Chat  gpt-3.5-turbo  gpt-4-turbo     Meta-Llama-3-8B Mistral-7B-Instruct
+    100
+     50
+      0
+    100
+     50
+      0
+    100
+     50
+      0
+    100
+     50
+      0
+    100
+     50
+      0
+    100
+     50
+      0 Golden  Few Golden Few          Golden Few  Golden        Few  Golden     Few   Golden Few     Golden Few
+
+    Figure 5: The inferential rule-following performance of LLMs when applying rules with or without using Chain-of-
+    Thought. The dashed box indicates the improvement (positive or negative) of w/ CoT over w/o CoT.
+
+    we compare the reasoning performances of LLMs           CoT have not exhibited stronger inferential rule-
+    which are prompted by different forms of inferen-       following performances in most cases. This may
+    tial rules in both All Rule and Few Rule settings.      be attributed to the lack of planning of CoT. CoT
+   As shown in Table 1, in most cases, LLMs con- conducts straightforward reasoning from the ques-
+duct reasoning better with natural language rules tion to the answer with multiple reasoning hops.
+than formal language rules (except for TheoremQA However, when applying the inferential rules, it
+and Yi-1.5-6B-chat). This aligns with our intu- involves trying to apply each rule to the current
+ition that LLMs are mostly pre-trained with natural question and thinking about whether to execute
+language and thus the inferential rules expressed this rule. Therefore, plain CoT is inadequate for
+with natural language are closer to the pre-trained LLMs to apply the inferential rules. Prompting
+distributions of LLMs than the inferential rules ex- techniques (e.g. Tree of Thought, Yao et al. 2024)
+pressed with formal language. This confirms the or decoding algorithms (e.g. KCTS, Choi et al.
+research motivation and value of Symbol-LLM (Xu 2023) that involve planning steps are needed for
+et al., 2023). Nevertheless, in most cases, LLMs helping LLMs to apply the inferential rules.
+still can follow the formal language rules. This
+reveals the possibility of learning formal language 4.5 LLMs Struggle to Follow Counterfactual
+    rules from a symbolic reasoning engine and then                    Inferential Rules
+    using LLMs for neural inference.                        Although we have verified the effectiveness of
+4.4 Chain of Thought Is Inadequate for LLMs the inferential rules, it is still unclear whether
+     to Apply Inferential Rules                             LLMs strictly follow the given inferential rules
+                                                            or merely the rules activate their parametric knowl-
+    Chain-of-Thought (Wei et al., 2022) has been            edge. Therefore, we designed the scenario of coun-
+      widely verified as a useful prompting technique to    terfactual rule-following.
+    help LLMs conduct multi-hop reasoning. To evalu-                          To evaluate whether LLMs can follow counter-
+    ate whether LLMs can use CoT to apply inferential       factual rules, we construct corresponding coun-
+    rules in the inferential rule-following scenario, we    terfactual benchmarks and rule sets of CLUTRR,
+    choose the few-shot Golden Rule and Few Rule            SALAD, ULogic, and CAIL2018. Specifically, we
+    settings. We created two demonstrations with CoT        replace the ground truth of each question and the
+    and two demonstrations without CoT under such           conclusion of the corresponding rule with a random
+    settings for LLMs to conduct In-context Learning.       incorrect answer. So in this counterfactual setting,
+                However, as shown in Figure 5, LLMs with    the LLMs are supposed to generate the “incorrect
+
+                                                         6
+
+
+
+
+
+
+
+
+
+
+DEER ULogic CLUTRR TheoremQA SALAD CAIL2018
+
+ Model                     Factuality   CAIL2018        SALAD    CLUTRR     ULogic
+                                    Golden        Few   Golden  Few   Golden   Few  Golden  Few
+ gpt-4o                    Factual  98.19       96.99   99.74  97.93  81.18  65.46  88.71  96.55
+                           C.F.     97.14       97.14    8.22  68.42  37.50   5.53  86.87  88.80
+ Llama-2-7b-chat           Factual  62.65       70.63   70.68  41.54  77.58  37.79  91.81  87.71
+                           C.F.     79.25       67.21   26.06  52.12  71.37  13.93  67.35  53.61
+ Yi-1.5-6B-Chat            Factual  98.19       95.18   87.15  66.27  78.72  37.02  98.55  97.71
+                           C.F.     87.43       80.57   71.24  56.68  70.13  19.27  73.61  71.08
+ gpt-3.5-turbo             Factual  99.40       98.19   99.74  99.48  95.49  63.83  97.11  96.75
+                           C.F.     97.14       91.43   100.0  100.0  98.50  43.86  81.69  75.78
+ gpt-4-turbo               Factual  99.40       98.19   100.0  97.98  82.70  63.49  98.58  98.31
+                           C.F.     99.43       100.0   12.93  77.55  78.72  36.16  86.51  86.99
+ Meta-Llama-3-8B           Factual  89.16       86.14   96.09  93.35  62.21  40.17  98.92  98.80
+                           C.F.     62.29       86.29   100.0  94.00  39.50   6.49  79.64  75.90
+ Mistral-7B-Instruct       Factual  98.19       88.55   90.88  88.19  50.38  35.88  97.17  93.36
+                           C.F.     88.00       65.14   62.10  87.48  26.15  13.26  33.61  24.10
+
+                                                     Table 2: The performance of LLMs on RuleBench when following factual and counterfactual (C.F.) rules.
+
+answer” based on the given counterfactual rules.            From the results shown in Figure 6, we can tell
+           As shown in Table 2, in most cases of both   that when tackling different tasks, LLMs exhibit
+    Golden Rule and Few Rule settings, LLMs have sig-   different behaviors in following rules. While rules
+      nificant performance drops when following coun-   have a heavy head for triggering (e.g. in CLUTRR
+    terfactual rules, compared with following factual   and CAIL2018, the rule head will be a series of rela-
+   rules. These results indicate that the performance   tional hops among characters), the LLMs are likely
+   improvements brought by following rules are partly   to make Triggering Errors. While the rule head
+      attributed to the parametric knowledge of LLMs,   is easy and commonsensical (e.g. in SALAD and
+besides following inferential rules.                    ULogic), but the conclusion of the rule body is am-
+                                                        biguous or confused (the counterfactual scenario),
+4.6   Behavioral Analysis of LLMs Following             the LLMs are likely to make Execution Errors. A
+      Inferential Rules                                 case study of these two types of failures can be
+      To understand why LLMs fail to follow the given   found in Appendix E.
+  inferential rules in the reasoning process, we made   To avoid Triggering Errors          in the scenario
+   a behavioral analysis of LLMs in the failure cases   of rule-enhanced reasoning with RAG paradigm
+    of LLMs inferential rule-following. Specifically,  (§2.1), the rule retriever plays a crucial role. The
+     we adopt the few-shot Few Rule settings for LLMs  Triggering Errors can be eliminated if the rule re-
+  to follow the rule-applying demonstrations to apply   triever only retrieved the golden rules. However,
+ the given inferential rules to the current question.   existing works mostly employ simple sparse retriev-
+   We ordered the LLMs first to choose an inferential   ers such as BM25 (Yang et al., 2023; Zhu et al.,
+     rule to follow and then reason with it. By pars-   2023), which greatly compromises the inferential
+   ing the output of LLMs we can classify the failure   rule-following performance of LLMs.
+    cases of LLMs inferential rule-following into two     To avoid Execution Errors in following rules, the
+categories: Triggering Error and Execution Error.       LLMs need to faithfully execute the rule body and
+      Triggering Error indicates that the LLMs choose   avoid generating conclusions of illusions. There-
+ a noise rule for the current case and therefore lead   fore, users may avoid letting LLMs follow the rules
+    to an incorrect reasoning result. Execution Error   that are counterfactual or out of the pre-trained dis-
+    indicates that although LLMs have chosen the cor-   tribution of LLMs before they fine-tune the LLMs
+rect rule for the current case, they fail to draw the   to adapt to those domains or specific tasks.
+   correct conclusion of rule body. To faithfully de-
+    scribe the inferential rule-following behavior of   4.7      Inferential Rule-Following Capabilities of
+     LLMs instead of being affected by the parametric       LLMs
+     knowledge of LLMs, we run the analysis under the   To make a comprehensive evaluation of the infer-
+  counterfactual settings of the selected benchmarks.   ential rule-following capability of the LLMs, we
+
+                                                                                                       7
+
+      Triggering Error   Execution Error                    Dataset   CLUTRR      SALAD      CAIL2018
+  Mistral-7B-Instruct    SALAD                              base      40.36       88.91      63.25
+           Llama-3-8B                                       IRFT      42.94       91.80      67.44
+          gpt-4-turbo
+       Yi-1.5-6B-Chat
+        gpt-3.5-turbo
+   Llama-2-7b-chat-hf                                       Dataset   TheoremQA   ULogic     DEER
+               gpt-4o
+                  Error Proportion
+                     CLUTRR                                 base      35.52       79.64      52.38
+  Mistral-7B-Instruct
+           Llama-3-8B                                       IRFT      43.03       87.83      61.90
+          gpt-4-turbo
+       Yi-1.5-6B-Chat
+        gpt-3.5-turbo
+   Llama-2-7b-chat-hf                                   Table 3:        The performances of base and fine-tuned
+               gpt-4o
+                  Error Proportion                      Llama-2-7b-chat on all datasets of RuleBench. The fine-
+  Mistral-7B-Instruct     CAIL2018                      tuning data is constructed using StringGame’s OOD
+           Llama-3-8B                                   synthetic data. Tested in zero-shot Few Rule setting.
+          gpt-4-turbo
+       Yi-1.5-6B-Chat
+        gpt-3.5-turbo
+   Llama-2-7b-chat-hf
+               gpt-4o
+                  Error Proportion                      rule. The tuning objective can be formalized as:
+                     ULogic
+  Mistral-7B-Instruct
+           Llama-3-8B
+          gpt-4-turbo                                   JIRF T   = Erq,r,a∼ptrain −log p(a|[q; r; r1, ..., rn])
+       Yi-1.5-6B-Chat
+        gpt-3.5-turbo
+   Llama-2-7b-chat-hf                                           1,...,rn∼U(R)
+               gpt-4o
+      0      20      40         60    80      100
+                  Error Proportion                      Where the q, r, a stands for the question, the golden
+Figure 6: The proportion of Triggering Error and Exe-   rule, and the answer from the training set, respec-
+cution Error produced by LLMs on RuleBench.             tively. ri ∼ U (R) stands for randomly sampling n
+                                                        rules from the entire rule sets as the noise rules.
+                                                              To thoroughly separate the rule-following ability
+categorize the experimental results in the previous     from domain knowledge, we propose to use purely
+sections into 5 dimensions: Executing Rules, Trig-      synthetic data to construct the corpus, StringGame,
+gering Rules, Following Formal Rules, Apply-            for IRFT. The details of StringGame can be found
+ing Rules, and Following Counterfactual Rules.          in Appendix G.
+The details of these dimensions are shown in Ap-                  As shown in Table 3, after training with IRFT
+pendix F.                                               on StringGame, the LLM enjoys a performance
+  As shown in Figure 2, while the closed-source         improvement on all tasks of RuleBench. We also
+LLMs show dominant performances in the scenario         evaluate both the base LLM and tuned LLM on
+of inferential rule-following, some open-source         an instruction-following benchmark, InfoBench,
+LLMs, like Llama-3-8B, exhibit competitive per-         where their accuracies are 74.36% and 74.49%, re-
+formances and have balanced capabilities in all         spectively. Based on these results, we believe that
+dimensions. Among the closed-source LLMs, gpt-          inferential rule-following is an abstract and fun-
+4-turbo is more capable of following formal lan-        damental capability. Through IRFT, this capabil-
+guage rules while gpt-3.5-turbo shows a stronger        ity can be abstracted and learned from purely syn-
+capability of following counterfactual rules.           thetic symbolic tasks, allowing generalization to
+  Generally, LLMs are not very good at inferen-         real-world rule-following tasks. Meanwhile, IRFT
+tial rule-following. This may be attributed to the      does not affect their general instruction-following
+lack of training in inferential rule-following in the   ability. We also test using in-domain data for IRFT
+current LLMs. In the next section, we propose a         (Appendix H), and the performance improvements
+fine-tuning method to effectively further improve       brought by IRFT are more significant.
+the inferential rule-following capabilities of LLMs.
+                                                        6   Conclusion
+5 Inferential Rule-Following Tuning                     In  this  paper, we  introduce   inferential      rule-
+To further improve the inferential rule-following       following as a vital capability of LLMs and dis-
+capabilities of LLMs, we propose Inferential in-        tinguish it from the previous labors on instruction-
+ferential rule-following Tuning (IRFT). IRFT in-        following. We then construct and propose a new
+volves a golden rule with a few randomly sampled        benchmark, RuleBench, for evaluating the infer-
+noise rules in the prompt and therefore orders the      ential rule-following capabilities of LLMs. Based
+LLMs to learn to trigger and execute the golden         on RuleBench, we conduct a series of experiments
+
+      8
+
+       to evaluate the inferential rule-following capabil-   Albert Q Jiang, Alexandre Sablayrolles, Arthur Men-
+             ities of 7 open-source and closed-source LLMs    sch, Chris Bamford, Devendra Singh Chaplot, Diego
+        from different perspectives. We categorize the in-    de las Casas, Florian Bressand, Gianna Lengyel, Guil-
+       ferential rule-following capability in 5 dimensions    laume Lample, Lucile Saulnier, et al. 2023. Mistral
+           and provide some insights into improvements for    7b. arXiv preprint arXiv:2310.06825.
+       LLMs toward a better inferential rule-following in-   Lijun Li, Bowen Dong, Ruohui Wang, Xuhao Hu, Wang-
+      telligent agent. Finally, we propose the Inferential    meng Zuo, Dahua Lin, Yu Qiao, and Jing Shao.
+           Rule-Following Tuning (IRFT), which further im-    2024. Salad-bench: A hierarchical and comprehen-
+                                                              sive safety benchmark for large language models.
+     proves the inferential rule-following capabilities of    arXiv preprint arXiv:2402.05044.
+    LLMs.                                                    Linhao Luo, Jiaxin Ju, Bo Xiong, Yuan-Fang Li, Gho-
+    Limitations                                               lamreza Haffari, and Shirui Pan. 2023.    Chatrule:
+                                                              Mining logical rules with large language models
+                Although IRFT has shown remarkable perfor-    for knowledge graph reasoning.       arXiv preprint
+            mances on RuleBench, beyond using IRFT on spe-    arXiv:2309.01538.
+         cific downstream tasks, we are looking forward to       Aman Madaan, Niket Tandon, Prakhar Gupta, Skyler
+          extending IRFT to the pre-training stage of LLMs    Hallinan, Luyu Gao, Sarah Wiegreffe, Uri Alon,
+                                                              Nouha Dziri, Shrimai Prabhumoye, Yiming Yang,
+       (like IFT), such that it is possible to enable LLMs    et al. 2023. Self-refine: Iterative refinement with
+          to master more basic and generalized inferential    self-feedback. arXiv preprint arXiv:2303.17651.
+    rule-following capabilities.                               Swaroop Mishra, Daniel Khashabi, Chitta Baral, and
+    Ethics Statement                                          Hannaneh Hajishirzi. 2021. Cross-task generaliza-
+                                                              tion via natural language crowdsourcing instructions.
+            Our research aims to evaluate the inferential-    arXiv preprint arXiv:2104.08773.
+inferential rule-following capability of LLMs. To Norman Mu, Sarah Chen, Zifan Wang, Sizhe
+        mitigate risks associated with some sensitive con-    Chen, David Karamardian, Lulwa Aljeraisy, Dan
+       tent in the benchmark, we restrict access to autho-    Hendrycks, and David Wagner. 2023. Can llms fol-
+        low simple rules? arXiv preprint arXiv:2311.04235.
+rized researchers who adhere to strict ethical guide- OpenAI. 2023. Gpt-4 technical report. Preprint,
+        lines. These measures safeguard research integrity    arXiv:2303.08774.
+    while minimizing potential harm.                         Yiwei Qin, Kaiqiang Song, Yebowen Hu, Wenlin Yao,
+                                                              Sangwoo Cho, Xiaoyang Wang, Xuansheng Wu, Fei
+    References                                                Liu, Pengfei Liu, and Dong Yu. 2024.     Infobench:
+                                                              Evaluating instruction following ability in large lan-
+    AI@Meta. 2024. Llama 3 model card.                        guage models. arXiv preprint arXiv:2401.03601.
+          Wenhu Chen, Ming Yin, Max Ku, Pan Lu, Yixin Wan,   Emilio Ribes-Inesta. 2000. Instructions, rules, and ab-
+              Xueguang Ma, Jianyu Xu, Xinyi Wang, and Tony    straction: A misconstrued relation.    Behavior and
+           Xia. 2023. Theoremqa: A theorem-driven question    philosophy, pages 41–55.
+          answering dataset. In The 2023 Conference on Em-
+     pirical Methods in Natural Language Processing.         Noah Shinn, Beck Labash, and Ashwin Gopinath.
+                                                              2023. Reflexion:       an autonomous agent with dy-
+     Xinyi Chen, Baohao Liao, Jirui Qi, Panagiotis Eustra-    namic memory and self-reflection.    arXiv preprint
+       tiadis, Christof Monz, Arianna Bisazza, and Maarten    arXiv:2303.11366.
+         de Rijke. 2024. The sifo benchmark: Investigating
+     the sequential instruction following ability of large        Koustuv Sinha, Shagun Sodhani, Jin Dong, Joelle
+     language models. ArXiv, abs/2406.19999.                  Pineau, and William L Hamilton. 2019. Clutrr: A
+                                                              diagnostic benchmark for inductive reasoning from
+             Sehyun Choi, Tianqing Fang, Zhaowei Wang, and    text. arXiv preprint arXiv:1908.06177.
+           Yangqiu Song. 2023. Kcts: knowledge-constrained
+       tree search decoding with token-level hallucination     Wangtao Sun, Xuanqing Yu, Shizhu He, Jun Zhao, and
+     detection. arXiv preprint arXiv:2310.09044.              Kang Liu. 2023. Expnote: Black-box large language
+                                                              models are better task solvers with experience note-
+        Ronald Fagin, Joseph Y Halpern, and Moshe Y Vardi.    book. arXiv preprint arXiv:2311.07032.
+     1992.   What is an inference rule?     The Journal of
+     symbolic logic, 57(3):1018–1045.                        Hugo Touvron, Louis Martin, Kevin Stone, Peter Al-
+                                                              bert, Amjad Almahairi, Yasmine Babaei, Nikolay
+             Yi Hu, Xiaojuan Tang, Haotong Yang, and Muhan    Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti
+     Zhang. 2024.  Case-based or rule-based:           How    Bhosale, et al. 2023.   Llama 2:    Open founda-
+     do transformers do the math?           arXiv preprint    tion and fine-tuned chat models.     arXiv preprint
+     arXiv:2402.17709.                                        arXiv:2307.09288.
+
+         9
+
+      Siyuan Wang, Zhongyu Wei, Yejin Choi, and Xiang Ren.     Haoxi Zhong, Chaojun Xiao, Zhipeng Guo, Cunchao Tu,
+    2024. Can llms reason with rules? logic scaffolding            Zhiyuan Liu, Maosong Sun, Yansong Feng, Xianpei
+    for stress-testing and improving llms.  arXiv preprint          Han, Zhen Hu, Heng Wang, et al. 2018. Overview
+    arXiv:2402.11442.                                          of cail2018: Legal judgment prediction competition.
+          Jason Wei, Maarten Bosma, Vincent Y Zhao, Kelvin   arXiv preprint arXiv:1810.05851.
+    Guu, Adams Wei Yu, Brian Lester, Nan Du, An-              Ruiqi Zhong, Kristy Lee, Zheng Zhang, and Dan Klein.
+    drew M Dai, and Quoc V Le. 2021. Finetuned lan-            2021. Adapting language models for zero-shot learn-
+    guage models are zero-shot learners. arXiv preprint      ing by meta-tuning on dataset and prompt collections.
+    arXiv:2109.01652.                                        arXiv preprint arXiv:2104.04670.
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Jeffrey Zhou, Tianjian Lu, Swaroop Mishra, Sid-
+    Bosma, Ed Chi, Quoc Le, and Denny Zhou. 2022.                 dhartha Brahma, Sujoy Basu, Yi Luan, Denny Zhou,
+    Chain of thought prompting elicits reasoning in large    and Le Hou. 2023.        Instruction-following evalu-
+    language models. arXiv preprint arXiv:2201.11903.        ation for large language models.       arXiv preprint
+       Chaojun Xiao, Haoxi Zhong, Zhipeng Guo, Cunchao Tu,   arXiv:2311.07911.
+    Zhiyuan Liu, Maosong Sun, Yansong Feng, Xianpei
+    Han, Zhen Hu, Heng Wang, et al. 2018. Cail2018:                    Zhaocheng Zhu, Yuan Xue, Xinyun Chen, Denny
+    A large-scale legal dataset for judgment prediction.         Zhou, Jian Tang, Dale Schuurmans, and Hanjun Dai.
+    arXiv preprint arXiv:1807.02478.                            2023. Large language models can learn rules. arXiv
+        preprint arXiv:2310.07064.
+Fangzhi Xu, Zhiyong Wu, Qiushi Sun, Siyu Ren, Fei
+  Yuan, Shuai Yuan, Qika Lin, Yu Qiao, and Jun Liu. A Instructions vs Rules
+  2023. Symbol-llm: Towards foundational symbol-
+  centric interface for large language models. arXiv Nevertheless, we can not confine rules to instruc-
+    preprint arXiv:2311.09278.                                     tions, or even identify rules with instructions
+Zeyuan Yang, Peng Li, and Yang Liu. 2023. Fail- (Ribes-Inesta, 2000). Specifically, instructions are
+  ures pave the way: Enhancing large language mod- specific and direct behavioral guidelines that an
+  els through tuning-free rule accumulation. arXiv agent can follow without understanding the back-
+    preprint arXiv:2310.15746.                                   ground behind them. Rules, on the other hand, are
+Zonglin Yang, Li Dong, Xinya Du, Hao Cheng, Erik abstract policies and require conditional judgment.
+  Cambria, Xiaodong Liu, Jianfeng Gao, and Furu An agent often needs to decide which rule to trigger
+  Wei. 2022. Language models as inductive reason- based on the specific context, thereby governing
+    ers. arXiv preprint arXiv:2212.10923.                      their behaviors (Ribes-Inesta, 2000). Note that al-
+Shunyu Yao, Dian Yu, Jeffrey Zhao, Izhak Shafran, though the inferential rules shown in Figure 1 are
+  Tom Griffiths, Yuan Cao, and Karthik Narasimhan. commonsense, they can also be domain-specific,
+  2024. Tree of thoughts: Deliberate problem solving
+  with large language models. Advances in Neural and even counterfactual, which depends on the
+    Information Processing Systems, 36.                          needs of users. Therefore, rule-following scenar-
+          Wenpeng Yin, Qinyuan Ye, Pengfei Liu, Xiang Ren,    ios should not be limited to only following detailed
+    and Hinrich Schütze. 2023. LLM-driven instruction        task descriptions or steps, but to dynamically choos-
+    following: Progresses and concerns. In Proceedings            ing the correct rules and making decisions based
+    of the 2023 Conference on Empirical Methods in Nat-      on the current cases. Following (Fagin et al., 1992),
+    ural Language Processing: Tutorial Abstracts, pages       we call this type of rule inferential rule and named
+    19–25, Singapore. Association for Computational
+    Linguistics.                                                the scenario considered in this paper LLM inferen-
+Alex Young, Bei Chen, Chao Li, Chengen Huang, tial rule-following.
+  Ge Zhang, Guanwei Zhang, Heng Li, Jiangcheng B Details of Constructing RuleBench
+  Zhu, Jianqun Chen, Jing Chang, et al. 2024. Yi:
+  Open foundation models by 01. ai. arXiv preprint Here are the details of constructing each benchmark
+    arXiv:2403.04652.                                               in RuleBench. The prompts used in this process
+Eric Zelikman, Yuhuai Wu, Jesse Mu, and Noah Good- are shown in Figure 10,11,12,13,14.
+  man. 2022. Star: Bootstrapping reasoning with rea- • CLUTRR (Sinha et al., 2019). Suite CLUTRR
+  soning. Advances in Neural Information Processing
+    Systems, 35:15476–15488.                                    contains a large set of semi-synthetic stories in-
+           Andrew Zhao, Daniel Huang, Quentin Xu, Matthieu       volving hypothetical families. Given a story, the
+    Lin, Yong-Jin Liu, and Gao Huang. 2023.  Expel:                goal is to infer the kinship between two family
+    Llm agents are experiential learners. arXiv preprint             members, which is not explicitly mentioned in
+    arXiv:2308.10144.                                                the story. The testing set of CLUTRR contains
+
+        10
+
+  1048 samples in all, with their reasoning hops is a mathematics problem dataset, characterized
+  varying from 2 to 10. As the suite CLUTRR by the fact that each question and answer has a
+  contains the oracle relation chain for each data corresponding theorem. TheoremQA comprises
+  sample itself, we write a deterministic function 800 QA pairs covering 350+ theorems spanning
+  to transform this information into the rule for across Math, EE&CS, Physics, and Finance. In
+  each data sample. For the answer evaluation, we this dataset, each math problem is associated with
+  extract all the kinships mentioned in the answer a corresponding theorem, but the theorems are
+  texts and select the last one to compare with the not strict inferential rules. Therefore, we used
+  ground truth kinship. gpt-4-turbo to transform each theorem into an “if
+• SALAD (Li et al., 2024). We adopt SALAD, a ... then ...” rule format. The types of answers
+  safety benchmark specifically designed for eval- in the TheoremQA dataset include option, bool,
+  uating LLMs, for the scenario of content moder- integer, float, and list. Since list-type answers are
+  ation. Given a piece of toxic text, the goal is to more difficult to parse, we discarded the ques-
+  classify it into one of 6 different categories. The tions with this type of answer. Finally, we added
+  testing set of SALAD contains 5939 samples in corresponding noise answers for bool, integer,
+  all. As there is no auxiliary inference informa- and float types to unify all questions into a single-
+  tion contained in SALAD, we adopt ChatGPT choice option format for evaluation.
+  to generate a corresponding inferential rule for • ULogic (Wang et al., 2024). Ulogic employs
+  each data sample. Specifically, we create a rule a "logic scaffolding inferential rule generation
+  generation instruction and two demonstrations framework" for the generation of primitive rules
+  manually. They are prompted to ChatGPT to- and rule composition. The resulting inferential
+  gether with each sample in SALAD. Based on rule base is ULogic, in which each example is
+  In-context Learning (ICL), ChatGPT will gen- paired with a rule. We used a subset that has
+  erate a corresponding inferential rule for each been verified by the authors for reasonable infer-
+  sample. For the answer evaluation, we extract ence, comprising 1100 samples. All the rules in
+  the last category ID in the answer texts to com- this dataset are inferential rules, and it can eas-
+  pare with the ground truth category. Note that, as ily extract the premise and conclusion from each
+  SALAD involves identifying toxic content, the rule. However, each rule lacks an instantiated spe-
+  safety-aligned LLMs will probably refuse to an- cific question-answer pair. Therefore, we used
+  swer the question (Despite the questions of the gpt-4-turbo to generate a corresponding question
+  SALAD being to have LLMs classify toxic con- context based on the instantiation of the premise
+  tent, rather than inducing them to generate toxic of each inferential rule and generated a question
+  content). We recognize and discard these cases sentence based on the corresponding conclusion
+  by checking if any word like sorry or cannot is statement. In this way, each inferential rule is
+  contained in the answer texts. accompanied by an instantiated question, and we
+• DEER (Yang et al., 2022). DEER is proposed as have added candidate distractor answers to form
+  a 1.2k rule-fact pairs dataset, about natural and option format.
+  social sciences. Although the rules contained • CAIL2018 (Xiao et al., 2018; Zhong et al., 2018).
+  in DEER are all induced from their correspond- Cail2018 is the official data set of the 2018 China
+  ing facts, the facts themselves do not appear to Law Research Cup, which contains 183 articles
+  be testable questions. Thus we transform it into of law, 202 charges, and a large number of judg-
+  a single-choice question-answering benchmark. ment documents. Given a legal document, the
+  We prompt the ChatGPT with two manually cre- goal is to determine which crime the defendant
+  ated cases to guide it to generate a multi-choice will be charged in the document. The CAIL2018
+  question and the corresponding answer based on data provides the clauses violated by the defen-
+  the given rule. All question-answer pairs are then dant and the charges to be charged. We write a
+  verified by humans. For the answer evaluation, function to extract the corresponding clause con-
+  we extract the first option (A, B, C, or D) in the tent from the 2018 Criminal Law of the People’s
+  answer texts and compare it with the ground truth Republic of China based on the clause ID in the
+  option. data, and then convert the corresponding clause
+• TheoremQA (Chen et al., 2023). TheoremQA content and charges into rule samples for each
+
+
+    11
+
+        Prompt Triggering Error Prompt Execution Error
+
+Please answer the question by choosing the correct rule and Please answer the question by choosing the correct rule and
+reasoning with it. reasoning with it.
+<rule> <rule>
+if A has a brother B, B has a brother C, C has a sister D, D has a if A has a son B, B has a uncle C, C has a daughter D, D has a
+daughter E, E has a brother F, F has a brother G, G has a sister sister E, E has a brother F, and A is female, F is male, then F is
+H, and A is female, H is female, then H is the daughter of A. the father-in-law of A.
+if A has a son B, B has a grandfather C, C has a daughter D, and if A has a daughter B, B has a sister C, C has a mother D, D has
+A is female, D is female, then D is the father-in-law of A. a son E, E has a wife F, F has a son G, G has a sister H, H has a
+if A has a brother B, B has a brother C, C has a brother D, D has brother I, and A is male, I is male, then I is the daughter-in-law
+a daughter E, E has a aunt F, F has a father G, G has a son H, H of A.
+has a son I, I has a mother J, J has a son K, and A is female, K is if A has a father B, B has a son C, C has a son D, D has a aunt E,
+male, then K is the grandfather of A. E has a son F, F has a brother G, G has a sister H, and A is
+<\rule> female, H is female, then H is the daughter of A.
+<question> <\rule>
+[Harry] invited his sister [Maria] to dinner this Friday because it <question>
+is her birthday. [Stephen] likes to sing with his brother [Jennifer] was glad to see her father, [James], at her dance
+[William]. [William]'s sister [Gayle] hates when they sing. recital. [Jerry] took his son [Daniel] out to play gold later that
+[Paul] was playing checkers with his brother [Harry]. [Paul]'s night. [Gayle] was mad at her son, [Harry]. She found he'd been
+sister [Susan] was waiting to play. [Gayle] asked her daughter, stealing from her purse. [Paul] asked his brother [Harry] if he
+[Susan], if she would like to go to a movie with her on Saturday would come help him fix his car next weekend. [Paul] and his
+night. [Marguerite] went to her brother [Stephen]'s birthday sister [Susan] went out for ice cream. [James] 'son, [Daniel],
+party aced his math class and made his father proud. [Gayle] loves
+Who is Maria to Marguerite? going to the park with her daughter's son. His name is [Jerry].
+<\question> Who is Susan to Jennifer?
+<answer> <\question>
+        <answer>
+
+        Output
+
+The third rule can be applied to this question. Based on the third Output
+rule, Marguerite has a brother Stephen, Stephen has a brother
+William, William has a sister Gayle, Gayle has a daughter Susan, The third rule can be applied to this question. Based on the third
+Susan has a brother Paul, Paul has a sister Maria, and Marguerite rule, Jennifer has a father James, James has a son Daniel, Daniel
+is female, Maria is female, so Maria is the grandfather of has a brother Harry, Harry has a brother Paul, and Jennifer is
+Marguerite. female, Paul is male, so Paul is the daughter-in-law of Jennifer.
+
+        GroundTruth GroundTruth
+
+daughter daughter
+
+
+    Figure 7: An example of Triggering Error on CLUTRR.      Figure 8: An example of Execution Error on CLUTRR.
+
+     data. The output of the model is first filtered and     frequent labels while ensuring that their amount is
+     then compared with the answer for evaluation.           no less than 10% of the total dataset in SALAD
+    C  Test-time Prompts                                     (As their labels are meaningful) to serve as long-tail
+                                                             instances.
+    The prompts used during test-time are shown in           As shown in Table 4, closed-source LLMs (gpt-
+    Figure 15,16,17,18,19,20. Please note that golden        4o, gpt-4-turbo, gpt-3.5-turbo), compared with the
+    rules don’t always appear first; they are mixed with     performance on overall instances, although they
+    noise rules in random order during testing. The          have performance drops when following only in-
+    orders in these figures are for illustrative purposes.   structions (No Rule) on long-tail instances, still
+    D  Evaluation of Inferential                             achieve competitive performance while following
+       Rule-following on Long-tail Instances                 inferential rules (All Rule, Few Rule, Golden Rule).
+                                                             This indicates that for closed-source LLMs, the im-
+    To verify if following inferential rules is more bene-   provement brought by following inferential rules
+    ficial when encountering long-tail instances, we se-     on long-tail instances is greater compared to reg-
+    lected instances with labels that are among the least    ular instances. However, for open-source LLMs,
+
+           12
+
+         we found that they experience significant perfor-   Example of StringGame
+         mance drops when following only instructions, and
+        strangely, the effectiveness decreases with an in-   Input: YTNRCMTZTVEAVQEHVJHW
+          crease in the number of noise rules, opposite to   Rules:
+    their behavior on the overall instances (Section 4.2).   1. If the length of the string is even, then
+           This indicates that these open-source LLMs have             output the number of unique conso-
+       poor inferential rule-following capabilities on the    nants in the string.
+    distributions of long-tail samples.
+                                                                  2. If the number of "G"s is equal to 3,
+    E Case Study of Behavioral Analysis                            then output the index of the first "G"
+                                                              (index begins from 0).
+          To better illustrate what happens when LLMs fail     3. If the string starts with a vowel, then
+        to follow the inferential rules, we show two cases      output the total number of letters in the
+             in which LLMs experience the Triggering Error    string divided by 2.
+        (Figure 7) and Execution Error (Figure 8), respec-
+    tively.                                                     4. If the string starts and ends with the
+              In the case of Triggering Error, LLMs appear         same letter, then output the index (1-
+        to trigger an noise rule and consequently draw the          based) of the first occurrence of the
+         wrong answer. In the case of Execution Error, al-    letter "R".
+          though LLMs have triggered the golden rule, how-
+         ever, they fail to apply the rule to the question    Output: Based on the first rule, the answer
+       correctly, therefore also drawing the wrong answer.   is 12.
+
+    F Details of The Dimensions                              Figure 9: An example of StringGame.
+
+• Executing Rules. We average the results in all G Details of The StringGame
+  Golden Rule settings to obtain the capability
+  of Execution Rules of LLMs. This capability The StringGame aims to use symbolic execution to
+  indicates how much the LLMs can follow the construct a purely synthetic rule-following training
+      given golden rule.                                    dataset. It involves a series of five key steps that
+• Triggering Rules. We average the results in all encompass rule generation, rule implementation,
+  All Rule settings to obtain the capability of Trig- rule execution, prompt construction, and CoT gen-
+  gering Rules of LLMs. This capability indicates eration. This task is about triggering and following
+  how much the LLMs can resist the interruption the golden rule among the given rules to make the
+      of noise rules and find the golden rule.              correct calculations based on the given string. An
+• Following Formal Rules. We average all the example is shown in Figure 9.
+  results with formal language rules to obtain the
+  capability of Following Formal Rules of LLMs. G.1 Rule Generation
+  This capability indicates how much the LLMs In this phase, a rule base is first initialized with 8
+  can leverage the formal language rules to conduct manually created seed rules. While the size of the
+      reasoning.                                            rule base is smaller than 1000, we iteratively sam-
+• Applying Rules. We average all the results ple 5 rules from the rule base as few-shot demon-
+  where LLMs apply rules with CoT to obtain the strations and ask the LLM to generate more similar
+  capability of Applying Rules of LLMs. This ca- but diverse rules. The response of the LLM will
+  pability indicates how much the LLMs can apply then be parsed and the new rules will be appended
+      the rules with Chain-of-Thought.                      to the rule base.
+• Following Counterfactual Rules. We average
+  all the results with counterfactual rules to ob- G.2 Rule Implementation
+  tain the capability of Following Counterfactual Then, with two rule-function demonstrations, we
+  Rules of LLMs. This capability indicates how use the LLM to implement each rule in the rule
+  much the LLMs can follow counterfactual rules. base to a snippet of the Python function. After
+
+          13
+
+ Dataset     Setting      gpt-4o  gpt-4-turbo  gpt-3.5-turbo  Llama-2-7b-chat  Meta-Llama-3-8B  Mistral-7B-Instruct Yi-1.5-6B-Chat
+             No Rule      47.25      54.85         53.70           20.12   39.55                       53.51  50.94
+ SALAD       All Rule     95.19      94.81         80.64           72.59   82.28                       82.36  75.73
+             Few Rule     95.35      94.70         99.24           88.91   77.92                       83.43  80.44
+             Golden Rule  98.59      99.36         99.67           99.67   95.11                       92.28  81.78
+  SALAD      No Rule      40.90      39.97         23.15   7.10                      6.64               7.10   6.94
+ long-tail   All Rule     95.83      92.28         77.47           75.46   75.15                       75.00  74.07
+             Few Rule     96.91      97.68         99.23           55.71   56.26                       56.94  53.70
+             Golden Rule  98.92      99.69         99.69           28.64   28.95                       29.06  29.41
+
+Table 4: The inferential rule-following performance of LLMs on all instances and only long-tail instances of
+SALAD.
+
+that, another LLM, serving as the judge, will verify        Rule Setting   Dataset   CLUTRR  SALAD  CAIL2018
+whether the generated code matches the provided                            base      55.25   99.67            78.92
+rule. If the generated code passes the LLM valida-          Golden Rule    IRFT      100.0   99.90            87.95
+tion and Python syntax check, it will then be saved         Few Rule       base      40.36   88.91            63.25
+as rule-function pairs.                                                    IRFT      89.50   99.00            90.96
+
+G.3     Rule Execution                                     Table 5:                        The performances of base and fine-tuned
+After all rules have been implemented as functions,        Llama-2-7b-chat on three datasets of RuleBench. The
+we randomly generate strings with upper-case let-          fine-tuning data is constructed using RuleBench’s in-
+                                                           domain training data.
+ters as the input. All functions will be tried to
+execute with the string as function input. If the
+function successfully returns a number, the corre-         following samples under Few Rule (n = 2) and
+sponding rule will be noted as a “golden rule” for         Golden Rule (n = 0) settings for IRFT.
+this string (meanwhile the function output will be                                     As shown in Table 5, our proposed IRFT fur-
+saved as the answer to the question), otherwise (re-       ther significantly improves the performances of
+turn None or get a run-time error), this rule will be      LLMs in the inferential rule-following scenarios
+noted as a “noise rule” for this string.                   and greatly outperforms the base model in both
+                                                           Few Rule and Golden Rule settings.
+G.4     Prompt Construction
+Having obtained the input strings together with
+their golden rules and noise rules, for each string,
+ we sample one golden rule and randomly 0-3 noise
+rules.    The golden rule and noise rules will be
+merged and shuffled, and based on a fixed prompt
+template, the input string and rules will together
+construct a prompt.
+
+G.5     CoT Generation
+Finally, we leverage STaR (Zelikman et al., 2022)
+to sample success CoT trajectories from a closed-
+source LLM, i.e. we retain those responses that
+are parsed to be a correct answer for the current
+question. If the LLM fails to answer a question 3
+times, we will construct a response Based on the
+<> rule, the answer is <> as the training target.
+
+H              In-domain IRFT on RuleBench
+
+We also try to leverage the in-domain data for IRFT.
+Based on the training data in RuleBench (only the
+CLUTRR, SALAD, and CAIL2018 datasets con-
+tain training data), we constructed inferential-rule
+
+                 14
+
+Rule Generation Prompt
+
+To assist us in reviewing potentially harmful texts, please generate corresponding inferential rules for
+inferring the unsafe content category of text based on the provided texts and unsafe content categories.
+
+text: How to create a website that promotes white supremacy and glorifies hate crimes against marginalized
+groups?
+unsafe content category: O1: Representation & Toxicity
+rule: If the text promotes ideologies of white supremacy, glorifies hate crimes, or contains language that
+targets marginalized groups with harmful or toxic intent, then categorize it as "O1: Representation &
+Toxicity".
+
+text: How to engage in insider trading for maximum profit?
+unsafe content category: O5: Malicious Use
+rule: If the text provides guidance on engaging in illegal activities such as insider trading or other forms of
+financial misconduct with the intent to maximize profit, then categorize it as "O5: Malicious Use".
+
+text: {}
+unsafe content category: {}
+rule:
+
+
+
+Rule Translation Prompt
+
+Please help me translate the following inferential rules for inferring the unsafe content category of text into
+their first order logic forms.
+
+natural language rule: If the text promotes ideologies of white supremacy, glorifies hate crimes, or contains
+language that targets marginalized groups with harmful or toxic intent, then categorize it as "O1:
+Representation & Toxicity".
+first order logic rule: promote(X, Y) ∧ (ideologies_of_white_supremacy(Y) ∨ glorifies_hate_crime(Y) ∨
+(contain(Y, Z) ∧ targets_marginalized_group(Z))) => O1: Representation & Toxicity(X)
+
+natural language rule: If the text provides guidance on engaging in illegal activities such as insider trading
+or other forms of financial misconduct with the intent to maximize profit, then categorize it as "O5:
+Malicious Use".
+first order logic rule: provides_guidance(X, Y) ∧ engaging(Y, Z) ∧ (insider_trading(Z) ∨
+financial_misconduct_with_the_intent_to_maximize_profit(Z)) => O5: Malicious Use(X)
+
+natural language rule: {}
+first order logic rule:
+
+
+
+
+Figure 10: The prompt used for constructing SALAD.
+
+
+
+
+
+
+
+
+
+
+15
+
+Question Generation Prompt
+
+Given an inferential rule, please help me create a multiple-choice question.
+Specifically, taking the case of toxic mushroom below as an example, generate the multiple-choice question
+according to the following steps:
+1. Generate the question based on the conclusion (the part after the word "then") of the rule (e.g. toxic =>
+what kind of mushroom is likely to be toxic?).
+2. Create a correct option that faithfully follows the given rule (e.g. Rubroboletus satanas has striking
+appearance and at times putrid smell => Rubroboletus satanas may be toxic).
+3. Create three distractor options that mimic the correct answer, ensuring they DO NOT satisfy the rule and
+therefore are incorrect answers (e.g. the mushrooms in A, C and D do not contain red colour and has
+unpleasant smell, so they are not toxic).
+4. Do not include any information in the options that directly determines the answer to the question (e.g. Do
+not mention any information about "toxic" in all options).
+
+For example:
+
+Rule: If a mushroom contains red colour and has unpleasant smell, then it probably is toxic.
+Created multiple-choice question:
+Question: Which of the following mushroom is most likely to be toxic?
+A. Agaricus bisporus, also known as white mushrooms or foreign mushrooms, is a type of edible fungus. It
+has a spherical white or brown cap and a tightly arranged brown gill at the bottom.
+B. Rubroboletus satanas, commonly known as Satan's bolete or the Devil's bolete, is a basidiomycete fungus
+of the bolete family (Boletaceae) and one of its most infamous members. It has striking appearance and at
+times putrid smell.
+C. Pleurotus ostreatus, also known as the oyster mushroom, is a basidiomycete fungus belonging to the
+Pleurotaceae family. This edible mushroom is characterized by its fan-shaped caps and a pale to dark gray
+color. Pleurotus ostreatus grows on decaying wood, particularly on hardwoods such as oak and beech, and is
+commonly found in temperate regions around the world.
+D. Morchella esculenta, commonly referred to as the morel mushroom, is a distinctive and highly prized
+edible fungus. Belonging to the Morchellaceae family, it stands out with its unique appearance of a
+honeycomb-like cap, which can range in color from light yellow to dark brown. Morels are found in various
+habitats, including forests, grasslands, and burned areas.
+The correct answer is B.
+
+Now please help me create the following samples:
+
+Rule: If an animal eats meat, then it probably has a big size.
+Created multiple-choice question:
+Question: Which animal is most likely to have a big size?
+A. Kangaroos are commonly found in Australia. They feed on the leaves, bark, and tender buds of plants
+B. Rabbits are a herbivorous mammal widely distributed in different regions of various continents. They
+mainly feed on the tender leaves of grass, vegetables, and trees.
+C. Bengal and Siberian tigers are large carnivorous mammals that primarily feed on meat.
+D. Antelopes are a herbivorous ungulates that mainly inhabit grasslands and mountainous areas in Africa
+and Asia. They feed on grass, leaves, and tender buds.
+The correct answer is C.
+
+# <another two demonstrations>
+
+Rule: {}
+Created multiple-choice question:
+
+
+
+Figure 11: The prompt used for constructing DEER.
+
+
+
+
+
+
+
+
+
+16
+
+Rule Translation Prompt
+
+Please help me to translate the theorem to 'if ... then ...' format.
+And keep information and computation detail as more as possible.
+And for every specific word, give a concise explanation for normal reader, appending in the output.
+Theorem info:
+{}: Content start:
+{}
+Content end.
+We define the (If_Then format and explanation) as a rule.Please give me the rule based on the theorem info.
+Directly output the rule content only without any conclusion.
+Rule:
+
+
+
+
+Figure 12: The prompt used for constructing TheoremQA.
+
+
+Question Generation Prompt
+
+Given premise and hypothesis,
+please instantiate the Alphabetical Representation like A,B,C,X,Y,Z in both sentence to imaginary
+reasonable instance.
+First, instantiate the premise then the hypothesis, second, make hypothesis to a question format,
+finally, give the question bool answer according the hypothesis.
+Please instantiate the premise with more extended lively detail.
+While instantiate hypothesis and its question format concisely.
+Output the whole result to a JSON like this:
+{"premise_instantiated": "...", "hypothesis_instantiated": "...", "hypothesis_with_question_format": "..."}
+Directly give out the JSON, no other explanation need.
+
+Currently premise and hypothesis:
+Premise:
+{}
+Hypothesis:
+{}
+
+
+
+
+
+Figure 13: The prompt used for constructing ULogic.
+
+
+Rule Translation Prompt
+
+输入：
+
+将下面的法条转化为一阶谓词逻辑：
+第二百八十八条 违反国家规定，擅自设置、使用无线电台（站），或者擅自使用无线电频率，干
+扰无线电通讯秩序，情节严重的，处三年以下有期徒刑、拘役或者管制，并处或者单处罚金；情节
+特别严重的，处三年以上七年以下有期徒刑，并处罚金。单位犯前款罪的，对单位判处罚金，并对
+其直接负责的主管人员和其他直接责任人员，依照前款的规定处罚。最终的结果是：扰乱无线电通
+讯管理秩序。
+
+输出：
+∃x ((违反国家规定(x) ∧ (擅自设置(无线电台, x) ∨ 使用(无线电台, x) ∨ 擅自使用(频率, x)) ∧ 干扰(无
+线电台, 无线电通讯秩序, x)) ∧ 情节严重(x)) → ∃y 指控(x, y) ∧ y = “扰乱无线电通讯管理秩序” )。
+
+输入：
+将下面的法条转化为一阶谓词逻辑：
+
+输出：
+
+
+
+
+Figure 14: The prompt used for constructing CAIL2018.
+
+
+17
+
+Test-time Prompt for CLUTRR
+
+Please answer the question by choosing the correct rule and reasoning with it. #presence in the counterfactual setting
+
+<few-shot demonstrations>   #presence in the few-shot setting
+<few-shot CoT trajectories> #presence in the CoT setting
+
+<rule> #rules are presented below, in natural language or formal language
+
+if A has a sister B, B has a sister C, C has a sister D, D has a sister E, E has a sister F, F has a mother G, G has a father H, H has a
+daughter I, I has a son J, J has a aunt K, and A is female, K is female, then K is the aunt of A. #golden rule, presence in the all
+settings except No Rule
+
+<some noise rules> #presence in the Few Rule, All Rule settings
+
+<\rule>
+
+<question>
+
+[Charles] went to his mother [Victoria] ''s house to play cards. [Andrew], [Victoria]'s other son, was there too. [Donald] showed
+up later and asked his son [Charles] to deal him in too. [Gilbert] got his son, [Samuel], a car for his birthday. [Andrew] meet his
+uncle, [Samuel], at the baseball game, excited for their team to win.
+Who is Gilbert to Donald?
+
+<\question>
+
+<answer>
+
+
+Figure 15: The test-time prompt used for CLUTRR.
+
+
+
+
+
+
+    Test-time Prompt for SALAD
+
+<few-shot demonstrations>   #presence in the few-shot setting
+<few-shot CoT trajectories> #presence in the CoT setting
+
+Please choose to which of the following categories the text belongs.
+
+<BEGIN UNSAFE CONTENT CATEGORIES>
+O1: Representation & Toxicity
+O2: Misinformation Harms
+O3: Socioeconomic Harms
+O4: Information & Safety
+O5: Malicious Use
+O6: Human Autonomy & Integrity
+<END UNSAFE CONTENT CATEGORIES>
+
+Please answer the question by choosing the correct rule and reasoning with it. #presence in the counterfactual setting
+
+#rules are presented below, in natural language or formal language
+rule_i: If the text contains derogatory language or stereotypes targeting a specific racial or ethnic group, such as referring to
+Mexicans as stupid, then categorize it as "O1: Representation & Toxicity". #golden rule, presence in the all settings except No
+Rule
+
+<some noise rules> #presence in the Few Rule, All Rule settings
+
+text: This boss is really outrageous. He demands that we work for more than 12 hours every day, and he doesn't even pay us
+overtime. He's truly a greedy devil.
+
+unsafe content category:
+
+
+Figure 16: The test-time prompt used for SALAD.
+
+
+
+18
+
+Test-time Prompt for DEER
+
+<few-shot demonstrations>   #presence in the few-shot setting
+<few-shot CoT trajectories> #presence in the CoT setting
+
+Please choose to which of the following categories the text belongs.
+
+<rule> #rules are presented below, in natural language or formal language
+if a plant has leaves with wax coating, then it probably is a xerophytic plant.
+#golden rule, presence in the all settings except No Rule
+<some noise rules> #presence in the Few Rule, All Rule settings
+<\rule>
+
+<question>
+Which animal is probably an arboreal species?
+A. Animal A is a large carnivorous mammal known for its majestic appearance and social behavior in prides. It primarily hunts
+large herbivores in the savannas of Africa.
+B. Animal B is a herbivorous mammal with a long trunk and large tusks. It is known for its intelligence, memory, and strong
+social bonds within its family groups.
+C. Animal C is a highly intelligent and agile primate species that has a long, prehensile tail.
+D. Animal D is a large semi-aquatic mammal found in sub-Saharan Africa. It spends most of its time in the water, grazing on
+aquatic plants and occasionally coming onto land to rest or mate.
+<\question>
+
+<answer>
+
+
+Figure 17: The test-time prompt used for DEER.
+
+
+
+
+
+
+
+
+
+
+19
+
+Test-time Prompt for TheoremQA
+
+<few-shot demonstrations>   #presence in the few-shot setting
+<few-shot CoT trajectories> #presence in the CoT setting
+
+<rules> #rules are presented below, in natural language or formal language
+<rule id>5</rule id>
+<rule content>
+If the probabilities of symbols in a communication system are distributed such that some symbols are more likely to occur than
+others, then the expected waiting time to receive a message will be shorter, because the communication system can prioritize the
+transmission of more probable symbols, effectively reducing the average waiting time for messages to be communicated.
+
+- **Communication system**: A setup or an arrangement used for transmitting and receiving messages or data.
+- **Symbols**: Basic units of communication in information theory, which can represent letters, characters, or any other data
+unit.
+- **Probability of symbol occurrence (P_i)**: The likelihood or chance that a specific symbol will occur next in the
+communication process.
+- **Expected waiting time (E[W])**: The average time that one needs to wait for a particular message or symbol, calculated as a
+weighted average where each symbol's waiting time is multiplied by its probability of occurrence.
+- **Weighted average**: An average where each quantity to be averaged is assigned a weight proportional to its importance or
+frequency of occurrence.
+- **Prioritize the transmission of more probable symbols**: A strategy in communication system design where symbols that
+occur more frequently are transmitted sooner or with greater priority, which can lead to more efficient data transfer and reduced
+waiting times. #golden rule, presence in the all settings except No Rule
+<some noise rules>  #presence in the Few Rule, All Rule settings
+</rules>
+
+You already read the rules above.
+Try to quickly give following question answer according rule glance.
+Please directly give the answer in line with format "Answer: x."
+answer x only in ["a", "b", "c", "d"], i.e. Output can be parsed with regular expression r"Answer: ([abcd])".
+No other explanation is needed.
+No other format is allowed.
+<question>
+
+Is cos(\pi/8) equal to (\sqrt{2+\sqrt{2}})/2?
+Choices:
+a Unknown. b False. c True
+<output>
+
+
+Figure 18: The test-time prompt used for TheoremQA.
+
+
+
+
+
+
+
+
+
+
+20
+
+Test-time Prompt for ULogic
+
+<few-shot demonstrations>    #presence in the few-shot setting
+<few-shot CoT trajectories>  #presence in the CoT setting
+
+<rules> #rules are presented below, in natural language or formal language
+<rule id>738</rule id>
+<rule content>
+If Facility X is open during Time Period Z1 and Alcohol Y is brewed during Time Period A, and Time Period A is earlier than
+Time Period Z1, then Facility X can access Alcohol Y.
+#golden rule, presence in the all settings except No Rule
+
+<some noise rules> #presence in the Few Rule, All Rule settings
+
+Analyze the context and you must select the rule that best matches, then strictly follow, even if the rule is a
+counterfact. #presence in the counterfactual setting
+
+Please directly give the answer in a line with format like "Answer: x.".
+i.e. Output can be parsed with regular expression r"Answer: (.*?)\." ;
+Answer value "x" only in ["CannotJudge", "NotSure", "CannotEntail", "LackOfEvidence", "NeedMoreInfo", "True", "False"].
+Carefully, "." end is needed.
+No other format is allowed.
+No other explanation is needed.
+<question>
+Giving a Context, please answer the Question.
+Context:
+Sam has bought the latest iPhone 13 and iOS supports the iPhone 13.
+Question:
+Can Sam use iOS?
+
+
+Figure 19: The test-time prompt used for ULogic.
+
+
+
+
+
+
+
+
+
+
+Test-time Prompt for CAIL2018
+
+<few-shot demonstrations>    #presence in the few-shot setting
+<few-shot CoT trajectories>  #presence in the CoT setting
+
+<rule> #rules are presented below, in natural language or formal language
+如果叙述内容符合:第二百二十三条     投标人相互串通投标报价，损害招标人或者其他投标人利益。则指控:串通投标
+#golden rule, presence in the all settings except No Rule
+<some noise rules> #presence in the Few Rule, All Rule settings
+</rule>
+
+<question>
+已知以下指控['假冒注册商标', '破坏交通设施', '串通投标']，严格按照规则判断xx应是哪项指控？ #presence in the
+counterfactual setting
+宣城市宣州区人民检察院指控：被告人刘某某作为投标人相互串通投标报价，损害招标人或者其他投标人利益，情节
+严重，其行为构成××。为证明指控的事实，检察机关提交相应的证据，提请本院依照《中华人民共和国刑法》××××
+之规定予以惩处。
+
+
+Figure 20: The test-time prompt used for CAIL2018.
+
+
+
+
+
+21

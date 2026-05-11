@@ -1,10 +1,12 @@
 ---
 title: Synthetic Truth
 created: 2026-05-05
-updated: 2026-05-07
+updated: 2026-05-10
 sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
+  - raw/2407.08440v4.txt
 tags: [concept, llm, reliability, failure-mode]
+unaudited_marginal: 0
 ---
 
 # Synthetic Truth
@@ -75,7 +77,9 @@ This directly reinforces the [[the-human-lever|human lever]] thesis: verificatio
 - [[verification-loop]] — The engineering defense against synthetic truth
 - [[slop]] — Synthetic truth is slop at its most dangerous: coherent, authoritative, and wrong
 - [[execution-apathy]] — Both execution apathy and synthetic truth produce plausible-looking outputs that haven't done the underlying work
+- [[inferential-rule-following]] — The counterfactual rule collapse is the same mechanism: the model outputs what fits its internal model (parametric knowledge) rather than what it's told (the given rule)
 
 ## Sources
 
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The original discovery of synthetic truth through a Gemini interaction; key quotes and analysis
+- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual rules expose the same mechanism — models prioritize internally consistent narrative (parametric knowledge) over explicit instructions

@@ -1,11 +1,12 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-05-04
+updated: 2026-05-10
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
 tags: [concept, context-engineering, agents, memory, continual-learning]
+unaudited_marginal: 0
 ---
 
 # Evolving Context
@@ -74,6 +75,7 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 ## Related
 
 - [[context-engineering]] — Evolving context is context engineering applied over time: curating the agent's persistent context, not just its per-session context
+- [[context-files]] — Context files are evolving context at the repository level: maintained, updated AGENTS.md reflects the evolving context principle; stale context files become doc rot
 - [[agent-skills]] — Skill learning is a category of evolving context; the skill.md format is the practical mechanism for agents to capture and reuse procedural knowledge
 - [[multi-tier-action-space]] — Skills and memories live on the file system; the computer tier hosts evolving context
 - [[lance-martin]] — Claude Diary, skill learning experiments, and the three-category breakdown
