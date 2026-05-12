@@ -207,7 +207,7 @@ If WARNING findings were also fixed, re-verify those too.
 
 ## Step 8: Commit
 
-Only after all CRITICAL findings are resolved and re-verified:
+Only after all CRITICAL findings are resolved and re-verified, and the human has approved both the Phase 2 theory summary and the Phase 3 verification report:
 
 ```bash
 git add wiki/
@@ -215,9 +215,10 @@ git add raw/<source-file-being-ingested.md>
 git commit -m "ingest: <source title> — <summary>. Verification: [PASSED / N issues fixed]"
 ```
 
-> ⚠️ **Never use `git add -A`.** It stages untracked raw/ files the user may have dropped in but hasn't asked you to ingest. Only stage `wiki/` plus the specific `raw/` file you ingested.
-
-Include verification status in the commit message for audit trail.
+**Git rules:**
+- ⚠️ **Never use `git add -A`.** It stages untracked raw/ files the user may have dropped in but hasn't asked you to ingest. Only stage `wiki/` plus the specific `raw/` file you ingested. If you ingested multiple sources in a batch, add each one explicitly.
+- **Raw/ files are committed ONLY at ingest time.** Never commit a `raw/` file during meta/ changes, skill edits, or any other operation. The sole moment a `raw/` file enters git is when you commit the ingest that consumed it.
+- Include verification status in the commit message for audit trail. If contradictions were flagged, mention them.
 
 ## Cleanup
 

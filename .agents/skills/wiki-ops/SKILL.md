@@ -12,11 +12,16 @@ description: |
 
 Detailed operational procedures for wiki operations: ingest, query, and lint.
 
-For wiki structure and conventions, see `AGENTS.md` in the project root.
+For wiki structure and invariants, see `AGENTS.md` in the project root.
+For page formats, naming, and source templates, see `meta/wiki-conventions.md`.
+For ingest philosophy and theory principles, see `references/ingest-philosophy.md`.
+For editor descriptions and invocation patterns, see `references/editors.md`.
 
 ## Mission Context
 
 This wiki is a collection of unproven suggestions about disciplined AI-assisted development. When you ingest a source, you're adding hypotheses to a living theory — not canonizing truth. Flag contradictions loudly. Surface uncertainty. Track what people are saying and how ideas connect. Don't declare winners.
+
+For the full design principles, see `references/ingest-philosophy.md`.
 
 ## Ingest
 
@@ -131,10 +136,18 @@ Work through each item and report findings:
 
 ### How to check
 
-Use the utility scripts in `scripts/` for mechanical checks, then do judgment checks yourself:
+Run the unified validator first — it catches all mechanical issues in one pass:
 
 ```bash
-# Mechanical checks (fast, run first)
+./scripts/validate-page      # Unified validator: frontmatter, links, sources, structure, orphans
+```
+
+If you need to check a single page: `./scripts/validate-page wiki/concepts/some-page.md`
+
+Then do judgment checks yourself:
+
+```bash
+# Individual scripts (if validate-page flags something specific)
 ./scripts/check-links        # Broken wiki-links, dangling raw/ refs, unreferenced raw files
 ./scripts/check-frontmatter  # Missing YAML fields, missing summary blockquotes, missing ## Related
 ./scripts/orphans            # Pages with no inbound links, pages missing from index.md
@@ -182,3 +195,17 @@ done
 - **Dates in frontmatter are ISO 8601**: `YYYY-MM-DD`. No exceptions.
 - **YouTube videos that arrive inline need a source stub**: When video content arrives via an extension with no file on disk, create a `raw/yt-<slug>.md` stub with key points extracted during ingest. YouTube stubs and web source files are the only cases where you write to `raw/`. If a transcript file already exists in `raw/`, it is the source — do not create a stub. Without the stub, future sessions can't re-read the source.
 - **No src/ layer**: Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. Each page's `## Sources` section references the `raw/` files it draws from.
+
+## Reference files
+
+**When to read each reference:**
+
+| Read when you need... | File |
+|---|---|
+| The full ingest pipeline: triage, filing, analysis, verification, commit | `references/ingest-flow.md` |
+| How to think about sources, theory pressure, thread emergence | `references/ingest-philosophy.md` |
+| Phase 2 critical analysis: contradictions, departures, tensions | `references/analytical-pass.md` |
+| Phase 3 verification: diff auditor, source-verifier, mechanical re-check | `references/verification-pass.md` |
+| Subagent editor descriptions and invocation patterns | `references/editors.md` |
+| Page formats, frontmatter spec, web/YouTube source templates | `meta/wiki-conventions.md` |
+

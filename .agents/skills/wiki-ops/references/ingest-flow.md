@@ -1,5 +1,7 @@
 # Ingest Flow
 
+> Procedural reference for the ingest pipeline. For the design principles behind these steps — how to think about sources, theory pressure, and thread emergence — see [`ingest-philosophy.md`](ingest-philosophy.md).
+
 ## Pipeline
 
 ```
