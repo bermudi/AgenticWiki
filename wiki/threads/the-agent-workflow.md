@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-10
+updated: 2026-05-13
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -28,6 +28,7 @@ sources:
   - raw/2311.04235v3.txt
   - raw/2407.08440v4.txt
   - raw/2603.00822v2.txt
+  - raw/the-final-bottleneck.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -59,6 +60,9 @@ Karpathy's hiring proposal — give candidates a big project ("build a Twitter c
 ## Thesis
 
 The agent workflow consists of two interdependent phases — human-in-the-loop design (HITL) and away-from-keyboard execution (AFK) — joined by a tight feedback cycle. The HITL phase owns the [[shared-design-concept]] and tests; the AFK phase executes within those boundaries. Success depends on three supporting layers: [[context-engineering|context hygiene]] (keeping the model in the [[smart-zone-dumb-zone|Smart Zone]]), [[tool-design-for-agents|tool design]] (outputs that agents can consume), and [[verification-loop|verification infrastructure]] (mechanical backpressure that rejects wrong outputs). Without any of these, the workflow degrades into [[the-slop-problem|slop]].
+
+> [!note] Marginal: The Review Bottleneck
+> [[armin-ronacher|Ronacher]]'s 2026 post `raw/the-final-bottleneck.md` reframes the entire workflow by arguing that **writing code is no longer the bottleneck — human review capacity is**. When agents produce output faster than humans can meaningfully review it, the workflow stalls at the handoff regardless of AFK execution speed. The historical parallel (textile industry: each speed-up just shifted the bottleneck downstream) suggests this isn't a temporary imbalance — it's a structural feature of the speed-up. The open question for this thread: can mechanical verification ([[verification-loop]]) scale to cover what only human judgment could do?
 
 ## The Two Phases
 

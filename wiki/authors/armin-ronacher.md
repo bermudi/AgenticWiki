@@ -1,10 +1,11 @@
 ---
 title: Armin Ronacher
 created: 2026-04-26
-updated: 2026-05-02
+updated: 2026-05-13
 sources:
   - raw/agentic-coding-recommendations.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
+  - raw/the-final-bottleneck.md
 tags: [author, python, flask, go, agentic-coding, austria]
 ---
 
@@ -63,6 +64,9 @@ Sees the most capable personal agents (OpenClaw) as just coding agents hidden fr
 ## The Austrian Circle
 
 Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and Peter Steinberger. Met Mario through Reddit and eventually in Vienna; met Peter at a conference in Istanbul. The three began experimenting with AI tools together in 2024-2025.
+
+> [!note] Marginal: Accountability as the Final Bottleneck
+> In his February 2026 post `raw/the-final-bottleneck.md`, Armin shifts his focus from agentic coding practices to a more fundamental constraint: **human review and accountability capacity as the hard ceiling on agentic output.** Even with perfect workflows, faster agents don't solve the problem that every line of agent-generated code requires human oversight. The textile industry historical parallel — each speed-up just moved the bottleneck downstream — structures his argument that this isn't fixable by faster tooling. He ends on an unresolved note: "Non-sentient machines will never be able to carry responsibility." This extends his earlier theme of [[deliberate-friction]] from agent process to human capacity.
 
 ## Thread
 
