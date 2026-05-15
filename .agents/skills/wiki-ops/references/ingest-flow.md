@@ -119,7 +119,7 @@ File stays in `raw/` as archive. No wiki changes. Done.
 
 **Who:** Main agent orchestrates; `source-verifier` + editors run in fresh sessions.
 
-1. **Diff auditor** (bash, no LLM) — catch deletions >20%, summary drift, source section changes
+1. **Diff auditor** (bash + LLM judgment) — mechanical checks for deletions >20%, summary drift, source section changes (bash); then diff reasoning for semantic drift, orphan edits, claim deletion, and scope creep (LLM, fresh session)
 2. **Source-verifier subagents** (parallel, one per changed page) — check against `raw/` sources:
    - Hallucinations (claims absent from source)
    - Omissions (key source insights missing)

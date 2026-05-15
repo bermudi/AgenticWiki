@@ -66,6 +66,51 @@ echo "=== Audit Complete ==="
 
 **If any 🚨 CRITICAL is found:** Fix it now before proceeding. A deletion or suspect change needs human review. Re-run the auditor after fixing.
 
+### Step 1b: Diff Reasoning — Catch Semantic Drift
+
+The bash audit catches volume changes. This step catches meaning changes — edits that changed *what the page says* without triggering word-count alarms. Run it before source-verifier: diff reasoning checks **transition fidelity** (was this change justified?), source-verifier checks **final-state fidelity** (does the result match the sources?). Both are needed because a page can pass source verification while still having suffered a silent corruption — a pre-existing caveat dropped during a rewrite, a hedged claim hardened into a universal, a paragraph "cleaned up" into meaning something subtly different.
+
+**What to check:**
+- **Orphan edits**: Changes with no clear justification from the source being ingested. The agent edited beyond what the source warranted.
+- **Semantic drift**: Hedging removed, qualifiers dropped, meaning changed. "X sometimes fails under Y" → "X fails under Y." Still factually defensible, so source-verifier won't flag it — but the *change itself* wasn't justified.
+- **Claim deletion**: Pre-existing claims that vanished during a rewrite without explanation. Not replaced or updated — just gone.
+- **Scope creep**: Edits to sections or concepts unrelated to the source being ingested.
+
+**How to run:**
+
+1. Collect the diffs:
+
+```bash
+changed=$(git diff --name-only -- 'wiki/**/*.md' 2>/dev/null)
+[ -z "$changed" ] && changed=$(git diff --cached --name-only -- 'wiki/**/*.md' 2>/dev/null)
+
+for f in $changed; do
+  echo "=== $f ==="
+  git diff -- "$f" 2>/dev/null || git diff --cached -- "$f" 2>/dev/null
+done
+```
+
+2. Spawn a single diff-reasoning delegate. Pass the collected diffs and identify the raw/ source file. The delegate reads the source itself — don't summarize it:
+
+```
+delegate({
+  tasks: [{
+    prompt: "You are verifying a wiki ingest by reasoning about the diffs. You'll receive unified diffs from a recent ingest and the path to the raw/ source that was ingested.\n\nRead the source first, then evaluate each diff chunk against it.\n\n## Check for:\n\n1. **Orphan edits** — changes with no connection to the source. The agent edited beyond what the source warranted.\n2. **Semantic drift** — hedging removed, qualifiers dropped, meaning changed. 'X sometimes fails' → 'X fails.' The final claim may still be true — the issue is the *change* wasn't justified.\n3. **Claim deletion** — pre-existing claims that vanished without explanation. Not replaced, just gone.\n4. **Scope creep** — edits to sections or concepts unrelated to the source.\n\n## Do NOT flag:\n\n- Formatting, whitespace, link syntax\n- Frontmatter updates (dates, source lists, tags)\n- New content clearly supported by the source\n- Rewordings that preserve meaning\n\n## Severity:\n\n- 🚨 CRITICAL: Claim deleted or meaning inverted. Must fix.\n- ⚠️ WARNING: Orphan edit, scope creep, or softened hedging. Should review.\n- ℹ️ INFO: Minor drift worth noting.\n\n## Output:\n\n### [page-name]\n- **[severity]**: [what changed and why it's problematic]\n- **Clean**: [changes that are justified]\n\n---\n\nSource being ingested: raw/[source-filename]\n\nDiffs:\n[paste the collected unified diffs]",
+    tools: ["read", "bash"],
+    context: "fresh"
+  }]
+})
+```
+
+**Important:**
+- The delegate gets only the diffs and the source file path. No editing context, no full wiki pages. Narrow input = reliable judgment.
+- Run this **before** source-verifier (Step 3). Diff reasoning catches transition problems; source-verifier catches final-state problems.
+- **If CRITICAL findings surface:** Fix before proceeding to Step 2. Meaning changes without justification are more likely errors than intentional.
+
+**Skip this step if:**
+- The bash auditor found no substantive changes (only frontmatter, formatting, or index additions)
+- The ingest was marginal (no full pages created or rewritten)
+
 ## Step 2: Identify Scope — Which Pages Need Source Verification?
 
 From the diff, determine which pages actually need source verification:
