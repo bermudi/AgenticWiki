@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-10
+updated: 2026-05-15
 sources: []
 tags: [index, wiki]
 unaudited_marginal: 0
@@ -47,6 +47,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[thibaud-gloaguen]] — Lead author of the first rigorous evaluation of AGENTS.md files on coding agent performance; found LLM-generated context files degrade agent performance.
 - [[martin-vechev]] — Professor at ETH Zurich and LogicStar.ai co-founder; senior author of the AGENTS.md evaluation study.
 - [[christoph-treude]] — Professor at SMU; co-author of the first empirical study on AGENTS.md efficiency impact.
+- [[thariq]] — Engineer on the Claude Code team; authored the practical playbook for using HTML instead of Markdown as agent output.
 
 ## 🧠 Concepts
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
@@ -79,6 +80,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
+- [[html-as-agent-output]] — Using HTML instead of Markdown for agent output: richer density, visual clarity, two-way interaction, at the cost of tokens and version control pain.
 - [[inferential-rule-following]] — Applying abstract conditional rules to concrete reasoning problems; models pattern-match against training data rather than following given rules.
 - [[instruction-hierarchy]] — The mechanism by which LLMs resolve conflicting instructions from heterogeneous sources; current models fail at >3 privilege tiers.
 - [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.

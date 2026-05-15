@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-05-10
+updated: 2026-05-15
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -153,6 +153,7 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - [[agentic-engineering]] — Context engineering is a core proficiency of agentic engineering; the discipline demands mastery of what to put in the context window
 - [[claude-code]] — The primary agent substrate that context engineering techniques are applied to; Claude Code's sub-agents, file-based tools, and AGENTS.md are context engineering surface area
 - [[context-files]] — Context files (AGENTS.md, CLAUDE.md) are the concrete artifact through which context engineering principles (minimalism, operational focus, high signal density) are applied at the repository level; recent empirical evidence validates that information-per-token density matters more than volume
+- [[html-as-agent-output]] — HTML output trades higher token cost for richer information-per-human-read-cycle; a context engineering tradeoff where the density question shifts from per-token to per-human-attention-unit
 
 ## Sources
 

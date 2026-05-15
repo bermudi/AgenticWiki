@@ -1,8 +1,8 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-05-10
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"]
+updated: 2026-05-15
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md]
 tags: [tool, ai, agent, anthropic]
 unaudited_marginal: 0
 ---
@@ -33,6 +33,12 @@ Claude Code is an agentic tool that operates directly in the terminal, allowing 
 
 This experience directly motivated Mario to build [[pi]], founded on the principle of context transparency — the user controls what goes into the model.
 
+## HTML as a Workflow Primitive
+
+[[thariq|Thariq]] (Claude Code team) documents a workflow where HTML files replace Markdown as the primary agent output. Claude Code's rich context access — filesystem, MCPs (Slack, Linear), browser, git history — makes it uniquely suited for generating HTML that synthesizes information across multiple data sources. The pattern: ask Claude Code to generate an HTML file, interact with it (or export state from it), then pass the file to a new session for implementation.
+
+This also applies in reverse: HTML files serve as high-context inputs for verification agents. When verifying implementation, the verification agent reads the HTML plan files and has much broader context on what was intended.
+
 ## Thread
 
 - [[the-agent-workflow]] — Claude Code enables the Ralph Wiggum AFK loop pattern; its agentic search was the workflow breakthrough
@@ -55,9 +61,13 @@ This experience directly motivated Mario to build [[pi]], founded on the princip
 - [[slop-watch]] — Claude Code is Slop Watch's first adapter target; hook surface and JSONL output as the primary ingestion path.
 - [[chris-parsons]] — Runs Ralph loops 24/7 through Claude Code; operationalized the worker loop pattern
 
+- [[thariq]] — Claude Code team member who documented the HTML-as-output workflow pattern
+- [[html-as-agent-output]] — HTML as the emerging output format for agent communication
+
 ## Sources
 
 - `raw/yt-claude-code-feature-build.md` — Demonstration of complex feature building with Claude Code.
 - `raw/how-to-ralph-wiggum.md` — Ralph Wiggum autonomous loop pattern using Claude Code.
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology, Claude Code's role as the agent CLI in the loop.
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Mario's grievances with Claude Code (silent context injection, system prompt manipulation); the "should I just build my own" origin story that led to Pi.
+- `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's article on using Claude Code to generate HTML files for specs, code review, design, reports, and custom editors; the tool's context access (filesystem, MCPs, git, browser) as the key differentiator over Claude.ai artifacts.

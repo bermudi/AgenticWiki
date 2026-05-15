@@ -1,12 +1,13 @@
 ---
 title: Andrej Karpathy
 created: 2026-05-09
-updated: 2026-05-10
-unaudited_marginal: 1
+updated: 2026-05-15
+unaudited_marginal: 0
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/karpathy-llm-knowledge-bases.md
   - raw/karpathy-farzapedia-explicit-memory.md
+  - raw/karpathy-html-output.md
 tags: [author, ai-researcher, educator]
 ---
 
@@ -16,7 +17,7 @@ tags: [author, ai-researcher, educator]
 
 ## Background
 
-Karpathy co-founded OpenAI, then explain it through his widely-followed educational content, and occasionally rename it. He was on the founding team at OpenAI, got Autopilot working at Tesla, and has a rare gift for making the most complex technical shifts feel both accessible and inevitable.
+Karpathy was on the founding team at OpenAI, led Autopilot at Tesla, and has a rare gift for making complex technical shifts feel both accessible and inevitable. He also has a habit of naming the shifts — coining terms like "vibe coding" and "agentic engineering" that the industry adopts.
 
 ## Key Ideas
 
@@ -57,6 +58,10 @@ In a follow-up tweet (April 2026), Karpathy refined the workflow with more opera
 
 He also endorsed Farza's "Farzapedia" — a personal Wikipedia built from 2,500 diary entries and messages — as a concrete example of the pattern. Karpathy highlighted four properties that make this approach superior to implicit personalization: **explicit** (navigable, inspectable artifact), **yours** (local, provider-independent), **file over app** (universal formats, interoperable), and **BYOAI** (bring your own AI — swap models freely, or finetune an open model on your wiki).
 
+### Audio In, Vision Out
+
+Karpathy argues for a fundamental I/O asymmetry in human-AI interaction: audio is the preferred input (ambient, natural), but vision is the preferred output — ~⅓ of the brain is a massively parallel processor dedicated to vision. He proposes a progression ladder of output fidelity: raw text → markdown → HTML → interactive neural videos. He also flags that input remains unsolved — humans need to point, gesture, and reference things on screen, not just speak or type.
+
 ### "Outsource Thinking, Not Understanding"
 
 A tweet Karpathy keeps returning to: "You can outsource your thinking but you can't outsource your understanding." Information still has to make it into the human brain — the human remains the bottleneck for knowing what to build, why it's worth doing, and how to direct agents.
@@ -67,6 +72,7 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 - [[the-human-lever]] — Karpathy's framing of taste, judgment, and understanding as the enduring human role
 - [[the-slop-problem]] — Vibe coding raises the floor but introduces the slop problem; agentic engineering is the proposed solution
 - [[the-agent-workflow]] — Agentic engineering operationalized as a disciplined workflow
+- [[tool-design-for-agents]] — Karpathy's audio-in/vision-out thesis frames output format as a tool design decision
 
 ## Related
 
@@ -76,6 +82,7 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 - [[verifiability]] — His economic theory of what gets automated
 - [[jagged-frontier]] — His "car wash" example is a canonical illustration of jaggedness
 - [[software-1-2-3]] — The paradigm progression he articulated
+- [[html-as-agent-output]] — His output fidelity progression ladder (text → md → HTML → neural video)
 - LLM knowledge bases — His recipe for personal knowledge management via LLMs (concept page TBD)
 
 ## Sources
@@ -83,3 +90,4 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Sequoia Capital interview covering the full arc from vibe coding to agentic engineering, software 1.0/2.0/3.0, verifiability, animals vs ghosts, LLM knowledge bases, and what remains worth learning.
 - `raw/karpathy-llm-knowledge-bases.md` — Original tweet describing the raw/ → compile → Q&A → lint workflow; Obsidian frontend, Marp slides, CLI search engine, and manual-free wiki maintenance.
 - `raw/karpathy-farzapedia-explicit-memory.md` — Follow-up tweet endorsing Farza's personal Wikipedia as a concrete example; explicit memory, file over app, BYOAI philosophy.
+- `raw/karpathy-html-output.md` — Tweet thread on audio-in/vision-out asymmetry, output fidelity progression, and HTML as an emerging default output format for LLMs.

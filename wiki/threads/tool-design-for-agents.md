@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-05-10
+updated: 2026-05-15
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -12,6 +12,8 @@ sources:
   - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/2603.00822v2.txt
+  - raw/karpathy-html-output.md
+  - raw/thariq-unreasonable-effectiveness-of-html.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -182,6 +184,20 @@ The result that LLM reflection is *worse than nothing* is particularly striking 
 
 ContextCov's evaluation provides empirical weight the thread previously lacked. The tool-design thesis — that better agent-facing tools produce better outcomes — now has a controlled experiment showing 21.3 percentage point improvement from deterministic tool feedback over passive instructions, and 38 points over LLM-based feedback.
 
+## Layer 6: Output Format as Tool Design
+
+[[andrej-karpathy|Karpathy]] and [[thariq|Thariq]] add a dimension the previous layers don't address: **the format in which agents communicate their output** is itself a tool design decision with quality implications.
+
+Karpathy's argument: ~⅓ of the human brain is dedicated to vision processing. When agents output text (or even Markdown), they're using a low-bandwidth channel to a high-bandwidth processor. Asking agents to structure output as HTML doesn't just improve readability — it changes what the model produces, because the richer format unlocks richer output. His progression: raw text → Markdown → HTML → interactive neural video.
+
+Thariq's practical evidence from daily Claude Code usage: Markdown files beyond ~100 lines go unread, and unread agent output is wasted agent output. HTML's visual structure (tabs, collapsibles, diagrams, interactive controls) extends the readable range. More importantly, HTML enables **two-way interaction** — sliders, export buttons, drag-and-drop — turning the output document into a bidirectional interface between human and agent.
+
+This extends Layer 1 (Zanie's output optimization) in a specific direction: Zanie argues tools should optimize what they *emit* for agent consumption. Karpathy and Thariq argue agents should optimize what they *produce* for human consumption — and that HTML is the current best format for that. The two layers are complementary: tools emit structured output for agents, agents emit HTML for humans.
+
+The [[context-engineering|information density]] lens is relevant here: richer visual output may convey more signal per human-read cycle even at higher token cost. The tradeoff is real — HTML takes 2–4× longer to generate and produces noisy version control diffs — but the hypothesis is that the engagement and comprehension gains outweigh the costs.
+
+See [[html-as-agent-output]] for the full treatment.
+
 ## Sources
 
 - `raw/yt-how-agents-use-dev-tools.md` — Zanie Blue's systematic treatment: feedback qualities, scale effects, output optimization, self-tooling
@@ -193,3 +209,5 @@ ContextCov's evaluation provides empirical weight the thread previously lacked. 
 - `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine as meta-tool: pre-curating context, satisfaction of search, expert graphs, and benchmark results
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Harvard AgentFloor study: model capability tier as a tool design constraint; open-weight models matching GPT-5 on tool use tasks at 15× lower cost
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): empirical validation of deterministic tool feedback over LLM reflection; fail-closed design; domain-routed code synthesis; PATH shims as lightweight enforcement
+- `raw/karpathy-html-output.md` — Karpathy's audio-in/vision-out thesis, output fidelity progression ladder, and the observation that output format constraints shape reasoning quality
+- `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's practical playbook for HTML agent output: use cases, interactive documents, throwaway editors, and honest tradeoffs from Claude Code usage
