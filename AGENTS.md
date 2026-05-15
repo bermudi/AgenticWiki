@@ -53,6 +53,7 @@ The wiki-ops skill references detailed sub-procedures in `references/`:
 
 | What you need | Where it lives |
 |---|---|
+| **The theory — what the wiki currently believes** | `wiki/index.md` (catalog), then `wiki/threads/*.md` (synthetic essays) |
 | Page formats, frontmatter spec, web/YouTube source templates | `meta/wiki-conventions.md` |
 | Ingest philosophy: theory pressure, thread emergence, contradictions | `.agents/skills/wiki-ops/references/ingest-philosophy.md` |
 | Design philosophy and manifesto | `meta/llm-wiki-manifesto.md` |
