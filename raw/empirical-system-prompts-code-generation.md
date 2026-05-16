@@ -1,0 +1,2058 @@
+arXiv:2602.15228v1 [cs.SE] 16 Feb 2026
+
+
+
+
+
+
+
+
+
+
+An Empirical Study on the Effects of System Prompts in
+Instruction-Tuned Models for Code Generation
+ZAIYU CHENG, AURA @ Dept. of Computer Science, William & Mary, USA
+ANTONIO MASTROPAOLO, AURA @ Dept. of Computer Science, William & Mary, USA
+Instruction-tuned Language Models (ILMs) have become essential components of modern AI systems, demon-
+strating exceptional versatility across natural language and reasoning tasks. Among their most impactful
+applications is code generation, where ILMs – commonly referred to as Code Language Models (CLMs) –
+translate human intent into executable programs. While progress has been driven by advances in scaling
+and training methodologies, one critical aspect remains underexplored: the impact of system prompts on
+both general-purpose ILMs and specialized CLMs for code generation. We systematically evaluate how sys-
+tem prompts of varying instructional detail, along with model scale, prompting strategy, and programming
+language, affect code assistant. Our experimental setting spans 360 configurations across four models, five
+system prompts, three prompting strategies, two languages, and two temperature settings. We find that:
+(1) increasing system-prompt constraint specificity does not monotonically improve correctness—prompt
+effectiveness is configuration-dependent and can help or hinder based on alignment with task requirements
+and decoding context; (2) for larger code-specialized models, few-shot examples can degrade performance
+relative to zero-shot generation, contrary to conventional wisdom; and (3) programming language matters,
+with Java exhibiting significantly greater sensitivity to system prompt variations than Python, suggesting
+language-specific prompt engineering strategies may be necessary.
+CCS Concepts: • Software and its engineering → Documentation.
+Additional Key Words and Phrases: Prompt Engineering, Code Language Model
+ACM Reference Format:
+Zaiyu Cheng and Antonio Mastropaolo. 2026. An Empirical Study on the Effects of System Prompts in
+Instruction-Tuned Models for Code Generation. 1, 1 (February 2026), 34 pages. https://doi.org/10.1145/
+nnnnnnn.nnnnnnn
+
+1 Introduction
+In recent years, instruction tuning has emerged as a critical technique for enhancing the ability
+of general-purpose Large Language Models (LLMs) to follow specific instructions and interact
+effectively across diverse domains [56, 64, 79, 91]. Building on this foundation, researchers have
+increasingly extended instruction tuning to Code Language Models (CLMs), using instruction-based
+datasets tailored for software engineering tasks to improve their ability to interpret and execute
+programming-specific instructions [38, 50, 76, 77, 81].
+   Existing studies in this area primarily focus on optimizing the user prompt component through
+various techniques and example quantities, which have demonstrated significant performance
+improvements across code generation, summarization, and translation tasks [10, 19, 22, 32, 66, 87].
+
+Authors’ Contact Information: Zaiyu Cheng, zcheng06@wm.edu, AURA @ Dept. of Computer Science, William & Mary,
+USA; Antonio Mastropaolo, amastropaolo@wm.edu, AURA @ Dept. of Computer Science, William & Mary, USA.
+
+Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee
+provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the
+full citation on the first page. Copyrights for components of this work owned by others than the author(s) must be honored.
+Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires
+prior specific permission and/or a fee. Request permissions from permissions@acm.org.
+© 2026 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM XXXX-XXXX/2026/2-ART
+https://doi.org/10.1145/nnnnnnn.nnnnnnn
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+2 Zaiyu et al.
+
+Widely adopted approaches include zero-shot prompting, which relies solely on the model’s pre-
+trained knowledge, and few-shot prompting, which augments input with demonstrations to guide
+task adaptation [33, 79]. More advanced strategies include Chain-of-Thought (CoT) reasoning and
+Retrieval-Augmented Generation (RAG), both proven effective for code generation [36, 80].
+   CoT prompting elicits intermediate reasoning steps that decompose complex problems into
+manageable sub-tasks, enabling multi-step logical inference before code generation [33, 74, 80]. In
+contrast, RAG dynamically retrieves relevant code snippets or natural-language examples from
+external corpora based on semantic similarity, grounding generation in concrete, contextually
+relevant examples—particularly beneficial for domain-specific APIs, idiomatic patterns, or project-
+specific conventions [9, 24, 36]. However, the role of system-level instructions—which establish the
+model’s behavioral context and operational constraints—remains largely unexplored in the code
+generation domain.
+   Beyond prompt strategy, the underlying model architecture and capacity also influence how
+effectively instructions and examples are interpreted. CLMs differ substantially in their pretraining
+corpora, tokenization schemes, and the balance between general and code-specific objectives. Larger
+models generally exhibit stronger generalization and reasoning capabilities, yet their behavior may
+also be more sensitive to system-level instructions and prompt formatting, leading to performance
+fluctuations when prompt semantics change [94]. In contrast, smaller or mid-sized models, though
+limited in capacity, often show more predictable responses under consistent prompting setups [13,
+25, 63, 68].
+   Understanding how model scale and specialization interact with system prompts and prompting
+strategies is essential for three reasons. First, it addresses a methodological gap: existing benchmarks
+seldom control for system prompt variations, confounding model comparisons and hindering
+reproducibility [3, 8]. Second, it provides practical guidance for practitioners balancing model
+size, prompting strategy, and instruction design under resource constraints [67]. Third, it offers
+theoretical insight into whether code-specialized models internalize programming conventions
+differently from general-purpose models, affecting their responsiveness to explicit instructions
+versus implicit examples.
+   To bridge this gap, we conduct a comparative empirical study of two model families with contrasting
+specialization strategies: (i) code-specialized models from the Qwen2.5-Coder family [28], trained
+specifically on code and technical natural language ( i.e., code documentation), and (ii) a general-
+purpose instruction-tuned model, GPT-OSS-20B [55], trained on broader corpora including – but not
+limited to code. While both families share instruction-following capabilities, they diverge fundamentally
+in their training objectives and domain exposure–enabling us to isolate whether prompt sensitivity
+is shaped by specialized pre-training or is a more universal property of instruction-tuned
+architectures.
+   The experimental setup addresses a fundamental question: How robust are LLM-generated so-
+lutions to variations in task communication? Understanding prompt sensitivity is critical because:
+(1) developers need reliable code generation today under diverse communication styles, not future
+models [52], (2) prompt brittleness directly impacts developer productivity and trust in AI-assisted
+workflows, and (3) the relative impact of prompt engineering may persist or amplify as models
+become more instruction-sensitive.
+   Our experimental design systematically manipulates three dimensions to isolate the impact of
+prompt formulation on generation quality:
+
+    • We evaluate code in Java and Python–the dominant languages in enterprise and open-source
+      ecosystems–ensuring comparability with established benchmarks [12, 59, 89].
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 3
+
+    • We examine three prompting approaches: one zero-shot configuration that supplies only the
+      task description, and two 𝑛-shot configurations that enrich the specification with demon-
+      stration examples provided to the model in either static or adaptive form. Each approach
+      is assessed across four models spanning both domain-specialized code architectures and
+      general-purpose instruction-following systems.
+    • We evaluate three deployment scenarios reflecting practical constraints. Deterministic gen-
+      eration (𝑇 = 0, Pass@1) uses greedy decoding to produce the single highest-probability
+      solution, testing top-ranked correctness. Stochastic single-shot (𝑇 = 1, Pass@1) samples from
+      the probability distribution [39, 42, 57] but accepts only the first output, measuring reliability
+      under minimal sampling budget. Stochastic multi-shot (𝑇 = 1, Pass@5) generates five candi-
+      dates, evaluating whether prompt formulation affects solution diversity and coverage when
+      developers can select among alternatives.
+  To the best of our knowledge, ours is the first study to provide a controlled, surgical analysis of the
+interaction between system prompt design and model characteristics across multiple temperature
+regimes and sampling budgets, revealing whether prompt sensitivity is a universal phenomenon
+or varies systematically with model type, scale and/or programming language. To summarize, we
+make the following threefold contributions:
+    • First systematic insights into system-prompt effects in instruction-tuned models for
+      code generation. We conduct the first large-scale empirical study examining how system-
+      level instructions influence the behavior of instruction-tuned models in code-generation
+      tasks.
+    • Uncovering the interplay between general-purpose and code-specialized domains.
+      We analyze how model specialization–from general-purpose to code-tuned architectures–
+      modulates responsiveness to system prompts and example-based guidance.
+    • A code-generation testbed for system prompt analysis. We release a reproducible testbed
+      that standardizes evaluation under controlled variations of system prompts and prompting
+      strategies, including (i) a suite of system instructions, (ii) a retrieval corpus with a fixed
+      three-shot selection policy, (iii) configuration files, seeds, and execution scripts for Java and
+      Python tasks.
+
+2 Background and Related Work
+This section reviews prior studies on CLMs and system prompt engineering. We summarize recent
+progress in CLMs for code-related tasks and survey emerging research on the impact of system-level
+prompts on model behavior and performance.
+
+2.1 Large Code Models
+Recent advances in adapting LLMs for code-related tasks have primarily focused on instruction
+tuning and parameter-efficient fine-tuning (PEFT). Yuan et al. [90] systematically evaluated the
+performance of ILMs on code comprehension and generation tasks. The study found that these
+models demonstrate outstanding capabilities under zero-shot conditions, even outperforming
+certain task-specific fine-tuned models. Li et al. [38] proposed InstructCoder and constructed a
+large-scale instruction dataset for code editing to fine-tune models. Experiments showed that the
+fine-tuned models significantly outperformed baseline models in tasks such as comment insertion,
+refactoring, and optimization. Luo et al. [50] introduced WizardCoder, which employed the Evol-
+Instruct method to generate diverse instruction data for model tuning. Results demonstrated
+substantial improvements on code generation benchmarks such as HumanEval [14] and MBPP [6].
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+4 Zaiyu et al.
+
+   Complementary to instruction tuning, a growing body of research explores PEFT techniques
+for code models. Chen et al. [15] introduced Pass-Tuning, a structure-aware approach that incor-
+porates graph neural representations of abstract syntax trees into prefix tuning to enhance code
+understanding. Choi and Lee [17] proposed CodePrompt, a task-agnostic prefix tuning framework
+that leverages input-dependent templates and corpus-specific prefixes to bridge the gap between
+pretraining and downstream adaptation. Fakih et al. [21] developed LLM4PLC, which harnesses
+LLMs for verifiable programming of Programmable Logic Controllers (PLCs) in industrial control
+systems, integrating verification tools and user feedback into prompt design. Hajipour et al. [27]
+presented SimSCOOD, a systematic benchmark for analyzing out-of-distribution generalization in
+fine-tuned source code models across length, syntax, and semantic shifts. Liu et al. [44] proposed
+MFTCoder, a multitask fine-tuning framework that jointly trains models on diverse code-related
+tasks to improve generalization and training efficiency. Wang et al. [71] introduced a framework
+that taught code LLMs to effectively use autocompletion tools during repository-level genera-
+tion, improving dependency coverage and syntactic validity. Finally, Yang et al. [85] proposed
+CorDA, a context-oriented decomposition adaptation method that employed task-aware low-rank
+decomposition to enhance parameter-efficient tuning and mitigate catastrophic forgetting of world
+knowledge.
+   Beyond adaptation methods, recent progress has also been driven by open foundation code models
+and the large-scale curation of code-centric pretraining corpora. Rozière et al. [62] introduced
+Code Llama, a family of open-code models designed for code synthesis and related programming
+tasks. Lozhkov et al. [48] reported StarCoder2 alongside The Stack v2, emphasizing principled data
+sourcing and extensive coverage of programming languages and software-development artifacts.
+Guo et al. [26] proposed DeepSeek-Coder, trained on large-scale code-heavy corpora with objectives
+targeting project-level completion and infilling.
+   In parallel, the community has begun to treat instruction data construction itself as a first-
+class research problem for code models. Wei et al. [81] introduced Magicoder and the OSS-Instruct
+methodology, which uses open-source code as grounded references to generate more realistic and
+controllable code instructions for training. Ahmad et al. [2] released OpenCodeInstruct, a large-scale
+instruction tuning dataset intended to broaden coverage of code tasks and improve the reliability
+of supervised instruction tuning for code LLMs. Weyssow et al. [82] presented CodeUltraFeedback,
+adopting an LLM-as-a-judge scheme to annotate coding responses with preference-aware feedback,
+thereby enabling alignment-style training objectives that target user-facing coding preferences
+beyond pure functional correctness.
+   Finally, evaluation methodology has evolved to address known gaps in functional-correctness
+benchmarking. Liu et al. [45] proposed EvalPlus, which augments canonical programming bench-
+marks with improved tests to reduce overestimation of correctness and to better stress generalization.
+Jimenez et al. [30] introduced SWE-bench, shifting evaluation toward real-world repository settings
+where models must resolve issues and produce changes that satisfy project tests. These benchmarks
+underscore that progress on code LLMs increasingly depends not only on model architecture and
+training, but also on evaluation regimes that more accurately reflect execution-driven correctness
+and software-engineering realism.
+
+2.2 System Prompt Engineering
+System prompts are high-level instructions provided to instruction-tuned coder models that define
+their global behavior across tasks. See Fig. 1 for reference. Unlike user prompts or in-context
+examples, which are task-specific and can vary with each query, system prompts set overarching
+guidelines for how the model interprets and generates code. Building on this understanding, recent
+research has begun to systematically investigate how system-level instructions can be automatically
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 5
+
+optimized. Recent analyses further suggest that system prompts form a fragile but critical control
+surface: as system messages accumulate more guardrails and constraints, models may omit relevant
+clauses or inconsistently apply higher-priority requirements, motivating dedicated evaluation
+protocols and interventions tailored to system-prompt adherence [54].
+  Zhang et al. [93] proposed SPRIG, an edit-based genetic algorithm that iteratively constructs
+system prompts from predefined components. Experiments on 47 task types showed that a single
+optimized system prompt can perform on par with task-specific prompts, and combining system-
+level with task-level optimization can further improve performance. Choi et al. [16] introduced
+MetaSPO, framing system prompt optimization as a bilevel problem and solving it via meta-learning.
+Across 14 unseen datasets, MetaSPO produced system prompts that generalize well under diverse
+user prompts and support rapid adaptation to new tasks. Beyond optimizing a single best system
+prompt, system messages have also been studied as an explicit conditioning channel that can encode
+preference-like directives at the system level. Lee et al. [34] proposed training and evaluation
+protocols that vary the system message itself and examined generalization to diverse, unseen
+system messages, highlighting that real deployments may require robustness to a distribution of
+system prompts rather than a single fixed template.
+  A second thread studies reliability and security implications of system prompts under the
+instruction hierarchy used by modern assistants. Wallace et al. [70] proposed training objectives
+and data generation methods that teach models to prioritize privileged instructions when higher-
+and lower-priority directives conflict. Liu et al. [46] analyzed prompt-injection attacks against
+LLM-integrated applications, demonstrating that adversarial inputs can manipulate downstream
+behavior when instruction boundaries are not robustly enforced. Complementary to integrity
+attacks that attempt to override system-level intent, recent work has shown that the confidentiality
+of system prompts is itself a first-class security concern. Hui et al. [29] proposed PLeak, a black-box
+optimization framework that crafts adversarial queries to induce an LLM application to reveal
+its hidden system prompt. Levin et al. [35] studied prompt membership inference for system
+prompts, showing that an adversary can statistically test whether a particular system prompt was
+used, even when direct extraction is difficult. Moving toward structural mitigation, Cao et al. [11]
+proposed encoding system prompts as internal representation vectors rather than raw text in the
+context, reducing leakage exposure while preserving the behavioral effect of system instructions.
+System prompts can also be compromised persistently through attacks that target the system
+prompt itself or the model supply chain. Li et al. [43] introduced system prompt poisoning, where
+attackers inject malicious content into the system prompt such that its impact persists across
+subsequent interactions. Yan et al. [84] demonstrated system prompt hijacking via permutation
+triggers embedded in upstream models, enabling downstream bypass of deployer-provided system
+prompts and exposing a supply-chain vulnerability in distributed LLM development.
+
+3 Study Design
+The main goal of this study is to systematically investigate how system prompts interact with code
+generation processes when carried out using both general-purpose instruction-tuned models and
+code-specialized language models. We aim to decouple and evaluate the individual and combined
+effects of four key dimensions on model performance: system prompt specificity, model scale,
+prompting strategy, and programming language. To help us study the role of system prompts in
+shaping code generation outcomes, we pose the following research questions:
+    • RQ1: How do system prompts with varying levels of specificity affect general-purpose
+      instruction-tuned models? In RQ1, we focus on how varying degrees of system prompt
+      specificity affect model behavior across three prompting strategies. Through this analysis,
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    6        Zaiyu et al.
+
+         System prompts
+         Prompt 1 (Baseline):
+         "You are a highly skilled code generator. Your task is to generate an executable method from
+         the natural language description."
+
+         Prompt 2 (Structure-Constrained):
+         "You are a highly skilled code generator. Your task is to generate an executable method from
+         the natural language description.
+         Rules:
+         1. Strictly adhere to the function signature, parameter requirements, and output type
+         specified in the docstring or leading comments."
+
+         Prompt 3 (Robust-Handling):
+         "You are a highly skilled code generator. Your task is to generate an executable method from
+         the natural language description.
+         Rules:
+         1. Strictly adhere to the function signature, parameter requirements, and output type specified
+         in the docstring or leading comments.
+         2. The method implementation must handle potential invalid inputs and runtime issues with
+         exception-handling behavior as appropriate."
+
+         Prompt 4 (Reasoning-Guided):
+         "You are a highly skilled code generator. Your task is to generate an executable method from
+         the natural language description.
+         Rules:
+         1. Strictly adhere to the function signature, parameter requirements, and output type specified
+         in the docstring or leading comments.
+         2. The method implementation must handle potential invalid inputs and runtime issues with
+         exception-handling behavior as appropriate.
+         3. Before writing any code, carefully think step by step the method’s purpose stated in the
+         docstring or leading comments, and keep this reasoning private."
+
+         Prompt 5 (Edge-Coverage):
+         "You are a highly skilled code generator. Your task is to generate an executable method from
+         the natural language description.
+         Rules:
+         1. Strictly adhere to the function signature, parameter requirements, and output type specified
+         in the docstring or leading comments.
+         2. The method implementation must handle potential invalid inputs and runtime issues with
+         exception-handling behavior as appropriate.
+         3. Before writing any code, carefully think step by step the method’s purpose stated in the
+         docstring or leading comments, and keep this reasoning private.
+         4. The method implementation must handle sufficient edge cases to pass all potential unit
+         tests."
+
+
+
+         Fig. 1. Five system prompts were used in this study.
+
+
+  we aim to evaluate the model’s sensitivity to system-level guidance and uncover how prompt
+  granularity impacts the correctness, consistency, and structural organization of the generated
+  code.
+• RQ2: How do system prompts with varying levels of specificity affect code-specialized
+  instruction-tuned models? In RQ2, we extend the analysis conducted in RQ1, with the key
+  distinction that the underlying model is explicitly trained to support code-related activities. As
+  in the previous research question, we compare outcomes across different system prompts and
+  prompting strategies to identify potential behavioral differences. Furthermore, we conduct a
+  model-scale analysis within each prompting strategy to examine whether–and to what extent–
+  contextual information and model size interact in shaping the effectiveness of system-level
+  instructions.
+
+
+    , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 7
+
+3.1 Prompting Strategies
+We structure prompting along two dimensions: (i) shot availability and (ii) prompting technique. For
+the former, we consider two settings: zero-shot, which supplies no examples and relies solely on the
+model’s pretraining, and few-shot with a fixed 𝑛 = 3 input–output demonstrations per task. The
+rationale for this choice is twofold: (𝑖) it aligns with the current state of practice, as evidenced by
+several recent studies that adopt a similar prompt design strategy [40, 58, 83, 88]; and (𝑖𝑖) it reflects
+computational constraints inherent to our experimental setup. Specifically, as detailed in Section 4,
+a total of 360 model configurations were executed. Consequently, we adopt a number of shots that
+previous research has shown to provide models with sufficient task-specific patterns for effective
+adaptation while maintaining prompt conciseness. This design strikes a careful balance between
+providing adequate contextual information during generation.
+   The prompting techniques are further divided into two approaches: 3-shot fixed prompting
+that employs a fixed set of general examples uniformly applied across tasks, independent of the
+input content. These examples remain consistent across queries, offering straightforward guidance
+without contextual adaptation.
+3-shot retrieval-based prompting dynamically selects examples that most closely resemble the user’s
+input, that is, the requirements the model is asked to implement. This selection is carried out using
+a third-party dataset or corpus composed of paired instances ⟨Requirement, Implementingcode⟩,
+which represent high-quality examples of natural language specifications and their corresponding
+code implementations. By retrieving and incorporating the most relevant pairs into the prompt, this
+approach provides contextually aligned demonstrations that can guide the model toward generating
+more accurate and requirement-consistent code outputs. To retrieve the sought information, we
+employed a dense embedding retrieval mechanism to identify the most semantically relevant
+support examples for each query instance [23]. Both the support instance corpus and query code
+are encoded using the SentenceTransformer model all-MiniLM-L6-v2, which has been employed
+in several research studies when supporting the same retrieval operation [7, 41, 51, 61, 65, 73]. To
+isolate the effect of prompt design from retrieval-specific variability, we keep the retriever and its
+hyperparameters fixed throughout all experiments. The normalized embeddings are compared via
+cosine similarity, and the top three nearest neighbors are selected. The retrieved examples are then
+integrated into the user prompt.
+
+3.2 System Prompts Design
+The evaluation involves multiple system prompt variants that differ in wording, emphasis, and
+task specificity, while maintaining the underlying style template unchanged. Specifically, as
+shown in Fig. 1, system prompts are divided into five variants–Prompt 1 (Baseline), Prompt
+2 (Structure-Constrained), Prompt 3 (Robust-Handling), Prompt 4 (Reasoning-Guided), and
+Prompt 5 (Edge-Coverage)–forming a progressive sequence in which each prompt introduces
+distinct levels of constraint or emphasis, allowing us to examine how incremental variations in
+prompt framing influence model behavior.
+   The design of these system prompts is informed by human judgment, incorporating thoughtful
+qualitative reasoning and intentional decisions about task framing and understanding. In particular,
+these prompts have been designed with structured progression in mind–in both content depth and
+constraint specificity. As illustrated in Fig. 1, we vary the system prompt along five progressively
+more constrained variants whose lengths are 21, 48, 69, 100, and 117 tokens, respectively, evidencing
+a monotonic increase in instructional detail and information density. Here, prompt length refers to
+the total token count of the system-prompt text for each configuration (excluding the user prompt
+and any few-shot examples). Concretely, we define:
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    8        Zaiyu et al.
+
+         Prompt Structure
+         System Prompt:
+         "You are a highly skilled code generator..."
+
+                                                                      System
+
+         Instruction 1:
+         "The following are a few examples for code generation."
+
+         Few-shot Examples (optional):
+         Example 1:
+         Input: "Adds two numbers and returns the result."
+         Output: def add(a, b): return a + b
+         Example 2: ...
+
+         Instruction 2:
+         "### It is your turn now! Generate the code based on the instruction provided. Output the
+         complete method directly as shown in the examples. ###"
+
+         Input Code:
+         Multiply two numbers and return the result.
+         Output:
+
+                                                                        User
+
+         Fig. 2. Representation of the structured prompt used in this study.
+
+
+
+
+    • Baseline: a minimal configuration with a generic expert role and task description, used
+      to examine the model’s default behavior when generating executable methods solely from
+      natural language specifications.
+    • Structure-Constrained: builds upon the baseline by explicitly enforcing strict adherence
+      to the function signature, parameter list, and return type specified in the docstring, ensuring
+      consistency between the generated implementation and the provided interface.
+    • Robust-Handling: further strengthens the specification by requiring the implementation to
+      handle invalid inputs and runtime issues through appropriate exception-handling mecha-
+      nisms, encouraging safer and more defensive method design.
+    • Reasoning-Guided: extends the robust handling configuration by explicitly activating chain-
+      of-thought internal reasoning. Before emitting any code, the model is instructed to privately
+      work through the stepwise logic implied by the docstring so that the final output remains
+      code only but is informed by an explicit, structured reasoning process.
+    • Edge-Coverage: a fully constrained configuration emphasizing correctness and reliability,
+      requiring implementations to account for a broad range of boundary conditions so that the
+      generated methods are more likely to pass potential unit tests, representing the highest level
+      of instruction precision and execution control within this series.
+
+  Complementing Fig. 1, Fig. 2 depicts the overall two-part prompt template used in our study: (i)
+the System Prompt, instantiated by one of the five variants above (thereby controlling instruction
+density and constraints), and (ii) the User Prompt, which contains the task-specific instruction
+and, when applicable, a few-shot section (fixed at 𝑛=3 demonstrations).
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 9
+
+3.3 Datasets and Evaluation Metrics
+We benchmark each model’s configuration against CoderEval [89]–one of the most recent bench-
+marks for code generation widely employed in related research [18, 69, 75, 92]. It comprises 460
+code generation problems evenly distributed across Java (230 problems) and Python (230 problems).
+Each problem is described by a triplet ⟨𝑑, 𝑓 , 𝑡 ⟩ where: (i) 𝑑 is a natural language specification
+describing the requirements for a function to be implemented; (ii) 𝑓 is a reference implementa-
+tion demonstrating a correct solution; and (iii) 𝑡 is a test suite for validating the correctness of
+automatically generated code.
+   Utilizing CoderEval as the foundation for measuring system prompt impact in code generation
+provides a controlled experimental setting in which multiple dimensions–such as those we propose
+to investigate in Section 3.1–can be systematically examined. Specifically, CoderEval’s dual-language
+structure enables cross-language analysis, allowing us to explore how system prompts interact
+with code generation tasks across both Python and Java contexts while holding other variables
+constant, such as task complexity.
+   The knowledge base (KB) for 3-shot retrieval-based prompting comprises 200,000 examples, each
+pairing a natural language instruction with its corresponding code implementation. These examples
+are evenly distributed across the two languages, with 100,000 Java and 100,000 Python samples.
+   Both retrieval corpora are drawn from the official CodeXGLUE benchmark and fall under its
+text-to-code scenario; we therefore use the language-aligned resources provided by CodeXGLUE–
+CONCODE [49] for Java and CodeSearchNet AdvTest [20] for Python—while applying identical
+retrieval and preprocessing procedures across languages to reduce potential corpus-induced con-
+founding.
+   Following standard practice in code generation research [14, 37], we employ the Pass@k metric
+to evaluate model performance, which measures the proportion of generated solutions that pass all
+unit tests among the top 𝑘 candidates. In this study, we set 𝑘 = 1 and 𝑘 = 5, reporting both Pass@1
+and Pass@5 because they capture complementary aspects of model capability. Pass@1 measures
+the success rate under a single deterministic generation, which reflects the experience of users
+interacting with a coding assistant or automated code generation system in realistic single-attempt
+scenarios. Pass@5 allows multiple independent samples and evaluates whether a correct solution
+exists among several plausible candidates, which reveals the model’s potential performance when
+search or reranking strategies are available. Together, these two metrics distinguish immediate
+reliability from latent solution diversity. Formally, if a test set contains 𝑁 problems, and 𝐶 of the
+model’s top-1 outputs are correct, Pass@1 is computed as:
+
+        Pass@1 = 𝐶 × 100%
+        𝑁
+   In addition, if a test set contains 𝑁 problems and for each problem 𝑖 we generate five candidate
+solutions, let 𝑠𝑖 be an indicator that equals one if at least one of the five candidates passes all tests
+and equals zero otherwise. Pass@5 is computed as:
+
+        Pass@5 = Í𝑖𝑁=1 𝑠𝑖 × 100%
+        𝑁
+   To test whether more information-dense system prompts outperform the Base prompt, we
+apply McNemar’s test for paired binary outcomes [53]. Each code-generation instance is treated
+as a matched observation evaluated under Baseline and, respectively, Structure-Constrained,
+Robust-Handling, Reasoning-Guided, and Edge-Coverage prompts (success = Pass@k is True,
+failure = Pass@k is False). We report the resulting 𝑝-values alongside matched-pairs Odds Ratios
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+10 Zaiyu et al.
+
+(ORs) and 95% confidence intervals to quantify effect magnitude and direction. Finally, to account
+for multiple comparisons, we correct p-values using Holm correction [86].
+
+3.4 Instruction-Tuned Model Selection
+To conduct our experiments, we rely on two types of instruction-tuned models that represent
+complementary approaches to LLM development and specialization. The first category includes
+general-purpose instruction-tuned models designed to follow natural language instructions across
+diverse tasks. The second category comprises domain-specialized variants, particularly models
+exposed to large-scale code datasets to enhance code understanding. By doing so, we further
+investigate the generalization capacity of broadly instruction-tuned models and the specialized
+capabilities of code-oriented models under varying prompting conditions.
+    • GPT-OSS [55]: A general-purpose, open-source, instruction-tuned model family comprising
+      20B and 120B variants. These models are optimized for multi-domain reasoning and demon-
+      strate performance comparable to proprietary instruction-tuned systems such as Claude [4]
+      and GPT-4 [1] across a range of code generation benchmarks [31, 60]. Consequently, GPT-
+      OSS offers an effective balance between openness, scalability, and performance–delivering
+      capabilities that closely align with those of widely adopted closed-source models like GPT-4,
+      while maintaining full transparency and reproducibility. This makes it a particularly suitable
+      choice for examining how system-level prompts affect the behavior of general-purpose,
+      instruction-tuned models in code generation tasks. In this study, we focus on GPT-OSS-20B
+      as the representative model for our experiments.
+    • Qwen2.5-Coder [28]: A domain-specialized model family trained on large-scale code corpora
+      and supporting a diverse range of programming languages and instruction formats. The
+      Qwen2.5-Coder series is well established in the field of software engineering automation and
+      represents the current state of practice for benchmarking code generation models [5, 47, 72,
+      78]. In this study, we examine several variants of Qwen2.5-Coder, specifically the 1.5B, 7B,
+      and 32B parameter configurations. This allows us to systematically analyze how system-level
+      prompts interact with models of varying scales within a domain-specialized, code-oriented
+      family.
+
+3.5 Model Inference
+Each experimental task used the official Hugging Face Transformers implementation of the
+evaluated models1,2. For every configuration–defined by the combination of model type, model
+scale, programming language, prompting strategy, inference temperature, sampling parameters,
+and system prompt–we conducted a separate inference run. Each prompt variant was evaluated
+independently to avoid potential cross-contamination of context or caching effects across runs. In
+total, this procedure yielded 360 distinct model configurations, as outlined in Section 3.2.
+  As anticipated in Section 1, we evaluate both Instruction-based CLMs and Instruction-based
+LLMs under two different temperature regimes: 𝑇 = 0 and 𝑇 = 1. Comparing these two settings
+enables us to analyze performance differences between deterministic decoding (𝑇 = 0) and realistic
+deployment scenarios (𝑇 = 1), leading to a more robust and externally valid assessment of model
+behavior.
+  During the post-processing phase of the generated outputs, we observed that several responses
+contained formatting artifacts, such as language delimiters (e.g., java or python) preceding the
+code. These artifacts often caused compilation or execution failures during metric evaluation, which
+
+1https://huggingface.co/collections/Qwen/qwen25-coder
+2https://huggingface.co/openai/gpt-oss-20b
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 11
+
+could erroneously reduce Pass@1 scores to zero. To mitigate this, we implemented a preprocessing
+step that systematically removed these language-specific tokens and extraneous text segments,
+ensuring that all generated code could be correctly parsed and executed in subsequent testing
+stages.
+
+3.6 Experimental Environment
+All experiments are conducted on a workstation running Ubuntu 24.04.3 LTS with the GNU/Linux
+6.8.0-85-generic kernel. The system is equipped with four NVIDIA L40S GPUs, each with 48 GB
+of VRAM. All model inferences in this study are performed using vLLM.
+
+4 Results
+In this section, we present and discuss the results of our investigation, structured according to
+the research questions outlined earlier. For readability, we adopt several naming conventions
+throughout this paper.
+    • Model names: We abbreviate models in the Qwen2.5-Coder family and GPT-OSS-20B by
+      retaining only their parameter scale. For example, Qwen2.5-Coder-1.5B becomes Qwen-1.5B,
+      and GPT-OSS-20B becomes GPT-20B.
+
+    • System Prompts: We reference prompts using the numeric identifiers from Section 3.2:
+      Prompt 1 corresponds to Base (Fig. 1), Prompt 2 to Structural, continuing through Prompt
+      5.
+
+    • Language Specific Prompts: When reporting results across programming languages, we use
+      𝑃XX and 𝑃XX to denote prompt-language pairings (e.g., 𝑃Base indicates the Base prompt
+       Java Python Java
+      applied to Java).
+
+    • Experimental Configurations: We denote experimental setups using the following notation:
+      Pass@k | T=T, where 𝑘 is the number of generated samples and 𝑇 is the sampling temperature.
+      For instance, Pass@1 | T=1 indicates Pass@1 evaluation using code generated at temperature
+      𝑇 = 1.
+
+4.1 RQ1: How do system prompts with varying levels of specificity affect
+     general-purpose instruction-tuned models?
+This section is organized into three subsections that correspond to our decoding and evaluation
+regimes: RQ1.1 (Pass@1 | T=0), RQ1.2 (Pass@1 | T=1), and RQ1.3 (Pass@5 | T=1). Within each
+subsection, we contrast the three prompting strategies used in this study – zero-shot, 3-shot fixed,
+and 3-shot retrieval-based prompting.
+Before presenting the results, we briefly summarize the table structure used throughout Section 4.1.
+Each table reports results for a single backbone model, GPT-OSS. Within every table, we organize
+results into two language-specific blocks: Java (top) and Python (bottom). Each row corresponds to
+an evaluated model configuration, while the columns compare the Base prompt against progres-
+sively more information-dense variants (Struct, Robust, Reason, and Edge). For each prompt
+variant, we report: (i) Pass@1 accuracy (%), (ii) the 𝑝-value from McNemar’s test computed relative
+to Base, and (iii) the Odds Ratio (OR) capturing effect size and direction. The symbols ▲ and ▼
+denote improvements and degradations relative to Base, respectively; “–” indicates no change; and
+black bars mark non-significant differences (𝑝 ≥ 0
+        .05).
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    12    Zaiyu et al.
+
+
+    Model                                                           GPT-OSS-20B
+                      Base            Struct                        Robust                     Reason                       Edge
+    Strategy         Pass@1  Pass@1  𝑝-value   OR      Pass@1     𝑝-value   OR      Pass@1  𝑝-value   OR       Pass@1  𝑝-value   OR
+
+                                                                     Java
+
+    Zero-shot        39.57   42.17 ▲                    37.83 ▼                       40.43 ▲                     40.00 ▲
+    Fixed            14.35   20.43 ▲  < 0.05    2. 17   25.22 ▲    <  0.05    3. 50   26.09 ▲  < 0.05    4.  00   29.57 ▲  < 0.05    5. 38
+    Retrieval-based  26.09   36.96 ▲  < 0.05    5. 17   39.13 ▲    <  0.05    4. 75   40.87 ▲  < 0.05    12. 33   39.57 ▲  < 0.05    8. 75
+
+                                                                    Python
+
+    Zero-shot        20.87   24.35 ▲                    20.43 ▼                       22.61 ▲                     16.96 ▼
+    Fixed            22.17   19.13 ▼                    19.57 ▼                       20.87 ▼                     22.17 –
+    Retrieval-based  20.87   20.87 –                    20.43 ▼                       22.17 ▲                     20.00 ▼
+
+
+    Table 1. Performance results for GPT-OSS-20B, evaluated with Pass@1 | T=0
+
+
+
+
+4.1.1 RQ1.1: Pass@1 | T=0. As shown in Table 1, GPT-20B performs best when the system prompt
+emphasizes structural requirements, regardless of the target language. In Java, 𝑃Struct achieves
+        Java
+42.17% Pass@1, exceeding 𝑃Base (39.57%) and 𝑃Robust (37.83%). Python exhibits the same trend:
+        Java Java
+𝑃Struct yields 24.35% functionally correct solutions compared to 20.87% for 𝑃Base , whereas 𝑃Edge
+ Python Python Python
+drops to 16.96%, suggesting that edge-coverage prompts can distract from core task constraints
+when no examples are provided.
+   However, these apparent differences are not statistically significant: McNemar’s tests against
+Base do not reject the null hypothesis at the 0.05 level (as indicated by the black bars), implying
+that the observed gains and drops may reflect sampling variability rather than a reliable effect of
+the prompting variant.
+   Introducing examples through 3-shot fixed prompting alters model behavior. For Java, GPT-20B
+exhibits marked vulnerability to example context under minimal guidance: 𝑃Base plummets to 14.35%
+        Java
+Pass@1. Performance recovers incrementally as prompt complexity increases, rising to 20.43%
+with 𝑃Struct, 25.22% with 𝑃Robust, 26.09% with 𝑃Reason, and peaking at 29.57% with 𝑃Edge. Even this
+      Java Java Java Java
+peak remains well below the 42.17% zero-shot baseline, indicating that introducing fixed examples
+undermines Java performance on the whole, with richer prompts only partially mitigating—rather
+than reversing—the harm from suboptimal example choice. These differences achieve statistical
+significance across all pairwise comparisons. Indeed, progressively elaborate system prompts yield
+ORs ranging from 2.17 to 5.38, meaning that under optimal conditions (𝑃Edge), the model has 5×
+        Java
+higher odds of generating functionally correct code than under 𝑃Base.
+        Java
+   Python demonstrates a contrasting pattern: 𝑃Base and 𝑃Edge tie at 22.17%, while 𝑃Struct and
+        Python Python Python
+𝑃Robust are lower at 19.13% and 19.57%. However, these differences are not statistically significant,
+ Python
+suggesting only a directional tendency that added constraints do not help when demonstrations
+are present.
+   3-shot retrieval-based prompting partially resolves the instability introduced by fixed examples,
+especially for Java. Starting from 26.09% under 𝑃Base, GPT-20B improves to 36.96% with 𝑃Struct
+        Java Java
+and 39.13% with 𝑃Robust, reaching its best retrieval-based score of 40.87% under 𝑃Reason. This
+        Java Java
+configuration comes within 1.30% of the overall best result for Java, the zero-shot 𝑃Struct score of
+        Java
+42.17%, suggesting that carefully selected examples can recover most of the loss introduced by fixed
+examples, but only when paired with a prompt that steers the model toward deliberate requirement
+satisfaction. The performance gains observed when enriching the user prompt with contextually
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation  13
+
+
+    Model                                                           GPT-OSS-20B
+                      Base            Struct                        Robust                     Reason                      Edge
+    Strategy         Pass@1  Pass@1  𝑝-value   OR      Pass@1     𝑝-value   OR      Pass@1  𝑝-value   OR      Pass@1  𝑝-value   OR
+
+                                                                     Java
+
+    Zero-shot        37.83   41.30 ▲                    40.00 ▲                       39.57 ▲                    42.61 ▲
+    Fixed            18.26   25.65 ▲  < 0.05    1. 89   30.87 ▲    <  0.05    4. 22   34.35 ▲  < 0.05    4. 70   32.17 ▲  < 0.05    4. 20
+    Retrieval-based  27.83   35.22 ▲  < 0.05    2. 31   36.52 ▲    <  0.05    2. 82   41.30 ▲  < 0.05    4. 88   44.78 ▲  < 0.05    7. 50
+
+                                                                    Python
+
+    Zero-shot        25.65   23.48 ▼                    24.78 ▼                       23.48 ▼                    23.91 ▼
+    Fixed            24.35   25.65 ▲                    26.09 ▲                       25.22 ▲                    25.22 ▲
+    Retrieval-based  21.30   23.04 ▲                    21.74 ▲                       20.87 ▼                    23.04 ▲
+
+
+    Table 2. Performance results for GPT-OSS-20B, evaluated with Pass@1 | T=1
+
+
+
+relevant code generation examples yield statistically significant improvements across all system
+prompts examined in this study, with ORs spanning from 4.75 to 12.33.
+   For Python, retrieval-based prompting produces a considerably tighter performance range of
+20.00% to 22.17%, with 𝑃Reason again achieving the highest score at 22.17%. Unlike Java, retrieval
+        Python
+enhances consistency but does not unlock substantial performance gains, confirming that GPT-
+20B’s Python code generation is less responsive to system prompt variations when examples are
+relevant, though overall correctness remains limited. This distinctive behavior is further reflected
+in our statistical analyses, which failed to detect significant differences across conditions.
+   Across languages, in most cases, GPT-20B achieves higher peak performance on Java than on
+Python for the same evaluation protocol. Under zero-shot, the best Java configuration exceeds the
+best Python configuration by 17.82%, and under retrieval-based the corresponding gap is 18.70%.
+The exception is 3-shot fixed prompting, where the gap shrinks to 7.40% because Java degrades
+dramatically under 𝑃Base while Python remains comparatively resilient.
+        Java
+      Answer to RQ1.1
+  System prompt complexity influences GPT-20B differently across prompting strategies and
+  languages. Under zero-shot, structural prompts (𝑃Struct) achieve highest scores (Java: 42.17%,
+  Python: 24.35%) without statistical significance. 3-shot fixed prompting severely degrades Java
+  (14.35% to 29.57%, OR: 2.17–5.38) while Python remains stable (19.13%–22.17%). Retrieval-based
+  prompting recovers Java performance substantially (40.87%, OR: 4.75–12.33) but minimally
+  affects Python (20.00%–22.17%, non-significant). Overall, Java benefits more from prompt
+  engineering and example quality than Python.
+
+4.1.2 RQ1.2: Pass@1 | T=1. Table 2 reveals that under zero-shot prompting, the model demon-
+strates a clear affinity for more elaborate system-level constraints in Java method generation.
+Performance climbs from 37.83% with 𝑃Base to 41.30% with 𝑃Struct, maintains strength at 40.00%
+        Java Java
+under 𝑃Robust, and reaches its zenith at 42.61% with 𝑃Edge. While these gains are quantitatively
+        Java Java
+observable, McNemar’s test indicates they do not achieve statistical significance.
+   The Python zero-shot results show an almost inverted pattern. Here, GPT-20B performs best with
+the minimalist prompt: 𝑃Base reaches 25.65%, while every more articulated variant yields lower
+        Python
+accuracy, from 24.78% under 𝑃Robust down to 23.48% under both 𝑃Struct and 𝑃Reason. This indicates
+        Python Python Python
+that, for Python, additional instruction content can function as overhead rather than guidance,
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+14 Zaiyu et al.
+
+reasonably because the language imposes fewer language-mandated syntactic requirements, making
+it easier to enter with default priors, while extra constraints increase the chance of over-steering or
+misprioritizing what the tests actually enforce.
+   In contrast to the 𝑇 = 0 setting above, increasing the temperature to one changes how GPT-20B
+trades off default priors versus system-level guidance, especially when examples are present. Under
+3-shot fixed prompting, adding examples amplifies prompt sensitivity in Java code generation tasks.
+The same GPT-20B model that achieved 37.83% with 𝑃Base under zero-shot collapses to 18.26%
+        Java
+when fixed examples are introduced. However, as the system prompt becomes more prescriptive,
+performance bounces back sharply: 𝑃Struct reaches 25.65%, 𝑃Robust reaches 30.87%, and 𝑃Reason
+        Java Java Java
+peaks at 34.35%, with 𝑃Edge close behind at 32.17%. These improvements yield not only quantitative
+        Java
+gains but also notable consistency, as evidenced by ORs of 1.89 for 𝑃Struct, 4.22 for 𝑃Robust, 4.70
+        Java Java
+for 𝑃Reason, and 4.20 for 𝑃Edge. A plausible interpretation is that noisy contextual information
+     Java Java
+necessitates explicit global guidance to help the model distinguish meaningful patterns from
+artifacts in examples. Reasoning-based instructions steer the model in realigning generation toward
+functional correctness.
+   In Python, the 3-shot fixed setting yields comparatively modest and stable changes. GPT-20B
+moves from 24.35% with 𝑃Base to a best of 26.09% with 𝑃Robust, while 𝑃Struct, 𝑃Reason, and 𝑃Edge
+        Python Python Python Python Python
+cluster around 25.22% to 25.65%. In line with the above conclusion, this smaller fluctuation range
+indicates that Python generation is less dependent on system-prompt instructions.
+   Table 2 also shows the strongest overall Java result for GPT-20B under 3-shot retrieval-based
+prompting, where example relevance is controlled. With progressively stronger constraints, Java
+accuracy increases approximately linearly, from 27.83% under 𝑃Base to 44.78% under 𝑃Edge. Critically,
+this best retrieval-based configuration surpasses the best Java Java
+        zero-shot Java approach by 2.17%, showing
+that examples become effective when query-aligned and paired with expert-style system prompts.
+Retrieval thus not only stabilizes but elevates performance, contingent on clear validity specifica-
+tions in the system prompt. As with fixed-shot selection, statistically significant improvements
+confirm the value of contextual guidance.
+   Python contrasts with Java again: Retrieval-based prompting does not improve GPT-20B, with
+the best score only 23.04% under 𝑃Struct and 𝑃Edge , below both the zero-shot best of 25.65% and
+        Python Python
+the 3-shot fixed prompting best of 26.09%. Moreover, 𝑃Reason drops to 20.87%, suggesting that,
+        Python
+in Python, coupling retrieved examples with explicit reasoning guidance can lead the model to
+overfit to contextual patterns or to introduce unnecessary complexity that harms correctness. This
+reinforces a consistent theme across the tables: Python performance is comparatively robust to
+prompt variation – a result that is also supported by the statistical comparison, which has produced
+for each single configuration 𝑝-values larger than 0.05, thus rejecting our original hypothesis.
+       Answer to RQ1.2
+  Overall, the variability itself is a key signal. In Java, the Pass@1 range across system prompts
+  is 4.78% under zero-shot, then expands to 16.09% under 3-shot fixed and 16.95% under 3-shot
+  retrieval-based, revealing that examples substantially increase the importance of system prompt
+  design. In Python, ranges remain tight, never exceeding 2.17%, implying a weaker dependence
+  on how instructions are phrased. Finally, the cross-language gap changes markedly by strategy:
+  Java exceeds Python by 16.96% at the best zero-shot configurations, the gap shrinks to 8.26%
+  under 3-shot fixed, then widens sharply to 21.74% under 3-shot retrieval-based. This pattern
+  suggests that GPT-20B is able to exploit relevant contextual evidence far more effectively in Java
+
+
+
+    , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation  15
+
+
+    Model                                                              GPT-OSS-20B
+                      Base              Struct                    Robust                    Reason             Edge
+    Strategy         Pass@5  Pass@5     𝑝-value  OR   Pass@5     𝑝-value  OR   Pass@5     𝑝-value  OR   Pass@5  𝑝-value   OR
+                                                                  Java
+    Zero-shot        48.70   49.57 ▲                   50.43 ▲                   49.57 ▲                   48.70 –
+    Fixed            45.65   46.52 ▲                   50.43 ▲                   47.39 ▲                   47.57 ▲
+    Retrieval-based  46.52   47.83 ▲                   50.00 ▲                   50.87 ▲                   53.91 ▲  < 0.05    9.50
+                                                                  Python
+    Zero-shot        33.91   34.35 ▲                   34.78 ▲                   34.35 ▲                   33.91 –
+    Fixed            36.09   33.04 ▼                   34.78 ▼                   35.65 ▼                   33.04 ▼
+    Retrieval-based  33.91   35.65 ▲                   34.78 ▲                   36.52 ▲                   34.35 ▲
+
+
+    Table 3. Performance results for GPT-OSS-20B, evaluated with Pass@5 | T=1.
+
+
+
+
+     than in Python, and that example relevance paired with high-information-density instruction
+     disproportionately benefits the Java setting.
+
+    4.1.3                          RQ1.3: Pass@5 | T=1. When the deployment scenario allows practitioners to inspect multiple
+    code recommendations, we naturally expect improved overall functional correctness. This is
+    precisely what emerges from Table 3.
+     Under zero-shot prompting, both languages exhibit minimal sensitivity to system prompt varia-
+    tions. Java performance clusters tightly between 48.70% (𝑃Base, 𝑃Edge) and 50.43% (𝑃Robust), while
+                                                                  Java               Java                  Java
+    Python ranges from 33.91% to 34.78% (𝑃Robust). These narrow spreads indicate that GPT-20B can
+                                                       Python
+    generate correct solutions reliably without aggressive prompt specialization when no examples are
+    provided.
+                           3-shot fixed prompting reveals divergent language-specific responses. Java benefits from increased
+    guidance: performance climbs from 45.65% (𝑃Base) to 50.43% (𝑃Robust), with 𝑃Edge maintaining
+                                                                  Java           Java                      Java
+strength at 47.57%. This suggests that detailed constraints help filter example noise and maintain
+alignment with test requirements. Conversely, Python performs best with minimal instruction
+(𝑃Base : 36.09%), declining to 33.04% under both 𝑃Struct and 𝑃Edge . Here, fixed examples appear
+     Python                                                       Python           Python
+    to provide sufficient grounding, with additional constraints functioning as friction rather than
+    guidance.
+                                     Retrieval-based prompting demonstrates the strongest synergy between example quality and
+    prompt sophistication. For Java, 𝑃Edge achieves the study’s highest score of 53.91%, surpassing
+    both zero-shot and fixed  Java
+                                                          configurations. This indicates that relevant examples combined with
+    comprehensive constraints maximize GPT-20B’s potential. 𝑃Reason (50.87%) and 𝑃Robust (50.00%)
+                                                                                 Java                      Java
+    remain highly competitive, while simpler prompts like 𝑃Base (46.52%) underperform, confirming
+                                                                      Java
+    that retrieval alone is insufficient without adequate system-level guidance.
+                                      Python shows modest but meaningful improvements under retrieval, peaking at 36.52% with
+    𝑃Reason. Performance now follows a clearer ordering across prompts (35.65% for 𝑃Struct, 34.78% for
+    Python                                                                                                 Python
+    𝑃Robust), suggesting that relevant examples help when paired with reasoning-focused guidance.
+    Python
+    However, absolute gains remain limited, indicating that Python’s correctness barriers stem more
+    from intrinsic generation errors than from insufficient contextual cues.
+                                    Moreover, statistically significant benefits from the more advanced system prompts emerge
+    only in one setting. When contextual cues are selected via a code-similarity mechanism, the effect
+
+                                                                  , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+16                                                                                        Zaiyu et al.
+
+strengthens, reaching an OR of 9.50 – but only when using the most comprehensive system prompt,
+i.e., 𝑃Edge, which explicitly specifies the environment, context, and constraints. Python’s inherent
+              Java
+stability is further validated even under the more dynamic conditions examined in this subsection.
+
+              Answer to RQ1.3
+      With Pass@5 | T=1 sampling, Java consistently outperforms Python in functional correctness.
+      Java is highly sensitive to prompt design once examples are provided, performing best when
+      relevant exemplars are paired with information-rich, constraint-explicit instructions. Python
+      remains comparatively stable across prompt variants and tends to benefit most from simpler
+      guidance that avoids unnecessary constraints, suggesting that Java optimization relies on
+      tight example–prompt alignment, or calibration procedure, while Python does not, and favors
+      minimal corrections.
+
+4.2           RQ2: How do system prompts with varying levels of specificity affect
+              code-specialized instruction-tuned models?
+To answer and present the results of RQ2, we follow the same three-subsection structure as in
+Section 4.1.
+      The difference is in the interpretation of the table. In this section, each table summarizes one
+prompting strategy, and reports results for a single backbone model—either GPT-OSS or Qwen-
+Coder. Results are split into two language sections, with Java presented first (top) and Python second
+(bottom). Rows enumerate the model backbones under evaluation (e.g., Qwen-Coder), whereas
+columns contrast the Base prompt with increasingly information-rich variants (Struct, Robust,
+Reason, and Edge). For each variant, we report: (i) Pass@1, (ii) the 𝑝-value from McNemar’s test
+comparing against Base, and (iii) the Odds Ratio (OR) as a measure of effect size and direction.
+Improvements and regressions relative to Base are indicated by ▲ and ▼, respectively; “–” denotes
+no difference; and black bars highlight results that are not statistically significant (𝑝 ≥ 0.05).
+4.2.1         RQ2.1: Pass@1 | T=0. As shown in Table 4, with zero-shot prompting, Qwen’s Java perfor-
+mance is strongly capacity-dependent: Qwen-32B sets the highest ceiling and benefits from more
+restrictive guidance (peaking at 42.61% with 𝑃Reason and 41.74% with 𝑃Robust), Qwen-7B improves
+                  Java        Java
+moderately and consistently over 𝑃Base, and Qwen-1.5B benefits only from structural guidance
+                  Java
+(𝑃Struct, 35.65%) while degrading sharply once constraints intensify (𝑃Robust–𝑃Edge, 26–27%). Im-
+      Java        Java     Java
+portantly, statistical significance is the exception rather than the rule in this regime: across most
+model–prompt pairs the McNemar tests do not reject the null (reported as “                ” in the ta-
+ble), and the few significant outcomes are concentrated in rare edge cases – notably, the smallest
+model (Qwen-1.5B) shows statistically significant degradations when moving from 𝑃Base to more
+                  Java
+constraint-heavy prompts, while only one significant improvement appears for Qwen-32B (the
+𝑃Reason variant).
+ Java
+           Compared to the GPT-20B (last row)– Table 4 – the pattern is consistent: GPT-20B is already
+strong in 𝑃Base: 39.57%, best at 𝑃Struct: 42.17%, but, like Qwen-32B, does not exhibit widespread
+                  Java       Java
+significant gains across prompt variants in the zero-shot, 𝑇 = 0 setting.
+           In comparison to Java, the Python results are more compact and admit a clearer notion of an
+attainable upper bound that shifts with model scale. At the top end, Qwen-32B defines the strongest
+ceiling, with 𝑃Struct reaching 26.52% (up from 23.91% with 𝑃Base       ); the remaining variants are
+                  Python                                         Python
+tightly clustered, with 𝑃Robust and 𝑃Edge        both at 24.35% and 𝑃Reason matching the baseline at
+                  Python      Python        Python
+23.91%. For Qwen-7B, the best configuration shifts toward the most explicit prompt, as 𝑃Edge
+                                                                                                Python
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation  17
+
+
+    Strategy                                                Zero-shot Prompting
+                Base              Struct                    Robust                     Reason                      Edge
+    Model      Pass@1  Pass@1     𝑝-value  OR   Pass@1     𝑝-value   OR     Pass@1  𝑝-value   OR      Pass@1  𝑝-value   OR
+
+                                                                 Java
+
+    Qwen-1.5B  32.61   35.65 ▲                   27.39 ▼    < 0. 05    0.37   26.96 ▼  < 0.05    0. 35   26.52 ▼  < 0.05    0.30
+    Qwen-7B    32.61   36.52 ▲                   35.65 ▲                      36.09 ▲                    35.22 ▲
+    Qwen-32B   37.39   37.39 –                   41.74 ▲                      42.61 ▲  < 0.05    4. 00   39.57 ▲
+
+    GPT-20B    39.57   42.17 ▲                   37.83 ▼                      40.43 ▲                    40.00 ▲
+                                                            Python
+
+    Qwen-1.5B  18.70   19.13 ▲                   15.22 ▼                      15.65 ▼                    14.78 ▼
+    Qwen-7B    19.57   20.87 ▲                   20.00 ▲                      20.43 ▲                    22.61 ▲
+    Qwen-32B   23.91   26.52 ▲                   24.35 ▲                      23.91 –                    24.35 ▲
+    GPT-20B    20.87   24.35 ▲                   20.43 ▼                      22.61 ▲                    16.96 ▼
+
+
+    Table 4. Performance results for the zero-shot prompting strategy, evaluated with Pass@1 | T=0.
+
+
+
+attains 22.61% relative to a 19.57% baseline, while the other variants remain in a narrow 20.00%–
+20.87% band. Finally, Qwen-1.5B shows the same “fragility” as in Java: it gains only slightly with
+𝑃Struct (19.13% vs. 18.70%) and drops sharply with stricter prompts, falling to 15.22%–14.78% from
+ Python
+𝑃Robust to 𝑃Edge .
+ Python Python
+   Overall, Python outcomes tighten more rapidly than Java as model capacity increases: prompt
+specialization mainly nudges the best achievable score for larger models, rather than reshaping the
+full performance profile. Consistent with this pattern, the statistical tests in Table 4 indicate that
+prompt effects are the exception in zero-shot Pass@1 | T=0; in Python, differences across prompt
+variants are uniformly non-significant, underscoring a limited sensitivity to system prompt choice
+at 𝑇 = 0.
+   Comparing GPT-20B to the largest instruction-tuned code model, i.e., Qwen-32B, shows that
+OpenAI’s open-source model reaches its best Python accuracy of 24.35% with 𝑃Struct. This score falls
+        Python
+below the Qwen-32B upper bound (26.52%) but exceeds the best Qwen-7B configuration (22.61%),
+suggesting that a general-purpose instruction-tuned model can remain competitive despite being
+optimized for a broader set of tasks beyond, for example, code generation.
+   More broadly, the GPT-20B row reinforces the main takeaway of Table 4; although point estimates
+vary across prompt variants (e.g., 20.87%–24.35% for GPT-20B), statistically significant improvements
+are rare in the zero-shot 𝑇 =0 regime, and most differences are not distinguishable from 𝑃Base in
+either language at 𝑝 < 0.05.
+   Compared with the zero-shot setting, 3-shot fixed prompting markedly reshapes both absolute
+performance and prompt sensitivity, especially for Java (Table 5). For the larger models, fixed
+examples appear highly disruptive unless counterbalanced by more prescriptive system guidance.
+In Qwen-32B, 𝑃Base collapses to 6.96%, but performance rebounds sharply with richer prompts,
+        Java
+reaching 29.57% with 𝑃Robust and 27.83% with 𝑃Edge. Qwen-7B follows the same trajectory: 𝑃Base
+        Java Java Java
+drops to 13.04%, then improves monotonically as constraints increase, peaking at 28.70% with 𝑃Edge.
+        Java
+By contrast, Qwen-1.5B is comparatively stable and even benefits from mild structure: it starts at
+29.57% with 𝑃Base and attains its best score of 35.22% with 𝑃Struct, while heavier prompt variants
+        Java Java
+yield smaller gains.
+   The McNemar results in Table 5 clarify which of these shifts are reliable. In Java, many of
+the improvements for Qwen-7B and Qwen-32B (and also GPT-20B) are statistically significant
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    18    Zaiyu et al.
+
+
+    Strategy                                                   Fixed Prompting
+                Base            Struct                   Robust                        Reason                      Edge
+    Model      Pass@1  Pass@1  𝑝-value     OR   Pass@1     𝑝-value OR       Pass@1  𝑝-value  OR       Pass@1  𝑝-value   OR
+
+                                                               Java
+
+    Qwen-1.5B  29.57   35.22 ▲  < 0.05   3. 60   32.17 ▲                      32.61 ▲                    33.04 ▲
+    Qwen-7B    13.04   24.78 ▲  < 0.05   10.00   25.65 ▲  < 0. 05    10 .66   27.83 ▲  < 0.05   12. 33   28.70 ▲  < 0.05    7.  00
+    Qwen-32B    6.96   16.96 ▲  < 0.05   12.50   29.57 ▲  < 0. 05    27 .03   22.61 ▲  < 0.05   10. 00   27.83 ▲  < 0.05    13. 00
+
+    GPT-20B    14.35   20.43 ▲  < 0.05   2. 17   25.22 ▲  < 0. 05    3  .50   26.09 ▲  < 0.05   4.  00   29.57 ▲  < 0.05    5.  38
+
+                                                     Python
+
+    Qwen-1.5B  17.83   18.70 ▲                   20.00 ▲                      19.13 ▲                    20.00 ▲
+    Qwen-7B    20.00   19.57 ▼                   20.00 –                      20.43 ▲                    21.30 ▲
+    Qwen-32B   23.04   23.91 ▲                   22.17 ▼                      22.17 ▼                    23.48 ▲
+
+    GPT-20B    22.17   19.13 ▼                   19.57 ▼                      20.87 ▼                    22.17 –
+
+
+    Table 5. Performance results for the 3-shot fixed prompting strategy, evaluated with Pass@1 | T=0.
+
+
+
+
+
+    Strategy                                                  Retrieval-based Prompting
+                Base            Struct                     Robust                        Reason                      Edge
+    Model      Pass@1  Pass@1  𝑝-value   OR       Pass@1     𝑝-value   OR      Pass@1 𝑝-value  OR       Pass@1  𝑝-value   OR
+
+                                                                 Java
+
+    Qwen-1.5B  26.09   31.74 ▲  < 0.05    5.  33   28.70 ▲                      30.87 ▲                    31.30 ▲
+    Qwen-7B    12.17   15.65 ▲  < 0.05    3.  67   19.57 ▲  < 0. 05      4 .40  17.83 ▲  < 0.05   2.  62   21.30 ▲  < 0.05    4. 00
+    Qwen-32B   17.83   30.43 ▲  < 0.05    10. 66   36.09 ▲  < 0. 05      9 .40  34.78 ▲  < 0.05   10. 75   34.35 ▲  < 0.05    6. 43
+
+    GPT-20B    26.09   36.96 ▲  < 0.05    5.  17   39.13 ▲  < 0. 05      4 .75  40.87 ▲  < 0.05   12. 33   39.57 ▲  < 0.05    8. 75
+
+                                                       Python
+
+    Qwen-1.5B  17.39   16.52 ▼                     16.96 ▼                      16.96 ▼                    17.83 ▲
+    Qwen-7B    20.00   19.57 ▼                     22.17 ▲                      22.61 ▲                    24.35 ▲
+    Qwen-32B   25.65   26.09 ▲                     25.22 ▼                      23.91 ▼                    24.78 ▼
+
+    GPT-20B    20.87   20.87 –                     20.43 ▼                      22.17 ▲                    20.00 ▼
+
+
+    Table 6. Performance results for the 3-shot retrieval-based prompting strategy, evaluated with
+    Pass@1 | T=0
+
+
+
+relative to 𝑃Base (frequently 𝑝 < 0.05), indicating that more contextually driven system prompts
+        Java
+consistently mitigate the noise introduced by fixed examples. However, we can anticipate that in
+the generated Python code, it does not produce any significant effect as we vary the type of system
+prompt and underlying model size. Overall, fixed examples amplify prompt sensitivity primarily
+in Java—and the statistical tests confirm that this interaction is both large in magnitude and, in
+several configurations, statistically reliable.
+  In Python, retrieval-based prompting stabilizes performance and yields modest gains, most
+clearly for Qwen-7B, which reaches 24.35% with 𝑃Edge (above both its zero-shot and fixed best).
+        Python
+Qwen-32B remains near its zero-shot ceiling, peaking at 26.09% with 𝑃Struct, while Qwen-1.5B
+        Python
+stays tightly bounded (16.52%–17.83%), indicating limited benefit from retrieved context.
+  Across strategies at Pass@1 | T=0, Java is markedly more sensitive than Python: fixed examples
+cause the largest disruptions (notably for Qwen-7B and Qwen-32B), whereas retrieval yields the
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 19
+
+strongest recovery (especially for Qwen-32B). Prompt preferences also vary with scale, with Qwen-
+1.5B most consistently helped by 𝑃Struct, while larger models shift toward more constraint-heavy
+prompts in Java. In Python, preferences are comparatively stable, with Qwen-32B favoring 𝑃Struct
+        Python
+and Qwen-7B favoring 𝑃Edge .
+        Python
+  The statistical results in Table 6 reinforce these performance trends. In Java, McNemar’s tests
+against 𝑃Base are frequently significant (𝑝 < 0.05) for Qwen-7B, Qwen-32B, and GPT-20B, indicating
+        Java
+that retrieval combined with richer system prompts yields consistent gains rather than sampling
+noise. The corresponding effect sizes are substantial rather than incremental: for GPT-20B, the
+odds of producing functionally correct code increase by roughly 4.75–12.33× over 𝑃Base across the
+        Java
+more contextually rich prompt variants, and for a code-specialized backbone such as Qwen-32B,
+the odds increases remain comparably large (about 6.43–10.75×).
+      Answer to RQ2.1
+  This first set of results – obtained under tightly controlled conditions with 𝑇 = 0 to minimize
+  stochasticity and ensure replicability – yields a coherent narrative. In zero-shot settings, system
+  prompt specificity acts as a secondary factor: model scale and language drive outcomes, with
+  statistically significant differences remaining uncommon. Introducing examples, however,
+  transforms this dynamic. Fixed examples can severely destabilize Java generation for larger
+  models, while retrieval-based examples restore stability and enable substantial gains when
+  paired with more informative system prompts. The shift reveals that example selection method
+  fundamentally alters how models respond to prompt design.
+
+
+
+4.2.2 RQ2.2: Pass@1 | T=1. Relative to RQ2.1, increasing the temperature to one systematically
+hinders the ability of the Qwen family to generate functionally correct code. This temperature
+shift is most visible in zero-shot Java code generation: for example, Qwen-1.5B drops from 32.61%
+under 𝑃Base 𝑇 = 0 to 28.26% (Table 7), and its earlier best case under 𝑃Struct at 35.65% no longer
+        Java Java
+persists. In other words, once token generation shifts from greedy decoding to stochastic sampling,
+prompt design is no longer only about task specification; it also determines whether the model can
+maintain functional alignment under sampling noise.
+  In particular, with zero-shot prompting, the larger Qwen backbones (Qwen-7B and especially
+Qwen-32B) generally gain from richer, more descriptive system prompts, whereas the smallest
+model (Qwen-1.5B) is consistently affected (negatively) as prompt specificity increases. Notably, for
+Qwen-1.5B the drop in performance under 𝑃Reason and 𝑃Edge is large enough to yield statistically
+significant differences relative to 𝑃Base, while for the larger models similar prompt-induced shifts
+rarely reach significance despite comparable directional trends.
+  General-purpose instruction-tuned models behave somewhat differently, as shown by the last
+row of Table 7. In particular, GPT-20B achieves its best performance – which can even surpass a
+code-specialized model in this setting – only when guided by a more descriptive system prompt
+that imposes clearer constraints and thereby narrows the effective search space.
+  Python reveals a different pattern under zero-shot conditions. Both specialized and general
+models generate fewer correct solutions, showing selective sensitivity to prompt formulation rather
+than consistent gains from prescriptive instructions. Qwen-32B remains stable, peaking at 24.78%
+(𝑃Struct) with minimal variation across configurations. Qwen-7B favors 𝑃Reason (20.00%), while
+  Python Python
+other prompts decline to 16.09%–16.96%. Qwen-1.5B degrades from 16.96% baseline to 12.17% under
+𝑃Edge . Unlike Java, Python performance depends less on constraint density and more on whether
+ Python
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+20    Zaiyu et al.
+
+
+Strategy                                                 Zero-shot Prompting
+            Base              Struct                    Robust                  Reason                     Edge
+Model      Pass@1  Pass@1     𝑝-value  OR   Pass@1     𝑝-value  OR   Pass@1  𝑝-value   OR     Pass@1  𝑝-value   OR
+
+                                                        Java
+
+Qwen-1.5B  28.26   24.35 ▼                   25.22 ▼                   20.87 ▼  < 0.05    0.45   20.87 ▼  < 0.05    0.39
+Qwen-7B    26.09   29.57 ▲                   32.61 ▲                   30.00 ▲                   31.30 ▲
+Qwen-32B   36.52   34.78 ▼                   40.43 ▲                   40.00 ▲                   38.70 ▲
+
+GPT-20B    37.83   41.30 ▲                   40.00 ▲                   39.57 ▲                   42.61 ▲
+
+                                                        Python
+
+Qwen-1.5B  16.96   15.22 ▼                   13.04 ▼                   12.61 ▼                   12.17 ▼
+Qwen-7B    19.57   16.96 ▼                   16.09 ▼                   20.00 ▲                   19.13 ▼
+Qwen-32B   24.35   24.78 ▲                   23.04 ▼                   23.04 ▼                   23.91 ▼
+
+GPT-20B    25.65   23.48 ▼                   24.78 ▼                   23.48 ▼                   23.91 ▼
+
+
+Table 7. Performance results for the zero-shot prompting strategy, evaluated with Pass@1 | T=1.
+
+
+
+
+
+Strategy                                                       Fixed Prompting
+            Base              Struct                     Robust                         Reason                         Edge
+Model      Pass@1  Pass@1     𝑝-value   OR      Pass@1     𝑝-value   OR      Pass@1     𝑝-value   OR      Pass@1   𝑝-value   OR
+
+                                                               Java
+
+Qwen-1.5B  20.00   23.91 ▲                       22.61 ▲                       26.96 ▲                       23.04 ▲
+Qwen-7B    14.35   16.96 ▲                       18.26 ▲                       19.13 ▲                       18.26 ▲
+Qwen-32B    9.57   20.00 ▲    < 0.05     4. 43   22.61 ▲  < 0. 05      3 .73   23.48 ▲  < 0.05       5. 57   24.35 ▲   < 0.05    4. 09
+
+GPT-20B    18.26   25.65 ▲    < 0.05     1. 89   30.87 ▲  < 0. 05      4 .22   34.35 ▲  < 0.05       4. 70   32.17 ▲   < 0.05    4. 20
+
+                                                            Python
+
+Qwen-1.5B  13.48   10.43 ▼                       13.04 ▼                       11.74 ▼                       15.65 ▲
+Qwen-7B    20.43   19.13 ▼                       18.70 ▼                       16.96 ▼                       19.57 ▼
+Qwen-32B   23.04   22.17 ▼                       21.74 ▼                       25.65 ▲                       23.91 ▲
+
+GPT-20B    24.35   25.65 ▲                       26.09 ▲                       25.22 ▲                       25.22 ▲
+
+
+Table 8. Performance results for the 3-shot fixed prompting strategy, evaluated with Pass@1 | T=1.
+
+
+
+prompts emphasize minimal operational requirements. Excessive guidance obscures rather than
+clarifies.
+                                           Fixed 3-shot examples expose sharp, language-dependent behaviors (Table 8). In Java, every
+backbone benefits from stronger system guidance, but the 𝑃Base condition is strikingly brittle for
+                                                                               Java
+larger models. Qwen-32B, for instance, delivers only 9.57% Pass@1 with 𝑃Base – roughly one correct
+                                                                                   Java
+solution out of ten – yet more informative prompts steadily pull it back, reaching 24.35% with 𝑃Edge.
+                                                                                                                                 Java
+Statistical tests confirm this improvement is reliable: all enriched prompts show significant gains
+over 𝑃Base, with odds ratios indicating a 3.7 − 5.6× higher likelihood of generating correct solutions.
+Java
+Qwen-7B follows the same direction (14.35% to 19.13%, best with 𝑃Reason), while Qwen-1.5B peaks
+                                                                                   Java
+higher at 26.96% under 𝑃Reason but without statistically significant differences in this fixed-example
+setting.                      Java
+                                      GPT-20B shows the clearest “re-anchoring” effect: it climbs from 18.26% with 𝑃Base to a best of
+                                                                                                             Java
+34.35% with 𝑃Reason, with all richer prompts significant (𝑝 < 0.05) and ORs ranging from 1.89 up
+    Java
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation  21
+
+
+    Strategy                                                    Retrieval-based prompting
+                Base            Struct                       Robust                        Reason                      Edge
+    Model      Pass@1  Pass@1     𝑝-value   OR      Pass@1     𝑝-value   OR      Pass@1 𝑝-value   OR      Pass@1  𝑝-value   OR
+
+                                                                   Java
+
+    Qwen-1.5B  18.70   24.35 ▲                       22.61 ▲                      20.43 ▲                    22.61 ▲
+    Qwen-7B     9.57   14.35 ▲                       14.78 ▲                      16.52 ▲  < 0.05    2. 45   18.26 ▲  < 0.05    3. 22
+    Qwen-32B   16.96   26.52 ▲  < 0.05       2. 83   33.48 ▲  < 0. 05      5 .75  31.30 ▲  < 0.05    5. 13   32.61 ▲  < 0.05    7. 00
+
+    GPT-20B    27.83   35.22 ▲  < 0.05       2. 31   36.52 ▲  < 0. 05      2 .82  41.30 ▲  < 0.05    4. 88   44.78 ▲  < 0.05    7. 50
+
+                                                         Python
+
+    Qwen-1.5B  15.22   14.78 ▼                       14.35 ▼                      12.17 ▼                    12.17 ▼
+    Qwen-7B    16.52   16.96 ▲                       16.52 –                      20.00 ▲                    19.13 ▲
+    Qwen-32B   23.48   24.78 ▲                       24.35 ▲                      22.61 ▼                    24.78 ▲
+
+    GPT-20B    21.30   23.04 ▲                       21.74 ▲                      20.87 ▼                    23.04 ▲
+
+
+    Table 9. Performance results for the 3-shot retrieval-based prompting strategy, evaluated with
+    Pass@1 | T=1.
+
+
+to 4.7. Overall, with fixed examples and 𝑇 = 1, Java correctness depends strongly on whether the
+system prompt can filter exemplar-induced noise; minimal prompting leaves the larger backbones
+under-anchored, whereas richer prompts restore functional alignment in a statistically reliable way.
+   Python reveals a contrasting pattern in the same table, with smaller and inconsistent gains
+that fail to reach statistical significance. Qwen-32B shows modest directional improvement from
+reasoning guidance (23.04% to 25.65%), but the effect remains statistically inconclusive. Qwen-7B
+actually performs best with minimal prompting (20.43% at 𝑃Base ), declining to 16.96% under
+        Python
+𝑃Reason as prescriptive constraints interfere with performance. Qwen-1.5B responds selectively,
+ Python
+improving only under 𝑃Edge (15.65% vs. 13.48% baseline). Even GPT-20B, while relatively stable
+        Python
+across prompts (peaking at 26.09% with 𝑃Robust), shows no statistically significant differences.
+        Python
+   The pattern suggests that for Python, fixed examples already capture sufficient structural in-
+formation. Additional constraints compete with rather than complement this signal, particularly
+for mid-sized models. Only the largest model (Qwen-32B) shows any directional benefit from
+reasoning-oriented prompts, though even this remains statistically uncertain.
+   Switching to retrieval-based examples (Table 9) transforms performance patterns in Java. Qwen-
+32B climbs from 16.96% (𝑃Base) to 33.48% (𝑃Robust), while GPT-20B rises from 27.83% to 44.78%
+        Java Java
+(𝑃Edge)—both with statistically significant gains (p<0.05) when retrieval pairs with descriptive
+  Java
+prompts.
+   Smaller models benefit less. Qwen-1.5B improves modestly to 24.35% (𝑃Struct), while Qwen-7B
+        Java
+reaches only 18.26% despite relevant examples. This reveals a capacity threshold: retrieval helps
+only when models can extract meaningful signals from retrieved context.
+   In Python, retrieval does not provide a universal boost, and the statistical evidence remains
+uniformly non-significant. Qwen-32B stays stable and again favors simple structure (24.78% with
+𝑃Struct and 24.78% with 𝑃Edge ), while 𝑃Reason drops to 22.61%. Qwen-7B retains its preference for
+ Python Python Python
+𝑃Reason (20.00%), but the baseline 𝑃Base falls to 16.52%, suggesting that retrieved examples can
+ Python Python
+shift reliance away from minimal prompting without guaranteeing higher accuracy. Qwen-1.5B
+continues to degrade with more information-dense prompts, reaching 12.17% under 𝑃Reason and
+        Python
+𝑃Edge . GPT-20B shows only limited movement in Python (best at 23.04% with 𝑃Struct and 𝑃Edge ),
+ Python Python Python
+consistent with the overall compression observed in this language.
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+22 Zaiyu et al.
+
+      Answer to RQ2.2
+  These results paint a coherent picture of how prompting strategy, example selection, and model
+  scale interact under stochastic generation. Overall, at 𝑇 = 1, examples (i.e., shots) and prompt
+  specificity interact most strongly in Java – with McNemar’s tests confirming large, statistically
+  reliable improvements over 𝑃Base – whereas Python code remains comparatively sound, showing
+  smaller and statistically inconclusive changes. The language-dependent sensitivity suggests
+  that Java’s more verbose syntax and stricter type requirements amplify the impact of both
+  example quality and prompt guidance.
+
+
+
+4.2.3 RQ2.3: Pass@5 | T=1. Table 10 presents zero-shot Pass@5 results, where the interplay of
+sampling and prompt sensitivity reveals whether prompts help models explore productive solution
+variations or constrain all attempts toward similar failures. Java shows the strongest prompt
+leverage, particularly for larger models. Qwen-32B climbs from 42.61% (𝑃Base) to 47.39% (𝑃Robust),
+        Java Java
+with 𝑃Reason (46.96%) and 𝑃Edge (46.52%) maintaining similarly high performance. The improvement
+      Java Java
+under 𝑃Robust is statistically significant, indicating roughly 4.7× higher odds of generating at least
+        Java
+one passing solution compared to baseline.
+   Qwen-7B follows a similar pattern, improving from 41.30% to 44.35% (𝑃Robust), with 𝑃Struct at
+        Java Java
+43.91%, though these gains lack statistical significance. Notably, 𝑃Edge provides no improvement
+        Java
+(41.30%), indicating that overly specific constraints offer diminishing returns under sampling. Qwen-
+1.5B reveals the opposite behavior: it peaks at 42.61% (𝑃Struct) but degrades as prompts become
+        Java
+more information-dense – dropping to 36.09% (𝑃Robust), 37.83% (𝑃Reason), and 36.96% (𝑃Edge). For
+        Java Java Java
+the smallest model, structural framing is optimal – additional constraints excessively narrow the
+solution space, causing generation attempts to collapse on the same incorrect patterns rather than
+exploring simpler plausible correct solutions.
+   For Python code generation, prompt variations have minimal impact, with most models showing
+similar performance across different prompts. The sole statistically significant exception occurs
+with Qwen-1.5B, the smallest model in the family, which clearly performs well in a less “information-
+dense” setting (𝑃Edge vs. 𝑃Base ).
+        Python Python
+   Introducing fixed examples (Table 11) reveals how examples and prompts interact under sampling.
+In Java, Qwen-32B shows the strongest sensitivity: performance drops to 22.17% with 𝑃Base, but
+        Java
+stronger prompts recover dramatically – reaching 42.17% (𝑃Robust, OR = 10.20, 𝑝 < 0.05) and 41.74%
+        Java
+(𝑃Edge, OR = 10.00, 𝑝 < 0.05). These large ORs indicate the model is approximately 10𝑡𝑖𝑚𝑒𝑠 more
+  Java
+likely to generate at least one passing solution with robust-handling or edge-coverage prompts.
+This suggests fixed examples can inject misleading priors that persist across sampled outputs
+unless prompts strongly reassert constraints. 𝑃Struct shows weaker recovery at 33.04% (OR = 4.57,
+𝑝 < 0.05). Java
+   Qwen-7B benefits selectively, with significant improvement only under 𝑃Edge (38.70%, OR =
+2.60, 𝑝 < 0. Java
+        05), while other enriched prompts improve directionally without statistical significance.
+Qwen-1.5B demonstrates a different pattern, benefiting from both 𝑃Struct (42.61%, OR = 4.40,
+        Java
+𝑝 < 0.05) and 𝑃Robust (40.87%, OR = 4.25, 𝑝 < 0.05). For the smallest model, fixed examples provide
+        Java
+helpful scaffolding when prompts maintain interface alignment.
+   Python shows minimal prompt sensitivity under fixed examples. Only Qwen-1.5B exhibits
+significant improvement (𝑃Robust: 28.26% vs. 21.74%, OR = 4.75, 𝑝 < 0.05), while Qwen-7B and
+        Python
+Qwen-32B show no statistical differences across prompts, clustering around 30–32%. Even GPT-20B
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation  23
+
+
+    Strategy                                                Zero-shot Prompting
+                Base              Struct                    Robust                       Reason                   Edge
+    Model      Pass@5  Pass@5     𝑝-value  OR   Pass@5     𝑝-value   OR     Pass@5     𝑝-value  OR   Pass@5   𝑝-value   OR
+
+                                                                 Java
+
+    Qwen-1.5B  40.43   42.61 ▲                   36.09 ▼                      37.83 ▼                   36.96 ▼
+    Qwen-7B    41.30   43.91 ▲                   44.35 ▲                      42.61 ▲                   41.30 –
+    Qwen-32B   42.61   45.65 ▲                   47.39 ▲    < 0. 05    4.67   46.96 ▲                   46.52 ▲
+
+    GPT-20B    48.70   49.57 ▲                   50.43 ▲                      49.57 ▲                   48.70 –
+
+                                                            Python
+
+    Qwen-1.5B  26.96   27.83 ▲                   25.22 ▼                      25.22 ▼                   20.87 ▼  < 0.05     0.33
+    Qwen-7B    31.74   32.17 ▲                   31.30 ▼                      32.17 ▲                   32.17 ▲
+    Qwen-32B   31.30   32.17 ▲                   31.30 –                      32.17 ▲                   31.74 ▲
+
+    GPT-20B    33.91   34.35 ▲                   34.78 ▲                      34.35 ▲                   33.91 –
+
+
+    Table 10. Performance results for the zero-shot prompting strategy, evaluated with Pass@5 | T=1.
+
+
+
+
+
+    Strategy                                                    Fixed Prompting
+                Base            Struct                    Robust                            Reason                      Edge
+    Model      Pass@5  Pass@5  𝑝-value   OR      Pass@5     𝑝-value   OR       Pass@5     𝑝-value   OR     Pass@5  𝑝-value  OR
+
+                                                                Java
+
+    Qwen-1.5B  35.22   42.61 ▲  < 0.05    4. 40   40.87 ▲  < 0. 05      4  .25   37.83 ▲                      38.70 ▲
+    Qwen-7B    31.74   36.52 ▲                    33.91 ▲                        36.52 ▲                      38.70 ▲  < 0.05   2.  60
+    Qwen-32B   22.17   33.04 ▲  < 0.05    4. 57   42.17 ▲  < 0. 05      10 .20   39.13 ▲    < 0.05     7.50   41.74 ▲  < 0.05   10. 00
+
+    GPT-20B    45.65   46.52 ▲                    50.43 ▲                        47.39 ▲                      47.57 ▲
+
+                                                             Python
+
+    Qwen-1.5B  21.74   22.17 ▲                    28.26 ▲  < 0. 05      4  .75   26.52 ▲                      26.09 ▲
+    Qwen-7B    30.00   32.17 ▲                    29.57 ▼                        30.43 ▲                      30.43 ▲
+    Qwen-32B   30.43   30.00 ▼                    31.30 ▲                        30.87 ▲                      30.00 ▼
+
+    GPT-20B    36.09   33.04 ▼                    34.78 ▼                        35.65 ▼                      33.04 ▼
+
+
+    Table 11. Performance results for the 3-shot fixed prompting strategy, evaluated with Pass@5 | T=1.
+
+
+
+
+degrades in Python (36.09% to 33.04%), suggesting fixed examples are less effective in Python
+regardless of model capacity.
+  Table 12 presents results for retrieval-based prompting under Pass@5, where examples are
+selected based on semantic similarity to each query and the model generates five candidate solutions
+per problem. This regime tests whether query-relevant context combined with multiple sampling
+attempts can amplify prompt effectiveness.
+  In Java, retrieval-based prompting shows clear benefits for larger models, with statistically
+significant improvements across most enriched prompts. Qwen-32B demonstrates the strongest
+effect: code generated with 𝑃Reason is 19× more likely to be functionally correct compared to the
+        Java
+same model using only 𝑃Base. Qwen-7B shows significant gains under 𝑃Struct (32.17%, OR = 2.70,
+        Java Java
+𝑝 < 0.05), 𝑃Robust (34.35%, OR = 3.44, 𝑝 < 0.05), and 𝑃Edge (34.35%, OR = 2.78, 𝑝 < 0.05), though
+        Java Java
+improvements remain more modest than the largest open-source model. Qwen-1.5B improves to
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+    24    Zaiyu et al.
+
+
+    Strategy                                                 Retrieval-based prompting
+                Base            Struct                    Robust                          Reason                      Edge
+    Model      Pass@5  Pass@5  𝑝-value   OR      Pass@5     𝑝-value   OR      Pass@5    𝑝-value  OR      Pass@5  𝑝-value   OR
+
+                                                                Java
+
+    Qwen-1.5B  38.70   42.17 ▲                    38.70 –                      39.60 ▲                      40.00 ▲
+    Qwen-7B    24.78   32.17 ▲  < 0.05    2. 70   34.35 ▲  < 0. 05      3 .44  29.57 ▲                      34.35 ▲  < 0.05    2. 78
+    Qwen-32B   31.30   40.87 ▲  < 0.05    3. 75   45.65 ▲  < 0. 05      9 .25  46.96 ▲    < 0.05    19.01   46.09 ▲  < 0.05    7. 80
+
+    GPT-20B    46.52   47.83 ▲                    50.00 ▲                      50.87 ▲                      53.91 ▲  < 0.05    9. 50
+
+                                                      Python
+
+    Qwen-1.5B  26.52   25.65 ▼                    25.65 ▼                      24.35 ▼                      23.91 ▼
+    Qwen-7B    30.43   33.04 ▲                    31.74 ▲                      31.74 ▲                      30.87 ▲
+    Qwen-32B   30.87   31.74 ▲                    32.61 ▲                      33.04 ▲                      31.30 ▲
+
+    GPT-20B    33.91   35.65 ▲                    34.78 ▲                      36.52 ▲                      34.35 ▲
+
+
+    Table 12. Performance results for the 3-shot retrieval-based prompting strategy, evaluated with
+    Pass@5 | T=1.
+
+
+
+42.17% (𝑃Struct) without statistical significance, confirming the smallest model’s limited capacity
+        Java
+to reliably exploit retrieved context under sampling, despite instruction-based specialization.
+  On the other hand, we find that GPT-20B – despite the absence of code-centric specialization –
+demonstrates that learning how to translate natural language intents into code extends beyond
+code-specialized models. In this regard, GPT-20B shows similar sensitivity to enriched prompts.
+Starting from 46.52%, it reaches 53.91% (𝑃Edge, OR = 9.50, 𝑝 < 0.05) – the only statistically significant
+        Java
+result among its enriched prompts. The fact that GPT-20B requires the most constraint-rich prompt
+to achieve significance under Pass@5, while showing gains across all enriched variants, suggests
+that larger models need more prescriptive constraints to ensure consistent improvements across
+multiple sampling attempts rather than sporadic gains. This indicates that the threshold for statistical
+reliability differs across model scales: larger models may occasionally produce better outputs with
+lighter prompts, but require stronger constraints to reliably improve the majority of their five
+generated candidates.
+  Looking at the results achieved in the context of Python-based code generation, we found
+no statistically significant improvements for any model, with performance remaining tightly
+clustered. Among the Qwen family, both Qwen-7B and Qwen-32B reach similar peaks (33.04%
+each), though via different prompts – Qwen-7B achieves its best with 𝑃Struct, while Qwen-32B
+        Python
+peaks under 𝑃Reason. Qwen-1.5B progressively degrades from its 26.52% baseline to 23.91% (𝑃Edge )
+        Python Python
+as constraints described in system prompts increase.
+  GPT-20B exhibits the same resistance to prompt-based guidance in Python observed across
+the Qwen family. Despite its superior baseline (33.91%) and peak performance (36.52% under
+𝑃Reason) – reflecting its strong general capabilities even as a non-code-specialized model – GPT-20B
+ Python
+shows no statistically significant differences across any prompt variants. This consistency across
+model families, from the smallest Qwen-1.5B to state-of-the-art GPT-20B, confirms that Python
+code generation remains largely insensitive to prompt specificity regardless of model scale or
+specialization. The pattern suggests that when solving the same algorithmic challenges, models
+respond fundamentally differently depending on the target language: Java’s verbose syntax and
+explicit type requirements create multiple intervention points where prompts can guide generation
+toward correctness, while Python’s compact, implicit design offers fewer such leverage points,
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 25
+
+limiting the effectiveness of constraint-based steering even when examples are query-relevant and
+multiple candidates are sampled.
+      Answer to RQ2.3
+  Pass@5 at 𝑇 = 1 confirms the Pass@1 story, with larger effect sizes under sampling. Java benefits
+  substantially—especially with retrieval-based prompting and descriptive system prompts (up
+  to 19× higher odds for Qwen-32B; GPT-20B reaches 53.91%, which translates into the ability
+  to generate correct code with ∼ 9× higher odds than the one achieved by the same model
+  operating with basic instruction (𝑃Base). Fixed examples are brittle unless paired with robustness
+  constraints. Python shows no statistically significant gains in any setting, reinforcing that
+  language structure (Java’s verbosity vs. Python’s terseness) primarily determines prompt
+  leverage.
+
+
+5 Qualitative Analysis
+In this section, we complement the quantitative findings of Section 4 with a qualitative analysis
+of a representative failure case (Fig. 3). While our aggregate results demonstrate that prompt
+choice significantly affects pass rates across the benchmark, this case study reveals the mechanisms
+underlying such variation. To illustrate these mechanisms, we selected a Java instance from the
+zero-shot setting that exhibits maximal prompt sensitivity: a problem where the strongest model in
+our study, Qwen-32B, produces a test-passing solution under exactly one of five system prompts,
+while each of the remaining four prompts induces a distinct, traceable failure mode.
+  We note that – consistent with our goal of isolating prompt-induced effects – we anchor the
+discussion on the simplest and least prescriptive prompt (𝑃Base) as a reference point, using it to
+highlight how progressively enriched prompts reshape the model’s decisions and introduce specific
+failure modes.
+  In Fig. 3 – the five generated variants correspond to the five system prompts in the order Base,
+Struct, Robust, Reason, and Edge. Only the Reason variant passed all tests. Below, we analyze
+why the other remaining four are incorrect, and why the Reason implementation is uniquely
+aligned with the unit-test expectations despite syntactically deviating from the official reference–a
+problem originally investigated by Mastropaolo et al. [52].
+  We now examine these findings in detail. Consider Example 1 depicted in Fig. 3, which
+shows the code generated by Qwen-32B under the Base system prompt. Comparing this output
+against the ground-truth implementation (bottom of the figure) reveals a fundamental architectural
+mismatch. The model’s solution treats buffer as a ByteBuffer object and invokes standard buffer
+manipulation methods (clear, array, position, remaining, flip) to manage reads and state
+transitions. However, the official implementation defines buffer as a primitive byte array that is
+dynamically grown and populated via resizeIfNeeded.
+  This discrepancy has cascading consequences. To begin with, if the class follows the official
+field layout, the generated code will not compile because ByteBuffer methods cannot be invoked
+on a byte array. Second, even assuming a hypothetical compatible ByteBuffer field exists, the
+implementation is logically incorrect: it never maintains the required pointer and size fields
+that track the current write position and occupied capacity. Third, the solution exhibits a critical
+capacity assumption, it presumes a fixed-size buffer can accommodate the entire input stream,
+completely omitting the resizing mechanism. This is not a stylistic choice but a specification
+violation: the ground-truth implementation includes resizeIfNeeded precisely because stream
+length is unknown at read time, requiring dynamic memory allocation. Finally, the generated code
+performs no input validation (e.g., null checks) and leaves resource management ambiguous—it
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+26    Zaiyu et al.
+
+
+Baseline:                                                                                       1
+public void    readFrom(final InputStream   in) throws IOException {
+     buffer.clear();
+     int read;
+     while ((read =    in.read(buffer.array(), buffer.position(), buffer.remaining()))  != -1) {
+          buffer.position(buffer.position()    + read);
+     }
+}    buffer.flip();                                                                             ✗
+
+Structure-Constrained:                                                                          2
+public void    readFrom(final InputStream   in) throws IOException {
+     buffer.clear();
+     int read;
+     while ((read =    in.read(buffer.array(), buffer.position(), buffer.remaining()))  != -1) {
+          buffer.position(buffer.position()    + read);
+     }
+}    buffer.flip();                                                                             ✗
+
+Robust-Handling:                                                                                3
+public void    readFrom(final InputStream   in) throws IOException {
+     if (in == null) {
+          throw new IllegalArgumentException("InputStream cannot be null");
+     }
+     try {
+          byte[] buffer =   new byte[in.available()];
+          int bytesRead =   in.read(buffer);
+          if (bytesRead  != buffer.length) {
+               throw new IOException("Failed to read   the expected number of bytes");
+          }
+          this.buffer =  buffer;
+          this.position  =  0;
+     }    finally       {
+          in.close();
+}    }                                                                                          ✗
+
+Reasoning-Guided:                                                                               4
+public void    readFrom(final InputStream   in) throws IOException {
+     if (in == null) {
+          throw new IllegalArgumentException("InputStream cannot be null");
+     }
+     try {
+          byte[] buffer =   new byte[in.available()];
+          int bytesRead =   in.read(buffer);
+          if (bytesRead  != buffer.length) {
+               throw new IOException("Failed to read   the expected number of bytes");
+          }
+          this.buffer =  buffer;
+     }    finally       {
+          in.close();
+}    }                                                                                          ✓
+
+Edge-Coverage:                                                                                  5
+public void    readFrom(final InputStream   in) throws IOException {
+     if (in == null) {
+          throw new IllegalArgumentException("InputStream cannot be null");
+     }
+     try {
+          this.buffer =  new byte[0];
+          ByteArrayOutputStream baos     = new ByteArrayOutputStream();
+          byte[] buffer =   new byte[1024];
+          int bytesRead;
+          while ((bytesRead   =   in.read(buffer)) != -1) {
+               baos.write(buffer, 0, bytesRead);
+          }
+          this.buffer =  baos.toByteArray();
+          this.readPointer    = 0;
+     }     catch (IOException e) {
+          throw new IOException("Error reading  from   InputStream", e);
+}    }                                                                                          ✗
+
+Official-Implementation:
+
+public void    readFrom(final   InputStream in) throws IOException {
+     pointer   =  0;
+     size =    0;
+     int n;
+     do {
+          n =  in.read(buffer, size, buffer.length - size);
+          if (n >    0) {
+               size += n;
+          }
+          resizeIfNeeded();
+     }           while (n >= 0);
+}                                                                                               JAVA
+
+
+
+
+Fig. 3. Example of generated Java code under varying system prompts.
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 27
+
+does not clearly establish whether stream closure is the method’s responsibility or the caller’s, both
+common sources of test failures.
+   The Struct output–(Ex. 2 in Fig. 3)–is identical to Base in this case and therefore fails for
+the same reasons. Qualitatively, this is instructive: even when the prompt emphasizes structural
+compliance, the generated code still departs from the reference at the level of data representation and
+state invariants. The method remains incompatible with a byte-array-backed implementation, does
+not reset or track the official state variables, and does not provide any growth path that would
+make it robust to larger inputs.
+   When prompted with Robust–(Ex. 3 in Fig. 3)–the model produces a substantially improved
+implementation compared to its Base output. The additional constraints communicated by Robust
+guide the model toward a byte-array architecture: it allocates buffer space using in.available(),
+performs a single read operation, validates that the bytes read match the allocated length, assigns
+the result to this.buffer, and ensures stream closure within a finally block for proper resource
+management. Yet, it does not pass all test cases, and the reasons lie in the statement this.position
+= 0;. To understand why this single line is decisive, we leverage a key empirical constraint: the
+Reason and Robust implementations are otherwise identical, yet only Reason passes. This isolates
+the failure mechanism to the role of position in the surrounding class invariants and in the tests
+that follow readFrom. Relative to the official solution, it attempts to reset position, which is not
+part of the official reference state. If the class is designed around pointer and size, resetting an
+unrelated field is either a compilation failure if the field does not exist, or a semantic failure if it
+exists but does not control the read cursor used by downstream methods.
+   The solution generated under 𝑃Edge–(Ex. 5 in Fig. 3)– demonstrates improved task compre-
+hension through its use of a Java
+        ByteArrayOutputStream loop that reads until end-of-stream. This
+design choice represents a clear advancement over Robust: it eliminates the brittle dependency on
+available() and correctly aggregates bytes across multiple read operations, aligning more closely
+with streaming semantics. Despite this architectural progress, the implementation still violates the
+specification in ways that expose fundamental misalignment with the reference design. First, it
+does not align with the reference state management: instead of resetting and updating pointer
+and size, it resets a different cursor field, readPointer. If the evaluation class skeleton does not
+define readPointer, this again yields an immediate compile-time failure. If readPointer exists, it
+is still not evidence that it is the authoritative cursor used by the rest of the class. Second, it does
+not close the input stream, leaving ownership ambiguous; this may be tolerated in some settings,
+but it can also be penalized in unit tests that explicitly check resource handling.
+   As anticipated, the only test-passing implementation is the Reason variant–(Ex. 4 in Fig. 3)–
+which reads in.available() bytes, performs a single read, checks for exact length, assigns
+this.buffer, and closes the stream in a finally block. This solution is not equivalent to the
+official answer in a general InputStream sense, since it relies on available() and assumes a
+full-length read. Its success suggests that the unit tests validate only a narrower set of behaviors
+than those addressed by the reference solution. A consistent explanation is that the harness supplies
+an InputStream whose available() accurately reflects the remaining content and whose read
+typically fills the requested array, such as an in-memory stream or a deterministic wrapper. Under
+such a harness, the Reason implementation achieves two properties that the failing variants do not
+simultaneously satisfy. First, it guarantees stream closure, which is absent in the Base and Struct
+outputs. Second, it avoids introducing potentially invalid state writes to non-reference fields such
+as position or readPointer. In a setting where the state variables are strictly named and the tests
+primarily validate buffer content and resource handling, refraining from mutating mismatched
+cursor fields can be safer than attempting to reset the wrong variable.
+
+
+    , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+28 Zaiyu et al.
+
+  This example illustrates a sharp qualitative separation between reference-correct implementations
+and test-aligned implementations. The official answer embodies a fully general streaming design by
+repeatedly reading, resizing as needed, and maintaining explicit cursor invariants through pointer
+and size. The four failing variants each violate at least one essential requirement, most commonly
+by using an incompatible buffer representation, by writing to non-existent or non-authoritative state
+fields, or by deviating from harness-sensitive behaviors such as exception and resource handling.
+The Reason variant passes because it aligns with the most plausible evaluation constraints in this
+setting, particularly deterministic stream behavior compatible with available() and the explicit
+stream-closure behavior, even though the same strategy would be brittle outside this constrained
+test environment.
+
+6 Threats to Validity
+Construct validity concerns whether our system prompts accurately represent different levels
+of instruction specificity. The five prompts were designed through manual judgment to reflect
+varying degrees of constraint detail. While performance differences suggest these variations had
+measurable effects, we cannot fully confirm how models internally interpret these distinctions.
+  Internal validity relates to confounding factors within our experimental design. Different
+retrievers or larger corpora might yield different results. Additionally, the evaluated LLMs vary
+in architecture, tokenization, and training data, which may introduce model-specific sensitivities
+beyond system prompt design alone. We controlled for this by maintaining identical experimental
+parameters–temperature, sampling seeds, and evaluation metrics–across all configurations.
+  Conclusion validity concerns the reliability of our statistical inferences. Our hypothesis testing
+relies on McNemar’s test over paired binary outcomes and reports matched-pairs odds ratios with
+confidence intervals, with Holm correction applied for multiple comparisons. This strengthens
+control of false positives, but it can reduce statistical power, increasing the chance of failing to detect
+modest but real effects, especially when effects are heterogeneous across languages, prompting
+strategies, and model scales.
+  External validity concerns generalizability beyond our experimental scope. Our findings focus
+on code generation in Java and Python using five specific system prompts and three prompting
+strategies. Results may not transfer to other languages (e.g., C++, JavaScript) or tasks (e.g., code
+summarization, bug detection). Future work should explore additional languages, tasks, and prompt
+formulations to establish broader applicability.
+
+7 Conclusion
+This paper examined system prompts as a controllable, first-class factor in instruction-tuned
+code generation, and evaluated their effects under a unified design that varies prompt specificity,
+prompting strategy, language, and decoding regime. Concretely, we constructed five progressively
+more information-dense system prompts and paired them with three prompting strategies (zero-
+shot, 3-shot fixed, and 3-shot retrieval-based) over Java and Python, reporting functional correctness
+via Pass@1 and Pass@5 under 𝑇 = 0 and 𝑇 = 1. This yields a comprehensive evaluation matrix of
+360 configurations, enabling controlled comparisons that isolate the interaction between prompt
+specification and contextual evidence.
+  Across models, our results show that prompt specificity does not consistently improve per-
+formance; instead, its impact is mediated by both the availability of in-context evidence and the
+programming language. For the general-purpose model, system prompts with higher specificity
+act in a strongly interaction-dependent manner: specificity tends to help most when paired with
+stronger in-context evidence, and retrieval-based prompting provides the most reliable foundation
+for these gains. Java consistently benefits from increased specificity once relevant examples are
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 29
+
+available, while Python benefits less consistently and can exhibit counterproductive behavior when
+added constraints restrict useful exploration under diverse sampling. These observations motivate
+treating prompt specificity as a targeted design choice rather than a universal improvement, and
+motivate reporting system prompts as part of the experimental specification rather than treating
+them as incidental scaffolding.
+   For code-specialized instruction-tuned models, we find systematic but non-uniform prompt effects
+that are structured by capacity and language. A first trend is scale-dependent sensitivity: higher-
+capacity code models exhibit larger behavioral shifts as prompt specificity increases, indicating that
+tightly constrained prompts more strongly steer what these models treat as the dominant decision
+signal during generation. A second trend is language-conditioned volatility: Java shows condition-
+dependent prompt effects and clearer strategy-driven regime shifts, whereas Python remains
+comparatively compressed and stable across many settings. Notably, even when multiple attempts
+are allowed under stochastic decoding, Pass@5 does not eliminate strategy-driven instability
+in Java, and prompt preferences remain capacity-conditioned: smaller models repeatedly favor
+structurally grounded prompts, while larger models benefit from more articulated constraints
+whose effectiveness depends on whether exemplars are absent or retrieval-aligned.
+   Finally, we observe a scale-conditioned inversion for code-specialized models in Java: as model
+capacity increases, the zero-shot setting more often yields the strongest performance, while adding
+demonstrations can be counterproductive. In particular, for Qwen-32B and Qwen-7B, introducing
+3-shot fixed examples triggers substantial degradation and sharp instability in Java unless the
+system prompt is sufficiently constraining to re-anchor generation, and even then the recovered
+performance does not reach the zero-shot peak. This suggests that larger code-specialized models
+already encode strong Java-specific priors for producing concise, testable methods, and unfiltered
+examples may introduce distributional drift or competing conventions that interfere with those
+priors rather than providing useful additional guidance.
+
+8 Data and Code Availability
+Code, results, scripts, and files used/generated for the investigation have been publicly released in
+our replication package at: https://github.com/ChrisCheng816/SystemPrompt.
+
+References
+ [1] Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya, Florencia Leoni Aleman, Diogo Almeida,
+    Janko Altenschmidt, Sam Altman, Shyamal Anadkat, et al. 2023. Gpt-4 technical report. arXiv preprint arXiv:2303.08774
+    (2023).
+ [2] Wasi Uddin Ahmad, Aleksander Ficek, Mehrzad Samadi, Jocelyn Huang, Vahid Noroozi, Somshubra Majumdar, and
+    Boris Ginsburg. 2025. OpenCodeInstruct: A Large-scale Instruction Tuning Dataset for Code LLMs. arXiv preprint
+    arXiv:2504.04030 (2025).
+ [3] Norah Alzahrani, Hisham Alyahya, Yazeed Alnumay, Sultan Alrashed, Shaykhah Alsubaie, Yousef Almushayqih, Faisal
+    Mirza, Nouf Alotaibi, Nora Al-Twairesh, Areeb Alowisheq, et al. 2024. When benchmarks are targets: Revealing the
+    sensitivity of large language model leaderboards. In Proceedings of the 62nd Annual Meeting of the Association for
+    Computational Linguistics (Volume 1: Long Papers). 13787–13805.
+ [4] Anthropic. 2024. The Claude 3 Model Family: Opus, Sonnet, Haiku (Model Card). https://www-cdn.anthropic.com/
+    de8ba9b01c9ab7cbabf5c33b80b7bbc618857627/Model_Card_Claude_3.pdf.
+ [5] Humza Ashraf, Syed Muhammad Danish, and Zeeshan Sattar. 2025. Toward Green Code: Prompting Small Language
+    Models for Energy-Efficient Code Generation. arXiv preprint arXiv:2509.09947 (2025).
+ [6] Jacob Austin, Augustus Odena, Maxwell Nye, Maarten Bosma, Henryk Michalewski, David Dohan, Ellen Jiang, Carrie
+    Cai, Michael Terry, Quoc Le, et al. 2021. Program Synthesis with Large Language Models. arXiv preprint arXiv:2108.07732
+    (2021).
+ [7] Philipp Bauerfeind, Amir Salarpour, David Fernandez, Pedram MohajerAnsari, Johannes Reschke, and Mert D Pesé.
+    2025. David vs. Goliath: A comparative study of different-sized LLMs for code generation in the domain of automotive
+    scenario generation. arXiv preprint arXiv:2510.14115 (2025).
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+30 Zaiyu et al.
+
+ [8] Stella Biderman, Hailey Schoelkopf, Lintang Sutawika, Leo Gao, Jonathan Tow, Baber Abbasi, Alham Fikri Aji,
+     Pawan Sasanka Ammanamanchi, Sidney Black, Jordan Clive, et al. 2024. Lessons from the trenches on reproducible
+     evaluation of language models. arXiv preprint arXiv:2405.14782 (2024).
+ [9] Sebastian Borgeaud, Arthur Mensch, Jordan Hoffmann, Trevor Cai, Eliza Rutherford, Katie Millican, George Bm
+     Van Den Driessche, Jean-Baptiste Lespiau, Bogdan Damoc, Aidan Clark, et al. 2022. Improving language models by
+     retrieving from trillions of tokens. In International conference on machine learning. PMLR, 2206–2240.
+[10] Tom B. Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan, Prafulla Dhariwal, Arvind Neelakantan,
+     Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal, Ariel Herbert-Voss, Gretchen Krueger, Tom Henighan,
+     Rewon Child, Aditya Ramesh, Daniel M. Ziegler, Jeffrey Wu, Clemens Winter, Christopher Hesse, Mark Chen, Eric
+     Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess, Jack Clark, Christopher Berner, Sam McCandlish, Alec Radford,
+     Ilya Sutskever, and Dario Amodei. 2020. Language models are few-shot learners (NIPS ’20). Curran Associates Inc.,
+     Red Hook, NY, USA, Article 159, 25 pages.
+[11] Bochuan Cao, Changjiang Li, Yuanpu Cao, Yameng Ge, Ting Wang, and Jinghui Chen. 2025. You Can’t Steal Nothing:
+     Mitigating Prompt Leakages in LLMs via System Vectors. In Proceedings of the 2025 ACM SIGSAC Conference on
+     Computer and Communications Security. 4423–4437.
+[12] Jialun Cao, Zhiyong Chen, Jiarong Wu, Shing-Chi Cheung, and Chang Xu. 2024. Javabench: A benchmark of object-
+     oriented code generation for evaluating large language models. In Proceedings of the 39th IEEE/ACM International
+     Conference on Automated Software Engineering. 870–882.
+[13] Anwoy Chatterjee, HSVNS Kowndinya Renduchintala, Sumit Bhatia, and Tanmoy Chakraborty. 2024. POSIX: A Prompt
+     Sensitivity Index For Large Language Models. In Findings of the Association for Computational Linguistics: EMNLP 2024.
+     14550–14565.
+[14] Mark Chen, Jerry Tworek, Heewoo Jun, Qiming Yuan, Henrique Ponde de Oliveira Pinto, Jared Kaplan, Harri Edwards,
+     Yuri Burda, Nicholas Joseph, Greg Brockman, Alex Ray, Raul Puri, Gretchen Krueger, Michael Petrov, Heidy Khlaaf,
+     Girish Sastry, Pamela Mishkin, Brooke Chan, Scott Gray, Nick Ryder, Mikhail Pavlov, Alethea Power, Lukasz Kaiser,
+     Mohammad Bavarian, Clemens Winter, Philippe Tillet, Felipe Petroski Such, Dave Cummings, Matthias Plappert,
+     Fotios Chantzis, Elizabeth Barnes, Ariel Herbert-Voss, William Hebgen Guss, Alex Nichol, Alex Paino, Nikolas Tezak,
+     Jie Tang, Igor Babuschkin, Suchir Balaji, Shantanu Jain, William Saunders, Christopher Hesse, Andrew N. Carr, Jan
+     Leike, Josh Achiam, Vedant Misra, Evan Morikawa, Alec Radford, Matthew Knight, Miles Brundage, Mira Murati, Katie
+     Mayer, Peter Welinder, Bob McGrew, Dario Amodei, Sam McCandlish, Ilya Sutskever, and Wojciech Zaremba. 2021.
+     Evaluating Large Language Models Trained on Code. (2021). arXiv:2107.03374 [cs.LG]
+[15] Nuo Chen, Qiushi Sun, Jianing Wang, Xiang Li, and Ming Gao. 2023. Pass-tuning: Towards structure-aware parameter-
+     efficient tuning for code representation learning. In Findings of the Association for Computational Linguistics: EMNLP
+     2023. 577–591.
+[16] Yumin Choi, Jinheon Baek, and Sung Ju Hwang. 2025. System Prompt Optimization with Meta-Learning. arXiv preprint
+     arXiv:2505.09666 (2025).
+[17] YunSeok Choi and Jee-Hyong Lee. 2023. CodePrompt: Task-agnostic prefix tuning for program and language generation.
+     In Findings of the Association for Computational Linguistics: ACL 2023. 5282–5297.
+[18] Giuseppe Crupi, Rosalia Tufano, Alejandro Velasco, Antonio Mastropaolo, Denys Poshyvanyk, and Gabriele Bavota.
+     2025. On the Effectiveness of LLM-as-a-judge for Code Generation and Summarization. IEEE Transactions on Software
+     Engineering (2025).
+[19] Antonio Della Porta, Stefano Lambiase, and Fabio Palomba. 2025. Do Prompt Patterns Affect Code Quality? A First
+     Empirical Assessment of ChatGPT-Generated Code. arXiv preprint arXiv:2504.13656 (2025).
+[20] Andor Diera, Abdelhalim Dahou, Lukas Galke, Fabian Karl, Florian Sihler, and Ansgar Scherp. 2023. GenCodeSearchNet:
+     A benchmark test suite for evaluating generalization in programming language understanding. arXiv preprint
+     arXiv:2311.09707 (2023).
+[21] Mohamad Fakih, Rahul Dharmaji, Yasamin Moghaddas, Gustavo Quiros, Oluwatosin Ogundare, and Mohammad Ab-
+     dullah Al Faruque. 2024. Llm4plc: Harnessing large language models for verifiable programming of plcs in industrial
+     control systems. In Proceedings of the 46th International Conference on Software Engineering: Software Engineering in
+     Practice. 192–203.
+[22] Chengzhe Feng, Yanan Sun, Ke Li, Pan Zhou, Jiancheng Lv, and Aojun Lu. 2024. Genetic auto-prompt learning for
+     pre-trained code intelligence language models. arXiv preprint arXiv:2403.13588 (2024).
+[23] Luyu Gao, Xueguang Ma, Jimmy Lin, and Jamie Callan. 2023. Precise zero-shot dense retrieval without relevance
+     labels. In Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers).
+     1762–1777.
+[24] Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia, Jinliu Pan, Yuxi Bi, Yixin Dai, Jiawei Sun, Haofen Wang, and Haofen
+     Wang. 2023. Retrieval-augmented generation for large language models: A survey. arXiv preprint arXiv:2312.10997 2, 1
+     (2023).
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 31
+
+[25] Yilin Geng, Haonan Li, Honglin Mu, Xudong Han, Timothy Baldwin, Omri Abend, Eduard Hovy, and Lea Frermann.
+     2025. Control illusion: The failure of instruction hierarchies in large language models. arXiv preprint arXiv:2502.15851
+     (2025).
+[26] Daya Guo, Qihao Zhu, Dejian Yang, Zhenda Xie, Kai Dong, Wentao Zhang, Guanting Chen, Xiao Bi, Yu Wu, YK Li,
+     et al. 2024. Deepseek-coder: When the large language model meets programming–the rise of code intelligence, 2024.
+     URL https://arxiv. org/abs/2401.14196 5 (2024), 19.
+[27] Hossein Hajipour, Ning Yu, Cristian-Alexandru Staicu, and Mario Fritz. 2022. Simscood: Systematic analysis of
+     out-of-distribution generalization in fine-tuned source code models. arXiv preprint arXiv:2210.04802 (2022).
+[28] Binyuan Hui, Jian Yang, Zeyu Cui, Jiaxi Yang, Dayiheng Liu, Lei Zhang, Tianyu Liu, Jiajun Zhang, Bowen Yu, Keming
+     Lu, et al. 2024. Qwen2. 5-coder technical report. arXiv preprint arXiv:2409.12186 (2024).
+[29] Bo Hui, Haolin Yuan, Neil Gong, Philippe Burlina, and Yinzhi Cao. 2024. Pleak: Prompt leaking attacks against large
+     language model applications. In Proceedings of the 2024 on ACM SIGSAC Conference on Computer and Communications
+     Security. 3600–3614.
+[30] Carlos E Jimenez, John Yang, Alexander Wettig, Shunyu Yao, Kexin Pei, Ofir Press, and Karthik Narasimhan. 2023.
+     Swe-bench: Can language models resolve real-world github issues? arXiv preprint arXiv:2310.06770 (2023).
+[31] Carlos E Jimenez, John Yang, Alexander Wettig, Shunyu Yao, Kexin Pei, Ofir Press, and Karthik R Narasimhan. 2024.
+     SWE-bench: Can Language Models Resolve Real-world Github Issues?. In The Twelfth International Conference on
+     Learning Representations. https://openreview.net/forum?id=VTF8yNQM66
+[32] Ranim Khojah, Francisco Gomes de Oliveira Neto, Mazen Mohamad, and Philipp Leitner. 2025. The impact of prompt
+     programming on function-level code generation. IEEE Transactions on Software Engineering (2025).
+[33] Takeshi Kojima, Shixiang Shane Gu, Machel Reid, Yutaka Matsuo, and Yusuke Iwasawa. 2022. Large language models
+     are zero-shot reasoners. Advances in neural information processing systems 35 (2022), 22199–22213.
+[34] Seongyun Lee, Sue Hyun Park, Seungone Kim, and Minjoon Seo. 2024. Aligning to thousands of preferences via system
+     message generalization. Advances in Neural Information Processing Systems 37 (2024), 73783–73829.
+[35] Roman Levin, Valeriia Cherepanova, Abhimanyu Hans, Avi Schwarzschild, and Tom Goldstein. 2025. Has My System
+     Prompt Been Used? Large Language Model Prompt Membership Inference. arXiv preprint arXiv:2502.09974 (2025).
+[36] Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler,
+     Mike Lewis, Wen-tau Yih, Tim Rocktäschel, et al. 2020. Retrieval-augmented generation for knowledge-intensive nlp
+     tasks. Advances in neural information processing systems 33 (2020), 9459–9474.
+[37] Jia Li, Ge Li, Xuanming Zhang, Yunfei Zhao, Yihong Dong, Zhi Jin, Binhua Li, Fei Huang, and Yongbin Li. 2024.
+     Evocodebench: An evolving code generation benchmark with domain-specific evaluations. Advances in Neural
+     Information Processing Systems 37 (2024), 57619–57641.
+[38] Kaixin Li, Qisheng Hu, James Xu Zhao, Hui Chen, Yuxi Xie, Tiedong Liu, Michael Shieh, and Junxian He. 2024.
+     InstructCoder: Instruction Tuning Large Language Models for Code Editing. In Proceedings of the 62nd Annual Meeting
+     of the Association for Computational Linguistics (Volume 4: Student Research Workshop), Xiyan Fu and Eve Fleisig (Eds.).
+     Association for Computational Linguistics, Bangkok, Thailand, 473–493. https://aclanthology.org/2024.acl-srw.52/
+[39] Lujun Li, Lama Sleem, Geoffrey Nichil, Radu State, et al. 2025. Exploring the impact of temperature on large language
+     models: Hot or cold? Procedia Computer Science 264 (2025), 242–251.
+[40] Peng Li, Tianxiang Sun, Qiong Tang, Hang Yan, Yuanbin Wu, Xuanjing Huang, and Xipeng Qiu. 2023. Codeie: Large
+     code generation models are better few-shot information extractors. arXiv preprint arXiv:2305.05711 (2023).
+[41] Yanzhou Li, Tianlin Li, Yiran Zhang, Shangqing Liu, Aishan Liu, and Yang Liu. 2025. Your Coding Intent is Secretly in
+     the Context and You Should Deliberately Infer It Before Completion. arXiv preprint arXiv:2508.09537 (2025).
+[42] Yuhui Li, Fangyun Wei, Chao Zhang, and Hongyang Zhang. 2024. Eagle-2: Faster inference of language models with
+     dynamic draft trees. arXiv preprint arXiv:2406.16858 (2024).
+[43] Zongze Li, Jiawei Guo, and Haipeng Cai. 2025. System prompt poisoning: Persistent attacks on large language models
+     beyond user injection. arXiv preprint arXiv:2505.06493 (2025).
+[44] Bingchang Liu, Chaoyu Chen, Zi Gong, Cong Liao, Huan Wang, Zhichao Lei, Ming Liang, Dajun Chen, Min Shen,
+     Hailian Zhou, et al. 2024. Mftcoder: Boosting code llms with multitask fine-tuning. In Proceedings of the 30th ACM
+     SIGKDD Conference on Knowledge Discovery and Data Mining. 5430–5441.
+[45] Jiawei Liu, Chunqiu Steven Xia, Yuyao Wang, and Lingming Zhang. 2023. Is your code generated by chatgpt really
+     correct? rigorous evaluation of large language models for code generation. Advances in Neural Information Processing
+     Systems 36 (2023), 21558–21572.
+[46] Yi Liu, Gelei Deng, Yuekang Li, Kailong Wang, Zihao Wang, Xiaofeng Wang, Tianwei Zhang, Yepang Liu, Haoyu Wang,
+     Yan Zheng, et al. 2023. Prompt injection attack against llm-integrated applications. arXiv preprint arXiv:2306.05499
+     (2023).
+[47] Yifei Liu, Li Lyna Zhang, Yi Zhu, Bingcheng Dong, Xudong Zhou, Ning Shang, Fan Yang, and Mao Yang. 2025. rStar-
+     Coder: Scaling Competitive Code Reasoning with a Large-Scale Verified Dataset. arXiv preprint arXiv:2505.21297
+
+        , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+32 Zaiyu et al.
+
+     (2025).
+[48] Anton Lozhkov, Raymond Li, Loubna Ben Allal, Federico Cassano, Joel Lamy-Poirier, Nouamane Tazi, Ao Tang,
+     Dmytro Pykhtar, Jiawei Liu, Yuxiang Wei, et al. 2024. Starcoder 2 and the stack v2: The next generation. arXiv preprint
+     arXiv:2402.19173 (2024).
+[49] Shuai Lu, Daya Guo, Shuo Ren, Junjie Huang, Alexey Svyatkovskiy, Ambrosio Blanco, Colin Clement, Dawn Drain,
+     Daxin Jiang, Duyu Tang, et al. 2021. Codexglue: A machine learning benchmark dataset for code understanding and
+     generation. arXiv preprint arXiv:2102.04664 (2021).
+[50] Ziyang Luo, Can Xu, Pu Zhao, Qingfeng Sun, Xiubo Geng, Wenxiang Hu, Chongyang Tao, Jing Ma, Qingwei Lin,
+     and Daxin Jiang. 2023. Wizardcoder: Empowering code large language models with evol-instruct. arXiv preprint
+     arXiv:2306.08568 (2023).
+[51] Antonio Mastropaolo, Matteo Ciniselli, Massimiliano Di Penta, and Gabriele Bavota. 2024. Evaluating code summa-
+     rization techniques: A new metric and an empirical characterization. In Proceedings of the IEEE/ACM 46th International
+     Conference on Software Engineering. 1–13.
+[52] Antonio Mastropaolo, Luca Pascarella, Emanuela Guglielmi, Matteo Ciniselli, Simone Scalabrino, Rocco Oliveto, and
+     Gabriele Bavota. 2023. On the robustness of code generation techniques: An empirical study on github copilot. In 2023
+     IEEE/ACM 45th International Conference on Software Engineering (ICSE). IEEE, 2149–2160.
+[53] Quinn McNemar. 1947. Note on the sampling error of the difference between correlated proportions or percentages.
+     Psychometrika 12, 2 (1947), 153–157.
+[54] Norman Mu, Jonathan Lu, Michael Lavery, and David Wagner. 2025. A Closer Look at System Prompt Robustness.
+     arXiv preprint arXiv:2502.12197 (2025).
+[55] OpenAI. 2025. gpt-oss-120b & gpt-oss-20b Model Card. arXiv:2508.10925 [cs.CL] https://arxiv.org/abs/2508.10925
+[56] Long Ouyang, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll Wainwright, Pamela Mishkin, Chong Zhang, Sandhini
+     Agarwal, Katarina Slama, Alex Ray, et al. 2022. Training language models to follow instructions with human feedback.
+     Advances in neural information processing systems 35 (2022), 27730–27744.
+[57] Siru Ouyang, Shuohang Wang, Minhao Jiang, Ming Zhong, Donghan Yu, Jiawei Han, and Yelong Shen.
+     2024. Temperature-Centric Investigation of Speculative Decoding with Knowledge Distillation. arXiv preprint
+     arXiv:2410.10141 (2024).
+[58] Chanathip Pornprasit and Chakkrit Tantithamthavorn. 2024. Gpt-3.5 for code review automation: How do few-shot
+     learning, prompt design, and model fine-tuning impact their performance. arXiv preprint arXiv:2402.00905 (2024).
+[59] Yuhao Qing, Boyu Zhu, Mingzhe Du, Zhijiang Guo, Terry Yue Zhuo, Qianru Zhang, Jie M Zhang, Heming Cui, Siu-Ming
+     Yiu, Dong Huang, et al. 2025. EffiBench-X: A Multi-Language Benchmark for Measuring Efficiency of LLM-Generated
+     Code. arXiv preprint arXiv:2505.13004 (2025).
+[60] Shanghaoran Quan, Jiaxi Yang, Bowen Yu, Bo Zheng, Dayiheng Liu, An Yang, Xuancheng Ren, Bofei Gao, Yibo Miao,
+     Yunlong Feng, et al. 2025. Codeelo: Benchmarking competition-level code generation of llms with human-comparable
+     elo ratings. arXiv preprint arXiv:2501.01257 (2025).
+[61] Imranur Rahman and Md Rayhanur Rahman. 2025. Relative Positioning Based Code Chunking Method For Rich Context
+     Retrieval In Repository Level Code Completion Task With Code Language Model. arXiv preprint arXiv:2510.08610
+     (2025).
+[62] Baptiste Roziere, Jonas Gehring, Fabian Gloeckle, Sten Sootla, Itai Gat, Xiaoqing Ellen Tan, Yossi Adi, Jingyu Liu,
+     Romain Sauvestre, Tal Remez, et al. 2023. Code llama: Open foundation models for code. arXiv preprint arXiv:2308.12950
+     (2023).
+[63] Melanie Sclar, Yejin Choi, Yulia Tsvetkov, and Alane Suhr. 2023. Quantifying Language Models’ Sensitivity to Spurious
+     Features in Prompt Design or: How I learned to start worrying about prompt formatting. arXiv preprint arXiv:2310.11324
+     (2023).
+[64] Zhang Shengyu, Dong Linfeng, Li Xiaoya, Zhang Sen, Sun Xiaofei, Wang Shuhe, Li Jiwei, Runyi Hu, Zhang Tianwei,
+     Fei Wu, et al. 2023. Instruction tuning for large language models: A survey. arXiv preprint arXiv:2308.10792 (2023).
+[65] Manik Sheokand and Parth Sawant. 2025. CodeMixBench: Evaluating Large Language Models on Code Generation
+     with Code-Mixed Prompts. arXiv preprint arXiv:2505.05063 (2025).
+[66] Jiho Shin, Clark Tang, Tahmineh Mohati, Maleknaz Nayebi, Song Wang, and Hadi Hemmati. 2025. Prompt Engineering
+     or Fine-Tuning: An Empirical Assessment of LLMs for Code. In 2025 IEEE/ACM 22nd International Conference on Mining
+     Software Repositories (MSR). IEEE, 490–502.
+[67] Neelabh Sinha, Vinija Jain, and Aman Chadha. 2024. Are Small Language Models Ready to Compete with Large
+     Language Models for Practical Applications? arXiv preprint arXiv:2406.11402 (2024).
+[68] Zhihong Sun, Chen Lyu, Bolun Li, Yao Wan, Hongyu Zhang, Ge Li, and Zhi Jin. 2024. Enhancing Code Generation
+     Performance of Smaller Models by Distilling the Reasoning Ability of LLMs. In Proceedings of the 2024 Joint International
+     Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024), Nicoletta Calzolari,
+     Min-Yen Kan, Veronique Hoste, Alessandro Lenci, Sakriani Sakti, and Nianwen Xue (Eds.). ELRA and ICCL, Torino,
+
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+An Empirical Study on the Effects of System Prompts in Instruction-Tuned Models for Code Generation 33
+
+     Italia, 5878–5895. https://aclanthology.org/2024.lrec-main.521/
+[69] Florian Tambon, Arghavan Moradi-Dakhel, Amin Nikanjam, Foutse Khomh, Michel C Desmarais, and Giuliano
+     Antoniol. 2025. Bugs in large language models generated code: An empirical study. Empirical Software Engineering 30,
+     3 (2025), 65.
+[70] Eric Wallace, Kai Xiao, Reimar Leike, Lilian Weng, Johannes Heidecke, and Alex Beutel. 2024. The instruction hierarchy:
+     Training llms to prioritize privileged instructions. arXiv preprint arXiv:2404.13208 (2024).
+[71] Chong Wang, Jian Zhang, Yebo Feng, Tianlin Li, Weisong Sun, Yang Liu, and Xin Peng. 2025. Teaching code llms to use
+     autocompletion tools in repository-level code generation. ACM Transactions on Software Engineering and Methodology
+     34, 7 (2025), 1–27.
+[72] Hao Wang, Boyi Liu, Yufeng Zhang, and Jie Chen. 2024. Seed-cts: Unleashing the power of tree search for superior
+     performance in competitive coding tasks. arXiv preprint arXiv:2412.12544 (2024).
+[73] Wenhui Wang, Furu Wei, Li Dong, Hangbo Bao, Nan Yang, and Ming Zhou. 2020. Minilm: Deep self-attention
+     distillation for task-agnostic compression of pre-trained transformers. Advances in neural information processing
+     systems 33 (2020), 5776–5788.
+[74] Xuezhi Wang, Jason Wei, Dale Schuurmans, Quoc Le, Ed Chi, Sharan Narang, Aakanksha Chowdhery, and Denny
+     Zhou. 2022. Self-consistency improves chain of thought reasoning in language models. arXiv preprint arXiv:2203.11171
+     (2022).
+[75] Yanlin Wang, Tianyue Jiang, Mingwei Liu, Jiachi Chen, Mingzhi Mao, Xilin Liu, Yuchi Ma, and Zibin Zheng. 2025.
+     Beyond functional correctness: Investigating coding style inconsistencies in large language models. Proceedings of the
+     ACM on Software Engineering 2, FSE (2025), 690–712.
+[76] Yue Wang, Hung Le, Akhilesh Deepak Gotmare, Nghi DQ Bui, Junnan Li, and Steven CH Hoi. 2023. Codet5+: Open
+     code large language models for code understanding and generation. arXiv preprint arXiv:2305.07922 (2023).
+[77] Yue Wang, Weishi Wang, Shafiq Joty, and Steven C.H. Hoi. 2021. CodeT5: Identifier-aware Unified Pre-trained
+     Encoder-Decoder Models for Code Understanding and Generation. In Proceedings of the 2021 Conference on Empirical
+     Methods in Natural Language Processing, Marie-Francine Moens, Xuanjing Huang, Lucia Specia, and Scott Wen-
+     tau Yih (Eds.). Association for Computational Linguistics, Online and Punta Cana, Dominican Republic, 8696–8708.
+     doi:10.18653/v1/2021.emnlp-main.685
+[78] Yinjie Wang, Ling Yang, Ye Tian, Ke Shen, and Mengdi Wang. 2025. Co-evolving llm coder and unit tester via
+     reinforcement learning. arXiv preprint arXiv:2506.03136 (2025).
+[79] Jason Wei, Maarten Bosma, Vincent Y Zhao, Kelvin Guu, Adams Wei Yu, Brian Lester, Nan Du, Andrew M Dai, and
+     Quoc V Le. 2021. Finetuned language models are zero-shot learners. arXiv preprint arXiv:2109.01652 (2021).
+[80] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou, et al. 2022.
+     Chain-of-thought prompting elicits reasoning in large language models. Advances in neural information processing
+     systems 35 (2022), 24824–24837.
+[81] Yuxiang Wei, Zhe Wang, Jiawei Liu, Yifeng Ding, and Lingming Zhang. 2023. Magicoder: Empowering code generation
+     with oss-instruct. arXiv preprint arXiv:2312.02120 (2023).
+[82] Martin Weyssow, Aton Kamanda, Xin Zhou, and Houari Sahraoui. 2024. Codeultrafeedback: An llm-as-a-judge dataset
+     for aligning large language models to coding preferences. arXiv preprint arXiv:2403.09032 (2024).
+[83] Derek Xu, Tong Xie, Botao Xia, Haoyu Li, Yunsheng Bai, Yizhou Sun, and Wei Wang. 2024. Does Few-Shot Learning
+     Help LLM Performance in Code Synthesis? arXiv preprint arXiv:2412.02906 (2024).
+[84] Lu Yan, Siyuan Cheng, Xuan Chen, Kaiyuan Zhang, Guangyu Shen, and Xiangyu Zhang. 2025. System prompt hijacking
+     via permutation triggers in llm supply chains. In Findings of the Association for Computational Linguistics: ACL 2025.
+     4452–4473.
+[85] Yibo Yang, Xiaojie Li, Zhongzhu Zhou, Shuaiwen Song, Jianlong Wu, Liqiang Nie, and Bernard Ghanem. 2024. Corda:
+     Context-oriented decomposition adaptation of large language models for task-aware parameter-efficient fine-tuning.
+     Advances in Neural Information Processing Systems 37 (2024), 71768–71791.
+[86] Frank Yates. 1934. Contingency tables involving small numbers and the 𝜒 2 test. Supplement to the Journal of the Royal
+     Statistical Society 1, 2 (1934), 217–235.
+[87] Sixiang Ye, Zeyu Sun, Guoqing Wang, Liwei Guo, Qingyuan Liang, Zheng Li, and Yong Liu. 2025. Prompt Alchemy:
+     Automatic Prompt Refinement for Enhancing Code Generation. IEEE Transactions on Software Engineering 51, 9 (2025),
+     2472–2493. doi:10.1109/TSE.2025.3589634
+[88] Jaeseok Yoo, Hojae Han, Youngwon Lee, Jaejin Kim, and Seung-won Hwang. 2024. PERC: Plan-As-Query Example
+     Retrieval for Underrepresented Code Generation. arXiv preprint arXiv:2412.12447 (2024).
+[89] Hao Yu, Bo Shen, Dezhi Ran, Jiaxin Zhang, Qi Zhang, Yuchi Ma, Guangtai Liang, Ying Li, Qianxiang Wang, and Tao
+     Xie. 2024. Codereval: A benchmark of pragmatic code generation with generative pre-trained models. In Proceedings
+     of the 46th IEEE/ACM International Conference on Software Engineering. 1–12.
+
+
+
+    , Vol. 1, No. 1, Article . Publication date: February 2026.
+
+34 Zaiyu et al.
+
+[90] Zhiqiang Yuan, Junwei Liu, Qiancheng Zi, Mingwei Liu, Xin Peng, and Yiling Lou. 2023. Evaluating instruction-tuned
+     large language models on code comprehension and generation. arXiv preprint arXiv:2308.01240 (2023).
+[91] Weihao Zeng, Can Xu, Yingxiu Zhao, Jian-Guang Lou, and Weizhu Chen. 2024. Automatic instruction evolving for
+     large language models. arXiv preprint arXiv:2406.00770 (2024).
+[92] Binquan Zhang, Li Zhang, Zhiwen Luo, Yuxin Du, Fang Liu, Song Wang, and Lin Shi. 2025. Are They All Good?
+     Evaluating the Quality of CoTs in LLM-based Code Generation. arXiv preprint arXiv:2507.06980 (2025).
+[93] Lechen Zhang, Tolga Ergen, Lajanugen Logeswaran, Moontae Lee, and David Jurgens. 2024. Sprig: Improving large
+     language model performance by system prompt optimization. arXiv preprint arXiv:2410.14826 (2024).
+[94] Jingming Zhuo, Songyang Zhang, Xinyu Fang, Haodong Duan, Dahua Lin, and Kai Chen. 2024. ProSA: Assessing and
+     understanding the prompt sensitivity of LLMs. arXiv preprint arXiv:2410.12405 (2024).
+
+
+
+
+
+
+
+
+
+
+    , Vol. 1, No. 1, Article . Publication date: February 2026.

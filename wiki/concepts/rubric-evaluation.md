@@ -1,7 +1,7 @@
 ---
 title: Rubric Evaluation
 created: 2026-05-10
-updated: 2026-05-10
+updated: 2026-05-16
 sources:
   - raw/2603.25133v1.txt
 tags: [concept, evaluation, llm-judge, instruction-following, meta-evaluation]
@@ -112,6 +112,9 @@ The RUBRICEVAL findings directly challenge key assumptions in agent eval infrast
 - [[delegate-52]] — Both benchmarks reveal LLM reliability gaps at fine granularity (document editing vs. rubric judging)
 - [[iterative-self-correction]] — Both show that even with (near-)perfect verification, convergence is not guaranteed; RUBRICEVAL adds that the verification signal itself may be noisy
 - [[instruction-hierarchy]] — Both address reliability of LLMs acting as evaluators in structured settings
+- [[llm-as-code-judge]] — Direct empirical evidence that LLM judges are unreliable for code evaluation; 12 prompt-induced biases shift decisions systematically
+- [[overcorrection-bias]] — When LLM judges are asked to explain and fix, they become overly conservative — a distinct failure mode from rubric-level inaccuracy
+- [[llm-as-code-judge]] — LLM-as-judge for code evaluation faces the same fine-grained reliability challenges; 12 prompt-induced biases systematically shift judge decisions
 
 ## Sources
 

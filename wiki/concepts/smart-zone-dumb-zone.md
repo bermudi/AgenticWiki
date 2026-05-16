@@ -1,7 +1,7 @@
 ---
 title: Smart Zone vs. Dumb Zone
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-05-16
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -58,6 +58,7 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[matt-pocock]] — The Memento Strategy (clear context, reload only what matters) is his operational response to the Dumb Zone.
 
 - [[context-engineering]] — The Smart Zone/Dumb Zone distinction is a core concept in context engineering
+- [[system-prompt-effects]] — The non-monotonic relationship between prompt detail and quality echoes the Smart Zone/Dumb Zone pattern: too much prompt detail can push agents into the Dumb Zone
 
 ## Sources
 

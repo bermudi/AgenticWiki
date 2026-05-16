@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-05-10
+updated: 2026-05-16
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -11,6 +11,7 @@ sources:
   - raw/many-tier-instruction-hierarchy.md
   - raw/playground-in-prod-samuel-colvin.md
   - raw/2603.25133v1.txt
+  - raw/bias-in-the-loop-llm-judge-code.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 0
 ---
@@ -121,6 +122,12 @@ These results strengthen the thread's existing skepticism with concrete numbers.
 
 See [[rubric-evaluation]] for the full analysis.
 
+### Prompt-Induced Bias in Eval Pipelines
+
+The [[prompts-in-code-review]] thread documents a systematic threat to the eval measurement layer itself. The [[llm-as-code-judge|Bias in the Loop]] study (Zhao et al.) shows that LLM judges used in eval pipelines are sensitive to 12 types of prompt-induced biases, with accuracy swinging by up to 40+ percentage points depending on candidate order and prompt framing. These biases are not random noise — they are *directional*, acting as positional priors that consistently favor one candidate over another regardless of code quality.
+
+This compounds the RUBRICEVAL finding (12–25 point variance from judge selection) with a second, independent error source: the same judge with the same code can produce drastically different scores based on how the evaluation prompt is worded and how candidates are ordered. The practical implication for agent quality engineering: eval results must be reported with **bias sensitivity analysis** — swapping candidate order and testing with neutral vs. structured prompts — not just aggregate accuracy. A high eval score may reflect a favorable prompt configuration rather than genuine quality.
+
 ## The Payoff at Scale: Quality Infrastructure Pays for Itself
 
 Samuel Colvin (Pydantic) provides a concrete cost example from Shopify: they were classifying Shopify sites for fraud and tax categories by sending entire website contents to GPT-5. Cost: ~$5M/year. By switching to a Qwen model behind an agent, then using prompt optimization to tune it, they dropped to **$73K/year** — a ~98.5% cost reduction — while improving accuracy.
@@ -164,7 +171,7 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 > [!warning] Contradiction: The RL Distribution Ceiling
 > [[andrej-karpathy|Karpathy]]'s [[verifiability|verifiability thesis]] introduces a structural ceiling on the quality loop. If a capability is outside the model's RL training distribution — not rewarded during training — no amount of eval infrastructure, observability, or feedback flywheels can create it. The quality loop can measure and improve behavior *within* the model's trained circuits, but it can't extend beyond them. Karpathy: "If you're not in the circuits, then you have to really look at fine-tuning." This doesn't invalidate the quality infrastructure — it remains necessary — but it establishes that quality engineering is bounded by the model's training distribution. See [[the-verifiability-thesis]] for the full argument.
 >
-> The Meeseeks benchmark ([[iterative-self-correction]]) provides direct empirical evidence for this ceiling. Its code-guided evaluation achieves 98.4% accuracy — near-perfect verification. Yet even after 20 rounds of precise feedback, no model exceeds ~91% utility rate. The catastrophic overcorrection phenomenon (models oscillating wildly on word counts despite precise feedback) shows that even when the quality infrastructure is effectively perfect, the model's underlying capability gap cannot be fully closed within a single session. The quality loop is necessary but not sufficient. — The 4-layer eval stack: CI for probabilistic systems
+> The Meeseeks benchmark ([[iterative-self-correction]]) provides direct empirical evidence for this ceiling. Its code-guided evaluation achieves 98.4% accuracy — near-perfect verification. Yet even after 20 rounds of precise feedback, no model exceeds ~91% utility rate. The [[overcorrection-bias|catastrophic overcorrection]] phenomenon (models oscillating wildly on word counts despite precise feedback) shows that even when the quality infrastructure is effectively perfect, the model's underlying capability gap cannot be fully closed within a single session. The quality loop is necessary but not sufficient. — The 4-layer eval stack: CI for probabilistic systems
 - [[agent-observability]] — Logs/traces/metrics for agent decision chains
 - [[agent-quality-loop]] — The flywheel: production failures → eval cases → continuous improvement
 - [[delegate-52]] — Long-horizon benchmark quantifying agent reliability across 52 domains
@@ -188,3 +195,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/many-tier-instruction-hierarchy.md` — ManyIH study: combinatorial collapse of LLM trust resolution, representation sensitivity, evidence for trust resolution as a missing quality dimension
 - `raw/playground-in-prod-samuel-colvin.md` — Shopify cost example ($5M→$73K via agent + optimization), private-data drives quality needs, most teams don't eval
 - `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): quantified evidence for LLM-as-judge reliability limits at rubric-level granularity; paradigm comparison (rubric-level vs. checklist-level, with/without reasoning — 7–12 point gap); inter-judge variance analysis (judge selection shifts scores by up to 25 points)
+- `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): systematic threat to eval pipelines from 12 prompt-induced biases acting as directional positional priors; same judge + same code produces drastically different scores based on prompt framing and candidate order

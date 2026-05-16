@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-15
+updated: 2026-05-16
 sources: []
 tags: [index, wiki]
 unaudited_marginal: 0
@@ -22,6 +22,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
 - [[intent-to-code]] — What stands between human intent and shipped code? Four philosophies — specs-as-compiler, plan-as-contract, alignment-first, and pure vibes — disagree on the artifact's weight and where quality enforcement lives.
 - [[the-verifiability-thesis]] — Karpathy's unified theory: verifiability drives RL training, which creates the jagged frontier, which makes vibe coding possible on the peaks and demands agentic engineering to manage the boundary.
+- [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
 
 ## ✍️ Authors
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
@@ -33,6 +34,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
 - [[damian-galarza]] — Multi-agent system operator and author of the three-part agent quality series (evals, observability, quality loop).
 - [[dex-horthy]] — Creator of "12 Factor Agents," co-creator of [[context-engineering]], and advocate for agentic engineering over vibe coding.
+- [[lechen-zhang]] — Researcher at UIUC; lead author of SPRIG (ICLR 2026) on system prompt optimization via genetic algorithms.
+- [[zaiyu-cheng]] — Researcher at William & Mary; lead author of the 360-configuration empirical study on system prompt effects in code generation.
+- [[haolin-jin]] — Researcher at University of Sydney; lead author of the systematic overcorrection study in LLM code review.
+- [[shubham-ugare]] — Researcher at Meta; lead author of the semi-formal reasoning paper on execution-free code verification.
+- [[zixiao-zhao]] — Researcher at UBC; lead author of the Bias in the Loop study auditing LLM-as-Judge for software engineering.
 - [[peter-werry]] — Founder of Unblocked; context engine architecture, satisfaction of search, and hard lessons building organizational context retrieval.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum technique for autonomous agent loops.
@@ -104,6 +110,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
+- [[system-prompt-effects]] — System prompts have measurable, non-monotonic effects on LLM performance that interact with model scale, prompting strategy, and programming language.
+- [[llm-as-code-judge]] — Using LLMs to evaluate code quality; increasingly common in agentic SE pipelines but suffers from systematic prompt-induced biases.
+- [[overcorrection-bias]] — The systematic tendency of LLMs to misclassify correct code as defective, especially when prompted to explain and fix.
+- [[semi-formal-reasoning]] — Structured prompting that requires explicit premises, execution traces, and formal conclusions to prevent unsupported claims.
 - [[strategic-vs-tactical-programming]] — Prioritizing long-term health over immediate tactical fixes.
 - [[synthetic-truth]] — Intent-aware AI fabrication where the model constructs what it infers the user wants, not what is true.
 - [[temporal-smoothing]] — A failure mode where AI presents speculative or future work as completed reality.

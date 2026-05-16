@@ -1,7 +1,7 @@
 ---
 title: Iterative Self-Correction
 created: 2026-05-10
-updated: 2026-05-10
+updated: 2026-05-16
 sources:
   - raw/2504.21625v6.txt
 tags: [concept, self-correction, instruction-following, benchmarks, feedback-loops, agent-workflow]
@@ -9,7 +9,7 @@ tags: [concept, self-correction, instruction-following, benchmarks, feedback-loo
 
 # Iterative Self-Correction
 
-> A pattern where an LLM receives automated feedback on which constraints it violated and retries its response, cycling through evaluation → feedback → correction until all constraints are satisfied or a turn limit is reached. The Meeseeks benchmark evaluates this capability across 32 constraint types and 20 turns, revealing that even with perfect feedback, all current models hit a sub-91% ceiling — and exhibit bizarre failure modes like catastrophic overcorrection.
+> A pattern where an LLM receives automated feedback on which constraints it violated and retries its response, cycling through evaluation → feedback → correction until all constraints are satisfied or a turn limit is reached. The Meeseeks benchmark evaluates this capability across 32 constraint types and 20 turns, revealing that even with perfect feedback, all current models hit a sub-91% ceiling — and exhibit bizarre failure modes like [[overcorrection-bias|catastrophic overcorrection]].
 
 ## The Pattern
 
@@ -146,6 +146,8 @@ This is why the reasoning-vs-non-reasoning gap widens over multiple turns — no
 - [[model-routing]] — The reasoning-vs-non-reasoning gap in multi-turn self-correction is a routing signal
 - [[instruction-hierarchy]] — Multi-constraint scenarios are a flattened version of the hierarchy problem; all constraints compete equally
 - [[instruction-severity-inflation]] — The multi-constraint environment mirrors severity inflation: when every constraint calls for attention equally, model performance hits a ceiling — the formatting isn't the root cause, the capability gap is
+- [[overcorrection-bias]] — A distinct failure mode: LLM code reviewers systematically reject correct code when asked to explain and fix; catastrophic overcorrection in Meeseeks is the instruction-following analogue
+- [[semi-formal-reasoning]] — Structured evidence templates as an alternative to free-form self-correction; prevents unsupported claims structurally rather than relying on feedback cycles
 
 ## Sources
 - `raw/2504.21625v6.txt` — Wang et al., "Meeseeks: A Feedback-Driven, Iterative Self-Correction Benchmark evaluating LLMs' Instruction Following Capability": framework design, code-guided evaluation, experimental results across 17 models over 20 turns

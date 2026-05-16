@@ -257,7 +257,7 @@ The pattern is the same: human (or automated evaluator) defines the verification
 - **The ceiling is low**: Even with perfect feedback, no model exceeds ~91% utility rate after 20 turns. Don't build workflows that assume convergence — there's a hard capability ceiling.
 - **Reasoning models are the right router target**: The gap between reasoning and non-reasoning models *widens* over multiple self-correction turns. Route constraint-dense prompts to reasoning models — the payoff compounds.
 - **Code-guided evaluation is production-ready**: The 98.4% accuracy at 71% token savings is a pattern worth adopting. Evaluators as code, not as LLM judges.
-- **Word count calibration is fundamentally broken**: Models can't control output length precisely — they oscillate wildly ("catastrophic overcorrection"). Post-process word counts rather than relying on the model.
+- **Word count calibration is fundamentally broken**: Models can't control output length precisely — they oscillate wildly ([[overcorrection-bias|"catastrophic overcorrection"]]). Post-process word counts rather than relying on the model.
 
 ## The Day-to-Day Loop
 

@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-05-10
+updated: 2026-05-16
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -9,6 +9,9 @@ sources:
   - raw/2504.21625v6.txt
   - raw/2603.25133v1.txt
   - raw/2603.00822v2.txt
+  - raw/bias-in-the-loop-llm-judge-code.md
+  - raw/llm-overcorrection-code-review.md
+  - raw/agentic-code-reasoning.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -99,6 +102,12 @@ Evals are the attempt to make agent behavior verifiable. The quality loop (trace
 
 The [[rubric-evaluation|RUBRICEVAL benchmark]] (Pan et al., 2026) adds a second dimension to this ceiling: even in verifiable domains like instruction following with structured rubrics, the LLM judge serving as the verifier may be unreliable at fine granularity. GPT-4o achieves only 55.97% accuracy on hard rubric-level judgments. This means the quality infrastructure's measurement layer has its own error rate that compounds with the model capability ceiling — the eval score itself is noisy. The thesis's causal chain (verifiability → RL → capability) implicitly assumes a reliable verifier; RUBRICEVAL shows that assumption may not hold in practice.
 
+### For [[prompts-in-code-review]]
+
+The prompts-in-code-review thread is the verifiability thesis applied to the *evaluation layer* itself. When LLMs act as code judges, the verification mechanism has its own error rate — and that error rate is *systematically biased* by prompt framing, not randomly distributed. [[overcorrection-bias|Overcorrection bias]] (Jin et al.) shows that detailed review prompts shift the decision boundary toward conservatism, rejecting correct code at rates up to 88%. [[llm-as-code-judge|Judge bias]] (Zhao et al.) shows that biases act as positional priors, with accuracy sign-flipping depending on candidate order.
+
+The thesis's causal chain assumes verifiability enables improvement. These papers qualify that assumption: the verifier's own reliability is a *prompt-dependent variable*, not a fixed property. [[semi-formal-reasoning|Semi-formal reasoning]] (Ugare et al.) directly addresses this by making the verification process itself verifiable — the agent must produce an evidence certificate that can be checked independently. This is the thesis operating recursively: verifiability of the verification, not just verification of the code.
+
 ### For [[intent-to-code]]
 
 The four positions on the intent-to-code axis are different strategies for managing the verifiability boundary:
@@ -131,7 +140,7 @@ Three recent benchmarks provide direct evidence for the verifiability thesis in 
 
 **RuleBench ([[inferential-rule-following]])** demonstrates the negative case — what happens when verifiability is absent in a domain that looks like it should be verifiable. The counterfactual rule collapse (GPT-4o drops from 99.7% to 8.2% on SALAD (content moderation) when rules contradict training) shows that models don't actually "follow" rules — they pattern-match them to parametric knowledge. The rule text is verifiable (you could check the conclusion), but the model's *process of following* it is not — and without process-level verification, parametric knowledge dominates. The IRFT training approach (synthetic rule-following data → generalization) is essentially building an RL environment for rule application — making the process verifiable.
 
-**Meeseeks ([[iterative-self-correction]])** demonstrates the ceiling. Its code-guided evaluation achieves 98.4% verification accuracy — near-perfect verifiability. Yet even with 20 rounds of perfect feedback, models plateau below 91% utility rate. Verifiability is necessary but not sufficient: you also need the model to be *capable* in the domain. If instruction-following isn't in the RL circuits, no amount of verification feedback within a single session will fully bridge the gap. The catastrophic overcorrection phenomenon on word counts — models that can't calibrate output magnitude despite precise feedback — is a concrete example of operating outside the RL-trained circuits.
+**Meeseeks ([[iterative-self-correction]])** demonstrates the ceiling. Its code-guided evaluation achieves 98.4% verification accuracy — near-perfect verifiability. Yet even with 20 rounds of perfect feedback, models plateau below 91% utility rate. Verifiability is necessary but not sufficient: you also need the model to be *capable* in the domain. If instruction-following isn't in the RL circuits, no amount of verification feedback within a single session will fully bridge the gap. The [[overcorrection-bias|catastrophic overcorrection]] phenomenon on word counts — models that can't calibrate output magnitude despite precise feedback — is a concrete example of operating outside the RL-trained circuits.
 
 ## The Long Arc
 
@@ -162,3 +171,6 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): near-perfect verification (98.4%) still doesn't guarantee convergence — verifiability is necessary but not sufficient
 - `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): provides evidence that the verifier's own reliability is a second-order constraint on the verifiability thesis — LLM judges achieve only 55.97% accuracy on hard rubric judgments, qualifying the thesis's assumption that verifiable domains have reliable verification
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): direct instantiation of the verifiability thesis applied to Agent Instructions; verifiable enforcement (88.3%) outperforms passive (67.0%) and unverifiable LLM reflection (50.3%); Executable Interpretability extends the thesis by making the verifier debuggable
+- `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): prompt-induced biases in LLM-as-judge for code; biases act as positional priors, qualifying the thesis's assumption of reliable verification
+- `raw/llm-overcorrection-code-review.md` — Jin & Chen (2026): overcorrection bias in LLM code review; detailed prompts shift the decision boundary toward conservatism, undermining verifier reliability
+- `raw/agentic-code-reasoning.md` — Ugare & Chandra (Meta, 2026): semi-formal reasoning as verifiable certificate structure for code verification; enables execution-free RL reward signals, directly instantiating the verifiability thesis recursively (verifiability of the verification)

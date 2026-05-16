@@ -1,7 +1,7 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-05-10
+updated: 2026-05-16
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -95,6 +95,9 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[inferential-rule-following]] — RuleBench's counterfactual collapse is the negative case: when rules contradict parametric knowledge, the model ignores them — verifiability of the rule text doesn't guarantee the model follows it
 - [[iterative-self-correction]] — Meeseeks's code-guided evaluation makes constraint satisfaction verifiable at 98.4% accuracy; the paper shows that even near-perfect verification doesn't guarantee convergence — verifiability is necessary but not sufficient
 - [[agent-evals]] — Evals are the practical attempt to make agent behavior verifiable; the quality loop operationalizes verifiability as a measurement discipline
+- [[semi-formal-reasoning]] — Structured reasoning templates produce evidence certificates that enable execution-free verification; accuracy improves from 78% to 88–93%
+- [[system-prompt-effects]] — System prompt optimization (SPRIG) demonstrates that verifiability gains depend on how the prompt is structured, not just what it asks for
+- [[semi-formal-reasoning]] — Structured evidence certificates enable execution-free verification; patch equivalence accuracy improves from 78% to 88% by mandating premises and execution traces
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: Model Routing
 created: 2026-05-06
-updated: 2026-05-10
+updated: 2026-05-16
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
@@ -77,7 +77,7 @@ The key insight: **the system around the model matters as much as the model itse
 
 ## Routing by Reasoning Requirement
 
-Meeseeks ([[iterative-self-correction]]) reveals a distinct routing signal: **reasoning models improve more over multiple self-correction turns**. The gap between reasoning and non-reasoning models *widens* with iteration — non-reasoning models suffer from catastrophic overcorrection (wild oscillation on precise constraints like word count), while reasoning models dampen the oscillation by pre-calculating required content length and proportions in their reasoning traces —
+Meeseeks ([[iterative-self-correction]]) reveals a distinct routing signal: **reasoning models improve more over multiple self-correction turns**. The gap between reasoning and non-reasoning models *widens* with iteration — non-reasoning models suffer from [[overcorrection-bias|catastrophic overcorrection]] (wild oscillation on precise constraints like word count), while reasoning models dampen the oscillation by pre-calculating required content length and proportions in their reasoning traces —
 
 Practical routing rule: **for constraint-dense prompts, route to reasoning models.** The payoff compounds — what starts as a small advantage on turn 1 becomes a significant gap by turn 10. This is distinct from the complexity-tier routing above: a prompt can be simple (tier A-B) but involve precise word counts or proportion constraints, and the routing signal from Meeseeks is constraint type, not planning depth.
 

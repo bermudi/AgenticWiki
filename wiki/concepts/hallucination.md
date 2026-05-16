@@ -1,7 +1,7 @@
 ---
 title: Hallucination
 created: 2026-04-25
-updated: 2026-05-10
+updated: 2026-05-16
 sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf, raw/synthetic-truths-gemini-has-a-secret-code.md, raw/2407.08440v4.txt]
 tags: [llm, reliability, engineering]
 unaudited_marginal: 0
@@ -83,6 +83,9 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 - [[instruction-hierarchy]] — Semantic arithmetic failure is a related phenomenon: the model doesn't understand numbers, it pattern-matches them — same mechanism as hallucination applied to structured conflict resolution
 - [[inferential-rule-following]] — Counterfactual rule collapse is intrinsic hallucination in reasoning form: given rules are overridden by parametric knowledge, just as context is overridden by training priors
 - [[procedural-knowledge]] — Skills reduce hallucination by replacing guesswork with defined procedures
+- [[overcorrection-bias]] — Overcorrection rationales fabricate unstated constraints (Added Requirement pattern), a form of extrinsic hallucination in code review
+- [[llm-as-code-judge]] — LLM judge rationales exhibit hallucination-like behavior: strong symptom-level diagnosis but weak cause-level diagnosis (44–71% match)
+- [[overcorrection-bias]] — Added Requirement rejections in code review resemble extrinsic hallucination (fabricating unstated constraints as grounds for rejection)
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.

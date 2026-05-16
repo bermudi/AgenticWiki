@@ -1,7 +1,7 @@
 ---
 title: Agent-Friendly Tooling
 created: 2026-04-26
-updated: 2026-05-02
+updated: 2026-05-16
 sources:
   - raw/agentic-coding-recommendations.md
 tags: [concept, tool-design, agent-speed, observability]
@@ -78,6 +78,7 @@ Ronacher uses MCP only when the alternative is unreliable. MCP servers themselve
 - [[backpressure]] — Fast, observable tools enable tighter backpressure
 - [[ralph-loop]] — AGENTS.md as agent-friendly infrastructure for the Ralph loop
 - [[slop]] — Slow, noisy tools produce more slop by limiting verification cycles
+- [[system-prompt-effects]] — System prompts shape how agents interact with tooling; non-monotonic effects mean more constrained tool instructions aren't always better
 
 ## Sources
 
