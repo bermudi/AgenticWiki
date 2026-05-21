@@ -1,9 +1,10 @@
 ---
 title: Multi-Tier Action Space
 created: 2026-05-02
-updated: 2026-05-04
+updated: 2026-05-21
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
+  - raw/2605.18747.pdf
 tags: [concept, architecture, context-engineering, agents, tool-design]
 ---
 
@@ -70,6 +71,14 @@ The multi-tier pattern shines for tasks where the search space is moderate (smal
 
 The file system also has collaboration limits: last-write-wins semantics don't support concurrent multi-agent editing. This is an unsolved problem for 2026.
 
+## Relationship to Harness Mechanisms
+
+The multi-tier action space pattern maps to the [[harness-mechanisms]] taxonomy in three specific ways:
+
+- **Planning** (§3.1): Linear decomposition planning maps to the Ralph loop's single-task-per-iteration pattern. Structure-grounded planning uses the file system tier's code structure (ASTs, call graphs) to constrain the planning search space. Orchestration-based planning (fast orchestrator + smart oracle) is a concrete instantiation of the orchestrator pattern.
+- **Memory** (§3.2): Context offloading, KV caching, and plan offloading are working memory management techniques. The file system tier serves as semantic memory — retrievable context that persists across turns. Progressive disclosure is the tool-tier equivalent of retrieval-based semantic memory.
+- **Tool Use** (§3.3): The two-tier architecture mirrors the taxonomy's distinction between function-oriented tools (Tier 1) and environment-interaction tools (Tier 2). The verification-driven tool paradigm (test runners, type checkers) operates in both tiers — CLI-based at Tier 2, bound tools at Tier 1.
+
 ## Thread
 
 - [[the-agent-workflow]] — The multi-tier action space is the architecture pattern underlying the agent workflow's execution phase
@@ -89,3 +98,4 @@ The file system also has collaboration limits: last-write-wins semantics don't s
 ## Sources
 
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Full interview detailing the multi-tier architecture, supporting patterns, and the MCP lesson
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Provides the systematic taxonomy that situates the multi-tier action space within the broader harness interface and mechanisms framework

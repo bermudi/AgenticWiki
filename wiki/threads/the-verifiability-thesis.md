@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-05-16
+updated: 2026-05-21
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -12,6 +12,7 @@ sources:
   - raw/bias-in-the-loop-llm-judge-code.md
   - raw/llm-overcorrection-code-review.md
   - raw/agentic-code-reasoning.md
+  - raw/2605.18747.pdf
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -142,6 +143,17 @@ Three recent benchmarks provide direct evidence for the verifiability thesis in 
 
 **Meeseeks ([[iterative-self-correction]])** demonstrates the ceiling. Its code-guided evaluation achieves 98.4% verification accuracy — near-perfect verifiability. Yet even with 20 rounds of perfect feedback, models plateau below 91% utility rate. Verifiability is necessary but not sufficient: you also need the model to be *capable* in the domain. If instruction-following isn't in the RL circuits, no amount of verification feedback within a single session will fully bridge the gap. The [[overcorrection-bias|catastrophic overcorrection]] phenomenon on word counts — models that can't calibrate output magnitude despite precise feedback — is a concrete example of operating outside the RL-trained circuits.
 
+### For [[code-as-agent-harness|Code as Agent Harness]]: The Thesis Applied to the Harness Itself
+
+The [[code-as-agent-harness]] survey (Ning et al., 2026), organized into the [[harness-interface|harness interface]] (code for reasoning, acting, environment modeling), [[harness-mechanisms|harness mechanisms]] (planning, memory, tool use, control), and [[harness-engineering|scaling the harness]] (multi-agent orchestration), extends the verifiability thesis from model capabilities to the harness infrastructure. The survey's open problems — harness-level evaluation, semantic verification, self-evolving harnesses — are consequences of the verifiability thesis operating recursively:
+
+- **Harness-level evaluation** (§5.2.1) asks: if end-task success conflates model capability and harness quality, can we make the *harness* verifiable? This is the verifiability thesis applied to the evaluation layer itself.
+- **Semantic verification** (§5.2.2) asks: if execution feedback creates a false sense of correctness (weak oracles → overconfidence), how do we make the *verification itself* verifiable? The survey's proposed evidence bundles — each accepted action carries what checks were run, assumptions preserved, and remaining risks — extend the thesis's demand that verification be inspectable and scope-aware.
+- **Oracle adequacy** (§5.2.1) surfaces the thesis's central qualification: verifiability is only as good as the oracle. If unit tests are incomplete or checkers are narrow, the agent optimizes against the wrong metric.
+- **Self-evolving harnesses** (§5.2.3) push the thesis to its limit: if the harness improves itself using its own verification signals, and those signals are incomplete (oracle inadequacy), the harness will optimize against the wrong metric. Governed harness mutation — each change with a change contract, held-out regression suites, safety invariants — is the thesis's discipline applied to the improvement process.
+
+The survey's four desired properties for future harness systems — **executable**, **inspectable**, **stateful**, **governed** — are the verifiability thesis expressed as design principles. Executable/inspectable are verifiability's preconditions; stateful is verifiability extended across time; governed is verifiability applied to agent autonomy.
+
 ## The Long Arc
 
 Karpathy speculates that the verifiability thesis may have an expiration date. If labs eventually train on aesthetics, taste, and simplification — if those enter the RL distribution — the jagged frontier smooths. His uncertainty about whether taste will remain permanently human ("nothing fundamental preventing it, just the labs haven't done it yet") suggests the thesis describes the *current* landscape, not a permanent one.
@@ -174,3 +186,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): prompt-induced biases in LLM-as-judge for code; biases act as positional priors, qualifying the thesis's assumption of reliable verification
 - `raw/llm-overcorrection-code-review.md` — Jin & Chen (2026): overcorrection bias in LLM code review; detailed prompts shift the decision boundary toward conservatism, undermining verifier reliability
 - `raw/agentic-code-reasoning.md` — Ugare & Chandra (Meta, 2026): semi-formal reasoning as verifiable certificate structure for code verification; enables execution-free RL reward signals, directly instantiating the verifiability thesis recursively (verifiability of the verification)
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Extends the verifiability thesis from model capabilities to the harness infrastructure; harness-level evaluation, semantic verification, and self-evolving harnesses are the thesis operating recursively; the four desired harness properties (executable, inspectable, stateful, governed) are the thesis expressed as design principles

@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-05-10
+updated: 2026-05-21
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -9,6 +9,7 @@ sources:
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - raw/2603.00822v2.txt
+  - raw/2605.18747.pdf
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -39,6 +40,9 @@ Four positions have emerged across sources. They're not points on a single "bett
 > 
 > [!note] Departure: A Missing Prerequisite — Task Decomposition
 > The Harvard AgentFloor study (May 2026) adds another blind spot to the axis: **all four positions assume the model can execute tasks of arbitrary planning complexity given adequate planning or alignment.** AgentFloor's tier E finding — that all models, including GPT-5, collapse at 8-12 step planning — shows that the model's own architectural planning horizon is an independent constraint that none of the four positions account for. This suggests a prerequisite dimension: **task decomposition** must happen before any of the four positions can work reliably. The intent-to-code pipeline implicitly requires breaking the intent into sub-tasks that fit within the model's capability ceiling. See [[agent-floor]] for the empirical data.
+
+> [!note] Departure: Code as the Verifiable Interface
+> The [[code-as-agent-harness]] survey (Ning et al., 2026) adds a missing dimension to the intent-to-code axis: code itself is the **verifiable interface** between intent and execution. All five positions implicitly rely on code's executability to verify that intent was realized — tests must pass, types must check, code must run. The survey's framing makes this explicit: code's defining property as a harness is that it is **executable**, meaning model outputs become operations with formally verifiable outcomes. The axis's blind spot is that every position except pure vibes depends on this property, but none explicitly names it. The survey's four desired properties — executable, inspectable, stateful, governed — are the prerequisites that make any position on the intent-to-code axis work reliably.
 
 ## The Four Positions
 
@@ -159,3 +163,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Specs-to-code critique: vibe coding by another name, code is the battleground
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The axis's blind spot: synthetic truth shows model trustworthiness is an independent variable; fabrication happens at content generation level, not instruction-following level
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): introduces a fifth position on the intent-to-code axis — Enforcement-as-Code; executable guardrails as the mediating artifact; mechanical enforcement at the environment level
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds code's executability as the missing explicit dimension: code as the verifiable interface between intent and execution; the four desired harness properties (executable, inspectable, stateful, governed) are prerequisites for any position on the axis

@@ -1,12 +1,13 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-05-10
+updated: 2026-05-21
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/skills-at-scale-workos-nisi-proser.md
   - raw/2407.08440v4.txt
+  - raw/2605.18747.pdf
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
@@ -223,6 +224,16 @@ Skills can include executable scripts with access to file systems, environment v
 > [!warning] Security
 > Treat skill installation with the same rigor as any software dependency. Review what the skill does before running it on your local machine.
 
+## Grounded Skill Selection and the [[harness-interface|Harness Interface]]
+
+The [[code-as-agent-harness]] framework positions skills within the code-for-acting layer (§2.2). The survey's taxonomy of acting paradigms maps directly to how skills work:
+
+- **Grounded Skill Selection** (§2.2.1): The agent retrieves relevant code-based skills from a skill library and executes them. Voyager (Minecraft, 2023) pioneered discoverable, verifiable, and continually growing skill libraries — the first lifelong learning agent using code as its action interface. RoboCodeX generalized this by retrieving generalized skill documents for robot task planning. The skill selection mechanism — pick the right skill, execute it, verify the outcome — is the same pattern whether the domain is Minecraft, robot control, or software engineering.
+- **Programmatic Policy Generation** (§2.2.2): Skills can be generated on-the-fly as task-specific programs. Code-as-Policies (CaP) demonstrated LLM-generated Python functions as policies with hierarchical composition. LYRA generates executable behavior trees. This maps to *skill creation* — the agent doesn't just retrieve existing skills, it generates new ones as needed.
+- **Lifelong Code-Based Agents** (§2.2.3): Voyager's three-component architecture — automatic curriculum, skill library, iterative prompting — shows that code serves simultaneously as action, memory, and adaptation. Skills evolve from trajectories. [[evolving-context|Evolving context]] is the same concept applied to the agent's own prompts and memories.
+
+The survey's key insight for skill design: code-based skills are not just instruction files. Because they are executable, inspectable, and stateful, they can be verified through execution, inspected for correctness, and evolved across sessions. The skill.md format's emphasis on constraints over prescription aligns with the survey's finding that program-delegated reasoning — letting the harness execute rather than prescribing every step — is more reliable.
+
 ## Thread
 
 - [[tool-design-for-agents]] — Skills are the procedural complement to tool access; MCP provides reach, skills provide judgment
@@ -253,3 +264,4 @@ Skills can include executable scripts with access to file systems, environment v
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Production operations: skills as documentation, skill discoverability ("use" verb trick), eval-driven development for skills, skill rot detection, skills+MCP complementarity
 - `raw/skills-at-scale-workos-nisi-proser.md` — Skill design craft: constraints over prescription, confidence scoring, script interpolation, anti-patterns; skills at team scale: sharing tiers, plugin marketplaces, non-technical users, CLI-driven skills, context mining
 - `raw/2407.08440v4.txt` — RuleBench (Sun et al.): IRFT demonstrates the same pattern as skills — abstract procedural capability (rule-following) learned from synthetic data and generalized to real tasks
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Positions skills within the code-for-acting layer (§2.2); code-based skills as executable, inspectable, and stateful artifacts that can be verified through execution

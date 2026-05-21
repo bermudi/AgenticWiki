@@ -1,8 +1,8 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-05-16
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.txt"]
+updated: 2026-05-21
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.txt", "raw/2605.18747.pdf"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 unaudited_marginal: 0
 ---
@@ -84,6 +84,16 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 
 Karpathy's framing adds context: the verification loop is most effective in domains where the model was RL-trained on similar verification signals (code, math). In domains outside those RL circuits, even a well-designed verification loop may struggle because the model lacks the underlying capability to converge on correct output given feedback.
 
+## Semantic Verification and Oracle Adequacy
+
+The [[code-as-agent-harness]] survey adds a second-order constraint to the verification loop's effectiveness: the verification signal itself may be incomplete or misleading. The survey identifies two related problems (§5.2.1–5.2.2):
+
+**Oracle adequacy** (§5.2.1): The evaluation oracle may capture only a narrow proxy of the intended task. An agent may pass visible tests while exploiting weak test suites, or succeed in a simulator while producing invalid results. The verifiability thesis assumes the oracle is adequate — this assumption doesn't always hold.
+
+**Semantic verification** (§5.2.2): Execution feedback creates a false sense of correctness. Unit tests may be incomplete, static analyzers may over-approximate, GUI checkers may miss unacceptable intermediate actions. The survey proposes a **verification stack with explicit scope** — each artifact declares what it verifies, what it cannot verify, and what confidence it provides. Each accepted action should carry an **evidence bundle** containing the checks run, assumptions preserved, untested regions, and remaining risks.
+
+The practical implication for verification loop design: the loop is not a single pass/fail gate but a composition of multiple verification artifacts with known scope and confidence. The harness must know when a signal is strong enough to act on, when it's weak, and when additional evidence is required. See [[harness-engineering]] for the full treatment.
+
 ## Related
 
 - [[verifiability]] — The economic theory that explains why verification loops work: LLMs automate what you can verify
@@ -136,3 +146,4 @@ Karpathy's framing adds context: the verification loop is most effective in doma
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — "Outrunning your headlights" as the Pragmatic Programmer metaphor for why AI does too much at once; TDD as the discipline that enforces small steps.
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: verifiability as the economic driver of AI capability; the RL circuits framework that explains when verification loops work and when they don't.
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): executable verification against LLM reflection baseline; LLM reflection degrades compliance; deterministic error traces enable faster convergence; three-layer enforcement architecture
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies oracle adequacy and semantic verification (§5.2.1–5.2.2) as second-order constraints on verification loop effectiveness; proposes verification stacks with explicit scope

@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-05-10
+updated: 2026-05-21
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -9,6 +9,7 @@ sources:
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/2504.21625v6.txt
   - raw/2603.00822v2.txt
+  - raw/2605.18747.pdf
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
 unaudited_marginal: 0
 ---
@@ -58,6 +59,16 @@ This is backpressure in the literal sense — the human's testing activity *push
 
 [[mario-zechner|Mario Zechner]] demonstrates a novel form of backpressure against agent-generated PRs: every pull request from an unknown GitHub account gets auto-closed. A workflow posts a comment asking the human to resubmit as a human-voice issue. Agents don't read the comment, so it acts as an effective bot filter. Once a human demonstrates intent, their account is whitelisted for future PRs. This is backpressure applied to the social layer of open source — not rejecting wrong *code*, but rejecting wrong *intent* (machine-generated contributions without human investment).
 
+## Multi-Agent Shared State as Backpressure
+
+Scaling backpressure to multi-agent systems introduces a challenge identified by the [[harness-engineering|harness engineering]] survey (§5.2.4): **transactional shared program state**. When multiple agents plan, code, test, review, and modify overlapping artifacts, backpressure must operate at the semantic level, not just the individual-action level:
+
+- Each action should declare its read set, write set, assumptions, version dependencies, and conflict policy
+- Conflicts should be detected at the level of plans, tests, retrieved evidence, permissions, memory entries, and latent user requirements — not just file diffs
+- Semantic conflict resolution mechanisms (rollback, dependency-aware locking, belief-state reconciliation) extend backpressure from individual verification gates to the entire multi-agent coordination layer
+
+This is the multi-agent extension of the backpressure principle: engineering the shared environment so that conflicting or stale agent assumptions are mechanically detected and rejected, not just wrong *outputs*.
+
 ## Relationship to Verification Loop
 
 [[verification-loop|Verification loops]] are the mechanism; backpressure is the strategy. A verification loop proves individual changes correct. Backpressure engineers the loop into the autonomous workflow so that the agent can't escape verification — it's built into the environment, not optional.
@@ -98,3 +109,4 @@ This is backpressure in the literal sense — the human's testing activity *push
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Social backpressure: auto-close filter for agent-generated PRs
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided rule-augmented evaluation as automated mechanical backpressure at the constraint level
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): executable guardrails as mechanical backpressure at process, source, and architectural levels; fail-closed philosophy; 88.3% compliance rate
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies transactional shared program state (§5.2.4) as the key challenge for scaling backpressure to multi-agent systems

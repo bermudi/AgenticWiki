@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-13
+updated: 2026-05-21
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -29,6 +29,7 @@ sources:
   - raw/2407.08440v4.txt
   - raw/2603.00822v2.txt
   - raw/the-final-bottleneck.md
+  - raw/2605.18747.pdf
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -56,6 +57,9 @@ Karpathy's hiring proposal — give candidates a big project ("build a Twitter c
 
 > [!note] Departure: Where Does Quality Live?
 > This thread's sources disagree on a fundamental question: does quality live in the spec or in QA? [[plan-vs-review|Plan-heavy]] says the spec IS the quality mechanism. [[matt-pocock|Pocock]]'s alignment-first says QA is where quality gets enforced — the PRD is a disposable hint. See [[intent-to-code]] for the full fork in the road.
+
+> [!note] Departure: The Code-as-Harness Framework
+> The [[code-as-agent-harness]] survey (Ning et al., 2026) adds an architectural layer beneath this thread's operational focus. The three-layer framework — [[harness-interface|harness interface]] (code for reasoning, acting, environment modeling), [[harness-mechanisms|harness mechanisms]] (planning, memory, tool use, control), and [[multi-agent-code-orchestration|scaling the harness]] (multi-agent orchestration over shared code) — provides the vocabulary for describing what happens in each phase of the workflow. The [[multi-tier-action-space]], context management techniques, and [[verification-loop|verification loops]] described here are concrete instantiations of the broader harness architecture rather than ad-hoc patterns.
 
 ## Thesis
 
@@ -407,4 +411,6 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - `raw/2311.04235v3.txt` — RuLES (Mu et al.): behavioral rule-following failures as a fundamental machine limitation; alignment tuning degrades rule-following; system messages provide negligible enforcement benefit
 - `raw/2407.08440v4.txt` — RuleBench (Sun et al.): inferential rule-following as distinct capability gap; counterfactual collapse proves models pattern-match rules rather than follow them
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): mechanical enforcement as a practical answer to the rule-following ceiling; PATH shims, Tree-sitter checks, and architectural validators that don't depend on model reasoning; 88.3% compliance rate
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds an architectural layer beneath the workflow's operational focus; the three-layer framework provides the vocabulary for workflow phases; the multi-tier action space, context management, and verification loops are instantiations of the broader harness architecture
+- `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 

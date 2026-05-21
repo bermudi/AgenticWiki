@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-05-16
+updated: 2026-05-21
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -12,6 +12,7 @@ sources:
   - raw/playground-in-prod-samuel-colvin.md
   - raw/2603.25133v1.txt
   - raw/bias-in-the-loop-llm-judge-code.md
+  - raw/2605.18747.pdf
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 0
 ---
@@ -148,6 +149,20 @@ The corollary: evals and optimization are **model-specific**. When you upgrade m
 - [[shared-design-concept]] — "Design so quality is measurable" is a shared-design principle. If the human and agent don't share the quality concept, the eval scores become meaningless.
 - [[grey-box-engineering]] — The eval/observability layer is how you maintain the grey-box model at scale. You can't read every trace, but aggregate quality metrics tell you where to look.
 
+## Harness-Level Evaluation: A Missing Framework Layer
+
+The [[code-as-agent-harness]] survey (Ning et al., 2026) identifies a gap in the quality engineering framework: most existing evaluations measure only end-task success, conflating the capabilities of the base model, quality of the [[harness-mechanisms|harness mechanisms]] (planning, memory, tool use, control), reliability of tools, informativeness of feedback, and difficulty of the environment (§5.2.1).
+
+The survey proposes **harness-level metrics** that evaluate the operational substrate itself — complementing the quality loop with:
+- **Trajectory efficiency**: tool calls, tokens, edits, wall-clock time
+- **Verification strength**: test coverage, oracle diversity, false acceptance rate
+- **Recovery ability**: can the agent diagnose and repair after invalid actions?
+- **State consistency**: are memory, repository state, and execution traces synchronized?
+- **Safety compliance**: are permissions, sandboxes, and HITL gates respected?
+- **Replayability**: can the full trajectory be reconstructed from logs?
+
+These dimensions operate at a different layer than the four quality dimensions (effectiveness, efficiency, robustness, safety) in the Galarza framework. They evaluate the *harness* as a runtime system, not the *agent* as a task performer. See [[harness-engineering]] for the full treatment.
+
 ## A Missing Quality Dimension: Trust Resolution
 
 The ManyIH study ([[instruction-hierarchy]]) reveals a quality dimension absent from existing agent quality frameworks: **can the agent correctly resolve conflicts among instructions from heterogeneous trusted sources?**
@@ -196,3 +211,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/playground-in-prod-samuel-colvin.md` — Shopify cost example ($5M→$73K via agent + optimization), private-data drives quality needs, most teams don't eval
 - `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): quantified evidence for LLM-as-judge reliability limits at rubric-level granularity; paradigm comparison (rubric-level vs. checklist-level, with/without reasoning — 7–12 point gap); inter-judge variance analysis (judge selection shifts scores by up to 25 points)
 - `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): systematic threat to eval pipelines from 12 prompt-induced biases acting as directional positional priors; same judge + same code produces drastically different scores based on prompt framing and candidate order
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Proposes harness-level evaluation metrics (§5.2.1) that complement the quality loop by evaluating the operational substrate rather than only end-task success

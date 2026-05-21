@@ -1,8 +1,9 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-16
-sources: []
+updated: 2026-05-21
+sources:
+  - raw/2605.18747.pdf
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -54,6 +55,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[martin-vechev]] — Professor at ETH Zurich and LogicStar.ai co-founder; senior author of the AGENTS.md evaluation study.
 - [[christoph-treude]] — Professor at SMU; co-author of the first empirical study on AGENTS.md efficiency impact.
 - [[thariq]] — Engineer on the Claude Code team; authored the practical playbook for using HTML instead of Markdown as agent output.
+- [[xuying-ning]] — Lead author of the *Code as Agent Harness* survey (UIUC + Meta + Stanford).
 
 ## 🧠 Concepts
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
@@ -61,6 +63,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
 - [[agentic-engineering]] — The professional discipline of coordinating AI agents without sacrificing quality; 10x is the floor, not the ceiling.
 - [[agent-evals]] — CI for probabilistic systems: the 4-layer eval stack for AI agents.
+- [[code-as-agent-harness]] — Code as the executable, inspectable, and stateful medium through which AI agents reason, act, and coordinate.
+- [[harness-interface]] — The harness interface where code connects agents to reasoning, action, and environment modeling.
+- [[harness-mechanisms]] — Planning, memory, tool use, control, and optimization that sustain code-centric agents.
+- [[harness-engineering]] — Self-evolving harnesses, harness-level evaluation, and the open problems of building reliable agent systems.
 - [[agent-floor]] — Harvard 6-tier benchmark isolating tool-use complexity from real-world confounds; small models match frontier through tier C, all collapse at long-horizon planning.
 - [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as the practical craft of tooling for agents.
 - [[agent-observability]] — Logs, traces, and metrics for agent decision chains.
@@ -95,6 +101,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
 - [[model-routing]] — Decomposing tasks by complexity and routing each subtask to the cheapest model capable of handling it; up to 15× cost savings.
+- [[multi-agent-code-orchestration]] — Scaling the code-as-harness from single agents to multi-agent systems with specialized roles, interaction modes, and workflow topologies.
 - [[multi-tier-action-space]] — The thin tool layer + computer architecture converged on by Claude Code, Manis, AMP, and Deep Agents.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
 - [[plan-disposability]] — Treat plans as ephemeral coordination state, not contracts.

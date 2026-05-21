@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-05-15
+updated: 2026-05-21
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -14,6 +14,7 @@ sources:
   - raw/2603.00822v2.txt
   - raw/karpathy-html-output.md
   - raw/thariq-unreasonable-effectiveness-of-html.md
+  - raw/2605.18747.pdf
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -33,6 +34,9 @@ unaudited_marginal: 0
 
 > [!note] Calibration: Bounded Returns on Interface Quality
 > The [[context-files]] empirical evidence adds a calibration to this thread's thesis that tool quality bounds agent outcomes. Developer-written context files (a well-designed tool interface) improve performance by only ~4% over none. LLM-generated files (a poorly-designed interface) degrade it by ~2%. The effect is real but bounded — past a minimal quality threshold, further tool interface refinement yields diminishing returns. This complements the AuthorFloor finding that task decomposition and [[model-routing|model routing]] may be higher-leverage interventions than tool design alone. The thesis is correct but its leverage is concentrated at the floor (preventing bad tools) rather than at the ceiling (perfecting good ones).
+
+> [!note] Departure: The Harness Interface Taxonomy
+> The [[code-as-agent-harness]] survey (Ning et al., 2026) provides a systematic taxonomy that subsumes this thread's tool categories. The survey organizes tool use within [[harness-mechanisms|harness mechanisms]] (§3.3) and identifies three acting paradigms within the code-for-acting layer (§2.2) — grounded skill selection, programmatic policy generation, and lifelong code-based agents — that correspond to different levels of agent autonomy over tools. The environment-interaction tool use paradigm (§3.3.2) — where the agent writes scripts rather than calling bound tools — is the theoretical foundation for why CLI composability outperforms MCP for developer-facing tools. The survey's key framing: the tool interface is one component of the broader **[[harness-interface|harness interface]]**, which also includes code for reasoning and code for environment modeling.
 
 ## The Core Thesis
 
@@ -211,3 +215,4 @@ See [[html-as-agent-output]] for the full treatment.
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): empirical validation of deterministic tool feedback over LLM reflection; fail-closed design; domain-routed code synthesis; PATH shims as lightweight enforcement
 - `raw/karpathy-html-output.md` — Karpathy's audio-in/vision-out thesis, output fidelity progression ladder, and the observation that output format constraints shape reasoning quality
 - `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's practical playbook for HTML agent output: use cases, interactive documents, throwaway editors, and honest tradeoffs from Claude Code usage
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Provides a systematic taxonomy of tool use paradigms (§3.3) and positions tool design within the broader harness interface; code-for-acting layer (§2.2) identifies three paradigms corresponding to different levels of agent autonomy over tools; environment-interaction tool use (§3.3.2) is the theoretical foundation for CLI composability

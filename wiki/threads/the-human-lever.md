@@ -1,13 +1,14 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-05-10
+updated: 2026-05-21
 unaudited_marginal: 1
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-dhh-ai-pilled.md
+  - raw/2605.18747.pdf
   - raw/yt-how-agents-use-dev-tools.md
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -105,6 +106,9 @@ The design principle: **default to constraining agents more than humans**. This 
 The unifying principle across all sources: the more code the AI writes, the more consequential each design decision becomes. Bad code has always been expensive, but [[matt-pocock|Matt Pocock]] argues it is now *the most expensive it's ever been* because it blocks AI's ability to help.
 
 Delegation without design authority is abdication. The human isn't less important in an AI-assisted workflow — they're *more* important, because the cost of a bad design decision is amplified by the speed at which the agent will faithfully implement it.
+
+> [!note] Departure: HITL as Permission Governance
+> The [[code-as-agent-harness]] survey (Ning et al., 2026) reframes the human's safety role as **multi-tier permission governance** — a structured hierarchy where actions are classified by risk and higher-risk operations (editing files, executing code, accessing the network, modifying production) require human approval while low-risk operations (reading files, inspecting logs) remain autonomous. This is narrower than the thread's framing, which blends **design authority** (taste, judgment, architecture ownership) with **safety governance** (preventing harm). The survey treats these as distinct concerns: the human as design authority (this thread) vs. the human as safety governor (a separate mechanism in [[harness-engineering]]). Both are valid — they describe different aspects of the human's role — but the survey's mechanical framing suggests the wiki should track them separately rather than under a single "human lever."
 
 ## Outsource Thinking, Not Understanding
 

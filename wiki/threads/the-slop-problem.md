@@ -1,13 +1,14 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-05-10
+updated: 2026-05-21
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-why-llms-hallucinate.md
+  - raw/2605.18747.pdf
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
@@ -185,6 +186,9 @@ This echoes [[mario-zechner|Mario Zechner]]'s own practice: he accepts slop in [
 > The BEEPs approach removes all friction at the tooling layer (never review the code, tag agents to add features) while preserving it at the design layer (4 days of careful design, 50%+ time on documentation). This is consistent with [[armin-ronacher|Armin Ronacher]]'s finding that removing [[deliberate-friction]] accelerates slop — because the friction is removed where output doesn't matter (disposable tooling) and preserved where it does (design decisions). The insight isn't that slop prevention doesn't need friction; it's that friction is a limited resource best allocated where quality matters most.
 
 The approach requires confident scoping. If the slop tooling creeps into critical paths, or if the disposable tooling needs human attention later (security, scaling), the cost of hindsight is high.
+
+> [!note] Departure: Overconfident Verification as a Slop Vector
+> The [[code-as-agent-harness]] survey (Ning et al., 2026) identifies a slop pattern this thread doesn't cover: **overconfident verification**. When the harness has executable feedback (tests pass, linters clean), it can become overconfident because "the green test is not the full specification" (§5.2.2). This is [[compounding-booboos|compounding booboos]] at the *verification layer* — the tests themselves are slop, but the agent treats them as authoritative. The survey calls this the "oracle adequacy" problem: the verification signal is real and objective, but incomplete. It's a distinct failure mode from "agents don't feel pain" (the agent *does* get a signal, but the signal is misleading) and from "untrustworthy test suites" (the tests aren't wrong — they're just not testing the right thing). The distinction matters: fixing untrustworthy tests requires better test generation, but fixing overconfident verification requires semantic verification beyond the harness's executable signals.
 
 ## Sources
 
