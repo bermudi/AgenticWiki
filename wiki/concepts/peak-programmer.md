@@ -1,8 +1,11 @@
 ---
 title: Peak Programmer
 created: 2026-04-25
-updated: 2026-05-02
-sources: [raw/yt-dhh-ai-pilled.md, "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"]
+updated: 2026-05-26
+sources:
+  - raw/yt-dhh-ai-pilled.md
+  - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
+  - raw/yt-llms-are-killing-agent-harness.md
 tags: [future-of-work, economics, ai]
 ---
 
@@ -19,6 +22,8 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 1. **Shift to Design and Product**: Value moves "up the stack" to product management, system architecture, and user experience.
 2. **Senior vs. Junior Gap**: Seniors become force-multiplied by AI, while the traditional "learning by doing" path for juniors is disrupted as entry-level tasks are automated.
 3. **Small Team Renaissance**: Small, high-talent teams can produce outcomes previously reserved for large corporations.
+4. **Code as Cattle**: [[thorsten-ball|Thorsten Ball]] argues the assumption that human-produced code is precious is outdated. GitHub's contribution graph, PR emoji reactions, and linear ticket assignment all rest on this assumption. "Who gives a shit about the contribution graph in 2026?" The tools built for a world of scarce, precious code are misfits for a world of cheap, abundant code.
+5. **The Fashion Designer Metaphor**: The software engineer of the future is like a fashion designer in Paris — knows textiles, colors, manufacturing — but doesn't cut the cloth. Value is in conceptualization and system understanding, not implementation.
 
 ## Related
 
@@ -29,6 +34,9 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 - [[omarchy]] — Case study: small team building an OS with AI.
 - [[dhh]] — The originator of the Peak Programmer thesis.
 - [[comprehension-debt]] — A senior engineer who can't pass a coding interview after a year of AI is peak programmer made personal.
+- [[thorsten-ball]] — "Software as we know it is dead" as the strongest articulation of peak programmer; code as cattle.
+- [[knowledge-triplet]] — The shift from implementation to conceptualization means "what you know and express" becomes the engineer's primary contribution.
+- [[vibe-coding]] — Vibe coding as the capability shift that triggers the peak programmer era
 
 ## Thread
 - [[the-agent-workflow]] — How developers adapt to the post-implementation world.
@@ -37,3 +45,4 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 
 - `raw/yt-dhh-ai-pilled.md` — Central topic of the interview between DHH and Gergely Orosz.
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — The senior engineer who fails the coding interview as the personal face of peak programmer
+- `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: "Software as we know it is dead," code as cattle, the fashion designer metaphor, the shift from programming language skill to system conceptualization

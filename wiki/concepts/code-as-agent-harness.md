@@ -1,9 +1,10 @@
 ---
 title: Code as Agent Harness
 created: 2026-05-21
-updated: 2026-05-21
+updated: 2026-05-26
 sources:
   - raw/2605.18747.pdf
+  - raw/yt-llms-are-killing-agent-harness.md
 tags: [concept, agent-harness, architecture, code-centric]
 unaudited_marginal: 0
 ---
@@ -78,9 +79,11 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - [[multi-tier-action-space]] — A concrete architecture pattern within the harness framework
 - [[verification-loop]] — Harness control through deterministic sensors
 - [[agent-skills]] — Grounded skill selection within code-for-acting
+- [[thorsten-ball]] — AMP as a live case study of the harness at the thin end: Ball argues the harness should decay like a cast as models improve
 - [[backpressure]] — Mechanical rejection within harness control
 - [[xuying-ning]] — Lead author of the survey
 
 ## Sources
 
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness: Toward Executable, Verifiable, and Stateful Agent Systems.* The full survey defining the framework, taxonomy, and open problems across 102 pages.
+- `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: AMP as a live case study of the harness at the extreme thin end; the harness falls away as models improve; AMP deleted features as models got better

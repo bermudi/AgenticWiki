@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-21
+updated: 2026-05-26
 sources:
   - raw/2605.18747.pdf
 tags: [index, wiki]
@@ -56,9 +56,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[christoph-treude]] — Professor at SMU; co-author of the first empirical study on AGENTS.md efficiency impact.
 - [[thariq]] — Engineer on the Claude Code team; authored the practical playbook for using HTML instead of Markdown as agent output.
 - [[xuying-ning]] — Lead author of the *Code as Agent Harness* survey (UIUC + Meta + Stanford).
+- [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
 
 ## 🧠 Concepts
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
+- [[knowledge-triplet]] — Either you know what you want, it's in the codebase, or it's in the training data. If none of these, the model fabricates.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
 - [[agentic-engineering]] — The professional discipline of coordinating AI agents without sacrificing quality; 10x is the floor, not the ceiling.

@@ -1,7 +1,7 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-05-10
+updated: 2026-05-26
 sources:
   - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
@@ -11,6 +11,7 @@ sources:
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/2603.25133v1.txt
+  - raw/yt-llms-are-killing-agent-harness.md
 tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
 
@@ -104,6 +105,7 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 ## Thread
 
 - [[agent-quality-engineering]] — Evals as the measurement layer of the quality framework
+- [[the-verifiability-thesis]] — The causal chain from verifiability through RL training to capability peaks; evals are the attempt to make agent behavior verifiable
 
 ## Related
 
@@ -124,6 +126,7 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - [[agent-floor]] — The Harvard 6-tier benchmark that provides the eval methodology for isolating cognitive complexity from environmental confounds
 - [[model-routing]] — Model routing depends on evals to validate which model tier handles which complexity class
 - [[instruction-hierarchy]] — MANYIH-BENCH adds a third axis to the long-horizon eval landscape: conflict tier scaling ([[delegate-52]] measures domain breadth, [[agent-floor]] measures planning depth, ManyIH measures privilege complexity)
+- [[thorsten-ball]] — Vibes-based evaluation as a practical alternative to formal evals for general-purpose coding agents
 
 ## Sources
 
@@ -135,3 +138,4 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Skill-specific eval pattern: A/B test with/without the skill, deterministic assertions over LLM-as-judge
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve
 - `raw/2603.25133v1.txt` — RUBRICEVAL benchmark: first rubric-level meta-evaluation for instruction following; finds LLM judges unreliable at fine granularity (GPT-4o: 55.97% HARD BAcc); paradigm comparison (rubric-level vs. checklist-level, with/without reasoning); rubric taxonomy of failure modes
+- `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for general-purpose coding agents; formal evals less useful than direct usage experience for arbitrary codebases

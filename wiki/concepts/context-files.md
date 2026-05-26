@@ -139,6 +139,7 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 - [[christoph-treude]] — Senior author of the Lulla et al. efficiency study
 - [[contextcov]] — Framework for transforming passive context file instructions into executable guardrails; constraint taxonomy (process/source/architectural); Documentation as Code paradigm
 - [[system-prompt-effects]] — System prompt effects are the mechanism by which context files influence agent behavior; the non-monotonic relationship explains why more detailed context files don't always help
+- [[knowledge-triplet]] — Context files push "what you know" into "what's in the codebase," making knowledge available to the model without explicit expression each time
 
 ## Sources
 

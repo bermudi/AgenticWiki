@@ -86,6 +86,7 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 - [[overcorrection-bias]] — Overcorrection rationales fabricate unstated constraints (Added Requirement pattern), a form of extrinsic hallucination in code review
 - [[llm-as-code-judge]] — LLM judge rationales exhibit hallucination-like behavior: strong symptom-level diagnosis but weak cause-level diagnosis (44–71% match)
 - [[overcorrection-bias]] — Added Requirement rejections in code review resemble extrinsic hallucination (fabricating unstated constraints as grounds for rejection)
+- [[knowledge-triplet]] — Hallucination reframed: the model fills gaps from its training distribution when knowledge exists in none of the three sources
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.

@@ -94,6 +94,7 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[agent-floor]] — AgentFloor demonstrates the jagged frontier empirically: small models match GPT-5 on some tiers but all collapse at the same planning ceiling
 - [[model-routing]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
 - [[instruction-hierarchy]] — The 2-tier → 12-tier gap is a single-axis case study of the jagged frontier: >99% at training distribution, ~40% one step beyond
+- [[knowledge-triplet]] — Model capability degrades precisely where the triplet is weakest: novel domains where neither codebase nor training data provides signal
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems

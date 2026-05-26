@@ -78,6 +78,7 @@ This directly reinforces the [[the-human-lever|human lever]] thesis: verificatio
 - [[slop]] — Synthetic truth is slop at its most dangerous: coherent, authoritative, and wrong
 - [[execution-apathy]] — Both execution apathy and synthetic truth produce plausible-looking outputs that haven't done the underlying work
 - [[inferential-rule-following]] — The counterfactual rule collapse is the same mechanism: the model outputs what fits its internal model (parametric knowledge) rather than what it's told (the given rule)
+- [[knowledge-triplet]] — When the triplet fails, the model constructs what it infers the user wants — synthetic truth as the failure mode of an unsatisfied triplet
 
 ## Sources
 

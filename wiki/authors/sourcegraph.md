@@ -28,6 +28,7 @@ Sourcegraph's mission is to make it so that everyone can code. They focus on sol
 - [[cody]] — Their flagship AI assistant.
 - [[code-intelligence]] — The core technology powering their platform.
 - [[dex-horthy]] — CTO of Sourcegraph, advocate for code intelligence in AI workflows.
+- [[thorsten-ball]] — Co-creator of AMP at Sourcegraph; argues the agent harness should decay as models improve.
 
 ## Sources
 

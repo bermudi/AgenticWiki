@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-05-21
+updated: 2026-05-25
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -209,3 +209,4 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Fighting slop with slop concept, BEEPs design doc workflow, threading design process
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Synthetic truth and temporal smoothing as high-grade information slop; Gemini's self-analysis of narrative coherence vs. temporal reality
 - `raw/2311.04235v3.txt` — RuLES (Mu et al.): rule-following failures as a distinct slop vector; alignment-tuned models are worse at obeying developer-defined constraints, making every generation a potential slop event
+- `raw/2605.18747.pdf` — Ning et al.: Code as Agent Harness survey; overconfident verification as slop vector; oracle adequacy problem (§5.2.2)

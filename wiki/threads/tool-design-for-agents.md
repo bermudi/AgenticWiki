@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-05-21
+updated: 2026-05-26
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -15,6 +15,7 @@ sources:
   - raw/karpathy-html-output.md
   - raw/thariq-unreasonable-effectiveness-of-html.md
   - raw/2605.18747.pdf
+  - raw/yt-llms-are-killing-agent-harness.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -165,6 +166,31 @@ The context engine layer interacts with the other four layers:
 - **Layer 3 (minimalism)**: The context engine enables minimal tool cores by pushing context retrieval complexity into a separate system
 - **Layer 4 (parallel management)**: Context pre-collection matters more when managing multiple agents — each agent would otherwise independently discover the same organizational knowledge
 
+## Layer 6: The Harness Falls Away
+
+[[thorsten-ball|Thorsten Ball]] (AMP) provides the most radical articulation of this thread's thesis: the harness should fall away like a cast on a healing leg. As models improve, the scaffolding around them becomes unnecessary. Not minimalism as a design choice — minimalism as an inevitability.
+
+He traces this through concrete model generations:
+- **Claude 3.5**: Old string/new string replacement. Sometimes wrong when the string appeared multiple times. Needed specialized "smart edit" tools with semantic matching.
+- **Claude 3.7**: Understood line numbers. Could navigate files sequentially — "read lines 50-99" became viable. Line numbers no longer confused the model.
+- **GPT-5.3/Jules**: Doesn't care about your tools at all. Runs `cat`, writes Python scripts to replace things in files. Just needs a shell.
+
+The implication: language servers are now "uninteresting." The model figures out where the parentheses go. "That's over." Specialized diff formats, semantic edit tools, multiple model chains, intent detection models — all unnecessary when the model can just execute shell commands.
+
+This is a departure from the thread's earlier framing. Where Layer 1 argues tools must be redesigned for agent consumption, Ball argues the best redesign is deletion. Where Layer 3 argues for minimal tool cores, Ball argues the core should approach a single tool: `bash`. The model itself becomes the tool router — it decides whether to use `cat`, `sed`, `grep`, or write a Python script.
+
+The progression Ball describes maps onto the thread's layers collapsing:
+- Layer 1 (output optimization) → the model handles its own output formatting
+- Layer 2 (language/infrastructure) → the model writes its own infrastructure scripts
+- Layer 3 (minimalism) → extreme minimalism: one tool
+- Layer 5 (context engine) → the model searches and synthesizes context itself
+- Layer 7 (output format) → the model decides the format
+
+What remains after the harness falls away: the [[knowledge-triplet|knowledge triplet]]. Either you know what you want, it's in the codebase, or it's in the training data. If it's none of these, the model fabricates. The human's irreducible contribution is expressing what they know. The harness can't supply that.
+
+> [!warning] Calibration: This Doesn't Apply Everywhere
+> Ball's experience is with frontier models (Claude 3.7, GPT-5.3) in a coding context. The [[agent-floor]] study shows that at high planning complexity (tier E, 8-12 steps), all models collapse even with clean tool interfaces. The "harness falls away" thesis holds for tool use at moderate complexity but not for planning at high complexity. The model's planning horizon remains a binding constraint regardless of harness design.
+
 ## ContextCov: Executable Checks as Tool Feedback
 
 [[contextcov|ContextCov]] (Sharma, 2026) provides the strongest empirical validation of this thread's core thesis: **deterministic tool feedback outperforms LLM-based judgment for agent control.**
@@ -188,7 +214,7 @@ The result that LLM reflection is *worse than nothing* is particularly striking 
 
 ContextCov's evaluation provides empirical weight the thread previously lacked. The tool-design thesis — that better agent-facing tools produce better outcomes — now has a controlled experiment showing 21.3 percentage point improvement from deterministic tool feedback over passive instructions, and 38 points over LLM-based feedback.
 
-## Layer 6: Output Format as Tool Design
+## Layer 7: Output Format as Tool Design
 
 [[andrej-karpathy|Karpathy]] and [[thariq|Thariq]] add a dimension the previous layers don't address: **the format in which agents communicate their output** is itself a tool design decision with quality implications.
 
@@ -216,3 +242,4 @@ See [[html-as-agent-output]] for the full treatment.
 - `raw/karpathy-html-output.md` — Karpathy's audio-in/vision-out thesis, output fidelity progression ladder, and the observation that output format constraints shape reasoning quality
 - `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's practical playbook for HTML agent output: use cases, interactive documents, throwaway editors, and honest tradeoffs from Claude Code usage
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Provides a systematic taxonomy of tool use paradigms (§3.3) and positions tool design within the broader harness interface; code-for-acting layer (§2.2) identifies three paradigms corresponding to different levels of agent autonomy over tools; environment-interaction tool use (§3.3.2) is the theoretical foundation for CLI composability
+- `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: the harness falls away as models improve; language servers are dead; the model just needs shell access; AMP deleted features as models got better; the knowledge triplet as the irreducible constraint

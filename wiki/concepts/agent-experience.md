@@ -1,11 +1,12 @@
 ---
 title: Agent Experience (AX)
 created: 2026-04-25
-updated: 2026-05-15
+updated: 2026-05-26
 sources:
   - raw/yt-reinventing-software-panel.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
+  - raw/yt-llms-are-killing-agent-harness.md
 unaudited_marginal: 0
 tags: [concept, dx, ax, software-design, tool-design]
 ---
@@ -39,6 +40,9 @@ Concrete AX failure: TanStack Router's `$param.tsx` filenames. The dollar sign t
 
 As software development shifts toward agentic workflows, the "usability" of a codebase will be measured by how effectively an agent can operate within it. A codebase with poor AX will lead to more [[slop]] and more frequent [[compounding-booboos]].
 
+> [!warning] Departure: Language Servers Are Dead?
+> [[thorsten-ball|Thorsten Ball]] challenges this thread's emphasis on tool redesign. His position: language servers are now "uninteresting" — the model figures out where the parentheses go. "That's over." Specialized tool interfaces, semantic edit tools, and LSP features are all unnecessary when the model can just run shell commands. This is a radical version of the thread's own conclusion (AX matters) but argues the solution is deletion, not redesign. The tension: Zanie argues tools need richer agent-facing interfaces; Ball argues the model makes those interfaces irrelevant. The resolution may depend on model capability — for frontier models, Ball is right; for weaker models, Zanie's redesign still matters.
+
 ## Thread
 
 - [[tool-design-for-agents]] — AX extends from codebases to the tools agents use
@@ -61,9 +65,12 @@ As software development shifts toward agentic workflows, the "usability" of a co
 - [[agent-observability]] — Designing for observability is an AX principle: the agent must expose its decision chain for the human to build trust.
 - [[context-files]] — Context files are part of the AX surface area; their design directly affects agent navigation and comprehension of a codebase.
 - [[html-as-agent-output]] — Output format as an AX dimension: HTML extends agent experience from codebase structure and tool interfaces to the agent's communication medium with humans
+- [[knowledge-triplet]] — AX design should maximize the codebase's contribution to the knowledge triplet
+- [[thorsten-ball]] — Challenges AX's emphasis on tool redesign: language servers are "uninteresting" when the model can just run shell commands
 
 ## Sources
 
 - `raw/yt-reinventing-software-panel.md` — AX/DX convergence insight from Fowler, Beck
 - `raw/yt-how-agents-use-dev-tools.md` — Zanie Blue extending AX from codebases to tool design
 - `raw/agentic-coding-recommendations.md` — Language choice and infrastructure as AX optimization
+- `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: language servers are "uninteresting"; the model figures out where the parentheses go; a challenge to the AX thread's emphasis on tool redesign

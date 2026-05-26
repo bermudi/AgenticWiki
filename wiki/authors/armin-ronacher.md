@@ -1,7 +1,7 @@
 ---
 title: Armin Ronacher
 created: 2026-04-26
-updated: 2026-05-13
+updated: 2026-05-25
 sources:
   - raw/agentic-coding-recommendations.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
@@ -91,3 +91,4 @@ Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and 
 
 - `raw/agentic-coding-recommendations.md` — Agentic coding practices and language recommendations
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — 30-team interviews, agentic regret, deliberate friction, industrial revolution parallel, MCP analysis, Austrian circle
+- `raw/the-final-bottleneck.md` — Accountability as the final bottleneck; human review capacity as hard ceiling on agentic output; textile industry parallel

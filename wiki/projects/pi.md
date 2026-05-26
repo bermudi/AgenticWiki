@@ -99,6 +99,7 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 - [[fighting-slop-with-slop]] — Mario's practice of accepting slop in Pi's HTML export is a case study of the fighting-slop-with-slop principle.
 - [[agent-skills]] — Pi's skill system follows the skill.md pattern; malleable agents create and modify skills mid-session
 - [[mastra]] — Both are agent frameworks offering observability and eval infrastructure; Pi emphasizes malleability, Mastra emphasizes the quality flywheel
+- [[thorsten-ball]] — Philosophical alignment on minimalism: Ball's "harness falls away" echoes Pi's four-tool core
 
 ## Sources
 

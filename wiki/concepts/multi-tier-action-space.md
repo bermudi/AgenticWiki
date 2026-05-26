@@ -94,6 +94,7 @@ The multi-tier action space pattern maps to the [[harness-mechanisms]] taxonomy 
 - [[dex-horthy]] — The fast orchestrator + smart oracle pattern is a specific multi-tier instantiation
 - [[agent-skills]] — Skills live on the file system tier, loaded on demand into the tool tier
 - [[claude-code]] — Claude Code's sub-agent patterns, KV caching, and file-based tool discovery are concrete multi-tier implementations
+- [[code-as-agent-harness]] — The multi-tier action space is a concrete instantiation of the harness interface + harness mechanisms
 
 ## Sources
 

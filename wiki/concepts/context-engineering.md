@@ -155,6 +155,7 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - [[context-files]] — Context files (AGENTS.md, CLAUDE.md) are the concrete artifact through which context engineering principles (minimalism, operational focus, high signal density) are applied at the repository level; recent empirical evidence validates that information-per-token density matters more than volume
 - [[html-as-agent-output]] — HTML output trades higher token cost for richer information-per-human-read-cycle; a context engineering tradeoff where the density question shifts from per-token to per-human-attention-unit
 - [[semi-formal-reasoning]] — Structured reasoning templates are a form of context engineering: constraining the reasoning process to maximize evidence-per-token density
+- [[knowledge-triplet]] — The triplet is an information-theoretic framing of context engineering: supply the knowledge the model can't find elsewhere
 
 ## Sources
 

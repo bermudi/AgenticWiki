@@ -1,9 +1,10 @@
 ---
 title: Vibe Coding
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-26
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+  - raw/yt-llms-are-killing-agent-harness.md
 tags: [concept, ai-engineering, coding]
 ---
 
@@ -44,6 +45,10 @@ This is a notable qualification: vibe coding produces *working* code, not necess
 
 This tension — vibe coding raises the floor (everyone can build) but the default output quality is "bloaty" and "gross" — is why [[agentic-engineering]] exists: preserving the quality bar while going faster.
 
+## Vibes as Evaluation
+
+[[thorsten-ball|Thorsten Ball]] extends the vibe coding concept to evaluation: for general-purpose coding agents in arbitrary codebases, formal evals are less useful than direct usage experience. "How do you even say what's correct? How do you even say what's good?" AMP built evals but found vibes-based engineering — using the agent heavily — provided more signal. This suggests vibe coding isn't just a development style but also an evaluation methodology: you know the agent works when you use it and it works, not when it scores well on a benchmark.
+
 ## Relationship to Vibes-Based Engineering
 
 > [!note] Departure: Vibe Coding ≠ Anti-Pattern
@@ -67,7 +72,10 @@ This tension — vibe coding raises the floor (everyone can build) but the defau
 - [[jagged-frontier]] — The jaggedness that makes vibe coding dangerous: models that seem reliable can fail catastrophically
 - [[verifiability]] — The economic driver that made vibe coding possible by December 2024
 - [[software-1-2-3]] — Vibe coding is the consumer experience of Software 3.0
+- [[peak-programmer]] — "Software as we know it is dead" as the strongest articulation of peak programmer; vibe coding as the capability shift that triggers it
+- [[thorsten-ball]] — Extends vibe coding to evaluation: vibes-based engineering as more signal than formal evals
 
 ## Sources
 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: coinage of "vibe coding," the December 2024 capability threshold, and the distinction between vibe coding and agentic engineering.
+- `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for coding agents; formal evals less useful than usage experience for arbitrary codebases.
