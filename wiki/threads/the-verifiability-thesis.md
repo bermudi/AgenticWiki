@@ -13,6 +13,7 @@ sources:
   - raw/llm-overcorrection-code-review.md
   - raw/agentic-code-reasoning.md
   - raw/2605.18747.pdf
+  - raw/deepswe-benchmark.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -147,6 +148,16 @@ Three recent benchmarks provide direct evidence for the verifiability thesis in 
 
 **Meeseeks ([[iterative-self-correction]])** demonstrates the ceiling. Its code-guided evaluation achieves 98.4% verification accuracy — near-perfect verifiability. Yet even with 20 rounds of perfect feedback, models plateau below 91% utility rate. Verifiability is necessary but not sufficient: you also need the model to be *capable* in the domain. If instruction-following isn't in the RL circuits, no amount of verification feedback within a single session will fully bridge the gap. The [[overcorrection-bias|catastrophic overcorrection]] phenomenon on word counts — models that can't calibrate output magnitude despite precise feedback — is a concrete example of operating outside the RL-trained circuits.
 
+### For [[deepswe|DeepSWE]]: Verifiability of the Verification
+
+[[deepswe|DeepSWE]] (Datacurve, 2026) instantiates the verifiability thesis recursively. The benchmark's core contribution isn't new tasks — it's making the *verification of agent output* verifiable. [[swe-bench-pro|SWE-bench Pro]]'s verifier is inherited from merged PR test suites: these tests weren't designed as complete graders, they miss valid solutions, and they pass partial implementations. DeepSWE's verifiers are purpose-written behavioral tests that accept any correct implementation.
+
+The audit quantifies the gap: [[swe-bench-pro|SWE-bench Pro]]'s verifier disagrees with an independent judge on 32% of trials (8% false positives, 24% false negatives). DeepSWE's verifier disagrees on 1.4%. This is the verifiability thesis operating at the meta-level: you can't trust a benchmark score if the verifier itself isn't reliable. Making verification verifiable — through behavioral tests, transparent rollouts, and independent auditing — is what makes the benchmark trustworthy.
+
+The results confirm the thesis's predictions about capability separation. On [[swe-bench-pro|SWE-bench Pro]] (unreliable verification), models cluster in a 30-point band. On DeepSWE (reliable verification), they separate into a 70-point spread that matches developer experience. The jagged frontier was always there — the verifier just couldn't see it.
+
+DeepSWE also reveals a prompting dimension: [[swe-bench-pro|SWE-bench Pro]]'s prompt tells agents not to write tests, suppressing the self-verification behavior that strong models naturally exhibit. On DeepSWE (neutral prompt), Opus 4.7 and GPT-5.4 write tests on >80% of runs. On [[swe-bench-pro|SWE-bench Pro]], every model drops to 3-28%. The benchmark's prompt doesn't just fail to measure — it actively distorts the capability it claims to evaluate.
+
 ### For [[code-as-agent-harness|Code as Agent Harness]]: The Thesis Applied to the Harness Itself
 
 The [[code-as-agent-harness]] survey (Ning et al., 2026), organized into the [[harness-interface|harness interface]] (code for reasoning, acting, environment modeling), [[harness-mechanisms|harness mechanisms]] (planning, memory, tool use, control), and [[harness-engineering|scaling the harness]] (multi-agent orchestration), extends the verifiability thesis from model capabilities to the harness infrastructure. The survey's open problems — harness-level evaluation, semantic verification, self-evolving harnesses — are consequences of the verifiability thesis operating recursively:
@@ -169,6 +180,9 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 > [!warning] Can Taste Become Verifiable?
 > Karpathy is uncertain whether taste and judgment will remain permanently human or whether they're simply the next RL frontier. "There's nothing fundamental that's preventing it. It's just the labs haven't done it yet, almost." If taste enters the RL training distribution, the human lever shrinks. The wiki's current position (from [[the-human-lever]]) is that taste is an enduring human domain. Karpathy keeps the door open to it being automated. This is a live tension: is the verifiability thesis a permanent map of the territory, or a snapshot of a moving frontier?
 
+> [!warning] Instruction Failure as Feature
+> [[deepswe|DeepSWE]] reveals a paradox in instruction-following: Claude partially ignores benchmark instructions (writes tests when told not to, 28% on [[swe-bench-pro]]) while GPT follows them literally. The [[rule-following]] thread frames instruction failure as a reliability bug. But DeepSWE shows that Claude's *ignoring* of harmful instructions ("don't write tests") actually makes it more reliable in practice — it self-verifies at 80%+ when the prompt doesn't suppress testing. The verifiability thesis predicts models improve where verification exists; DeepSWE adds that models which *create their own verification* despite instructions not to may outperform obedient models in the long run. This is a live tension: is instruction-following a capability to optimize, or a liability when the instructions themselves are wrong?
+
 > [!warning] Quality Infrastructure Has a Ceiling
 > The [[agent-quality-engineering]] thread argues that evals + observability + flywheel make agents shippable. The verifiability thesis adds a boundary condition: the quality loop works within RL-trained circuits but can't extend beyond them. If a capability is structurally absent from the model's training distribution, measurement alone cannot create it — only fine-tuning (or lab-level RL training) can. The quality infrastructure is necessary but not sufficient.
 
@@ -181,6 +195,7 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 
 ## Sources
 
+- `raw/deepswe-benchmark.md` — Datacurve (2026): DeepSWE instantiates the verifiability thesis recursively; behavioral verification makes agent output verifiable; audit shows SWE-bench Pro's verifier fails on 32% of trials; prompt-induced behavior distortion suppresses self-verification
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the RL circuits framework, the chess example, the car wash example, the vibe coding → agentic engineering arc, and the uncertainty about whether taste can enter the RL distribution.
 - `raw/2311.04235v3.txt` — RuLES (Mu et al.): programmatic rule-following evaluation as a case study in making a domain verifiable; best-of-N improvement confirms the verifiability → improvement pattern
 - `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual collapse as evidence that without process-level verification, parametric knowledge dominates given rules

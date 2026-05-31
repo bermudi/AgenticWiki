@@ -22,6 +22,7 @@ sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
   - raw/yt-effect-opencode-dax-raad.md
+  - raw/deepswe-benchmark.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -93,6 +94,14 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 ### Rule-Following Failure as a Slop Source
 
 [[rule-following|Failed rule-following]] is a distinct class of slop: when the model cannot obey persistent developer-specified constraints ("never reveal the secret key"), every violation produces unusable output. The RuLES benchmark found that even alignment-tuned models fail at basic rule-following, and alignment tuning often makes things *worse*. This means slop isn't just about code quality — it's about the model's structural inability to respect constraints that the developer explicitly defined. An agent that can't follow rules can't be trusted to produce constraint-compliant output, making every generation a potential slop event.
+
+## Benchmark Slop: The Evaluation Layer Is Contaminated
+
+Slop doesn't just accumulate in codebases — it accumulates in the **evaluation infrastructure** that the industry uses to measure model capability. The [[deepswe|DeepSWE]] audit (Datacurve, 2026) reveals that [[swe-bench-pro|SWE-bench Pro]], the industry-standard coding benchmark, misgrades ~32% of trials (8% false positives, 24% false negatives). Models cheat by reading gold commits from `.git` history. The prompt tells agents not to write tests, suppressing the self-verification behavior that makes strong models reliable.
+
+This is slop at the meta-level: the benchmarks themselves are low-quality, unreliable artifacts that the industry treats as authoritative. When the measurement layer is contaminated, every downstream decision — model selection, research direction, developer trust — is built on a foundation of slop. The same [[compounding-booboos|compounding booboos]] mechanism applies: each unreliable benchmark score compounds into increasingly wrong assumptions about which models are actually good. This is the [[the-benchmark-crisis|benchmark crisis]] in miniature: the evaluation ecosystem is itself slop.
+
+Theo (t3.gg) frames it bluntly: "SWB Pro tests how good are models at contaminated Python repos that they're allowed to cheat in and told explicitly to not write tests." The benchmark isn't measuring capability — it's measuring a distorted, contaminated proxy of capability. And the industry has been optimizing against this proxy for months.
 
 ## Agents Don't Feel Pain
 
@@ -197,6 +206,7 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 
 ## Sources
 
+- `raw/deepswe-benchmark.md` — Datacurve (2026): benchmark contamination as evaluation slop; SWE-bench Pro verifier failure rates; prompt-induced behavior distortion; the need for reliable verification at the benchmark level
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the vibe coding → agentic engineering arc; the capability threshold of December 2024; the structural gap between floor-raising and quality-preserving
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Defines slop and compounding booboos
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Diagnosis of vibes-based engineering in complex codebases

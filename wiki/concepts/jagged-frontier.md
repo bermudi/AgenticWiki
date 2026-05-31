@@ -7,6 +7,7 @@ sources:
   - raw/many-tier-instruction-hierarchy.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
+  - raw/deepswe-benchmark.md
 tags: [concept, llm-capabilities, domain-variance, delegation]
 ---
 
@@ -67,6 +68,19 @@ Karpathy frames LLMs as "ghosts" rather than "animals" to explain the jaggedness
 
 This framing isn't meant to be scientifically rigorous, but to help users build a better mental model: "If you yell at them, they're not going to work better or worse. It doesn't have any impact." Being suspicious of them — rather than anthropomorphizing — is the right posture.
 
+## Evidence from [[deepswe|DeepSWE]]
+
+The [[deepswe|DeepSWE]] benchmark (Datacurve, 2026) reveals a jagged frontier that existing benchmarks compressed into invisibility. On [[swe-bench-pro|SWE-bench Pro]], models cluster in a narrow 30-point band (35-65%). On DeepSWE — which uses novel tasks, behavioral verification, and neutral prompts — the same models separate into a 70-point spread that matches developer experience:
+
+- GPT-5.5: 70% vs. [[swe-bench-pro|SWE-bench Pro]] 59%
+- Claude Opus 4.7: 54% vs. [[swe-bench-pro|SWE-bench Pro]] 64%
+- Claude Sonnet 4.6: 32% vs. [[swe-bench-pro|SWE-bench Pro]] 54%
+- Gemini 3 Flash: 5% vs. [[swe-bench-pro|SWE-bench Pro]] 35%
+
+The jaggedness isn't just across models — it's within model families. Claude misses stated requirements on multi-part prompts more than any other family (implementing one branch, forgetting the mirror). GPT implements exactly what's asked with high precision. These are stable behavioral traits, not per-run variance.
+
+DeepSWE also reveals that **prompt style** interacts with the jagged frontier. [[swe-bench-pro|SWE-bench Pro]]'s verbose, test-suppressing prompt compresses score differences. DeepSWE's short, behavioral prompt lets the frontier separate. The same model looks different depending on how you ask.
+
 ## Evidence from Model Regression
 
 The jagged frontier isn't just about different domains — it appears **within a single model generation on a single task**. Nate B Jones (2026) found that GPT 5.5, while dramatically better than its predecessor at catching semantically obvious traps in a data migration test (rejecting "Mickey Mouse" and "ASDF ASDF" as fake customers, flagging a planted $25,000 fake payment), **regressed on backend hygiene** that GPT 5.4 had handled better: missing service code conflicts, leaving payment statuses unnormalized (29 distinct raw values), and building a review UI where different panels disagreed on flagged item counts. The model advanced on semantic intuition while retreating on boring structural discipline — a jagged frontier within the same task, the same model family, the same release.
@@ -80,8 +94,12 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[the-slop-problem]] — Jagged frontier means slop risk is domain-dependent; capability in one area cannot be assumed in others
 - [[the-human-lever]] — Capability unevenness means human domain judgment is irreplaceable; models can't self-assess where their frontier is jagged
 - [[agent-quality-engineering]] — Evals must be domain-specific because capability is uneven across domains
+- [[the-benchmark-crisis]] — DeepSWE exposes a wider jagged frontier than SWE-bench Pro could measure: 70-point spread vs. 30-point
 
 ## Related
+- [[deepswe]] — The benchmark that reveals the true width of the jagged frontier in coding agents
+- [[swe-bench-pro]] — The benchmark that compressed the jagged frontier into a narrow band
+- [[benchmark-contamination]] — Contamination hides the jagged frontier by compressing score ranges
 - [[verifiability]] — Karpathy's economic theory of why the frontier is jagged: RL circuits + lab data distribution choices
 - [[agentic-engineering]] — The engineering discipline for navigating spiky, fallible agents
 - [[vibe-coding]] — Exploits the verifiable peaks of the jagged frontier
@@ -102,3 +120,4 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH results demonstrating the jagged frontier within a single capability axis: near-perfect at 2 tiers, catastrophic at 12
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the car wash example of jaggedness, RL circuits explanation, animals vs ghosts framing, and the practical implication that you must "figure out which circuits you're in for your application."
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Within-model jaggedness: 5.5 advanced on semantic traps but regressed on backend hygiene vs its predecessor, demonstrating non-monotonic capability even within the same task
+- `raw/deepswe-benchmark.md` — DeepSWE reveals the true width of the jagged frontier in coding agents: 70-point spread vs. [[swe-bench-pro|SWE-bench Pro]]'s 30-point spread

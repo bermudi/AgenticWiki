@@ -4,6 +4,8 @@ created: 2026-04-25
 updated: 2026-05-31
 sources:
   - raw/2605.18747.pdf
+  - raw/deepswe-benchmark.md
+  - raw/yt-ai-code-benchmarks-lied-to-us.md
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -11,6 +13,8 @@ unaudited_marginal: 0
 ## Sources
 
 - `raw/2605.18747.pdf` — Code as Agent Harness survey (Ning et al., 2026); index entry added
+- `raw/deepswe-benchmark.md` — DeepSWE benchmark (Datacurve, 2026); new concept + thread pages
+- `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): benchmark crisis commentary; marginal ingest
 
 # Index
 
@@ -19,6 +23,8 @@ unaudited_marginal: 0
 ## 🧵 Threads — The Big Picture
 
 Synthetic essays that trace themes across multiple sources. Start here.
+
+- [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. SWE-bench Pro misgrades ~32% of trials and suppresses self-verification. DeepSWE exposes the gap.
 
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
@@ -65,6 +71,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
 
 ## 🧠 Concepts
+- [[deepswe]] — A long-horizon coding benchmark with contamination-free tasks, behavioral verification, and 70-point model spread
+- [[benchmark-contamination]] — Training data leakage, verifier misgrading, and prompt distortion that make benchmarks unreliable
+- [[swe-bench-pro]] — The industry-standard coding benchmark; DeepSWE's audit found 32% verifier disagreement rate
 - [[ai-boilerplate-paradox]] — Verbose frameworks become preferable with AI because explicitness constrains LLM output; the DX/AX divergence
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[knowledge-triplet]] — Either you know what you want, it's in the codebase, or it's in the training data. If none of these, the model fabricates.
