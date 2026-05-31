@@ -65,6 +65,8 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 
 ## Thread
 
+- [[the-slop-problem]] — The harness's overconfident verification (green tests ≠ complete specification) is a slop vector at the verification layer
+- [[the-human-lever]] — HITL as permission governance: the survey reframes the human's safety role as multi-tier risk classification within the harness
 - [[the-agent-workflow]] — The harness framework provides the architectural vocabulary for the workflow's execution phase
 - [[the-verifiability-thesis]] — Executable verification is the core property that makes code work as a harness
 - [[agent-quality-engineering]] — Harness-level evaluation and telemetry are prerequisites for quality measurement

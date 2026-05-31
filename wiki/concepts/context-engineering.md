@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-05-16
+updated: 2026-05-31
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -9,7 +9,8 @@ sources:
   - raw/2602.11988v1.txt
   - raw/2601.20404v1.txt
   - raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md
-unaudited_marginal: 1
+  - raw/yt-effect-opencode-dax-raad.md
+unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
 
@@ -58,6 +59,12 @@ Frontier models can follow ~100-200 instructions before attention spreads too th
 
 ### NoSQL Over SQL for AI
 Dex argues that flexible schemas (front matter, markdown) are more AI-friendly than rigid SQL schemas. The agent doesn't care about the schema — it reads the data and extracts what it needs. Schemas constrain programs, not AI. An agent can evolve its own schema by adding front matter fields as needed.
+
+### Framework Verbosity as Context Engineering
+
+[[dax-raad|Dax Raad]] provides a concrete example of context engineering at the codebase level: verbose frameworks like [[effect|Effect]] embed explicit patterns (branded types, service interfaces, schema definitions) directly in each file. When an LLM reads a file, these patterns act as dense, high-signal context — the model knows exactly what the next piece of code should look like because the existing code is unambiguous. "When I ask the LLM to do something in an effect codebase, it almost always does it correctly" because the framework's verbosity is context engineering: more explicit patterns = more signal per token = better LLM output.
+
+This is context engineering applied not at the prompt level but at the codebase architecture level — choosing frameworks and patterns that maximize information density for the AI, not just the human.
 
 ## Operational Techniques
 
@@ -129,6 +136,8 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 
 ## Thread
 
+- [[the-slop-problem]] — Context pollution from verbose tool output and poorly designed context files is a primary slop vector; information-per-token density is slop prevention
+- [[the-human-lever]] — The human owns the context decisions: what to include, what to exclude, how dense the signal; context engineering operationalizes the human lever at the information layer
 - [[the-agent-workflow]] — Context engineering is the infrastructure layer beneath the agent workflow; managing information-per-token density is the operational skill the workflow depends on
 - [[agent-quality-engineering]] — The eval infrastructure (logging proxies, snapshots) is a context engineering concern
 - [[tool-design-for-agents]] — Tool output design is a context engineering concern; verbose tool output is a primary source of context bloat
@@ -156,6 +165,8 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - [[html-as-agent-output]] — HTML output trades higher token cost for richer information-per-human-read-cycle; a context engineering tradeoff where the density question shifts from per-token to per-human-attention-unit
 - [[semi-formal-reasoning]] — Structured reasoning templates are a form of context engineering: constraining the reasoning process to maximize evidence-per-token density
 - [[knowledge-triplet]] — The triplet is an information-theoretic framing of context engineering: supply the knowledge the model can't find elsewhere
+- [[ai-boilerplate-paradox]] — Framework verbosity as context engineering at the codebase architecture level
+- [[opencode]] — Real-world demonstration of Effect's verbosity as context engineering
 
 ## Sources
 
@@ -165,3 +176,4 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - `raw/2602.11988v1.txt` — Gloaguen et al. (2026). Context files as context engineering surface area; the first empirical validation that information-per-token density (minimal, operational-only files) outperforms verbose, LLM-generated alternatives.
 - `raw/2601.20404v1.txt` — Lulla et al. (2026). Efficiency evidence that well-designed context files reduce agent runtime and token consumption, consistent with context engineering goals.
 - `raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md` — Practitioners' report from Arise: failure progression from naive truncation through summarization to smart truncation + memory, long session evals technique, context-vs-memory distinction, and context management as a product/UX problem.
+- `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: Effect's verbosity as context engineering — explicit patterns in each file constrain LLM output. The framework's strictness means the AI "almost always does it correctly" because the context is unambiguous.

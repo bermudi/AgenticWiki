@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-21
+updated: 2026-05-31
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -30,6 +30,7 @@ sources:
   - raw/2603.00822v2.txt
   - raw/the-final-bottleneck.md
   - raw/2605.18747.pdf
+  - raw/yt-effect-opencode-dax-raad.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -263,6 +264,17 @@ The pattern is the same: human (or automated evaluator) defines the verification
 - **Code-guided evaluation is production-ready**: The 98.4% accuracy at 71% token savings is a pattern worth adopting. Evaluators as code, not as LLM judges.
 - **Word count calibration is fundamentally broken**: Models can't control output length precisely — they oscillate wildly ([[overcorrection-bias|"catastrophic overcorrection"]]). Post-process word counts rather than relying on the model.
 
+## The OTEL Feedback Loop
+
+[[dax-raad|Dax Raad]] describes a novel pattern for agent-assisted debugging: [[opencode|OpenCode]] — already transformed by the [[ai-boilerplate-paradox|AI boilerplate paradox]] — instruments its entire codebase with auto-instrumented OpenTelemetry spans via [[effect|Effect]], then gives the coding agent the ability to query those traces directly. When a team member reports a performance issue (e.g., slow startup), the agent can:
+
+1. Add extra logging with its hypothesis about the cause
+2. Run the application
+3. Query the OTEL traces to see what happened
+4. Diagnose the issue autonomously
+
+"The feedback loop — you don't have to use coding agents with a feedback loop, but adding a feedback loop makes them like really really powerful." This is the [[agent-observability|observability]] pattern applied to the agent itself — the agent becomes both the instrumented system and the diagnostician, closing the loop without human intervention in the middle.
+
 ## The Day-to-Day Loop
 
 Putting it together:
@@ -413,4 +425,5 @@ This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): mechanical enforcement as a practical answer to the rule-following ceiling; PATH shims, Tree-sitter checks, and architectural validators that don't depend on model reasoning; 88.3% compliance rate
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds an architectural layer beneath the workflow's operational focus; the three-layer framework provides the vocabulary for workflow phases; the multi-tier action space, context management, and verification loops are instantiations of the broader harness architecture
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
+- `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
 

@@ -39,6 +39,7 @@ Instead of "compacting" or summarizing a long chat history (which preserves the 
 The [[pi]] agent harness is designed to help stay in the Smart Zone by providing a minimal core and allowing for "sessions" that can be easily reset or partitioned to keep context fresh and relevant.
 
 ## Thread
+- [[the-slop-problem]] — Context degradation produces slop that compounds across loop iterations; the Dumb Zone is a slop source
 - [[the-agent-workflow]] — Context hygiene as the operational challenge of the workflow
 - [[tool-design-for-agents]] — Tool output as a context threat; designing tools to keep agents in the Smart Zone
 

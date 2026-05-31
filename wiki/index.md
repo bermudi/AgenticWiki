@@ -1,12 +1,16 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-26
+updated: 2026-05-31
 sources:
   - raw/2605.18747.pdf
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
+
+## Sources
+
+- `raw/2605.18747.pdf` — Code as Agent Harness survey (Ning et al., 2026); index entry added
 
 # Index
 
@@ -56,9 +60,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[christoph-treude]] — Professor at SMU; co-author of the first empirical study on AGENTS.md efficiency impact.
 - [[thariq]] — Engineer on the Claude Code team; authored the practical playbook for using HTML instead of Markdown as agent output.
 - [[xuying-ning]] — Lead author of the *Code as Agent Harness* survey (UIUC + Meta + Stanford).
+- [[dax-raad]] — Engineer at Anomaly; led OpenCode's rewrite in Effect; articulated the AI boilerplate paradox
 - [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
 
 ## 🧠 Concepts
+- [[ai-boilerplate-paradox]] — Verbose frameworks become preferable with AI because explicitness constrains LLM output; the DX/AX divergence
 - [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[knowledge-triplet]] — Either you know what you want, it's in the codebase, or it's in the training data. If none of these, the model fabricates.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
@@ -138,6 +144,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[sourcegraph]] — Universal code search and intelligence platform.
 
 ## 🛠️ Projects & Tools
+- [[effect]] — TypeScript framework bundling schema, services, streams, and tracing; its verbosity acts as AI guardrails
+- [[opencode]] — Open-source coding agent (~8M MAU) rewritten in Effect by Anomaly
 - [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.
 - [[axiom]] — Observability platform for high-cardinality, high-dimensionality log data at scale.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.

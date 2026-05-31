@@ -23,6 +23,7 @@ Mitigation via a Fix-guided Verification Filter — treating the model's propose
 ## Thread
 
 - [[prompts-in-code-review]] — Overcorrection is the primary failure mode when detailed prompts are used for code review
+- [[the-agent-workflow]] — Catastrophic overcorrection is a word-count calibration failure in iterative self-correction; post-process rather than relying on the model
 
 ## Related
 

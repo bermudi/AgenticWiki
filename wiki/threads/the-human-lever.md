@@ -1,8 +1,8 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-05-26
-unaudited_marginal: 1
+updated: 2026-05-31
+unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -25,6 +25,7 @@ sources:
   - raw/karpathy-llm-knowledge-bases.md
   - raw/karpathy-farzapedia-explicit-memory.md
   - raw/yt-llms-are-killing-agent-harness.md
+  - raw/yt-effect-opencode-dax-raad.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -88,6 +89,14 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 [[mario-zechner|Mario Zechner]] reinforces this from the tooling side: [[pi]] is designed around **observability** so the human can always see what the agent is doing and intervene before small errors compound. Minimalism in tooling isn't an aesthetic choice — it's a structural safeguard against the speed-review bottleneck.
 
 A deeper challenge for the verification contract: even when rules are explicitly given, models may not follow them. [[inferential-rule-following|RuleBench]] demonstrates that when rules contradict a model's parametric knowledge (e.g., counterfactual kinship rules), performance collapses — GPT-4o drops from 99.7% to 8.2%. The model isn't following the rule; it's pattern-matching it to training data. This means the human's verification responsibility extends beyond testing outputs to testing *whether the model actually used the rules you gave it* — a far harder problem.
+
+## Schema-First Design as the Human Lever
+
+[[dax-raad|Dax Raad]] provides a concrete instantiation of the human lever — and the [[ai-boilerplate-paradox|AI boilerplate paradox]]: his team at [[opencode|OpenCode]] aligns on data shapes using [[effect|Effect]]'s schema system *before* implementation, then lets AI fill in the details. "We try to model reality using schema and we kind of align on what makes sense, and then the implementation kind of AI does."
+
+The schema becomes the contract the human owns. Branded types — distinguishing absolute paths from relative paths, model IDs from provider IDs — prevent the kind of type confusion that causes real bugs at scale. "We can be very explicit. We can say hey this function expects a relative path, this function expects an absolute path, and when you look at the function signature you can kind of see that."
+
+This is the human lever at the type level: the human designs the type contracts (schemas, branded types, service interfaces), and the AI implements within those constraints. The stricter the contracts, the less room the AI has to produce incorrect code.
 
 ## Agent Experience (AX) is Developer Experience (DX)
 
@@ -304,5 +313,5 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/karpathy-llm-knowledge-bases.md` — Karpathy's original tweet codifying the raw/ → compile → Q&A → lint workflow; operational details (Obsidian IDE, Marp slides, CLI search engine, health checks).
 - `raw/karpathy-farzapedia-explicit-memory.md` — Karpathy's follow-up tweet endorsing Farza's personal Wikipedia as an instantiation of explicit memory; file over app, BYOAI, and agent proficiency as core skills.
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: the fashion designer metaphor, "software as we know it is dead," the knowledge triplet as the irreducible human contribution, code as cattle
-- `raw/2605.18747.pdf` — Ning et al. (2026): HITL as permission governance — multi-tier risk classification reframing the human's safety role
+- `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: schema/interface design as the human lever; team aligns on data shapes using [[effect|Effect]] schema before implementation, then lets AI fill in the details. Branded types (absolute vs. relative paths) as a concrete example of design authority preventing real bugs.
 

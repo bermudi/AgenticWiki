@@ -1,7 +1,7 @@
 ---
 title: Agent Experience (AX)
 created: 2026-04-25
-updated: 2026-05-26
+updated: 2026-05-31
 sources:
   - raw/yt-reinventing-software-panel.md
   - raw/yt-how-agents-use-dev-tools.md
@@ -67,6 +67,7 @@ As software development shifts toward agentic workflows, the "usability" of a co
 - [[html-as-agent-output]] — Output format as an AX dimension: HTML extends agent experience from codebase structure and tool interfaces to the agent's communication medium with humans
 - [[knowledge-triplet]] — AX design should maximize the codebase's contribution to the knowledge triplet
 - [[thorsten-ball]] — Challenges AX's emphasis on tool redesign: language servers are "uninteresting" when the model can just run shell commands
+- [[ai-boilerplate-paradox]] — The inversion that makes verbose, "enterprisey" frameworks preferable because explicitness is an AX feature
 
 ## Sources
 

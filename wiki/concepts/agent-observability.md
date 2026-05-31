@@ -118,6 +118,8 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 
 ## Thread
 
+- [[the-slop-problem]] — Observability catches slop in its decision context, not as isolated log lines; the concrete response to agent-driven quality degradation
+- [[the-agent-workflow]] — The OTEL feedback loop where agents query their own traces is observability as workflow infrastructure
 - [[agent-quality-engineering]] — Observability as the visibility layer of the quality framework
 
 ## Sources

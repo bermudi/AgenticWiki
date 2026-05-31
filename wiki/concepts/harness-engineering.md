@@ -110,6 +110,7 @@ The survey concludes with four properties that define the next frontier for reli
 
 ## Thread
 
+- [[the-human-lever]] — HITL as permission governance: multi-tier risk classification reframes the human's safety role within the harness
 - [[code-as-agent-harness]] — Harness engineering is the future direction of the code-as-harness framework
 - [[agent-quality-engineering]] — Harness-level evaluation extends quality engineering beyond end-task metrics
 - [[the-verifiability-thesis]] — Semantic verification and oracle adequacy qualify the verifiability thesis's assumptions

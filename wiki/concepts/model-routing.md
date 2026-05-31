@@ -84,6 +84,7 @@ Practical routing rule: **for constraint-dense prompts, route to reasoning model
 Conversely, for single-constraint or loose-constraint prompts where the model has high base accuracy, the reasoning overhead provides no benefit and the cheaper model is the correct route.
 
 ## Thread
+- [[the-human-lever]] — Task decomposition and model routing are the escape valve when the planning ceiling exceeds model capability
 - [[the-agent-workflow]] — Model routing is the cost optimization layer of the decomposition workflow
 - [[tool-design-for-agents]] — Model selection as a tool design input; different routing tiers may need different tool interfaces
 

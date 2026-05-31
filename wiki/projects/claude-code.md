@@ -1,7 +1,7 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-05-15
+updated: 2026-05-31
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md]
 tags: [tool, ai, agent, anthropic]
 unaudited_marginal: 0
@@ -63,6 +63,7 @@ This also applies in reverse: HTML files serve as high-context inputs for verifi
 
 - [[thariq]] — Claude Code team member who documented the HTML-as-output workflow pattern
 - [[html-as-agent-output]] — HTML as the emerging output format for agent communication
+- [[opencode]] — A similar open-source coding agent rewritten in Effect (~8M MAU)
 
 ## Sources
 
