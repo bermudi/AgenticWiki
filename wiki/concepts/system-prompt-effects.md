@@ -1,7 +1,7 @@
 ---
 title: System Prompt Effects
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-05-31
 sources:
   - raw/sprig-system-prompt-optimization.md
   - raw/empirical-system-prompts-code-generation.md
@@ -31,6 +31,7 @@ However, the 360-configuration empirical study on code generation reveals that s
 
 - [[context-files]] — AGENTS.md and similar files serve as system prompts for coding agents; their effects are similarly ambiguous
 - [[agent-friendly-tooling]] — System prompts are a tool surface that affects how agents interact with codebases
+- [[verifiability]] — Prompt structure affects verifiability gains: system prompt optimization demonstrates that how you prompt matters for whether tasks become verifiable by the model
 - [[smart-zone-dumb-zone]] — The non-monotonic relationship between prompt detail and quality echoes the smart zone/dumb zone pattern
 
 ## Sources

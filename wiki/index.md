@@ -30,6 +30,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
 
 ## ✍️ Authors
+- [[aaron-brethorst]] — Software engineer; argues domain expertise is the real professional moat because agentic AI commoditized implementation but not verification.
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
 - [[andrej-karpathy]] — AI researcher and educator; co-founder of OpenAI, led Autopilot at Tesla; coined "vibe coding" and "agentic engineering."
 - [[discover-ai]] — YouTube creator (code4AI); documented the synthetic truth phenomenon through a Gemini interaction.
@@ -71,6 +72,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
 - [[agentic-engineering]] — The professional discipline of coordinating AI agents without sacrificing quality; 10x is the floor, not the ceiling.
 - [[agent-evals]] — CI for probabilistic systems: the 4-layer eval stack for AI agents.
+- [[domain-expertise-as-moat]] — Agentic AI commoditized implementation but not domain knowledge. The binding constraint is "can you tell whether it's right?" — and that requires deep domain expertise.
 - [[code-as-agent-harness]] — Code as the executable, inspectable, and stateful medium through which AI agents reason, act, and coordinate.
 - [[harness-interface]] — The harness interface where code connects agents to reasoning, action, and environment modeling.
 - [[harness-mechanisms]] — Planning, memory, tool use, control, and optimization that sustain code-centric agents.

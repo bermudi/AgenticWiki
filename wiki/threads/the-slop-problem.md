@@ -79,7 +79,7 @@ The degradation also **compounds multiplicatively** with document size and inter
 ## Why It Matters
 
 - **Context pollution**: Slop fills LLM context windows with noise, making it harder for the next agent session to reason about what matters. This pushes the system into the [[smart-zone-dumb-zone|Dumb Zone]]. Poorly designed [[context-files|context files]] (AGENTS.md, CLAUDE.md) are a vector for this — the empirical evidence shows that LLM-generated context files add reasoning overhead (14–22% more tokens) without improving outcomes. A minimal, operational-only context file reduces noise; a verbose, auto-generated one adds it.
-- **Speed-review asymmetry**: AI generates faster than humans verify. Without a **[[verification-loop]]**, every generated line is an unreviewed line.
+- **Speed-review asymmetry**: AI generates faster than humans verify. Without a **[[verification-loop]]**, every generated line is an unreviewed line. [[verifiability]] explains the structural reason: code is auto-verifiable (tests, types) so RL-trained models excel at it, but the gap between generation and verification speed is exactly where slop accumulates.
 - **Design erosion**: Without a **[[shared-design-concept]]**, each agent session drifts further from the original architecture. The codebase becomes a Frankenstein of conflicting patterns.
 
 ## Explicit Frameworks as Slop Prevention

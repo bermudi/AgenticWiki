@@ -83,7 +83,7 @@ The key discipline: **never skip the Destination**. Going straight from a vague 
 [[grey-box-engineering|Grey Box Engineering]] defines the handoff between the two phases:
 
 - **HITL (Human-In-The-Loop)**: Used during planning. The human defines interfaces, types, and the overall architecture. The agent may participate in refining the design, but the human has final authority.
-- **AFK (Away-From-Keyboard)**: Once the plan is granular enough, an [[afk-agent]] executes autonomously. Each task is bounded by the interfaces and verified by the [[verification-loop]].
+- **AFK (Away-From-Keyboard)**: Once the plan is granular enough, an [[afk-agent]] executes autonomously. Each task is bounded by the interfaces and verified by the [[verification-loop]]. The [[verifiability]] framework explains why this split works: tasks that are auto-verifiable (code, tests, types) are safe to delegate to AFK agents because the verification loop can mechanically confirm correctness; tasks in unverifiable domains (design taste, domain knowledge) must remain in HITL.
 
 This isn't a one-time handoff — it's a cycle. After each AFK execution, the human reviews the outcome (via tests, not line-reading) and adjusts the plan before the next AFK session.
 

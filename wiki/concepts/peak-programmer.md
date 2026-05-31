@@ -1,11 +1,12 @@
 ---
 title: Peak Programmer
 created: 2026-04-25
-updated: 2026-05-26
+updated: 2026-05-31
 sources:
   - raw/yt-dhh-ai-pilled.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/yt-llms-are-killing-agent-harness.md
+  - raw/domain-expertise-has-always-been-the-real-moat.md
 tags: [future-of-work, economics, ai]
 ---
 
@@ -25,6 +26,10 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 4. **Code as Cattle**: [[thorsten-ball|Thorsten Ball]] argues the assumption that human-produced code is precious is outdated. GitHub's contribution graph, PR emoji reactions, and linear ticket assignment all rest on this assumption. "Who gives a shit about the contribution graph in 2026?" The tools built for a world of scarce, precious code are misfits for a world of cheap, abundant code.
 5. **The Fashion Designer Metaphor**: The software engineer of the future is like a fashion designer in Paris — knows textiles, colors, manufacturing — but doesn't cut the cloth. Value is in conceptualization and system understanding, not implementation.
 
+## Thread
+- [[the-human-lever]] — Peak programmer describes the world the human lever responds to: implementation is cheap, so human judgment moves up the stack
+- [[the-agent-workflow]] — How developers adapt to the post-implementation world.
+
 ## Related
 
 - [[the-human-lever]] — The human moves from being a "writer" to an "editor/architect."
@@ -35,14 +40,14 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 - [[dhh]] — The originator of the Peak Programmer thesis.
 - [[comprehension-debt]] — A senior engineer who can't pass a coding interview after a year of AI is peak programmer made personal.
 - [[thorsten-ball]] — "Software as we know it is dead" as the strongest articulation of peak programmer; code as cattle.
+- [[domain-expertise-as-moat]] — The career response to peak programmer: invest in domain expertise, the one thing agents can't supply.
+- [[aaron-brethorst]] — Argues the binding constraint shifted from implementation to domain-level verification; the asymmetric path collapse extends peak programmer
 - [[knowledge-triplet]] — The shift from implementation to conceptualization means "what you know and express" becomes the engineer's primary contribution.
 - [[vibe-coding]] — Vibe coding as the capability shift that triggers the peak programmer era
-
-## Thread
-- [[the-agent-workflow]] — How developers adapt to the post-implementation world.
 
 ## Sources
 
 - `raw/yt-dhh-ai-pilled.md` — Central topic of the interview between DHH and Gergely Orosz.
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — The senior engineer who fails the coding interview as the personal face of peak programmer
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: "Software as we know it is dead," code as cattle, the fashion designer metaphor, the shift from programming language skill to system conceptualization
+- `raw/domain-expertise-has-always-been-the-real-moat.md` — Brethorst: implementation commoditized, domain expertise is what remains scarce; the asymmetric path collapse

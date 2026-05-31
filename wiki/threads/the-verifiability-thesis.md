@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-05-21
+updated: 2026-05-31
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -84,6 +84,10 @@ Slop isn't a moral failing — it's what happens when vibe coding is applied out
 ### For [[the-human-lever]]
 
 The human lever operates precisely where verifiability ends. "Outsource your thinking but not your understanding" because understanding operates in the unverifiable domain. Taste, judgment, and design authority are the human's domain not because humans are magical, but because these things currently have no verification reward in RL training — and may never get good ones.
+
+### For [[domain-expertise-as-moat]]
+
+[[aaron-brethorst|Brethorst]]'s argument is the verifiability thesis applied to domain knowledge. "Can you tell whether it's right?" is Karpathy's question in a new context: domain correctness is the hardest kind to verify because it requires tacit knowledge that no RL environment captures. A logistics dispatcher knows a schedule is wrong the way a type checker knows a type is wrong — but there's no automated reward signal for domain correctness. The binding constraint shifted from "can you build it?" to "can you tell whether it's right?" because building is now verifiable (agents + tests) but domain correctness is not.
 
 ### For [[the-agent-workflow]]
 

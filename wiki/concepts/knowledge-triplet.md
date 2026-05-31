@@ -1,7 +1,7 @@
 ---
 title: Knowledge Triplet
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-31
 sources:
   - raw/yt-llms-are-killing-agent-harness.md
 tags: [concept, context, agent-harness, prompt-engineering, hallucination]
@@ -63,6 +63,7 @@ The wiki connects this to [[synthetic-truth]]: when the triplet fails, the model
 - [[thorsten-ball]] — The originator of the framework
 - [[agent-experience]] — AX design should maximize the codebase's contribution to the triplet
 - [[peak-programmer]] — The shift from implementation to conceptualization means "what you know and express" becomes the engineer's primary contribution
+- [[domain-expertise-as-moat]] — Domain expertise as the highest-value form of "what you know"; the career response to implementation commoditization
 
 ## Sources
 

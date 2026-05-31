@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-05-21
+updated: 2026-05-31
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -10,6 +10,7 @@ sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - raw/2603.00822v2.txt
   - raw/2605.18747.pdf
+  - raw/domain-expertise-has-always-been-the-real-moat.md
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -113,6 +114,9 @@ The intent-to-code axis isn't academic. It determines:
 
 Different projects and teams will land at different points. The wiki's job is to make the options explicit and traceable.
 
+> [!warning] Gap: The Domain Expert User
+> All five positions assume the person supplying intent has engineering fluency — they can write specs, PRDs, or at least articulate requirements in terms an engineer would recognize. [[aaron-brethorst|Brethorst]]'s argument in [[domain-expertise-as-moat]] suggests this assumption may not hold in the agent era. A domain expert (logistics dispatcher, clinical coder, actuary) with no software background plus an agent can be startlingly effective — they know what "right" looks like and the agent supplies the code. But they can't write a spec in any of the formats this thread describes. The intent-to-code pipeline currently has no position for "I know the correct output but can't articulate it in engineering terms." If domain experts become primary users of agent-assisted development, the mediating artifact may need to shift from engineering documents to domain-level examples, test cases, and constraints.
+
 ## Position 5: Enforcement-as-Code (ContextCov)
 
 [[contextcov|ContextCov]] (Sharma, 2026) introduces a fifth position on the intent-to-code axis that the original four didn't anticipate. Instead of asking "what artifact mediates intent → code?", it asks "what mechanically prevents the agent from producing code that violates intent?"
@@ -164,3 +168,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The axis's blind spot: synthetic truth shows model trustworthiness is an independent variable; fabrication happens at content generation level, not instruction-following level
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): introduces a fifth position on the intent-to-code axis — Enforcement-as-Code; executable guardrails as the mediating artifact; mechanical enforcement at the environment level
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds code's executability as the missing explicit dimension: code as the verifiable interface between intent and execution; the four desired harness properties (executable, inspectable, stateful, governed) are prerequisites for any position on the axis
+- `raw/domain-expertise-has-always-been-the-real-moat.md` — [[aaron-brethorst|Brethorst]]: the domain expert gap; all five positions assume engineering fluency, but domain experts + agents may be the most effective pairing

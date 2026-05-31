@@ -1,7 +1,7 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-05-16
+updated: 2026-05-31
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -89,6 +89,8 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[andrej-karpathy]] — Originator of the verifiability framework
 - [[the-agent-workflow]] — The workflow that operationalizes the verifiable/unverifiable boundary: HITL for unverifiable design decisions, AFK for verifiable implementation
 - [[model-routing]] — Routes complex tasks to the cheapest capable model; depends on knowing which domains are verifiable for which models
+- [[domain-expertise-as-moat]] — "Can you tell whether it's right?" is verifiability applied to domain knowledge; the moat exists because domain correctness is unverifiable without expertise
+- [[aaron-brethorst]] — Applies verifiability to domain knowledge: the binding constraint shifted from "can you build it?" to "can you tell whether it's right?"
 
 - [[vibes-based-engineering]] — Verifiability explains the boundary where vibes-based engineering works vs. fails
 - [[rule-following]] — RuLES's programmatic evaluation is a case study: make rule-following verifiable via deterministic checks, and performance becomes measurable and improvable

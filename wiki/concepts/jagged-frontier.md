@@ -1,7 +1,7 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-05-10
+updated: 2026-05-31
 sources:
   - raw/2604.15597v1.pdf
   - raw/many-tier-instruction-hierarchy.md
@@ -95,6 +95,7 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[model-routing]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
 - [[instruction-hierarchy]] — The 2-tier → 12-tier gap is a single-axis case study of the jagged frontier: >99% at training distribution, ~40% one step beyond
 - [[knowledge-triplet]] — Model capability degrades precisely where the triplet is weakest: novel domains where neither codebase nor training data provides signal
+- [[domain-expertise-as-moat]] — Domain expertise is the deepest form of the jagged frontier: correctness is domain-specific and unverifiable without expertise
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems
