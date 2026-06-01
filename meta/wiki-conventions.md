@@ -83,6 +83,23 @@ Where the theory is unsettled. Contradictions between sources, open questions.
 
 The `## Tensions` section is optional but encouraged when sources disagree.
 
+## Epistemic Callouts
+
+Use these standard callouts to flag the epistemic status of claims, especially on thread pages where synthesis is highest. Keep them at **claim level**, not page level — a single page may contain sourced facts, synthesized arguments, and speculative extensions simultaneously.
+
+| Callout | Use when | Example |
+|---|---|---|
+| `> [!note] Departure:` | Sources disagree on a point; the wiki is choosing one path or noting the fork | "Sources disagree on where the human lever should be applied most forcefully..." |
+| `> [!warning] Contradiction:` | A new source directly contradicts an existing wiki claim | "The AgentFloor finding that structured prompting actively hurt Gemma 4 contradicts the thread's emphasis on prompt engineering at tier E." |
+| `> [!note] Synthesis:` | The wiki author's own synthesis — not stated by any single source, but inferred from multiple | "The reconciliation is the wiki author's synthesis, not stated by Horthy..." |
+| `> [!note] Extension:` | A reasonable extrapolation beyond what sources claim, but unvalidated | "it's a reasonable but unvalidated extension" |
+
+Rules:
+- Thread pages (high synthesis) should use at least one callout. The validator warns if they don't.
+- Concept pages (mostly source summary) don't need callouts unless making claims beyond the sources.
+- Never use a callout to water down a well-sourced claim — reserve them for genuinely uncertain or synthesized territory.
+- Prefer specificity over generality: `Extension: grey-box toolchain` is better than `Extension: this whole section`.
+
 ## Cross-References
 
 - Use Obsidian wiki-links: `[[page-name]]` (no `.md` extension)

@@ -1,7 +1,7 @@
 ---
 title: Prompts in Code Review
 created: 2026-05-15
-updated: 2026-05-16
+updated: 2026-06-01
 sources:
   - raw/sprig-system-prompt-optimization.md
   - raw/empirical-system-prompts-code-generation.md
@@ -16,6 +16,9 @@ tags: [thread, code-review, prompting, llm-as-judge, overcorrection, bias]
 > How you prompt an LLM to review code is not a neutral framing — it systematically reshapes what the model sees, what it misses, and how it decides. Five papers spanning [[system-prompt-effects|system prompt optimization]], code generation, [[llm-as-code-judge|LLM-as-judge bias]], [[semi-formal-reasoning|semi-formal reasoning]], and [[overcorrection-bias|overcorrection]] reveal that prompt design is a first-class control surface with measurable, sometimes counterintuitive, effects on review quality.
 
 ## Thesis
+
+> [!note] Synthesis
+> The framing of "three findings" below is the wiki author's synthesis across five papers. No single source makes all three claims; the convergence argument is inferred.
 
 Prompt engineering for code review is not about "improving accuracy" in a monotonic sense — it's about understanding and controlling systematic biases. More detailed prompts do not uniformly help. They trade false rejections for false acceptances, inject positional preferences, amplify overcorrection, and can flip model rankings. The five sources converge on three findings:
 

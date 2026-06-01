@@ -6,11 +6,14 @@ set -uo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 echo "=== Broken [[wiki-links]] ==="
-grep -roh '\[\[[a-z0-9-]*\]\]' wiki/ 2>/dev/null | sort -u | while read -r link; do
-  clean="${link//[[/}"; clean="${clean//]]/}"
-  found=$(find wiki/ -name "${clean}.md" 2>/dev/null)
-  [ -z "$found" ] && echo "  BROKEN: $link (no wiki/${clean}.md)"
-done
+# Catch both [[slug]] and [[slug|Display]]; strip code spans first
+find wiki/ -name '*.md' -exec perl -0777 -pe 's/```.*?```//gs; s/`[^`]*`//g' {} + \
+  | grep -ohE '\[\[[a-z0-9-]+(\|[^]]*)?\]\]' 2>/dev/null | sort -u \
+  | while read -r link; do
+    clean="${link#\[\[}"; clean="${clean%%|*}"; clean="${clean%\]\]}"
+    found=$(find wiki/ -name "${clean}.md" 2>/dev/null)
+    [ -z "$found" ] && echo "  BROKEN: [[${clean}]] (no wiki/${clean}.md)"
+  done
 
 echo ""
 echo "=== Dangling raw/ references ==="

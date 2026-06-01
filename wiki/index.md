@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-05-31
+updated: 2026-06-01
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
@@ -108,6 +108,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
 - [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
+- [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.

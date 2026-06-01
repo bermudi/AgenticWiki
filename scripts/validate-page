@@ -99,10 +99,17 @@ validate_one() {
   [ -n "$body_only" ] && check ERROR "$f: sources in ## Sources but not frontmatter: $(echo "$body_only" | tr '\n' ' ')"
 
   # --- Broken outbound [[wiki-links]] ---
-  links=$(grep -oh '\[\[[a-z0-9-]*\]\]' "$f" 2>/dev/null | sort -u || true)
+  # Catch both [[slug]] and [[slug|Display]] forms
+  # Strip inline code spans and fenced code blocks first so literal [[...]] inside
+  # backticks (e.g. ManyIH privilege tags) are not treated as wiki-links.
+  links=$(perl -0777 -pe 's/```.*?```//gs; s/`[^`]*`//g' "$f" \
+    | grep -ohE '\[\[[a-z0-9-]+(\|[^]]*)?\]\]' 2>/dev/null | sort -u || true)
   if [ -n "$links" ]; then
     while IFS= read -r link; do
-      target="${link#\[\[}"; target="${target%\]\]}"
+      # Extract slug: [[slug]] or [[slug|Display]]
+      target="${link#\[\[}"
+      target="${target%%|*}"
+      target="${target%\]\]}"
       [ "$target" = "$slug" ] && continue
       if [ ! -f "wiki/${target}.md" ]; then
         if ! find wiki/ -name "${target}.md" | grep -q .; then
@@ -113,20 +120,30 @@ validate_one() {
   fi
 
   # --- Orphan check ---
-  hits=$(grep -rl "\[\[${slug}\]\]" wiki/ --include='*.md' 2>/dev/null | grep -v "$f" | wc -l || echo 0)
+  hits=$(grep -rlE "\[\[${slug}(\|[^]]*)?\]\]" wiki/ --include='*.md' 2>/dev/null | grep -v "$f" | wc -l || echo 0)
   [ "$hits" -eq 0 ] && check WARN "$f: orphan (no inbound wiki-links)"
 
   # --- Index coverage ---
-  if ! grep -q "\[\[${slug}\]\]" wiki/index.md; then
+  if ! grep -qE "\[\[${slug}(\|[^]]*)?\]\]" wiki/index.md; then
     check WARN "$f: not listed in index.md"
   fi
 
   # --- Thread section for concept pages linked from threads ---
   if [[ "$f" == wiki/concepts/* ]]; then
-    if grep -rq "\[\[${slug}\]\]" wiki/threads/ 2>/dev/null; then
+    if grep -rqE "\[\[${slug}(\|[^]]*)?\]\]" wiki/threads/ 2>/dev/null; then
       if ! grep -q '^## Thread' "$f"; then
         check ERROR "$f: linked from thread but missing ## Thread section"
       fi
+    fi
+  fi
+
+  # --- Epistemic callouts on thread pages ---
+  # Any > [!note] or > [!warning] callout counts as epistemic signaling.
+  # The four standard labels are Departure, Contradiction, Synthesis, Extension
+  # (see meta/wiki-conventions.md), but other callout labels are acceptable.
+  if [[ "$f" == wiki/threads/* ]]; then
+    if ! grep -qE '^> \[!note\]|^> \[!warning\]' "$f" 2>/dev/null; then
+      check WARN "$f: thread page missing epistemic callout (Departure/Contradiction/Synthesis/Extension or other note/warning)"
     fi
   fi
 

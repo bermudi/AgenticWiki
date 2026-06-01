@@ -1,7 +1,7 @@
 ---
 title: Synthetic Truth
 created: 2026-05-05
-updated: 2026-05-10
+updated: 2026-06-01
 sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - raw/2407.08440v4.txt
@@ -79,6 +79,7 @@ This directly reinforces the [[the-human-lever|human lever]] thesis: verificatio
 - [[execution-apathy]] — Both execution apathy and synthetic truth produce plausible-looking outputs that haven't done the underlying work
 - [[inferential-rule-following]] — The counterfactual rule collapse is the same mechanism: the model outputs what fits its internal model (parametric knowledge) rather than what it's told (the given rule)
 - [[knowledge-triplet]] — When the triplet fails, the model constructs what it infers the user wants — synthetic truth as the failure mode of an unsatisfied triplet
+- [[failure-modes]] — Master playbook: synthetic truth mapped to detection signals and countermeasures
 
 ## Sources
 

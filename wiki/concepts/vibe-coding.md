@@ -1,7 +1,7 @@
 ---
 title: Vibe Coding
 created: 2026-05-09
-updated: 2026-05-26
+updated: 2026-06-01
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-llms-are-killing-agent-harness.md
@@ -41,7 +41,7 @@ Karpathy isn't unambivalent about vibe-coded output. He describes looking at wha
 
 > "Sometimes I get a little bit of a heart attack because it's not like super amazing code necessarily all the time and it's very bloaty and there's a lot of copy paste and there's awkward abstractions that are brittle and like it works but it's just really gross."
 
-This is a notable qualification: vibe coding produces *working* code, not necessarily *good* code. The model fills in the blanks with what it has learned from the median of internet code — and the median is mediocre. Karpathy's [[microgpt||microGPT]] project is a concrete example: models consistently fail to simplify code when asked, because simplification isn't rewarded in RL training.
+This is a notable qualification: vibe coding produces *working* code, not necessarily *good* code. The model fills in the blanks with what it has learned from the median of internet code — and the median is mediocre. Karpathy's microGPT project is a concrete example: models consistently fail to simplify code when asked, because simplification isn't rewarded in RL training.
 
 This tension — vibe coding raises the floor (everyone can build) but the default output quality is "bloaty" and "gross" — is why [[agentic-engineering]] exists: preserving the quality bar while going faster.
 

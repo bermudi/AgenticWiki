@@ -1,7 +1,7 @@
 ---
 title: Execution Apathy
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-06-01
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [llm, failure-mode, agent-quality, planning]
@@ -59,6 +59,7 @@ The AgentFloor study found that system prompts designed to prevent this (e.g., "
 - [[discover-ai]] — The source that documented GPT-5's execution apathy failure mode
 
 - [[afk-agent]] — AFK agents may exhibit execution apathy: plausible plans with no real work behind them
+- [[failure-modes]] — Master playbook: execution apathy mapped to detection signals and countermeasures
 
 ## Sources
 

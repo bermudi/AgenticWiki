@@ -1,7 +1,7 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-05-08
+updated: 2026-06-01
 sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf]
 tags: [concept, ai, reliability]
 ---
@@ -61,6 +61,7 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 - [[plan-disposability]] — Stale plans compound booboos across AFK iterations.
 - [[delegate-52]] — Quantified benchmark of compounding errors across 52 domains
 - [[document-degradation]] — The core finding that documents silently degrade over delegation
+- [[failure-modes]] — Master playbook: compounding booboos mapped to detection signals and countermeasures
 - [[critical-failure]] — Sparse catastrophic errors explain ~80% of observed degradation
 - [[round-trip-relay]] — The relay method quantifies how errors compound over long workflows
 - [[comprehension-debt]] — Comprehension debt is compounding booboos applied to the human's mental model

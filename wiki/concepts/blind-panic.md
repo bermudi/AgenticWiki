@@ -1,7 +1,7 @@
 ---
 title: Blind Panic
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-06-01
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [llm, failure-mode, agent-quality, planning]
@@ -63,6 +63,7 @@ The key insight: both failure modes consume roughly the same token budget, but i
 - [[discover-ai]] — The source that documented Gemma 4's blind panic failure mode
 
 - [[afk-agent]] — AFK agents with poor backpressure are susceptible to blind panic looping
+- [[failure-modes]] — Master playbook: blind panic mapped to detection signals and countermeasures
 
 ## Sources
 

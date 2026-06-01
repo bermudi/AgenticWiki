@@ -1,7 +1,7 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-05-21
+updated: 2026-06-01
 sources:
   - raw/2605.18747.pdf
 tags: [concept, agent-harness, evaluation, verification, safety, open-problems]
@@ -115,6 +115,7 @@ The survey concludes with four properties that define the next frontier for reli
 - [[agent-quality-engineering]] — Harness-level evaluation extends quality engineering beyond end-task metrics
 - [[the-verifiability-thesis]] — Semantic verification and oracle adequacy qualify the verifiability thesis's assumptions
 - [[the-agent-workflow]] — The four properties (executable, inspectable, stateful, governed) are the design principles for the workflow's infrastructure
+- [[failure-modes]] — The playbook mapping harness-level and model-level failure modes to detection signals and countermeasures
 
 ## Related
 

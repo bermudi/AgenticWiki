@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-05-31
+updated: 2026-06-01
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -36,6 +36,9 @@ Verifiability → RL training distribution → capability peaks & gaps → jagge
 The other threads in this wiki describe the *symptoms* and *responses*. This thread traces the *cause*.
 
 ## The Causal Chain
+
+> [!note] Synthesis
+> The causal chain below and the "implications for other threads" sections are the wiki author's synthesis. Karpathy stated the core thesis (verifiability drives RL training, which creates the jagged frontier) in interview form; the systematic mapping to other threads, the recursive application to evaluation and harness layers, and the formalization as a causal chain are constructed here.
 
 ### 1. Verifiability Determines Capability
 

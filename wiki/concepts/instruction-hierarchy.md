@@ -1,7 +1,7 @@
 ---
 title: Instruction Hierarchy
 created: 2026-05-08
-updated: 2026-05-10
+updated: 2026-06-01
 sources:
   - raw/many-tier-instruction-hierarchy.md
   - raw/yt-agent-trust-vector-study-2026.md
