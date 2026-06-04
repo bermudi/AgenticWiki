@@ -1,7 +1,7 @@
 ---
 title: Failure Modes
 created: 2026-06-01
-updated: 2026-06-01
+updated: 2026-06-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -103,6 +103,8 @@ These occur when the quality infrastructure itself is compromised:
 - [[agent-quality-engineering]] — The quality infrastructure that catches failure modes in production before they ship
 - [[the-agent-workflow]] — Where deliberate friction, context hygiene, and verification loops fit in day-to-day operations
 - [[harness-engineering]] — The emerging science of building harnesses that are executable, inspectable, stateful, and governed
+- [[the-verifiability-thesis]] — Verifiability is the structural precondition for catching failure modes; unverifiable domains accumulate them silently
+- [[the-benchmark-crisis]] — Benchmark gaming is itself a failure mode: the eval infrastructure is compromised, not just the models
 
 ## Related
 
@@ -122,6 +124,7 @@ These occur when the quality infrastructure itself is compromised:
 - [[rubric-evaluation]] — How to structure LLM-as-judge to minimize bias and variance
 - friction — The human verification step that catches synthetic truth
 - [[critical-failure]] — Sparse catastrophic errors that explain most observed degradation in DELEGATE-52
+- [[vibe-coding]] — Vibe coding without verification is the failure mode that most of this table is organized against
 
 ## Sources
 

@@ -60,6 +60,7 @@ This tension — vibe coding raises the floor (everyone can build) but the defau
 - [[the-human-lever]] — Vibe coding makes the human lever more important, not less: when code generation is automated, design authority and verification become the human's core job
 - [[the-slop-problem]] — Vibe coding without discipline produces slop; agentic engineering is the proposed path forward
 - [[the-agent-workflow]] — Agentic engineering as the operational discipline for vibe coding at professional scale
+- [[failure-modes]] — Vibe coding is a documented failure mode in the engineering playbook: accepting AI output without verification
 
 ## Related
 

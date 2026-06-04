@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-05-31
+updated: 2026-06-04
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -23,6 +23,8 @@ sources:
   - raw/2311.04235v3.txt
   - raw/yt-effect-opencode-dax-raad.md
   - raw/deepswe-benchmark.md
+  - raw/agentic-coding-is-a-trap.md
+  - raw/yt-we-all-fell-for-it.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -101,7 +103,7 @@ Slop doesn't just accumulate in codebases — it accumulates in the **evaluation
 
 This is slop at the meta-level: the benchmarks themselves are low-quality, unreliable artifacts that the industry treats as authoritative. When the measurement layer is contaminated, every downstream decision — model selection, research direction, developer trust — is built on a foundation of slop. The same [[compounding-booboos|compounding booboos]] mechanism applies: each unreliable benchmark score compounds into increasingly wrong assumptions about which models are actually good. This is the [[the-benchmark-crisis|benchmark crisis]] in miniature: the evaluation ecosystem is itself slop.
 
-Theo (t3.gg) frames it bluntly: "SWB Pro tests how good are models at contaminated Python repos that they're allowed to cheat in and told explicitly to not write tests." The benchmark isn't measuring capability — it's measuring a distorted, contaminated proxy of capability. And the industry has been optimizing against this proxy for months.
+[[theo-t3gg|Theo]] (t3.gg) frames it bluntly: "SWB Pro tests how good are models at contaminated Python repos that they're allowed to cheat in and told explicitly to not write tests." The benchmark isn't measuring capability — it's measuring a distorted, contaminated proxy of capability. And the industry has been optimizing against this proxy for months.
 
 ## Agents Don't Feel Pain
 
@@ -226,3 +228,5 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/2311.04235v3.txt` — RuLES (Mu et al.): rule-following failures as a distinct slop vector; alignment-tuned models are worse at obeying developer-defined constraints, making every generation a potential slop event
 - `raw/2605.18747.pdf` — Ning et al.: Code as Agent Harness survey; overconfident verification as slop vector; oracle adequacy problem (§5.2.2)
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: explicit frameworks as slop prevention; Effect's strict patterns constrain LLM output so "it almost always does it correctly"
+- `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: cognitive debt as the human-side complement to codebase slop; the inverted priority list (speed over understanding); the argument that AI accelerates the wrong parts of development
+- `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the code-frequency distinction (ship vs. one-off); forced speed without earned competence produces slop; "most devs should not be allowed to code fast"

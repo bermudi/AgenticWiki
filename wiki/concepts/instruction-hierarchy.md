@@ -1,7 +1,7 @@
 ---
 title: Instruction Hierarchy
 created: 2026-05-08
-updated: 2026-06-01
+updated: 2026-06-03
 sources:
   - raw/many-tier-instruction-hierarchy.md
   - raw/yt-agent-trust-vector-study-2026.md
@@ -151,6 +151,7 @@ The two approaches are complementary rather than competing: ManyIH addresses how
 - [[the-agent-workflow]] — Multi-agent workflows inherently create instruction conflicts; the hierarchy determines whose output wins
 - [[the-human-lever]] — ManyIH reveals that the human lever's trust delegation is bounded by model architectural limits: the human can design the perfect hierarchy, but the model fails to follow it 60% of the time beyond 2-3 tiers
 - [[contextcov]] — Mechanical enforcement as an alternative to instruction hierarchy resolution; executable checks bypass the combinatorial collapse problem for operationalized constraints
+- [[failure-modes]] — Instruction hierarchy collapse is a failure mode that compounds with multi-agent systems; the failure-modes playbook maps it to countermeasures
 
 ## Related
 - [[agent-evals]] — MANYIH-BENCH joins [[delegate-52]] and [[agent-floor]] in the long-horizon eval landscape, each revealing a distinct failure mode
@@ -164,6 +165,7 @@ The two approaches are complementary rather than competing: ManyIH addresses how
 - [[inferential-rule-following]] — RuleBench formalizes the hierarchy problem in the reasoning domain: given rules should outrank parametric knowledge, but don't
 - [[iterative-self-correction]] — Meeseeks shows iterative feedback can partially compensate for hierarchy failures, but with a hard sub-91% ceiling
 - [[contextcov]] — Mechanical enforcement that doesn't depend on the model resolving instruction conflicts; complementary to ManyIH for deterministic constraint types
+- [[failure-modes]] — Instruction hierarchy collapse is a documented failure mode; the master table maps it to detection signals and countermeasures
 
 ## Sources
 - `raw/many-tier-instruction-hierarchy.md` — The ManyIH paper (Zhang et al., JHU, April 2026): paradigm definition, Privilege Prompt Interface design, MANYIH-BENCH construction, experimental results and analysis

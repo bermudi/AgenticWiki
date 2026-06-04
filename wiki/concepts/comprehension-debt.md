@@ -1,10 +1,13 @@
 ---
 title: Comprehension Debt
 created: 2026-05-02
-updated: 2026-05-04
+updated: 2026-06-03
 sources:
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
+  - raw/agentic-coding-is-a-trap.md
+  - raw/yt-we-all-fell-for-it.md
 tags: [concept, ai-engineering, cognitive-debt, code-quality]
+unaudited_marginal: 0
 ---
 
 # Comprehension Debt
@@ -80,6 +83,7 @@ That is the part the model cannot hold for you, because that is the part you are
 
 ## Thread
 
+- [[the-cognitive-cost]] — Comprehension debt is a core concept in the cognitive cost thread; the gap between code and understanding that cognitive debt widens
 - [[the-human-lever]] — Comprehension debt is what happens when you lose the human lever
 - [[the-slop-problem]] — Comprehension debt is the cognitive consequence of slop accumulation
 - [[the-agent-workflow]] — Comprehension debt is the cost of delegating without understanding the workflow's outcome
@@ -96,7 +100,13 @@ That is the part the model cannot hold for you, because that is the part you are
 - [[addy-osmani]] — Coined the term
 - [[the-gray-cat]] — Personal account of living inside comprehension debt and recovering
 - [[slop]] — Slop degrades the human's mental model too; comprehension debt is the cognitive consequence.
+- [[failure-modes]] — Comprehension debt is a human-in-the-loop failure mode: the human outsources thinking but not understanding
+- [[cognitive-debt]] — Sibling concept: cognitive debt tracks degradation of the *capacity* to understand; comprehension debt tracks the gap between code and understanding
+- [[skill-atrophy]] — The mechanism by which comprehension debt accelerates (as skills erode, the gap widens faster)
+- [[the-cognitive-cost]] — The thread that frames comprehension debt as part of a larger cognitive cost structure
 
 ## Sources
 
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Core source: definition, Anthropic RCT, inquiry-vs-delegation, personal drift and recovery, cultural signal
+- `raw/agentic-coding-is-a-trap.md` — Lars Faye: cognitive debt as the broader frame (comprehension debt is a symptom of cognitive debt); the Anthropic supervision paradox quote; the argument that comprehension loss is faster than previous transitions
+- `raw/yt-we-all-fell-for-it.md` — Theo: the debugging story as a case where comprehension debt was avoided through deep system understanding; the code-frequency distinction (comprehension debt matters more for ship code than one-off code)

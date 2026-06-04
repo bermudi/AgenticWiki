@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-05-31
+updated: 2026-06-03
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -11,6 +11,8 @@ sources:
   - raw/2603.00822v2.txt
   - raw/2605.18747.pdf
   - raw/domain-expertise-has-always-been-the-real-moat.md
+  - raw/agentic-coding-is-a-trap.md
+  - raw/yt-we-all-fell-for-it.md
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -169,3 +171,5 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): introduces a fifth position on the intent-to-code axis — Enforcement-as-Code; executable guardrails as the mediating artifact; mechanical enforcement at the environment level
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds code's executability as the missing explicit dimension: code as the verifiable interface between intent and execution; the four desired harness properties (executable, inspectable, stateful, governed) are prerequisites for any position on the axis
 - `raw/domain-expertise-has-always-been-the-real-moat.md` — [[aaron-brethorst|Brethorst]]: the domain expert gap; all five positions assume engineering fluency, but domain experts + agents may be the most effective pairing
+- `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: "coding as planning" argument — some developers plan and think better with code; typing out code is how they figure out what to do; this challenges the specs-to-code position by arguing code IS the thinking, not just the output
+- `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: "the Theo method" — start with minimal implementation, learn from it, then spec; write once, throw it away, build it right; AI makes experimentation cheaper ("when you get it wrong, it's never been cheaper to fix it")

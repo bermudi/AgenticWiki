@@ -1,7 +1,7 @@
 ---
 title: Domain Expertise as Moat
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-03
 sources:
   - raw/domain-expertise-has-always-been-the-real-moat.md
 tags: [concept, domain-expertise, verification, career, human-lever]
@@ -60,6 +60,8 @@ It reinforces the [[knowledge-triplet]]: the irreducible human contribution is w
 ## Thread
 - [[the-human-lever]] — Domain expertise is the sharpest form of the human lever: the binding constraint on whether AI-generated output is correct
 - [[the-verifiability-thesis]] — "Can you tell whether it's right?" is verifiability applied to domain knowledge specifically
+- [[intent-to-code]] — The intent-to-code pipeline assumes engineering fluency; domain experts bypass it entirely by knowing what right looks like
+- [[the-cognitive-cost]] — Domain expertise may substitute for coding skill as the population-level moat if coding comprehension erodes
 
 ## Related
 

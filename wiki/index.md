@@ -1,11 +1,13 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-01
+updated: 2026-06-03
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
+  - raw/agentic-coding-is-a-trap.md
+  - raw/yt-we-all-fell-for-it.md
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -15,6 +17,8 @@ unaudited_marginal: 0
 - `raw/2605.18747.pdf` — Code as Agent Harness survey (Ning et al., 2026); index entry added
 - `raw/deepswe-benchmark.md` — DeepSWE benchmark (Datacurve, 2026); new concept + thread pages
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): benchmark crisis commentary; marginal ingest
+- `raw/agentic-coding-is-a-trap.md` — Lars Faye: cognitive debt, supervision paradox, skill atrophy; new thread + concept + author pages
+- `raw/yt-we-all-fell-for-it.md` — Theo (t3.gg): video response to Faye; cognitive cost commentary; new author page + thread update
 
 # Index
 
@@ -24,6 +28,7 @@ unaudited_marginal: 0
 
 Synthetic essays that trace themes across multiple sources. Start here.
 
+- [[the-cognitive-cost]] — Agentic coding trades cognitive capacity for output volume. The skills needed to supervise agents erode through sustained use. The population of humans capable of providing design authority may be shrinking.
 - [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. SWE-bench Pro misgrades ~32% of trials and suppresses self-verification. DeepSWE exposes the gap.
 
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
@@ -36,6 +41,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
 
 ## ✍️ Authors
+- [[lars-faye]] — Developer and writer; introduced "cognitive debt" and articulated the supervision paradox from Anthropic's research.
+- [[theo-t3gg]] — YouTube creator (t3.gg); commentary on cognitive debt, skill atrophy, and the code-frequency distinction; creator of T3 Stack.
 - [[aaron-brethorst]] — Software engineer; argues domain expertise is the real professional moat because agentic AI commoditized implementation but not verification.
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
 - [[andrej-karpathy]] — AI researcher and educator; co-founder of OpenAI, led Autopilot at Tesla; coined "vibe coding" and "agentic engineering."
@@ -71,6 +78,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
 
 ## 🧠 Concepts
+- [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
+- [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
+- [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.
 - [[deepswe]] — A long-horizon coding benchmark with contamination-free tasks, behavioral verification, and 70-point model spread
 - [[benchmark-contamination]] — Training data leakage, verifier misgrading, and prompt distortion that make benchmarks unreliable
 - [[swe-bench-pro]] — The industry-standard coding benchmark; DeepSWE's audit found 32% verifier disagreement rate

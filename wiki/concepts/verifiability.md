@@ -1,7 +1,7 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-05-31
+updated: 2026-06-03
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -78,6 +78,7 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[the-human-lever]] — Verifiability explains which domains need human judgment: the unverifiable ones
 - [[the-slop-problem]] — Slop flourishes in domains that are hard to verify; verifiability is the structural defense
 - [[agent-quality-engineering]] — Evals are the attempt to make agent quality verifiable
+- [[the-benchmark-crisis]] — Public benchmarks are unreliable precisely because they're verifiable artifacts being gamed; verifiability applied to model selection means trusting your own evals, not leaderboards
 
 ## Related
 
