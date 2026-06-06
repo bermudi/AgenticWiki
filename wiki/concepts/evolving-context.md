@@ -1,7 +1,7 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-05-10
+updated: 2026-06-05
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
@@ -84,6 +84,7 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 - [[chris-parsons]] — Worker loop skills evolved via post-session reflection; skill learning as evolving context in practice
 
 - [[procedural-knowledge]] — Capturing procedural knowledge from experience is a form of evolving context
+- [[babysitter-agent]] — The babysitter's handoff prompts are a form of evolving context — what survives across sessions
 
 ## Sources
 

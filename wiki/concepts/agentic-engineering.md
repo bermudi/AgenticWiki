@@ -1,10 +1,12 @@
 ---
 title: Agentic Engineering
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-06-05
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+  - raw/yt-systems-building-systems.md
 tags: [concept, ai-engineering, discipline]
+unaudited_marginal: 0
 ---
 
 # Agentic Engineering
@@ -36,6 +38,12 @@ The human remains in charge of:
 - **Judgment**: Spotting when the agent does something weird
 - **Fundamentals**: Understanding what the system is doing (e.g., tensor views vs copies) — not API details (e.g., `keep_dim` vs `keepdims`)
 
+## The Next Step: Software Factories
+
+[[eero-alvar|Eero Alvar]] extends the agentic engineering arc: the next logical step is shifting from *building software with agents* to *designing the systems that build the software*. This is the [[software-factory]] concept — a system that maps spec-like inputs to finished software without human steering.
+
+The current state of agentic engineering (sitting in the terminal, steering agents one feature at a time) is the human-in-the-loop baseline. The software factory automates the human's role entirely. The hard part isn't building the factory — it's [[aiming-problem|aiming it]] to produce quality output rather than [[slop]].
+
 ## Hiring for Agentic Engineering
 
 Karpathy proposes a different hiring paradigm: instead of puzzles, give candidates "a really big project." His example: build a Twitter clone, make it really secure, have agents simulate activity on it, then "use 10 Codexes 5.4x for X high to try to break your website — and they should not be able to break it."
@@ -60,9 +68,11 @@ The evaluation is: can you build something large using agents that withstands ag
 - [[the-human-lever]] — The human role of taste, judgment, and design authority within agentic engineering
 - [[jagged-frontier]] — The spiky capability surface that agentic engineering must navigate
 - [[context-engineering]] — One of the core skills of agentic engineering proficiency
+- [[babysitter-agent]] — A proposed infrastructure component for professional-grade agentic systems
 - [[software-1-2-3]] — Agentic engineering is the professional discipline for building with Software 3.0
 - [[intent-to-code]] — Both plan-as-contract and alignment-first positions are strategies within agentic engineering, differing on where verification lives
 
 ## Sources
 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: coining of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm, and the distinction from vibe coding.
+- `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: agentic engineering's next logical step — from building software to designing systems that build software (software factories)

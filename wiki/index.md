@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-03
+updated: 2026-06-05
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
@@ -41,6 +41,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
 
 ## ✍️ Authors
+- [[eero-alvar]] — YouTube creator; proposes software factories and the aiming problem as the next step in agentic engineering
 - [[lars-faye]] — Developer and writer; introduced "cognitive debt" and articulated the supervision paradox from Anthropic's research.
 - [[theo-t3gg]] — YouTube creator (t3.gg); commentary on cognitive debt, skill atrophy, and the code-frequency distinction; creator of T3 Stack.
 - [[aaron-brethorst]] — Software engineer; argues domain expertise is the real professional moat because agentic AI commoditized implementation but not verification.
@@ -78,6 +79,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
 
 ## 🧠 Concepts
+- [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
+- [[babysitter-agent]] — An invisible agent managing another agent's context as its subconscious mind
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
 - [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.
@@ -146,6 +149,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
 - [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
+- [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
 - [[system-prompt-effects]] — System prompts have measurable, non-monotonic effects on LLM performance that interact with model scale, prompting strategy, and programming language.
 - [[llm-as-code-judge]] — Using LLMs to evaluate code quality; increasingly common in agentic SE pipelines but suffers from systematic prompt-induced biases.

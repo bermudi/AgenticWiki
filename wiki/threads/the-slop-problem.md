@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-06-04
+updated: 2026-06-05
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -25,6 +25,7 @@ sources:
   - raw/deepswe-benchmark.md
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
+  - raw/yt-systems-building-systems.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -96,6 +97,14 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 ### Rule-Following Failure as a Slop Source
 
 [[rule-following|Failed rule-following]] is a distinct class of slop: when the model cannot obey persistent developer-specified constraints ("never reveal the secret key"), every violation produces unusable output. The RuLES benchmark found that even alignment-tuned models fail at basic rule-following, and alignment tuning often makes things *worse*. This means slop isn't just about code quality — it's about the model's structural inability to respect constraints that the developer explicitly defined. An agent that can't follow rules can't be trusted to produce constraint-compliant output, making every generation a potential slop event.
+
+## The Software Factory Framing: Slop as the Missed Subset
+
+[[eero-alvar|Eero Alvar]] offers the most precise definition of slop to date. In his [[software-factory]] framework, the output space of an automated software production system is enormous, and only a tiny subset constitutes **desirable outputs** — production-ready, spec-aligned, no vulnerabilities, no bugs. Everything outside that subset is slop.
+
+The insight: building machinery that produces *something resembling* finished software is trivial. The hard part is **[[aiming-problem|aiming the system]]** to land in the desirable subset. This reframes the slop problem from a quality issue to a targeting problem — and the targeting problem is likely **chaotic**: small changes to the input spec produce wildly different outputs. Tuning the system to reliably produce quality output is the core engineering challenge.
+
+This connects to [[matt-pocock|Matt Pocock]]'s software entropy framing: entropy is the mechanism by which outputs drift out of the desirable subset. The software factory framing makes the destination explicit where Pocock describes the drift.
 
 ## Benchmark Slop: The Evaluation Layer Is Contaminated
 
@@ -230,3 +239,4 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: explicit frameworks as slop prevention; Effect's strict patterns constrain LLM output so "it almost always does it correctly"
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: cognitive debt as the human-side complement to codebase slop; the inverted priority list (speed over understanding); the argument that AI accelerates the wrong parts of development
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the code-frequency distinction (ship vs. one-off); forced speed without earned competence produces slop; "most devs should not be allowed to code fast"
+- `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: slop defined as outputs outside the desirable subset in the software factory mapping; chaos property of spec→implementation mapping; the aiming problem as the inverse of the slop problem

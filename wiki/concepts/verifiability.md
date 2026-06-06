@@ -1,7 +1,7 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-06-03
+updated: 2026-06-05
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -101,6 +101,7 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[semi-formal-reasoning]] — Structured reasoning templates produce evidence certificates that enable execution-free verification; accuracy improves from 78% to 88–93%
 - [[system-prompt-effects]] — System prompt optimization (SPRIG) demonstrates that verifiability gains depend on how the prompt is structured, not just what it asks for
 - [[semi-formal-reasoning]] — Structured evidence certificates enable execution-free verification; patch equivalence accuracy improves from 78% to 88% by mandating premises and execution traces
+- [[aiming-problem]] — Verification agents are a tuning mechanism for the aiming problem: by tuning what verification checks catch, you aim the system toward the desirable subset
 
 ## Sources
 

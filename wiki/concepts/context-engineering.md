@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-05-31
+updated: 2026-06-05
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -10,6 +10,7 @@ sources:
   - raw/2601.20404v1.txt
   - raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md
   - raw/yt-effect-opencode-dax-raad.md
+  - raw/yt-systems-building-systems.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -134,6 +135,18 @@ See [[satisfaction-of-search]] for the full treatment. Introduced by Werry from 
 
 Werry's benchmark data shows the concrete impact of context engineering at organizational scale: implementing Anthropic's adaptive thinking mode took 2.5 hours and 21M tokens *without* a context engine vs. 25 minutes and 10M tokens *with* one. The improvement comes from eliminating doom loops — the agent gets the right context upfront and doesn't need to iterate through multiple wrong approaches.
 
+## Agent Persistence as Context Engineering
+
+[[eero-alvar|Eero Alvar]] identifies agent persistence as the shared bottleneck across all [[software-factory]] designs. The problem: long-running complex tasks can't fit in a single session, and the agent has to manage its own context on top of orchestrating the build.
+
+Three persistence mechanisms, each a context engineering problem:
+
+1. **New session tool**: Agent ends its session and starts a new one with a crafted prompt. Works mechanically, but the agent accumulates files it never cleans up, reads the same context repeatedly, and spends most of each session reorienting. Context engineering failure: the handoff prompt doesn't compress enough signal.
+2. **Compact tool**: In-session compaction. Lossy — the agent has limited control over what survives. Context engineering failure: compaction is a blunt instrument that doesn't preserve the right information.
+3. **[[babysitter-agent]]**: An invisible agent that crafts perfect session-launch prompts. The babysitter is a dedicated context engineering agent — its entire job is maximizing information density in the handoff between sessions.
+
+The deeper insight: ideally, the agent shouldn't have to think about context management at all. Context engineering should be infrastructure, not agent cognition.
+
 ## Thread
 
 - [[the-slop-problem]] — Context pollution from verbose tool output and poorly designed context files is a primary slop vector; information-per-token density is slop prevention
@@ -159,6 +172,7 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - [[unblocked]] — A productized context engine architecture
 - [[peter-werry]] — Contributions to context engine architecture, satisfaction of search, and organizational context retrieval
 - [[dynamic-trust]] — Real-time context injection is the mechanism for the "time-specific context" component of dynamic trust; context engineering enables it
+- [[aiming-problem]] — Instruction tuning is context engineering applied at the system level: the instructions are the context that shapes agent behavior toward the desirable subset
 - [[agentic-engineering]] — Context engineering is a core proficiency of agentic engineering; the discipline demands mastery of what to put in the context window
 - [[claude-code]] — The primary agent substrate that context engineering techniques are applied to; Claude Code's sub-agents, file-based tools, and AGENTS.md are context engineering surface area
 - [[context-files]] — Context files (AGENTS.md, CLAUDE.md) are the concrete artifact through which context engineering principles (minimalism, operational focus, high signal density) are applied at the repository level; recent empirical evidence validates that information-per-token density matters more than volume
@@ -177,3 +191,4 @@ Werry's benchmark data shows the concrete impact of context engineering at organ
 - `raw/2601.20404v1.txt` — Lulla et al. (2026). Efficiency evidence that well-designed context files reduce agent runtime and token consumption, consistent with context engineering goals.
 - `raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md` — Practitioners' report from Arise: failure progression from naive truncation through summarization to smart truncation + memory, long session evals technique, context-vs-memory distinction, and context management as a product/UX problem.
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: Effect's verbosity as context engineering — explicit patterns in each file constrain LLM output. The framework's strictness means the AI "almost always does it correctly" because the context is unambiguous.
+- `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: agent persistence as a context engineering problem; babysitter agent as dedicated context management infrastructure; instruction libraries as factory-level context engineering

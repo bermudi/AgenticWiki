@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-05-21
+updated: 2026-06-05
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -101,6 +101,7 @@ This is the multi-agent extension of the backpressure principle: engineering the
 - [[iterative-self-correction]] — Meeseeks's code-guided constraint evaluation is automated mechanical backpressure: correct-by-construction verification at 98.4% accuracy
 - [[contextcov]] — ContextCov implements mechanical backpressure at process, source, and architectural levels via PATH shims, Tree-sitter, and dependency graph analysis
 - [[code-as-agent-harness]] — Backpressure as a form of harness control within the plan-execute-verify loop
+- [[aiming-problem]] — Backpressure is a mechanical aiming mechanism: tests, builds, and LLM-as-judge steer outputs toward the desirable subset
 
 ## Sources
 

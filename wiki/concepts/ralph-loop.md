@@ -1,7 +1,7 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-05-10
+updated: 2026-06-05
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -189,6 +189,8 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - [[iterative-self-correction]] — Meeseeks's feedback-driven self-correction loop is structurally identical to a Ralph Loop with automated constraint evaluation replacing human review — the same pattern at the per-response level
 
 - [[multi-tier-action-space]] — The Ralph loop structures execution across multiple action-space tiers
+- [[software-factory]] — The Ralph Loop's fresh-context-per-iteration is a minimalist persistence mechanism for the software factory architecture
+- [[babysitter-agent]] — The babysitter is a more sophisticated alternative to the Ralph Loop's crude fresh-context-per-iteration approach
 
 ## Sources
 

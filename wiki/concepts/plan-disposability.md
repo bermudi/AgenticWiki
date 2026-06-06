@@ -1,7 +1,7 @@
 ---
 title: Plan Disposability
 created: 2026-04-26
-updated: 2026-05-05
+updated: 2026-06-05
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -49,6 +49,7 @@ Plan disposability is a form of [[smart-zone-dumb-zone|context management]] for 
 - [[geoffrey-huntley]] — Originator of the plan disposability principle
 - [[ralph-loop]] — Plan disposability as a core discipline of the Ralph loop
 - [[doc-rot]] — Doc rot is why plan disposability matters: stale plans are a vector for doc rot
+- [[software-factory]] — Fresh plans per session as a persistence strategy for the software factory architecture
 
 ## Sources
 

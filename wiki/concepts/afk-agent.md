@@ -1,7 +1,7 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-05-07
+updated: 2026-06-05
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
 tags: [concept, workflow, agents]
 ---
@@ -71,7 +71,7 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[execution-apathy]] — Execution apathy is particularly dangerous for AFK agents: they report completion without having done the work
 - [[blind-panic]] — Blind panic manifests as an AFK agent that runs its full budget producing confused, looping traces
 - [[model-routing]] — Model routing enables cheaper, more scalable AFK execution by routing subtasks to the cheapest capable model
-
+- [[software-factory]] — The software factory is the full automation of the AFK agent concept — replacing the human-in-the-loop with a system
 - [[wide-events]] — Wide events make AFK agent behavior inspectable without constant human attention
 
 ## Sources

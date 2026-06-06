@@ -1,9 +1,10 @@
 ---
 title: Multi-Agent Code Orchestration
 created: 2026-05-21
-updated: 2026-05-21
+updated: 2026-06-05
 sources:
   - raw/2605.18747.pdf
+  - raw/yt-systems-building-systems.md
 tags: [concept, multi-agent, orchestration, code-harness, collaboration]
 unaudited_marginal: 0
 ---
@@ -11,6 +12,15 @@ unaudited_marginal: 0
 # Multi-Agent Code Orchestration
 
 > Scaling the [[code-as-agent-harness|code-as-harness]] framework from single agents to multi-agent systems: the harness becomes a shared substrate where specialized agents with distinct roles (manager, planner, coder, reviewer, tester) coordinate through shared code artifacts, execution feedback, and structured workflow topologies. A defining property of code-centric multi-agent systems is **artifact-mediated communication**: agents observe and modify shared code artifacts, and their interaction is grounded in objective state exposed by execution results.
+
+## Company-Shaped Hierarchies
+
+[[eero-alvar|Eero Alvar]] identifies a natural extension of the master orchestrator pattern: a company-shaped hierarchy where a master agent commands team leads, who task worker sub-agents. This maps directly to the hierarchical topology below.
+
+However, Eero Alvar raises a critical concern: **company-shaped hierarchies are human organizational patterns**. They work for humans, but may not be the optimal topology for agents. The persistence problems (context limits, information loss across layers) and the increased [[aiming-problem|chaos]] from longer command chains suggest that human organizational metaphors may be a local optimum that agents shouldn't be constrained by.
+
+> [!note] Departure: Human Org Patterns May Be Suboptimal for Agents
+> The survey's hierarchical topologies (MAGIS, HyperAgent, SoA) assume that human organizational structures transfer well to agent systems. Eero Alvar challenges this: company-shaped hierarchies work for humans, but "may not be optimal for agents" (4:27–5:05). The "game of telephone" risk from longer command chains and the increased chaos from deeper hierarchies suggest that agent-native topologies (flat, peer-to-peer, or execution-graph-based) may outperform human-inspired ones. This is an unvalidated departure — no source has yet compared company-shaped vs. agent-native topologies empirically.
 
 ## Why Multi-Agent?
 
@@ -140,6 +150,7 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - [[code-as-agent-harness]] — Multi-agent orchestration is the third layer of the code-as-harness framework
 - [[the-agent-workflow]] — Multi-agent patterns (orchestration, focus maxing, parallel agents) operationalize the scaling of the workflow
 - [[agent-quality-engineering]] — The convergence patterns (test-gated, security, consensus) are quality mechanisms for multi-agent systems
+- [[the-human-lever]] — Company-shaped hierarchies raise the question of where the human lever sits in multi-agent topologies
 
 ## Related
 
@@ -149,7 +160,9 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - [[model-routing]] — Orchestration-based planning routes subtasks to optimal agents, an extension of model routing
 - [[ralph-loop]] — Linear decomposition planning scales to multi-agent via orchestration-based topologies
 - [[plan-vs-review]] — Agent role delegation (planner, reviewer, coder) operationalizes the plan-vs-review tradeoff at the multi-agent level
+- [[software-factory]] — The company-shaped hierarchy approach maps to multi-agent orchestration patterns
 
 ## Sources
 
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §4: Scaling the Harness — Multi-Agent Orchestration over Code (pages 34–48).
+- `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: company-shaped hierarchy as a design approach; concern that human organizational patterns may not be optimal for agents

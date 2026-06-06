@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-06-03
+updated: 2026-06-05
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -29,6 +29,7 @@ sources:
   - raw/domain-expertise-has-always-been-the-real-moat.md
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
+  - raw/yt-systems-building-systems.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -249,7 +250,7 @@ What remains: the [[knowledge-triplet|knowledge triplet]]. Either you know what 
 
 His two-person thought experiment: a domain expert (logistics dispatcher, clinical coder, actuary) with no coding skills plus an agent is startlingly effective, because the agent supplies what they lack and they supply what the agent can't — ground truth. A generalist engineer without domain knowledge plus an agent can verify the software is well-built but cannot verify it's *correct*, because correctness is defined by a domain they don't hold.
 
-The key insight: agentic tools collapsed the engineer's path to value (learn domain → build system) but not the domain expert's path. The engineer's advantage — translating a domain model into code — is now cheap. The domain expert's advantage — knowing what right looks like — is not. You can't prompt your way to it. There's no skill file that contains the tacit knowledge of a person who has reconciled a thousand payrolls.
+The key insight: [[agentic-engineering|agentic tools]] collapsed the engineer's path to value (learn domain → build system) but not the domain expert's path. The engineer's advantage — translating a domain model into code — is now cheap. The domain expert's advantage — knowing what right looks like — is not. You can't prompt your way to it. There's no skill file that contains the tacit knowledge of a person who has reconciled a thousand payrolls.
 
 See [[domain-expertise-as-moat]] for the full treatment.
 
@@ -277,6 +278,23 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 > [!warning] Contradiction: Is Taste Permanently Human?
 > [[andrej-karpathy|Karpathy]] is uncertain whether taste and judgment will remain permanently human or whether they're simply outside the current RL training distribution: "There's nothing fundamental that's preventing it. It's just the labs haven't done it yet, almost." This creates a live tension with this thread's position that taste is an enduring human domain. Karpathy's [[verifiability|verifiability thesis]] suggests taste may be automatable once labs build RL environments that reward it — the microGPT example (models can't simplify code when asked) supports the view that this is a training gap, not a fundamental limit. See [[the-verifiability-thesis]] for the full causal chain.
 
+## Tensions
+
+### The Automation Frontier
+
+[[eero-alvar|Eero Alvar]]'s [[software-factory]] concept pushes the automation frontier further than this thread's current consensus. The thread argues the human is essential for design authority, taste, and verification. The factory says: automate the execution layer entirely, keep the human at the spec and tuning layer.
+
+Three positions are emerging:
+1. **Human as essential lever** — current thread consensus; the human owns design boundaries, verification, and taste
+2. **Human as designer/tuner, system as executor** — Eero Alvar's position; the human writes the spec and tunes the factory, but doesn't steer individual agent sessions
+3. **Human as verifier only** — Karpathy's "outsource thinking, not understanding"; the human verifies outputs but delegates even design
+
+These aren't contradictions — they're different positions on where the automation frontier should be. The thread currently tracks position 1 as the primary frame. Positions 2 and 3 are departures that future sources may resolve.
+
+### Is the Human Lever Self-Eliminating?
+
+If the [[software-factory]] works, the human lever at the execution layer disappears entirely. The human shifts from steering agents to designing systems that steer agents. This doesn't eliminate the human role — it moves it up a level of abstraction. But it does raise the question: if the factory can be tuned to produce quality output reliably, how much design authority does the human actually need to exercise per build? The [[aiming-problem|aiming problem]] suggests the answer is "a lot" — tuning is slow, expensive, and difficult. But if tuning gets easier (better verification agents, better instruction libraries), the human lever's domain shrinks.
+
 ## Related
 
 - [[agent-friendly-tooling]] — Fast, observable tools as infrastructure for the human-to-agent handoff
@@ -299,6 +317,9 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - [[domain-expertise-as-moat]] — Domain expertise as the deepest verification layer; the binding constraint shifted from "can you build it?" to "can you tell whether it's right?"
 - [[document-degradation]] — Silent corruption is why humans must own the verification contract
 - [[comprehension-debt]] — The cognitive cost of losing the human lever
+- [[software-factory]] — The automation of the execution layer; the human lever shifts from steering to tuning
+- [[aiming-problem]] — Tuning the factory is the new form of the human lever — slow, expensive, and difficult
+- [[babysitter-agent]] — Invisible context management as infrastructure that frees the human from session-level concerns
 - [[cognitive-debt]] — The erosion of the skills the human lever requires
 - [[skill-atrophy]] — The mechanism by which the human lever's prerequisites degrade
 - [[supervision-paradox]] — The structural contradiction that makes the human lever self-undermining
@@ -347,4 +368,5 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 - `raw/domain-expertise-has-always-been-the-real-moat.md` — [[aaron-brethorst|Brethorst]]: domain expertise as the deepest verification layer; the two-person thought experiment; asymmetric path collapse; the dual-verifier who can check both code soundness and domain correctness.
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the argument that the human lever requires skills that are actively eroding; the [[supervision-paradox]]; Faye's "demote AI" workflow as a specific human lever position (stay in implementation, use AI for planning)
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the debugging story (understanding layers, not code); the population problem ("devs who are way out of bound for where their capabilities are"); AI as amplifier for existing skills vs. substitute for missing skills
+- `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: the automation frontier tension — software factory as the next step in automating the execution layer; the human lever shifts from steering to tuning
 
