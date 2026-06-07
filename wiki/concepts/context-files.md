@@ -1,11 +1,13 @@
 ---
 title: Context Files (AGENTS.md, CLAUDE.md)
 created: 2026-05-10
-updated: 2026-05-10
+updated: 2026-06-07
 sources:
   - raw/2602.11988v1.txt
   - raw/2601.20404v1.txt
   - raw/2603.00822v2.txt
+  - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
+  - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 unaudited_marginal: 0
 tags: [concept, context-files, agents-md, agentic-engineering, configuration]
 ---
@@ -146,3 +148,5 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 - `raw/2602.11988v1.txt` — Gloaguen et al. (2026). Introduces AGENTBENCH and evaluates context file impact on task completion, finding LLM-generated files reduce performance and increase costs.
 - `raw/2601.20404v1.txt` — Lulla et al. (2026). Evaluates AGENTS.md impact on agent efficiency, finding reduced wall-clock time and token consumption on small-scope PRs.
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026). Proposes executable guardrails for passive instruction files; introduces constraint taxonomy, Documentation as Code paradigm, and instruction quality feedback loop.
+- `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — Names the synonymy problem across SDD tools (constitution / CLAUDE.md / .cursorrules / steering).
+- `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Steering docs as accumulated learnings; three demonstrated use cases (commit style, code style, operational learnings); available in system prompt at every turn.

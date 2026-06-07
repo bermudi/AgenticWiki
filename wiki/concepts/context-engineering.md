@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-06-05
+updated: 2026-06-08
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -181,6 +181,8 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[knowledge-triplet]] — The triplet is an information-theoretic framing of context engineering: supply the knowledge the model can't find elsewhere
 - [[ai-boilerplate-paradox]] — Framework verbosity as context engineering at the codebase architecture level
 - [[opencode]] — Real-world demonstration of Effect's verbosity as context engineering
+- [[steering-docs]] — Kiro's branded operational context: surface operational notes (commit style, code style, hard-won CDK flags) in the system prompt at every turn, rather than re-learning them each session; the persistent-context layer of context engineering
+- [[kiro]] — Amazon's agentic IDE that codifies context engineering principles (EARS-formatted requirements, steering as operational context) into the IDE interface
 
 ## Sources
 

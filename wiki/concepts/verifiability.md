@@ -1,7 +1,7 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-06-05
+updated: 2026-06-08
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -99,6 +99,8 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[iterative-self-correction]] — Meeseeks's code-guided evaluation makes constraint satisfaction verifiable at 98.4% accuracy; the paper shows that even near-perfect verification doesn't guarantee convergence — verifiability is necessary but not sufficient
 - [[agent-evals]] — Evals are the practical attempt to make agent behavior verifiable; the quality loop operationalizes verifiability as a measurement discipline
 - [[semi-formal-reasoning]] — Structured reasoning templates produce evidence certificates that enable execution-free verification; accuracy improves from 78% to 88–93%
+- [[ears-notation]] — EARS is verifiability-by-design applied to the requirements artifact: structured natural language lets deterministic parsers verify requirements without the LLM in the loop
+- [[property-based-testing-as-spec]] — The verification layer that translates EARS requirements into falsifiable correctness properties; operationalizes the verifiability thesis at the spec-to-code boundary
 - [[system-prompt-effects]] — System prompt optimization (SPRIG) demonstrates that verifiability gains depend on how the prompt is structured, not just what it asks for
 - [[semi-formal-reasoning]] — Structured evidence certificates enable execution-free verification; patch equivalence accuracy improves from 78% to 88% by mandating premises and execution traces
 - [[aiming-problem]] — Verification agents are a tuning mechanism for the aiming problem: by tuning what verification checks catch, you aim the system toward the desirable subset

@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-06-05
+updated: 2026-06-07
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -30,6 +30,7 @@ sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-systems-building-systems.md
+  - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -83,6 +84,9 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 > [!note] Departure: Aesthetics vs. Verification
 > There is a notable tension between [[dex-horthy|Dex Horthy]]'s insistence on a rigorous **[[verification-loop]]** (types, tests, linters) and [[dhh|David Heinemeier Hansson]]'s emphasis on **[[aesthetics-is-truth]]**. While Horthy focuses on mechanical proof, DHH argues that a human's aesthetic judgment ("taste") is a faster and often more accurate proxy for system health. Most modern agentic workflows attempt to balance both.
+
+> [!warning] Theory Pressure: Deterministic Verification May Shrink the Human's Role
+> [[property-based-testing-as-spec|Property-based testing as spec verification]] (from [[al-harris|Al Harris]], [[kiro|Amazon Kiro]]) automates the verification step this thread says humans must own. In the Kiro pipeline, EARS requirements are translated to correctness properties, property-based tests are generated, and the verification pass/fail is deterministic — the human remains in the loop for requirement and design review, but not for property falsification. If deterministic property tests can verify spec compliance once properties are extracted, the human's role contracts from "review everything against the spec" to "write good specs and trust the tests." This doesn't eliminate the human lever — the human still writes the spec and reviews the design — but it reduces the leverage surface. The thread's core claim that humans must own verification gets pressure: some verification is now automatable, and the fraction may grow as structured natural language formats (EARS) and PBT tooling mature.
 
 ## The Verification Contract
 
@@ -369,4 +373,5 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the argument that the human lever requires skills that are actively eroding; the [[supervision-paradox]]; Faye's "demote AI" workflow as a specific human lever position (stay in implementation, use AI for planning)
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the debugging story (understanding layers, not code); the population problem ("devs who are way out of bound for where their capabilities are"); AI as amplifier for existing skills vs. substitute for missing skills
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: the automation frontier tension — software factory as the next step in automating the execution layer; the human lever shifts from steering to tuning
+- `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — [[al-harris|Al Harris]] / [[kiro|Amazon Kiro]]: property-based testing as spec verification in the deterministic-verification theory-pressure callout; the spec automation of verification reduces the human's verification responsibility
 

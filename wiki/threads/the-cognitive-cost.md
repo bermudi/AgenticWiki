@@ -1,11 +1,13 @@
 ---
 title: The Cognitive Cost
 created: 2026-06-03
-updated: 2026-06-03
+updated: 2026-06-07
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
+  - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
+  - raw/yt-spec-driven-dev-hype-or-future.md
 tags: [thread, ai-engineering, cognitive-debt, failure-modes, human-in-the-loop]
 unaudited_marginal: 0
 ---
@@ -57,6 +59,9 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 
 ## Tensions
 
+> [!note] Departure: SDD's Cognitive Cost Direction Is Unknown
+> [[spec-driven-development|Spec-driven development]] introduces a new dimension to the cognitive cost question. [[cian-clarke|Cian Clarke]] reports that SDD produces "unquestionably orders of magnitude better" results but "takes a lot lot longer" — the human's time shifts from code review to specification writing. [[colin-eberhardt|Colin Eberhardt]]'s benchmark quantifies the overhead: 2,500 lines of spec markdown for 689 lines of code, requiring 3.5 hours of human review vs 24 minutes without SDD. The question this thread can't yet answer: **does specification writing preserve cognitive capacity better than code review?** If the cognitive exercise of writing specs (structured reasoning about requirements, edge cases, acceptance criteria) is more resistant to atrophy than the cognitive exercise of reviewing AI-generated code, SDD may be a protective discipline. If spec writing is itself a form of delegation to a template, it may not be. The empirical question is open — the thread flags it because the cognitive cost framing currently assumes the cost is concentrated in AI-assisted code review, but SDD concentrates it in spec writing instead.
+
 > [!warning] Mitigation vs. Prevention
 > Sources disagree on whether the cognitive cost is preventable or only mitigable. Faye advocates demoting AI's role (prevention). Theo suggests the right mindset can make AI a learning accelerator (mitigation). The Gray Cat's recovery through "teaching mode" suggests mitigation is possible but requires deliberate effort that most people won't invest. The question: is the default trajectory reversible, or only escapable by individuals who actively resist it?
 
@@ -65,6 +70,8 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 
 ## Sources
 
-- `raw/agentic-coding-is-a-trap.md` — Lars Faye: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
+- `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
 - `raw/yt-we-all-fell-for-it.md` — Theo (t3.gg): the skateboarding metaphor, the code-frequency distinction, vendor lock-in as competence failure, token cost correction, the debugging story, the population problem
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — The Gray Cat: the drift into comprehension debt, the recovery through teaching mode, the cultural signal of "let me ask Claude"
+- `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — [[cian-clarke|Cian Clarke]]: SDD's "orders of magnitude better" but "lot lot longer" tradeoff in the SDD cognitive-cost departure callout
+- `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] benchmark (2,500 lines spec markdown for 689 LOC, 3.5h vs 24 min review) in the SDD cognitive-cost departure callout

@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-05-21
+updated: 2026-06-08
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -197,6 +197,7 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - [[blind-panic]] — A quality failure mode quantified by AgentFloor: the model loops and degenerates
 - [[instruction-hierarchy]] — ManyIH reveals a missing quality dimension: trust resolution across heterogeneous instruction sources under privilege conflict
 - [[agentic-engineering]] — The professional discipline whose quality bar agent quality engineering is designed to preserve
+- [[property-based-testing-as-spec]] — A deterministic-verification analog to the probabilistic quality loop: EARS requirements are translated to correctness properties and verified by property-based tests rather than LLM judges. Where evals score generated text, PBT-as-spec scores generated code against machine-parseable invariants — a complementary verification mechanism, not a replacement.
 - [[verifiability]] — The economic theory that explains why evals work: LLMs automate what you can verify
 - [[contextcov]] — ContextCov's empirical framework (compliance metrics, feedback cost, functional correctness) is a quality engineering methodology for deterministic enforcement; its finding that LLM reflection degrades compliance is a cautionary result for eval design
 

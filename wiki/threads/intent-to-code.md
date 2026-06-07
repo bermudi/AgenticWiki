@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-06-03
+updated: 2026-06-08
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -11,8 +11,12 @@ sources:
   - raw/2603.00822v2.txt
   - raw/2605.18747.pdf
   - raw/domain-expertise-has-always-been-the-real-moat.md
+  - raw/yt-spec-driven-development-ai-assisted-coding-explained.md
+  - raw/yt-spec-driven-dev-hype-or-future.md
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
+  - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
+  - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -46,6 +50,12 @@ Four positions have emerged across sources. They're not points on a single "bett
 
 > [!note] Departure: Code as the Verifiable Interface
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) adds a missing dimension to the intent-to-code axis: code itself is the **verifiable interface** between intent and execution. All five positions implicitly rely on code's executability to verify that intent was realized — tests must pass, types must check, code must run. The survey's framing makes this explicit: code's defining property as a harness is that it is **executable**, meaning model outputs become operations with formally verifiable outcomes. The axis's blind spot is that every position except pure vibes depends on this property, but none explicitly names it. The survey's four desired properties — executable, inspectable, stateful, governed — are the prerequisites that make any position on the intent-to-code axis work reliably.
+
+> [!warning] Theory Pressure: SDD Effectiveness is Empirically Contested
+> [[colin-eberhardt|Colin Eberhardt]] (Scott Logic) ran the first head-to-head benchmark of SDD vs iterative development: GitHub Spec Kit took 33 minutes of agent time, produced 2,500 lines of markdown for 689 lines of code, and required 3.5 hours of human review. The iterative approach took 8 minutes, produced 1,000 lines of code, and needed 24 minutes of review — with zero bugs. End-to-end: **10× faster without SDD** on the test problem. This directly challenges positions 2 (plan-as-contract) and 5 (enforcement-as-code), both of which assume the upfront investment in spec precision pays off. The test problem is not characterized in the source, so external validity is unknown. Eberhardt's result may reflect a poor SDD fit, or a senior engineer whose "iterative" approach already had mental specs. But the wiki treats this as the strongest counter-evidence that the plan-as-contract predicate can fail in practice.
+
+> [!note] Departure: EARS+PBT as a Hybrid Position
+> [[kiro|Amazon Kiro]]'s spec-driven pipeline doesn't fit cleanly into any of the five positions. It uses a plan-as-contract artifact ([[ears-notation|EARS]] requirements) but verifies it with downstream [[property-based-testing-as-spec|property-based testing]] — which is enforcement-as-code's mechanism applied at the spec level, not the code level. The LLM generates EARS requirements; the structured format enables downstream non-LLM verification; PBT verifies the code against properties derived from the requirements. The EARS-PBT pipeline ([[ears-notation]] + [[property-based-testing-as-spec]]) is the canonical instantiation: the spec is the contract (position 2), but verification is mechanical and the LLM is outside the verification loop (position 5). For the team-scale extension, see [[single-player-to-multiplayer]] — Clarke's framing of how SDD tooling must evolve to support parallel contributors at agentic team pace.
 
 ## The Four Positions
 
@@ -171,5 +181,9 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): introduces a fifth position on the intent-to-code axis — Enforcement-as-Code; executable guardrails as the mediating artifact; mechanical enforcement at the environment level
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds code's executability as the missing explicit dimension: code as the verifiable interface between intent and execution; the four desired harness properties (executable, inspectable, stateful, governed) are prerequisites for any position on the axis
 - `raw/domain-expertise-has-always-been-the-real-moat.md` — [[aaron-brethorst|Brethorst]]: the domain expert gap; all five positions assume engineering fluency, but domain experts + agents may be the most effective pairing
-- `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: "coding as planning" argument — some developers plan and think better with code; typing out code is how they figure out what to do; this challenges the specs-to-code position by arguing code IS the thinking, not just the output
-- `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: "the Theo method" — start with minimal implementation, learn from it, then spec; write once, throw it away, build it right; AI makes experimentation cheaper ("when you get it wrong, it's never been cheaper to fix it")
+- `raw/yt-spec-driven-development-ai-assisted-coding-explained.md` — IBM Technology's introductory explainer on SDD as the SDLC components added to AI coding
+- `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark (10x faster without SDD) is the wiki's strongest counter-evidence to positions 2 and 5
+- `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: "coding as planning" argument — some developers plan and think better with code; challenges the specs-to-code position by arguing code IS the thinking, not just the output
+- `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: "the Theo method" — start with minimal implementation, learn from it, then spec; write once, throw it away, build it right; AI makes experimentation cheaper
+- `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — DevCon Fall 2025: Cian Clarke's practitioner framing supports the plan-as-contract position
+- `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Al Harris, Amazon Kiro: EARS requirements + PBT verification = hybrid of positions 2 and 5; LLM is in the generation step but not the verification step

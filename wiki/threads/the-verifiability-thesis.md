@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-06-01
+updated: 2026-06-07
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -14,6 +14,7 @@ sources:
   - raw/agentic-code-reasoning.md
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
+  - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -183,6 +184,9 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 > [!warning] Can Taste Become Verifiable?
 > Karpathy is uncertain whether taste and judgment will remain permanently human or whether they're simply the next RL frontier. "There's nothing fundamental that's preventing it. It's just the labs haven't done it yet, almost." If taste enters the RL training distribution, the human lever shrinks. The wiki's current position (from [[the-human-lever]]) is that taste is an enduring human domain. Karpathy keeps the door open to it being automated. This is a live tension: is the verifiability thesis a permanent map of the territory, or a snapshot of a moving frontier?
 
+> [!note] Departure: Deliberate Verifiability Design — From Passive Exploitation to Active Engineering
+> The thesis describes verifiability as a *given* property of domains: code is verifiable, aesthetics is not. [[ears-notation|EARS]] and [[property-based-testing-as-spec|PBT-as-spec]] (from [[al-harris|Al Harris]], [[kiro|Amazon Kiro]]) introduce a different move: **deliberately restructuring the artifact to make it verifiable.** EARS transforms requirements into structured natural language that downstream tools (PBT) can verify mechanically, with the LLM outside the verification loop. PBT translates EARS requirements into correctness properties that property-based tests can falsify. This isn't passive exploitation of existing verifiability — it's *engineering the artifact for verifiability*. The thesis's causal chain (verifiability → RL → capability) implies verifiability is a fixed property of the domain. The EARS+PBT pipeline implies it's a *designable property of the artifact*. If you can make your requirements machine-parseable, you extend the verifiable domain without waiting for the labs to train on it. This is potentially a significant extension of the thesis: verifiability isn't just inherited from the domain — it can be constructed.
+
 > [!warning] Instruction Failure as Feature
 > [[deepswe|DeepSWE]] reveals a paradox in instruction-following: Claude partially ignores benchmark instructions (writes tests when told not to, 28% on [[swe-bench-pro]]) while GPT follows them literally. The [[rule-following]] thread frames instruction failure as a reliability bug. But DeepSWE shows that Claude's *ignoring* of harmful instructions ("don't write tests") actually makes it more reliable in practice — it self-verifies at 80%+ when the prompt doesn't suppress testing. The verifiability thesis predicts models improve where verification exists; DeepSWE adds that models which *create their own verification* despite instructions not to may outperform obedient models in the long run. This is a live tension: is instruction-following a capability to optimize, or a liability when the instructions themselves are wrong?
 
@@ -205,6 +209,7 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): near-perfect verification (98.4%) still doesn't guarantee convergence — verifiability is necessary but not sufficient
 - `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): provides evidence that the verifier's own reliability is a second-order constraint on the verifiability thesis — LLM judges achieve only 55.97% accuracy on hard rubric judgments, qualifying the thesis's assumption that verifiable domains have reliable verification
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): direct instantiation of the verifiability thesis applied to Agent Instructions; verifiable enforcement (88.3%) outperforms passive (67.0%) and unverifiable LLM reflection (50.3%); Executable Interpretability extends the thesis by making the verifier debuggable
+- `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — [[al-harris|Al Harris]] / [[kiro|Amazon Kiro]]: EARS+PBT as deliberate-verifiability-design — engineered the artifact for verifiability via structured natural language and property-based tests; the EARS+PBT pipeline extends the thesis by making verifiability a designable property of the artifact rather than an inherited property of the domain
 - `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): prompt-induced biases in LLM-as-judge for code; biases act as positional priors, qualifying the thesis's assumption of reliable verification
 - `raw/llm-overcorrection-code-review.md` — Jin & Chen (2026): overcorrection bias in LLM code review; detailed prompts shift the decision boundary toward conservatism, undermining verifier reliability
 - `raw/agentic-code-reasoning.md` — Ugare & Chandra (Meta, 2026): semi-formal reasoning as verifiable certificate structure for code verification; enables execution-free RL reward signals, directly instantiating the verifiability thesis recursively (verifiability of the verification)

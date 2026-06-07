@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-05-31
+updated: 2026-06-08
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -149,7 +149,7 @@ This shifts the workflow design burden from "how do we get the model to follow i
 
 [[louis-knight-webb|Louis Knight-Webb]] adds a crucial operational dimension: **how much planning depth should you invest before executing?** The two modes exist on a spectrum:
 
-- **Plan-heavy**: Write a comprehensive spec. Interrogate the agent until it exhausts all questions. Produces fewer review rounds, but requires more upfront thinking.
+- **Plan-heavy**: Write a comprehensive spec. Interrogate the agent until it exhausts all questions. Produces fewer review rounds, but requires more upfront thinking. The most explicit instantiations are [[spec-driven-development]] (where the spec is the primary artifact) and [[kiro|Amazon Kiro]]'s requirements → design → tasks pipeline, which uses [[ears-notation|EARS]]-formatted requirements and [[property-based-testing-as-spec|property-based testing]] as the verification layer.
 - **Review-heavy**: Give the agent a rough goal. Let it iterate. More back-and-forth, higher total human time because review is interrupt-driven.
 
 The quantified heuristic: **5 minutes of planning saves 30 minutes of reviewing.** Switching back and forth with a half-finished agent output is more taxing than doing the thinking upfront.
@@ -172,6 +172,7 @@ Context management is the operational challenge nobody anticipated. The [[smart-
 The fix isn't bigger context windows — it's **ruthless context hygiene**:
 
 - **The Memento Strategy**: Instead of summarizing a long session (which preserves the "vibes" but loses precision), clear the context and start fresh with minimal, high-quality context: the current file, relevant interfaces, and the specific task.
+- **Persistent operational context**: Some learnings should survive across sessions. [[steering-docs|Steering docs]] (Kiro's branded equivalent of [[context-files]]) capture operational notes — commit style, coverage minimums, hard-won CDK flags — and surface them in the system prompt at every turn. This is [[evolving-context]] operationalized: the agent improves its own operating context over time rather than re-learning the same gotchas each session.
 - **Deep modules as context boundaries**: A well-designed deep module is naturally context-complete — the agent needs the interface, not the entire call graph.
 
 [[mario-zechner|Mario Zechner]] designed [[pi]] around this insight. Pi's minimal core (four tools: `read`, `write`, `edit`, `bash`) and session-based model make it easy to reset context and stay in the Smart Zone. The design philosophy — [[malleable-agents|malleability]] — means the agent itself can create new tools mid-session to reduce its own context load.
@@ -395,6 +396,8 @@ This is a fundamentally different mode from traditional software engineering, wh
 The key design constraint: agents must run for **long enough** that context-switching doesn't fry the human. Shifting attention every 30 seconds between agent outputs is unsustainable. The ideal is sessions of 5+ minutes where the agent produces a complete, reviewable unit — not incremental partial outputs that require constant mid-stream intervention.
 
 This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|Pocock]]'s pipeline: the human runs multiple agents during the day (each in different stages), not just one overnight batch. The [[verification-loop]] becomes a parallel concern — different streams may need different verification gates.
+
+The team-scale extension of focus maxing is the [[single-player-to-multiplayer]] problem: at agentic team pace, the cost of merge conflicts and forgotten commits is magnified, requiring workflow primitives like staging gates and decomposition by contributor specialization.
 
 ## Sources
 

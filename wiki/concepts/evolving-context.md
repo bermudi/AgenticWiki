@@ -1,7 +1,7 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-06-05
+updated: 2026-06-08
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
@@ -82,6 +82,7 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 - [[dex-horthy]] — His snapshot-based eval approach and model intuition philosophy are complementary: evals measure whether evolution is helping
 - [[ralph-loop]] — The plan file is a primitive form of evolving context — it's modified by each iteration and read by the next
 - [[chris-parsons]] — Worker loop skills evolved via post-session reflection; skill learning as evolving context in practice
+- [[steering-docs]] — The canonical Kiro example of evolving context: agents write operational learnings (CDK flags, code style) back into steering, which is surfaced in the system prompt at every turn
 
 - [[procedural-knowledge]] — Capturing procedural knowledge from experience is a form of evolving context
 - [[babysitter-agent]] — The babysitter's handoff prompts are a form of evolving context — what survives across sessions

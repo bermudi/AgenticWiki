@@ -1,7 +1,7 @@
 ---
 title: Multi-Agent Code Orchestration
 created: 2026-05-21
-updated: 2026-06-05
+updated: 2026-06-08
 sources:
   - raw/2605.18747.pdf
   - raw/yt-systems-building-systems.md
@@ -161,6 +161,7 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - [[ralph-loop]] — Linear decomposition planning scales to multi-agent via orchestration-based topologies
 - [[plan-vs-review]] — Agent role delegation (planner, reviewer, coder) operationalizes the plan-vs-review tradeoff at the multi-agent level
 - [[software-factory]] — The company-shaped hierarchy approach maps to multi-agent orchestration patterns
+- [[single-player-to-multiplayer]] — Clarke's framing of how SDD tooling scales from individual to team workflows; team-scale multi-agent orchestration is the architectural extension this concept page describes
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-06-05
+updated: 2026-06-08
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -26,6 +26,7 @@ sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-systems-building-systems.md
+  - raw/yt-spec-driven-dev-hype-or-future.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -82,7 +83,7 @@ The degradation also **compounds multiplicatively** with document size and inter
 
 ## Why It Matters
 
-- **Context pollution**: Slop fills LLM context windows with noise, making it harder for the next agent session to reason about what matters. This pushes the system into the [[smart-zone-dumb-zone|Dumb Zone]]. Poorly designed [[context-files|context files]] (AGENTS.md, CLAUDE.md) are a vector for this — the empirical evidence shows that LLM-generated context files add reasoning overhead (14–22% more tokens) without improving outcomes. A minimal, operational-only context file reduces noise; a verbose, auto-generated one adds it.
+- **Context pollution**: Slop fills LLM context windows with noise, making it harder for the next agent session to reason about what matters. This pushes the system into the [[smart-zone-dumb-zone|Dumb Zone]]. Poorly designed [[context-files|context files]] (AGENTS.md, CLAUDE.md) are a vector for this — the empirical evidence shows that LLM-generated context files add reasoning overhead (14–22% more tokens) without improving outcomes. A minimal, operational-only context file reduces noise; a verbose, auto-generated one adds it. The same principle applies to [[steering-docs|Kiro's steering]] — well-designed steering constrains agent output to operational context, while verbose steering (per the same empirical evidence) adds the same reasoning overhead.
 - **Speed-review asymmetry**: AI generates faster than humans verify. Without a **[[verification-loop]]**, every generated line is an unreviewed line. [[verifiability]] explains the structural reason: code is auto-verifiable (tests, types) so RL-trained models excel at it, but the gap between generation and verification speed is exactly where slop accumulates.
 - **Design erosion**: Without a **[[shared-design-concept]]**, each agent session drifts further from the original architecture. The codebase becomes a Frankenstein of conflicting patterns.
 
@@ -113,6 +114,9 @@ Slop doesn't just accumulate in codebases — it accumulates in the **evaluation
 This is slop at the meta-level: the benchmarks themselves are low-quality, unreliable artifacts that the industry treats as authoritative. When the measurement layer is contaminated, every downstream decision — model selection, research direction, developer trust — is built on a foundation of slop. The same [[compounding-booboos|compounding booboos]] mechanism applies: each unreliable benchmark score compounds into increasingly wrong assumptions about which models are actually good. This is the [[the-benchmark-crisis|benchmark crisis]] in miniature: the evaluation ecosystem is itself slop.
 
 [[theo-t3gg|Theo]] (t3.gg) frames it bluntly: "SWB Pro tests how good are models at contaminated Python repos that they're allowed to cheat in and told explicitly to not write tests." The benchmark isn't measuring capability — it's measuring a distorted, contaminated proxy of capability. And the industry has been optimizing against this proxy for months.
+
+> [!note] Departure: Spec Slop — The Specification Artifact as a Maintenance Burden
+> [[colin-eberhardt|Colin Eberhardt]]'s head-to-head benchmark of [[spec-driven-development|SDD]] vs iterative development produced a new form of slop: the specification artifact itself. Spec Kit generated 2,500 lines of markdown to produce 689 lines of code — a 3.6:1 spec-to-code ratio. The 3.5 hours of human review time was dominated by reading and validating specification documents, not code. This is **spec slop**: the specification becomes a maintenance burden that rivals the codebase it governs. The slop problem thread currently tracks code slop and benchmark slop; spec slop is a third category that emerges when the mediating artifact (spec, PRD, design doc) grows faster than the code it describes. The question it raises: does SDD prevent slop in the codebase by producing it in the specification layer instead? See [[spec-driven-development]] and [[colin-eberhardt]] for the full benchmark data.
 
 ## Agents Don't Feel Pain
 
@@ -240,3 +244,4 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: cognitive debt as the human-side complement to codebase slop; the inverted priority list (speed over understanding); the argument that AI accelerates the wrong parts of development
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the code-frequency distinction (ship vs. one-off); forced speed without earned competence produces slop; "most devs should not be allowed to code fast"
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: slop defined as outputs outside the desirable subset in the software factory mapping; chaos property of spec→implementation mapping; the aiming problem as the inverse of the slop problem
+- `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark of Spec Kit vs iterative development (10x faster without SDD on the test problem) is the strongest empirical counter-evidence cited in the thread's theory-pressure callout; [[birgitta-boeckler|Birgitta Boeckler]] on spec drift is the source behind the open-source-SDD-tools "spec first, vague about spec maintenance" observation

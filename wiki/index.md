@@ -1,13 +1,16 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-05
+updated: 2026-06-07
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
+  - raw/yt-spec-driven-development-ai-assisted-coding-explained.md
+  - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
+  - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -77,6 +80,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[xuying-ning]] — Lead author of the *Code as Agent Harness* survey (UIUC + Meta + Stanford).
 - [[dax-raad]] — Engineer at Anomaly; led OpenCode's rewrite in Effect; articulated the AI boilerplate paradox
 - [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
+- [[cian-clarke]] — Engineer at Near Form; primary practitioner source on SDD at team scale; single-player-to-multiplayer framing; empirical fit/miss for SDD
+- [[al-harris]] — Principal engineer at Amazon Kiro; EARS, property-based testing, steering docs, neurosymbolic hybrid architecture
+- [[birgitta-boeckler]] — ThoughtWorks writer on SDD methodology; identified the spec drift problem and the "sledgehammer to crack a nut" critique
+- [[colin-eberhardt]] — CTO of Scott Logic; ran the head-to-head Spec Kit vs iterative benchmark (10× faster without SDD)
+- [[near-form]] — Consultancy behind Cian Clarke's SDD work; 6-9 months of internal SDD experience as of late 2025
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -151,6 +159,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
+- [[spec-driven-development]] — Structured specification document as primary artifact driving AI-assisted implementation; PRD + architecture + task backlog stack (Clarke) or EARS + PBT pipeline (Kiro); empirical fit (greenfield MVP, modernization) and miss (brownfield, legacy langs, prototypes)
+- [[ears-notation]] — Easy Approach to Requirements Syntax: structured natural language (`When X, the system shall Y`) designed for downstream automated reasoning; the substrate for Kiro's property-based testing pipeline
+- [[property-based-testing-as-spec]] — Using PBT as the verification layer for EARS requirements; bridges stochastic LLM generation to deterministic verification by removing the LLM from the verification loop
+- [[steering-docs]] — Kiro's branded context files; framed as accumulated learnings (operational gotchas, code style, commit style) rather than static configuration
+- [[single-player-to-multiplayer]] — Cian Clarke's framing of where SDD tooling needs to evolve: from individual to multi-contributor parallel work via specialization-by-architecture-area and staging gates
 - [[system-prompt-effects]] — System prompts have measurable, non-monotonic effects on LLM performance that interact with model scale, prompting strategy, and programming language.
 - [[llm-as-code-judge]] — Using LLMs to evaluate code quality; increasingly common in agentic SE pipelines but suffers from systematic prompt-induced biases.
 - [[overcorrection-bias]] — The systematic tendency of LLMs to misclassify correct code as defective, especially when prompted to explain and fix.
@@ -184,4 +197,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[sandcastle]] — Matt Pocock's TypeScript library for parallelizing AFK agent loops in Docker sandboxes.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
 - [[unblocked]] — Context engine for engineering organizations; pre-curates organizational context for AI coding agents.
+- [[kiro]] — Amazon's agentic IDE (code-OSS fork); first to codify SDD primitives into the interface: EARS, property-based testing pipeline, steering docs, MCP integration
+- [[bmad-method]] — Open-source SDD methodology that installs into Claude Code or Cursor; strong on specialized role definition (technical director, QA tester, backend engineer)
+- [[spec-kit]] — GitHub's open-source SDD toolkit (~92K stars); the "constitution" model for project-level agent rules; tooling-agnostic
+- [[mcp]] — Model Context Protocol; standard interface for connecting agents to external tools and data sources; Kiro uses it pervasively as the user-extensible tool surface
 
