@@ -54,13 +54,25 @@ The mechanical work of extracting knowledge from the source and filing it into t
 
 #### Step 0: Source Acquisition (if needed)
 
-If the user provided a URL and no file exists in `raw/` yet:
-1. Use the web-content skill to fetch the content
-2. Slugify the title to produce a filename: `./scripts/slugify "Article Title Here"` — prepend `yt-` for YouTube sources. The result is your `raw/` filename.
-3. Save to `raw/` following the appropriate template (see AGENTS.md "Web Sources" or "YouTube Videos" sections)
-4. Proceed with the filed source
+**Three cases, in order of frequency. Don't skip this step — a source not in `raw/` is invisible to future sessions.**
 
-If the source is already in `raw/`, skip this step.
+1. **User provides a local file path** (e.g., `~/Downloads/karpathy-talk.pdf`):
+   - **Slugify the title** to produce the `raw/` filename — same convention as the URL case. Strip the extension, pass the basename through `./scripts/slugify`, then re-attach the original extension (`.pdf`, `.md`, `.html`, etc.). For YouTube content, prepend `yt-` to the slug.
+   - `mv` the file to its new slugified name in `raw/`. Don't preserve `~/Downloads/` defaults like `Untitled.pdf`, `karpathy-talk (1).pdf`, or browser hash names — the wiki's naming convention wins over the download manager's.
+   - If the basename is genuinely unrecoverable (a hash, all numbers, etc.), peek at the file's first page or metadata to extract a real title before slugifying. Don't slugify garbage.
+   - For companion media (images, audio, video clips, screenshots), `mv` them into `raw/assets/` with slugified names so they live next to the source.
+   - Proceed with the file now in `raw/`.
+   - **Note:** `mv` is not destruction — the file ends up in `raw/`. The `trash > rm` rule applies to files you're throwing away, not files you're relocating. Don't over-rotate and use `trash` here.
+
+2. **User provides a URL and no file exists in `raw/` yet**:
+   - Use the web-content skill to fetch the content
+   - Slugify the title to produce a filename: `./scripts/slugify "Article Title Here"` — prepend `yt-` for YouTube sources. The result is your `raw/` filename.
+   - Save to `raw/` following the appropriate template (see AGENTS.md "Web Sources" or "YouTube Videos" sections)
+   - Proceed with the filed source
+
+3. **File is already in `raw/`** (user points you at `raw/some-file.md`, or you can see it there): skip this step entirely. Just read it.
+
+**After acquisition, before triage:** confirm the file actually arrived in `raw/` (`ls raw/`). Downloads can silently fail, partial PDFs can corrupt, and `mv` across filesystems (e.g., `/tmp` → repo) is slower than it looks. Cheap to check, expensive to discover mid-edit.
 
 #### Steps 1–5: Follow [ingest-flow.md](references/ingest-flow.md)
 
