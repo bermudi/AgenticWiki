@@ -13,6 +13,7 @@ sources:
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
   - raw/self-harness-harnesses-that-improve-themselves.txt
   - raw/recursive-agent-harnesses.txt
+  - raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -26,6 +27,7 @@ unaudited_marginal: 0
 - `raw/yt-we-all-fell-for-it.md` — Theo (t3.gg): video response to Faye; cognitive cost commentary; new author page + thread update
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Self-Harness (Zhang et al., Shanghai AI Lab, 2026); new self-harness concept; harness-engineering §5.2.3 self-evolution open problem empirically instantiated; harness-mechanisms §3.5; evolving-context extended
 - `raw/recursive-agent-harnesses.txt` — Recursive Agent Harnesses (Lumer et al., PwC, 2026); new recursive-agent-harness concept; multi-agent-code-orchestration code-driven subagent spawning; harness-mechanisms recursive instantiation; code-as-agent-harness extension
+- `raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md` — Drew Breunig (Computer History Museum): spec-code triangle, onewords postmortem, decision extraction, Plum demo, software history digression; new author + 3 concepts + 2 projects
 
 # Index
 
@@ -60,6 +62,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[philippe-laban]] — Researcher at Microsoft Research; lead author of DELEGATE-52 benchmark on LLM document corruption.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
 - [[damian-galarza]] — Multi-agent system operator and author of the three-part agent quality series (evals, observability, quality loop).
+- [[drew-breunig]] — Co-founder of Compound; coined the spec-code triangle; created onewords (no-code library) and plum-dev (decision-tracking CLI). Editing the Context Engineering Handbook for O'Reilly.
 - [[dex-horthy]] — Creator of "12 Factor Agents," co-creator of [[context-engineering]], and advocate for agentic engineering over vibe coding.
 - [[lechen-zhang]] — Researcher at UIUC; lead author of SPRIG (ICLR 2026) on system prompt optimization via genetic algorithms.
 - [[zaiyu-cheng]] — Researcher at William & Mary; lead author of the 360-configuration empirical study on system prompt effects in code generation.
@@ -94,6 +97,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
 - [[babysitter-agent]] — An invisible agent managing another agent's context as its subconscious mind
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
+- [[code-clarifies-spec]] — Implementing code improves the spec; the act of writing code generates new decisions that weren't anticipated in the spec, and these decisions should feed back into it.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
 - [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.
 - [[deepswe]] — A long-horizon coding benchmark with contamination-free tasks, behavioral verification, and 70-point model spread
@@ -128,6 +132,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
 - [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
+- [[decision-extraction]] — Mining decisions from code diffs and agent traces at commit time; presenting them for human approval; logging as structured artifacts for intent traceability.
 - [[deliberate-friction]] — Intentional engineering slowdowns at high-stakes decision points. Not all friction is bad DX.
 - [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
@@ -164,6 +169,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
 - [[spec-driven-development]] — Structured specification document as primary artifact driving AI-assisted implementation; PRD + architecture + task backlog stack (Clarke) or EARS + PBT pipeline (Kiro); empirical fit (greenfield MVP, modernization) and miss (brownfield, legacy langs, prototypes)
+- [[spec-code-triangle]] — The spec-driven development equation is wrong; spec, tests, and code form a bidirectional feedback loop. Coined by Drew Breunig.
 - [[ears-notation]] — Easy Approach to Requirements Syntax: structured natural language (`When X, the system shall Y`) designed for downstream automated reasoning; the substrate for Kiro's property-based testing pipeline
 - [[property-based-testing-as-spec]] — Using PBT as the verification layer for EARS requirements; bridges stochastic LLM generation to deterministic verification by removing the LLM from the verification loop
 - [[steering-docs]] — Kiro's branded context files; framed as accumulated learnings (operational gotchas, code style, commit style) rather than static configuration
@@ -199,9 +205,11 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
+- [[plum-dev]] — CLI decision-tracking tool that keeps spec, tests, and code in sync via git hooks; extracts decisions from diffs and agent traces at commit time.
 - [[slop-watch]] — Self-hosted coding agent observability platform; sessions, tokens, traces, and quality metrics for agent-driven teams.
 - [[sandcastle]] — Matt Pocock's TypeScript library for parallelizing AFK agent loops in Docker sandboxes.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
+- [[onewords]] — A no-code library (spec + 750 tests, no implementation); the original proof of concept for spec-driven development. 1000+ GitHub stars.
 - [[unblocked]] — Context engine for engineering organizations; pre-curates organizational context for AI coding agents.
 - [[kiro]] — Amazon's agentic IDE (code-OSS fork); first to codify SDD primitives into the interface: EARS, property-based testing pipeline, steering docs, MCP integration
 - [[bmad-method]] — Open-source SDD methodology that installs into Claude Code or Cursor; strong on specialized role definition (technical director, QA tester, backend engineer)
