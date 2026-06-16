@@ -1,10 +1,12 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-06-01
+updated: 2026-06-16
 sources:
   - raw/2605.18747.pdf
-tags: [concept, agent-harness, evaluation, verification, safety, open-problems]
+  - raw/self-harness-harnesses-that-improve-themselves.txt
+  - raw/recursive-agent-harnesses.txt
+tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion]
 unaudited_marginal: 0
 ---
 
@@ -48,6 +50,10 @@ The solution the survey proposes: treat every harness mutation like a code chang
 
 > [!warning] The Self-Improvement Ceiling
 > This problem connects directly to the [[the-verifiability-thesis|verifiability thesis]]: if a harness improves itself using its own verification signals, and those signals are incomplete (oracle inadequacy), the harness will optimize against the wrong metric. Self-evolution requires trustworthy verification first — a bootstrapping problem.
+
+> [!note] Update: Self-Harness Instantiation
+> The [[self-harness]] paper (Zhang et al., Shanghai AI Lab, 2026) provides a concrete instantiation of this open problem. A three-stage loop — **Weakness Mining** (cluster failed traces by verifier-grounded failure signatures), **Harness Proposal** (same model in a proposer role generates bounded edits tied to specific mechanisms), **Proposal Validation** (regression-tested on a held-out split; conservative acceptance rule: improve at least one split without degrading the other) — produces empirical gains of 14–21 percentage points absolute on Terminal-Bench-2.0 held-out tasks across three diverse base models. The harness lineage becomes auditable: each transition is a bounded edit with explicit change contract, held-out regression evidence, and accept/reject decision.
+> The proposed solution tracks the survey's "change contract" framework with high fidelity: bounded edits rather than free rewrites, regression suites, evidence-carrying evolution, and rollback semantics (rejected edits are logged but do not change the active harness). The remaining ceiling is exactly where the survey predicts: oracle adequacy. If the verifier is wrong about why a task failed, weakness mining produces misleading evidence. Self-Harness does not solve the bootstrapping problem — it relies on trustworthy verifiers as a substrate. The self-improvement ceiling still applies, but its operational floor is now an empirical question rather than a purely theoretical one.
 
 ### 4. Transactional Shared Program State (§5.2.4)
 
@@ -107,6 +113,8 @@ The survey concludes with four properties that define the next frontier for reli
 - [[verification-loop]] — The verification loop is harness control; semantic verification (§5.2.2) extends it with scope-aware verification stacks
 - [[backpressure]] — Sandboxed execution and multi-tier permissions (§5.2.5) are backpressure applied at the harness governance level
 - [[evolving-context]] — Self-evolving harnesses (§5.2.3) are the next frontier of evolving context — the agent improving the harness, not just its own prompts
+- [[self-harness]] — The Self-Harness paper instantiates the §5.2.3 open problem with a concrete propose-evaluate-accept loop and empirical results; gain attributable to the harness, not the model
+- [[recursive-agent-harness]] — The complementary pattern: rather than editing the harness in place, recurse over fresh harness instances for long-context workloads
 
 ## Thread
 
@@ -126,7 +134,11 @@ The survey concludes with four properties that define the next frontier for reli
 - [[backpressure]] — Multi-tier permissions as governance backpressure
 - [[agent-observability]] — Telemetry as the optimization substrate for harness evolution
 - [[delegate-52]] — Long-horizon benchmarks that expose harness-level failures
+- [[self-harness]] — Concrete instantiation of the §5.2.3 self-evolution open problem; propose-evaluate-accept loop with empirical results on Terminal-Bench-2.0
+- [[recursive-agent-harness]] — Alternative to in-place harness evolution: recurse over fresh harness instances for long-context workloads
 
 ## Sources
 
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §5: Emerging Fields and Open Problems (pages 49–66).
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §5: Emerging Fields and Open Problems (pages 49–66). Establishes the seven open problems including self-evolving harnesses without regression (§5.2.3).
+- `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Provides the first concrete instantiation of the §5.2.3 open problem: a propose-evaluate-accept loop with weakness mining, harness proposal, and conservative regression testing. Empirical held-out gains of 14.2–21.4 percentage points absolute on Terminal-Bench-2.0 across MiniMax M2.5, Qwen3.5-35B-A3B, and GLM-5.
+- `raw/recursive-agent-harnesses.txt` — Lumer, Sen, Paul, Subbiah (PwC, 2026). *Recursive Agent Harnesses.* Complementary pattern: rather than editing the harness in place, recurse over fresh harness instances via code-driven parallel spawning. Demonstrates that harness architecture is a primary performance lever independent of the model.

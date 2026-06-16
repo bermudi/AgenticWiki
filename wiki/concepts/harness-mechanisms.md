@@ -1,10 +1,12 @@
 ---
 title: Harness Mechanisms
 created: 2026-05-21
-updated: 2026-05-21
+updated: 2026-06-16
 sources:
   - raw/2605.18747.pdf
-tags: [concept, agent-harness, planning, memory, tool-use, control, optimization]
+  - raw/self-harness-harnesses-that-improve-themselves.txt
+  - raw/recursive-agent-harnesses.txt
+tags: [concept, agent-harness, planning, memory, tool-use, control, optimization, self-evolution, harness-recursion]
 unaudited_marginal: 0
 ---
 
@@ -92,6 +94,12 @@ An evolutionary or optimization agent analyzes telemetry, proposes modifications
 ### Governed Harness Mutation
 Every harness edit is treated like a code change to a safety-critical runtime. Each proposed change carries a "change contract": which component is modified, which failure mode it targets, what improvement it predicts, which invariants it must preserve, what evaluation can falsify it, and how it can be rolled back. This prevents the harness from overfitting, weakening safety, or regressing on rare tasks.
 
+> [!note] Update: Self-Harness Empirically Instantiates Governed Mutation
+> The [[self-harness]] paper (Zhang et al., Shanghai AI Lab, 2026) is the first concrete instantiation of the survey's "governed harness mutation" principle. Its three-stage loop operationalizes the change contract directly: the **Weakness Mining** stage provides the evidence (verifier-grounded failure signatures clustered by mechanism), the **Harness Proposal** stage generates bounded edits tied to specific mechanisms with audit records (the change contract), and the **Proposal Validation** stage enforces the invariant — an edit is promoted only if it improves at least one split without degrading the other (regression-tested on a held-out split the proposer never sees). Rejected edits are logged but do not change the active harness; this is the rollback semantic. Held-out gains of 14.2–21.4 pp absolute across three base models on Terminal-Bench-2.0 suggest that governed harness mutation, with the right acceptance rule, is a practical path to self-evolution — though bounded, narrow, and dependent on oracle adequacy. See [[harness-engineering]] §5.2.3 for the broader open problem this resolves.
+
+### Recursive Harness Instantiation
+A different axis of harness evolution: rather than editing the harness in place, **spawn fresh harness instances** for each sub-task and aggregate their results. The [[recursive-agent-harness]] paper (Lumer et al., PwC, 2026) shows this is a primary performance lever for long-context reasoning: holding the backbone fixed at GPT-5, recursing over full agent harnesses (vs. regex loops) improved Oolong-Synthetic scores from 71.75% to 81.36%. The recursive unit is the full harness, not the model call; code-execution spawning (parent writes a script that instantiates subagents and runs them in parallel via `asyncio.gather`) bypasses the per-turn tool-call budget and scales to thousands of subagents. The pattern is already in production (Anthropic's dynamic workflows) but the controlled evaluation is new. The two strategies are complementary: **in-place evolution** ([[self-harness]]) improves one harness over time; **recursive instantiation** ([[recursive-agent-harness]]) spawns many harnesses per task. See [[multi-agent-code-orchestration]] for the broader topology taxonomy.
+
 ## Relationship to Platform Concepts
 
 - The [[multi-tier-action-space]] pattern maps to the tool use taxonomy (Tier 1 = function-oriented, Tier 2 = environment-interaction)
@@ -101,6 +109,8 @@ Every harness edit is treated like a code change to a safety-critical runtime. E
 - [[agent-skills]] map to grounded skill selection and semantic memory
 - [[verification-loop]] maps to harness control through deterministic sensors
 - [[backpressure]] is the principle behind sandboxed execution and verified state transitions
+- [[self-harness]] — A propose-evaluate-accept loop that edits the harness in place: governed mutation with regression testing
+- [[recursive-agent-harness]] — The complementary pattern: spawn fresh harness instances per task rather than editing one in place
 
 ## Thread
 
@@ -109,6 +119,7 @@ Every harness edit is treated like a code change to a safety-critical runtime. E
 - [[agent-quality-engineering]] — Harness engineering (deep telemetry, governed mutation) is quality engineering for the harness itself
 - [[tool-design-for-agents]] — The tool use paradigm taxonomy provides a systematic framework for tool design
 - [[the-verifiability-thesis]] — Verification-driven control and deterministic sensors instantiate the verifiability principle
+- [[harness-engineering]] — Self-evolving harnesses (§5.2.3) and recursive harness instantiation are the two paths to harness-level optimization
 
 ## Related
 
@@ -118,7 +129,12 @@ Every harness edit is treated like a code change to a safety-critical runtime. E
 - [[model-routing]] — Orchestration-based planning routes sub-tasks to optimal models
 - [[agent-observability]] — Deep telemetry as the optimization substrate
 - [[ralph-loop]] — Minimal instantiation of planning + control mechanisms
+- [[self-harness]] — Concrete instantiation of governed harness mutation with empirical results
+- [[recursive-agent-harness]] — Code-driven parallel subagent spawning as a complementary self-optimization pattern
+- [[multi-agent-code-orchestration]] — Topology taxonomy; recursive agent harness is the "subagent from a script" pattern
 
 ## Sources
 
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §3: Harness Mechanisms — Planning, Memory, Tool Use, Control, and Optimization (pages 16–33).
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §3: Harness Mechanisms — Planning, Memory, Tool Use, Control, and Optimization (pages 16–33). Defines the four-paradigm planning taxonomy, memory taxonomy, four tool use paradigms, the plan-execute-verify control loop, and §3.5 introduces agentic harness engineering with deep telemetry and governed mutation.
+- `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang et al. (Shanghai AI Lab, 2026). Empirically instantiates §3.5's governed mutation principle with a concrete propose-evaluate-accept loop. Three-stage algorithm: Weakness Mining (verifier-grounded failure signatures), Harness Proposal (same model in proposer role, bounded edits), Proposal Validation (conservative acceptance rule on held-out regression tests). Held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0.
+- `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). The complementary pattern: recursive harness instantiation. Parent agent writes executable code that spawns full subagent harnesses in parallel; the recursive unit is the harness, not the model call. Oolong-Synthetic gains from 71.75% (Codex) to 81.36% (RAH) with backbone held fixed.

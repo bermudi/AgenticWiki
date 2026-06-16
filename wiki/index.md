@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-07
+updated: 2026-06-16
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
@@ -11,6 +11,8 @@ sources:
   - raw/yt-spec-driven-development-ai-assisted-coding-explained.md
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
+  - raw/self-harness-harnesses-that-improve-themselves.txt
+  - raw/recursive-agent-harnesses.txt
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -22,6 +24,8 @@ unaudited_marginal: 0
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): benchmark crisis commentary; marginal ingest
 - `raw/agentic-coding-is-a-trap.md` — Lars Faye: cognitive debt, supervision paradox, skill atrophy; new thread + concept + author pages
 - `raw/yt-we-all-fell-for-it.md` — Theo (t3.gg): video response to Faye; cognitive cost commentary; new author page + thread update
+- `raw/self-harness-harnesses-that-improve-themselves.txt` — Self-Harness (Zhang et al., Shanghai AI Lab, 2026); new self-harness concept; harness-engineering §5.2.3 self-evolution open problem empirically instantiated; harness-mechanisms §3.5; evolving-context extended
+- `raw/recursive-agent-harnesses.txt` — Recursive Agent Harnesses (Lumer et al., PwC, 2026); new recursive-agent-harness concept; multi-agent-code-orchestration code-driven subagent spawning; harness-mechanisms recursive instantiation; code-as-agent-harness extension
 
 # Index
 
@@ -164,6 +168,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[property-based-testing-as-spec]] — Using PBT as the verification layer for EARS requirements; bridges stochastic LLM generation to deterministic verification by removing the LLM from the verification loop
 - [[steering-docs]] — Kiro's branded context files; framed as accumulated learnings (operational gotchas, code style, commit style) rather than static configuration
 - [[single-player-to-multiplayer]] — Cian Clarke's framing of where SDD tooling needs to evolve: from individual to multi-contributor parallel work via specialization-by-architecture-area and staging gates
+- [[self-harness]] — A paradigm where the same fixed model iteratively improves its own harness via weakness mining, harness proposal, and regression-tested validation; held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0 across three diverse base models
+- [[recursive-agent-harness]] — Recursion over full agent harnesses (with filesystem, code execution, and tools) rather than bare model calls; 71.75% → 81.36% on Oolong-Synthetic with backbone held fixed
 - [[system-prompt-effects]] — System prompts have measurable, non-monotonic effects on LLM performance that interact with model scale, prompting strategy, and programming language.
 - [[llm-as-code-judge]] — Using LLMs to evaluate code quality; increasingly common in agentic SE pipelines but suffers from systematic prompt-induced biases.
 - [[overcorrection-bias]] — The systematic tendency of LLMs to misclassify correct code as defective, especially when prompted to explain and fix.

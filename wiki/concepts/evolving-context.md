@@ -1,11 +1,13 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-06-08
+updated: 2026-06-16
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
-tags: [concept, context-engineering, agents, memory, continual-learning]
+  - raw/self-harness-harnesses-that-improve-themselves.txt
+  - raw/recursive-agent-harnesses.txt
+tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion]
 unaudited_marginal: 0
 ---
 
@@ -68,9 +70,38 @@ Martin argues token-space learning has several advantages over weight-space (LoR
 
 The tradeoff: token-space learning is crude. Current implementations are "custom man" — bespoke prompts for reflection, manual rules for what to save. But the barrier to entry is near zero.
 
+## Two Extensions to Evolving Context
+
+Two recent papers extend evolving context beyond prompts, memories, and skills into the harness substrate itself. They are not contradictory; they target different layers of the agent's operating context.
+
+### 4. Harness Self-Evolution ([[self-harness]])
+The [[self-harness]] paper (Zhang et al., Shanghai AI Lab, 2026) extends evolving context to the **harness surface** — the system prompt, tools, runtime policies, verification rules that mediate the agent's behavior. The same fixed model proposes bounded edits to its own harness based on verifier-grounded failure signatures; edits are regression-tested on a held-out split the proposer never sees, and only promoted if they improve at least one split without degrading the other. This is **in-place evolution**: the harness's identity persists, but the executable protocol through which the model observes tasks, takes actions, and checks artifacts is rewritten iteratively.
+
+Compared to the three Lance Martin categories, harness self-evolution is *more constrained* in some ways (edits must target a specific mechanism, modify only the relevant surface, and not rewrite the control architecture) and *more powerful* in others (the editable surface includes tools, runtime policies, and verification rules — not just prompts, memories, and skills). Empirically, it produces held-out gains of 14.2–21.4 pp absolute on Terminal-Bench-2.0 across three diverse base models. The central design property is the conservative acceptance rule: the system can reject a promising edit if it would regress on a held-out task. This is a learned "what to keep" property, but enforced at the harness level rather than the prompt level.
+
+### 5. Harness Recursive Instantiation ([[recursive-agent-harness]])
+A different direction. The [[recursive-agent-harness]] paper (Lumer et al., PwC, 2026) doesn't evolve the harness at all — it spawns fresh harness instances per sub-task and aggregates their results. The parent agent writes executable code that instantiates subagent harnesses and runs them in parallel via `asyncio.gather`. This is **evolution by instantiation**: rather than improving one harness over time, the system spawns many harnesses per task and aggregates their output.
+
+This pattern complements evolving context rather than extending it. The harness is treated as a reusable execution unit, not a tunable artifact. The system is a *factory* of harness instances, each with its own context window, filesystem, and tool access. On Oolong-Synthetic, holding the backbone fixed at GPT-5, this pattern improves the Codex coding-agent baseline from 71.75% to 81.36% — the gain is attributable to harness architecture, not the model.
+
+### How the Two Extensions Differ
+
+| Dimension | Harness Self-Evolution ([[self-harness]]) | Harness Recursive Instantiation ([[recursive-agent-harness]]) |
+|---|---|---|
+| Object evolved | The single harness's editable surfaces | The set of harness instances spawned per task |
+| Mechanism | Bounded edits, regression-tested, conservative acceptance | Code-driven parallel spawning, deterministic aggregation |
+| Identity | Same harness, modified iteratively | Many fresh harnesses, aggregated at the parent level |
+| Token-space legibility | High — every edit is a logged, auditable change | Lower — the harness is unchanged, but the orchestration script is the artifact |
+| Cost structure | Many evaluation runs to test candidate edits | Many subagent invocations per task |
+| Empirical claim | Held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0 | Held-out gains of 9.6 pp on Oolong-Synthetic (71.75% → 81.36%) |
+| Failure mode | Stochastic promotion of edits that regress | Parent decides not to recurse, collapses to single coding agent |
+
+Both approaches are **empirically grounded**: gains attributable to the harness, not the model. Both rely on trustworthy verification (held-out regression tests, programmatic answer extraction). Both are model-agnostic in principle but empirically demonstrated on a small set of base models. The open question is whether they compose: a self-evolving harness whose spawned subagents are also self-evolving.
+
 ## Thread
 
 - [[the-agent-workflow]] — Evolving context closes the loop between agent sessions, making the workflow improve with use
+- [[harness-engineering]] — Self-Harness is the "self-evolving harnesses" extension of evolving context applied to the harness surface; the §5.2.3 open problem
 
 ## Related
 
@@ -83,11 +114,15 @@ The tradeoff: token-space learning is crude. Current implementations are "custom
 - [[ralph-loop]] — The plan file is a primitive form of evolving context — it's modified by each iteration and read by the next
 - [[chris-parsons]] — Worker loop skills evolved via post-session reflection; skill learning as evolving context in practice
 - [[steering-docs]] — The canonical Kiro example of evolving context: agents write operational learnings (CDK flags, code style) back into steering, which is surfaced in the system prompt at every turn
-
 - [[procedural-knowledge]] — Capturing procedural knowledge from experience is a form of evolving context
 - [[babysitter-agent]] — The babysitter's handoff prompts are a form of evolving context — what survives across sessions
+- [[self-harness]] — Extends evolving context to the harness surface: bounded edits, regression-tested, conservative acceptance
+- [[recursive-agent-harness]] — A different axis: harness instances spawned per task via code-driven parallel orchestration, not evolving one harness
+- [[harness-mechanisms]] — Self-evolution and recursive instantiation are the two harness-level optimization mechanisms
 
 ## Sources
 
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Full interview detailing the three categories of evolving context, RLM, the classifier heuristic, and the token-space vs. weight-space tradeoff
 - `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video on the skill.md open standard, validating and extending the skill learning category of evolving context
+- `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang et al. (Shanghai AI Lab, 2026). Extends evolving context to the harness surface itself. Propose-evaluate-accept loop with verifier-grounded weakness mining, bounded proposals, and conservative acceptance on held-out regression tests. Held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0.
+- `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). A different axis: harness as a recursive unit. Parent writes executable code that spawns fresh subagent harnesses in parallel. Held-out gain of 9.6 pp on Oolong-Synthetic (71.75% → 81.36%) with backbone held fixed.

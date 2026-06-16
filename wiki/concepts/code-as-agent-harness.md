@@ -1,11 +1,12 @@
 ---
 title: Code as Agent Harness
 created: 2026-05-21
-updated: 2026-05-26
+updated: 2026-06-16
 sources:
   - raw/2605.18747.pdf
   - raw/yt-llms-are-killing-agent-harness.md
-tags: [concept, agent-harness, architecture, code-centric]
+  - raw/recursive-agent-harnesses.txt
+tags: [concept, agent-harness, architecture, code-centric, harness-recursion]
 unaudited_marginal: 0
 ---
 
@@ -62,6 +63,7 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - [[evolving-context]] and [[context-engineering]] connect to memory mechanisms and context compaction
 - [[the-agent-workflow]]'s HITL/AFK split is operationalized by harness mechanisms (planning, control)
 - The [[ralph-loop]] is a minimal harness instantiation — linear decomposition planning + verification-driven control
+- The [[recursive-agent-harness]] is the code-as-action extension applied to multi-agent orchestration: the parent writes executable code that instantiates subagents in parallel. This is the framework's "code for acting" instantiated at the parent-child level — the script is the action that produces many subagent harnesses.
 
 ## Thread
 
@@ -84,8 +86,11 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - [[thorsten-ball]] — AMP as a live case study of the harness at the thin end: Ball argues the harness should decay like a cast as models improve
 - [[backpressure]] — Mechanical rejection within harness control
 - [[xuying-ning]] — Lead author of the survey
+- [[recursive-agent-harness]] — The code-as-action extension applied to multi-agent orchestration: parent writes executable code that spawns subagents in parallel
+- [[self-harness]] — The complementary in-place pattern: a single harness that improves itself iteratively via bounded, regression-tested edits
 
 ## Sources
 
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness: Toward Executable, Verifiable, and Stateful Agent Systems.* The full survey defining the framework, taxonomy, and open problems across 102 pages.
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: AMP as a live case study of the harness at the extreme thin end; the harness falls away as models improve; AMP deleted features as models got better
+- `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Operationalizes the code-as-harness framework for multi-agent orchestration: the parent agent writes executable code that instantiates subagent harnesses in parallel. Empirically demonstrates that code-driven spawning is a primary performance lever: 71.75% → 81.36% on Oolong-Synthetic with backbone held fixed.

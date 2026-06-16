@@ -1,11 +1,12 @@
 ---
 title: Multi-Agent Code Orchestration
 created: 2026-05-21
-updated: 2026-06-08
+updated: 2026-06-16
 sources:
   - raw/2605.18747.pdf
   - raw/yt-systems-building-systems.md
-tags: [concept, multi-agent, orchestration, code-harness, collaboration]
+  - raw/recursive-agent-harnesses.txt
+tags: [concept, multi-agent, orchestration, code-harness, collaboration, harness-recursion]
 unaudited_marginal: 0
 ---
 
@@ -83,6 +84,20 @@ The topology of agent interaction — who communicates with whom, in what order,
 - **Dynamic agent pool scaling**: Agent count scales with task complexity, topology type fixed. SoA, MAGIS, BOAD (bandit-optimized sub-agent selection).
 - **Feedback-driven DAG restructuring**: EvoMAC's Gradient Agent reads execution logs to attribute failures, Updating Agent modifies prompts and graph structure — topology structurally modified in response to execution feedback.
 - **Runtime self-reorganization**: SEW generates and mutates entire workflow specifications using evolutionary operators. FlowReasoner trains a meta-agent to generate tailored multi-agent systems per input problem.
+
+### Code-Driven Subagent Spawning (RAH Topology)
+Distinct from the adaptive topologies above: the [[recursive-agent-harness]] paper (Lumer et al., PwC, 2026) introduces a topology in which the **parent agent writes executable code** that instantiates subagents and runs them in parallel via `asyncio.gather`. The spawning logic is ordinary program code, not a fixed recursive-call convention or a schema-defined tool. This gives the parent agent complete control over:
+
+- **Concurrency** — the number of subagents in flight
+- **Per-entry instructions** — what each subagent receives as its prompt
+- **Output paths** — where each subagent writes its result for aggregation
+- **Composition** — combining subagent results at the parent level
+
+The topology is **recursive**: each subagent is itself a full harness with the same spawning capability as its parent, so the decomposition is genuinely multi-level (default depth limit 3). The pattern is already in production (Anthropic's dynamic workflows), but the controlled evaluation is new. On Oolong-Synthetic, holding the backbone fixed at GPT-5, RAH improves the Codex coding-agent baseline from 71.75% to 81.36% — the gain is attributable to harness architecture rather than model choice.
+
+**Why code as a first-class action**: writing a program is a more expressive way to orchestrate tools than emitting one structured call at a time (CodeAct, Wang et al., 2024). The parent's spawning script uses the same language for orchestration that it uses for all other reasoning (data manipulation, file I/O, output formatting). This is [[code-as-agent-harness|code as harness]] applied to the parent-child relationship: the parent *is* a code-driven orchestrator, and the subagents are the units of execution it composes.
+
+**The other axis**: [[self-harness]] edits the harness in place rather than spawning fresh instances. The two are complementary: in-place evolution improves one harness over time; recursive instantiation spawns many harnesses per task. See [[harness-mechanisms]] §3.5 for the full comparison.
 
 ## Execution Feedback Integration (§4.2.1)
 
@@ -162,8 +177,11 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - [[plan-vs-review]] — Agent role delegation (planner, reviewer, coder) operationalizes the plan-vs-review tradeoff at the multi-agent level
 - [[software-factory]] — The company-shaped hierarchy approach maps to multi-agent orchestration patterns
 - [[single-player-to-multiplayer]] — Clarke's framing of how SDD tooling scales from individual to team workflows; team-scale multi-agent orchestration is the architectural extension this concept page describes
+- [[recursive-agent-harness]] — Code-driven subagent spawning as a distinct multi-agent topology: the parent writes executable code that instantiates subagents in parallel
+- [[self-harness]] — The complementary in-place pattern: a single harness that improves itself over time, rather than spawning fresh instances per task
 
 ## Sources
 
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §4: Scaling the Harness — Multi-Agent Orchestration over Code (pages 34–48).
+- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §4: Scaling the Harness — Multi-Agent Orchestration over Code (pages 34–48). Defines the five role categories, four interaction modes, topology taxonomy, and convergence patterns.
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: company-shaped hierarchy as a design approach; concern that human organizational patterns may not be optimal for agents
+- `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Introduces the code-driven subagent spawning topology: the parent writes executable code that instantiates subagents and runs them in parallel. The recursive unit is the full harness, not the model call. On Oolong-Synthetic, holding GPT-5 fixed, RAH improves Codex from 71.75% to 81.36% — gain attributable to harness architecture.
