@@ -1,7 +1,7 @@
 ---
 title: Software Factory
 created: 2026-06-05
-updated: 2026-06-05
+updated: 2026-06-16
 sources:
   - raw/yt-systems-building-systems.md
 tags: [concept, agentic-engineering, automation, orchestration]
@@ -96,6 +96,7 @@ Either way, **tuning is the slow, expensive, and difficult part**.
 - [[ralph-loop]] — The Ralph Loop's fresh-context-per-iteration is a minimalist persistence mechanism
 - [[plan-disposability]] — Fresh plans per session as a persistence strategy
 - [[the-human-lever]] — The software factory automates the execution layer of the human lever
+- [[self-harness]] — Self-Harness automates harness engineering; the software factory automates spec-to-software — both self-optimization at different layers of the stack
 
 ## Sources
 

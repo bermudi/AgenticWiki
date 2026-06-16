@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-06-08
+updated: 2026-06-16
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -231,6 +231,8 @@ See [[html-as-agent-output]] for the full treatment.
 ### Structured Natural Language as a Tool Interface
 
 The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in [[kiro|Amazon Kiro]]'s spec pipeline is a tool-design move in disguise. By constraining requirements to a machine-parseable pattern (`When <trigger>, the <system> shall <response>`), the requirements artifact becomes a deterministic interface between the LLM and downstream verification tools. The tool design lesson generalizes: **structured natural language inputs can shift verification from probabilistic (LLM-as-judge) to deterministic (parsers, automated reasoners)** without requiring the LLM to be in the loop. This is [[spec-driven-development|Spec-driven development]]'s tool-design contribution: replace the LLM-as-judge verification step with a deterministic pipeline.
+
+[//]: # ([[recursive-agent-harness]] links here from its ## Thread section)
 
 ## Sources
 

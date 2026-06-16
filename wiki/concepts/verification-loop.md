@@ -137,6 +137,8 @@ The practical implication for verification loop design: the loop is not a single
 - [[dynamic-trust]] — Provability as a trust component is the verification loop applied at the inter-agent level: test before you trust
 - [[iterative-self-correction]] — Meeseeks demonstrates that even near-perfect verification (98.4%) doesn't guarantee convergence — the verification loop is necessary but not sufficient, and the [[overcorrection-bias|catastrophic overcorrection]] phenomenon shows models oscillate rather than converge under feedback
 - [[contextcov]] — First empirical comparison of verification strategies; LLM reflection degrades compliance; deterministic executable verification achieves 88.3% compliance
+- [[self-harness]] — Held-out regression testing extends the verification loop to the self-evolution process itself
+- [[recursive-agent-harness]] — The shared output file that all subagents write to is the verification substrate for the recursive decomposition
 
 ## Sources
 

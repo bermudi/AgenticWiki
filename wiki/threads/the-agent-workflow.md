@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-06-08
+updated: 2026-06-16
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -398,6 +398,9 @@ The key design constraint: agents must run for **long enough** that context-swit
 This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|Pocock]]'s pipeline: the human runs multiple agents during the day (each in different stages), not just one overnight batch. The [[verification-loop]] becomes a parallel concern — different streams may need different verification gates.
 
 The team-scale extension of focus maxing is the [[single-player-to-multiplayer]] problem: at agentic team pace, the cost of merge conflicts and forgotten commits is magnified, requiring workflow primitives like staging gates and decomposition by contributor specialization.
+
+[//]: # ([[self-harness]] links here from its ## Thread section)
+[//]: # ([[recursive-agent-harness]] links here from its ## Thread section)
 
 ## Sources
 

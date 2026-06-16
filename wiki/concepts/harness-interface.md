@@ -93,6 +93,7 @@ The harness interface connects to existing wiki concepts:
 - [[backpressure]] — Mechanical rejection of wrong actions in the acting interface
 - [[agent-skills]] — Skill libraries as code-based action interfaces
 - [[ralph-loop]] — A minimal harness instantiation using code for acting and verification
+- [[self-harness]] — The harness surface that Self-Harness modifies is the harness interface layer
 
 ## Sources
 

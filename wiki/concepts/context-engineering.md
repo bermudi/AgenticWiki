@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-06-08
+updated: 2026-06-16
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -183,6 +183,7 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[opencode]] — Real-world demonstration of Effect's verbosity as context engineering
 - [[steering-docs]] — Kiro's branded operational context: surface operational notes (commit style, code style, hard-won CDK flags) in the system prompt at every turn, rather than re-learning them each session; the persistent-context layer of context engineering
 - [[kiro]] — Amazon's agentic IDE that codifies context engineering principles (EARS-formatted requirements, steering as operational context) into the IDE interface
+- [[recursive-agent-harness]] — Isolated subagent contexts (no shared memory, no communication) are an extreme form of context isolation
 
 ## Sources
 

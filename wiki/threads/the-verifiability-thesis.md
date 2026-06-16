@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-06-07
+updated: 2026-06-16
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -199,6 +199,8 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 [//]: # ([[rubric-evaluation]] links here from its ## Thread section)
 [//]: # ([[verifiability]] links here from its ## Thread section)
 [//]: # ([[agent-evals]] links here from its ## Related section)
+[//]: # ([[self-harness]] links here from its ## Thread section)
+[//]: # ([[recursive-agent-harness]] links here from its ## Thread section)
 
 ## Sources
 

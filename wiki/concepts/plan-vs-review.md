@@ -72,6 +72,7 @@ The distinction parallels [[grey-box-engineering]]: plan-heavy corresponds to ow
 - [[vibes-based-engineering]] — Review-heavy without structure is vibes; plan-heavy is the alternative
 - [[fighting-slop-with-slop]] — The BEEPs workflow (50%+ design time) empirically validates the plan-heavy approach.
 - [[the-slop-problem]] — Plan-heavy design is a direct slop prevention strategy; review-heavy without verification accelerates it.
+- [[recursive-agent-harness]] — RAH is a structural implementation of plan-vs-review: the plan is a spawning script, the review is per-subagent output aggregation
 
 ## Sources
 
