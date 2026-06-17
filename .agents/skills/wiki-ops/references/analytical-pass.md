@@ -26,20 +26,33 @@ If you find theory pressure — contradiction, departure, boundary shift, refram
 
 | Scope | Action |
 |---|---|
-| **Local caveat** | Add a `> [!warning] Theory pressure` callout or `> [!note] Departure` callout on the affected page. |
+| **Local caveat** | Add a callout on the affected page (see Epistemic Callouts below). |
 | **Thread-level tension** | Add/update the thread's `## Tensions` section and link the affected concepts. |
 | **Panorama-level reframe** | Propose a new thread or major section in an existing thread. Do not bury it as only a callout. |
 
 Do not silently reconcile. Preserve the disagreement or departure as part of the theory map.
 
+### Epistemic Callouts
+
+Use the standard callout formats defined in `meta/wiki-conventions.md`:
+
+| Callout | Use when |
+|---|---|
+| `> [!note] Departure:` | Sources disagree on a point; the wiki is choosing one path or noting the fork |
+| `> [!warning] Contradiction:` | A new source directly contradicts an existing wiki claim |
+| `> [!note] Synthesis:` | The wiki's own inference — not stated by any single source, but inferred from multiple |
+| `> [!note] Extension:` | A reasonable extrapolation beyond what sources claim, but unvalidated |
+
+Keep callouts at **claim level**, not page level. A single page may contain sourced facts, synthesized arguments, and speculative extensions simultaneously. Prefer specificity: `Extension: grey-box toolchain` is better than `Extension: this whole section`.
+
 ## Step 3: Theory summary
 
 Present this to the human:
 
-- **Threads gained support**: Which threads did this source reinforce?
-- **Threads took a hit**: Did any thread lose ground?
-- **Contradictions found**: List them with the conflicting claims and pages
-- **Departures found**: List novel positions that don't fit the existing theory
+- **Threads gained support**: Which threads did this source reinforce? List specific thread pages and what the source adds.
+- **Threads took a hit**: Did any thread lose ground? What claim was weakened?
+- **Contradictions found**: List them with the conflicting claims, affected pages, and severity.
+- **Departures found**: List novel positions that don't fit the existing theory — not wrong, just different frames.
 - **Emerging themes**: Is a new thread brewing? Are there tensions that need resolution?
 - **Recommended theory action**: Should this remain a local callout, become a thread tension, expand an existing thread, or become a provisional new thread?
 

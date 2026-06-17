@@ -5,9 +5,47 @@
 ## Pipeline
 
 ```
-Step 0: Triage (GATE)  →  Phase 1: Filing  →  Phase 2: Analysis  →  Phase 3: Verification  →  Commit
-                             (editing)            (critical re-read)      (separate audit)
+Pre-step: Acquisition → Step 0: Triage (GATE) → Phase 1: Filing → Phase 2: Analysis → Phase 3: Verification → Commit
 ```
+
+Progress checklist:
+
+- [ ] Source acquired in `raw/` (pre-step)
+- [ ] Triage approved by human (step 0)
+- [ ] Filing summary presented to human (phase 1)
+- [ ] Theory summary presented to human (phase 2)
+- [ ] Verification passed — no CRITICAL findings (phase 3)
+- [ ] Committed
+
+## Pre-step: Source Acquisition
+
+**Who:** Main agent. **When:** Before triage. A source not in `raw/` is invisible to future sessions.
+
+Three cases, in order of frequency:
+
+### 1. User provides a local file path
+
+(e.g., `~/Downloads/karpathy-talk.pdf`)
+
+- **Slugify the title** to produce the `raw/` filename. Strip the extension, pass the basename through `./scripts/slugify`, then re-attach the original extension (`.pdf`, `.md`, `.html`, etc.). For YouTube content, prepend `yt-` to the slug.
+- `mv` the file to its new slugified name in `raw/`. Don't preserve `~/Downloads/` defaults like `Untitled.pdf`, `karpathy-talk (1).pdf`, or browser hash names — the wiki's naming convention wins over the download manager's.
+- If the basename is genuinely unrecoverable (a hash, all numbers, etc.), peek at the file's first page or metadata to extract a real title before slugifying. Don't slugify garbage.
+- For companion media (images, audio, video clips, screenshots), `mv` them into `raw/assets/` with slugified names so they live next to the source.
+- **Note:** `mv` is not destruction — the file ends up in `raw/`. The `trash > rm` rule applies to files you're throwing away, not files you're relocating. Don't over-rotate and use `trash` here.
+
+### 2. User provides a URL and no file exists in `raw/` yet
+
+- Use the web-content skill to fetch the content
+- Slugify the title to produce a filename: `./scripts/slugify "Article Title Here"` — prepend `yt-` for YouTube sources
+- Save to `raw/` following the appropriate template (see `meta/wiki-conventions.md` for web/YouTube source formats)
+
+### 3. File is already in `raw/`
+
+User points you at `raw/some-file.md`, or you can see it there. Skip this step entirely. Just read it.
+
+### Verify acquisition
+
+After acquisition, before triage: confirm the file actually arrived in `raw/` (`ls raw/`). Downloads can silently fail, partial PDFs can corrupt, and `mv` across filesystems (e.g., `/tmp` → repo) is slower than it looks. Cheap to check, expensive to discover mid-edit.
 
 ## Step 0: Relevance Triage (GATE)
 
@@ -59,6 +97,8 @@ Pages that accumulate 5+ marginal ingests without a verification pass carry unau
 
 A full ingest that touches the page also resets the counter to 0 (Phase 3 verification already ran).
 
+**Why this matters:** Marginal ingests add claims without the full three-phase verification cycle. The counter is a circuit breaker — it prevents the slow accumulation of unaudited assertions that compound silently. This parallels the [[document-degradation]] finding: degradation is invisible per-interaction but catastrophic cumulatively.
+
 ### Skip outcome
 
 File stays in `raw/` as archive. No wiki changes. Done.
@@ -69,19 +109,22 @@ File stays in `raw/` as archive. No wiki changes. Done.
 
 1. Read source, identify entities/concepts/claims
 2. Determine thread fit (strengthen/contradict/new thread?)
-3. Create/update pages. For **each** page created or updated:
-   - Populate YAML frontmatter: `title`, `created` (new pages only), `updated` (always), `sources` (list of `raw/` filenames), `tags`
-   - Write the blockquote summary (1-3 sentences immediately after the `# Title` heading)
-   - For concept pages: add `## Thread` section linking to relevant threads
-   - For thread pages: cross-references live in body wiki-links, no separate link section needed
-   - Add `## Related` section (concept/author/project pages) with links to 2-3 existing pages
-   - Add `## Sources` section with annotated entries (must match frontmatter `sources` list)
-   - Update `wiki/index.md` with any new pages
+3. Create or update pages. For **each** page, complete this checklist:
 
-   **Batch your edits.** Use the `edit` tool's `edits[]` array to make multiple changes to the same file in one call. A file needing a frontmatter fix, a new paragraph, and a source entry = one `edit` call with three entries in `edits[]`, not three separate calls. Files that don't share changes can be done in parallel calls, but never make sequential single-change calls to the same file.
+   - [ ] Frontmatter: `title`, `created` (new pages only), `updated` (always), `sources` (list of `raw/` filenames), `tags`, `unaudited_marginal` (0 for new pages)
+   - [ ] Blockquote summary: 1-3 sentences immediately after the `# Title` heading
+   - [ ] Thread section: `## Thread` linking to relevant threads (concept pages); body cross-refs (thread pages)
+   - [ ] Related section: `## Related` with links to 2-3 existing pages
+   - [ ] Sources section: `## Sources` with annotated entries matching frontmatter `sources` list
+   - [ ] Index updated: new pages added to `wiki/index.md`
 
-   **Don't re-read what you just wrote.** After editing pages, you already know their content. Move directly to editors — they will re-read every page independently. Re-reading before invoking editors adds latency with zero additional signal.
-4. Run editors in **parallel** via `delegate`. Scope each editor to recently changed/created pages only. The three editors are independent — structural checks frontmatter/links, link checks cross-references, content checks summaries. They can run simultaneously:
+   **Batch your edits.** Use the `edit` tool's `edits[]` array to make multiple changes to the same file in one call. Files that don't share changes can be done in parallel calls, but never make sequential single-change calls to the same file.
+
+   **Batch index updates.** When processing multiple sources, update `wiki/index.md` once at the end — not after each page.
+
+   **Don't re-read what you just wrote.** After editing pages, move directly to editors — they re-read independently. Re-reading before invoking editors adds latency with zero signal.
+
+4. Run editors in **parallel** via `delegate`. Scope each editor to recently changed/created pages only:
 
    ```
    delegate({
@@ -102,32 +145,41 @@ File stays in `raw/` as archive. No wiki changes. Done.
    })
    ```
 
-   Read all editor reports. Fix any issues surfaced before proceeding to Step 5.
-5. Filing summary → human. Do NOT commit.
+   Read all editor reports. Fix any issues surfaced before proceeding.
+
+5. Present filing summary to human. **Do NOT commit.**
 
 ## Phase 2 — Analysis (main agent only)
 
-**Who:** Main agent, switching to critical mode.
+**Who:** Main agent, switching to critical mode. **When:** After filing is approved.
 
-- Re-read every thread page
-- Check: contradictions, departures, tensions, panorama-level reframes
-- Present theory summary: what gained support, what took a hit, and recommended theory action
+This is a separate cognitive pass — you are no longer filing, you are stress-testing the wiki's theory. Load [analytical-pass.md](references/analytical-pass.md) for the full procedure.
+
+The pass produces a **theory summary** for the human:
+- Which threads gained support, which took a hit
+- Contradictions and departures found (with affected pages and severity)
+- Emerging themes and recommended theory action
+
+Check *every* thread, not just the ones you updated. Classify theory pressure by scope (local callout, thread tension, or panorama reframe). Don't just list what was added — tell the human how the theory changed.
+
+**Do not skip Phase 2.** It is not optional. After the human reviews the theory summary, proceed to Phase 3. Do **not** commit.
 
 ## Phase 3 — Verification (separate agents, separate sessions)
 
-**Why:** LLMs silently corrupt documents during delegated editing (DELEGATE-52). Verification as a separate judgment pass is ~95% reliable even when editing chains degrade.
+**Why:** LLMs silently corrupt documents during delegated editing. The empirical basis: [[delegate-52|DELEGATE-52]] found that frontier models corrupt ~25% of document content over 20 interactions, with sparse [[critical-failure|critical failures]] explaining ~80% of degradation. Agentic tool use does not help — models with file read/write/code execution tools performed **6% worse** than those without. Single-turn judgment is reliable (models maintain near-perfect fidelity on individual interactions); the problem is rare catastrophic events in long chains. Separate sessions break the chain.
 
 **Who:** Main agent orchestrates; `source-verifier` + editors run in fresh sessions.
 
-1. **Diff auditor** (bash + LLM judgment) — mechanical checks for deletions >20%, summary drift, source section changes (bash); then diff reasoning for semantic drift, orphan edits, claim deletion, and scope creep (LLM, fresh session)
-2. **Source-verifier subagents** (parallel, one per changed page) — check against `raw/` sources:
-   - Hallucinations (claims absent from source)
-   - Omissions (key source insights missing)
-   - Misattributions (wrong person/source credited)
-   - Summary accuracy (blockquote matches page + sources)
-3. **Mechanical re-check** — structural-editor + link-editor on changed files
-4. Aggregate → report to human with severity (🚨 CRITICAL / ⚠️ WARNING / ℹ️ INFO)
-5. Fix CRITICAL → re-verify → commit
+The phase runs four checks, in order:
+
+1. **Mechanical diff audit** (bash) — deletions >20%, summary drift, source section changes. Fix any CRITICALs before proceeding.
+2. **Semantic diff reasoning** (delegate, fresh session) — orphan edits, semantic drift, claim deletion, scope creep. Skipped if no substantive changes or marginal ingest.
+3. **Source verification** (parallel delegates, one per page) — hallucinations, omissions, misattributions, summary accuracy. Filter findings: fix factual errors, skip synthesis and epistemic callout territory.
+4. **Mechanical re-check** — structural-editor then link-editor on changed files.
+
+Aggregate findings with severity (CRITICAL / WARNING / INFO). Present to human. Fix CRITICALs, re-verify, then commit.
+
+Load [verification-pass.md](references/verification-pass.md) for the full procedure: bash scripts, delegate prompt templates, scope decision criteria, re-verification steps, and commit rules.
 
 ## Agents
 
@@ -143,7 +195,7 @@ File stays in `raw/` as archive. No wiki changes. Done.
 
 **Editing and verification must never be the same session.**
 
-The source-verifier never inherits the editing agent's context. It gets: the wiki page (final state) + `raw/` sources (immutable) + one instruction. This is the pattern DELEGATE-52 shows is reliable — single-turn judgment at RS@2 scores ~95% even for weaker models.
+The source-verifier never inherits the editing agent's context. It gets: the wiki page (final state) + `raw/` sources (immutable) + one instruction. This is the pattern [[delegate-52|DELEGATE-52]] validates: single-turn judgment is reliable (models maintain near-perfect fidelity on individual interactions), while long-horizon chains degrade silently via sparse [[critical-failure|critical failures]] that explain ~80% of total degradation. Separate sessions break the degradation chain.
 
 ## Commit criteria
 

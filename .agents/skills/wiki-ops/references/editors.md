@@ -1,6 +1,6 @@
 # Editor Reference
 
-Specialized subagents for wiki quality. Each owns a narrow beat — invoke them via `delegate` when their domain is relevant. All editors inherit project context and the wiki-ops skill.
+Specialized subagents for wiki quality. Each owns a narrow beat — invoke them via `delegate` when their domain is relevant. All editors except Theory inherit project context and the wiki-ops skill. Theory-editor gets fresh context to avoid anchoring on the editing pass.
 
 | Editor | Agent | Beat | When to invoke |
 |---|---|---|---|
@@ -23,3 +23,21 @@ The temporal editor runs on a weekly cadence, but there's no cron. Instead:
 4. If the user declines or is mid-task, don't block — just note it.
 
 Don't be pushy. One mention per session is enough.
+
+## Theory Editor — Deep Dive
+
+The theory editor is the wiki's cross-thread intelligence layer. It doesn't check mechanical correctness — it reasons about the theory as a whole.
+
+**Beat:**
+- **Thread thesis support**: Does each thread's thesis still hold given all accumulated sources? Or has evidence shifted?
+- **Cross-thread tensions**: Do threads contradict each other? Are there claims on one thread that undermine another?
+- **Unfalsifiable arguments**: Has a thread hardened into unfalsifiable territory — claims that can't be disproven because they're too vague or too broad?
+- **Emerging thread candidates**: Are there concepts or claims accumulating across multiple pages that don't belong to any existing thread?
+- **Coverage gaps**: Are there important ideas with multiple sources but no thread to synthesize them?
+
+**When to invoke:**
+- After temporal-editor surfaces stale or drifting pages (chained)
+- When the wiki has accumulated several new sources and you suspect the theory needs re-grounding
+- When you notice concepts that seem related but aren't linked to any common thread
+
+**Output:** A structured report with: thread health assessments, cross-thread tension map, emerging theme candidates, and recommended actions (merge threads, split threads, create new threads, update thread theses).
