@@ -9,6 +9,7 @@ sources:
   - raw/recursive-agent-harnesses.txt
   - raw/2606.16707v1.txt
   - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
 tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion, executable-memory, memory-compression]
 unaudited_marginal: 0
 ---
@@ -141,6 +142,35 @@ The relationship to the other extensions:
 
 All seven share the **decoupling of storage and representation**: the append-only log is the storage, the structured view is regenerated from it. The regenerated view is auditable as a diff. The regenerator is constrained (bounded edits, regression tests, factual judgment) rather than free.
 
+### 8. Memory Evolution via [[evomem]]
+
+An eighth axis: the agent's **memory evolution trace** is the evolving object. The [[evomem]] paper (Xu et al., NUS + collaborators, June 2026, arXiv 2606.13681) extends evolving context to the **change provenance** of memory: each non-additive update is recorded as a patch with pre-state, post-state, rationale, semantic summary, and triggering evidence. The patch history is append-only, indexed for retrieval, and concatenated with the latest memory at query time when the query depends on overwritten states, temporal changes, or version-specific behavior.
+
+Where the other extensions target *what gets written* (prompts, skills, harness surfaces, user schemas) or *what stays in the store* (compression), EvoMem targets *what changed and why*. The patch is the evolution log — every meaningful memory revision is auditable as a structured record with full before/after context. The retrieval layer decides when to surface patches (when queries depend on version-dependent information) and when to ignore them (when the latest memory suffices).
+
+The relationship to the other extensions:
+
+| Extension | Object evolved | What triggers a regeneration | What survives |
+|---|---|---|---|
+| Task-specific prompt evolution | The system prompt for a specific task | Reflected trajectory evaluation | Best-performing prompt variant |
+| Memory and preference learning | Memories, preferences, durable patterns | Session diary + reflection loop | Selected facts and preferences |
+| Skill learning | Reusable SOPs as skill files | Successful trajectory pattern mining | Captured skill files |
+| Harness self-evolution ([[self-harness]]) | The single harness's editable surfaces | Verifier-grounded weakness mining + held-out regression test | Bounded edits that pass regression |
+| Harness recursive instantiation ([[recursive-agent-harness]]) | The set of harness instances spawned per task | Parent writes a script that spawns fresh subagent harnesses | Aggregated output across instances |
+| Schema evolution ([[executable-memory]]) | The user model's data structures | Periodic regeneration from full fact corpus | Typed Python state with 0.18% drop rate |
+| Store compression ([[memrefine]]) | The set of entries in the memory store | Storage budget exceeded | Entries that pass pairwise factual judgment |
+| Memory evolution ([[evomem]]) | The change history of memory entries | Non-additive memory update (overwrite/rewrite/reinterpret) | Append-only patch log with before/after + rationale |
+
+EvoMem's distinguishing property: the **patch itself** is the evolving object, not the latest memory. The latest memory is still regenerated from the construction pipeline (whatever the host framework does); the patches are a parallel record of how the latest memory came to be. This is the **database write-ahead log** pattern, applied to LLM memory: the WAL is the patch history, the materialized view is the latest memory, and the writer commits the latest memory only after appending to the WAL.
+
+The empirical claim is sharper than the other extensions: EvoMem is **memory-system-agnostic**. The paper instantiates it across four heterogeneous base memories (A-Mem graph memory, Memento-Skill file memory, Terminus2 terminal trajectories, OpenHands software context) with the same patch schema. The base construction pipeline is unchanged; the patch layer is an annotation. This is the **non-invasiveness property** — EvoMem composes with existing memory harnesses rather than replacing them.
+
+The token-space advantage applies: the patch history is a human-readable log of every meaningful memory change. A future session can read the patches and reconstruct the memory's evolution. Compared to opaque vector stores where the user has no way to audit what the agent "remembers," a patch-augmented store exposes both the current memory and its history.
+
+The mechanism analysis isolates *when* EvoMem actually helps: when the agent operationalizes retrieved patches (uses prior-state terms in reasoning or commands). The gain jumps from +2.6% to +8.3% on Terminal-Bench-Evo when patch uptake is nonzero. EvoMem is not "more context" — it is a structured record that becomes useful only when the agent incorporates its content into its decisions.
+
+The boundary with [[memrefine]]: MemRefine targets *what stays* (compression under a budget); EvoMem targets *what changed* (provenance of changes). They are orthogonal primitives. An agent could use MemRefine to keep its memory store within a budget while using EvoMem to preserve the evolution history of the remaining entries. The combined regime — bounded, versioned memory — is unexplored by either paper alone.
+
 ## Thread
 
 - [[the-agent-workflow]] — Evolving context closes the loop between agent sessions, making the workflow improve with use
@@ -164,8 +194,11 @@ All seven share the **decoupling of storage and representation**: the append-onl
 - [[harness-mechanisms]] — Self-evolution and recursive instantiation are the two harness-level optimization mechanisms
 - [[executable-memory]] — Extends evolving context to the schema layer: the LLM writes its own dataclasses, domain partitioning, and constraints, regenerating the user model from the full fact corpus
 - [[memrefine]] — Extends evolving context to the store layer: the LLM judge decides what stays in the memory store when it has outgrown a fixed size budget
+- [[evomem]] — Extends evolving context to the memory-evolution layer: the append-only patch history records what changed and why across non-additive memory updates
 - [[comprehension-debt]] — Schema evolution is a counter-move at the schema layer: the user model stays readable as Python files, not opaque vector stores
 - [[bojie-li]] — Author of User as Code, the implementation of schema-level evolving context
+- [[evomem]] — The memory-evolution layer: append-only patch history preserves the change provenance of memory
+- [[jundong-xu]] — Lead author of the EvoArena paper that introduces EvoMem
 
 ## Sources
 
@@ -175,3 +208,4 @@ All seven share the **decoupling of storage and representation**: the append-onl
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). A different axis: harness as a recursive unit. Parent writes executable code that spawns fresh subagent harnesses in parallel. Held-out gain of 9.6 pp on Oolong-Synthetic (71.75% → 81.36%) with backbone held fixed.
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* Evolving context at the schema layer. The LLM writes its own dataclasses, domain partitioning, and constraints; the structured state is regenerated from the full fact corpus. Bitter-lesson framing: no human-designed schema, only human-designed scaffolding. Schema evolution is a strict extension of the three Lance Martin categories — a new fourth category where the *data model itself* evolves.
 - `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf` — Kim (Korea U), Baek, Jeong, Hwang (KAIST; Hwang also DeepAuto.ai), June 2026. *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* A seventh axis: evolving context at the **store level**. The pairwise LLM judge decides what stays in the memory store when it has outgrown a fixed size budget. The redundancy/complementarity/distinctness taxonomy is the action space; similarity is the proposal mechanism; factual judgment is the decision mechanism. LLM judge decisively outperforms fixed rule-based baselines (RuleSim, RulePR) as the budget tightens. Framework-agnostic: A-MEM graph memory and Mem0.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* An eighth axis: evolving context at the **memory-evolution layer**. The append-only patch history records what changed and why across non-additive memory updates. The patch is the change record; the latest memory is the materialized view; the WAL is the patch log. Memory-system-agnostic: instantiated over A-Mem, Memento-Skill, Terminus2, OpenHands. Improves chain accuracy +6.1pp on Terminal-Bench-Evo. Mechanism: gain jumps from +2.6% to +8.3% when agents operationalize retrieved patches.

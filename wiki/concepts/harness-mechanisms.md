@@ -8,6 +8,7 @@ sources:
   - raw/recursive-agent-harnesses.txt
   - raw/2606.16707v1.txt
   - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
 tags: [concept, agent-harness, planning, memory, tool-use, control, optimization, self-evolution, harness-recursion, executable-memory, memory-compression]
 unaudited_marginal: 0
 ---
@@ -60,6 +61,25 @@ The contribution to the memory taxonomy: a **compression primitive** that comple
 
 ### Context Compaction and State Offloading
 Techniques to manage context growth: summarizing completed portions, offloading tool results to the file system, KV caching, progressive disclosure. These are the engineering practices that make long-horizon execution feasible. See [[multi-tier-action-space]] for the architecture.
+
+### Memory Evolution via [[evomem]]
+A new memory mechanism: instead of maintaining only the latest consolidated memory, augment the construction pipeline with an **append-only patch history** that records every non-additive memory update. The [[evomem]] paper (Xu et al., NUS + collaborators, June 2026, arXiv 2606.13681) formalizes this as a structured patch per non-additive change:
+
+> πₜ = ⟨τₜ, Cₜ⁻, Cₜ⁺, rₜ, zₜ, eₜ⟩
+
+The patch captures the affected content before and after the update, the rationale, a semantic summary, and the triggering evidence. At inference time, the agent's context is `Concat(c_mem, P_q)` — the latest memory evidence plus the top-k relevant patches. In ordinary cases the latest memory suffices; when the query depends on overwritten states, temporal changes, or version-specific behavior, the patches supply versioned evidence.
+
+The contribution to the memory taxonomy: a **version-aware retrieval primitive** that complements the construction primitives (working, semantic, experiential, long-term, multi-agent memory) and the compression primitive ([[memrefine]]). The three are orthogonal:
+
+- Construction primitives (this section, §3.2) — how new information enters the store and is organized for retrieval.
+- Compression primitives ([[memrefine]]) — how the store is shrunk when it has outgrown a fixed budget.
+- Evolution primitives ([[evomem]]) — how the store's change history is preserved as retrievable evidence.
+
+EvoMem is **memory-system-agnostic**: the paper instantiates it across A-Mem (graph memory), Memento-Skill (skill file), Terminus2 (terminal trajectories), and OpenHands (software-engineering context) with the same patch schema. The base construction pipeline is unchanged; the patch layer is a non-invasive annotation that monitors non-additive updates.
+
+The empirical claim: EvoMem improves chain accuracy +6.1pp on Terminal-Bench-Evo (largest single gain in the paper), +2.9pp on SWE-Chain-Evo, +3.0pp on PersonaMem-Evo. Mechanism analysis isolates that the gain jumps from +2.6% to +8.3% when the agent operationalizes retrieved patches (uses prior-state terms in reasoning/commands). The mechanism is genuine, not "more context."
+
+The boundary with [[executable-memory]] (also in this section): Executable memory structures the *current* user model as typed Python; EvoMem structures the *evolution history* of any memory as append-only patches. They are complementary primitives — an executable-memory agent could use EvoMem to track how its typed Python state has been regenerated across structuring cycles.
 
 ## Tool Use (§3.3)
 
@@ -132,6 +152,7 @@ The boundary with the other memory patterns: [[context-files|AGENTS.md]] is a st
 - [[self-harness]] — A propose-evaluate-accept loop that edits the harness in place: governed mutation with regression testing
 - [[recursive-agent-harness]] — The complementary pattern: spawn fresh harness instances per task rather than editing one in place
 - [[executable-memory]] — User memory as a harness mechanism: a two-phase pipeline (append-only memorize + periodic structure) that makes the user model a living software project
+- [[evomem]] — Memory evolution as a harness mechanism: an append-only patch history that records every non-additive update and is retrieved alongside the latest memory at query time
 
 ## Thread
 
@@ -161,3 +182,4 @@ The boundary with the other memory patterns: [[context-files|AGENTS.md]] is a st
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). The complementary pattern: recursive harness instantiation. Parent agent writes executable code that spawns full subagent harnesses in parallel; the recursive unit is the harness, not the model call. Oolong-Synthetic gains from 71.75% (Codex) to 81.36% (RAH) with backbone held fixed.
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* User memory as a harness mechanism: a two-phase pipeline (append-only memorize + periodic structure) plus constraint execution. Concrete ablation isolates that the two phases must be separate (append-only +19pp on LOCOMO; periodic structure +12.3pp over incremental code). The interpreter is the verification boundary. 78.8% on LOCOMO, 99% on Analytical Inference, 100% on Active Service.
 - `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf` — Kim (Korea U), Baek, Jeong, Hwang (KAIST; Hwang also DeepAuto.ai), June 2026. *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* Adds a **post-construction memory compression** primitive to the memory taxonomy. The compressor solves a query-agnostic max-min program by iterating a pairwise LLM judge (DELETE/MERGE/PRESERVE on factual content) over the store. Framework-agnostic: A-MEM graph memory and Mem0. LLM judge decisively outperforms fixed rule-based baselines (RuleSim, RulePR) as the budget tightens. Modest degradation at 30% budget; A-MEM F1 holds to within 3.9pp on standard LoCoMo.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Adds a **memory evolution primitive** to the memory taxonomy: an append-only patch history recording every non-additive memory update. The patch tuple ⟨τ, C⁻, C⁺, r, z, e⟩ captures before/after content, rationale, summary, and evidence. At query time, retrieved patches are concatenated with the latest memory. Memory-system-agnostic: instantiated over A-Mem, Memento-Skill, Terminus2, OpenHands. Improves chain accuracy +6.1pp on Terminal-Bench-Evo.

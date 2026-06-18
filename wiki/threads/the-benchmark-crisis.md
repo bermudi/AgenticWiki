@@ -1,11 +1,12 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
-tags: [thread, benchmark, evaluation, contamination, model-selection]
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
+tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution]
 unaudited_marginal: 0
 ---
 
@@ -75,6 +76,21 @@ This connects to the broader [[the-agent-workflow]] thread: prompts that describ
 
 This is also an instance of [[benchmark-contamination|benchmark contamination]] — the benchmark's design choices (verbose prompts, test-suppressing instructions, leaked git history) systematically distort the signal it claims to measure.
 
+## The Fourth Axis: Persistent Environment Evolution
+
+[[evoarena|EvoArena]] (Xu et al., NUS + collaborators, June 2026) exposes a fourth axis the prior three benchmarks do not measure: **persistent environment evolution**. Most benchmarks evaluate on static environment snapshots — the interface, rules, task distribution, and success criteria are fixed. Real deployment is dynamic: APIs evolve, workflows change, codebases accumulate, user preferences shift. The benchmark crisis runs along four axes:
+
+1. **Contamination**: tasks leak into training data; agents recall rather than reason.
+2. **Verifier failure**: graders accept wrong answers and reject right ones at rates that make small score differences meaningless.
+3. **Prompt distortion**: benchmark instructions suppress behaviors that make strong models reliable.
+4. **Environment evolution**: the same task in production looks different than the version the benchmark evaluated. **Chain accuracy** (EvoArena's primary metric alongside step accuracy) exposes this — base agents drop 22.1pp from step accuracy to chain accuracy on Terminal-Bench-Evo, 17.9pp on SWE-Chain-Evo. Solving isolated tasks does not translate into deployment reliability.
+
+The structural innovation: EvoArena's PE/IC/CE triplet. **PE (persistent evolution)** — the same environment evolves across versions. **IC (implicit change)** — the agent must infer or handle changes from context. **CE (chain evaluation)** — success is measured over temporally linked task sequences. No prior benchmark supports all three; most support none.
+
+The result is a benchmark that exposes a previously hidden failure mode: [[state-collapse|state collapse]]. Single-latest-state memory systems lose prior versions when they overwrite entries — and the prior versions often remain valid for older deployments, other organizations, or future rollbacks. EvoArena's [[evomem|EvoMem]] is the proposed remedy: an append-only patch history that preserves every non-additive memory update with before-state, after-state, rationale, and evidence. EvoMem improves chain accuracy +6.1pp on Terminal-Bench-Evo — the regime where state collapse matters most.
+
+The implication for model selection: if you're choosing a coding agent for production deployment where the API evolves, the codebase accumulates, or user preferences shift, step accuracy on static benchmarks is incomplete evidence. Chain accuracy on evolving-environment benchmarks is the binding metric. Models that score similarly on [[swe-bench-pro|SWE-bench Pro]] (30-point spread) or [[deepswe|DeepSWE]] (70-point spread) may diverge substantially on EvoArena when chain accuracy is the criterion.
+
 ## The Call for Community Benchmarks
 
 Theo's video makes a case that developers should build their own benchmarks from real failures:
@@ -95,3 +111,4 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 
 - `raw/deepswe-benchmark.md` — Datacurve's full benchmark description, methodology, audit results, and qualitative analysis
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective, SWE-bench Pro criticism, call for community benchmarks, cost/token analysis
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.

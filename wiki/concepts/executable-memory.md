@@ -4,6 +4,7 @@ created: 2026-06-18
 updated: 2026-06-18
 sources:
   - raw/2606.16707v1.txt
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
 tags: [concept, agent-memory, code-as-representation, harness, personalization, executable-verification]
 unaudited_marginal: 0
 ---
@@ -127,6 +128,7 @@ The trade-off is honest: the engineering scaffolding — the two-phase pipeline,
 
 - [[code-as-agent-harness]] — UaC is the most concrete case study of code as harness applied to user memory. The user model becomes a directory of typed Python that an interpreter computes over directly. Extends the survey's "code for environment modeling" to the user.
 - [[memrefine]] — The complementary memory-compression framework. Where UaC sidesteps the storage-budget problem by structuring the user model (so redundancy is controlled at write time), MemRefine targets the inverse problem on free-text memory stores: given an already constructed store that has outgrown a budget, [[llm-guided-compression|an LLM judge]] decides which entries are redundant, complementary, or distinct, iterating until the store meets the target size. Both are offline, post-construction maintenance primitives for long-term agent memory; the difference is substrate.
+- [[evomem]] — A complementary memory-evolution primitive. Where UaC structures the *current* user model as typed Python, EvoMem structures the *evolution history* of any memory as append-only patches. UaC makes the present representation executable; EvoMem makes the change history auditable. They are orthogonal primitives: an executable-memory agent could use EvoMem to track how its typed Python state evolved across structuring regenerations.
 - [[harness-mechanisms]] — Memory becomes a first-class harness mechanism via the two-phase pipeline. The scaffolding (Phase 1, Phase 2, constraint runner) is human-designed harness infrastructure; the schemas and constraints are LLM-generated harness surface.
 - [[evolving-context]] — UaC is the most aggressive instantiation of evolving context: the LLM writes its own schema, its own domain partitioning, and its own constraints at runtime, from the full fact corpus. Closer to "the system improves its own data structures" than to "the system improves its own prompt."
 - [[multi-tier-action-space]] — The user project is a directory in the agent's workspace; memory operations are file-system actions. The thin-tool-plus-computer tier hosts executable memory: the agent uses bash/python tools to read state and run constraints.
@@ -168,7 +170,12 @@ The trade-off is honest: the engineering scaffolding — the two-phase pipeline,
 - [[comprehension-debt]] — The append-only log and structured Python as a counter-move against opaque agent memory
 - [[code-intelligence]] — The user model IS the model — typed Python the agent reasons about
 - [[bojie-li]] — Author of UaC, Pine AI
+- [[evomem]] — A complementary memory-evolution primitive: where UaC structures the *current* user model as typed Python, EvoMem structures the *evolution history* of any memory as append-only patches. They compose: an executable-memory agent could use EvoMem to track how its typed state has been regenerated across structuring cycles
+- [[state-collapse]] — The failure mode EvoMem is designed to prevent; UaC sidesteps it via the recoverable append-only fact log
+- [[evoarena]] — The benchmark designed to evaluate EvoMem and the chain-accuracy metric; could host UaC or EvoMem as the memory backbone
+- [[jundong-xu]] — Lead author of the EvoArena paper
 
 ## Sources
 
 - `raw/2606.16707v1.txt` — Bojie Li, Pine AI (June 2026). *User as Code: Executable Memory for Personalized Agents.* The full paper: two-phase architecture (append-only memorize + periodic structure), three capability tiers (recall, analytical inference, active service), generate-verify-review loop, manifest pattern, Active Service benchmark, Analytical Inference benchmark, Modularity/Progressive Disclosure ablation, retrieval-channel ablation, scaling discussion. Open-source implementation: github.com/19PINE-AI/user-as-code.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* EvoMem paradigm: append-only patch history preserving every non-additive memory update. The wiki's [[evomem]] page is filed separately; this page cross-references EvoMem and [[evoarena]] as complementary primitives — UaC structures the present user model as typed Python, EvoMem preserves the evolution history of any memory as append-only patches, and the two compose. Chain accuracy metric (where EvoMem helps most) and state-collapse failure mode (which UaC sidesteps via the recoverable append-only fact log).

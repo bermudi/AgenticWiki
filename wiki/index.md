@@ -18,6 +18,7 @@ sources:
   - raw/open-knowledge-format-spec-v0.1.md
   - raw/2606.16707v1.txt
   - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -35,6 +36,7 @@ unaudited_marginal: 0
 - `raw/how-the-open-knowledge-format-can-improve-data-sharing.md` — Google Cloud blog announcing OKF (2026-06-12); formalizes Karpathy's LLM-wiki pattern into a portable spec; new OKF concept page
 - `raw/open-knowledge-format-spec-v0.1.md` — The OKF v0.1 specification itself; one required field (type), two reserved filenames, three conformance criteria, permissive-consumption MUST NOT clause
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* The two-phase pipeline, three capability tiers, generate-verify-review loop, manifest pattern, Active Service benchmark, Analytical Inference benchmark, Modularity ablation. 78.8% on LOCOMO, 99% on Analytical Inference, 100% on Active Service. New concept pages (executable-memory, proactive-service), author (bojie-li), updates to code-as-agent-harness, harness-mechanisms, jagged-frontier, verifiability, evolving-context, code-intelligence.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, 2026). *EvoArena.* Benchmark suite for persistent environment evolution (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo) + EvoMem patch-based memory paradigm. Names state-collapse failure mode. Introduces chain-accuracy metric (base drop 22.1pp from step to chain on Terminal-Bench-Evo). EvoMem improves chain accuracy +6.1pp average on Terminal-Bench-Evo, +2.9pp on SWE-Chain-Evo, +3.0pp on PersonaMem-Evo. Mechanism analysis: gain jumps from +2.6% to +8.3% when agents operationalize retrieved patches. New pages: evoarena, evomem, state-collapse, chain-accuracy, jundong-xu. Updates to evolving-context, harness-mechanisms, code-as-agent-harness, the-benchmark-crisis.
 
 # Index
 
@@ -104,6 +106,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[jinheon-baek]] — Co-author of MemRefine (KAIST)
 - [[soyeong-jeong]] — Co-author of MemRefine (KAIST)
 - [[sung-ju-hwang]] — Corresponding author of MemRefine (KAIST, DeepAuto.ai)
+- [[jundong-xu]] — Lead author of *EvoArena* (NUS + collaborators, 2026); co-creator of the EvoArena benchmark and EvoMem patch-based memory paradigm; names state-collapse as a distinct failure mode
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -135,6 +138,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[backpressure]] — Engineering the environment so wrong agent outputs are mechanically rejected.
 - [[blind-panic]] — Failure mode where an LLM executes persistently but degenerates into looping and tool hallucination when pushed beyond its planning horizon.
+- [[chain-accuracy]] — Evaluation metric where a model is credited only if it solves every step in an evolution chain; the gap from step accuracy is the headline finding of EvoArena
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
@@ -181,10 +185,13 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
+- [[state-collapse]] — The failure mode of single-latest-state memory systems in evolving environments: prior versions are silently overwritten and lost, even when they remain valid for older deployments or future rollbacks
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
 - [[spec-driven-development]] — Structured specification document as primary artifact driving AI-assisted implementation; PRD + architecture + task backlog stack (Clarke) or EARS + PBT pipeline (Kiro); empirical fit (greenfield MVP, modernization) and miss (brownfield, legacy langs, prototypes)
 - [[spec-code-triangle]] — The spec-driven development equation is wrong; spec, tests, and code form a bidirectional feedback loop. Coined by Drew Breunig.
 - [[ears-notation]] — Easy Approach to Requirements Syntax: structured natural language (`When X, the system shall Y`) designed for downstream automated reasoning; the substrate for Kiro's property-based testing pipeline
+- [[evoarena]] — Benchmark suite for evaluating LLM agents under persistent environment evolution (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo); introduces the PE/IC/CE triplet and chain-accuracy metric
+- [[evomem]] — Patch-based memory paradigm: append-only patch history records every non-additive memory update with before-state, after-state, rationale, and evidence; memory-system-agnostic across A-Mem, Memento-Skill, Terminus2, OpenHands
 - [[property-based-testing-as-spec]] — Using PBT as the verification layer for EARS requirements; bridges stochastic LLM generation to deterministic verification by removing the LLM from the verification loop
 - [[steering-docs]] — Kiro's branded context files; framed as accumulated learnings (operational gotchas, code style, commit style) rather than static configuration
 - [[single-player-to-multiplayer]] — Cian Clarke's framing of where SDD tooling needs to evolve: from individual to multi-contributor parallel work via specialization-by-architecture-area and staging gates

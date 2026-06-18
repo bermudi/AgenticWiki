@@ -7,6 +7,7 @@ sources:
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/recursive-agent-harnesses.txt
   - raw/2606.16707v1.txt
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
 tags: [concept, agent-harness, architecture, code-centric, harness-recursion, executable-memory]
 unaudited_marginal: 0
 ---
@@ -66,6 +67,7 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - The [[ralph-loop]] is a minimal harness instantiation — linear decomposition planning + verification-driven control
 - The [[recursive-agent-harness]] is the code-as-action extension applied to multi-agent orchestration: the parent writes executable code that instantiates subagents in parallel. This is the framework's "code for acting" instantiated at the parent-child level — the script is the action that produces many subagent harnesses.
 - [[executable-memory]] (User as Code, Bojie Li, Pine AI 2026) is the framework's "code for environment modeling" instantiated at the user-model layer: the agent's model of the user is a living software project (typed Python state + Python functions encoding rules) maintained by a two-phase pipeline. Memory operations become file-system actions; the interpreter is the verification boundary. This is the most concrete case study yet of code as the operational substrate for the agent's working environment.
+- [[evomem]] (EvoArena paper, Xu et al., NUS + collaborators, June 2026) is the framework's "code for environment modeling" applied to memory evolution: a structured patch record (typed fields: timestamp, before-state, after-state, rationale, summary, evidence) augments any base memory system with an append-only evolution trace. The patch is itself a code artifact that the agent inspects, indexes, and retrieves at query time. Composes with [[executable-memory]]: an executable-memory agent could use EvoMem to track how its typed Python state evolved across structuring regenerations.
 
 ## Thread
 
@@ -91,7 +93,9 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - [[recursive-agent-harness]] — The code-as-action extension applied to multi-agent orchestration: parent writes executable code that spawns subagents in parallel
 - [[self-harness]] — The complementary in-place pattern: a single harness that improves itself iteratively via bounded, regression-tested edits
 - [[executable-memory]] — The code-for-environment-modeling extension applied to the user model: a living software project that the agent and interpreter both read and write
+- [[evomem]] — The code-for-environment-modeling extension applied to memory evolution: structured patch records that preserve the change history of any memory as inspectable, indexable, retrievable code artifacts
 - [[bojie-li]] — Author of User as Code, the implementation of executable memory
+- [[jundong-xu]] — Lead author of EvoArena, the implementation of EvoMem
 
 ## Sources
 
@@ -99,3 +103,4 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: AMP as a live case study of the harness at the extreme thin end; the harness falls away as models improve; AMP deleted features as models got better
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Operationalizes the code-as-harness framework for multi-agent orchestration: the parent agent writes executable code that instantiates subagent harnesses in parallel. Empirically demonstrates that code-driven spawning is a primary performance lever: 71.75% → 81.36% on Oolong-Synthetic with backbone held fixed.
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* Operationalizes the code-as-harness framework for the user model. The two-phase pipeline (append-only memorize + periodic structure) is a harness mechanism; the typed Python state is the harness interface (code for environment modeling); the constraint pipeline is harness control (deterministic verification). The LLM writes its own schemas, domain partitioning, and constraints. 78.8% on LOCOMO (within 1.0pp of full-context upper bound), 99% on Analytical Inference (vs 6–43% for retrieval baselines), 100% on Active Service.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Operationalizes the code-as-harness framework for memory evolution. The patch record (typed fields: timestamp, before-state, after-state, rationale, summary, evidence) is a structured code artifact that the agent inspects, indexes, and retrieves at query time — code for environment modeling applied to memory change provenance. The patch layer is harness infrastructure (non-invasive annotation that monitors non-additive updates); patch-augmented retrieval is harness control (selective retrieval when version-specific reasoning is required). Composes with [[executable-memory]]: an executable-memory agent could use EvoMem to track how its typed Python state evolved across structuring regenerations. Improves chain accuracy +6.1pp on Terminal-Bench-Evo.
