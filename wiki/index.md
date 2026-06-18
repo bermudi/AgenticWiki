@@ -20,6 +20,7 @@ sources:
   - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
   - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/the-illusion-of-multi-agent-advantage.pdf
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -110,6 +111,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[sung-ju-hwang]] — Corresponding author of MemRefine (KAIST, DeepAuto.ai)
 - [[jundong-xu]] — Lead author of *EvoArena* (NUS + collaborators, 2026); co-creator of the EvoArena benchmark and EvoMem patch-based memory paradigm; names state-collapse as a distinct failure mode
 - [[darwin-agent-team]] — Author team behind HarnessX (Chen, Lu, Zhao, Meng, Shao, Luan et al., arXiv 2606.14249v1, 12 June 2026); introduced typed composition, the operational mirror, AEGIS, variant isolation, and harness-model co-evolution; +14.5% average / +44.0% peak across 5 benchmarks and 3 model families
+- [[prathyusha-jwalapuram]] — Project lead on *The Illusion of Multi-Agent Advantage* (Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 June 2026); systematic cost-controlled audit of automated MAS frameworks against single-agent CoT-SC
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -148,6 +150,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[catastrophic-forgetting]] — A predicted pathology in the [[operational-mirror|operational mirror]] for symbolic harness evolution: per-edit checks pass but cross-edit coupling causes aggregate regression (e.g., −14% from accumulated same-type edits that each passed individual regression tests). The [[variant-isolation|seesaw]] cannot detect sub-threshold coupling
 - [[chain-accuracy]] — Evaluation metric where a model is credited only if it solves every step in an evolution chain; the gap from step accuracy is the headline finding of EvoArena
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
+- [[architectural-bloat]] — The structural failure mode of automated MAS: complex architectures that are functionally simpler than their appearance (e.g., AFlow 7/14 final workflows reduce to "iterate one prompt three times then aggregate" — literally CoT-SC)
+- [[expert-mas]] — Hand-designed, deterministic, code-driven multi-agent baseline (Meta-Agent + Python Executor + Extractor/Calculator). GPT-5: 57.0% → 96.5% on [[smfr]] at comparable cost. The experimental lever proving the multi-agent paradigm *can* work when engineered.
+- [[multi-agent-illusion]] — The empirical correction: across 6 automated MAS frameworks, automated MAS do not consistently outperform single-agent CoT-SC and are up to 10× more expensive. Three pillars: [[architectural-bloat|architectural bloat]], [[functional-collapse|functional collapse]], capability floor.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
 - [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks, verbose LLM-generated files hurt.
@@ -165,6 +170,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
+- [[functional-collapse]] — The runtime failure mode of automated MAS: complex architecture reduces to single-agent execution. Five documented manifestations: DyLAN consensus collapse, MAS-Zero positional bias, MaAS signal saturation, MAS-Orchestra static policy, role redundancy.
+- [[smfr]] — Synthetic Multi-Hop Financial Reasoning: a procedurally generated diagnostic benchmark designed to expose the [[multi-agent-illusion]] under conditions where MAS *should* help. Immune to contamination; the [[expert-mas]] control demonstrates the multi-agent paradigm can work.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
 - [[html-as-agent-output]] — Using HTML instead of Markdown for agent output: richer density, visual clarity, two-way interaction, at the cost of tokens and version control pain.

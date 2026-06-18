@@ -1,10 +1,12 @@
 ---
 title: Dynamic Trust
 created: 2026-05-08
-updated: 2026-05-08
+updated: 2026-06-18
 sources:
   - raw/yt-agent-trust-vector-study-2026.md
+  - raw/the-illusion-of-multi-agent-advantage.pdf
 tags: [concept, agents, trust, multi-agent, verification]
+unaudited_marginal: 0
 ---
 
 # Dynamic Trust
@@ -41,7 +43,7 @@ The vision is a trust engine running alongside the agent swarm that:
 - **Runs sandbox tests** to validate claims before acting on them — code that compiles and passes tests earns higher trust than assertions
 - **Cross-references outputs** from independent agents with different perspectives (visual agent, radar agent, logical agent) — agreement across modalities increases trust
 - **Consults a world model** to predict what should happen next and validate agent proposals against physics and common sense
-- **Adjusts privilege tags in real-time**, rewriting the `z=value` annotations on data flowing between agents as trust scores evolve
+- **Adjustes privilege tags in real-time**, rewriting the `z=value` annotations on data flowing between agents as trust scores evolve
 
 This inverts the paper's model: instead of a Python middleware applying static tags once before the LLM sees anything, a trust engine continuously reevaluates what to trust as new evidence arrives.
 
@@ -51,6 +53,9 @@ A coherent world model would provide an objective reference for trust calculatio
 
 > [!note] Forward-Looking
 > The dynamic trust concept is speculative. The video author acknowledges this and references an upcoming video specifically about world models. The concrete empirical evidence in the wiki currently supports only the paper's findings about static trust assignment failure modes, not the proposed dynamic alternative. This page captures the argument as a design direction, not a validated pattern.
+
+> [!note] Empirical Strengthening: "Expensive Witnesses"
+> The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., 2026) provides empirical support for a stronger version of the dynamic-trust thesis. The paper documents *intra-MAS* trust failures that static source-based assignment cannot detect: in MAS-Zero, the verifier selects the first worker's output 45%+ of the time despite the architecture claiming to coordinate multiple agents. In DyLAN, agents reach unanimous consensus in 70-90% of cases — the "diversity" mechanism is decorative. The paper names these agents "expensive witnesses": they incur full inference cost with near-zero causal influence. The implication for dynamic trust: the trust engine needs to measure the *causal contribution* of each agent to the final answer, not just its source role. An agent that costs 30% of the inference budget and contributes 0% to the decision is a tax. The dynamic-trust framework needs to discount such outputs before propagating them.
 
 ## Thread
 - [[agent-quality-engineering]] — Dynamic trust middleware is a proposed quality infrastructure component for multi-agent systems: trust scoring as a continuous eval
@@ -63,6 +68,10 @@ A coherent world model would provide an objective reference for trust calculatio
 - [[context-engineering]] — Real-time context injection is the mechanism for the "time-specific context" component of trust
 - [[model-routing]] — Parallel concept: route to the cheapest capable model; dynamic trust: route authority to the most verifiable output
 - [[discover-ai]] — The creator who proposed this framework
+- [[multi-agent-illusion]] — the [[functional-collapse|expensive-witness]] finding strengthens the dynamic-trust thesis: trust should be a property of the output, measured causally
+- [[functional-collapse]] — the documented failure modes that dynamic trust middleware would need to address
+- [[multi-agent-code-orchestration]] — the broader topology taxonomy; the trust engine operates on instances of these topologies
 
 ## Sources
 - `raw/yt-agent-trust-vector-study-2026.md` — [[discover-ai|Discover AI]]'s critique of static trust assignment and proposal for dynamic trust middleware based on source + context + provability
+- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). The "expensive witness" finding (MAS-Zero positional bias, DyLAN consensus collapse) is the empirical support for the dynamic-trust thesis's claim that trust should be a property of the output, not the source.

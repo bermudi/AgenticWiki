@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-06-16
+updated: 2026-06-18
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -16,6 +16,7 @@ sources:
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
   - raw/deepswe-benchmark.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
+  - raw/the-illusion-of-multi-agent-advantage.pdf
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -204,6 +205,13 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 > [!note] Boundary Condition: Unverifiable Guidance Still Helps Simple Tasks
 > The [[context-files|Lulla et al. (2026)]] finding — that AGENTS.md files reduce median runtime by 28.64% and output tokens by 16.58% on small-scope PRs — introduces a boundary condition on the verifiability thesis. The thesis predicts that unverified domains stagnate. Yet unverified context files (their quality is not systematically verifiable) still improve task efficiency. The mechanism is **guidance efficiency**: simply telling the agent where things are and what conventions to follow reduces search time, even if the guidance itself isn't verifiably correct. This operates at the information-theoretic level (reduced entropy in the agent's state space), not the RL training level. The thesis describes model capability evolution; guidance efficiency describes task execution in a single session. They measure different things and both can be true simultaneously.
 
+> [!note] Extension: Functional Collapse as the Multi-Agent Instantiation of the Thesis
+> The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., 2026) is the strongest empirical anchor for the thesis in the multi-agent domain. Three connections generalize the thesis to coordination:
+> 1. **Coordination is unverifiable, so models default to single-agent behavior.** The paper's [[functional-collapse]] finding (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier selects first worker 45%+ of the time) is the multi-agent version of the jagged frontier: when the coordination mechanism cannot be verified, the model falls back on whatever behavior IS verifiable — which is the single-agent CoT-SC execution it would have produced anyway. The 10× cost premium is paid for orchestration that the model cannot reliably execute.
+> 2. **Expert-MAS is verifiability engineering applied to multi-agent architecture.** The paper's positive result (Expert-MAS: GPT-5 57.0% → 96.5% on [[smfr]] at comparable cost to CoT-SC) is the EARS+PBT move at the architecture layer: by handing coordination to a deterministic Python executor, the LLM is removed from the coordination loop the way the LLM is removed from the PBT verification loop. The architecture is *engineered for verifiability* — every sub-step is inspectable, the executor is deterministic, the aggregation is computed. The [[expert-mas]] architecture is what the [[ears-notation|EARS+PBT pipeline]] is to the spec.
+> 3. **The capability floor is the verifiable capability budget.** The paper's model-tier finding (a single-agent GPT-5 with CoT-SC beats the most sophisticated GPT-4o-based MAS at less than half the tokens) is the verifiability thesis at its sharpest: a higher-tier model has more *verifiable* capability per token, so coordination overhead (which is NOT in the verified circuits) does not dominate. A lower-tier model has less verifiable capability, so coordination overhead eats the budget before the task gets solved. The [[the-verifiability-thesis|verifiability thesis]] thus predicts a hard ceiling on multi-agent gain for any model tier, set by the proportion of total capability that is verifiable.
+> The unifying claim: the verifiability thesis generalizes to coordination. Multi-agent systems gain capability *only* when the coordination layer is engineered to be verifiable (hand-designed deterministic decomposition, not automated search). The paper's three findings — bloat, collapse, capability floor — are exactly the symptoms of an unverifiable coordination layer.
+
 [//]: # ([[rubric-evaluation]] links here from its ## Thread section)
 [//]: # ([[verifiability]] links here from its ## Thread section)
 [//]: # ([[agent-evals]] links here from its ## Related section)
@@ -224,4 +232,5 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/llm-overcorrection-code-review.md` — Jin & Chen (2026): overcorrection bias in LLM code review; detailed prompts shift the decision boundary toward conservatism, undermining verifier reliability
 - `raw/agentic-code-reasoning.md` — Ugare & Chandra (Meta, 2026): semi-formal reasoning as verifiable certificate structure for code verification; enables execution-free RL reward signals, directly instantiating the verifiability thesis recursively (verifiability of the verification)
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Extends the verifiability thesis from model capabilities to the harness infrastructure; harness-level evaluation, semantic verification, and self-evolving harnesses are the thesis operating recursively; the four desired harness properties (executable, inspectable, stateful, governed) are the thesis expressed as design principles
+- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the "Functional Collapse as the Multi-Agent Instantiation of the Thesis" extension. Three connections: (1) coordination is unverifiable, so models default to single-agent behavior (DyLAN consensus collapse, MAS-Zero positional bias); (2) Expert-MAS is verifiability engineering applied to multi-agent architecture (deterministic Python orchestrator replaces LLM-orchestrated coordination); (3) the capability floor is the verifiable capability budget — coordination overhead consumes fixed budget, lower-tier models don't have enough left. The paper vindicates the [[expert-mas|deliberate-verifiability-design]] departure and generalizes the thesis to coordination itself. §3 (cost-quality Pareto); §3.3 (SMFR + Expert-MAS 57%→96.5% on GPT-5); §4 (architectural deconstruction: functional collapse, positional bias, ensemble-stalling); §5 (ensembling trap, capability floor).
 - `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "thesis generalizes to the harness — with a precision caveat" callout. The [[operational-mirror|operational mirror]] is the theoretical structure that extends the thesis to the harness level (capability clusters around what the verifier rewards; harness capability clusters around what the type system permits). The precision caveat: the mirror is a design heuristic (§7.3), not a predictive theory — it identifies what to defend against (reward hacking, catastrophic forgetting, under-exploration), not what will happen or when. The [[harness-engineering|harness engineering]] §5.2.1 oracle-adequacy concern persists at the harness level — it is sharpened, not dissolved. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.

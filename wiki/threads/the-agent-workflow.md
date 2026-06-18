@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-06-16
+updated: 2026-06-18
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -18,6 +18,7 @@ sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - "raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md"
+  - raw/the-illusion-of-multi-agent-advantage.pdf
   - "raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md"
   - raw/yt-slop-watch-ideation.md
   - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
@@ -61,6 +62,12 @@ Karpathy's hiring proposal — give candidates a big project ("build a Twitter c
 
 > [!note] Departure: The Code-as-Harness Framework
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) adds an architectural layer beneath this thread's operational focus. The three-layer framework — [[harness-interface|harness interface]] (code for reasoning, acting, environment modeling), [[harness-mechanisms|harness mechanisms]] (planning, memory, tool use, control), and [[multi-agent-code-orchestration|scaling the harness]] (multi-agent orchestration over shared code) — provides the vocabulary for describing what happens in each phase of the workflow. The [[multi-tier-action-space]], context management techniques, and [[verification-loop|verification loops]] described here are concrete instantiations of the broader harness architecture rather than ad-hoc patterns.
+
+> [!note] Departure: The Capability Floor for Multi-Agent Coordination
+> The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., 2026) sharpens the conditions under which multi-agent coordination actually works. Across 6 automated MAS frameworks, CoT-SC matches or beats them on accuracy and *always* on cost — the cost premium is up to 10× for no measurable gain. The paper documents three findings this thread should incorporate:
+> 1. **Capability floor**: multi-agent coordination only helps when the backbone has the reasoning competence to navigate the coordination overhead. A single-agent GPT-5 with CoT-SC beats the most sophisticated GPT-4o-based MAS frameworks (e.g., ADAS, AFlow) at less than half the tokens. With mid-tier backbones (GPT-4o, GPT-OSS-120B), the same compute spent on more samples (CoT-SC with K > 5) will outperform a sophisticated MAS.
+> 2. **Automated search is the failure, not the paradigm**: the [[expert-mas|hand-designed]] deterministic baseline (GPT-5: 57.0% → 96.5% on [[smfr]]) demonstrates that the multi-agent paradigm *can* work. The hand-designed case is what [[recursive-agent-harness|RAH]], [[sandcastle|Sandcastle]], and [[ralph-loop|Ralph Loops]] already do. The automated *search* case is what fails.
+> 3. **Cost-quality Pareto position is a first-class metric**: a workflow that costs 10× and gains 0% is *worse* than the single-agent baseline regardless of its absolute accuracy. The thread's advocacy of focus maxing and AFK swarms should be tempered: parallelize where the underlying tasks are genuinely parallelizable, but verify that the multi-agent infrastructure isn't just [[architectural-bloat|architectural bloat]] on top of CoT-SC.
 
 ## Thesis
 
@@ -430,6 +437,7 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/2407.08440v4.txt` — RuleBench (Sun et al.): inferential rule-following as distinct capability gap; counterfactual collapse proves models pattern-match rules rather than follow them
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): mechanical enforcement as a practical answer to the rule-following ceiling; PATH shims, Tree-sitter checks, and architectural validators that don't depend on model reasoning; 88.3% compliance rate
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds an architectural layer beneath the workflow's operational focus; the three-layer framework provides the vocabulary for workflow phases; the multi-tier action space, context management, and verification loops are instantiations of the broader harness architecture
+- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). The [[multi-agent-illusion]] audit. Source for the "capability floor for multi-agent coordination" departure: automated MAS do not outperform CoT-SC, hand-designed [[expert-mas]] does; the cost-quality Pareto position is a first-class metric. §3 cost-quality results; §3.3 [[smfr]] + [[expert-mas]]; §4 architectural deconstruction; §5 ensembling trap and capability floor.
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
 

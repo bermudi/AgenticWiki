@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-06-07
+updated: 2026-06-18
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -18,6 +18,7 @@ sources:
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
+  - raw/the-illusion-of-multi-agent-advantage.pdf
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
@@ -282,6 +283,9 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 > [!warning] Contradiction: Is Taste Permanently Human?
 > [[andrej-karpathy|Karpathy]] is uncertain whether taste and judgment will remain permanently human or whether they're simply outside the current RL training distribution: "There's nothing fundamental that's preventing it. It's just the labs haven't done it yet, almost." This creates a live tension with this thread's position that taste is an enduring human domain. Karpathy's [[verifiability|verifiability thesis]] suggests taste may be automatable once labs build RL environments that reward it — the microGPT example (models can't simplify code when asked) supports the view that this is a training gap, not a fundamental limit. See [[the-verifiability-thesis]] for the full causal chain.
 
+> [!warning] Contradiction: More Agents Is Not More Leverage
+> The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., 2026) is a thread-level tension with the "let agents handle tactical orders" framing. The General/Sergeant model assumes that the human's design authority scales by delegating to multiple coordinated agents, but the paper documents that **multi-agent coordination is largely unverifiable**, and the model defaults to single-agent execution anyway (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier picks first worker 45%+ of the time). The result: the General is usually commanding a single Sergeant, and the cost of paying for a "squad" is uncompensated. The human lever applies to *design boundaries*, not to *execution multiplicity*. The [[expert-mas|Expert-MAS]] result is the control: the lever *does* apply to hand-designed multi-agent architecture (GPT-5: 57.0% → 96.5% on [[smfr]]), and the gain is real — but the gain is from the *deterministic decomposition* of the problem, not from the model being more capable at coordination. The thread should distinguish: (a) lever applies to single-agent scenarios, (b) lever applies to hand-designed multi-agent architectures, (c) lever does *not* apply to automated multi-agent search — the case the field is increasingly defaulting to.
+
 ## Tensions
 
 ### The Automation Frontier
@@ -374,4 +378,5 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the debugging story (understanding layers, not code); the population problem ("devs who are way out of bound for where their capabilities are"); AI as amplifier for existing skills vs. substitute for missing skills
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: the automation frontier tension — software factory as the next step in automating the execution layer; the human lever shifts from steering to tuning
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — [[al-harris|Al Harris]] / [[kiro|Amazon Kiro]]: property-based testing as spec verification in the deterministic-verification theory-pressure callout; the spec automation of verification reduces the human's verification responsibility
+- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the "More Agents Is Not More Leverage" contradiction. Documents that multi-agent coordination is largely unverifiable and the model defaults to single-agent execution anyway (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier picks first worker 45%+ of the time, "expensive witnesses"). The human lever applies to (a) single-agent scenarios, (b) hand-designed multi-agent architectures ([[expert-mas]] 57%→96.5% on GPT-5), but NOT to automated multi-agent search — the case the field is increasingly defaulting to. §3 (cost-quality Pareto); §3.3 (Expert-MAS as the hand-designed control); §4 (functional collapse, positional bias); §5 (ensembling trap).
 

@@ -1,12 +1,13 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-06-17
+updated: 2026-06-18
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/the-illusion-of-multi-agent-advantage.pdf
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution]
 unaudited_marginal: 0
 ---
@@ -113,9 +114,13 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 >
 > The [[variant-isolation|variant isolation]] result (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is also relevant: ensemble routing scopes the per-task set each variant sees, allowing K harnesses to evolve in parallel without cross-task interference. This is a *form of environment-aware evolution* — the system implicitly recognizes that no single harness is optimal across heterogeneous task sets, paralleling [[evoarena|EvoArena's]] "fourth axis" (persistent environment evolution). The wiki should note that [[harnessx]] inherits the same "no held-out evaluation" limitation as [[deepswe|DeepSWE]] and [[evoarena|EvoArena]]: all reported gains are measured on the adaptation set, with potential overfitting. The benchmarks are not just broken; they are *substrates* for an optimization loop that is also constrained by the same measurement problem.
 
+> [!note] Extension: SMFR as a benchmark that resists the typical failure modes
+> The [[multi-agent-illusion]] paper (Jwalapuram, Lin et al., Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 June 2026) introduces [[smfr|SMFR]] — a procedurally generated diagnostic benchmark designed to *avoid* the standard benchmark failure modes (contamination, verifier failure, prompt distortion, static snapshots). SMFR is built from real yfinance data, balanced across transaction types and aggregation logic, and immune to data contamination because it is programmatically generated. It is the only major 2026 benchmark explicitly designed for multi-step agentic reasoning with parallelizable sub-tasks. The paper's most important finding: even on a benchmark built to *help* MAS succeed, automated MAS frameworks do not outperform single-agent CoT-SC, and where they do, the cost premium is up to 10×. The implication for the thread: the benchmark crisis is not just about contamination and verifier failure — it is also about the cost-quality Pareto position. A framework that costs 10× and gains 0% is *on the wrong side* of the Pareto frontier regardless of its absolute accuracy. Future MAS evaluations need to report cost-quality Pareto position, not just accuracy. The Expert-MAS result on SMFR (GPT-5: 57.0% → 96.5%) is the control: the same benchmark, the same backbone, the same task — only the architecture changes — and the cost stays comparable to CoT-SC. This is the kind of result that the [[smfr|SMFR]] benchmark enables and that the thread's future iterations should hold the field to.
+
 ## Sources
 
 - `raw/deepswe-benchmark.md` — Datacurve's full benchmark description, methodology, audit results, and qualitative analysis
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective, SWE-bench Pro criticism, call for community benchmarks, cost/token analysis
 - `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.
 - `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "trace-rich benchmarks required" extension. §4.2 (the [[operational-mirror|operational mirror]]'s [[reward-hacking|reward-hacking]] pathology is enabled by scalar-reward benchmarks), §4.5 ([[variant-isolation]] ensemble routing as environment-aware evolution on heterogeneous task sets), §6.3 (Global 49.5% vs. Ensemble 87.4% on GAIA GPT-5.4), §7.2 ("the richness of the feedback signal bounds the sophistication of evolution that can be safely performed"), §7.7 (no held-out evaluation; same measurement limitation as DeepSWE and EvoArena).
+- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the "SMFR as a benchmark that resists typical failure modes" extension. §3 (cost-quality Pareto position, not just accuracy, as the right MAS evaluation criterion); §3.3 (SMFR procedural generation, immune to contamination); §3.3 (Expert-MAS GPT-5: 57.0% → 96.5% on SMFR, cost comparable to CoT-SC); §6 (the cost-efficiency gap as the central finding).

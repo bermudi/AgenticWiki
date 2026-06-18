@@ -1,11 +1,12 @@
 ---
 title: Multi-Agent Code Orchestration
 created: 2026-05-21
-updated: 2026-06-16
+updated: 2026-06-18
 sources:
   - raw/2605.18747.pdf
   - raw/yt-systems-building-systems.md
   - raw/recursive-agent-harnesses.txt
+  - raw/the-illusion-of-multi-agent-advantage.pdf
 tags: [concept, multi-agent, orchestration, code-harness, collaboration, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -22,6 +23,9 @@ However, Eero Alvar raises a critical concern: **company-shaped hierarchies are 
 
 > [!note] Departure: Human Org Patterns May Be Suboptimal for Agents
 > The survey's hierarchical topologies (MAGIS, HyperAgent, SoA) assume that human organizational structures transfer well to agent systems. Eero Alvar challenges this: company-shaped hierarchies work for humans, but "may not be optimal for agents" (4:27–5:05). The "game of telephone" risk from longer command chains and the increased chaos from deeper hierarchies suggest that agent-native topologies (flat, peer-to-peer, or execution-graph-based) may outperform human-inspired ones. This is an unvalidated departure — no source has yet compared company-shaped vs. agent-native topologies empirically.
+
+> [!warning] Contradiction: Automated Multi-Agent Designs Do Not Outperform Single-Agent CoT-SC
+> The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 Jun 2026) is a direct empirical correction to the optimistic framing of multi-agent topologies above. Across 6 representative frameworks (DyLAN, MAS-Zero, ADAS, AFlow, MaAS, MAS-Orchestra) and 5 benchmarks, automated MAS rarely outperform single-agent CoT-SC, and where they do, the cost premium is up to 10×. The paper documents [[architectural-bloat]] (complex structures with no functional purpose) and [[functional-collapse]] (architectures that reduce to single-agent execution at runtime). AFlow 7/14 final workflows are functionally identical to CoT-SC; DyLAN agents reach unanimous consensus in 70-90% of cases. The [[expert-mas|hand-designed deterministic]] baseline (GPT-5: 57.0% → 96.5% on SMFR) demonstrates that the multi-agent paradigm *can* work, but only when engineered — not when discovered by automated search. The wiki's positive multi-agent results (the survey §4 topology taxonomy, [[recursive-agent-harness]]) are specifically the *hand-designed* case the paper vindicates; the *automated search* case is empirically shown to largely fail.
 
 ## Why Multi-Agent?
 
@@ -185,3 +189,4 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §4: Scaling the Harness — Multi-Agent Orchestration over Code (pages 34–48). Defines the five role categories, four interaction modes, topology taxonomy, and convergence patterns.
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: company-shaped hierarchy as a design approach; concern that human organizational patterns may not be optimal for agents
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Introduces the code-driven subagent spawning topology: the parent writes executable code that instantiates subagents and runs them in parallel. The recursive unit is the full harness, not the model call. On Oolong-Synthetic, holding GPT-5 fixed, RAH improves Codex from 71.75% to 81.36% — gain attributable to harness architecture.
+- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the [[multi-agent-illusion]] contradiction callout. Documents [[architectural-bloat]] and [[functional-collapse]] across 6 automated frameworks. Validates the [[expert-mas|hand-designed]] case (GPT-5: 57.0% → 96.5% on SMFR) while showing the [[architectural-bloat|automated search]] case largely fails.
