@@ -8,7 +8,8 @@ sources:
   - raw/self-harness-harnesses-that-improve-themselves.txt
   - raw/recursive-agent-harnesses.txt
   - raw/2606.16707v1.txt
-tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion, executable-memory]
+  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion, executable-memory, memory-compression]
 unaudited_marginal: 0
 ---
 
@@ -118,6 +119,28 @@ The legibility property holds: every schema regeneration is auditable as a diff 
 
 The token-space advantage is sharpest here: the user model is a directory of human-readable Python files. A future session can read every line. Compare to opaque vector stores or knowledge graphs, where the user has no way to know what the agent "remembers" about them. This is the [[comprehension-debt]] counter-move at the schema layer: don't let the user model become unreadable.
 
+### 7. Store-Level Compression via [[memrefine]]
+
+A seventh axis: the agent's **memory store itself** is the evolving object. The [[memrefine]] paper (Kim et al., Korea U / KAIST / DeepAuto.ai, June 2026) extends evolving context to a new substrate: the append-only log is the storage, the compressed store is the materialized view, and the pairwise LLM judge is the regenerator. The framework solves a [[storage-budgeted-memory|query-agnostic max-min program]] — keep the store within a fixed size budget while preserving information useful for any plausible future query — and is framework-agnostic: it works on A-MEM-style graph memory and Mem0's ingested-entry store without modifying the host pipeline.
+
+Where the other extensions target *what gets written* (prompts, skills, harness surfaces, user schemas), MemRefine targets *what stays in the store* when it has outgrown a budget. The redundancy/complementarity/distinctness taxonomy is the memory-level analog of the structural pattern: just as UaC separates append-only storage from typed representation, MemRefine separates the cost-agnostic semantic of "what should remain" (the LLM judge's verdict) from the cost-agnostic semantic of "what should be proposed" (similarity ranking). The LLM judge decides on factual content; similarity only proposes candidates.
+
+The empirical claim: the LLM judge is roughly tied with rule-based heuristics at loose budgets (where most decisions are obvious near-duplicates) and decisively outperforms them at tight budgets (where the hard cases are semantically related memories whose factual relationship must be interpreted). This is the [[jagged-frontier]] prediction confirmed at the memory layer: factual reasoning is a regime where simple heuristics fail and LLM judgment is necessary.
+
+The relationship to the other extensions:
+
+| Extension | Object evolved | What triggers a regeneration |
+|---|---|---|
+| Task-specific prompt evolution | The system prompt for a specific task | Reflected trajectory evaluation |
+| Memory and preference learning | Memories, preferences, durable patterns | Session diary + reflection loop |
+| Skill learning | Reusable SOPs as skill files | Successful trajectory pattern mining |
+| Harness self-evolution ([[self-harness]]) | The single harness's editable surfaces | Verifier-grounded weakness mining + held-out regression test |
+| Harness recursive instantiation ([[recursive-agent-harness]]) | The set of harness instances spawned per task | Parent writes a script that spawns fresh subagent harnesses |
+| Schema evolution ([[executable-memory]]) | The user model's data structures | Periodic regeneration from full fact corpus |
+| Store compression ([[memrefine]]) | The set of entries in the memory store | Storage budget exceeded |
+
+All seven share the **decoupling of storage and representation**: the append-only log is the storage, the structured view is regenerated from it. The regenerated view is auditable as a diff. The regenerator is constrained (bounded edits, regression tests, factual judgment) rather than free.
+
 ## Thread
 
 - [[the-agent-workflow]] — Evolving context closes the loop between agent sessions, making the workflow improve with use
@@ -140,6 +163,7 @@ The token-space advantage is sharpest here: the user model is a directory of hum
 - [[recursive-agent-harness]] — A different axis: harness instances spawned per task via code-driven parallel orchestration, not evolving one harness
 - [[harness-mechanisms]] — Self-evolution and recursive instantiation are the two harness-level optimization mechanisms
 - [[executable-memory]] — Extends evolving context to the schema layer: the LLM writes its own dataclasses, domain partitioning, and constraints, regenerating the user model from the full fact corpus
+- [[memrefine]] — Extends evolving context to the store layer: the LLM judge decides what stays in the memory store when it has outgrown a fixed size budget
 - [[comprehension-debt]] — Schema evolution is a counter-move at the schema layer: the user model stays readable as Python files, not opaque vector stores
 - [[bojie-li]] — Author of User as Code, the implementation of schema-level evolving context
 
@@ -150,3 +174,4 @@ The token-space advantage is sharpest here: the user model is a directory of hum
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang et al. (Shanghai AI Lab, 2026). Extends evolving context to the harness surface itself. Propose-evaluate-accept loop with verifier-grounded weakness mining, bounded proposals, and conservative acceptance on held-out regression tests. Held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0.
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). A different axis: harness as a recursive unit. Parent writes executable code that spawns fresh subagent harnesses in parallel. Held-out gain of 9.6 pp on Oolong-Synthetic (71.75% → 81.36%) with backbone held fixed.
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* Evolving context at the schema layer. The LLM writes its own dataclasses, domain partitioning, and constraints; the structured state is regenerated from the full fact corpus. Bitter-lesson framing: no human-designed schema, only human-designed scaffolding. Schema evolution is a strict extension of the three Lance Martin categories — a new fourth category where the *data model itself* evolves.
+- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf` — Kim (Korea U), Baek, Jeong, Hwang (KAIST; Hwang also DeepAuto.ai), June 2026. *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* A seventh axis: evolving context at the **store level**. The pairwise LLM judge decides what stays in the memory store when it has outgrown a fixed size budget. The redundancy/complementarity/distinctness taxonomy is the action space; similarity is the proposal mechanism; factual judgment is the decision mechanism. LLM judge decisively outperforms fixed rule-based baselines (RuleSim, RulePR) as the budget tightens. Framework-agnostic: A-MEM graph memory and Mem0.

@@ -7,7 +7,8 @@ sources:
   - raw/self-harness-harnesses-that-improve-themselves.txt
   - raw/recursive-agent-harnesses.txt
   - raw/2606.16707v1.txt
-tags: [concept, agent-harness, planning, memory, tool-use, control, optimization, self-evolution, harness-recursion, executable-memory]
+  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+tags: [concept, agent-harness, planning, memory, tool-use, control, optimization, self-evolution, harness-recursion, executable-memory, memory-compression]
 unaudited_marginal: 0
 ---
 
@@ -49,6 +50,13 @@ Persistent state that survives across sessions: user preferences, project conven
 
 ### Multi-Agent Memory
 Shared state across multiple agents: blackboards, shared logs, repository state, belief-state synchronization. This is a frontier problem — current systems rely on sequential handoff or file-only state, which doesn't provide transactional semantics or assumption-level consistency.
+
+### Post-Construction Memory Compression ([[memrefine]])
+The memory taxonomy above covers **construction** — how new information enters the store and is organized for retrieval. The inverse problem — **shrinking an already constructed store under a fixed storage budget** while preserving information useful for future interactions — was largely unaddressed in the survey literature. The [[memrefine]] paper (Kim et al., Korea U / KAIST / DeepAuto.ai, June 2026) formalizes this as [[storage-budgeted-memory|storage-budgeted memory management]]: a query-agnostic max-min program that the compressor solves by iterating a pairwise [[llm-guided-compression|LLM judge]] over the store. The judge decides whether each pair of similar entries is redundant (DELETE), complementary (MERGE), or distinct (PRESERVE), iterating until the store meets the target budget or all sufficiently similar pairs have been judged preserve.
+
+Empirically, MemRefine preserves downstream utility across moderate compression (70–50% of base size) and degrades gracefully under tight budgets (30% of base size), with LLM-guided judgment decisively outperforming fixed rule-based baselines (similarity threshold, PageRank-style preservation) as the budget tightens. The framework is framework-agnostic — it works on A-MEM-style graph memory (pruning dangling edges on DELETE, inheriting the union of links on MERGE) and Mem0's non-graph entry store (operating directly on entries and embeddings) — and is inserted after memory construction and before retrieval, leaving the host pipeline unchanged.
+
+The contribution to the memory taxonomy: a **compression primitive** that complements the construction primitives above. Where the survey covers working, semantic, experiential, long-term, and multi-agent memory *as the store grows*, MemRefine addresses the regime where the store has outgrown a fixed budget. The two regimes share the same retrieval downstream but are governed by different objectives: construction maximizes recall, compression maximizes the worst-case query utility at a fixed size.
 
 ### Context Compaction and State Offloading
 Techniques to manage context growth: summarizing completed portions, offloading tool results to the file system, KV caching, progressive disclosure. These are the engineering practices that make long-horizon execution feasible. See [[multi-tier-action-space]] for the architecture.
@@ -152,3 +160,4 @@ The boundary with the other memory patterns: [[context-files|AGENTS.md]] is a st
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang et al. (Shanghai AI Lab, 2026). Empirically instantiates §3.5's governed mutation principle with a concrete propose-evaluate-accept loop. Three-stage algorithm: Weakness Mining (verifier-grounded failure signatures), Harness Proposal (same model in proposer role, bounded edits), Proposal Validation (conservative acceptance rule on held-out regression tests). Held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0.
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). The complementary pattern: recursive harness instantiation. Parent agent writes executable code that spawns full subagent harnesses in parallel; the recursive unit is the harness, not the model call. Oolong-Synthetic gains from 71.75% (Codex) to 81.36% (RAH) with backbone held fixed.
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* User memory as a harness mechanism: a two-phase pipeline (append-only memorize + periodic structure) plus constraint execution. Concrete ablation isolates that the two phases must be separate (append-only +19pp on LOCOMO; periodic structure +12.3pp over incremental code). The interpreter is the verification boundary. 78.8% on LOCOMO, 99% on Analytical Inference, 100% on Active Service.
+- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf` — Kim (Korea U), Baek, Jeong, Hwang (KAIST; Hwang also DeepAuto.ai), June 2026. *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* Adds a **post-construction memory compression** primitive to the memory taxonomy. The compressor solves a query-agnostic max-min program by iterating a pairwise LLM judge (DELETE/MERGE/PRESERVE on factual content) over the store. Framework-agnostic: A-MEM graph memory and Mem0. LLM judge decisively outperforms fixed rule-based baselines (RuleSim, RulePR) as the budget tightens. Modest degradation at 30% budget; A-MEM F1 holds to within 3.9pp on standard LoCoMo.

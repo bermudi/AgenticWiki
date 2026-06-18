@@ -17,6 +17,7 @@ sources:
   - raw/how-the-open-knowledge-format-can-improve-data-sharing.md
   - raw/open-knowledge-format-spec-v0.1.md
   - raw/2606.16707v1.txt
+  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -99,6 +100,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[colin-eberhardt]] — CTO of Scott Logic; ran the head-to-head Spec Kit vs iterative benchmark (10× faster without SDD)
 - [[near-form]] — Consultancy behind Cian Clarke's SDD work; 6-9 months of internal SDD experience as of late 2025
 - [[bojie-li]] — Researcher at Pine AI; author of *User as Code: Executable Memory for Personalized Agents*; argues the user model should be a living software project (typed Python state + Python functions for rules) maintained by a two-phase pipeline
+- [[minjae-kim]] — First author of the MemRefine paper (Korea University); storage-budgeted memory compression
+- [[jinheon-baek]] — Co-author of MemRefine (KAIST)
+- [[soyeong-jeong]] — Co-author of MemRefine (KAIST)
+- [[sung-ju-hwang]] — Corresponding author of MemRefine (KAIST, DeepAuto.ai)
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -225,4 +230,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[spec-kit]] — GitHub's open-source SDD toolkit (~92K stars); the "constitution" model for project-level agent rules; tooling-agnostic
 - [[mcp]] — Model Context Protocol; standard interface for connecting agents to external tools and data sources; Kiro uses it pervasively as the user-extensible tool surface
 - [[open-knowledge-format]] — Google Cloud's open spec (v0.1, June 2026) formalizing the Karpathy LLM-wiki pattern into a portable, interoperable markdown+frontmatter format; deliberately minimal — one required field, punts on taxonomy and link typing
+- [[memrefine]] — Post-construction, LLM-guided memory compression framework: similarity proposes candidate pairs, an LLM judge decides delete/merge/preserve on factual content, iterates until a fixed size budget is met. Framework-agnostic across A-MEM graph memory and Mem0 (Kim et al., Korea U / KAIST / DeepAuto.ai, 2026)
+- [[storage-budgeted-memory]] — A new problem formulation: keep an already constructed memory store within a fixed size budget while remaining as useful as possible across an unknown future query distribution. Formalized as a query-agnostic max-min program
+- [[llm-guided-compression]] — The compression pattern in which surface similarity only proposes candidate pairs and an LLM judge decides the action (DELETE/MERGE/PRESERVE) on factual content. The redundancy/complementarity/distinctness taxonomy is the action space
 
