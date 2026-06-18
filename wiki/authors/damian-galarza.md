@@ -1,8 +1,8 @@
 ---
 title: Damian Galarza
 created: 2026-04-27
-updated: 2026-04-27
-sources: ["raw/yt-the-observability-layer-your-ai-agent-is-missing.md", "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md"]
+updated: 2026-06-18
+sources: ["raw/yt-the-observability-layer-your-ai-agent-is-missing.md", "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md", "raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md"]
 tags: ["author", "agent-quality", "observability", "evals"]
 ---
 
@@ -13,6 +13,8 @@ tags: ["author", "agent-quality", "observability", "evals"]
 Galarza operates a multi-agent system named **Emma** that handles business operations: invoicing, CRM updates, scheduling, and client communications. His content draws from real debugging experiences with this system.
 
 His three-part series on agent quality covers the full stack: [[agent-evals|what to measure]] (the 4-layer eval framework), [[agent-observability|how to see inside agents]] (logs/traces/metrics), and [[agent-quality-loop|the flywheel that ties them together]] (code → traces → evals → code).
+
+In a 2026 walkthrough, Galarza demonstrated building a sponsor email triage workflow in Mastra that blends deterministic steps with per-step LLM calls — Ministral 3.8B (local) for classification and extraction, Qwen 3.5 35B for reasoned scoring — with guardrails and per-step [[agent-evals|evals]] wired into the workflow graph itself. This illustrates his argument that the right architecture is neither a single giant agent prompt nor ad-hoc wiring, but a typed, inspectable workflow where each step's model choice and verification are explicit.
 
 ## Key Contributions
 

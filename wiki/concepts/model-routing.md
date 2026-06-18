@@ -1,13 +1,14 @@
 ---
 title: Model Routing
 created: 2026-05-06
-updated: 2026-05-16
+updated: 2026-06-18
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/2504.21625v6.txt
+  - raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md
 tags: [workflow, cost-optimization, architecture, model-selection]
-unaudited_marginal: 0
+unaudited_marginal: 1
 ---
 
 # Model Routing
@@ -53,6 +54,22 @@ Model routing integrates naturally with the [[the-agent-workflow|agent workflow]
 - **HITL phase**: The human decomposes the task into complexity tiers, specifying which model handles each
 - **AFK phase**: The agent harness routes each subtask to the appropriate model
 - The [[multi-tier-action-space|fast orchestrator + smart oracle]] pattern is a concrete instantiation of model routing — a fast, cheap model handles navigation and tool calling, routing only heavy reasoning to an expensive oracle model
+
+## Walkthrough: Sponsor Email Triage Pipeline
+
+Galarza (2026) demonstrates model routing in a concrete workflow: triaging a sponsor inquiry email through Ministral 3.8B (local, lightweight) for classification and extraction, then routing the compiled evidence to Qwen 3.5 35B for reasoned scoring. The pipeline:
+
+1. **Normalize** (deterministic): Parse raw email into structured fields — no model needed
+2. **Classify** (Ministral 3.8B): Narrow judgment — "is this a sponsor inquiry?" — with structured JSON output
+3. **Reconcile** (deterministic + LLM): Combine the model's classification with keyword-based signal checks before trusting the routing decision
+4. **Extract** (Ministral 3.8B): Pull sponsor details, claims, URLs from email text
+5. **Research** (Tavily search API, deterministic): External corroboration via web search — no model needed for the fetch
+6. **Score** (Qwen 3.5 35B): Take compiled evidence (normalized email + classification + extraction + research) and evaluate sponsor fit across audience relevance, product credibility, content naturalness, reputation safety, and commercial clarity
+7. **Guardrails** (deterministic): Validate that scores and extracted claims are internally consistent before generating output
+
+The routing logic: Ministral handles steps 2 and 4 (classification and extraction — tier A-B complexity) because they're narrow, single-model-call tasks with structured output schemas. Qwen only enters at step 6, when the task requires synthesis across multiple evidence sources (tier D). This keeps the frontier model off the critical path for 4 of 6 non-deterministic steps, and the deterministic steps (1, 3, 7) need no model at all.
+
+> [!note] Marginal: This walkthrough is a Mastra-based demonstration and serves as a practical instantiation, not an empirical benchmark.
 
 ## Practical Considerations
 

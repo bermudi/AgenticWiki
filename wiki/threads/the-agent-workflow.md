@@ -32,8 +32,9 @@ sources:
   - raw/the-final-bottleneck.md
   - raw/2605.18747.pdf
   - raw/yt-effect-opencode-dax-raad.md
+  - raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
-unaudited_marginal: 0
+unaudited_marginal: 1
 ---
 
 # The Agent Workflow
@@ -99,6 +100,20 @@ This isn't a one-time handoff — it's a cycle. After each AFK execution, the hu
 [[zanie-blue|Zanie Blue]] (Astral) identifies tool output design as a workflow concern, not just a tooling detail. When agents run tools in the AFK phase, the output those tools produce directly affects context consumption. Verbose output from a type checker or package manager floods the context window, degrading subsequent reasoning.
 
 The fix is [[tool-design-for-agents|designing tools for agentic consumption]]: machine-readable output with built-in context reduction, verbose logs persisted to files instead of returned inline, and schemas that let agents request only the data they need. This isn't a nice-to-have — as inference gets faster, tools become the bottleneck.
+
+## Typed Workflows as Decomposition Substrate
+
+Galarza (2026) demonstrates encoding the decomposition phase directly into a typed, inspectable workflow graph — not as ad-hoc wiring, but as a first-class system abstraction. The workflow graph provides a structured execution substrate with three properties:
+
+- **Typed step interfaces**: Each step defines input/output schemas (Zod) and shared state. The workflow graph is statically inspectable — you can see which model handles which step, what data flows where, and where branching occurs.
+- **Per-step model selection**: Each step can specify a different model. Classification and extraction use a cheap local model (Ministral 3.8B); synthesis and scoring use a larger model (Qwen 3.5 35B). The workflow graph makes model routing an architectural property, not a runtime heuristic.
+- **Deterministic reconciliation**: Between LLM calls, deterministic steps validate, reconcile, and guardrail. Galarza's "reconcile sponsor signals" function combines the LLM's classification with keyword-based deterministic checks — neither alone is trusted to make the routing decision.
+
+The functional separation into deterministic and LLM steps also enables test-driven development on the deterministic portions: normalization, reconciliation, and guardrails can be unit-tested conventionally, while the LLM-call steps get per-step scorers.
+
+This bridges the HITL decomposition phase and the AFK execution phase: the human designs the workflow graph (HITL), and the system executes it step-by-step (AFK). The graph itself is the decomposition artifact — replacing an unstructured prompt with a typed execution plan.
+
+> [!note] Marginal: This walkthrough uses Mastra as the workflow framework. The patterns are framework-agnostic, but the concrete implementation details (Zod schemas, `createStep`, `branch`) are Mastra-specific. The workflow-graph approach is one decomposition strategy; the [[ralph-loop]] represents the opposite extreme (single-step, fresh context). The tension between typed graphs and disposable iteration is unresolved.
 
 ## Know Thy Machine
 
@@ -440,4 +455,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). The [[multi-agent-illusion]] audit. Source for the "capability floor for multi-agent coordination" departure: automated MAS do not outperform CoT-SC, hand-designed [[expert-mas]] does; the cost-quality Pareto position is a first-class metric. §3 cost-quality results; §3.3 [[smfr]] + [[expert-mas]]; §4 architectural deconstruction; §5 ensembling trap and capability floor.
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
+- `raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph
 

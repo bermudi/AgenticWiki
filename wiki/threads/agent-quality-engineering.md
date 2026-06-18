@@ -14,8 +14,9 @@ sources:
   - raw/bias-in-the-loop-llm-judge-code.md
   - raw/2605.18747.pdf
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
-unaudited_marginal: 0
+unaudited_marginal: 1
 ---
 
 # Agent Quality Engineering
@@ -49,6 +50,27 @@ And four quality dimensions:
 - **Safety & Alignment**: Stays within bounds, refuses appropriately
 
 > You can only measure what you can see. Quality requires visibility designed in from day one.
+
+### Per-Step Scoring: Evals Wired Into the Workflow Graph
+
+Galarza (2026) demonstrates attaching scorers directly to individual workflow steps rather than only evaluating final output. In the sponsor email triage walkthrough:
+
+- The `classifyEmail` step carries a `classifiedEmailScore` scorer (ratio: 1, meaning it fires on every execution) that checks whether the classification output matches the expected category given the input
+- The scorer compares the LLM's classification against expected labels for known fixtures and reports a simple 0/1 score per run
+- Failed runs can be saved as dataset items for future regression testing
+
+This is a refinement of the trajectory eval layer: instead of evaluating the full trajectory after the fact, per-step scorers evaluate each LLM call at the point of execution. The workflow graph becomes the eval scaffold — each step declares what "correct" looks like for that step, and the system tracks conformance automatically.
+
+### Deterministic Guardrails as Output Validation
+
+Between LLM-call steps, Galarza inserts deterministic validation steps that check the LLM's output before passing it downstream:
+
+- **Reconcile sponsor signals**: After the LLM classifies an email, a deterministic function cross-checks against keyword-based signal detection (domain mentions, sponsorship vocabulary). Neither the LLM's classification nor the keyword check is trusted alone — only their agreement produces the routing decision.
+- **Apply guardrails**: After the LLM scores a sponsor opportunity, a deterministic function validates internal consistency (e.g., if audience relevance is high but commercial clarity is scored low, flag for review).
+
+This operationalizes [[dex-horthy|Horthy]]'s "never send an AI to do a linter's job" principle: the deterministic checks are narrow, mechanical validations that don't consume model tokens or reasoning budget. They act as output gates between LLM steps, catching misclassifications and inconsistencies before they cascade.
+
+> [!note] Marginal: The walkthrough uses the Mastra framework for scoring and guardrails. The patterns (per-step scoring, deterministic reconciliation) are framework-agnostic, but the implementation details are Mastra-specific.
 
 ## Layer 2: Observability — The Decision Narrative
 
@@ -217,3 +239,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): systematic threat to eval pipelines from 12 prompt-induced biases acting as directional positional priors; same judge + same code produces drastically different scores based on prompt framing and candidate order
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Proposes harness-level evaluation metrics (§5.2.1) that complement the quality loop by evaluating the operational substrate rather than only end-task success
 - `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies are the failure modes the flywheel is designed to defend against. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.
+- `raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md` — Galarza (2026): per-step scoring attached to workflow steps, deterministic guardrails as output validation between LLM calls; reconcile LLM + deterministic signals before routing decisions
