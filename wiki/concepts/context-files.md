@@ -1,7 +1,7 @@
 ---
 title: Context Files (AGENTS.md, CLAUDE.md)
 created: 2026-05-10
-updated: 2026-06-07
+updated: 2026-06-17
 sources:
   - raw/2602.11988v1.txt
   - raw/2601.20404v1.txt
@@ -142,6 +142,7 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 - [[contextcov]] — Framework for transforming passive context file instructions into executable guardrails; constraint taxonomy (process/source/architectural); Documentation as Code paradigm
 - [[system-prompt-effects]] — System prompt effects are the mechanism by which context files influence agent behavior; the non-monotonic relationship explains why more detailed context files don't always help
 - [[knowledge-triplet]] — Context files push "what you know" into "what's in the codebase," making knowledge available to the model without explicit expression each time
+- [[open-knowledge-format]] — OKF standardizes the broader knowledge-as-markdown pattern that context files are one instance of; the AGENTS.md / CLAUDE.md family is named in the OKF announcement as a related bespoke instance
 
 ## Sources
 

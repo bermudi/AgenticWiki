@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-16
+updated: 2026-06-17
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
@@ -14,6 +14,8 @@ sources:
   - raw/self-harness-harnesses-that-improve-themselves.txt
   - raw/recursive-agent-harnesses.txt
   - raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md
+  - raw/how-the-open-knowledge-format-can-improve-data-sharing.md
+  - raw/open-knowledge-format-spec-v0.1.md
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -28,6 +30,8 @@ unaudited_marginal: 0
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Self-Harness (Zhang et al., Shanghai AI Lab, 2026); new self-harness concept; harness-engineering §5.2.3 self-evolution open problem empirically instantiated; harness-mechanisms §3.5; evolving-context extended
 - `raw/recursive-agent-harnesses.txt` — Recursive Agent Harnesses (Lumer et al., PwC, 2026); new recursive-agent-harness concept; multi-agent-code-orchestration code-driven subagent spawning; harness-mechanisms recursive instantiation; code-as-agent-harness extension
 - `raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md` — Drew Breunig (Computer History Museum): spec-code triangle, onewords postmortem, decision extraction, Plum demo, software history digression; new author + 3 concepts + 2 projects
+- `raw/how-the-open-knowledge-format-can-improve-data-sharing.md` — Google Cloud blog announcing OKF (2026-06-12); formalizes Karpathy's LLM-wiki pattern into a portable spec; new OKF concept page
+- `raw/open-knowledge-format-spec-v0.1.md` — The OKF v0.1 specification itself; one required field (type), two reserved filenames, three conformance criteria, permissive-consumption MUST NOT clause
 
 # Index
 
@@ -215,4 +219,5 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[bmad-method]] — Open-source SDD methodology that installs into Claude Code or Cursor; strong on specialized role definition (technical director, QA tester, backend engineer)
 - [[spec-kit]] — GitHub's open-source SDD toolkit (~92K stars); the "constitution" model for project-level agent rules; tooling-agnostic
 - [[mcp]] — Model Context Protocol; standard interface for connecting agents to external tools and data sources; Kiro uses it pervasively as the user-extensible tool surface
+- [[open-knowledge-format]] — Google Cloud's open spec (v0.1, June 2026) formalizing the Karpathy LLM-wiki pattern into a portable, interoperable markdown+frontmatter format; deliberately minimal — one required field, punts on taxonomy and link typing
 

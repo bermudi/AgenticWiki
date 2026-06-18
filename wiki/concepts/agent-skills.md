@@ -1,7 +1,7 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-05-21
+updated: 2026-06-17
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
@@ -257,6 +257,7 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[sandcastle]] — Matt Pocock's Docker-based Ralph loop variant that uses the skill.md pattern
 - [[procedural-knowledge]] — Skills are the canonical format for packaging procedural knowledge for agents
 - [[inferential-rule-following]] — IRFT (Inferential Rule-Following Tuning) is structurally analogous to skills: synthetic procedural training data that generalizes across domains
+- [[open-knowledge-format]] — Parallel precedent: both are minimal open format specs with reference implementations, betting that speaker count beats ownership
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: Andrej Karpathy
 created: 2026-05-09
-updated: 2026-05-15
+updated: 2026-06-17
 unaudited_marginal: 0
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
@@ -83,6 +83,7 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 - [[jagged-frontier]] — His "car wash" example is a canonical illustration of jaggedness
 - [[software-1-2-3]] — The paradigm progression he articulated
 - [[html-as-agent-output]] — His output fidelity progression ladder (text → md → HTML → neural video)
+- [[open-knowledge-format]] — Google Cloud's OKF spec formalizes Karpathy's LLM-wiki pattern into a portable, interoperable format; cites him by name in the announcement
 - LLM knowledge bases — His recipe for personal knowledge management via LLMs (concept page TBD)
 
 ## Sources
