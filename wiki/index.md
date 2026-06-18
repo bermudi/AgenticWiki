@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-17
+updated: 2026-06-18
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
@@ -16,6 +16,7 @@ sources:
   - raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md
   - raw/how-the-open-knowledge-format-can-improve-data-sharing.md
   - raw/open-knowledge-format-spec-v0.1.md
+  - raw/2606.16707v1.txt
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -32,6 +33,7 @@ unaudited_marginal: 0
 - `raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md` — Drew Breunig (Computer History Museum): spec-code triangle, onewords postmortem, decision extraction, Plum demo, software history digression; new author + 3 concepts + 2 projects
 - `raw/how-the-open-knowledge-format-can-improve-data-sharing.md` — Google Cloud blog announcing OKF (2026-06-12); formalizes Karpathy's LLM-wiki pattern into a portable spec; new OKF concept page
 - `raw/open-knowledge-format-spec-v0.1.md` — The OKF v0.1 specification itself; one required field (type), two reserved filenames, three conformance criteria, permissive-consumption MUST NOT clause
+- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* The two-phase pipeline, three capability tiers, generate-verify-review loop, manifest pattern, Active Service benchmark, Analytical Inference benchmark, Modularity ablation. 78.8% on LOCOMO, 99% on Analytical Inference, 100% on Active Service. New concept pages (executable-memory, proactive-service), author (bojie-li), updates to code-as-agent-harness, harness-mechanisms, jagged-frontier, verifiability, evolving-context, code-intelligence.
 
 # Index
 
@@ -96,6 +98,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[birgitta-boeckler]] — ThoughtWorks writer on SDD methodology; identified the spec drift problem and the "sledgehammer to crack a nut" critique
 - [[colin-eberhardt]] — CTO of Scott Logic; ran the head-to-head Spec Kit vs iterative benchmark (10× faster without SDD)
 - [[near-form]] — Consultancy behind Cian Clarke's SDD work; 6-9 months of internal SDD experience as of late 2025
+- [[bojie-li]] — Researcher at Pine AI; author of *User as Code: Executable Memory for Personalized Agents*; argues the user model should be a living software project (typed Python state + Python functions for rules) maintained by a two-phase pipeline
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -141,6 +144,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
 - [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
+- [[executable-memory]] — The paradigm in which an agent's model of a user is a living software project: typed Python objects hold state, ordinary Python functions encode rules, and an interpreter runs the whole thing (User as Code, Bojie Li, Pine AI 2026)
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
@@ -160,6 +164,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.
 - [[plan-disposability]] — Treat plans as ephemeral coordination state, not contracts.
 - [[plan-vs-review]] — The quantified tradeoff: 5 minutes of planning saves 30 minutes of reviewing AI-generated code.
+- [[proactive-service]] — The capability tier in which an agent surfaces an unsolicited alert driven by a state change, not a user query; the defining property is the initiation asymmetry
 - [[procedural-knowledge]] — The cognitive science framing of procedural memory mapped to agent skill files; distinct from semantic (RAG) and episodic (conversation logs) knowledge.
 - [[ralph-loop]] — Minimalist autonomous agent loop: dumb bash loop, plan file as shared state, one task per iteration.
 - [[rubric-evaluation]] — Evaluating LLM outputs at the rubric level; RUBRICEVAL finds even frontier models struggle with fine-grained LLM-as-judge (GPT-4o: 55.97% on hard cases).

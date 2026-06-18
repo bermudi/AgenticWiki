@@ -1,14 +1,16 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
   - raw/2604.15597v1.pdf
   - raw/many-tier-instruction-hierarchy.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/deepswe-benchmark.md
-tags: [concept, llm-capabilities, domain-variance, delegation]
+  - raw/2606.16707v1.txt
+tags: [concept, llm-capabilities, domain-variance, delegation, executable-memory]
+unaudited_marginal: 0
 ---
 
 # Jagged Frontier
@@ -85,6 +87,22 @@ DeepSWE also reveals that **prompt style** interacts with the jagged frontier. [
 
 The jagged frontier isn't just about different domains — it appears **within a single model generation on a single task**. Nate B Jones (2026) found that GPT 5.5, while dramatically better than its predecessor at catching semantically obvious traps in a data migration test (rejecting "Mickey Mouse" and "ASDF ASDF" as fake customers, flagging a planted $25,000 fake payment), **regressed on backend hygiene** that GPT 5.4 had handled better: missing service code conflicts, leaving payment statuses unnormalized (29 distinct raw values), and building a review UI where different panels disagreed on flagged item counts. The model advanced on semantic intuition while retreating on boring structural discipline — a jagged frontier within the same task, the same model family, the same release.
 
+## Evidence from User Memory: Jaggedness Across Representation
+
+The [[executable-memory|User as Code]] benchmark (Bojie Li, Pine AI, 2026) reveals jaggedness **across representation**, not just across domain. On the same user-history data with the same backbone, the capability frontier separates cleanly by what the representation supports:
+
+| Capability tier | Best representation | Retrieval-based memory | Code-executable memory |
+|---|---|---|---|
+| Basic Recall (LOCOMO) | Full Context (79.8%) | MemMachine 72.7%, Hindsight 69.7%, A-MEM 51.8%, Mem0 29.3% | UaC 78.8% (within 1.0pp of full-context) |
+| Analytical Inference (counts, sums, group-bys) | Full Context + REPL (100%) | MemMachine 43%, Mem0 6% | UaC 99% |
+| Active Service (proactive alerts) | UaC + constraint pipeline (100%) | Mem0 (live) 90%, A-MEM 30% | UaC 85% (hard) |
+
+The divide is between **representations a code tool can read** (UaC, FC+REPL, Full Context for small N) and **representations only retrievable by similarity** (Mem0, MemMachine). The former scale with N; the latter do not. MemMachine collapses from 100% at N=20 to 15–25% at N=200–500 on aggregate queries. Mem0 sits near zero throughout because NL fact stores cannot be enumerated.
+
+The jaggedness is a **structural property of retrieval, not a model failure**: top-k retrieval can return at most the top-k records, but aggregate queries need every record. No amount of model improvement will fix this — the representation is the bottleneck. Karpathy's verifiability thesis explains why: code is verifiable, retrieval isn't, and a model is only as capable as its verifiability allows.
+
+This is concrete empirical evidence for the [[the-verifiability-thesis|verifiability thread]]'s claim that the frontier is jagged, and the executable-memory result extends the thesis: the jaggedness isn't just across domains (code vs. aesthetics) — it's also across representations (text vs. typed code) within a domain (user memory). Switching representations is a way to navigate the frontier.
+
 ## Implications
 
 Users of AI systems should be cautious not to generalize an LLM's capability in one domain to other domains. A model that is reliable for Python coding may be severely unreliable for spreadsheet editing, music notation, or creative writing. This has direct implications for [[vibes-based-engineering|vibe coding]] and [[afk-agent|AFK delegation]]: domain expertise cannot be assumed.
@@ -114,6 +132,8 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[instruction-hierarchy]] — The 2-tier → 12-tier gap is a single-axis case study of the jagged frontier: >99% at training distribution, ~40% one step beyond
 - [[knowledge-triplet]] — Model capability degrades precisely where the triplet is weakest: novel domains where neither codebase nor training data provides signal
 - [[domain-expertise-as-moat]] — Domain expertise is the deepest form of the jagged frontier: correctness is domain-specific and unverifiable without expertise
+- [[executable-memory]] — Concrete empirical evidence that the frontier is jagged across representation, not just across domain: 99% vs 6–43% on analytical inference; 100% on proactive alerts with executable constraints vs 30% with retrieval
+- [[verifiability]] — Code is verifiable, retrieval is not; the model is only as capable as its verifiability allows
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems
@@ -121,3 +141,4 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the car wash example of jaggedness, RL circuits explanation, animals vs ghosts framing, and the practical implication that you must "figure out which circuits you're in for your application."
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Within-model jaggedness: 5.5 advanced on semantic traps but regressed on backend hygiene vs its predecessor, demonstrating non-monotonic capability even within the same task
 - `raw/deepswe-benchmark.md` — DeepSWE reveals the true width of the jagged frontier in coding agents: 70-point spread vs. [[swe-bench-pro|SWE-bench Pro]]'s 30-point spread
+- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete empirical evidence that the jagged frontier is a property of representation, not just domain. On the same user-history data with the same backbone: UaC reaches 99% on analytical inference while retrieval-based systems reach 6–43%; UaC + constraint pipeline reaches 100% on proactive alerts while retrieval-based systems reach 30–90%. The divide is between representations a code tool can read and representations only retrievable by similarity. Switching representations is a way to navigate the frontier.

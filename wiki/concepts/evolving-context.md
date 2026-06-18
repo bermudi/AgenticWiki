@@ -1,13 +1,14 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-06-16
+updated: 2026-06-18
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/self-harness-harnesses-that-improve-themselves.txt
   - raw/recursive-agent-harnesses.txt
-tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion]
+  - raw/2606.16707v1.txt
+tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion, executable-memory]
 unaudited_marginal: 0
 ---
 
@@ -98,6 +99,25 @@ This pattern complements evolving context rather than extending it. The harness 
 
 Both approaches are **empirically grounded**: gains attributable to the harness, not the model. Both rely on trustworthy verification (held-out regression tests, programmatic answer extraction). Both are model-agnostic in principle but empirically demonstrated on a small set of base models. The open question is whether they compose: a self-evolving harness whose spawned subagents are also self-evolving.
 
+### 6. Schema Evolution via the User Model ([[executable-memory]])
+
+A third direction: the LLM **writes its own data structures**, not just its prompts and skills. The [[executable-memory|User as Code]] paper (Bojie Li, Pine AI, 2026) extends evolving context to the schema layer. The dataclasses, domain partitioning, and constraints are all produced by the LLM at structuring time and **regenerated from the full fact corpus** as the user's life changes. The representation is flexible and self-evolving rather than fixed.
+
+This is a strict extension of the Lance Martin categories:
+
+| Lance Martin category | What evolves | UaC equivalent |
+|---|---|---|
+| Task-specific prompt evolution | The system prompt for a specific task | Schema regeneration — the data model is rewritten as facts accumulate |
+| Memory and preference learning | Memories, preferences, durable patterns | Typed user state — facts become typed dataclass instances |
+| Skill learning | Reusable standard operating procedures | Constraint generation — ad-hoc checks get promoted to persistent constraints |
+| (new) Schema evolution | The data model itself | The dataclasses, domain partitioning, and types are LLM-generated |
+
+The bitter-lesson framing: instead of encoding a fixed ontology, UaC leans on the single capability current LLMs are strongest at — code generation — and lets the model design the data structures that fit each user. The absence of a human-designed schema is a feature, not a pitfall: the only human contribution is the scaffolding, not the structure of the memory itself.
+
+The legibility property holds: every schema regeneration is auditable as a diff in `domains/<x>/state.py`. A user can read what's stored about them, audit what's been added, and roll back changes. Compared to the other extensions, schema evolution is **more powerful** (the editable surface includes the entire data model — types, fields, domain boundaries) and **more dangerous** (a bad regeneration could drop facts — the audit found 0.18% drop rate, concentrated on the longest inputs).
+
+The token-space advantage is sharpest here: the user model is a directory of human-readable Python files. A future session can read every line. Compare to opaque vector stores or knowledge graphs, where the user has no way to know what the agent "remembers" about them. This is the [[comprehension-debt]] counter-move at the schema layer: don't let the user model become unreadable.
+
 ## Thread
 
 - [[the-agent-workflow]] — Evolving context closes the loop between agent sessions, making the workflow improve with use
@@ -119,6 +139,9 @@ Both approaches are **empirically grounded**: gains attributable to the harness,
 - [[self-harness]] — Extends evolving context to the harness surface: bounded edits, regression-tested, conservative acceptance
 - [[recursive-agent-harness]] — A different axis: harness instances spawned per task via code-driven parallel orchestration, not evolving one harness
 - [[harness-mechanisms]] — Self-evolution and recursive instantiation are the two harness-level optimization mechanisms
+- [[executable-memory]] — Extends evolving context to the schema layer: the LLM writes its own dataclasses, domain partitioning, and constraints, regenerating the user model from the full fact corpus
+- [[comprehension-debt]] — Schema evolution is a counter-move at the schema layer: the user model stays readable as Python files, not opaque vector stores
+- [[bojie-li]] — Author of User as Code, the implementation of schema-level evolving context
 
 ## Sources
 
@@ -126,3 +149,4 @@ Both approaches are **empirically grounded**: gains attributable to the harness,
 - `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video on the skill.md open standard, validating and extending the skill learning category of evolving context
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang et al. (Shanghai AI Lab, 2026). Extends evolving context to the harness surface itself. Propose-evaluate-accept loop with verifier-grounded weakness mining, bounded proposals, and conservative acceptance on held-out regression tests. Held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0.
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). A different axis: harness as a recursive unit. Parent writes executable code that spawns fresh subagent harnesses in parallel. Held-out gain of 9.6 pp on Oolong-Synthetic (71.75% → 81.36%) with backbone held fixed.
+- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* Evolving context at the schema layer. The LLM writes its own dataclasses, domain partitioning, and constraints; the structured state is regenerated from the full fact corpus. Bitter-lesson framing: no human-designed schema, only human-designed scaffolding. Schema evolution is a strict extension of the three Lance Martin categories — a new fourth category where the *data model itself* evolves.

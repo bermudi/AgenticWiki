@@ -1,12 +1,13 @@
 ---
 title: Harness Mechanisms
 created: 2026-05-21
-updated: 2026-06-16
+updated: 2026-06-18
 sources:
   - raw/2605.18747.pdf
   - raw/self-harness-harnesses-that-improve-themselves.txt
   - raw/recursive-agent-harnesses.txt
-tags: [concept, agent-harness, planning, memory, tool-use, control, optimization, self-evolution, harness-recursion]
+  - raw/2606.16707v1.txt
+tags: [concept, agent-harness, planning, memory, tool-use, control, optimization, self-evolution, harness-recursion, executable-memory]
 unaudited_marginal: 0
 ---
 
@@ -100,6 +101,17 @@ Every harness edit is treated like a code change to a safety-critical runtime. E
 ### Recursive Harness Instantiation
 A different axis of harness evolution: rather than editing the harness in place, **spawn fresh harness instances** for each sub-task and aggregate their results. The [[recursive-agent-harness]] paper (Lumer et al., PwC, 2026) shows this is a primary performance lever for long-context reasoning: holding the backbone fixed at GPT-5, recursing over full agent harnesses (vs. regex loops) improved Oolong-Synthetic scores from 71.75% to 81.36%. The recursive unit is the full harness, not the model call; code-execution spawning (parent writes a script that instantiates subagents and runs them in parallel via `asyncio.gather`) bypasses the per-turn tool-call budget and scales to thousands of subagents. The pattern is already in production (Anthropic's dynamic workflows) but the controlled evaluation is new. The two strategies are complementary: **in-place evolution** ([[self-harness]]) improves one harness over time; **recursive instantiation** ([[recursive-agent-harness]]) spawns many harnesses per task. See [[multi-agent-code-orchestration]] for the broader topology taxonomy.
 
+### User Memory as a Harness Mechanism
+A third axis: the user model itself is a harness mechanism. The [[executable-memory|User as Code]] paper (Bojie Li, Pine AI, 2026) treats the agent's memory of the user as a living software project maintained by a two-phase pipeline:
+
+- **Phase 1 (Memorize)** is a per-session append-only fact extraction — every fact is logged, never overwritten. This is the sandboxed state transition pattern applied to memory: facts enter the system as immutable records.
+- **Phase 2 (Structure)** is a periodic regeneration of typed Python from the full fact corpus — the schema and constraints are LLM-generated. This is the database write-ahead log + materialized view pattern, applied to LLM memory.
+- **Constraint execution** is deterministic verification over the typed state — the [[verification-loop|verification-driven control]] pattern applied to user data. The interpreter runs constraints at every state change, and the resulting `ACTIVE_ALERTS` are surfaced in the manifest at the start of every conversation.
+
+The decisive finding from the ablation: append-only extraction alone is +19pp on LOCOMO over a code-only baseline, and periodic regeneration is +12.3pp over incremental code rewrites. The two phases must be **separate** — incremental code editing drops facts because each session's code rewrite loses earlier facts. This is a concrete instantiation of the survey's general principle that memory mechanisms must distinguish **storage** from **representation**, with the representation regenerated from storage rather than edited in place.
+
+The boundary with the other memory patterns: [[context-files|AGENTS.md]] is a static, hand-authored context file. [[evolving-context|Learned context]] is a prompt/skill that improves over time. Executable memory is a typed, code-represented user model that the LLM writes itself and the interpreter executes — a strict superset where storage and verification share a medium.
+
 ## Relationship to Platform Concepts
 
 - The [[multi-tier-action-space]] pattern maps to the tool use taxonomy (Tier 1 = function-oriented, Tier 2 = environment-interaction)
@@ -111,6 +123,7 @@ A different axis of harness evolution: rather than editing the harness in place,
 - [[backpressure]] is the principle behind sandboxed execution and verified state transitions
 - [[self-harness]] — A propose-evaluate-accept loop that edits the harness in place: governed mutation with regression testing
 - [[recursive-agent-harness]] — The complementary pattern: spawn fresh harness instances per task rather than editing one in place
+- [[executable-memory]] — User memory as a harness mechanism: a two-phase pipeline (append-only memorize + periodic structure) that makes the user model a living software project
 
 ## Thread
 
@@ -138,3 +151,4 @@ A different axis of harness evolution: rather than editing the harness in place,
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §3: Harness Mechanisms — Planning, Memory, Tool Use, Control, and Optimization (pages 16–33). Defines the four-paradigm planning taxonomy, memory taxonomy, four tool use paradigms, the plan-execute-verify control loop, and §3.5 introduces agentic harness engineering with deep telemetry and governed mutation.
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang et al. (Shanghai AI Lab, 2026). Empirically instantiates §3.5's governed mutation principle with a concrete propose-evaluate-accept loop. Three-stage algorithm: Weakness Mining (verifier-grounded failure signatures), Harness Proposal (same model in proposer role, bounded edits), Proposal Validation (conservative acceptance rule on held-out regression tests). Held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0.
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). The complementary pattern: recursive harness instantiation. Parent agent writes executable code that spawns full subagent harnesses in parallel; the recursive unit is the harness, not the model call. Oolong-Synthetic gains from 71.75% (Codex) to 81.36% (RAH) with backbone held fixed.
+- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* User memory as a harness mechanism: a two-phase pipeline (append-only memorize + periodic structure) plus constraint execution. Concrete ablation isolates that the two phases must be separate (append-only +19pp on LOCOMO; periodic structure +12.3pp over incremental code). The interpreter is the verification boundary. 78.8% on LOCOMO, 99% on Analytical Inference, 100% on Active Service.

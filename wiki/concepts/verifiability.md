@@ -1,14 +1,15 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-06-16
+updated: 2026-06-18
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
   - raw/2407.08440v4.txt
   - raw/2504.21625v6.txt
   - raw/2603.25133v1.txt
-tags: [concept, ai-capability, reinforcement-learning]
+  - raw/2606.16707v1.txt
+tags: [concept, ai-capability, reinforcement-learning, executable-memory]
 unaudited_marginal: 0
 ---
 
@@ -72,6 +73,17 @@ Threads like [[the-human-lever]] and [[agent-quality-engineering]] each take a d
 
 Verifiability (the economic/capability argument) is distinct from [[verification-loop|verification loops]] (the mechanical process of testing AI output). Verifiability explains *why* AI is good at code — because code is auto-verifiable via tests and type checkers. Verification loops are the *mechanism* by which that verifiability is operationalized in a workflow.
 
+## Representation as the Verifiability Lever
+
+> [!note] Extension: The representation determines the reach of verifiability
+> The thesis argues that verifiability is a property of the *domain* (code is verifiable, aesthetics is not). The [[executable-memory|User as Code]] result (Bojie Li, Pine AI, 2026) extends this: **verifiability is also a property of the *representation***. A user model stored as free text is verifiable only by retrieval (a similarity search). A user model stored as typed Python is verifiable by the interpreter (a deterministic check). The same domain (user memory) yields 6% accuracy on aggregate queries when the representation is text and 99% accuracy when the representation is typed code. The capability gap is not in the model — it's in the representation.
+
+The thesis also implies that verifiability is **inherited from the domain**: code is verifiable because tests and types exist, retrieval isn't verifiable because there's no oracle for "did the right documents come back?" The UaC result adds a complementary move: **the representation can be deliberately structured to enable verification** — typed `date()` objects, deterministic constraints, a manifest with pre-computed alerts. This is the EARS+PBT insight applied to user memory: deliberately engineering the artifact for verifiability rather than waiting for the labs to train on it.
+
+The constraint runner in UaC is the verification boundary: the LLM is not in the loop at check time. Constraints are deterministic Python functions over typed state; the interpreter runs them at every state change. The 100% on Active Service scenarios is a direct result of moving verification off the LLM and onto the interpreter — the same mechanism that gives 88.3% on ContextCov's executable checks. The pattern generalizes: any time a check can be expressed as a deterministic function over a structured representation, the LLM should not be the verifier. The LLM is the *writer* of the check; the interpreter is the *runner*. This is the verifiability thesis operating at the architectural level: a clear separation between "the LLM proposes" and "the deterministic system verifies."
+
+The 99% vs 6% gap on analytical inference is the most concrete empirical evidence for this extension: the same data, the same model, the same question — only the representation differs. The representation is the lever, not the model.
+
 ## Thread
 
 - [[the-verifiability-thesis]] — Verifiability is the root mechanism of this thread; this page is the concept it's built around
@@ -105,6 +117,8 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - [[semi-formal-reasoning]] — Structured evidence certificates enable execution-free verification; patch equivalence accuracy improves from 78% to 88% by mandating premises and execution traces
 - [[aiming-problem]] — Verification agents are a tuning mechanism for the aiming problem: by tuning what verification checks catch, you aim the system toward the desirable subset
 - [[self-harness]] — The acceptance rule relies on the verifiability principle: trustworthy pass/fail signals are the substrate for self-evolution
+- [[executable-memory]] — Concrete evidence that verifiability is a property of representation, not just domain. Typed Python + interpreter = 99% on aggregate queries where text + retrieval = 6%. The interpreter is the verification boundary; the LLM is not in the loop at check time.
+- [[proactive-service]] — The constraint runner is the verification mechanism for proactive alerts: deterministic Python functions over typed state, fired on every state change, surfacing 100% of standard Active Service scenarios
 
 ## Sources
 
@@ -113,3 +127,4 @@ Verifiability (the economic/capability argument) is distinct from [[verification
 - `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual rules reveal that verifiability of the rule text doesn't guarantee the model follows it — parametric knowledge dominates
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided evaluation demonstrates that near-perfect verification is achievable, but convergence remains elusive
 - `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): rubric-level meta-evaluation showing that even in structurally verifiable domains with structured rubrics, the LLM judge (verifier) may be unreliable at fine granularity (GPT-4o: 55.97% on hard cases) — adds a second-order constraint to the verifiability thesis: verifier capability bounds verifiability
+- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete evidence that verifiability is a property of representation, not just domain. Same data, same model, same question: 99% on aggregate queries with typed Python + interpreter vs 6% with text + retrieval. 100% on Active Service with constraint pipeline. The LLM is the writer of the constraint; the interpreter is the runner. This is the verifiability thesis at the architectural level: clear separation between "the LLM proposes" and "the deterministic system verifies."
