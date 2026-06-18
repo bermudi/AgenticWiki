@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-06-16
+updated: 2026-06-17
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -13,6 +13,7 @@ sources:
   - raw/2603.25133v1.txt
   - raw/bias-in-the-loop-llm-judge-code.md
   - raw/2605.18747.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 0
 ---
@@ -201,6 +202,7 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - [[verifiability]] — The economic theory that explains why evals work: LLMs automate what you can verify
 - [[contextcov]] — ContextCov's empirical framework (compliance metrics, feedback cost, functional correctness) is a quality engineering methodology for deterministic enforcement; its finding that LLM reflection degrades compliance is a cautionary result for eval design
 - [[self-harness]] — The held-in/held-out split and conservative acceptance rule are quality infrastructure for the self-evolution loop
+- [[harnessx]] — AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies (reward hacking, catastrophic forgetting, under-exploration) are what the flywheel is *for* — they make the failure modes explicit and the defenses auditable. The trace store T is the observability substrate that makes the flywheel operational.
 
 ## Sources
 
@@ -214,3 +216,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): quantified evidence for LLM-as-judge reliability limits at rubric-level granularity; paradigm comparison (rubric-level vs. checklist-level, with/without reasoning — 7–12 point gap); inter-judge variance analysis (judge selection shifts scores by up to 25 points)
 - `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): systematic threat to eval pipelines from 12 prompt-induced biases acting as directional positional priors; same judge + same code produces drastically different scores based on prompt framing and candidate order
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Proposes harness-level evaluation metrics (§5.2.1) that complement the quality loop by evaluating the operational substrate rather than only end-task success
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies are the failure modes the flywheel is designed to defend against. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.

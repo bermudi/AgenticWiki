@@ -1,12 +1,13 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-06-16
+updated: 2026-06-17
 sources:
   - raw/2605.18747.pdf
   - raw/self-harness-harnesses-that-improve-themselves.txt
   - raw/recursive-agent-harnesses.txt
-tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion]
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion, harness-co-evolution, operational-mirror]
 unaudited_marginal: 0
 ---
 
@@ -54,6 +55,16 @@ The solution the survey proposes: treat every harness mutation like a code chang
 > [!note] Update: Self-Harness Instantiation
 > The [[self-harness]] paper (Zhang et al., Shanghai AI Lab, 2026) provides a concrete instantiation of this open problem. A three-stage loop — **Weakness Mining** (cluster failed traces by verifier-grounded failure signatures), **Harness Proposal** (same model in a proposer role generates bounded edits tied to specific mechanisms), **Proposal Validation** (regression-tested on a held-out split; conservative acceptance rule: improve at least one split without degrading the other) — produces empirical gains of 14–21 percentage points absolute on Terminal-Bench-2.0 held-out tasks across three diverse base models. The harness lineage becomes auditable: each transition is a bounded edit with explicit change contract, held-out regression evidence, and accept/reject decision.
 > The proposed solution tracks the survey's "change contract" framework with high fidelity: bounded edits rather than free rewrites, regression suites, evidence-carrying evolution, and rollback semantics (rejected edits are logged but do not change the active harness). The remaining ceiling is exactly where the survey predicts: oracle adequacy. If the verifier is wrong about why a task failed, weakness mining produces misleading evidence. Self-Harness does not solve the bootstrapping problem — it relies on trustworthy verifiers as a substrate. The self-improvement ceiling still applies, but its operational floor is now an empirical question rather than a purely theoretical one.
+
+> [!note] Update: HarnessX as the Most Complete Instantiation
+> The [[harnessx]] paper (Darwin Agent Team, arXiv 2606.14249v1, June 2026) extends the Self-Harness instantiation in three orthogonal directions:
+> 1. **Typed composition** — the harness is formalized as a first-class object `H = (M, C)` with a **processor abstraction** (one of five outcomes: pass-through, transform, split, intercept, interrupt), **eight hook points** with permitted-modification contracts, and a **nine-dimension taxonomy** (D1 model selection → D9 training bridge). The substitution algebra allows AEGIS to insert, replace, or remove processors without touching other processors — the typed structure makes the *intended scope* of each edit explicit.
+> 2. **The [[operational-mirror|operational mirror]]** — a formal correspondence between symbolic harness evolution and reinforcement learning that predicts three concrete failure modes: **reward hacking**, **catastrophic forgetting**, **under-exploration**. Each pathology maps to a specific architectural defense (Critic, deterministic gating layer, Planner). The mirror is a design heuristic, not a predictive theory — it identifies what to defend against, not what will happen or when.
+> 3. **[[harness-model-co-evolution|Harness-model co-evolution]]** — interleaves AEGIS harness evolution with model RL (cross-harness GRPO) over a shared replay buffer. The evolving harness acts as a structured exploration operator for the model's RL: each new H version injects a distinct mode of behavior into the sampling distribution. Adds +4.7% beyond harness-only evolution on Qwen3.5-9B across GAIA and WebShop, with no additional rollouts.
+>
+> The combination is the most complete instantiation of §5.2.3 to date: typed composition enables safe programmatic mutation, the operational mirror formalizes what can go wrong, AEGIS is the four-stage defense architecture, the seesaw constraint enforces non-regression, and cross-harness GRPO breaks the scaffolding/training-signal ceilings. Across 5 benchmarks and 3 model families, 14 of 15 model-benchmark configurations improve (average +14.5%, peak +44.0%). The [[variant-isolation]] ablation resolves the catastrophic-forgetting failure on heterogeneous task sets (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) — but it requires the typed composition that makes scope explicit.
+>
+> The remaining open question — exactly the survey's oracle-adequacy concern (§5.2.1) — is now sharper. The three operational-mirror pathologies only matter if verifiers are trustworthy. From HarnessX §7.3: "The RL–symbolic-space mirror is a design heuristic, not a formal framework." The mirror identifies what to defend against, not what will happen or when. The bootstrapping problem persists.
 
 ### 4. Transactional Shared Program State (§5.2.4)
 
@@ -115,6 +126,10 @@ The survey concludes with four properties that define the next frontier for reli
 - [[evolving-context]] — Self-evolving harnesses (§5.2.3) are the next frontier of evolving context — the agent improving the harness, not just its own prompts
 - [[self-harness]] — The Self-Harness paper instantiates the §5.2.3 open problem with a concrete propose-evaluate-accept loop and empirical results; gain attributable to the harness, not the model
 - [[recursive-agent-harness]] — The complementary pattern: rather than editing the harness in place, recurse over fresh harness instances for long-context workloads
+- [[harnessx]] — HarnessX is the most complete instantiation of §5.2.3 to date: typed composition + [[operational-mirror]] + AEGIS + [[variant-isolation]] + [[harness-model-co-evolution]]; +14.5% average / +44.0% peak across 5 benchmarks and 3 model families
+- [[operational-mirror]] — The RL ↔ symbolic-space correspondence that predicts three pathologies (reward hacking, catastrophic forgetting, under-exploration) and motivates AEGIS's three architectural defenses
+- [[variant-isolation]] — The ensemble routing strategy that resolves the catastrophic-forgetting failure on heterogeneous task sets (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4)
+- [[harness-model-co-evolution]] — The cross-harness GRPO loop that breaks the scaffolding ceiling (harness-only) and training-signal ceiling (model-RL-only); +4.7% over harness-only
 
 ## Thread
 
@@ -136,9 +151,15 @@ The survey concludes with four properties that define the next frontier for reli
 - [[delegate-52]] — Long-horizon benchmarks that expose harness-level failures
 - [[self-harness]] — Concrete instantiation of the §5.2.3 self-evolution open problem; propose-evaluate-accept loop with empirical results on Terminal-Bench-2.0
 - [[recursive-agent-harness]] — Alternative to in-place harness evolution: recurse over fresh harness instances for long-context workloads
+- [[harnessx]] — The most complete instantiation of §5.2.3 to date; typed composition + [[operational-mirror]] + AEGIS + [[variant-isolation]] + [[harness-model-co-evolution]]
+- [[operational-mirror]] — The theoretical framework (RL ↔ symbolic space) that motivates AEGIS's three architectural defenses
+- [[variant-isolation]] — The ensemble routing strategy that resolves the catastrophic-forgetting pathology on heterogeneous task sets
+- [[harness-model-co-evolution]] — The cross-harness GRPO loop that closes the harness–model optimization cycle
+- [[darwin-agent-team]] — The author team behind HarnessX
 
 ## Sources
 
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §5: Emerging Fields and Open Problems (pages 49–66). Establishes the seven open problems including self-evolving harnesses without regression (§5.2.3).
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Provides the first concrete instantiation of the §5.2.3 open problem: a propose-evaluate-accept loop with weakness mining, harness proposal, and conservative regression testing. Empirical held-out gains of 14.2–21.4 percentage points absolute on Terminal-Bench-2.0 across MiniMax M2.5, Qwen3.5-35B-A3B, and GLM-5.
 - `raw/recursive-agent-harnesses.txt` — Lumer, Sen, Paul, Subbiah (PwC, 2026). *Recursive Agent Harnesses.* Complementary pattern: rather than editing the harness in place, recurse over fresh harness instances via code-driven parallel spawning. Demonstrates that harness architecture is a primary performance lever independent of the model.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). The most complete instantiation of §5.2.3 to date: typed composition (processor abstraction, eight hook points, nine-dim taxonomy) + [[operational-mirror]] (RL ↔ symbolic-space correspondence; three predicted pathologies) + AEGIS (Digester → Planner → Evolver → Critic with deterministic gating) + [[variant-isolation]] (ensemble routing, +13.6pp on GAIA GPT-5.4) + [[harness-model-co-evolution]] (cross-harness GRPO, +4.7pp over harness-only). +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.

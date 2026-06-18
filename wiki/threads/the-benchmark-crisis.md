@@ -1,11 +1,12 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-17
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution]
 unaudited_marginal: 0
 ---
@@ -107,8 +108,14 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 > [!warning] Harness Effect
 > All DeepSWE results use mini-swe-agent (single bash tool, shared prompt). This standardizes the comparison but doesn't reflect how developers actually use models. Claude Code, Cursor, and Codex CLI each have model-specific system prompts and editing primitives that may significantly affect performance. DeepSWE's pilot showed mini-swe-agent matches or beats native harnesses on a subset of tasks, but the comparison is limited in scope.
 
+> [!note] Extension: Benchmark substrate must be trace-rich to support harness evolution
+> The [[harnessx|HarnessX]] paper (Darwin Agent Team, arXiv 2606.14249v1, 12 June 2026) sharpens the thread's "[[benchmark-contamination|benchmark contamination]]" concern into a *runtime contamination* problem: if the harness can be evolved against the benchmark trace, the benchmark itself becomes the optimization target, and the [[reward-hacking|reward-hacking]] pathology becomes possible. The paper's §7.2 finding — "the richness of the feedback signal bounds the sophistication of evolution that can be safely performed. From scalar reward alone, none of the three pathologies is detectable" — is a *benchmark-design principle*: **benchmarks with only scalar rewards cannot be safely evolved against**. A new class of *evolution-safe* benchmarks is required, with rich traces, behavior-level verifiers, and multi-channel feedback. DeepSWE's "transparent rollouts" and [[evoarena|EvoArena's]] "chain accuracy" metric are steps in this direction; the wiki should consolidate them.
+>
+> The [[variant-isolation|variant isolation]] result (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is also relevant: ensemble routing scopes the per-task set each variant sees, allowing K harnesses to evolve in parallel without cross-task interference. This is a *form of environment-aware evolution* — the system implicitly recognizes that no single harness is optimal across heterogeneous task sets, paralleling [[evoarena|EvoArena's]] "fourth axis" (persistent environment evolution). The wiki should note that [[harnessx]] inherits the same "no held-out evaluation" limitation as [[deepswe|DeepSWE]] and [[evoarena|EvoArena]]: all reported gains are measured on the adaptation set, with potential overfitting. The benchmarks are not just broken; they are *substrates* for an optimization loop that is also constrained by the same measurement problem.
+
 ## Sources
 
 - `raw/deepswe-benchmark.md` — Datacurve's full benchmark description, methodology, audit results, and qualitative analysis
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective, SWE-bench Pro criticism, call for community benchmarks, cost/token analysis
 - `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "trace-rich benchmarks required" extension. §4.2 (the [[operational-mirror|operational mirror]]'s [[reward-hacking|reward-hacking]] pathology is enabled by scalar-reward benchmarks), §4.5 ([[variant-isolation]] ensemble routing as environment-aware evolution on heterogeneous task sets), §6.3 (Global 49.5% vs. Ensemble 87.4% on GAIA GPT-5.4), §7.2 ("the richness of the feedback signal bounds the sophistication of evolution that can be safely performed"), §7.7 (no held-out evaluation; same measurement limitation as DeepSWE and EvoArena).

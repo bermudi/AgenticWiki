@@ -1,14 +1,15 @@
 ---
 title: Code as Agent Harness
 created: 2026-05-21
-updated: 2026-06-18
+updated: 2026-06-17
 sources:
   - raw/2605.18747.pdf
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/recursive-agent-harnesses.txt
   - raw/2606.16707v1.txt
   - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
-tags: [concept, agent-harness, architecture, code-centric, harness-recursion, executable-memory]
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+tags: [concept, agent-harness, architecture, code-centric, harness-recursion, executable-memory, typed-composition]
 unaudited_marginal: 0
 ---
 
@@ -68,6 +69,7 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - The [[recursive-agent-harness]] is the code-as-action extension applied to multi-agent orchestration: the parent writes executable code that instantiates subagents in parallel. This is the framework's "code for acting" instantiated at the parent-child level — the script is the action that produces many subagent harnesses.
 - [[executable-memory]] (User as Code, Bojie Li, Pine AI 2026) is the framework's "code for environment modeling" instantiated at the user-model layer: the agent's model of the user is a living software project (typed Python state + Python functions encoding rules) maintained by a two-phase pipeline. Memory operations become file-system actions; the interpreter is the verification boundary. This is the most concrete case study yet of code as the operational substrate for the agent's working environment.
 - [[evomem]] (EvoArena paper, Xu et al., NUS + collaborators, June 2026) is the framework's "code for environment modeling" applied to memory evolution: a structured patch record (typed fields: timestamp, before-state, after-state, rationale, summary, evidence) augments any base memory system with an append-only evolution trace. The patch is itself a code artifact that the agent inspects, indexes, and retrieves at query time. Composes with [[executable-memory]]: an executable-memory agent could use EvoMem to track how its typed Python state evolved across structuring regenerations.
+- [[harnessx]] (Darwin Agent Team, arXiv 2606.14249v1, June 2026) is the most concrete **foundry** to instantiate the code-as-harness framework: the harness is a code-shaped first-class object `H = (M, C)`, the substitution algebra is a code operation, and the trace substrate is the optimization signal. The **typed composition** principle (processor abstraction, eight hook points with permitted-modification contracts, nine-dimension taxonomy) generalizes the "code for environment modeling" property from data to the agent's runtime interface itself. The operational mirror (RL ↔ symbolic-space correspondence) is the theoretical structure that the framework's open problems (§5.2.3 self-evolution, §5.2.1 harness-level evaluation) have been waiting for.
 
 ## Thread
 
@@ -96,6 +98,11 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - [[evomem]] — The code-for-environment-modeling extension applied to memory evolution: structured patch records that preserve the change history of any memory as inspectable, indexable, retrievable code artifacts
 - [[bojie-li]] — Author of User as Code, the implementation of executable memory
 - [[jundong-xu]] — Lead author of EvoArena, the implementation of EvoMem
+- [[harnessx]] — The most concrete foundry instantiating the code-as-harness framework; typed composition + [[operational-mirror]] + AEGIS four-stage pipeline + [[variant-isolation]] + [[harness-model-co-evolution]]
+- [[operational-mirror]] — The RL ↔ symbolic-space correspondence that motivates AEGIS's three named architectural defenses
+- [[variant-isolation]] — The ensemble routing strategy that requires typed composition; resolves the catastrophic-forgetting failure on heterogeneous task sets
+- [[harness-model-co-evolution]] — The cross-harness GRPO loop that closes the harness–model optimization cycle
+- [[darwin-agent-team]] — The author team behind HarnessX
 
 ## Sources
 
@@ -104,3 +111,4 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Operationalizes the code-as-harness framework for multi-agent orchestration: the parent agent writes executable code that instantiates subagent harnesses in parallel. Empirically demonstrates that code-driven spawning is a primary performance lever: 71.75% → 81.36% on Oolong-Synthetic with backbone held fixed.
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* Operationalizes the code-as-harness framework for the user model. The two-phase pipeline (append-only memorize + periodic structure) is a harness mechanism; the typed Python state is the harness interface (code for environment modeling); the constraint pipeline is harness control (deterministic verification). The LLM writes its own schemas, domain partitioning, and constraints. 78.8% on LOCOMO (within 1.0pp of full-context upper bound), 99% on Analytical Inference (vs 6–43% for retrieval baselines), 100% on Active Service.
 - `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Operationalizes the code-as-harness framework for memory evolution. The patch record (typed fields: timestamp, before-state, after-state, rationale, summary, evidence) is a structured code artifact that the agent inspects, indexes, and retrieves at query time — code for environment modeling applied to memory change provenance. The patch layer is harness infrastructure (non-invasive annotation that monitors non-additive updates); patch-augmented retrieval is harness control (selective retrieval when version-specific reasoning is required). Composes with [[executable-memory]]: an executable-memory agent could use EvoMem to track how its typed Python state evolved across structuring regenerations. Improves chain accuracy +6.1pp on Terminal-Bench-Evo.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* The most concrete **foundry** instantiating the code-as-harness framework: harness is a code-shaped first-class object `H = (M, C)`, substitution algebra is a code operation, trace substrate is the optimization signal. Extends the framework with **typed composition** (processor abstraction, eight hook points, nine-dimension taxonomy), the **[[operational-mirror]]** (RL ↔ symbolic-space correspondence with three named pathologies), the **AEGIS** four-stage pipeline (Digester → Planner → Evolver → Critic), [[variant-isolation]] ensemble routing, and [[harness-model-co-evolution]] cross-harness GRPO. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.

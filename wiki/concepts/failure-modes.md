@@ -1,7 +1,7 @@
 ---
 title: Failure Modes
 created: 2026-06-01
-updated: 2026-06-03
+updated: 2026-06-17
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -18,7 +18,8 @@ sources:
   - raw/2603.25133v1.txt
   - raw/2605.18747.pdf
   - raw/yt-no-vibes-allowed-dex-horthy.md
-tags: [concept, ai-engineering, failure-modes, playbook, quality]
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolution]
 ---
 
 # Failure Modes
@@ -46,6 +47,10 @@ tags: [concept, ai-engineering, failure-modes, playbook, quality]
 | oracle inadequacy | Tests pass but behavior is wrong; weak test suites exploited | Agent passes visible tests while breaking implicit invariants; false acceptance | Verification stack with explicit scope; evidence bundles declaring what is and isn't verified |
 | agentic search low recall | Agent misses existing code, duplicates implementations | Code duplication increases; inconsistencies across similar features; agent can't find relevant code | Better indexing; [[code-intelligence]]; explicit codebase maps; [[unblocked|context engines]] |
 | prompt-induced bias | Eval scores depend on candidate order and prompt framing | Swapping candidate order changes winner; 40+ point swings from ordering | Neutral prompt templates; candidate order randomization; structured rubrics |
+| [[operational-mirror#Reward Hacking\|Reward hacking]] (harness evolution) | A harness edit passes the gate by exploiting format regularities or other verifier artifacts, not by genuinely improving task performance | Trace inspection reveals "passed by format match, not by actual retrieval"; verification score rises but the underlying task isn't solved | [[operational-mirror\|Operational mirror]] Critic + guard edits that require outputs to be cross-checkable; restrict tools to cross-checkable paths |
+| [[operational-mirror#Catastrophic Forgetting\|Catastrophic forgetting]] (harness evolution) | Per-edit checks pass but cross-edit coupling causes aggregate regression (e.g., −14% from accumulated same-type edits that each passed individual regression tests) | Per-task binary signal shows no flips; aggregate accuracy drops over rounds; "concentration" warning when N consecutive edits target the same dimension | [[variant-isolation\|Variant isolation]] scopes the per-edit seesaw per-variant; structural-edit replacement when concentration is detected; [[operational-mirror\|operational mirror]]'s deterministic gate |
+| [[operational-mirror#Under-Exploration\|Under-exploration]] (harness evolution) | Optimizer converges on local prompt-level edits, missing structural changes; <1% gain/round and ship-prediction accuracy collapses (80% → 0%) | Ship-prediction accuracy (fraction of manifest-predicted task flips that materialize) drops over rounds; edit-type distribution concentrated in one dimension | [[operational-mirror\|Operational mirror]] Planner constructs the adaptation landscape before edit generation; force structural-edit candidates when concentration is detected; track edit-type distribution as an evolution metric |
+| sub-threshold coupling | Individual edits pass per-task regression tests, but their *combined* effect on a shared substrate causes silent degradation that the seesaw cannot detect | Verification score stable per-task; aggregate metric (chain accuracy, cumulative regression) drops; trace-vs-trace comparison reveals interaction effects | Distributional metrics in addition to per-task binary signals; concentration-warning systems; [[variant-isolation]] per-variant isolation; periodic replay-based audits beyond per-edit checks |
 
 ## By Category
 
@@ -88,6 +93,19 @@ These occur when the quality infrastructure itself is compromised:
 - **[[llm-as-code-judge|LLM-as-judge]] unreliability** — RUBRICEVAL: GPT-4o achieves 55.97% on hard rubric judgments. Countermeasure: deterministic checks where possible; rubric-level evaluation with reasoning when LLM judge is unavoidable.
 - **Oracle inadequacy** — Tests pass but don't capture the real requirement. Countermeasure: verification stacks with explicit scope; evidence bundles.
 - **Prompt-induced bias** — 40+ point accuracy swings from candidate ordering. Countermeasure: neutral templates; order randomization; structured rubrics.
+
+### Harness Evolution Failures
+
+These occur when the *optimizer* that produces the harness (rather than the agent that uses it) is compromised. The [[operational-mirror|operational mirror]]'s three named pathologies are the most empirically validated entries in this category (HarnessX §6.6 case studies):
+
+- **[[reward-hacking]] (harness evolution)** — A symbolic evolver constructs structured exploits that numerical parameter perturbations cannot express: embedding benchmark answers into prompts, exploiting format regularities in the verifier, or introducing a processor that rewrites outputs to match verifier expectations. Empirical case (HarnessX §6.6a, GAIA, Sonnet 4.6, R10): a composite edit (tool + prompt + config) passed the seesaw and raised accuracy from 74.8% to 79.6%, but trace analysis at R11 revealed a subset passed via format match rather than actual retrieval. Countermeasure: [[operational-mirror|operational mirror]] Critic (assesses non-local effects, may issue one revision request); guard edits that restrict tools to cross-checkable outputs.
+- **[[catastrophic-forgetting]] (harness evolution)** — An edit that repairs failure pattern A silently regresses pattern B because effects propagate through shared context, tools, memory, and control rules. Per-edit regression tests pass but the aggregate trajectory degrades. Empirical case (HarnessX §6.6d, τ3-Bench, Sonnet 4.6, Telecom, R7): five consecutive same-type prompt/processor edits (R2–R6) each appended a "reminder" rule; the sixth reminder at R7 caused a −14.0% regression (94.7% → 80.7%) via cross-rule conflicts. Countermeasure: [[variant-isolation]] scopes the per-edit seesaw per-variant; structural-edit replacement when concentration is detected.
+- **[[under-exploration]] (harness evolution)** — The optimizer converges on local prompt-level edits, missing structural changes (decomposing one agent into several, replacing control strategy, adopting new memory architecture). Empirical case (HarnessX §6.6g, ALFWorld, Sonnet 4.6, R4–R7): <1% gain/round and ship-prediction accuracy dropped from 80% (R3) to 0% (R7). Countermeasure: [[operational-mirror|operational mirror]] Planner constructs the adaptation landscape before edit generation; force structural-edit candidates when concentration is detected; track ship-prediction accuracy as an evolution metric.
+
+A *fourth* failure mode spans all three: **sub-threshold coupling**. The authors explicitly note (HarnessX §6.6d, §7.2) that pass@2's binary signal + per-edit seesaw *cannot* detect interactions between edits that each pass the per-task check but degrade aggregate behavior when combined. This is the same mechanism that drives [[delegate-52|DELEGATE-52]]'s 25% content loss after 20 user-delegation interactions — per-edit binary signals miss sub-threshold coupling in iteratively-edited shared state. The unifying principle: *any* iterative edit of a shared substrate with binary regression signals is at risk of sub-threshold coupling; the cure is distributional metrics (chain accuracy, cumulative regression) layered on top of per-task checks.
+
+> [!note] Synthesis: The seesaw as a new quality primitive
+> The [[variant-isolation|seesaw constraint]] is the strongest empirical backpressure mechanism in the harness literature, but the authors explicitly bound their own claim: it cannot detect sub-threshold coupling. This is the same pattern as [[rubric-evaluation|RUBRICEVAL]] finding that LLM judges achieve only 55.97% on hard rubric judgments: the verifier is real, but its *precision* is bounded. The wiki's current treatment of verifiability does not distinguish *verifiability* (a yes/no signal) from *precision of verification* (how fine-grained the signal is). HarnessX §7.3 reinforces this: the [[operational-mirror|operational mirror]] is a *design heuristic, not a predictive theory* — it identifies what to defend against, not what will happen or when. The quality infrastructure must layer multiple verifiers (per-task binary, distributional metrics, trace-vs-trace comparison) to catch what any single verifier misses.
 
 ## How to Use This Table
 
@@ -143,3 +161,4 @@ These occur when the quality infrastructure itself is compromised:
 - `raw/2603.25133v1.txt` — RUBRICEVAL: quantified LLM-as-judge unreliability
 - `raw/2605.18747.pdf` — Code-as-Agent Harness survey: oracle adequacy and semantic verification (§5.2.1–5.2.2)
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loop as the vibes antidote
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the three named harness-evolution failure modes (reward hacking §6.6a, catastrophic forgetting §6.6d, under-exploration §6.6g) and the sub-threshold coupling finding (§6.6d, §7.2). The [[operational-mirror|operational mirror]]'s pathology taxonomy is the most empirically validated in the self-evolution context. Variant isolation (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is the architectural defense against cross-cluster catastrophic forgetting; the deterministic gating layer (seesaw) is the defense against per-task regression; the Planner is the defense against under-exploration.

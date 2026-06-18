@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-18
+updated: 2026-06-17
 sources:
   - raw/2605.18747.pdf
   - raw/deepswe-benchmark.md
@@ -19,6 +19,7 @@ sources:
   - raw/2606.16707v1.txt
   - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
   - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -37,6 +38,7 @@ unaudited_marginal: 0
 - `raw/open-knowledge-format-spec-v0.1.md` — The OKF v0.1 specification itself; one required field (type), two reserved filenames, three conformance criteria, permissive-consumption MUST NOT clause
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* The two-phase pipeline, three capability tiers, generate-verify-review loop, manifest pattern, Active Service benchmark, Analytical Inference benchmark, Modularity ablation. 78.8% on LOCOMO, 99% on Analytical Inference, 100% on Active Service. New concept pages (executable-memory, proactive-service), author (bojie-li), updates to code-as-agent-harness, harness-mechanisms, jagged-frontier, verifiability, evolving-context, code-intelligence.
 - `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, 2026). *EvoArena.* Benchmark suite for persistent environment evolution (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo) + EvoMem patch-based memory paradigm. Names state-collapse failure mode. Introduces chain-accuracy metric (base drop 22.1pp from step to chain on Terminal-Bench-Evo). EvoMem improves chain accuracy +6.1pp average on Terminal-Bench-Evo, +2.9pp on SWE-Chain-Evo, +3.0pp on PersonaMem-Evo. Mechanism analysis: gain jumps from +2.6% to +8.3% when agents operationalize retrieved patches. New pages: evoarena, evomem, state-collapse, chain-accuracy, jundong-xu. Updates to evolving-context, harness-mechanisms, code-as-agent-harness, the-benchmark-crisis.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, arXiv 2606.14249v1, 12 June 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* A foundry for typed, composable, and trace-evolved agent harnesses. The harness is a first-class object H = (M, C) with a processor abstraction, eight hook points with permitted-modification contracts, and a nine-dimension taxonomy (D1 model selection → D9 training bridge). AEGIS is a four-stage evolution engine (Digester → Planner → Evolver → Critic) grounded in the operational mirror between symbolic adaptation and RL, with three named pathologies (reward hacking, catastrophic forgetting, under-exploration) and corresponding architectural defenses. The deterministic gating layer enforces the seesaw constraint. Variant isolation (ensemble routing, up to K variants) resolves the catastrophic-forgetting failure on heterogeneous task sets: Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4 (-24.3pp peak-final gap closed). Cross-harness GRPO interleaves harness evolution with model RL over a shared replay buffer, adding +4.7% over harness-only evolution on Qwen3.5-9B. 14 of 15 model-benchmark configurations improve (average +14.5%, peak +44.0%); inverse-scaling pattern (weaker models gain most). New pages: harnessx, operational-mirror, variant-isolation, harness-model-co-evolution, darwin-agent-team. Updates to harness-engineering (most complete §5.2.3 instantiation), harness-mechanisms (typed composition axis), self-harness (comparison note), code-as-agent-harness (concrete foundry), agent-quality-engineering thread (AEGIS as feedback flywheel).
 
 # Index
 
@@ -107,6 +109,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[soyeong-jeong]] — Co-author of MemRefine (KAIST)
 - [[sung-ju-hwang]] — Corresponding author of MemRefine (KAIST, DeepAuto.ai)
 - [[jundong-xu]] — Lead author of *EvoArena* (NUS + collaborators, 2026); co-creator of the EvoArena benchmark and EvoMem patch-based memory paradigm; names state-collapse as a distinct failure mode
+- [[darwin-agent-team]] — Author team behind HarnessX (Chen, Lu, Zhao, Meng, Shao, Luan et al., arXiv 2606.14249v1, 12 June 2026); introduced typed composition, the operational mirror, AEGIS, variant isolation, and harness-model co-evolution; +14.5% average / +44.0% peak across 5 benchmarks and 3 model families
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -130,6 +133,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[harness-interface]] — The harness interface where code connects agents to reasoning, action, and environment modeling.
 - [[harness-mechanisms]] — Planning, memory, tool use, control, and optimization that sustain code-centric agents.
 - [[harness-engineering]] — Self-evolving harnesses, harness-level evaluation, and the open problems of building reliable agent systems.
+- [[harnessx]] — A foundry for composable, adaptive, and evolvable agent harnesses; the harness as a first-class typed object, evolved via AEGIS (a four-stage trace-driven engine grounded in the operational mirror), and coupled with the model via cross-harness GRPO. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families
+- [[operational-mirror]] — The formal correspondence between symbolic harness evolution and reinforcement learning; predicts three concrete failure modes (reward hacking, catastrophic forgetting, under-exploration) with corresponding architectural defenses
+- [[variant-isolation]] — Ensemble routing strategy that maintains up to K harness variants and routes each task to the variant with highest estimated success rate; resolves the catastrophic-forgetting failure on heterogeneous task sets (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4)
+- [[harness-model-co-evolution]] — Cross-harness GRPO loop that interleaves AEGIS harness evolution with model RL over a shared replay buffer; breaks the scaffolding ceiling (harness-only) and training-signal ceiling (model-RL-only); +4.7% over harness-only on Qwen3.5-9B
 - [[agent-floor]] — Harvard 6-tier benchmark isolating tool-use complexity from real-world confounds; small models match frontier through tier C, all collapse at long-horizon planning.
 - [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as the practical craft of tooling for agents.
 - [[agent-observability]] — Logs, traces, and metrics for agent decision chains.
@@ -138,6 +145,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[backpressure]] — Engineering the environment so wrong agent outputs are mechanically rejected.
 - [[blind-panic]] — Failure mode where an LLM executes persistently but degenerates into looping and tool hallucination when pushed beyond its planning horizon.
+- [[catastrophic-forgetting]] — A predicted pathology in the [[operational-mirror|operational mirror]] for symbolic harness evolution: per-edit checks pass but cross-edit coupling causes aggregate regression (e.g., −14% from accumulated same-type edits that each passed individual regression tests). The [[variant-isolation|seesaw]] cannot detect sub-threshold coupling
 - [[chain-accuracy]] — Evaluation metric where a model is credited only if it solves every step in an evolution chain; the gap from step accuracy is the headline finding of EvoArena
 - [[code-intelligence]] — Semantic understanding of code to provide high-fidelity context.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
@@ -176,6 +184,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[proactive-service]] — The capability tier in which an agent surfaces an unsolicited alert driven by a state change, not a user query; the defining property is the initiation asymmetry
 - [[procedural-knowledge]] — The cognitive science framing of procedural memory mapped to agent skill files; distinct from semantic (RAG) and episodic (conversation logs) knowledge.
 - [[ralph-loop]] — Minimalist autonomous agent loop: dumb bash loop, plan file as shared state, one task per iteration.
+- [[reward-hacking]] — A predicted pathology in the [[operational-mirror|operational mirror]]: an optimizer constructs a structured exploit of the verification signal that produces high scores without genuinely completing the task. Empirically confirmed in [[harnessx]] §6.6(a) and §6.6(c)
 - [[rubric-evaluation]] — Evaluating LLM outputs at the rubric level; RUBRICEVAL finds even frontier models struggle with fine-grained LLM-as-judge (GPT-4o: 55.97% on hard cases).
 - [[round-trip-relay]] — Reference-free evaluation method chaining reversible edits to measure long-horizon degradation.
 - [[rule-following]] — Obeying developer-specified rules across conversations; alignment tuning often hurts, and performance has zero correlation with standard benchmarks.
@@ -206,6 +215,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[temporal-smoothing]] — A failure mode where AI presents speculative or future work as completed reality.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
+- [[under-exploration]] — A predicted pathology in the [[operational-mirror|operational mirror]]: the optimizer converges on local prompt-level edits, missing structural changes. Detection signal: ship-prediction accuracy decay (e.g., 80% → 0%). Empirically confirmed in [[harnessx]] §6.6(g–i)
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[verifiability]] — Karpathy's framework: LLMs automate what you can verify; the driver of jagged AI capability.
 - [[vibe-coding]] — The term Karpathy coined: coding where you fully trust the LLM's output. Raises the floor for everyone.

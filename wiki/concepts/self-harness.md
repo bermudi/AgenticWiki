@@ -1,9 +1,10 @@
 ---
 title: Self-Harness
 created: 2026-06-16
-updated: 2026-06-16
+updated: 2026-06-17
 sources:
   - raw/self-harness-harnesses-that-improve-themselves.txt
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
 tags: [concept, agent-harness, self-evolution, harness-engineering, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -126,7 +127,44 @@ In domains where higher-stakes harness changes matter, the rule is the floor, no
 - [[recursive-agent-harness]] — The complementary pattern: same model, but recursing over the harness rather than editing it
 - [[babysitter-agent]] — The babysitter manages the agent's context; Self-Harness manages the agent's harness — the same invisible-maintenance pattern at different layers
 - [[software-factory]] — Software factories automate spec-to-software; Self-Harness automates harness-engineering — both self-optimization at different layers of the stack
+- [[harnessx]] — Extends Self-Harness with typed composition, [[operational-mirror]] pathology taxonomy, [[variant-isolation]] ensemble routing, and [[harness-model-co-evolution]]; the more powerful but more architecturally demanding alternative
+
+## Self-Harness vs. HarnessX: A Comparison
+
+The [[harnessx]] paper (Darwin Agent Team, arXiv 2606.14249v1, June 2026) generalizes the Self-Harness paradigm in three orthogonal ways. Both are concrete instantiations of the [[harness-engineering]] §5.2.3 open problem; both rely on the same model as agent and proposer; both produce regression-tested bounded edits. They differ in three areas:
+
+### 1. Harness substrate: opaque string vs. typed object
+- **Self-Harness** treats the harness as an opaque configuration (a prompt template, a set of tool definitions, a control policy) and edits it as a string. The proposer generates edits by string manipulation, and the acceptance rule is a black-box regression test.
+- **HarnessX** treats the harness as a **first-class typed object** `H = (M, C)` with a **processor abstraction** (one of five outcomes: pass-through, transform, split, intercept, interrupt), **eight hook points** with permitted-modification contracts, and a **nine-dimension taxonomy**. The substitution algebra allows AEGIS to insert, replace, or remove processors without touching other processors — the typed structure makes the *intended scope* of each edit explicit. This typed substrate is the **precondition for [[variant-isolation]]** — without it, the system cannot know which tasks an edit is "supposed" to affect.
+
+### 2. Failure-mode coverage: implicit acceptance rule vs. named pathology defenses
+- **Self-Harness** relies on a single conservative acceptance rule (improve at least one split without degrading the other) to prevent regression. It does not name specific failure modes; the acceptance rule is the only defense.
+- **HarnessX** grounds the design in the [[operational-mirror]] — a formal RL ↔ symbolic-space correspondence that predicts **three concrete failure modes**:
+  - **Reward hacking** — defended by the **Critic**, which assesses non-local effects and may issue one revision request to the Evolver
+  - **Catastrophic forgetting** — defended by the **deterministic gating layer**, which enforces the **seesaw constraint** (no regression on previously-solved tasks)
+  - **Under-exploration** — defended by the **Planner**, which constructs the adaptation landscape before edit generation, ensuring structural changes are considered alongside incremental prompt edits
+  
+  Each defense is architecture-specific. The mirror is a design heuristic, not a predictive theory — it identifies *what* to defend against, not *when* or in what order — but it makes the failure modes explicit and the defenses auditable.
+
+### 3. Optimization axis: harness-only vs. harness-model co-evolution
+- **Self-Harness** is harness-only. The model is fixed throughout evolution; gains come from the harness surface alone.
+- **HarnessX** introduces [[harness-model-co-evolution]]: interleaves AEGIS harness evolution with model RL (cross-harness GRPO) over a shared replay buffer. The evolving harness acts as a structured exploration operator for the model's RL: each new H version injects a distinct mode of behavior into the sampling distribution. Adds +4.7% beyond harness-only evolution on Qwen3.5-9B across GAIA and WebShop, with no additional rollouts.
+
+### Empirical comparison
+| Dimension | Self-Harness | HarnessX |
+|---|---|---|
+| Base models | M2.5, Qwen3.5-35B-A3B, GLM-5 | Sonnet 4.6, GPT-5.4, Qwen3.5-9B |
+| Benchmark | Terminal-Bench-2.0 (64-task subset) | ALFWorld, GAIA, WebShop, τ3-Bench, SWE-bench Verified |
+| Held-out gain | +14.2 to +21.4 pp | +14.5% average across 15 model-benchmark configurations (peak +44.0%) |
+| Scaling law | Per-model | Inverse-scaling (weaker models gain most) |
+| Acceptance rule | Conservative split-level (held-in/held-out) | Per-task seesaw (regression-free on prior passes) + Critic assessment |
+| Failure modes addressed | Implicit (conservative acceptance prevents most) | Named (reward hacking, forgetting, under-exploration with named defenses) |
+| Co-evolution | No | Yes (cross-harness GRPO, +4.7% over harness-only) |
+| Cost efficiency | Not reported | ~12% fewer tokens than single-agent CC SDK evolver on GAIA |
+
+The two are not competitors — they live at different points on the simplicity/power spectrum. Self-Harness is the **simpler, more model-agnostic** option when the harness is not yet a typed object. HarnessX is the **more powerful** option when the harness can be reified as typed components and the team can invest in the additional infrastructure (typed composition, observability, co-evolution buffer). The [[harness-engineering]] §5.2.3 open problem admits both solutions; the question is which is appropriate for the deployment context.
 
 ## Sources
 
 - `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Full paper: §1 motivation, §3 algorithm, §4 experiments, §5 conclusion. Empirical results on Terminal-Bench-2.0 with MiniMax M2.5, Qwen3.5-35B-A3B, GLM-5.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). §3 (typed composition: processor abstraction, eight hook points, nine-dimension taxonomy), §4.1 (operational mirror), §4.2 (three predicted pathologies with architectural defenses), §4.3 (AEGIS pipeline), §4.5 (variant isolation), §5 (harness-model co-evolution), §6.4 (meta-agent effectiveness ablation). Source for the comparison section above.

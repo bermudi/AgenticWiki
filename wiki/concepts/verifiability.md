@@ -1,13 +1,14 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-06-18
+updated: 2026-06-17
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
   - raw/2407.08440v4.txt
   - raw/2504.21625v6.txt
   - raw/2603.25133v1.txt
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
   - raw/2606.16707v1.txt
 tags: [concept, ai-capability, reinforcement-learning, executable-memory]
 unaudited_marginal: 0
@@ -69,6 +70,27 @@ This creates a tension: jaggedness is a structural feature of today's models, bu
 
 Threads like [[the-human-lever]] and [[agent-quality-engineering]] each take a different stance on how much of this ceiling is permanent vs. temporary — see their respective tension callouts.
 
+### The Layered Bootstrap Problem
+
+> [!note] Extension: Verifiability has a precision dimension
+> The [[harnessx|HarnessX]] paper (§4.1, §7.2, §7.3) sharpens the verifiability thesis by distinguishing **verifiability** (a yes/no signal) from **precision of verification** (how fine-grained the signal is). The [[operational-mirror|operational mirror]]'s seesaw constraint is *verifiable* (it produces a binary accept/reject) but *imprecise* (it cannot detect sub-threshold coupling — interactions between edits that each pass the per-task check but degrade aggregate behavior). The mirror's authors explicitly bound their own claim: "The mirror identifies what to defend against, not what will happen or when."
+>
+> The bootstrap problem is **layered**, not singular. Each layer of the optimization stack has its own verifier, and each can be wrong:
+> - **Model layer** — bad verifier → bad model (Meeseeks: 98.4% verification, <91% utility)
+> - **Harness layer** — bad verifier → bad harness ([[harnessx]] §7.3: the mirror's pathology taxonomy is heuristic, not predictive)
+> - **Meta-agent layer** — bad meta-agent → bad proposals ([[harnessx]] §6.4: the four-stage decomposition contributes efficiency, not accuracy, at this capability level)
+>
+> The unifying principle: verifiability is a *necessary* condition for any optimization loop, but the *precision* of the verifier bounds what the loop can detect. The seesaw is a *correct* binary verifier; it is not a *complete* one. To catch what the seesaw misses, the quality infrastructure must layer multiple verifiers: per-task binary (seesaw), distributional (chain accuracy, cumulative regression), trace-vs-trace (concentration warnings, edit-type distribution).
+
+### Output Verifiability vs. Proposal Verifiability
+
+> [!note] Synthesis: Two distinct verifiability surfaces
+> The [[harnessx|HarnessX]] AEGIS pipeline introduces a second verifiability surface that the original thesis does not distinguish: **proposal verifiability** (does the proposed edit's expected effect match the trace evidence?) is distinct from **output verifiability** (does the result pass the test?). The AEGIS Critic checks the proposal against the manifest; the deterministic gate checks the output against the seesaw; both can be wrong, and they catch different things.
+>
+> Output verifiability is what Karpathy's original framing addresses: the LLM produces a result, the verifier scores it, the score is the reward. Proposal verifiability is what harness evolution requires: the meta-agent LLM produces a candidate edit (with a change manifest), the Critic LLM checks the manifest against trace evidence, the deterministic gate makes the final accept/reject. The Critic is itself an LLM and inherits all the unreliability of [[rubric-evaluation|LLM-as-judge]] (RUBRICEVAL: 55.97% on hard rubric judgments). The deterministic gate is the *only* mechanism that survives this unreliability — and the gate is bounded to per-task binary checks.
+>
+> The implication: the bootstrap problem generalizes from "is the model right?" to "is the model's proposal right?" The AEGIS pipeline's design principle (§4.3) — "Language-model subagents explore, hypothesize, and propose; typed structure and deterministic gates determine what ships" — is the architectural answer. It applies to any optimization loop where the optimizer is an LLM: separate the proposal (LLM, possibly unreliable) from the disposition (deterministic, verifiable). The Critic + gate pattern generalizes across harness evolution, [[self-harness]] (where the gate is the conservative acceptance rule), and [[executable-memory|User as Code]] (where the gate is the constraint interpreter).
+
 ## Relationship to Verification Loops
 
 Verifiability (the economic/capability argument) is distinct from [[verification-loop|verification loops]] (the mechanical process of testing AI output). Verifiability explains *why* AI is good at code — because code is auto-verifiable via tests and type checkers. Verification loops are the *mechanism* by which that verifiability is operationalized in a workflow.
@@ -119,6 +141,12 @@ The 99% vs 6% gap on analytical inference is the most concrete empirical evidenc
 - [[self-harness]] — The acceptance rule relies on the verifiability principle: trustworthy pass/fail signals are the substrate for self-evolution
 - [[executable-memory]] — Concrete evidence that verifiability is a property of representation, not just domain. Typed Python + interpreter = 99% on aggregate queries where text + retrieval = 6%. The interpreter is the verification boundary; the LLM is not in the loop at check time.
 - [[proactive-service]] — The constraint runner is the verification mechanism for proactive alerts: deterministic Python functions over typed state, fired on every state change, surfacing 100% of standard Active Service scenarios
+- [[harnessx]] — AEGIS's deterministic gate is verifiability-by-design applied to harness evolution; the seesaw constraint is the strictest empirical backpressure mechanism in the harness literature
+- [[operational-mirror]] — The mirror's three named pathologies are the failure modes the verifiability infrastructure must defend against; the mirror is a design heuristic, not a predictive theory
+- [[variant-isolation]] — Scoping the seesaw per-variant is a precision-of-verification improvement; cross-cluster forgetting becomes detectable when each variant's acceptance is isolated
+- [[reward-hacking]] / [[catastrophic-forgetting]] / [[under-exploration]] — The three named pathologies that layer on top of the seesaw; each requires a distinct detection signal and defense
+- [[rubric-evaluation]] — LLM-as-judge unreliability at the rubric level; the mirror's Critic inherits this, which is why the deterministic gate is the load-bearing piece
+- [[harness-engineering]] — §5.2.1 "oracle adequacy" concern is the precision-of-verification problem at the harness level; the seesaw is correct but bounded
 
 ## Sources
 
@@ -128,3 +156,4 @@ The 99% vs 6% gap on analytical inference is the most concrete empirical evidenc
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided evaluation demonstrates that near-perfect verification is achievable, but convergence remains elusive
 - `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): rubric-level meta-evaluation showing that even in structurally verifiable domains with structured rubrics, the LLM judge (verifier) may be unreliable at fine granularity (GPT-4o: 55.97% on hard cases) — adds a second-order constraint to the verifiability thesis: verifier capability bounds verifiability
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete evidence that verifiability is a property of representation, not just domain. Same data, same model, same question: 99% on aggregate queries with typed Python + interpreter vs 6% with text + retrieval. 100% on Active Service with constraint pipeline. The LLM is the writer of the constraint; the interpreter is the runner. This is the verifiability thesis at the architectural level: clear separation between "the LLM proposes" and "the deterministic system verifies."
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the layered bootstrap problem and output-vs-proposal verifiability synthesis. §4.1 (operational mirror formalism), §4.3 (AEGIS design principle: "Language-model subagents explore, hypothesize, and propose; typed structure and deterministic gates determine what ships"), §6.6 (case studies of the three named pathologies), §7.2 (trace richness as the bound on detection), §7.3 (the mirror is a design heuristic, not a predictive theory).
