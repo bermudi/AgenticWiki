@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# extract-sources — print raw/ source paths from wiki page frontmatter or body
+# Usage: extract-sources frontmatter wiki/page.md
+#        extract-sources body wiki/page.md
+
+set -euo pipefail
+
+if [ $# -ne 2 ]; then
+  echo "usage: extract-sources <frontmatter|body> <wiki-page.md>" >&2
+  exit 2
+fi
+
+mode="$1"
+file="$2"
+
+case "$mode" in
+  frontmatter)
+    awk '
+      /^---$/{n++; next}
+      n==1{
+        line=$0
+        while (match(line, /"raw\/[^"]+"/)) {
+          print substr(line, RSTART + 1, RLENGTH - 2)
+          line=substr(line, 1, RSTART - 1) substr(line, RSTART + RLENGTH)
+        }
+        while (match(line, /raw\//)) {
+          line=substr(line, RSTART)
+          item=line
+          comma=index(item, ",")
+          if (comma > 0) item=substr(item, 1, comma - 1)
+          sub(/\].*$/, "", item)
+          sub(/[[:space:]]+$/, "", item)
+          print item
+          if (comma > 0) line=substr(line, comma + 1); else break
+        }
+      }
+      n==2{exit}
+    ' "$file" | sort -u
+    ;;
+  body)
+    awk 'BEGIN{in_s=0} /^## Sources$/{in_s=1; next} in_s && /^## /{exit} in_s{print}' "$file" \
+      | { grep -oP '`raw/[^`]+`' || true; } \
+      | tr -d '`' \
+      | sort -u
+    ;;
+  *)
+    echo "unknown mode: $mode" >&2
+    exit 2
+    ;;
+esac

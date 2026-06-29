@@ -39,8 +39,16 @@ validate_one() {
   local f="$1"
   local slug=$(basename "$f" .md)
 
-  # Skip index.md
-  [ "$slug" = "index" ] && return
+  # index.md is a catalog, not a source-backed page
+  if [ "$slug" = "index" ]; then
+    if awk '/^---$/{n++; next} n==1 && /^sources:/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
+      check ERROR "$f: index.md must not have sources frontmatter"
+    fi
+    if grep -q '^## Sources' "$f"; then
+      check ERROR "$f: index.md must not have a ## Sources section"
+    fi
+    return
+  fi
 
   # --- Frontmatter presence ---
   if ! head -1 "$f" | grep -q '^---$'; then
@@ -88,10 +96,8 @@ validate_one() {
   fi
 
   # --- Frontmatter/body source desync ---
-  fm_sources=$(awk '/^---$/{n++; next} n==1{print} n==2{exit}' "$f" \
-    | { grep -oP 'raw/[a-zA-Z0-9_.-]+' || true; } | sort -u)
-  body_sources=$(awk 'BEGIN{in_s=0} /^## Sources$/{in_s=1; next} in_s && /^## /{exit} in_s{print}' "$f" \
-    | { grep -oP '`raw/[^`]+`' || true; } | tr -d '`' | { grep -oP 'raw/[a-zA-Z0-9_.-]+' || true; } | sort -u)
+  fm_sources=$(./scripts/extract-sources frontmatter "$f")
+  body_sources=$(./scripts/extract-sources body "$f")
 
   fm_only=$(comm -23 <(echo "$fm_sources") <(echo "$body_sources") 2>/dev/null || true)
   body_only=$(comm -13 <(echo "$fm_sources") <(echo "$body_sources") 2>/dev/null || true)
@@ -160,7 +166,7 @@ echo ""
 if [ $# -eq 1 ]; then
   validate_one "$1"
 else
-  for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
+  for f in $(find wiki/ -name "*.md" | sort); do
     validate_one "$f"
   done
 fi
