@@ -1,43 +1,50 @@
 # Editor Reference
 
-Specialized subagents for wiki quality. Each owns a narrow beat — invoke them via `delegate` when their domain is relevant. All editors except Theory inherit project context and the wiki-ops skill. Theory-editor gets fresh context to avoid anchoring on the editing pass.
+Specialized subagents for wiki quality. Keep the active set small: mechanical editors fix safe invariants, while the theory editor handles high-judgment semantic health and compression.
 
 | Editor | Agent | Beat | When to invoke |
 |---|---|---|---|
-| Structural | `structural-editor` | Copy desk — frontmatter, broken links, index accuracy, orphan pages | Post-ingest verification, periodic lint |
-| Content | `content-editor` | Developmental editor — summary quality, thin pages, section completeness, contradictions | Post-ingest verification, when pages feel shallow |
+| Structural | `structural-editor` | Copy desk — frontmatter, source-list sync, index accuracy, orphan pages | Post-ingest verification, periodic lint |
 | Link | `link-editor` | Weaver — bidirectional links, thread↔concept coverage, dangling refs | Post-ingest verification, when cross-references feel sparse |
 | Source Verifier | `source-verifier` | Fact-checker — hallucinations, omissions, misattributions (read-only) | Post-ingest verification, when fidelity is uncertain |
-| Temporal | `temporal-editor` | Diachronic guardian — stale pages, thread drift, contradiction aging, coverage gaps over git history | Weekly, surfaced via session nudge |
-| Theory | `theory-editor` | Cross-thread theorist — thesis support, cross-thread tensions, unfalsifiable arguments, emerging thread candidates | Chained from temporal-editor; also invocable standalone |
+| Theory | `theory-editor` | Semantic health — page quality, thread coherence, temporal drift, contradiction pressure, ontology compression | Periodic deep audit, after several ingests, or when the theory feels bloated |
 
-All editors except Theory run during the wiki-ops lint phase. Theory-editor is triggered by temporal-editor after its own passes. You can also invoke editors individually for targeted checks.
+Retired compatibility shims:
 
-## Temporal Editor — Session Nudge
+| Retired agent | Replacement |
+|---|---|
+| `content-editor` | `theory-editor` |
+| `temporal-editor` | `theory-editor` |
 
-The temporal editor runs on a weekly cadence, but there's no cron. Instead:
+Do not add more high-judgment editors unless the existing `theory-editor` becomes too broad to produce useful reports. The wiki's risk is not lack of editors; it is editors preserving every distinction they notice.
 
-1. At session start, read `.agents/state/temporal-editor-last-run`.
-2. If the date is 7+ days ago, suggest running `temporal-editor` via delegate.
-3. If the user agrees, delegate to `temporal-editor`. It will update the state file on completion.
-4. If the user declines or is mid-task, don't block — just note it.
+## Mechanical Editors
 
-Don't be pushy. One mention per session is enough.
+Run `structural-editor` and `link-editor` after filing and during lint. They are narrow, safe, and allowed to fix directly.
 
-## Theory Editor — Deep Dive
+- `structural-editor`: frontmatter, source-list sync, broken wiki-links, index accuracy, orphan detection
+- `link-editor`: bidirectional refs, `## Related`, thread↔concept links, dangling mentions
 
-The theory editor is the wiki's cross-thread intelligence layer. It doesn't check mechanical correctness — it reasons about the theory as a whole.
+## Theory Editor — Deep Semantic Pass
+
+The theory editor is the wiki's compression and coherence layer. It replaces the old content and temporal passes.
 
 **Beat:**
-- **Thread thesis support**: Does each thread's thesis still hold given all accumulated sources? Or has evidence shifted?
-- **Cross-thread tensions**: Do threads contradict each other? Are there claims on one thread that undermine another?
-- **Unfalsifiable arguments**: Has a thread hardened into unfalsifiable territory — claims that can't be disproven because they're too vague or too broad?
-- **Emerging thread candidates**: Are there concepts or claims accumulating across multiple pages that don't belong to any existing thread?
-- **Coverage gaps**: Are there important ideas with multiple sources but no thread to synthesize them?
+- **Page quality and scope fit**: thin pages, summary/body mismatch, stale sections, over-broad pages
+- **Thread coherence**: thesis support, cross-thread tensions, unfalsifiable arguments, thread rewrites
+- **Temporal drift**: stale pages, contradiction aging, evolution narratives from git history
+- **Ontology compression**: merge candidates, demote-to-section candidates, split candidates, category drift
+- **Theory gaps**: missing concepts or threads that would reduce repeated prose or connect accumulated evidence
 
 **When to invoke:**
-- After temporal-editor surfaces stale or drifting pages (chained)
-- When the wiki has accumulated several new sources and you suspect the theory needs re-grounding
-- When you notice concepts that seem related but aren't linked to any common thread
+- After several ingests have accumulated
+- When `index.md` or concept pages feel bloated
+- When a thread has absorbed multiple departures/contradictions
+- When the user asks for wiki health beyond mechanical validation
+- On a monthly-ish cadence if the wiki is actively growing
 
-**Output:** A structured report with: thread health assessments, cross-thread tension map, emerging theme candidates, and recommended actions (merge threads, split threads, create new threads, update thread theses).
+**Output:** A structured report with: thread coherence, page quality/scope issues, temporal drift, ontology compression proposals, theory gaps, direct safe fixes made, and clean areas.
+
+## Retired Editors
+
+`content-editor` and `temporal-editor` remain as compatibility shims so old references fail softly. They should not be invoked for new work.

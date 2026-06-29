@@ -27,8 +27,11 @@ Three cases, in order of frequency:
 
 (e.g., `~/Downloads/karpathy-talk.pdf`)
 
-- **Slugify the title** to produce the `raw/` filename. Strip the extension, pass the basename through `./scripts/slugify`, then re-attach the original extension (`.pdf`, `.md`, `.html`, etc.). For YouTube content, prepend `yt-` to the slug.
-- `mv` the file to its new slugified name in `raw/`. Don't preserve `~/Downloads/` defaults like `Untitled.pdf`, `karpathy-talk (1).pdf`, or browser hash names — the wiki's naming convention wins over the download manager's.
+- **Slugify before moving. This is mandatory.** Strip the extension, pass the intended human-readable title through `./scripts/slugify`, then re-attach the original extension (`.pdf`, `.md`, `.html`, etc.). For YouTube content, prepend `yt-` to the slug.
+  - Example: `title="AI Agents Need Workflows, Not Bigger Prompts"; slug=$(./scripts/slugify "$title"); mv "$src" "raw/${slug}.md"`
+  - Good: `raw/ai-agents-need-workflows-not-bigger-prompts.md`
+  - Bad: `raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md`
+- `mv` the file to its new slugified name in `raw/`. Don't preserve `~/Downloads/` defaults like `Untitled.pdf`, `karpathy-talk (1).pdf`, browser hash names, spaces, commas, or title-case filenames — the wiki's naming convention wins over the download manager's.
 - If the basename is genuinely unrecoverable (a hash, all numbers, etc.), peek at the file's first page or metadata to extract a real title before slugifying. Don't slugify garbage.
 - For companion media (images, audio, video clips, screenshots), `mv` them into `raw/assets/` with slugified names so they live next to the source.
 - **Note:** `mv` is not destruction — the file ends up in `raw/`. The `trash > rm` rule applies to files you're throwing away, not files you're relocating. Don't over-rotate and use `trash` here.
@@ -46,6 +49,8 @@ User points you at `raw/some-file.md`, or you can see it there. Skip this step e
 ### Verify acquisition
 
 After acquisition, before triage: confirm the file actually arrived in `raw/` (`ls raw/`). Downloads can silently fail, partial PDFs can corrupt, and `mv` across filesystems (e.g., `/tmp` → repo) is slower than it looks. Cheap to check, expensive to discover mid-edit.
+
+Also verify the new `raw/` filename is slugified: lowercase, dash-separated, no spaces, no commas, no title case. If the filename is not slugified, rename it before triage. Future source validators assume raw paths are boring.
 
 ## Step 0: Relevance Triage (GATE)
 
@@ -124,7 +129,7 @@ File stays in `raw/` as archive. No wiki changes. Done.
 
    **Don't re-read what you just wrote.** After editing pages, move directly to editors — they re-read independently. Re-reading before invoking editors adds latency with zero signal.
 
-4. Run editors in **parallel** via `delegate`. Scope each editor to recently changed/created pages only:
+4. Run mechanical editors in **parallel** via `delegate`. Scope each editor to recently changed/created pages only:
 
    ```
    delegate({
@@ -136,16 +141,12 @@ File stays in `raw/` as archive. No wiki changes. Done.
        {
          prompt: "Check and fix cross-reference integrity of recently changed wiki pages. Focus on: bidirectional links, thread↔concept coverage, Related section completeness, dangling references. Only process pages changed in this ingest."
          agent: "link-editor"
-       },
-       {
-         prompt: "Review substantive quality of recently changed wiki pages. Focus on: summary blockquote exists and is 1-3 sentences, section completeness (Thread, Related, Sources), thin page detection, content-structure alignment. Only process pages changed in this ingest."
-         agent: "content-editor"
        }
      ]
    })
    ```
 
-   Read all editor reports. Fix any issues surfaced before proceeding.
+   Read all editor reports. Fix any issues surfaced before proceeding. Semantic/page-quality pressure is handled in Phase 2 by the main analytical pass and, for periodic deep audits, by `theory-editor`.
 
 5. Present filing summary to human. **Do NOT commit.**
 
@@ -186,9 +187,9 @@ Load [verification-pass.md](references/verification-pass.md) for the full proced
 | Agent | Role | Tools |
 |---|---|---|
 | main agent | Orchestrate filing, analysis, verification | all |
-| structural-editor | Frontmatter, links, index, orphans | read, edit, write, bash |
+| structural-editor | Frontmatter, source-list sync, index, orphans | read, edit, write, bash |
 | link-editor | Bidirectional refs, thread↔concept | read, edit, write, bash |
-| content-editor | Summaries, thin pages, contradictions | read, edit, write, bash |
+| theory-editor | Semantic health, temporal drift, ontology compression | read, edit, write, bash |
 | source-verifier | Source fidelity (read-only) | read, bash |
 
 ## Key architectural rule
