@@ -58,13 +58,13 @@ The wiki-ops skill references detailed sub-procedures in `references/`:
 | Ingest philosophy: theory pressure, thread emergence, contradictions | `.agents/skills/wiki-ops/references/ingest-philosophy.md` |
 | Design philosophy and manifesto | `meta/llm-wiki-manifesto.md` |
 | Ingest pipeline, query procedure, lint checklist | `.agents/skills/wiki-ops/SKILL.md` |
-| Editor descriptions, temporal nudge | `.agents/skills/wiki-ops/references/editors.md` |
+| Editor descriptions and invocation patterns | `.agents/skills/wiki-ops/references/editors.md` |
 | Quick mechanical validation (frontmatter, links, sources) | `./scripts/validate-page` |
 
 ## Invariant Rules
 
 1. **Never modify or delete files in `raw/`** — that's the source of truth. You may *create* new source files during ingest.
-2. **Always update `index.md`** when creating or significantly updating pages.
+2. **Always update `index.md`** when creating or significantly updating pages. `index.md` is a catalog only — no `sources:` frontmatter, no `## Sources` section, and no per-ingest source summaries. Git log is the chronology.
 3. **Always add a `## Related` section** to new pages (concepts, authors, projects) with links to existing pages.
 4. **Always update the `updated` date** in frontmatter when editing a page.
 5. **Prefer creating a page over leaving knowledge in chat history.** Good answers, comparisons, and analyses should be filed as wiki pages.

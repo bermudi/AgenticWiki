@@ -1,45 +1,10 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-17
-sources:
-  - raw/2605.18747.pdf
-  - raw/deepswe-benchmark.md
-  - raw/yt-ai-code-benchmarks-lied-to-us.md
-  - raw/agentic-coding-is-a-trap.md
-  - raw/yt-we-all-fell-for-it.md
-  - raw/yt-spec-driven-development-ai-assisted-coding-explained.md
-  - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
-  - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
-  - raw/self-harness-harnesses-that-improve-themselves.txt
-  - raw/recursive-agent-harnesses.txt
-  - raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md
-  - raw/how-the-open-knowledge-format-can-improve-data-sharing.md
-  - raw/open-knowledge-format-spec-v0.1.md
-  - raw/2606.16707v1.txt
-  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
-  - raw/the-illusion-of-multi-agent-advantage.pdf
+updated: 2026-06-19
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
-
-## Sources
-
-- `raw/2605.18747.pdf` — Code as Agent Harness survey (Ning et al., 2026); index entry added
-- `raw/deepswe-benchmark.md` — DeepSWE benchmark (Datacurve, 2026); new concept + thread pages
-- `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): benchmark crisis commentary; marginal ingest
-- `raw/agentic-coding-is-a-trap.md` — Lars Faye: cognitive debt, supervision paradox, skill atrophy; new thread + concept + author pages
-- `raw/yt-we-all-fell-for-it.md` — Theo (t3.gg): video response to Faye; cognitive cost commentary; new author page + thread update
-- `raw/self-harness-harnesses-that-improve-themselves.txt` — Self-Harness (Zhang et al., Shanghai AI Lab, 2026); new self-harness concept; harness-engineering §5.2.3 self-evolution open problem empirically instantiated; harness-mechanisms §3.5; evolving-context extended
-- `raw/recursive-agent-harnesses.txt` — Recursive Agent Harnesses (Lumer et al., PwC, 2026); new recursive-agent-harness concept; multi-agent-code-orchestration code-driven subagent spawning; harness-mechanisms recursive instantiation; code-as-agent-harness extension
-- `raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md` — Drew Breunig (Computer History Museum): spec-code triangle, onewords postmortem, decision extraction, Plum demo, software history digression; new author + 3 concepts + 2 projects
-- `raw/how-the-open-knowledge-format-can-improve-data-sharing.md` — Google Cloud blog announcing OKF (2026-06-12); formalizes Karpathy's LLM-wiki pattern into a portable spec; new OKF concept page
-- `raw/open-knowledge-format-spec-v0.1.md` — The OKF v0.1 specification itself; one required field (type), two reserved filenames, three conformance criteria, permissive-consumption MUST NOT clause
-- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* The two-phase pipeline, three capability tiers, generate-verify-review loop, manifest pattern, Active Service benchmark, Analytical Inference benchmark, Modularity ablation. 78.8% on LOCOMO, 99% on Analytical Inference, 100% on Active Service. New concept pages (executable-memory, proactive-service), author (bojie-li), updates to code-as-agent-harness, harness-mechanisms, jagged-frontier, verifiability, evolving-context, code-intelligence.
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, 2026). *EvoArena.* Benchmark suite for persistent environment evolution (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo) + EvoMem patch-based memory paradigm. Names state-collapse failure mode. Introduces chain-accuracy metric (base drop 22.1pp from step to chain on Terminal-Bench-Evo). EvoMem improves chain accuracy +6.1pp average on Terminal-Bench-Evo, +2.9pp on SWE-Chain-Evo, +3.0pp on PersonaMem-Evo. Mechanism analysis: gain jumps from +2.6% to +8.3% when agents operationalize retrieved patches. New pages: evoarena, evomem, state-collapse, chain-accuracy, jundong-xu. Updates to evolving-context, harness-mechanisms, code-as-agent-harness, the-benchmark-crisis.
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, arXiv 2606.14249v1, 12 June 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* A foundry for typed, composable, and trace-evolved agent harnesses. The harness is a first-class object H = (M, C) with a processor abstraction, eight hook points with permitted-modification contracts, and a nine-dimension taxonomy (D1 model selection → D9 training bridge). AEGIS is a four-stage evolution engine (Digester → Planner → Evolver → Critic) grounded in the operational mirror between symbolic adaptation and RL, with three named pathologies (reward hacking, catastrophic forgetting, under-exploration) and corresponding architectural defenses. The deterministic gating layer enforces the seesaw constraint. Variant isolation (ensemble routing, up to K variants) resolves the catastrophic-forgetting failure on heterogeneous task sets: Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4 (-24.3pp peak-final gap closed). Cross-harness GRPO interleaves harness evolution with model RL over a shared replay buffer, adding +4.7% over harness-only evolution on Qwen3.5-9B. 14 of 15 model-benchmark configurations improve (average +14.5%, peak +44.0%); inverse-scaling pattern (weaker models gain most). New pages: harnessx, operational-mirror, variant-isolation, harness-model-co-evolution, darwin-agent-team. Updates to harness-engineering (most complete §5.2.3 instantiation), harness-mechanisms (typed composition axis), self-harness (comparison note), code-as-agent-harness (concrete foundry), agent-quality-engineering thread (AEGIS as feedback flywheel).
 
 # Index
 

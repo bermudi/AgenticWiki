@@ -128,7 +128,7 @@ The content catalog. Organized by category. Updated after every ingest and every
 - [[page-name]] — one-line summary
 ```
 
-Sources are tracked per-page in `## Sources` sections pointing to `raw/` files. Git log provides the timeline. No centralized source list needed.
+`wiki/index.md` is a catalog only. It must not contain `sources:` frontmatter, a `## Sources` section, or per-ingest source summaries. Sources are tracked per-page in `## Sources` sections pointing to `raw/` files. Git log provides the timeline. No centralized source list needed.
 
 ## Web Source Format
 
