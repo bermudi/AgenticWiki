@@ -1,8 +1,8 @@
 ---
 title: Damian Galarza
 created: 2026-04-27
-updated: 2026-06-18
-sources: ["raw/yt-the-observability-layer-your-ai-agent-is-missing.md", "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md", "raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md"]
+updated: 2026-06-19
+sources: ["raw/yt-the-observability-layer-your-ai-agent-is-missing.md", "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md", "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"]
 tags: ["author", "agent-quality", "observability", "evals"]
 ---
 
@@ -38,3 +38,4 @@ In a 2026 walkthrough, Galarza demonstrated building a sponsor email triage work
 - `raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md`
 - `raw/yt-the-observability-layer-your-ai-agent-is-missing.md`
 - `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md`
+- `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza's typed workflow walkthrough: model routing, per-step evals, deterministic guardrails, and workflow graphs

@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-06-17
+updated: 2026-06-19
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -14,7 +14,7 @@ sources:
   - raw/bias-in-the-loop-llm-judge-code.md
   - raw/2605.18747.pdf
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
-  - raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md
+  - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 1
 ---
@@ -239,4 +239,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): systematic threat to eval pipelines from 12 prompt-induced biases acting as directional positional priors; same judge + same code produces drastically different scores based on prompt framing and candidate order
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Proposes harness-level evaluation metrics (§5.2.1) that complement the quality loop by evaluating the operational substrate rather than only end-task success
 - `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies are the failure modes the flywheel is designed to defend against. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.
-- `raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md` — Galarza (2026): per-step scoring attached to workflow steps, deterministic guardrails as output validation between LLM calls; reconcile LLM + deterministic signals before routing decisions
+- `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): per-step scoring attached to workflow steps, deterministic guardrails as output validation between LLM calls; reconcile LLM + deterministic signals before routing decisions

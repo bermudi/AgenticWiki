@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-06-18
+updated: 2026-06-19
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -32,7 +32,7 @@ sources:
   - raw/the-final-bottleneck.md
   - raw/2605.18747.pdf
   - raw/yt-effect-opencode-dax-raad.md
-  - raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md
+  - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 1
 ---
@@ -455,5 +455,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). The [[multi-agent-illusion]] audit. Source for the "capability floor for multi-agent coordination" departure: automated MAS do not outperform CoT-SC, hand-designed [[expert-mas]] does; the cost-quality Pareto position is a first-class metric. §3 cost-quality results; §3.3 [[smfr]] + [[expert-mas]]; §4 architectural deconstruction; §5 ensembling trap and capability floor.
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
-- `raw/AI Agents Need Workflows, Not Bigger Prompts - youtube.com.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph
+- `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph
 
