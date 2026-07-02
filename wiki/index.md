@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-01
+updated: 2026-07-02
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -79,6 +79,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[prathyusha-jwalapuram]] — Project lead on *The Illusion of Multi-Agent Advantage* (Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 June 2026); systematic cost-controlled audit of automated MAS frameworks against single-agent CoT-SC
 - [[boris-cherny]] — Creator of Claude Code (side project, Sep 2024); the "designing loops" practitioner — 259 PRs written by Claude Code, deleted his IDE
 - [[peter-steinberger]] — The "designing loops that prompt your agents" tweet (2.2M views); skills-not-loops thesis; Austrian engineering circle
+- [[matthew-berman]] — YouTube creator; loop primers, the automation-vs-loop distinction, the three-trigger taxonomy, and the Loop Library
+- [[ai-jason]] — Practitioner running production loops; loop-engineer-as-outer-harness and the compounding-loops shared-state pattern
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -197,6 +199,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
 - [[agent-loop]] — "Cron plus a decision-maker in the body": a program that prompts the agent, reads the result, decides whether to keep going. The five-stage lineage (ReAct → AutoGPT → ralph → /goal → orchestration).
 - [[orchestration-loop]] — Stage 5 of the agent-loop lineage: loops that supervise loops, concurrently and on cron, with git-backed durability so the system survives a restart.
+- [[compounding-loops]] — Independent agent loops cooperating laterally through a shared signals/artifacts/logs file system — peer cooperation via shared state, distinct from hierarchical orchestration.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.

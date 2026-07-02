@@ -1,9 +1,12 @@
 ---
 title: Agent Loop
 created: 2026-07-01
-updated: 2026-07-01
+updated: 2026-07-02
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
+  - raw/yt-only-the-best-are-using-them.md
+  - raw/yt-7-insane-loops-you-need-to-try-right-now.md
+  - raw/yt-i-guess-were-writing-loops-now.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, autonomous-agents, claude-code, cron, orchestration]
 ---
@@ -26,6 +29,16 @@ The sharpest skeptic line in the discourse was four words: *"Cronjobs have funny
 
 What cron never had is the part in the middle. A cron job runs a fixed script. A loop runs a model that looks at the current state, decides what to do next, does it, checks whether it worked, and decides whether to keep going. **The decision is the agent's, not a hardcoded branch.** The honest framing is that loops are cron plus a decision-maker in the body, and the interesting engineering is everything you wrap around that decision so it does not run off a cliff.
 
+### Automation vs. Loop: The Decision Is the Difference
+
+[[matthew-berman|Matthew Berman]] sharpens the same point by separating loops from their nearest neighbor — automations. The two are easy to conflate because both run on a trigger, but the difference is load-bearing:
+
+> "The difference between a loop and an automation is that a loop has some decision inside the loop. It is deciding if it reached the goal or not. It is not just executing a series of prompts... With a loop, you are specifically giving the loop the ability to determine if it reached its goal or not."
+
+An automation executes a fixed sequence of prompts or code. A loop *decides* whether it is done. That decision — and the goal-verification behind it — is the entire substance. Strip the decision out and you have an automation, however sophisticated.
+
+A loop needs exactly two things, and only two: a **trigger** and a **goal**. The triggers come in three and only three flavors (Berman's taxonomy): an **action** (a PR opens), a **schedule** (cron — every 30 min, daily), or a **human** (a manual kickoff, still a valid trigger). The goal is either **verifiable** (deterministic: tests pass, 100% coverage, page load under 50 ms) or **LLM-as-judge** (non-deterministic: "refactor until satisfied"). That trigger + goal grammar is the minimum viable loop.
+
 ## The Lineage (Five Stages)
 
 The word "loop" caused a brawl because it hides at least five different things. The ladder, oldest to newest:
@@ -39,6 +52,9 @@ The word "loop" caused a brawl because it hides at least five different things. 
 | **5. Orchestration loops** | 2026 | [[boris-cherny\|Boris Cherny]], [[peter-steinberger\|Peter Steinberger]] | See [[orchestration-loop]]. Loop becomes the unit of work (not the task); loops supervise loops; scheduling replaces the human kickoff; durability becomes explicit. |
 
 Stage 3 — the single-agent ralph loop — is "old hat by now" (in one practitioner's words). Stage 5 — the multi-agent orchestration loop on top of it — is the genuinely new layer. See [[ralph-loop]] for the full mechanics of Stage 3 and [[orchestration-loop]] for Stage 5.
+
+> [!note] Departure: `/goal` (Linear) vs. Dynamic Workflow (Generative)
+> Stage 4's `/goal` and Stage 5's dynamic workflow look similar but differ in shape. [[theo-t3gg|Theo]] draws the line: `/goal` is a **linear, never-ending single thread** that keeps double-checking "did you finish the work? if no, keep going." A **dynamic workflow** takes a pre-planned goal and *generates* sub-threads and sub-loops based on the specific problem — "a dynamic workflow that was created based on the specific needs of this specific problem." Linear `/goal` plugs along on one thread; a dynamic workflow spawns the structure the work demands. Both are loops; only the latter creates loops (see [[orchestration-loop]]).
 
 ## Hard Stops: Making the Loop Halt
 
@@ -59,6 +75,8 @@ When the model writes code for almost nothing, the cost moves to the loop runnin
 
 The receipt of the month: Uber capped its engineers at **$1,500 per person per tool per month** for Claude Code and Cursor after burning its annual AI budget in four months. The deflating engineering take: "Every AI agent I shipped this year is a for-loop, an LLM call, and a try/catch around the JSON parsing. The only thing agentic about it is the Anthropic bill at the end of the month."
 
+The firsthand practitioner receipt cuts the other way. [[theo-t3gg|Theo]] tracked his own loop usage: roughly **$10,000 of inference in a month across his machines, for $600 of flat-rate subscriptions** (three $200 plans) — with five such loops running over that stretch, he still finished the week at only 29% of his weekly limit. His framing is that idle subscription capacity is wasted money: "the 70% I'm not going to hit... is thousands of dollars of inference that I paid for that I could have done that I didn't do." The cautionary datum in the same run: one agent spent under 10 minutes leaving review feedback, and the Opus workflow addressing it ran **eight hours and over three million tokens to address three small comments**. Flat-rate subscriptions make loops affordable; they do not make runaway loops cheap.
+
 > [!note] Relation to the Review Bottleneck
 > This is the dollar-cost twin of the review-bottleneck thesis (Ronacher's *The Final Bottleneck*): the bottleneck moved off "writing code." Ronacher locates it in *human review capacity*; this source locates it in *loop-management cost*. Both are "where did the expense go" arguments — one measures human attention, the other measures money. They reinforce rather than contradict each other.
 
@@ -71,6 +89,13 @@ Gartner places agentic AI at the peak of inflated expectations, with only ~17% o
 > A loop with no reusable skills inside it is just a while-true around a stranger. A loop that calls a library of sharp, tested, named skills is a system that compounds.
 
 A loop is plumbing. The asset is the skill it calls. Loops that call sharp named skills compound; loops that re-derive everything just burn money. This reframes the loop not as a prompt-engineering artifact but as an execution harness for a [[procedural-knowledge|procedural-knowledge]] library.
+
+### Concrete Patterns — and Where Loops Break
+
+The loops people actually run sort cleanly by goal type. Verifiable goals: sub-50ms page-load optimization, logging coverage to "every important path," production error sweep (trace → root-cause → fix → PR → Slack ping). LLM-as-judge goals: overnight docs sweep, architecture-satisfaction refactor ("refactor until you are happy with the architecture"), full product evaluation across N scenarios. The verifiable ones are reliable; the judged ones are "a little more brittle because we are leaving taste and judgment up to the model."
+
+> [!warning] Contradiction: Loops Can't Build Features (Yet)
+> Even the technique's popularizers concede the wall. Berman: *"I have not really found a way to build features with loops. You cannot say 'loop until we build a full permissioning system'... I don't know which direction the AI is going to go."* Loops optimize toward an end state they can recognize; they do not *choose* the end state. Day-zero feature building — where the goal is itself discovered through exploration — is precisely where the goal-verification grammar breaks down. This is the [[aiming-problem]] at the loop level: a loop can pursue a goal but cannot aim one.
 
 ## Thread
 
@@ -89,7 +114,13 @@ A loop is plumbing. The asset is the skill it calls. Loops that call sharp named
 - [[babysitter-agent]] — A different persistence mechanism: invisible single-master context management vs. the loop's tick-based prompting
 - [[armin-ronacher]] — His *The Final Bottleneck* thesis (review capacity) is the human-attention twin of this source's cost-shift thesis
 - [[multi-agent-illusion]] — Tempers orchestration enthusiasm: automated multi-agent search largely fails; hand-designed loops are the case that works
+- [[compounding-loops]] — Lateral loop cooperation via shared state, a sibling to hierarchical orchestration
+- [[matthew-berman]] — The automation-vs-loop distinction and trigger taxonomy
+- [[theo-t3gg]] — Firsthand loop receipts and the /goal-vs-dynamic-workflow distinction
 
 ## Sources
 
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The unified loop concept, the five-stage lineage (ReAct → AutoGPT → ralph → /goal → orchestration), the cron rebuttal, hard stops, the cost-shift thesis (Uber cap), and skills as the reusable unit. Quotes Cherny's WorkOS definition and Steinberger's tweet.
+- `raw/yt-only-the-best-are-using-them.md` — The automation-vs-loop distinction (decision inside the loop), the three-trigger taxonomy (action/schedule/human), verifiable vs. LLM-as-judge goals, and the cost/expertise bifurcation.
+- `raw/yt-7-insane-loops-you-need-to-try-right-now.md` — Concrete loop patterns sorted by goal type (the Loop Library), and the "loops can't build features" tension.
+- `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand cost receipts ($10K inference for $600 of subscriptions; the 8-hour/3M-token comment loop), the /goal-vs-dynamic-workflow distinction, and the "prompt yourself out of involvement" heuristic.

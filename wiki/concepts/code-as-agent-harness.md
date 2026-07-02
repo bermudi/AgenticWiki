@@ -1,7 +1,7 @@
 ---
 title: Code as Agent Harness
 created: 2026-05-21
-updated: 2026-06-17
+updated: 2026-07-02
 sources:
   - raw/2605.18747.pdf
   - raw/yt-llms-are-killing-agent-harness.md
@@ -91,6 +91,7 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - [[agent-skills]] — Grounded skill selection within code-for-acting
 - [[thorsten-ball]] — AMP as a live case study of the harness at the thin end: Ball argues the harness should decay like a cast as models improve
 - [[backpressure]] — Mechanical rejection within harness control
+- [[compounding-loops]] — Code-as-harness applied to inter-loop coordination: shared files (signals, artifacts, logs) as the executable, stateful medium through which peer loops compound
 - [[xuying-ning]] — Lead author of the survey
 - [[recursive-agent-harness]] — The code-as-action extension applied to multi-agent orchestration: parent writes executable code that spawns subagents in parallel
 - [[self-harness]] — The complementary in-place pattern: a single harness that improves itself iteratively via bounded, regression-tested edits

@@ -1,9 +1,11 @@
 ---
 title: Orchestration Loop
 created: 2026-07-01
-updated: 2026-07-01
+updated: 2026-07-02
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
+  - raw/yt-wtf-is-loop-engineer-how-to-setup-for-real.md
+  - raw/yt-i-guess-were-writing-loops-now.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, orchestration, multi-agent, durability, cron]
 ---
@@ -23,6 +25,22 @@ The single-agent [[ralph-loop|ralph loop]] (Stage 3) assumed your terminal staye
 
 > [!note] Orchestration Loop vs. Babysitter Agent
 > The [[babysitter-agent|babysitter agent]] is a different persistence mechanism. The babysitter is *invisible* to a single master orchestrator and manages that one master's context across session boundaries — a subconscious mind. The orchestration loop supervises *many* loops on a schedule and owns durability at the system level. Babysitter = single-master context care; orchestration loop = multi-loop supervision on infrastructure time.
+
+### The Orchestration Layer *Is* the Harness
+
+[[ai-jason|AI Jason]] gives the cleanest reframing of what Stage 5 actually is. He splits agent optimization into two parts: (1) the **agent loop itself** — Claude Code, Codex, a custom harness — all the techniques for completing one task well; and (2) the **outer environment** that decides *what should be worked on*, triggers agents, and tracks state and logs so the system improves. That outer part is "loop engineer." The orchestration loop is not a fancier prompt; it is the harness/environment layer — everything non-model wrapped around the agent runtime. This is why the [[multi-agent-illusion]] audit does not touch it: it indicts auto-searched model-side topologies, not the deterministic harness that schedules and supervises.
+
+### Supervision vs. Cooperation
+
+There are two ways loops multiply, and they are easy to blur. **Hierarchical supervision** (this page): one loop dispatches and oversees others. **Lateral cooperation** ([[compounding-loops]]): peer loops share a durable file system — signals, artifacts, logs — and compound through shared state without anyone supervising anyone. The two compose: a supervising orchestration loop can dispatch work into a shared-state substrate where cooperating loops pick it up. But cooperation through shared files is a distinct coordination mechanism, and it is the one that produces the "compounding" effect practitioners report.
+
+### Dynamic Loop Generation: Loops That Make Loops
+
+The frontier of Stage 5 is not a fixed supervisor dispatching fixed sub-loops — it is loops that *generate their own sub-loops* to fit the work. [[theo-t3gg|Theo]] hit this accidentally: he asked the model to build a workflow that files a PR, spins up a review thread, loops on comments until approvals, then merges and triggers the next piece. It built it — and ran overnight, producing four stacked PRs, "reviewed to hell and back, all merged."
+
+> "I asked the model if I could make this loop and it made a loop that makes sub loops dynamically. This isn't a hard-coded 'every time I make a change, I spin up one reviewer'... My loops created loops."
+
+The consequence: **the shape of the loop is generated from the shape of the work.** Instead of forcing work into a static agile-sprint skeleton, the orchestration topology is synthesized to fit the specific multi-stage problem. This is a real step beyond hardcoded Stage-5 supervision — and it is also where runaway cost lives: one of these generated workflows ran eight hours and burned over three million tokens to address three review comments.
 
 ## Canonical Implementations
 
@@ -57,6 +75,7 @@ The orchestration loop inherits the [[agent-loop|hard-stops discipline]]: maximu
 
 - [[agent-loop]] — The umbrella concept and five-stage lineage; this is Stage 5
 - [[ralph-loop]] — Stage 3, the single-agent loop that orchestration loops supervise
+- [[compounding-loops]] — Sibling pattern: lateral cooperation via shared state rather than hierarchical supervision
 - [[babysitter-agent]] — Different persistence mechanism (invisible single-master context care)
 - [[multi-agent-code-orchestration]] — The code-as-harness framework's multi-agent layer
 - [[multi-agent-illusion]] — Tempers orchestration enthusiasm; vindicates hand-designed, indicts auto-search
@@ -67,3 +86,5 @@ The orchestration loop inherits the [[agent-loop|hard-stops discipline]]: maximu
 ## Sources
 
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The four changes that define Stage 5, Cherny's setup (hundreds of agents, cron, the `/loop` on-ramp, five tips), and Gas Town (Mayor + patrol agents, git-backed state, open source).
+- `raw/yt-wtf-is-loop-engineer-how-to-setup-for-real.md` — The "loop engineer as outer harness" reframing (Stage 5 is the harness/environment layer, not model-side topology) and the shared-state cooperation that motivates [[compounding-loops]].
+- `raw/yt-i-guess-were-writing-loops-now.md` — Dynamic loop generation ("my loops created loops"), the overnight four-stacked-PR run, the /goal-vs-dynamic-workflow distinction, and the runaway-cost cautionary data.

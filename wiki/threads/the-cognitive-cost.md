@@ -1,13 +1,14 @@
 ---
 title: The Cognitive Cost
 created: 2026-06-03
-updated: 2026-06-07
+updated: 2026-07-02
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-spec-driven-dev-hype-or-future.md
+  - raw/yt-i-guess-were-writing-loops-now.md
 tags: [thread, ai-engineering, cognitive-debt, failure-modes, human-in-the-loop]
 unaudited_marginal: 0
 ---
@@ -68,6 +69,9 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 > [!note] The Cost Is Real, But So Are the Gains
 > Theo challenges the pure cost framing: AI enables speed in areas previously too expensive (one-off scripts, exploratory code, learning new domains). His debugging story shows AI *amplifying* existing skills rather than replacing them. The cost isn't universal — it's concentrated among developers who use AI to *avoid* learning rather than to *accelerate* learning. The thread holds this tension: the cognitive cost is real and measured, but it's not the only outcome.
 
+> [!warning] The Loops Discourse Is the Maximal-Delegation Frontier
+> The "designing loops" wave ([[agent-loop|agent loops]], [[orchestration-loop|orchestration loops]]) — removing the human from the per-turn prompting loop entirely — is the strongest push yet toward the maximal delegation this thread identifies as the cognitive-erosion mechanism. The tell is authorial: [[theo-t3gg|Theo]] anchors this thread (his "we all fell for it" video supplies the skateboarding metaphor and the population problem) *and* is a leading voice in the loops batch, where he frames loop cost as a budget to maximize and urges engineers to "prompt yourself out of involvement." He is internally consistent — he explicitly calls [[boris-cherny|Boris Cherny]]'s no-oversight claims "stupid" and insists he is "not at the fully autonomous point" — but the *direction* of the discourse is toward removing the very involvement whose loss drives [[cognitive-debt]]. The loops thesis doesn't resolve the [[supervision-paradox]]; it accelerates its inputs. See [[the-human-lever]]'s Automation Frontier tension for the parallel design-authority framing.
+
 ## Sources
 
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
@@ -75,3 +79,4 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — The Gray Cat: the drift into comprehension debt, the recovery through teaching mode, the cultural signal of "let me ask Claude"
 - `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — [[cian-clarke|Cian Clarke]]: SDD's "orders of magnitude better" but "lot lot longer" tradeoff in the SDD cognitive-cost departure callout
 - `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] benchmark (2,500 lines spec markdown for 689 LOC, 3.5h vs 24 min review) in the SDD cognitive-cost departure callout
+- `raw/yt-i-guess-were-writing-loops-now.md` — [[theo-t3gg|Theo]]: the loops conversion, the cost-as-challenge framing ("treat these limits like challenges"), and the "prompt yourself out of involvement" heuristic — the maximal-delegation frontier that accelerates this thread's cognitive-erosion mechanism.

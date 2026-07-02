@@ -1,7 +1,7 @@
 ---
 title: Multi-Agent Illusion
 created: 2026-06-18
-updated: 2026-07-01
+updated: 2026-07-02
 sources:
   - raw/the-illusion-of-multi-agent-advantage.pdf
 tags: [concept, multi-agent, orchestration, evaluation, negative-result, mas-audit]
@@ -90,6 +90,7 @@ The illusion is specifically about *automated* MAS design — frameworks that us
 - [[variant-isolation]] — HarnessX's ensemble routing is a different *escape* from the multi-agent illusion: rather than discovering one complex architecture, maintain K simple ones and route per task
 - [[backpressure]] — the [[expert-mas]] baseline succeeds because the deterministic Python orchestrator provides backpressure that LLM-based orchestrators cannot
 - [[orchestration-loop]] — Production orchestration loops are the hand-designed case this audit vindicates; they are not the auto-searched architectures it indicts
+- [[compounding-loops]] — Lateral peer-loop coordination via shared state: another hand-designed pattern the audit vindicates, not auto-searched topology
 
 ## Sources
 
