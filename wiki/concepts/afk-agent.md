@@ -1,7 +1,7 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-06-05
+updated: 2026-07-01
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
 tags: [concept, workflow, agents]
 ---
@@ -73,6 +73,7 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[model-routing]] — Model routing enables cheaper, more scalable AFK execution by routing subtasks to the cheapest capable model
 - [[software-factory]] — The software factory is the full automation of the AFK agent concept — replacing the human-in-the-loop with a system
 - [[wide-events]] — Wide events make AFK agent behavior inspectable without constant human attention
+- [[agent-loop]] — The agent loop is the canonical AFK execution pattern: a program that prompts the agent each tick instead of a human
 
 ## Sources
 

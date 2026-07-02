@@ -1,8 +1,8 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-05-31
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md]
+updated: 2026-07-01
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md, raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md]
 tags: [tool, ai, agent, anthropic]
 unaudited_marginal: 0
 ---
@@ -13,7 +13,7 @@ unaudited_marginal: 0
 
 ## Overview
 
-Claude Code is an agentic tool that operates directly in the terminal, allowing developers to interact with their codebase through natural language. It can read files, search the repository, run commands, and propose multi-file edits.
+Claude Code is an agentic tool that operates directly in the terminal, allowing developers to interact with their codebase through natural language. It can read files, search the repository, run commands, and propose multi-file edits. It was created by [[boris-cherny|Boris Cherny]] as a side project in September 2024 and now reportedly sits behind close to four percent of all public commits on GitHub.
 
 ## Features
 
@@ -22,6 +22,25 @@ Claude Code is an agentic tool that operates directly in the terminal, allowing 
 - **HITL/AFK Support**: Designed to work both interactively with the developer and as a background agent for longer-running tasks.
 - **Security**: Can be run in sandboxed environments (like Docker) to prevent unsafe operations.
 - **Autonomous loops**: Supports the Ralph Wiggum pattern — `while :; do cat PROMPT.md | claude ; done` — for fully autonomous implementation with fresh context per iteration.
+
+## Autonomous Loops: /loop and /goal
+
+In spring 2026 Claude Code shipped productized loop primitives that made [[boris-cherny|Cherny]]'s "designing loops that prompt your agents" thesis a one-command on-ramp:
+
+- **`/goal`** — runs the [[ralph-loop|ralph loop]] until a small validator model confirms the task is done.
+- **`/loop`** — a built-in loop with cron-like scheduling (uses cron under the hood) that runs on infrastructure time instead of your attention. Cherny's canonical starter:
+
+```
+/loop babysit all my PRs. Auto-fix build issues, and when comments come in, use a worktree agent to fix them.
+```
+
+Cherny's five tips for running Opus autonomously for hours or days (June 2026), in his words:
+
+> Use auto mode for permissions so Claude doesn't ask for approval; use dynamic workflows to have Claude orchestrate hundreds or thousands of agents to get a task done; use /goal or /loop to nudge Claude to keep going until it's done; use Claude Code in the cloud so you can close your laptop; and make sure Claude has a way to self-verify its work end to end.
+
+Tip five is the one the hype skips and the practitioners obsess over: a loop is only as trustworthy as its ability to check its own work.
+
+The loops inherit the [[agent-loop|hard-stops discipline]] — maximum iteration count, no-progress detection, a token-or-dollar budget ceiling — because the loop that does not stop is the production failure mode. See [[orchestration-loop]].
 
 ## The Context Manipulation Problem
 
@@ -64,6 +83,10 @@ This also applies in reverse: HTML files serve as high-context inputs for verifi
 - [[thariq]] — Claude Code team member who documented the HTML-as-output workflow pattern
 - [[html-as-agent-output]] — HTML as the emerging output format for agent communication
 - [[opencode]] — A similar open-source coding agent rewritten in Effect (~8M MAU)
+- [[boris-cherny]] — Creator of Claude Code (side project, September 2024)
+- [[agent-loop]] — The concept Claude Code's `/loop` and `/goal` primitives instantiate
+- [[orchestration-loop]] — Stage 5: loops supervising loops on a schedule, made accessible by `/loop`
+- [[gas-town]] — Steve Yegge's open-source orchestration loop built on 20–30 Claude Code instances
 
 ## Sources
 
@@ -72,3 +95,4 @@ This also applies in reverse: HTML files serve as high-context inputs for verifi
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology, Claude Code's role as the agent CLI in the loop.
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Mario's grievances with Claude Code (silent context injection, system prompt manipulation); the "should I just build my own" origin story that led to Pi.
 - `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's article on using Claude Code to generate HTML files for specs, code review, design, reports, and custom editors; the tool's context access (filesystem, MCPs, git, browser) as the key differentiator over Claude.ai artifacts.
+- `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Cherny as creator (side project, Sep 2024; ~4% of public GitHub commits); the `/loop` and `/goal` primitives; the five autonomous-Opus tips; the canonical `/loop` starter

@@ -107,7 +107,7 @@ Both agree: for developer-facing agent tools, CLI composability (pipes, scripts)
 
 ## Layer 3: Minimalism as Performance
 
-[[mario-zechner|Mario Zechner]] approaches from a different angle. Rather than redesigning existing tools, he argues for fewer tools with simpler contracts. [[pi]]'s core is four tools: `read`, `write`, `edit`, `bash`. No MCP server, no protocol overhead, no feature negotiation. This minimalism is echoed in the [[ralph-loop]] pattern, where a dumb bash loop and a plan file replace sophisticated orchestration — both converge on the same insight: fewer moving parts means fewer failure modes for the agent.
+[[mario-zechner|Mario Zechner]] approaches from a different angle. Rather than redesigning existing tools, he argues for fewer tools with simpler contracts. [[pi]]'s core is four tools: `read`, `write`, `edit`, `bash`. No MCP server, no protocol overhead, no feature negotiation. This minimalism is echoed in the [[ralph-loop]] pattern (Stage 3 of the [[agent-loop|agent-loop]] lineage), where a dumb bash loop and a plan file replace sophisticated orchestration — both converge on the same insight: fewer moving parts means fewer failure modes for the agent.
 
 The argument: complex tools create complex failure modes. A harness with 50 specialized tools gives the LLM 50 chances to pick the wrong one, misuse it, or get confused by overlapping functionality. A harness with 4 composable tools gives the LLM clarity and forces creativity into *how* the tools are composed, not *which* one to pick.
 

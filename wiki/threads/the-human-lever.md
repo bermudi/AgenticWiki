@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-06-18
+updated: 2026-07-01
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -196,7 +196,7 @@ He also reviews **module interfaces** during the PRD phase — evaluating whethe
 
 ## The "Valuable Garbage" Insight
 
-[[mario-zechner|Mario Zechner]] pushes back on the "just send me your prompt" approach (Peter Steinberger's "prompt request" idea). He values seeing terrible implementations: someone instructed their agent to build something, the result is garbage, but it shows what they wanted. The naive agent attempt reveals the problem space. He doesn't have to waste his own time on the first try.
+[[mario-zechner|Mario Zechner]] pushes back on the "just send me your prompt" approach ([[peter-steinberger|Peter Steinberger]]'s "prompt request" idea). He values seeing terrible implementations: someone instructed their agent to build something, the result is garbage, but it shows what they wanted. The naive agent attempt reveals the problem space. He doesn't have to waste his own time on the first try.
 
 [[armin-ronacher|Armin Ronacher]] refines this: the prompt request is valuable not because you can "reclank your clanker slightly better," but because the act of creating clarifies what you really wanted. Once you understand the intent, it's often faster for the senior engineer to start fresh than to fix the agent's implementation.
 
@@ -348,6 +348,7 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - [[peak-programmer]] — The world the human lever responds to: implementation is commoditized, so human judgment moves up the stack
 - [[vibe-coding]] — The capability shift that makes the human lever critical: when machines write code, design authority and verification become the human's core job
 - [[the-agent-workflow]] — Sister thread: how the workflow operationalizes the human lever through HITL/AFK splits and delegation patterns
+- [[boris-cherny]] — The practitioner who embodies the thesis: "great engineers matter more than ever"; the job moved up an altitude from writing code to writing the thing that writes the code
 
 ## Sources
 

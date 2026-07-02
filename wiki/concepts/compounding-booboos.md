@@ -1,7 +1,7 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-06-01
+updated: 2026-07-01
 sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf]
 tags: [concept, ai, reliability]
 ---
@@ -69,6 +69,7 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 - [[execution-apathy]] — Execution apathy compounds booboos silently: the model reports completion without executing, creating a cascade of unverified assumptions
 - [[blind-panic]] — Blind panic's looping and tool hallucination is a compounding booboo pattern: each failed attempt builds on the last
 - [[agent-evals]] — The eval flywheel catches booboos in production before they compound; every production failure becomes a permanent eval case
+- [[agent-loop]] — An open loop that writes code with no feedback is a machine for generating compounding mistakes; hard stops and verification are the defense
 
 ## Sources
 

@@ -1,7 +1,7 @@
 ---
 title: Multi-Agent Code Orchestration
 created: 2026-05-21
-updated: 2026-06-18
+updated: 2026-07-01
 sources:
   - raw/2605.18747.pdf
   - raw/yt-systems-building-systems.md
@@ -183,6 +183,8 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - [[single-player-to-multiplayer]] — Clarke's framing of how SDD tooling scales from individual to team workflows; team-scale multi-agent orchestration is the architectural extension this concept page describes
 - [[recursive-agent-harness]] — Code-driven subagent spawning as a distinct multi-agent topology: the parent writes executable code that instantiates subagents in parallel
 - [[self-harness]] — The complementary in-place pattern: a single harness that improves itself over time, rather than spawning fresh instances per task
+- [[orchestration-loop]] — The architectural vocabulary (roles, topologies, artifact-mediated communication) that production orchestration loops instantiate
+- [[gas-town]] — Steve Yegge's open-source orchestration loop (Mayor + patrol agents, git-backed state) as a concrete hierarchical-topology implementation
 
 ## Sources
 

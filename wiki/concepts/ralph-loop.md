@@ -1,7 +1,7 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-06-05
+updated: 2026-07-01
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -9,6 +9,7 @@ sources:
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/2504.21625v6.txt
+  - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
 unaudited_marginal: 0
 tags: [concept, autonomous-agents, agent-loops, claude-code, workflow, skills]
 ---
@@ -16,6 +17,9 @@ tags: [concept, autonomous-agents, agent-loops, claude-code, workflow, skills]
 # Ralph Loop
 
 > A minimalist autonomous agent loop: a dumb bash `while` loop feeds a prompt to an agent CLI, which reads a plan file, picks one task, implements it, commits, exits. Fresh context each iteration. The plan file on disk is the only shared state between otherwise isolated executions. Originated by [[geoffrey-huntley|Geoffrey Huntley]].
+
+> [!note] Lineage: Stage 3 of 5
+> The Ralph Loop is Stage 3 of the [[agent-loop|agent-loop]] lineage (ReAct 2022 → AutoGPT 2023 → **ralph 2025** → `/goal` spring 2026 → [[orchestration-loop|orchestration loops]] 2026). One practitioner's verdict: the single-agent ralph loop is "old hat by now" — the multi-agent [[orchestration-loop|orchestration loop]] supervising ralph loops on top of it is the new layer. See [[agent-loop]] for the full ladder.
 
 ## The Core Loop
 
@@ -191,6 +195,9 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - [[multi-tier-action-space]] — The Ralph loop structures execution across multiple action-space tiers
 - [[software-factory]] — The Ralph Loop's fresh-context-per-iteration is a minimalist persistence mechanism for the software factory architecture
 - [[babysitter-agent]] — The babysitter is a more sophisticated alternative to the Ralph Loop's crude fresh-context-per-iteration approach
+- [[agent-loop]] — The umbrella concept and five-stage lineage; the Ralph Loop is Stage 3
+- [[orchestration-loop]] — Stage 5: loops that supervise ralph loops concurrently and on a schedule
+- [[gas-town]] — The shipped, open-source proof: 20–30 Claude Code instances supervised by a Mayor agent with git-backed durability
 
 ## Sources
 
@@ -200,3 +207,4 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: loop evolution, sub-agent validation, skills-as-loop-package, worker loop, safety heuristics
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle as the parallelized Ralph Loop variant: Kanban DAG, four-stage pipeline, Docker sandboxes, separate reviewer agents
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): iterative self-correction as a micro-scale Ralph Loop — automated evaluation replaces human review at the per-response level
+- `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Locates the Ralph Loop as Stage 3 of the five-stage agent-loop lineage; the single-agent ralph loop is "old hat," the orchestration loop on top is the new layer

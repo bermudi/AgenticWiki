@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-06-19
+updated: 2026-07-01
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -77,6 +77,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[jundong-xu]] — Lead author of *EvoArena* (NUS + collaborators, 2026); co-creator of the EvoArena benchmark and EvoMem patch-based memory paradigm; names state-collapse as a distinct failure mode
 - [[darwin-agent-team]] — Author team behind HarnessX (Chen, Lu, Zhao, Meng, Shao, Luan et al., arXiv 2606.14249v1, 12 June 2026); introduced typed composition, the operational mirror, AEGIS, variant isolation, and harness-model co-evolution; +14.5% average / +44.0% peak across 5 benchmarks and 3 model families
 - [[prathyusha-jwalapuram]] — Project lead on *The Illusion of Multi-Agent Advantage* (Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 June 2026); systematic cost-controlled audit of automated MAS frameworks against single-agent CoT-SC
+- [[boris-cherny]] — Creator of Claude Code (side project, Sep 2024); the "designing loops" practitioner — 259 PRs written by Claude Code, deleted his IDE
+- [[peter-steinberger]] — The "designing loops that prompt your agents" tweet (2.2M views); skills-not-loops thesis; Austrian engineering circle
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -193,6 +195,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[vibe-coding]] — The term Karpathy coined: coding where you fully trust the LLM's output. Raises the floor for everyone.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
+- [[agent-loop]] — "Cron plus a decision-maker in the body": a program that prompts the agent, reads the result, decides whether to keep going. The five-stage lineage (ReAct → AutoGPT → ralph → /goal → orchestration).
+- [[orchestration-loop]] — Stage 5 of the agent-loop lineage: loops that supervise loops, concurrently and on cron, with git-backed durability so the system survives a restart.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.
@@ -222,4 +226,5 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[memrefine]] — Post-construction, LLM-guided memory compression framework: similarity proposes candidate pairs, an LLM judge decides delete/merge/preserve on factual content, iterates until a fixed size budget is met. Framework-agnostic across A-MEM graph memory and Mem0 (Kim et al., Korea U / KAIST / DeepAuto.ai, 2026)
 - [[storage-budgeted-memory]] — A new problem formulation: keep an already constructed memory store within a fixed size budget while remaining as useful as possible across an unknown future query distribution. Formalized as a query-agnostic max-min program
 - [[llm-guided-compression]] — The compression pattern in which surface similarity only proposes candidate pairs and an LLM judge decides the action (DELETE/MERGE/PRESERVE) on factual content. The redundancy/complementarity/distinctness taxonomy is the action space
+- [[gas-town]] — Steve Yegge's open-source orchestration loop: 20–30 Claude Code instances coordinated by a Mayor agent, with patrol agents and git-backed state.
 

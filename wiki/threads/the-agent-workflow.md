@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-06-19
+updated: 2026-07-01
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -33,8 +33,9 @@ sources:
   - raw/2605.18747.pdf
   - raw/yt-effect-opencode-dax-raad.md
   - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
+  - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
-unaudited_marginal: 1
+unaudited_marginal: 0
 ---
 
 # The Agent Workflow
@@ -76,6 +77,9 @@ The agent workflow consists of two interdependent phases — human-in-the-loop d
 
 > [!note] Marginal: The Review Bottleneck
 > [[armin-ronacher|Ronacher]]'s 2026 post `raw/the-final-bottleneck.md` reframes the entire workflow by arguing that **writing code is no longer the bottleneck — human review capacity is**. When agents produce output faster than humans can meaningfully review it, the workflow stalls at the handoff regardless of AFK execution speed. The historical parallel (textile industry: each speed-up just shifted the bottleneck downstream) suggests this isn't a temporary imbalance — it's a structural feature of the speed-up. The open question for this thread: can mechanical verification ([[verification-loop]]) scale to cover what only human judgment could do?
+
+> [!note] Marginal: The Cost Shift and the Loop Lineage
+> The "designing loops that prompt your agents" discourse ([[peter-steinberger|Steinberger]]'s June 2026 tweet; [[boris-cherny|Boris Cherny]]'s definition) adds two things to this thread's model. First, the **financial twin of the review bottleneck**: once the model writes code for almost nothing, loop management becomes the expensive part — "the costliest thing in AI coding is no longer writing code, it's managing the agent loop" — as @runes_leo put it in June 2026 (Uber capped engineers at $1,500/person/tool/month for Claude Code and Cursor after burning its annual AI budget in four months). Second, a five-stage [[agent-loop]] lineage — ReAct (2022) → AutoGPT (2023) → [[ralph-loop|ralph]] (2025) → `/goal` (spring 2026) → [[orchestration-loop|orchestration loops]] (2026) — in which this thread's [[ralph-loop|Ralph loop]] is merely Stage 3. Stage 5, the [[orchestration-loop|orchestration loop]], supervises many loops concurrently and on cron with git-backed durability. It inherits hard stops (maximum iteration count, no-progress detection, token-or-dollar budget ceiling), because the loop that does not stop is the production failure mode. [[gas-town]] is the shipped, open-source proof of concept — 20–30 Claude Code instances coordinated by a Mayor agent with git-backed durability. See [[agent-loop]] and [[orchestration-loop]] for the full ladder.
 
 ## The Two Phases
 
@@ -204,7 +208,7 @@ The fix isn't bigger context windows — it's **ruthless context hygiene**:
 
 ## Model Switching Strategy: Stick With One
 
-[[dex-horthy|Dex Horthy]] makes a strong case against tool-switching: people who constantly swap between Claude Code, Cursor, Codex, and Deep Research "are only going to get to like 80% of the possible level of intuition" compared to focused practice. The engineers who get the best results have spent 1-2 months intensively with a single model family and tool.
+[[dex-horthy|Dex Horthy]] makes a strong case against tool-switching: people who constantly swap between [[claude-code|Claude Code]], Cursor, Codex, and Deep Research "are only going to get to like 80% of the possible level of intuition" compared to focused practice. The engineers who get the best results have spent 1-2 months intensively with a single model family and tool.
 
 The intuition isn't about prompt syntax — it's about behavioral nuance:
 - Different models respond differently to instruction style (all caps helps Opus but de-tunes Codex)
@@ -222,7 +226,7 @@ Key insight: **smart models are bad at tool calling.** If you have the fast orch
 
 ## The Agent Harness Architecture
 
-The [[multi-tier-action-space]] pattern has emerged across Claude Code, Manis, AMP, and Deep Agents as a shared agent harness architecture. It has two tiers:
+The [[multi-tier-action-space]] pattern has emerged across [[claude-code|Claude Code]], Manis, AMP, and Deep Agents as a shared agent harness architecture. It has two tiers:
 
 1. **Tool calling layer**: A thin set of atomic, general-purpose tools (~12) — glob, grep, file read/write, bash. These control the computer but don't encode domain logic.
 2. **Computer**: A shell, file system, and code execution environment where the actual actions happen via bash commands, scripts, and file operations.
@@ -456,4 +460,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph
+- `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The "designing loops" discourse: the cost-shift thesis (loop management as the new expensive part; Uber $1,500/person/tool/month cap) as the financial twin of the review bottleneck, and the five-stage agent-loop lineage in which the Ralph loop is Stage 3 and the orchestration loop is Stage 5
 

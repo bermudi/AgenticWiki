@@ -1,7 +1,7 @@
 ---
 title: Babysitter Agent
 created: 2026-06-05
-updated: 2026-06-16
+updated: 2026-07-01
 sources:
   - raw/yt-systems-building-systems.md
 tags: [concept, agentic-engineering, persistence, context-management]
@@ -58,6 +58,7 @@ Both alternatives share a flaw: they make the agent responsible for its own cont
 - [[smart-zone-dumb-zone]] — The babysitter aims to keep the master agent in the Smart Zone by managing context size
 - [[evolving-context]] — The babysitter's handoff prompts are a form of evolving context — what survives across sessions
 - [[self-harness]] — The babysitter manages the agent's context; Self-Harness manages the agent's harness — the same invisible-maintenance pattern at different layers
+- [[orchestration-loop]] — A different persistence mechanism: the babysitter manages one master's context invisibly; the orchestration loop supervises many loops on a schedule
 
 ## Sources
 

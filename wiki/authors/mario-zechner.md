@@ -1,7 +1,7 @@
 ---
 title: Mario Zechner
 created: 2026-04-25
-updated: 2026-05-02
+updated: 2026-07-01
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-ai-coding-for-real-engineers.md
@@ -53,7 +53,7 @@ Early access to GitHub Copilot through Nat Friedman (whom he knew from startup d
 
 ## The Austrian Connection
 
-Part of an Austrian engineering circle with [[armin-ronacher|Armin Ronacher]] (Flask/Sentry) and Peter Steinberger (PSPDFKit/OpenClaw). The three met through conferences and online arguments ("screaming at each other on the internet in a very cute, non-confrontational kind of way") and began experimenting with AI tools together in 2024-2025.
+Part of an Austrian engineering circle with [[armin-ronacher|Armin Ronacher]] (Flask/Sentry) and [[peter-steinberger|Peter Steinberger]] (PSPDFKit/OpenClaw). The three met through conferences and online arguments ("screaming at each other on the internet in a very cute, non-confrontational kind of way") and began experimenting with AI tools together in 2024-2025.
 
 ## Related
 

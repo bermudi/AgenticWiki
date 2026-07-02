@@ -1,7 +1,7 @@
 ---
 title: Armin Ronacher
 created: 2026-04-26
-updated: 2026-05-25
+updated: 2026-07-01
 sources:
   - raw/agentic-coding-recommendations.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
@@ -38,7 +38,7 @@ Between leaving Sentry (April 2024) and starting his new venture, Armin intervie
 - **Adoption follows vacation**: People explore agents when they have free time — summer, Thanksgiving, Christmas. Mandates from above ("you must use Cursor") don't stick without personal exploration time. It's a 2-3 week learning curve.
 - **Quality drops after adoption**: Teams report PRs getting larger, more frequent, and harder to review. Code in those PRs doesn't look like how an engineer would do it — agents over-recover from errors, adding complexity instead of failing cleanly.
 - **Non-engineers participating in engineering**: Marketing teams modifying websites, sales teams building demos that land on GitHub. One sales demo built a feature that didn't exist but nobody noticed.
-- **The "prompt request"**: Peter Steinberger's idea — don't send code, send the prompt. Armin's refinement: the prompt is valuable because the act of creating clarifies what you really want. Then the senior engineer can implement it properly.
+- **The "prompt request"**: [[peter-steinberger|Peter Steinberger]]'s idea — don't send code, send the prompt. Armin's refinement: the prompt is valuable because the act of creating clarifies what you really want. Then the senior engineer can implement it properly.
 
 ## Agentic Regret
 
@@ -63,7 +63,7 @@ Sees the most capable personal agents (OpenClaw) as just coding agents hidden fr
 
 ## The Austrian Circle
 
-Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and Peter Steinberger. Met Mario through Reddit and eventually in Vienna; met Peter at a conference in Istanbul. The three began experimenting with AI tools together in 2024-2025.
+Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and [[peter-steinberger|Peter Steinberger]]. Met Mario through Reddit and eventually in Vienna; met Peter at a conference in Istanbul. The three began experimenting with AI tools together in 2024-2025.
 
 > [!note] Marginal: Accountability as the Final Bottleneck
 > In his February 2026 post `raw/the-final-bottleneck.md`, Armin shifts his focus from agentic coding practices to a more fundamental constraint: **human review and accountability capacity as the hard ceiling on agentic output.** Even with perfect workflows, faster agents don't solve the problem that every line of agent-generated code requires human oversight. The textile industry historical parallel — each speed-up just moved the bottleneck downstream — structures his argument that this isn't fixable by faster tooling. He ends on an unresolved note: "Non-sentient machines will never be able to carry responsibility." This extends his earlier theme of [[deliberate-friction]] from agent process to human capacity.

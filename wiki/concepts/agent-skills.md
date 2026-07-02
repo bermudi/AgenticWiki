@@ -1,13 +1,14 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-06-17
+updated: 2026-07-01
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/skills-at-scale-workos-nisi-proser.md
   - raw/2407.08440v4.txt
   - raw/2605.18747.pdf
+  - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
@@ -213,6 +214,14 @@ In the pre-LLM era, failed conversations were disposable. In the agentic era, th
 
 The full development loop: **build → use for a week → mine transcripts → refine → repeat**. Skills get better over time if you treat every failure as training data.
 
+## Skills as the Loop's Reusable Unit
+
+[[peter-steinberger|Steinberger]]'s general skills rule — **if you do something more than once, turn it into an automated skill**; if you do something hard, turn it into a skill afterward so next time is free — is the more durable half of the loops thesis. The article's author (Matt Van Horn) frames the consequence for loops:
+
+> A loop with no reusable skills inside it is just a while-true around a stranger. A loop that calls a library of sharp, tested, named skills is a system that compounds.
+
+The implication is economic as well as architectural. Loops that re-derive everything from scratch just burn money (see [[agent-loop#The Cost Shift: Loop Management Is Now the Expensive Part]]). Loops that call a library of sharp, named, tested skills compound — each captured SOP makes the next loop cheaper. This is the procedural-knowledge flywheel inside the execution harness: the [[ralph-loop|ralph loop]] or [[orchestration-loop|orchestration loop]] provides the tick, the skill provides the judgment.
+
 ## Security
 
 Skills can include executable scripts with access to file systems, environment variables, and API keys — this is what makes them powerful but also introduces trust concerns. Audits of publicly available skills have found:
@@ -258,6 +267,8 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[procedural-knowledge]] — Skills are the canonical format for packaging procedural knowledge for agents
 - [[inferential-rule-following]] — IRFT (Inferential Rule-Following Tuning) is structurally analogous to skills: synthetic procedural training data that generalizes across domains
 - [[open-knowledge-format]] — Parallel precedent: both are minimal open format specs with reference implementations, betting that speaker count beats ownership
+- [[agent-loop]] — Skills are the reusable unit a loop dispatches; the loop is plumbing, the skill is the asset
+- [[peter-steinberger]] — Originator of the "skills, not loops, are the durable half" thesis
 
 ## Sources
 
@@ -266,3 +277,4 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/skills-at-scale-workos-nisi-proser.md` — Skill design craft: constraints over prescription, confidence scoring, script interpolation, anti-patterns; skills at team scale: sharing tiers, plugin marketplaces, non-technical users, CLI-driven skills, context mining
 - `raw/2407.08440v4.txt` — RuleBench (Sun et al.): IRFT demonstrates the same pattern as skills — abstract procedural capability (rule-following) learned from synthetic data and generalized to real tasks
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Positions skills within the code-for-acting layer (§2.2); code-based skills as executable, inspectable, and stateful artifacts that can be verified through execution
+- `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Steinberger's general skills rule (turn repeated work into a skill) and Van Horn's framing of the consequence: a loop calling sharp named skills compounds; a loop with no skills is a "while-true around a stranger"
