@@ -103,6 +103,7 @@ This is the multi-agent extension of the backpressure principle: engineering the
 - [[code-as-agent-harness]] — Backpressure as a form of harness control within the plan-execute-verify loop
 - [[aiming-problem]] — Backpressure is a mechanical aiming mechanism: tests, builds, and LLM-as-judge steer outputs toward the desirable subset
 - [[compounding-loops]] — Custom lint rules that mechanically reject wrong agent output are backpressure at the loop-coordination layer
+- [[rollback-posture]] — Backpressure rejects bad outputs before merge; rollback posture governs the merge cadence itself
 
 ## Sources
 

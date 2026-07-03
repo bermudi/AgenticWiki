@@ -1,7 +1,7 @@
 ---
 title: Deliberate Friction
 created: 2026-04-30
-updated: 2026-05-04
+updated: 2026-07-02
 sources:
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/2604.15597v1.pdf
@@ -73,6 +73,7 @@ Don't remove friction wholesale to enable agent autonomy. Audit which friction i
 - [[comprehension-debt]] — Teaching mode as deliberate friction: slowing down to build understanding instead of shipping faster
 - [[chris-parsons]] — "Reversible without embarrassment" as an operational instantiation of deliberate friction for safety boundaries
 - [[ralph-loop]] — Fresh-context-per-iteration and plan disposability as deliberate friction against compounding errors
+- [[rollback-posture]] — Refusing to release at full generation speed is deliberate friction at the release layer
 
 ## Sources
 

@@ -1,9 +1,10 @@
 ---
 title: Boris Cherny
 created: 2026-07-01
-updated: 2026-07-01
+updated: 2026-07-02
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
+  - raw/yt-are-we-really-doing-this-again.md
 unaudited_marginal: 0
 tags: [author, claude-code, anthropic, agent-loops, orchestration]
 ---
@@ -45,6 +46,9 @@ Cherny's recipe for running Opus autonomously for hours or days (June 2026):
 
 Tip five is the one the hype skips and the practitioners obsess over: a loop is only as trustworthy as its ability to check its own work. His canonical `/loop` starter: *babysit all my PRs; auto-fix build issues; when comments come in, use a worktree agent to fix them.*
 
+> [!note] Marginal: The Performative-Communication Critique
+> [[neetcode|NeetCode]] reads Cherny's public arc — "coding is largely solved," then "prompts are dead too, we killed it one more time," then the uninstalled IDE — as [[discourse-slop|discourse slop]]: performative communication shaped for virality rather than instruction. The windshield-wipers analogy: uninstalling your IDE because you haven't used it lately is like uninstalling your windshield wipers because it hasn't rained in a few days. The substance, when it arrives (the [[orchestration-loop|loop]] config, the five tips), is real; the packaging is maximal-hype, and the incentive to hype is structural — Cherny's employer (Anthropic) sells agentic coding. The wiki records both: the genuine practitioner evolution (above) and the skeptical read of how it is communicated.
+
 ## Thread
 
 - [[the-agent-workflow]] — Cherny's three-stage evolution is the lived instance of the HITL→AFK→orchestration progression
@@ -58,7 +62,11 @@ Tip five is the one the hype skips and the practitioners obsess over: a loop is 
 - [[peter-steinberger]] — Co-protagonist of the loops discourse; Steinberger's tweet, Cherny's definition
 - [[the-human-lever]] — The altitude-shift framing
 - [[verification-loop]] — His tip five: self-verification as the trust condition for autonomous loops
+- [[discourse-slop]] — The skeptical read of how Cherny's arc is communicated
+- [[neetcode]] — The skeptic auditor who reads Cherny's messaging as performative
+- [[jarred-sumner]] — Co-protagonist of the loops wave whose for-each/while walk-back tempers Cherny's Stage-5 enthusiasm
 
 ## Sources
 
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Creator of Claude Code (side project, Sep 2024); the three-stage evolution; the 259-PR / deleted-IDE receipt (via Simon Willison, Dec 2025); the WorkOS loop definition (June 2, 2026); the five autonomous-Opus tips and the `/loop` starter; the "job moved up an altitude" nuance.
+- `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s performative-communication critique: the "prompts are dead too" escalation, the windshield-wipers analogy for the IDE uninstall, and the structural incentive (Anthropic sells agentic coding) to hype.

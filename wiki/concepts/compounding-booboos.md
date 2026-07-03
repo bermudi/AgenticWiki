@@ -1,9 +1,10 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-07-01
-sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf]
+updated: 2026-07-02
+sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf, raw/yt-are-we-really-doing-this-again.md]
 tags: [concept, ai, reliability]
+unaudited_marginal: 0
 ---
 
 # Compounding Booboos
@@ -31,6 +32,10 @@ Laban et al. (2026) provide direct quantitative evidence for compounding booboos
 - **Short-term performance is not predictive**: a model's score after 2 interactions is a poor predictor of its score after 20 interactions
 
 This confirms the mechanism Mario Zechner described: small errors introduced in each interaction build upon the degraded state, and the compounding is non-linear.
+
+## Per-Iteration Decay Across Loop Ticks
+
+The compounding is sharpest in an [[agent-loop]], where each iteration builds on the previous iteration's output. [[neetcode|NeetCode]] supplies the framing: if an agent is correct 95% of the time per iteration, ten iterations is not "10 × 95%" — it is 0.95¹⁰ ≈ 0.60 (NeetCode miscalculated the product as 0.5 on camera; the correct value is ~0.60 and the argument is unchanged). The system is right on only ~60% of its runs. The point generalizes: unless the agent operates at (effectively) perfect accuracy, "the crap just compounds and gets worse and worse the longer you let it go." This is the same multiplicative mechanism [[delegate-52|DELEGATE-52]] measured for document editing — degradation compounds with interaction length, monotonic and non-plateauing — now stated as the structural argument against unbounded ([[orchestration-loop|while]]) loops. It is also why the [[agent-loop|for-each-not-while]] discipline and hard stops are not optional polish: bounded iteration counts are the only thing that keeps the decay product above water.
 
 ## Mitigation
 
@@ -70,9 +75,12 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 - [[blind-panic]] — Blind panic's looping and tool hallucination is a compounding booboo pattern: each failed attempt builds on the last
 - [[agent-evals]] — The eval flywheel catches booboos in production before they compound; every production failure becomes a permanent eval case
 - [[agent-loop]] — An open loop that writes code with no feedback is a machine for generating compounding mistakes; hard stops and verification are the defense
+- [[neetcode]] — The exponential-decay articulation of per-iteration loop error compounding
+- [[rollback-posture]] — Undetected faults that stack up jam the rollback valve; compounding booboos are the mechanism
 
 ## Sources
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/slowing-the-fuck-down.md`
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors across 52 domains
+- `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s exponential-decay framing: per-iteration error compounds multiplicatively across loop ticks (0.95¹⁰ ≈ 0.60)

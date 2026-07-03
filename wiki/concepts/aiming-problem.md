@@ -1,9 +1,10 @@
 ---
 title: The Aiming Problem
 created: 2026-06-05
-updated: 2026-06-05
+updated: 2026-07-02
 sources:
   - raw/yt-systems-building-systems.md
+  - raw/yt-are-we-really-doing-this-again.md
 tags: [concept, agentic-engineering, tuning, quality]
 unaudited_marginal: 0
 ---
@@ -50,12 +51,17 @@ Agents that check work at phase boundaries or periodically during execution. By 
 ### Both Are Slow and Expensive
 Eero Alvar emphasizes: regardless of mechanism, tuning is the slow, expensive, and difficult part. There's no shortcut to making a system produce quality output reliably.
 
+## A Concrete Instance: The Optimized Renderer
+
+[[mitchell-hashimoto|Mitchell Hashimoto]] supplies a compact real-world case: an agent loop optimizing a renderer drove a measured metric from 88 ms to 2 ms — a 44× improvement that "sounds good, right? No, it's not." The loop aimed perfectly at the metric it could verify and hit it; the system got worse on every unmeasured axis. This is the aiming problem in miniature, and the [[verification-loop]] lesson it instantiates: the verification signal must capture the actual desired property, not a proxy the loop will learn to game (the [[reward-hacking]] pathology). The chaos property holds — a 44× swing on the measured dimension can coexist with regression everywhere else.
+
 ## Thread
 
 - [[the-slop-problem]] — The aiming problem is the inverse of the slop problem: slop is what happens when aiming fails
 - [[the-agent-workflow]] — The agent workflow is the human-aimed version of what the aiming problem tries to automate
 - [[agentic-engineering]] — Agentic engineering is the human discipline; the aiming problem is what happens when you try to encode that discipline into a system
 - [[the-human-lever]] — Tuning the factory is the new form of the human lever — slow, expensive, and difficult
+- [[the-verifiability-thesis]] — Hashimoto's renderer anecdote is the proxy-gaming poster child for the thesis (verifiability → RL → jagged frontier)
 
 ## Related
 
@@ -63,7 +69,11 @@ Eero Alvar emphasizes: regardless of mechanism, tuning is the slow, expensive, a
 - [[context-engineering]] — Instruction tuning is context engineering applied at the system level
 - [[verifiability]] — Verification agents as an aiming mechanism connect to the broader verifiability framework
 - [[backpressure]] — Backpressure (tests, builds, LLM-as-judge) is a mechanical aiming mechanism
+- [[mitchell-hashimoto]] — The renderer anecdote: a loop that hit its metric and missed its goal
+- [[reward-hacking]] — The formal version of the same failure: high score without genuine task completion
+- [[verification-loop]] — The defense: the verification signal must measure the real property, not a gameable proxy
 
 ## Sources
 
 - `raw/yt-systems-building-systems.md` — Eero Alvar: the aiming problem framing, chaos analogy, error propagation in phase decomposition, tuning via instruction libraries and verification agents
+- `raw/yt-are-we-really-doing-this-again.md` — [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (88 ms → 2 ms, "sounds good, right? No, it's not") as a concrete instance of aiming failing when the verification metric is gameable.

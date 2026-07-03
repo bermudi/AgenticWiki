@@ -81,6 +81,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[peter-steinberger]] — The "designing loops that prompt your agents" tweet (2.2M views); skills-not-loops thesis; Austrian engineering circle
 - [[matthew-berman]] — YouTube creator; loop primers, the automation-vs-loop distinction, the three-trigger taxonomy, and the Loop Library
 - [[ai-jason]] — Practitioner running production loops; loop-engineer-as-outer-harness and the compounding-loops shared-state pattern
+- [[jarred-sumner]] — Creator of Bun; parallel-agent management, the Zig→Rust Bun port, and the for-each-not-while loop walk-back
+- [[mitchell-hashimoto]] — HashiCorp co-founder; balanced skeptic; the renderer-optimization metric-gaming caveat
+- [[neetcode]] — YouTube creator; the hype-cycle and discourse-slop critic of the loops wave
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -169,6 +172,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
 - [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
+- [[discourse-slop]] — AI-generated thought-leadership slop circulating through the meta-discourse about AI tools; the hype cycle and incentive-to-hype map.
 - [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
 - [[state-collapse]] — The failure mode of single-latest-state memory systems in evolving environments: prior versions are silently overwritten and lost, even when they remain valid for older deployments or future rollbacks
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
@@ -193,6 +197,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[under-exploration]] — A predicted pathology in the [[operational-mirror|operational mirror]]: the optimizer converges on local prompt-level edits, missing structural changes. Detection signal: ship-prediction accuracy decay (e.g., 80% → 0%). Empirically confirmed in [[harnessx]] §6.6(g–i)
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
+- [[rollback-posture]] — Rollbacks only work when you release slower than you can detect problems; agents shipping faster than detection jams the safety valve.
 - [[verifiability]] — Karpathy's framework: LLMs automate what you can verify; the driver of jagged AI capability.
 - [[vibe-coding]] — The term Karpathy coined: coding where you fully trust the LLM's output. Raises the floor for everyone.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.

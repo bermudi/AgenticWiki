@@ -1,11 +1,12 @@
 ---
 title: Peter Steinberger
 created: 2026-07-01
-updated: 2026-07-01
+updated: 2026-07-02
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/agentic-coding-recommendations.md
   - raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md
+  - raw/yt-are-we-really-doing-this-again.md
 unaudited_marginal: 0
 tags: [author, agent-loops, agent-skills, claude-code]
 ---
@@ -20,6 +21,10 @@ tags: [author, agent-loops, agent-skills, claude-code]
 > — @steipete, June 7, 2026
 
 The telling part wasn't the claim — it was that a six-word phrase cleared 2.2 million views while the people boosting it argued in the replies about what it meant ("nobody knows but him and Boris"). The loudest idea in AI coding this week was one most people repeating it could not explain.
+
+## The Follow-Up: Threads Spawning Threads
+
+Four days after the tweet, Steinberger posted the closest thing to a concrete recipe: tell Codex to maintain your repos, wake every five minutes, and direct work to *threads*; this makes the work easy to parallelize and steer as needed. His stack: an "orchestrator skill" combined with "triage plus auto review plus computer use skills," so that "some work can land autonomously." The load-bearing mechanic, as [[neetcode|NeetCode]] glosses it, is that a Codex **thread** (a session, like a ChatGPT thread) can invoke and create *other* independent threads, each with its own context — one loop spawning sub-loops. That is the [[orchestration-loop|Stage-5]] primitive in plain terms: the thread is the unit of work, and a supervising thread dispatches work into isolated child threads. Everything else (the named skills, the five-minute wake) is configuration around that one capability. NeetCode's complaint is precisely that this — the one genuinely useful, concrete takeaway — was buried under the viral phrasing of the original tweet rather than stated plainly.
 
 ## Skills, Not Loops, Are the Durable Half
 
@@ -45,15 +50,18 @@ Part of an Austrian engineering circle with [[armin-ronacher|Armin Ronacher]] an
 ## Related
 
 - [[agent-loop]] — The concept his tweet named; skills as the reusable unit inside it
-- [[orchestration-loop]] — Stage 5 of the lineage his tweet boosted
+- [[orchestration-loop]] — Stage 5 of the lineage his tweet boosted; his follow-up describes the Stage-5 primitive (threads spawning threads) in plain terms
 - [[boris-cherny]] — Co-protagonist: Steinberger's tweet, Cherny's definition
 - [[agent-skills]] — The "more durable half" of his loops thesis
 - [[armin-ronacher]] — Austrian circle; refiner of the prompt-request pattern
 - [[mario-zechner]] — Austrian circle; the "valuable garbage" counterpoint to the prompt request
 - [[claude-code]] — The tool his loops target
+- [[neetcode]] — Surfaced the threads-spawning-threads mechanic as the one concrete takeaway buried under the viral phrasing
+- [[jarred-sumner]] — Co-protagonist of the loops wave whose for-each/while walk-back tempers Steinberger's tweet enthusiasm
 
 ## Sources
 
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The June 7, 2026 tweet (2.2M views); the skills-as-durable-half thesis (turn repeated work into a skill); the "while-true around a stranger" framing of a loop without skills (Van Horn's wording, per the source).
 - `raw/agentic-coding-recommendations.md` — Ronacher's agentic coding workflow (Go as the workflow language, Makefiles, parallelization, refactor timing); background for the Austrian engineering circle.
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — The Austrian circle (Steinberger, Ronacher, Zechner) and their joint experimentation with AI tools.
+- `raw/yt-are-we-really-doing-this-again.md` — The follow-up tweet: Codex threads spawning threads (orchestrator + triage + auto-review + computer-use skills); [[neetcode|NeetCode]]'s gloss that the load-bearing mechanic is one thread invoking independent child threads.

@@ -1,12 +1,14 @@
 ---
 title: Armin Ronacher
 created: 2026-04-26
-updated: 2026-07-01
+updated: 2026-07-02
 sources:
   - raw/agentic-coding-recommendations.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/the-final-bottleneck.md
+  - raw/yt-are-we-really-doing-this-again.md
 tags: [author, python, flask, go, agentic-coding, austria]
+unaudited_marginal: 0
 ---
 
 # Armin Ronacher
@@ -68,6 +70,9 @@ Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and 
 > [!note] Marginal: Accountability as the Final Bottleneck
 > In his February 2026 post `raw/the-final-bottleneck.md`, Armin shifts his focus from agentic coding practices to a more fundamental constraint: **human review and accountability capacity as the hard ceiling on agentic output.** Even with perfect workflows, faster agents don't solve the problem that every line of agent-generated code requires human oversight. The textile industry historical parallel — each speed-up just moved the bottleneck downstream — structures his argument that this isn't fixable by faster tooling. He ends on an unresolved note: "Non-sentient machines will never be able to carry responsibility." This extends his earlier theme of [[deliberate-friction]] from agent process to human capacity.
 
+> [!note] Marginal: Loop Experiments — Review Works, Implementation Doesn't (Yet)
+> In mid-2026, Ronacher ran his own loop experiments over a weekend and reported a candid, narrow result: "The only cases where they work so far for me are a review." He uses review loops himself — running a reviewer (CodeRabbit or similar) continuously and addressing issues until none remain — but he openly asked whether anyone had made loops work for *actual implementation* on a medium-sized project. This is an empirical, from-a-trusted-practitioner instance of the [[agent-loop|loops-can't-build-features]] wall and a direct corroboration of his own review-bottleneck thesis (from `raw/the-final-bottleneck.md`): where loops help is exactly where the bottleneck already lives. See [[neetcode|NeetCode]] for the surrounding discourse and [[jarred-sumner|Jarred Sumner]]'s for-each-not-while refinement, which replies directly to this experiment.
+
 ## Thread
 
 - [[the-slop-problem]] — Armin's 30-team interview findings, deliberate friction removal as slop accelerant, and conservative upgrade patterns
@@ -86,9 +91,13 @@ Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and 
 - [[deliberate-friction]] — His strongest new concept from the podcast
 - [[mario-zechner]] — Austrian peer, Pi creator
 - [[gergely-orosz]] — Host of the podcast where Armin shared these views
+- [[agent-loop]] — Armin's loop-experiment result (review-only) is an empirical instance of the loops-can't-build-features wall
+- [[jarred-sumner]] — Sumner's for-each/while reply came directly in response to Armin's loop experiments
+- [[neetcode]] — Surfaced and contextualized Armin's loop experiments in the discourse audit
 
 ## Sources
 
 - `raw/agentic-coding-recommendations.md` — Agentic coding practices and language recommendations
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — 30-team interviews, agentic regret, deliberate friction, industrial revolution parallel, MCP analysis, Austrian circle
 - `raw/the-final-bottleneck.md` — Accountability as the final bottleneck; human review capacity as hard ceiling on agentic output; textile industry parallel
+- `raw/yt-are-we-really-doing-this-again.md` — Armin's weekend loop experiments: "the only cases where they work so far for me are a review"; the open question of whether loops work for implementation on medium-sized projects.

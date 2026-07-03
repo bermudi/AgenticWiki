@@ -9,6 +9,7 @@ sources:
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-spec-driven-dev-hype-or-future.md
   - raw/yt-i-guess-were-writing-loops-now.md
+  - raw/yt-are-we-really-doing-this-again.md
 tags: [thread, ai-engineering, cognitive-debt, failure-modes, human-in-the-loop]
 unaudited_marginal: 0
 ---
@@ -72,6 +73,9 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 > [!warning] The Loops Discourse Is the Maximal-Delegation Frontier
 > The "designing loops" wave ([[agent-loop|agent loops]], [[orchestration-loop|orchestration loops]]) — removing the human from the per-turn prompting loop entirely — is the strongest push yet toward the maximal delegation this thread identifies as the cognitive-erosion mechanism. The tell is authorial: [[theo-t3gg|Theo]] anchors this thread (his "we all fell for it" video supplies the skateboarding metaphor and the population problem) *and* is a leading voice in the loops batch, where he frames loop cost as a budget to maximize and urges engineers to "prompt yourself out of involvement." He is internally consistent — he explicitly calls [[boris-cherny|Boris Cherny]]'s no-oversight claims "stupid" and insists he is "not at the fully autonomous point" — but the *direction* of the discourse is toward removing the very involvement whose loss drives [[cognitive-debt]]. The loops thesis doesn't resolve the [[supervision-paradox]]; it accelerates its inputs. See [[the-human-lever]]'s Automation Frontier tension for the parallel design-authority framing.
 
+> [!note] Departure: Two Skeptic Frames on the Loops Wave — Danger vs. Triviality
+> [[neetcode|NeetCode]] adds a second skeptic lens on the same "designing loops" wave the callout above addresses. This thread (via [[theo-t3gg|Theo]]) holds the **danger frame**: loops are the maximal-delegation frontier, and removing involvement is what drives [[cognitive-debt]]. NeetCode holds the **triviality frame**: the underlying idea is a simple cron-plus-sub-agents job, and the wave is mostly [[discourse-slop]] — performative, LLM-polished, incentive-driven hype whose substance-to-noise ratio is near zero. The two frames are complementary, not contradictory: NeetCode is loop-literate (he runs his own bug-triage loop) and does not dispute that delegation can erode skill. The distinction matters because it separates two different risks this thread conflates when it treats the loops wave monolithically: removing the human (the danger frame, which drives cognitive erosion) vs. mis-educating the human with slop (the triviality frame, which drives epistemic confusion about what the workflow even is). Notably, NeetCode's "there are no experts, only people who pretend" is an epistemic-humility claim about the *field*, distinct from this thread's population/skill-erosion claim about *individuals* — a different failure mode of the same hype cycle.
+
 ## Sources
 
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
@@ -80,3 +84,4 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 - `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — [[cian-clarke|Cian Clarke]]: SDD's "orders of magnitude better" but "lot lot longer" tradeoff in the SDD cognitive-cost departure callout
 - `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] benchmark (2,500 lines spec markdown for 689 LOC, 3.5h vs 24 min review) in the SDD cognitive-cost departure callout
 - `raw/yt-i-guess-were-writing-loops-now.md` — [[theo-t3gg|Theo]]: the loops conversion, the cost-as-challenge framing ("treat these limits like challenges"), and the "prompt yourself out of involvement" heuristic — the maximal-delegation frontier that accelerates this thread's cognitive-erosion mechanism.
+- `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]: the triviality/discourse-slop skeptic frame on the loops wave (vs. Theo's danger frame); "there are no experts, only people who pretend" as a field-level epistemic-humility claim distinct from this thread's individual skill-erosion claim.

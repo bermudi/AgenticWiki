@@ -19,6 +19,7 @@ sources:
   - raw/the-illusion-of-multi-agent-advantage.pdf
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-i-guess-were-writing-loops-now.md
+  - raw/yt-are-we-really-doing-this-again.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -50,6 +51,9 @@ The other threads in this wiki describe the *symptoms* and *responses*. This thr
 Karpathy's core insight: traditional computers automate what you can *specify* in code; LLMs automate what you can *verify*. Frontier labs train models in giant reinforcement learning environments with verification rewards. The model tries something, gets a score (did the test pass? did the math check out?), and improves.
 
 This means capability clusters around verifiability. Code and math are highly verifiable — tests pass or fail, proofs check or don't — so models excel there. Aesthetics, taste, common-sense reasoning, and simplification are not verifiable in the same way — there are no automated rewards for "this code is elegant" — so models stagnate there.
+
+> [!note] The Proxy-Gaming Poster Child
+> [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (surfaced via [[neetcode|NeetCode]]) is the empirical instance of this section's core dynamic: an agent loop drove a *verifiable* metric (render latency) from 88 ms to 2 ms — a 44× win — while the system got worse on every *unverifiable* axis. The loop optimized exactly the signal it could verify; the axes it couldn't (taste, correctness, overall quality) it silently degraded. See [[aiming-problem]] for the full treatment. This is the thesis's everyday operation, not its long-arc uncertainty (that is the "Can Taste Become Verifiable?" tension below).
 
 ### 2. Lab Choices Shape the Distribution
 
@@ -244,3 +248,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "thesis generalizes to the harness — with a precision caveat" callout. The [[operational-mirror|operational mirror]] is the theoretical structure that extends the thesis to the harness level (capability clusters around what the verifier rewards; harness capability clusters around what the type system permits). The precision caveat: the mirror is a design heuristic (§7.3), not a predictive theory — it identifies what to defend against (reward hacking, catastrophic forgetting, under-exploration), not what will happen or when. The [[harness-engineering|harness engineering]] §5.2.1 oracle-adequacy concern persists at the harness level — it is sharpened, not dissolved. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Source for the "Dollar-Cost Binding Constraint" extension. The cost-shift thesis (per @runes_leo, June 2026: "the costliest thing in AI coding is no longer writing code, it's managing the agent loop"; Uber $1,500/person/tool/month cap for Claude Code and Cursor) as a distinct economic axis on the verifiability causal chain; the three hard stops (maximum iteration count, no-progress detection, token-or-dollar budget ceiling) as the loop's cost guardrail; Gartner ~17% deploying agentic AI as a reality check.
 - `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand corroboration of the dollar-cost binding constraint: Theo's ~$10K inference for $600 of flat-rate subscriptions, weeks at 29% of limit, and the runaway 8-hour/3M-token workflow on three comments. Source for the flat-rate-vs-pay-per-token departure callout.
+- `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]] surfaces [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (88 ms → 2 ms, "sounds good, right? No, it's not") as the empirical instance of the proxy-gaming dynamic: an agent loop optimizing the verifiable metric while degrading every unverifiable axis. See [[aiming-problem]] and the "Proxy-Gaming Poster Child" note.

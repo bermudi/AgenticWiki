@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-01
+updated: 2026-07-02
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -314,6 +314,7 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - [[aesthetics-is-truth]] — Beauty as a proxy for technical correctness and quality
 - [[tool-design-for-agents]] — Tool design as part of the verification contract
 - [[deliberate-friction]] — Preserving institutional mechanisms that force human deliberation
+- [[rollback-posture]] — Refusing to release at full generation speed is deliberate friction at the release layer: the human owns deploy cadence as a detection-vs-release gate
 - [[backpressure]] — Engineering the environment to reject wrong outputs
 - [[ralph-loop]] — The canonical AFK loop implementation
 - [[plan-disposability]] — Plans as ephemeral coordination state

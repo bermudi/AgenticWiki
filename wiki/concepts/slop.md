@@ -1,7 +1,7 @@
 ---
 title: Slop
 created: 2026-04-25
-updated: 2026-06-01
+updated: 2026-07-02
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/agentic-coding-recommendations.md
@@ -104,6 +104,7 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - [[slop-watch]] — The observability platform built to measure and combat slop: sessions, traces, DRI review.
 - [[fighting-slop-with-slop]] — Accepting slop in disposable tooling to reduce slop where it matters
 - [[synthetic-truth]] — Sophisticated information slop: structurally perfect, rhetorically persuasive, factually empty
+- [[discourse-slop]] — The discourse-level variant: AI-generated thought-leadership about tools, LLM-polished and hype-amplified
 - [[temporal-smoothing]] — Temporal displacement as a slop mechanism: presenting future work as completed reality
 - [[failure-modes]] — Master playbook: slop as one of 17 mapped failure modes with detection signals and countermeasures
 

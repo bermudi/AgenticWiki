@@ -1,7 +1,7 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-07-01
+updated: 2026-07-02
 sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.txt", "raw/2605.18747.pdf"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 unaudited_marginal: 0
@@ -124,6 +124,7 @@ The practical implication for verification loop design: the loop is not a single
 - [[strategic-vs-tactical-programming]] — Strategic programming requires verification to prove design intent.
 - [[agent-quality-engineering]] — Evals + observability + flywheel: the quality framework for agentic systems
 - [[seams-and-adapters]] — Testing at seams is how the verification loop proves correctness.
+- [[rollback-posture]] — Per-change verification is necessary but not sufficient; rollback posture demands system-level detection cadence
 - [[matt-pocock]] — "Outrunning your headlights" metaphor; TDD as the discipline for keeping agent speed proportional to verification ability.
 - [[agent-observability]] — Traces as the input to the verification loop: you can only verify what you can see.
 - [[fighting-slop-with-slop]] — The BEEPs workflow uses the verification loop differently: the design doc is the verification target, the tooling is the throwaway means.

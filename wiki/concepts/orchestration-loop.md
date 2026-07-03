@@ -6,6 +6,7 @@ sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-wtf-is-loop-engineer-how-to-setup-for-real.md
   - raw/yt-i-guess-were-writing-loops-now.md
+  - raw/yt-are-we-really-doing-this-again.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, orchestration, multi-agent, durability, cron]
 ---
@@ -65,11 +66,15 @@ His fuller recipe (five tips for running Opus autonomously for hours or days): u
 
 The orchestration loop inherits the [[agent-loop|hard-stops discipline]]: maximum iteration count, no-progress detection, a token-or-dollar budget ceiling. Without them, the supervising loop is the failure mode — the loop that does not stop, at scale.
 
+> [!note] Departure: The Temporal Walk-Back
+> Stage-5 enthusiasm is recent enough that its own popularizers were still mapping its boundaries in public. [[jarred-sumner|Jarred Sumner]] — weeks after the "now we loop" wave — placed the limit: "loops work best around a task queue, more like a for-each rather than a while," implying the unbounded while case (letting supervising loops run loose) is *not* where the pattern is strong. [[neetcode|NeetCode]] reads the gap between the June hype and the late-June walk-back as [[discourse-slop]]: "there are no experts on this stuff, only people who pretend to be experts." The orchestration loop therefore inherits the for-each-not-while refinement too — the supervisor should be bounded by the work queue, not open-ended — and the incentive to hype it is highest exactly at the companies ([[boris-cherny|Anthropic]], OpenAI) whose business is agentic adoption.
+
 ## Thread
 
 - [[the-agent-workflow]] — The orchestration loop is the AFK execution substrate scaled to multi-agent, scheduled, durable operation
 - [[multi-agent-code-orchestration]] — The architectural vocabulary (roles, topologies, artifact-mediated communication) that orchestration loops instantiate
 - [[the-verifiability-thesis]] — The orchestration loop inherits hard stops as the loop's economic verification feedback channel; the cost-shift thesis frames the dollar cost as a third axis on the verifiability causal chain
+- [[the-cognitive-cost]] — The orchestration wave is the maximal-delegation frontier that accelerates cognitive erosion
 
 ## Related
 
@@ -82,9 +87,14 @@ The orchestration loop inherits the [[agent-loop|hard-stops discipline]]: maximu
 - [[gas-town]] — Canonical open-source implementation
 - [[verification-loop]] — The self-verification that makes an orchestration loop trustworthy
 - [[afk-agent]] — Orchestration loops are AFK execution at system scale
+- [[jarred-sumner]] — The for-each-not-while walk-back tempers Stage-5 enthusiasm
+- [[discourse-slop]] — The hype layer over Stage 5; the temporal walk-back as a symptom
+- [[neetcode]] — Skeptic auditor of the orchestration discourse
+- [[rollback-posture]] — Concurrent dispatch compresses release cadence without compressing detection; the systems consequence of orchestration loops
 
 ## Sources
 
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The four changes that define Stage 5, Cherny's setup (hundreds of agents, cron, the `/loop` on-ramp, five tips), and Gas Town (Mayor + patrol agents, git-backed state, open source).
 - `raw/yt-wtf-is-loop-engineer-how-to-setup-for-real.md` — The "loop engineer as outer harness" reframing (Stage 5 is the harness/environment layer, not model-side topology) and the shared-state cooperation that motivates [[compounding-loops]].
 - `raw/yt-i-guess-were-writing-loops-now.md` — Dynamic loop generation ("my loops created loops"), the overnight four-stacked-PR run, the /goal-vs-dynamic-workflow distinction, and the runaway-cost cautionary data.
+- `raw/yt-are-we-really-doing-this-again.md` — The temporal walk-back: [[jarred-sumner|Sumner]]'s for-each-not-while refinement and [[neetcode|NeetCode]]'s read of the discourse as discourse slop; the incentive-to-hype map (Anthropic/OpenAI).

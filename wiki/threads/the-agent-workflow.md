@@ -34,6 +34,7 @@ sources:
   - raw/yt-effect-opencode-dax-raad.md
   - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
+  - raw/yt-are-we-really-doing-this-again.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -80,6 +81,9 @@ The agent workflow consists of two interdependent phases — human-in-the-loop d
 
 > [!note] Marginal: The Cost Shift and the Loop Lineage
 > The "designing loops that prompt your agents" discourse ([[peter-steinberger|Steinberger]]'s June 2026 tweet; [[boris-cherny|Boris Cherny]]'s definition) adds two things to this thread's model. First, the **financial twin of the review bottleneck**: once the model writes code for almost nothing, loop management becomes the expensive part — "the costliest thing in AI coding is no longer writing code, it's managing the agent loop" — as @runes_leo put it in June 2026 (Uber capped engineers at $1,500/person/tool/month for Claude Code and Cursor after burning its annual AI budget in four months). Second, a five-stage [[agent-loop]] lineage — ReAct (2022) → AutoGPT (2023) → [[ralph-loop|ralph]] (2025) → `/goal` (spring 2026) → [[orchestration-loop|orchestration loops]] (2026) — in which this thread's [[ralph-loop|Ralph loop]] is merely Stage 3. Stage 5, the [[orchestration-loop|orchestration loop]], supervises many loops concurrently and on cron with git-backed durability. It inherits hard stops (maximum iteration count, no-progress detection, token-or-dollar budget ceiling), because the loop that does not stop is the production failure mode. [[gas-town]] is the shipped, open-source proof of concept — 20–30 Claude Code instances coordinated by a Mayor agent with git-backed durability. See [[agent-loop]] and [[orchestration-loop]] for the full ladder, and [[compounding-loops]] for the lateral sibling: peer loops cooperating through a shared file system rather than through hierarchical supervision.
+
+> [!note] Marginal: The Hype Cycle, Discourse Slop, and Rollback Posture
+> [[neetcode|NeetCode]] audits the very loops discourse the note above draws on and finds it largely [[discourse-slop]]: performative, LLM-polished, conceptually trivial once the styling is stripped. His epistemic heuristic is to weight hype by the speaker's incentive — Anthropic, OpenAI, and Cursor sell agentic coding and have strong incentives to build hype, while Google does not, which is one reason its internal talks run more measured. The practical upshot for this thread: the loops/skills workflow is real and documented above, but the *public conversation* about it moves faster than practitioners understand it ("there are no experts, only people who pretend"), and the popularizers themselves walked back their enthusiasm within weeks ([[jarred-sumner|for-each, not while]]; [[armin-ronacher|review, not implementation]]). NeetCode also surfaces [[rollback-posture]] as a systems counterweight: release cadence must not outpace detection cadence, or rollbacks jam — the deploy-layer version of the speed-review asymmetry this thread already documents at the code level. Treat the workflow as documented engineering; treat the discourse about it as a hype-amplified signal that needs the same verification discipline as the code it describes.
 
 ## The Two Phases
 
@@ -272,7 +276,7 @@ Within the Journey phase, [[tracer-bullets]] are the first thing to ship: thin v
 3. **Not mission-critical**: Nobody's life or revenue depends on the output.
 4. **Exploratory**: Trying things you'd otherwise not have time for.
 
-Karpathy's auto-research is a good example — you give it a narrow evaluation function (startup time, loss), and it optimizes. But beware: the evaluation function only captures a narrow metric. The agent will happily ignore code quality, complexity, or correctness if your evaluation function doesn't capture them. The human is always the final quality gate.
+Karpathy's auto-research is a good example — you give it a narrow evaluation function (startup time, loss), and it optimizes. But beware: the evaluation function only captures a narrow metric. The agent will happily ignore code quality, complexity, or correctness if your evaluation function doesn't capture them. [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote is a concrete instance of the [[aiming-problem]] this creates: an agent loop drove a metric from 88 ms to 2 ms (a 44× win) — but the system got worse on every unmeasured axis. The human is always the final quality gate.
 
 ## Iterative Self-Correction: A Micro-Scale HITL Cycle
 
@@ -461,4 +465,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The "designing loops" discourse: the cost-shift thesis (loop management as the new expensive part; Uber $1,500/person/tool/month cap) as the financial twin of the review bottleneck, and the five-stage agent-loop lineage in which the Ralph loop is Stage 3 and the orchestration loop is Stage 5
+- `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s audit of the loops discourse as discourse slop; the incentive heuristic (Anthropic/OpenAI/Cursor hype, Google measured); the temporal walk-back (for-each not while; review not implementation); "there are no experts, only people who pretend."
 

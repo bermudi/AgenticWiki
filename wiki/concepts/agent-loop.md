@@ -7,6 +7,7 @@ sources:
   - raw/yt-only-the-best-are-using-them.md
   - raw/yt-7-insane-loops-you-need-to-try-right-now.md
   - raw/yt-i-guess-were-writing-loops-now.md
+  - raw/yt-are-we-really-doing-this-again.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, autonomous-agents, claude-code, cron, orchestration]
 ---
@@ -25,7 +26,7 @@ In plain terms: you write the *intent* and the *stopping behavior*, and the loop
 
 ### The "Cron Job With a Hat On" Rebuttal
 
-The sharpest skeptic line in the discourse was four words: *"Cronjobs have funny re-branding rn."* It is half right. The scheduling layer *is* cron — Boris literally runs his loops on cron, and Claude Code's `/loop` command uses cron under the hood. If your entire definition of a loop is "a thing that runs on a timer," cron was invented in 1975 and you can go home.
+The sharpest skeptic line in the discourse was four words: *"Cronjobs have funny re-branding rn."* [[neetcode|NeetCode]] arrives at the same position from the outside — "conceptually, this is very trivial stuff... basically a long-running task, aka a loop... like a cron job" — while conceding he already runs one. The rebuttal below is the response. The skeptic line is half right. The scheduling layer *is* cron — Boris literally runs his loops on cron, and Claude Code's `/loop` command uses cron under the hood. If your entire definition of a loop is "a thing that runs on a timer," cron was invented in 1975 and you can go home.
 
 What cron never had is the part in the middle. A cron job runs a fixed script. A loop runs a model that looks at the current state, decides what to do next, does it, checks whether it worked, and decides whether to keep going. **The decision is the agent's, not a hardcoded branch.** The honest framing is that loops are cron plus a decision-maker in the body, and the interesting engineering is everything you wrap around that decision so it does not run off a cliff.
 
@@ -67,6 +68,10 @@ The romantic version of loops is that you write the loops and a thousand agents 
 > [!warning] The Loop That Doesn't Stop
 > The failure mode everyone in production is scared of is the loop that does not stop. "Without guardrails, you get infinite loops and billing surprises orders of magnitude over budget." An open loop that writes code with no feedback is a machine for generating confident mistakes. A loop that writes, runs, reads the result, and corrects is the thing that actually works — the loop is not the magic, the *feedback inside it* is. See [[verification-loop]] and [[compounding-booboos]].
 
+## For-Each, Not While: Bounded Task Queues
+
+The hard-stops discipline has a sharper articulation from the practitioners themselves: loops are strong around a *bounded task queue* and weak as an *unbounded pursuit*. [[jarred-sumner|Jarred Sumner]], weeks after boosting the "now we loop" wave, walked it back: "loops work best around a task queue, more like a for-each rather than a while." A **while** runs continuously until a condition is met — the romantic "let the agent run loose" vision the hype sold. A **for-each** iterates a *predefined* bounded sequence. The honest reading is that the unbounded while case is not where loops pay off; the bounded for-each is. This is a first-hand tempering of the [[orchestration-loop|Stage-5]] enthusiasm from one of its own practitioners, and it is also why the exponential-decay objection bites: at 95% per-iteration accuracy, ten unbounded iterations collapse to ~60% overall (0.95¹⁰) — see [[compounding-booboos]]. Bounded iteration counts are not optional polish; they are what keeps the decay product above water.
+
 ## The Cost Shift: Loop Management Is Now the Expensive Part
 
 When the model writes code for almost nothing, the cost moves to the loop running it. The shift is real and financial:
@@ -95,13 +100,14 @@ A loop is plumbing. The asset is the skill it calls. Loops that call sharp named
 The loops people actually run sort cleanly by goal type. Verifiable goals: sub-50ms page-load optimization, logging coverage to "every important path," production error sweep (trace → root-cause → fix → PR → Slack ping). LLM-as-judge goals: overnight docs sweep, architecture-satisfaction refactor ("refactor until you are happy with the architecture"), full product evaluation across N scenarios. The verifiable ones are reliable; the judged ones are "a little more brittle because we are leaving taste and judgment up to the model."
 
 > [!warning] Contradiction: Loops Can't Build Features (Yet)
-> Even the technique's popularizers concede the wall. Berman: *"I have not really found a way to build features with loops. You cannot say 'loop until we build a full permissioning system'... I don't know which direction the AI is going to go."* Loops optimize toward an end state they can recognize; they do not *choose* the end state. Day-zero feature building — where the goal is itself discovered through exploration — is precisely where the goal-verification grammar breaks down. This is the [[aiming-problem]] at the loop level: a loop can pursue a goal but cannot aim one.
+> Even the technique's popularizers concede the wall. Berman: *"I have not really found a way to build features with loops. You cannot say 'loop until we build a full permissioning system'... I don't know which direction the AI is going to go."* [[armin-ronacher|Armin Ronacher]]'s own weekend loop experiments hit the same wall from the opposite direction: "The only cases where they work so far for me are a review" — and he openly asked whether anyone had made loops work for *implementation* on a medium-sized project. Loops optimize toward an end state they can recognize; they do not *choose* the end state. Day-zero feature building — where the goal is itself discovered through exploration — is precisely where the goal-verification grammar breaks down. This is the [[aiming-problem]] at the loop level: a loop can pursue a goal but cannot aim one.
 
 ## Thread
 
 - [[the-agent-workflow]] — The agent loop is the AFK execution substrate; the cost-shift and hard-stops discipline belong in the workflow's production layer
 - [[tool-design-for-agents]] — Skills as the reusable unit the loop dispatches; the loop is the harness, the skill is the judgment
 - [[the-verifiability-thesis]] — The loop's cost discipline is the verifiability thesis applied to the loop's economic feedback channel; the hard stops (max iterations, no-progress, dollar budget) are the operationalization
+- [[the-cognitive-cost]] — The loops wave is the maximal-delegation frontier; removing the human from the per-turn loop accelerates cognitive erosion
 
 ## Related
 
@@ -117,6 +123,9 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - [[compounding-loops]] — Lateral loop cooperation via shared state, a sibling to hierarchical orchestration
 - [[matthew-berman]] — The automation-vs-loop distinction and trigger taxonomy
 - [[theo-t3gg]] — Firsthand loop receipts and the /goal-vs-dynamic-workflow distinction
+- [[jarred-sumner]] — The for-each-not-while refinement: loops work best around a bounded task queue
+- [[neetcode]] — The skeptic auditor: "it's just cron," the exponential-decay objection
+- [[discourse-slop]] — The meta-discourse around loops (the viral "designing loops" wave) is itself slop-prone
 
 ## Sources
 
@@ -124,3 +133,4 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - `raw/yt-only-the-best-are-using-them.md` — The automation-vs-loop distinction (decision inside the loop), the three-trigger taxonomy (action/schedule/human), verifiable vs. LLM-as-judge goals, and the cost/expertise bifurcation.
 - `raw/yt-7-insane-loops-you-need-to-try-right-now.md` — Concrete loop patterns sorted by goal type (the Loop Library), and the "loops can't build features" tension.
 - `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand cost receipts ($10K inference for $600 of subscriptions; the 8-hour/3M-token comment loop), the /goal-vs-dynamic-workflow distinction, and the "prompt yourself out of involvement" heuristic.
+- `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s skeptic audit: the "it's just cron" position, the for-each-not-while refinement (via [[jarred-sumner|Jarred Sumner]]), the exponential-decay objection (0.95¹⁰), and [[armin-ronacher|Armin Ronacher]]'s loop-experiment finding (review-only).
