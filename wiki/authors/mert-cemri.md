@@ -3,7 +3,7 @@ title: Mert Cemri
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.txt
 tags: [author, researcher, multi-agent, failure-taxonomy]
 unaudited_marginal: 0
 ---
@@ -25,7 +25,8 @@ UC Berkeley — shared with the LMSys / Sky Computing lab (Ion Stoica, Joseph Go
 - [[mast]] — the taxonomy and dataset
 - [[multi-agent-illusion]] — the complementary cost-controlled audit (Jwalapuram et al.); same empirical territory, different question (why vs. whether)
 - [[prathyusha-jwalapuram]] — lead author of the multi-agent-illusion audit; the two papers form the wiki's empirical MAS-reliability cluster
+- [[the-multi-agent-theory]] — the thread that traces the full six-paper theory; Cemri's work is Layer 2 (the diagnosis)
 
 ## Sources
 
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). Lead author (equal contribution with Melissa Z. Pan and Shuyi Yang). Co-created the [[mast]] taxonomy and MAST-Data (1642 traces, 7 frameworks, 4 model families).
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.txt` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). Lead author (equal contribution with Melissa Z. Pan and Shuyi Yang). Co-created the [[mast]] taxonomy and MAST-Data (1642 traces, 7 frameworks, 4 model families).

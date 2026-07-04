@@ -10,7 +10,9 @@ sources:
   - raw/2504.21625v6.txt
   - raw/2603.00822v2.txt
   - raw/2605.18747.pdf
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.txt
+  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/2603.04474-spark-to-fire-error-cascades.txt
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
 unaudited_marginal: 0
 ---
@@ -74,6 +76,27 @@ This is the multi-agent extension of the backpressure principle: engineering the
 
 [[verification-loop|Verification loops]] are the mechanism; backpressure is the strategy. A verification loop proves individual changes correct. Backpressure engineers the loop into the autonomous workflow so that the agent can't escape verification — it's built into the environment, not optional.
 
+## Response-Level Backpressure: Red-Flagging
+
+[[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] (Meyerson et al., 2025) implement a minimal form of backpressure at the LLM-response level: **red-flagging**. Any response that exhibits pathological signals — overly long outputs, malformed formats — is discarded without repair, and the agent is resampled. The hypothesis: bad behaviors are correlated in LLMs; a malformed response indicates the model has been conditioned into a strange state, so its reasoning is suspect even where parseable. Discarding and resampling is cheaper than repairing and propagates fewer correlated errors. This is backpressure at the finest granularity: the environment mechanically rejects suspect outputs *before* they influence the next step, rather than trying to direct the agent toward better outputs.
+
+The empirical validation (MAKER §4.5): red-flagging's main benefit is not raising the average per-step success rate but reducing *correlated* errors — the collisions where both of the first two votes are incorrect. Moving from a "helpful" repairing parser to a red-flagging parser cut collision counts substantially. Detection + rejection at the response level is what keeps the voting mechanism from being overwhelmed by correlated errors in many-step tasks.
+
+## Atomic-Claim Backpressure: The Genealogy Governance Layer
+
+[[genealogy-governance|Xie, Zhu, Zhang et al. (2026)]] scale backpressure to the multi-agent message layer. The governance layer intercepts every inter-agent message, decomposes it into atomic claims, tri-state labels each (Green/Red/Yellow) against a Lineage Graph of confirmed provenance, and enforces **blocking with rollback** for Red atoms. Unverified claims are mechanically prevented from entering shared context — backpressure at the claim level, not the output level.
+
+The ablation is the empirical validation of the backpressure principle at this layer:
+
+| Variant | BICR | Tokens |
+|---|---|---|
+| w/o Atomization | 40.0 ± 49.0% | 11,663 |
+| w/o Detection | 14.4 ± 35.2% | 14,708 |
+| **w/o Blocking** | **3.1 ± 10.1%** | **34,991** |
+| None | 2.2 ± 14.7% | 7,365 |
+
+Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline — *while consuming the most tokens*. Screening without enforceable isolation spends substantial computation and leaves propagation largely uncontrolled. **Detection signals need enforceable isolation or rollback to affect downstream propagation** — the backpressure thesis validated empirically at the multi-agent layer.
+
 ## Thread
 
 - [[the-agent-workflow]] — Backpressure as the convergence mechanism in the AFK loop
@@ -106,6 +129,10 @@ This is the multi-agent extension of the backpressure principle: engineering the
 - [[compounding-loops]] — Custom lint rules that mechanically reject wrong agent output are backpressure at the loop-coordination layer
 - [[rollback-posture]] — Backpressure rejects bad outputs before merge; rollback posture governs the merge cadence itself
 - [[mast]] — The FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs
+- [[massively-decomposed-agentic-processes]] — red-flagging as response-level backpressure: malformed/overlong outputs mechanically rejected before they influence the next step
+- [[maker]] — the implementation; §4.5 shows red-flagging's main benefit is reducing correlated errors, not raising average accuracy
+- [[error-cascades]] — the propagation model the governance layer's backpressure is designed to break; βρ(A) > δ is the condition backpressure (raising δ) is meant to invert
+- [[genealogy-governance]] — atomic-claim backpressure at the multi-agent message layer; the ablation (no blocking → 3.1% BICR) is the empirical validation that detection without enforcement is insufficient
 
 ## Sources
 
@@ -116,4 +143,6 @@ This is the multi-agent extension of the backpressure principle: engineering the
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided rule-augmented evaluation as automated mechanical backpressure at the constraint level
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): executable guardrails as mechanical backpressure at process, source, and architectural levels; fail-closed philosophy; 88.3% compliance rate
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies transactional shared program state (§5.2.4) as the key challenge for scaling backpressure to multi-agent systems
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs. The ChatDev chess program example (compiled but had runtime bugs) illustrates this.
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.txt` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs. The ChatDev chess program example (compiled but had runtime bugs) illustrates this.
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.3 red-flagging (discard malformed/overlong responses without repair); §4.5 empirical impact (red-flagging reduces correlated errors — the collisions where both first two votes are incorrect). Source for the "Response-Level Backpressure" section.
+- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (atomic-claim decomposition, tri-state screening, blocking with rollback); §VII.D ablation (Table VI: w/o blocking → 3.1% BICR, the empirical validation that detection without enforcement is insufficient). Source for the "Atomic-Claim Backpressure" section.

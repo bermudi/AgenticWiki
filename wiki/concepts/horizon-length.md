@@ -3,7 +3,8 @@ title: Horizon Length
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/the-illusion-of-diminishing-returns.txt
+  - raw/2511.09030-maker-million-step-zero-errors.txt
 tags: [concept, evaluation, scaling, long-horizon, execution, compounding]
 unaudited_marginal: 0
 ---
@@ -45,6 +46,12 @@ This removes planning (the keys are given) and parametric knowledge (the diction
 
 The binding failure mode that caps horizon length — models degrading as their own errors accumulate in context — is [[self-conditioning]].
 
+## Pushing Horizon Length Without Raising Model Capability
+
+The horizon-length formula assumes a fixed per-step accuracy `p`. [[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] (Meyerson et al., 2025) push the *effective* per-step accuracy via subtask-level voting rather than by raising model capability: independent samples are drawn until one candidate leads by `k` votes, and the per-subtask success probability becomes `p_sub = 1 / (1 + ((1-p)/p)^k)`. The minimal `k` grows only logarithmically with `s` (`k_min = Θ(ln s)`), so the cost of solving an `s`-step task with target reliability `t` scales as `Θ(s ln s)` — log-linear, parallelizable to linear wall-clock. The empirical demonstration: Towers of Hanoi with 20 disks (1,048,575 steps) solved with zero errors using gpt-4.1-mini.
+
+This is the same compounding identity run in a different direction. Where the horizon-length paper shows that *raising `p`* past ~80% buys exponential horizon gains, MDAPs show that *raising effective `p` via voting* buys the same gains at log-linear cost — without changing the underlying model. The two results are complementary: the horizon-length formula tells you when scaling pays; the MDAP scaling laws tell you that voting is a log-linear-cost way to get there.
+
 ## Why This Matters for the Wiki
 
 Two reframes:
@@ -67,7 +74,10 @@ Two reframes:
 - [[model-routing]] — horizon length is a routing signal: match task length to model execution capability
 - [[iterative-self-correction]] — the horizon-length formula assumes no self-correction; the limits of iterative self-correction are what cap horizon length in practice
 - [[context-engineering]] — context engineering as a reliability lever: the sliding-window mitigation limits the error accumulation that caps horizon length
+- [[massively-decomposed-agentic-processes]] — pushes horizon length via voting (raising effective `p`) rather than via model capability (raising `p` directly); log-linear cost scaling
+- [[maker]] — the empirical demonstration: 1M-step Towers of Hanoi solved with zero errors via maximal decomposition + first-to-ahead-by-k voting
 
 ## Sources
 
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). *The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs.* arXiv 2509.09677v3. Horizon-length metric and Proposition 1 (§2.1); execution-isolation methodology (§2.2, §3); scaling and frontier-execution results (§3.1, §3.3); METR reconciliation (§2.1).
+- `raw/the-illusion-of-diminishing-returns.txt` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). *The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs.* arXiv 2509.09677v3. Horizon-length metric and Proposition 1 (§2.1); execution-isolation methodology (§2.2, §3); scaling and frontier-execution results (§3.1, §3.3); METR reconciliation (§2.1).
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 first-to-ahead-by-k voting and the log-linear cost scaling (Eqs. 9–18, `k_min = Θ(ln s)`); §4.4 the million-step Towers of Hanoi result. Source for the "Pushing Horizon Length Without Raising Model Capability" section.

@@ -4,6 +4,8 @@ created: 2026-07-03
 updated: 2026-07-03
 sources:
   - raw/2512.08296-scaling-agent-systems.pdf
+  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/2603.04474-spark-to-fire-error-cascades.txt
 tags: [concept, multi-agent, scaling, empirical, regression, architecture-selection, mas-audit]
 unaudited_marginal: 0
 ---
@@ -215,8 +217,16 @@ The three papers converge: MAS is not universally beneficial or universally harm
 > [!note] Synthesis: The Three-Leg Multi-Agent Theory
 > The wiki author's synthesis: the three papers together constitute a coherent theory of multi-agent LLM systems. The illusion paper establishes that automated MAS don't work (the negative result). MAST explains why (the diagnostic). The scaling study specifies when alternatives work (the predictive). No single paper makes the full argument; the theory emerges from their convergence. This synthesis is the wiki author's, not stated by any single source.
 
+## The Fourth and Fifth Legs: Mechanism and Engineered Escape
+
+Two 2025–2026 papers extend the theory beyond the three-leg structure:
+
+- **Mechanism** — [[error-cascades|Xie, Zhu, Zhang et al. (2026)]] supply the formal *how*: the collaboration graph's spectral radius ρ(A) governs amplification, and once βρ(A) > δ the system is supercritical. The architecture-specific error-amplification factors in this study's Table 5 (Independent 17.2×, Centralized 4.4×) are the regression-side measurement of the propagation the cascade paper models formally. The cascade paper's three vulnerability classes (cascade amplification, topological fragility, consensus inertia) are the dynamic patterns that produce the static symptoms this study's regression captures as overhead and efficiency.
+- **Engineered escape** — [[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] (Meyerson et al., 2025) operate on a different scaling axis than this study. Where this study varies architecture (SAS + 4 MAS) and agent count, MDAPs fix the architecture at maximal decomposition (one step per microagent) and vary the per-step vote budget `k`. The MDAP scaling laws (cost Θ(s ln s), `k_min = Θ(ln s)`) are orthogonal to this study's regression: they describe reliability under a fixed engineered topology, not architecture selection across topologies. The two frameworks are complementary — this study tells you *which architecture to pick*; MDAPs tell you *how to make the engineered pole reliable at scale*.
+
 ## Thread
 
+- [[the-multi-agent-theory]] — Layer 3 (the thresholds): this page supplies the *when* — SA < 45%, low tool count, decomposable task. The thread traces the full theory across six papers.
 - [[the-agent-workflow]] — the scaling framework is the quantitative answer to "when does multi-agent coordination help?" in the workflow thread
 - [[the-verifiability-thesis]] — the architecture-selection decision boundary (SA ≈ 0.45) is a verifiability threshold: tasks you can already do well don't benefit from coordination overhead
 - [[the-benchmark-crisis]] — the agentic vs. non-agentic distinction is a benchmark-design principle: MAS evaluations on non-agentic benchmarks (HumanEval) produce misleading guidance about agentic tasks
@@ -234,7 +244,13 @@ The three papers converge: MAS is not universally beneficial or universally harm
 - [[agent-floor]] — the Harvard 6-tier benchmark; both studies isolate tool-use complexity from real-world confounds, but this study adds the coordination dimension
 - [[deepswe]] — the long-horizon coding benchmark; SWE-bench Verified's placement in the saturation regime (SA = 0.522 > 0.45) is consistent with DeepSWE's finding that single-agent baselines are hard to beat on well-structured coding tasks
 - [[horizon-length]] — the super-linear turn scaling (α = 1.724) is an agent-system analog of horizon-length limits: communication overhead caps the effective team size just as error-laden history caps the effective task length
+- [[error-cascades]] — the formal propagation model beneath this study's error-amplification factors; βρ(A) > δ is the mechanism that produces the 17.2× (Independent) vs 4.4× (Centralized) gap
+- [[genealogy-governance]] — the message-layer defense against the cascades this study's error-amplification factors measure
+- [[massively-decomposed-agentic-processes]] — the orthogonal scaling axis (decomposition granularity + vote budget) this study doesn't vary; the engineered-decomposition pole
+- [[maker]] — the million-step demonstration that the engineered pole can be made reliable at scale
 
 ## Sources
 
 - `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park, Park, Schmidgall, Heydari, Yan, Zhang, Zhuang, Liu, Malhotra, Liang, Park, Yang, Xu, Du, Patel, Althoff, McDuff, Liu (Google Research + Google DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §1 introduction (260 configurations, agentic task definition); §3 system definition (5 architectures, formal model); §4.1 setup (benchmarks, LLMs, metrics); §4.2 main results (per-benchmark MAS deltas, decomposability analysis, family-specific signatures); §4.3 scaling principles (Eq. 1 regression, Table 4 coefficients, architecture selection, 87% accuracy); §4.4 coordination efficiency (turn power law, message density saturation, error absorption, error taxonomy, three regimes); §4.5 robustness (cluster-robust, Holm-Bonferroni, ACI, LODO); §5 limitations; §6 conclusion.
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 MDAP scaling laws (Θ(s ln s), `k_min = Θ(ln s)`) — the orthogonal scaling axis (decomposition granularity + vote budget) this study doesn't vary. Source for the "Engineered escape" leg.
+- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ) — the formal mechanism beneath this study's error-amplification factors. Source for the "Mechanism" leg.

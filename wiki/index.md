@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-03
+updated: 2026-07-04
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -24,6 +24,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
 - [[intent-to-code]] — What stands between human intent and shipped code? Four philosophies — specs-as-compiler, plan-as-contract, alignment-first, and pure vibes — disagree on the artifact's weight and where quality enforcement lives.
 - [[the-verifiability-thesis]] — Karpathy's unified theory: verifiability drives RL training, which creates the jagged frontier, which makes vibe coding possible on the peaks and demands agentic engineering to manage the boundary.
+- [[the-multi-agent-theory]] — Six papers converge on a layered theory of LLM-based Multi-Agent Systems: *whether* automated MAS work (no), *why* they fail (system design), *when* coordination helps (conditional), *how* errors propagate (graph dynamics), and *how to make MAS reliable* (engineered decomposition + message-layer governance). The binding constraint is the coordination layer, not the model.
 - [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
 
 ## ✍️ Authors
@@ -86,6 +87,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[neetcode]] — YouTube creator; the hype-cycle and discourse-slop critic of the loops wave
 - [[shashwat-goel]] — Researcher (MPI Tübingen / ELLS); conceived *The Illusion of Diminishing Returns* (ICLR 2026) — formalized horizon length and named self-conditioning.
 - [[mert-cemri]] — Lead author (with Melissa Z. Pan and Shuyi Yang) of *Why Do Multi-Agent LLM Systems Fail?* (NeurIPS 2025); co-created the [[mast]] failure taxonomy and MAST-Data — the first empirically grounded MAS failure dataset.
+- [[elliot-meyerson]] — Lead author of *Solving a Million-Step LLM Task with Zero Errors* (Cognizant AI Lab + UT Austin, 2025); co-designed the [[massively-decomposed-agentic-processes|MDAP]] framework and [[maker|MAKER]]; co-authored the AALPs position paper that motivates asymptotic analysis of LLM primitives.
+- [[yizhe-xie]] — Lead author (with Congcong Zhu and Xinyue Zhang) of *From Spark to Fire: Modeling and Mitigating Error Cascades in LLM-Based Multi-Agent Collaboration* (City University of Macau + Minzu University, 2026); co-designed the [[error-cascades|propagation-dynamics model]] and [[genealogy-governance|genealogy-based governance layer]].
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -129,6 +132,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[expert-mas]] — Hand-designed, deterministic, code-driven multi-agent baseline (Meta-Agent + Python Executor + Extractor/Calculator). GPT-5: 57.0% → 96.5% on [[smfr]] at comparable cost. The experimental lever proving the multi-agent paradigm *can* work when engineered.
 - [[multi-agent-illusion]] — The empirical correction: across 6 automated MAS frameworks, automated MAS do not consistently outperform single-agent CoT-SC and are up to 10× more expensive. Three pillars: [[architectural-bloat|architectural bloat]], [[functional-collapse|functional collapse]], capability floor.
 - [[mast]] — The first empirically grounded Multi-Agent System Failure Taxonomy (Cemri et al., NeurIPS 2025): 14 failure modes in 3 categories (System Design 44.2%, Inter-Agent Misalignment 32.3%, Task Verification 23.5%) across 1642 traces from 7 MAS frameworks. The diagnostic complement to [[multi-agent-illusion]] — explains *why* MAS fail.
+- [[error-cascades]] — The propagation-dynamics model for how a single atomic falsehood becomes system-wide false consensus in LLM-MAS (Xie et al., 2026): the collaboration graph's spectral radius ρ(A) governs amplification, βρ(A) > δ is the supercritical condition, three vulnerability classes (cascade amplification, topological fragility, consensus inertia). The mechanism layer beneath [[mast]] and [[multi-agent-illusion]].
+- [[genealogy-governance]] — A message-layer defense against [[error-cascades]] (Xie et al., 2026): atomic-claim decomposition, Lineage Graph of claim provenance, tri-state screening (Green/Red/Yellow), blocking with rollback. Prevents final infection in ≥89% of runs without altering the collaboration topology; the ablation (no blocking → 3.1% BICR) validates that detection without enforcement is insufficient.
+- [[massively-decomposed-agentic-processes]] — A scaling paradigm (Meyerson et al., 2025): decompose a long-horizon task into single-step microagents, apply per-step voting (first-to-ahead-by-k), red-flag malformed responses. Log-linear cost scaling (Θ(s ln s)) under maximal decomposition; the first approach to solve a >1M-step LLM task with zero errors. The engineered-decomposition pole that reinforces the [[multi-agent-illusion]] corollary (engineered works, auto-discovered doesn't).
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[self-conditioning]] — Models degrade on their own error-laden history; the failure mode that caps horizon length. Not fixed by scaling, fixed by thinking.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
@@ -243,4 +249,5 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[storage-budgeted-memory]] — A new problem formulation: keep an already constructed memory store within a fixed size budget while remaining as useful as possible across an unknown future query distribution. Formalized as a query-agnostic max-min program
 - [[llm-guided-compression]] — The compression pattern in which surface similarity only proposes candidate pairs and an LLM judge decides the action (DELETE/MERGE/PRESERVE) on factual content. The redundancy/complementarity/distinctness taxonomy is the action space
 - [[gas-town]] — Steve Yegge's open-source orchestration loop: 20–30 Claude Code instances coordinated by a Mayor agent, with patrol agents and git-backed state.
+- [[maker]] — The first implementation of the [[massively-decomposed-agentic-processes|MDAP]] framework (Meyerson et al., Cognizant AI Lab + UT Austin, 2025): maximal decomposition + first-to-ahead-by-k voting + red-flagging. Solved Towers of Hanoi with 20 disks (1,048,575 steps) with zero errors using gpt-4.1-mini. The first demonstration that LLM-based systems can scale to million-step reliability.
 

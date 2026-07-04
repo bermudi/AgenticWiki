@@ -4,7 +4,8 @@ created: 2026-05-06
 updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/the-illusion-of-diminishing-returns.txt
+  - raw/2511.09030-maker-million-step-zero-errors.txt
 tags: [benchmark, agent-evals, tool-use, model-evaluation]
 unaudited_marginal: 0
 ---
@@ -43,6 +44,9 @@ Each tier introduces a new cognitive demand, with 5 tasks per tier (30 total):
 Tier E is where "all the models suddenly die." Even GPT-5 achieves only ~10% task completion rate at tier E. Gemma 4 26B drops to 0%. The failure is not a matter of scale — it is a fundamental architectural limitation of auto-regressive LLMs for long-horizon, multi-step contingent planning.
 
 The authors demonstrated that this collapse occurs **even in a perfectly clean, deterministic environment**. This proves that the limitation in agentic workflows is not just that "the real world is messy" — even when the world is perfectly clean, the fundamental architecture of auto-regressive LLMs breaks down after about 5-7 sequential contingent steps.
+
+> [!note] Extension: maximal decomposition as an architectural answer to the tier-E ceiling
+> [[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] (Meyerson et al., 2025) approach the tier-E ceiling from a different angle: rather than asking the model to maintain system constraints across 8–12 contingent steps in one context, decompose the task into single-step microagents and apply per-step voting. The million-step zero-error Towers of Hanoi result is the limit case — a task that no single-agent system can complete at practical cost, solved by maximal decomposition. The open question is whether AgentFloor's tier E (which blends planning and execution) admits the same decomposition that Towers of Hanoi (pure execution with a fixed strategy) does. The MDAP paper's insight-vs-execution distinction suggests the execution component should yield; the planning component may not. This is a reasonable but unvalidated extension.
 
 > [!note] Departure: is tier E a planning ceiling or an execution ceiling?
 > Sinha, Arun, Goel et al. (ICLR 2026) would contest the framing that tier E is purely a planning/architectural ceiling that "scale alone cannot fix." Their work isolates *execution* (carrying out a given plan) from planning, and finds execution [[horizon-length|horizon]] improves non-diminishingly with model size — and dramatically with RL-trained thinking. Their thesis is that long-task failures are routinely *misattributed* to reasoning/planning when they are execution failures. The resolution may be that AgentFloor's tier E (8–12 contingent steps maintaining system constraints) blends planning and execution; the Illusion paper predicts the execution component should yield to scale + thinking even if the planning component resists. This is a live tension, not a settled contradiction.
@@ -93,8 +97,11 @@ The authors tried structured prompting — telling models to plan first and then
 - [[instruction-hierarchy]] — ManyIH also demonstrates complexity-scaling collapse: models break at 12-tier conflicts, just as AgentFloor reveals break at 8-12 step planning
 - [[horizon-length]] — re-examines the tier-E ceiling through the execution lens: some "planning" collapse may be execution failure that yields to scale + thinking
 - [[self-conditioning]] — a candidate mechanism for in-trajectory tier-E collapse: models degrading on their own accumulated errors
+- [[massively-decomposed-agentic-processes]] — the architectural answer to the tier-E ceiling: decompose into single-step microagents + per-step voting; the million-step result is the limit case
+- [[maker]] — the implementation; Towers of Hanoi as the execution-pole benchmark that admits maximal decomposition
 
 ## Sources
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's summary of the Harvard AgentFloor study, including the tier framework, comparative results, failure mode analysis, and cost implications
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the tier-E execution-vs-planning departure: isolating execution shows it improves with scale + thinking (§3.1), contesting the "scale alone cannot fix" reading of long-horizon collapse.
+- `raw/the-illusion-of-diminishing-returns.txt` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the tier-E execution-vs-planning departure: isolating execution shows it improves with scale + thinking (§3.1), contesting the "scale alone cannot fix" reading of long-horizon collapse.
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §4.4 the million-step zero-result via maximal decomposition + voting. Source for the "Extension: maximal decomposition as an architectural answer" callout.

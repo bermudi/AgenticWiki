@@ -1,0 +1,1151 @@
+arX iv:2603.04474v2 [cs.MA] 11 May 2026
+
+
+
+
+
+
+
+
+
+
+          From Spark to Fire: Modeling and Mitigating Error
+           Cascades in LLM-Based Multi-Agent Collaboration
+
+Yizhe Xie∗†, Congcong Zhu∗, Xinyue Zhang∗†, Tianqing Zhu∗, Dayong Ye∗,
+               Minfeng Qi∗, Huajie Chen∗, Wanlei Zhou∗
+         ∗Faculty of Data Science, City University of Macau
+                     †Minzu University of China
+
+
+    Abstract-Large Language Model-based Multi-Agent Systems
+    (LLM-MAS) are increasingly applied to complex collaborative
+    scenarios. However, their collaborative mechanisms may cause
+    minor inaccuracies to gradually solidify into system-level false
+    consensus through iteration. Such risks are difficult to trace since
+    errors can propagate and amplify through message dependencies.
+    Existing protections often rely on single-agent validation or
+    require modifications to the collaboration architecture, which
+    can weaken effective information flow and may not align with
+    natural collaboration processes in real tasks. To address this,
+    we propose a propagation dynamics model tailored for LLM-
+    MAS that abstracts collaboration as a directed dependency
+    graph and provides an early-stage risk criterion to characterize
+    amplification risk. Through experiments on six mainstream                  Fig. 1.            The amplification of errors in LLM-MAS. Whether the input is
+    frameworks, we identify three vulnerability classes: cascade               a factuality error or a faithfulness error, the agents reach a false consensus.
+    amplification, topological sensitivity, and consensus inertia. We          This results in failures ranging from security breaches to operational outages.
+    further instantiate an attack where injecting just a single atomic
+    error seed leads to widespread failure. In response, we introduce
+    a genealogy-graph-based governance layer, implemented as a
+    message-layer plugin, that suppresses both endogenous and                                        However, the assumption of inherent reliability faces in-
+    exogenous error amplification without altering the collaboration           creasing skepticism. Recent studies have begun to examine
+    architecture. Experiments show that this approach prevents final           the limitations of collaboration, indicating that multi-agent
+    infection in at least 89% of runs across operating modes and               architectures are susceptible to systemic breakdowns [12] [13].
+    significantly mitigates the cascading spread of minor errors. 1            Building upon these investigations, our empirical observations
+I. INTRODUCTION                                                                of mainstream collaborative LLM-MAS reveal a fundamental
+                                                                               challenge. While these systems enhance noise filtering for in-
+    With the rapid advancement of Large Language Models                        dependent deviations, we observe that under recursive context
+    (LLM), intelligent agents have been increasingly integrated                reuse, collaborative structures frequently exhibit a cascading
+    into diverse real-world applications [1] [2]. Evolving beyond              amplification of errors.
+    isolated monolithic models, the paradigm is advancing toward                                        Minor deviations regarding factuality or faithfulness,
+    Multi-Agent Systems based on LLM (LLM-MAS) [3], [4],                       whether endogenous or introduced externally, are repeatedly
+    enabling complex collaboration through specialized roles [5].              cited and reused within the interaction chain. Over multi-
+    Concurrently, representative open-source frameworks for col-               ple rounds of interaction, these inaccuracies propagate and
+    laborative orchestration have emerged. For instance, AUTO-                 converge into a collective agreement, eventually evolving
+    GEN [6] organizes task flows through multi-agent conversation              into a false consensus at the system level. The absence of
+    and tool usage, whereas METAGPT [7] incorporates Standard                  an observable semantically traceable propagation trajectory
+    Operating Procedures, or SOPs, derived from human work-                    further compounds this issue. As misinformation undergoes
+    flows into multi-agent collaboration. A fundamental design                 semantic shifts during transmission and restatement, tracing
+    premise of these systems is that collaborative division of labor           the incremental confirmation and accumulation of errors from
+    enhances reliability [8], [9]. These architectures decompose               the final failure back to intermediate stages presents significant
+    complex tasks into subtasks wherein specific agents generate               difficulties. Figure 1 shows this process.
+    intermediate results. By subsequently aggregating these results                                    Existing security research on LLM predominantly charac-
+    into final decisions through collaborative mechanisms, such                terizes risks and defense strategies at the single-agent level, fo-
+    systems are considered capable of mitigating the risks associ-             cusing on prompt injection, jailbreaking, and application-side
+    ated with hallucinations and factual deviations [10], [11].                security boundaries, or addressing localized issues regarding
+    1Our code and data are available at https://anonymous.4open.science/r/     the truthfulness of Retrieval-Augmented Generation (RAG)
+    From-spark-to-fire-6E0C/                                                   [14]-[17]. While effective for microscopic risks, such efforts
+
+Fig. 2. Overview of our work. We categorize false consensus arising from internal vulnerabilities versus external induction. We model propagation dynamics
+to characterize consensus collapse mechanisms. Correspondingly, a genealogy-based governance layer implements atomic propagation control to mitigate
+faithfulness and factuality errors.
+
+
+    lack a direct characterization of the macroscopic amplification                vulnerabilities that predispose them to amplify rather than
+    mechanisms inherent in collaborative systems [18]. Further-             correct errors under specific conditions?
+    more, prevalent defense approaches in LLM-MAS typically                        • RQ3: Can attackers exploit these characteristics to prop-
+    involve introducing additional critic roles or altering existing               agate errors at a limited cost, thereby increasing the risk
+    collaboration patterns, which results in intrusive impacts on           of system convergence to a false consensus?
+    system usability and information flow [18]. However, these                              • RQ4: How can workflow-agnostic governance mecha-
+    defenses largely operate on heuristic trial-and-error, treating                  nisms be designed to suppress the solidification of false
+    errors as static anomalies to be filtered rather than dynamic           consensus without disrupting valid information flow?
+    flows [19]. Current analyses lack a first-principles understand-
+    ing of how semantic errors cascade through the system [20]-                       Our Work. In response to RQ1, we formalize the landscape
+    [22]. Without a rigorous system dynamics framework, defend-                    by modeling the message flow as a directed graph G = (V, E)
+    ers cannot distinguish between random noise and structural                      and mapping the semantic entailment of agents to state dy-
+    inevitability, hindering the understanding of how errors are                    namics on this graph. By tracking the node state si(t) and
+    progressively validated, reused, and magnified [23]. Therefore,                    the system coverage S(t) of a single atomic error m, we
+    a system dynamics perspective is required to quantify collab-                establish that context reuse drives a deterministic contagion
+    oration risks across frameworks [24]. It is essential to design               process rather than random diffusion. Furthermore, we derive
+    detection and defense methods that control the propagation                a structure-sensitive Risk Criterion R to identify amplification
+    of misinformation without compromising effective information            trends at an early stage.
+    flow, thereby achieving an interpretable balance between utility                      Addressing RQ2, we analyze the behavior of different
+    and safety [25].                                                            collaboration architectures within a unified state space based
+    Research Questions. To address the risks associated with                        on the proposed propagation representation. Through a sys-
+    error propagation and the potential formation of false con-                    tematic comparison of mainstream architectures, we identify
+    sensus within collaborative Multi-Agent Systems, this study                  three categories of endogenous vulnerabilities: the cascading
+    investigates four core research questions:                                   amplification of minor errors, topological sensitivity to hub
+                                                                                 nodes, and consensus inertia during multi-round interactions.
+                • RQ1: How can the diffusion of errors during collabora-          Regarding RQ3, we validate the feasibility of such exploita-
+                  tion be modeled as a traceable and quantifiable system         tion by instantiating a form of directed Consensus Corruption
+               dynamics process to characterize the evolutionary trajec-             within the same propagation framework. Experiments demon-
+    tory from local deviation to collective false consensus?                strate that attackers can exploit the amplification effects of the
+                  • RQ2: Do mainstream collaboration architectures based          collaboration mechanism without disrupting the system struc-
+                       on Large Language Models (LLM) possess endogenous       ture. By utilizing spectral properties to locate critical nodes
+
+
+    2
+
+  and injecting a small number of error seeds, the probability of     on the evaluation reference of the task. We distinguish between
+    system convergence to an erroneous consensus is significantly     two non-exclusive categories:
+increased.                                                            1) Factuality Error. A claim m constitutes a factuality error
+            Finally, for RQ4, we introduce a Genealogy-Based Gov-     if it contradicts the ground truth of the dataset, an evaluation
+      ernance Layer that is parametrically guided by our dynamics     oracle, or other explicitly specified external references for the
+      model. By tracking information flow in real-time and inter-     task, including verified tool outputs or gold annotations. This
+         vening on demand, this approach aims to suppress harmful     dimension measures alignment with the external reference
+       cascades while maximally preserving beneficial information     world defined by the task.
+  transfer. This is achieved without altering the original commu-     2) Faithfulness Error. Faithfulness is defined exclusively
+nication structure, thereby establishing an interpretable balance     within an evidence-available setting. Let Ei(t) denote the
+between safety and utility.                                           evidence bundle provided to agent i at round t, which includes
+Figure 2 presents an overview of our work.                            task instructions and constraints, upstream messages delivered
+         Contributions. The primary contributions of our work are     to i via the communication graph, and any tool outputs or
+summarized as follows:                                                retrieved documents contained in its context ci(t). When the
+      • We characterize error propagation and the subsequent for-     task requires responses grounded in Ei(t), or when agent
+            mation of false consensus within LLM-MAS as a system-     i explicitly attributes a claim to Ei(t) using phrases such
+           level security risk. To quantify this risk, we propose     as "according to the above logs" or "based on the retrieved
+         a process-oriented propagation abstraction that utilizes     document," we classify m as a faithfulness error if it is un-
+        unified state variables and coverage metrics to model the     supported by or contradictory to Ei(t). This category includes
+      evolutionary trajectory from local deviations to collective     task unfaithfulness, where the agent deviates from explicit
+consensus.                                                            instructions, and context inconsistency, where the agent asserts
+        • We mechanistically characterize three categories of en-     m despite the upstream context in Ei(t) stating otherwise or
+        dogenous vulnerabilities through a systematic analysis of     providing no support.
+                mainstream LLM-MAS frameworks and diverse topolo-                In LLM-MAS settings, both error types are problematic:
+     gies: the cascading amplification of minor errors, sensitiv-     factuality errors inject incorrect content, whereas faithfulness
+      ity to topological structures, and consensus inertia during     errors cause downstream steps to rely on unsupported or
+multi-round collaboration.                                            contradictory premises transmitted through the context-reuse
+        • We instantiate a directed consensus corruption strategy     pipeline.
+              consistent with the proposed propagation mechanism.     Definition 2 (Propagation as Adoption). Let ui(t) denote
+          Our findings demonstrate that attackers can exploit the     the output of agent i at interaction round t, and let ci(t)
+         confirmation and context reuse inherent in collaborative     denote the full context used to generate ui(t), including Ei(t)
+             processes to propagate errors by injecting a minimal     and any additional system messages. We introduce a binary
+         number of seeds at a limited cost, thereby significantly     random variable Xi(t) ∈ {0, 1} to indicate whether agent i
+        increasing the probability that the system converges to a     has adopted the atomic falsehood m at round t. We say that
+targeted false consensus.                                             adoption propagates to agent i at round t if Xi(t) = 1, where
+             • We propose a governance mechanism based on lineage     adoption means that m becomes a semantic commitment or a
+            graphs for the detection and intervention of informa-     functional premise in ui(t) rather than a surface repetition:
+            tion flow. This approach tracks propagation paths and
+         intervenes on-demand to suppress error diffusion and the        1) Direct entailment: ui(t) logically entails m; for instance,
+         solidification of consensus while maximizing information                  when the output explicitly states "the dependency is
+         integrity. We empirically evaluate the trade-off between                    pandas-v2" while m specifies that pandas-v2 is the
+safety gains and overhead costs.                                      required dependency.
+                                                                                2) Implicit reliance: The conclusion or action in ui(t)
+    II. SYSTEM MODELING                                                          would be invalidated if m were removed from or negated
+                                                                           within ci(t). That is, ui(t) relies on m as a latent premise
+A. Problem Formalization                                              contained in its context.
+           We formalize the target phenomenon as the system-level     This definition captures the pathway whereby an incorrect
+        convergence of a single atomic error, driven by iterative     premise is internalized by a downstream agent and then drives
+       context reuse within an LLM-MAS. This formulation requires     an incorrect answer. In open-ended outputs, such adoption
+     precise definitions of an atomic falsehood, the mechanism by     may occur through paraphrase or implicit reliance, so surface
+      which downstream agents adopt it through context reuse, and     matching alone is not a complete adoption test.
+       the criteria for determining when the system has failed by     Definition 3 (False Consensus). We define the continuous
+converging to a false consensus.                                      state variable
+        Definition 1 (Atomic Falsehood). An atomic falsehood is a
+     minimal, declarative claim m that violates correctness based    si(t) = E[Xi(t)] ∈ [0, 1]
+
+
+3
+
+    as the adoption probability of m for agent i at round t, and               per-setting constant that summarizes the net recovery strength
+    the system-level error coverage as                                         over the trajectory. The first term, (1 - δ)si(t), represents
+                 S(t) = 1               Xn    si(t).                           the probability mass retained from the previous round, while
+                                                                               the second term accounts for new adoption on the susceptible
+                        n              i=1                                     portion (1 - si(t)).
+    The LLM-MAS is said to reach false consensus on m if S(t)                  Deriving the product-form infection function. We now
+    exceeds a preset critical threshold τ ∈ (0, 1) and remains                 formulate the infection function fi(·) by integrating a discrete
+    above τ for a prescribed number of consecutive rounds.                     Independent Cascade (IC) mechanism with an IBMF closure.
+    Operationally, this definition characterizes false consensus as            We assume that at each interaction round, every upstream
+    a stable failure state of error lock-in, distinct from transient           neighbor j ∈ N (i) initiates one independent attempt to induce
+    fluctuations. In experiments, si(t) and S(t) are estimated                 adoption of m by agent i in the next round, through context
+    from empirical frequencies over tasks or random seeds. For                 reuse and downstream semantic internalization. Here, m is
+    controlled tracer experiments, Xi(t) = 1 is assigned when the              a single tracked atomic deviation that is incorrect under the
+    injected canonical seed is reproduced or relied on in the agent            task evaluation reference: it may be a factuality error carried
+    output, with explicitly rejected or negated mentions excluded              in j's output, or a faithfulness error in evidence-available
+    from the count.                                                            settings where a claim (including a claim about constraints,
+                                                                               tool outputs, or retrieved documents) is unsupported by or
+    B. Graph Dynamics                                                          contradictory to the evidence bundle that downstream agents
+                  Our objective is to characterize the mechanisms by which     condition on. Let β ∈ (0, 1] denote the propagation probability,
+    the adoption state of an atomic falsehood m spreads, am-                   interpreted as the probability that the content in the output of
+    plifies, or dissipates through iterative context reuse within              agent j causes agent i to treat m as a usable premise when
+    a multi-agent system, employing quantities estimable from                  generating ui(t + 1).
+    observable traces. Concretely, we construct the communication                     Under IBMF, sj (t) approximates the probability that agent
+    graph from message-routing or context-inclusion logs, and we               j is active regarding m at round t. Therefore, the probability
+    estimate the state of each agent si(t) from the output of agent            that edge j → i triggers adoption at round t is approximated
+    i, denoted as ui(t), via the adoption criterion in Definition              by βaij sj (t), and the probability that this specific edge fails
+    2. The resulting model provides a deterministic mean-field                 to trigger adoption is 1 - βaij sj (t).
+    description of the expected adoption dynamics, rather than                            Under the IC assumption that upstream attempts are in-
+    an exact sample-path realization of the underlying stochastic              dependent within a round, the probability that no upstream
+    process.                                                                   neighbor triggers adoption is the product over all in-neighbors:
+                 We formalize the multi-agent workflow as a directed graph
+    G = (V, E) comprising |V | = n agents. Let A = [aij ] ∈                                       Y     1 - βaij sj (t).
+    {0, 1}n×n   denote the adjacency matrix, where aij                 = 1                        j∈N(i)
+    indicates the existence of a directed information channel from             Consequently, the probability that at least one upstream
+    agent j to agent i. This implies that the output of agent j is             attempt succeeds, representing the mean-field new-adoption
+    included in the context of agent i for subsequent generation.              probability contributed by neighbors at round t, is given by
+    The in-neighbor set of agent i is defined as                                            f prod
+                                                                                              i   (t) = 1 - Y    1 - βaij sj (t).
+  N (i) = {j | aij = 1},                                                                                 j∈N(i)
+    which enumerates the upstream agents capable of directly                   This formulation matches a round-based interaction protocol:
+    influencing agent i through context reuse.                                 each active upstream neighbor obtains one opportunity per
+                We track a single propagation channel corresponding to one     round, and a single success is sufficient to trigger adoption.
+    atomic falsehood m. Let Xi(t) ∈ {0, 1} indicate whether agent                       In workflows where interpreting influence as accumulated
+    i adopts m at round t under the adoption criterion in Definition           infection intensity within a step is more natural, a hazard-
+    2, and define the continuous state variable as                             based perspective may be employed. We define λi(t) =
+si(t) = E[Xi(t)] ∈ [0, 1].                                                     β Pj∈N(i)     aij sj (t) and model the within-step adoption prob-
+                                                                               ability using a Poisson cumulative probability:
+    Following an individual-based mean-field (IBMF) approxima-                    f     pois  (t) = 1 - exp         
+    tion, we model the one-step evolution as                                            i         - β∆t     X     aij sj (t)     ,
+    si(t + 1) = (1 - δ)si(t) + (1 - si(t))fi        {sj (t)}j∈N(i), G  ,                        j∈N(i)
+                                                                               where ∆t = 1 when one interaction round constitutes a basic
+    where δ ∈ [0, 1] represents an effective decay rate that                   step. This exponential form corresponds to an approximation
+    aggregates forgetting, self-correction, external verification, and         that replaces the product of independent failure probabilities
+    other mechanisms that reduce adoption probability across                   with the exponential of summed hazards. In Section II, we
+                                                                                        prod
+    rounds; in our fitted dynamics, δ is treated as an effective               employ f i         as the default because it directly matches the
+
+
+                          4
+
+Fig. 3. Model validation across different topologies. The black lines represent the observed mean infection rates with ±1 standard error. The dashed lines
+show the fitted curves using product-based and Poisson-based infection functions.
+
+    pois
+round-based agent interaction protocol; we utilize fi          only                      TABLE I
+when a continuous-time interpretation is explicitly required.    FITTED PARAMETERS FOR TOPOLOGY-LEVEL ERROR PROPAGATION.
+The spectral threshold indicator. To derive an analytic    β
+criterion for determining whether a minor seed of falsehood                      Topology          Function               δ          MSE         S(T)
+tends to amplify initially, we examine the early stage where                     Centralized       Product     0.670    0.000    8.0 × 10-4      1.000
+si(t) ≪ 1. In this regime, we neglect the saturation effect                                        Poisson     1.000    0.000    1.0 × 10-3      1.000
+induced by (1-si(t)) ≈ 1 and linearize the infection function.                                     Product     0.920    0.005    8.0 × 10-4      0.920
+Using the first-order approximation                                              Layered           Poisson     1.000    0.000    1.74 × 10-2     0.920
+1 - Y     1 - βaij sj (t) ≈ β     X     aij sj (t),                             Layered           Product     0.850    0.020    4.5 × 10-3      0.823
+    j∈N(i)        j∈N(i)                                                         (Horizontal)      Poisson     1.000    0.000    1.04 × 10-2     0.823
+the dynamics become approximately linear:                                        Decentralized     Product     0.370    0.025    1.6 × 10-3      0.982
+                                                                                                   Poisson     0.390    0.020    1.8 × 10-3      0.982
+    s(t + 1) ≈     (1 - δ)I + βAs(t).
+Let ρ(A) denote the spectral radius of A. The dominant growth           lateral communication, allowing us to test whether the model
+factor in this linear system is approximately (1 - δ) + βρ(A);          remains stable under a topology closer to practical multi-agent
+thus, the condition for early-stage amplification is (1 - δ) +          workflows.
+βρ(A) > 1, or equivalently βρ(A) > δ. This motivates the                                     Table I reports the fitted parameters and errors for topology
+auxiliary risk criterion                                                settings under infection-function variants. The product-form
+    R ≈ βρ(A)                                                           function achieves low MSE values, with errors mostly on the
+    δ      .                                                            order of 10-3                     . The gap is most visible in layered topologies:
+In settings where the fitted δ is numerically close to zero,            for the layered graph, product-form fitting reduces MSE from
+R becomes ill-conditioned; in such cases             we rely on the     1.74×10-2 to 8.0×10-4                       ; for the layered horizontal graph, it
+inequality βρ(A) > δ as the primary amplification check and             reduces MSE from 1.04×10-2 to 4.5×10-3                        . In these settings,
+treat R as a diagnostic only when δ is non-negligible.                  the Poisson-form function often pushes β to its upper boundary
+                                                                        and δ to zero, suggesting that it tends to over-saturate the
+C. Model Utility                                                        adoption process when propagation is constrained by staged
+             Figure 3 compares observed system-level error coverage     communication. We use f prod as the default model in later
+S(t) (mean ±1 standard error) with simulated trajectories               analysis, since it better separates agent-side susceptibility β
+under the product-form f prod and Poisson-form f pois infection         from architectural exposure encoded by A. Additional details
+functions defined in §2.3. Across centralized (STAR), lay-              on model fitting, topology construction, and threshold-shift
+ered (CHAIN), layered horizontal, and decentralized (MESH)              estimation are provided in Appendix A.
+topologies, the fitted trajectories closely follow the observed                     III. THREAT MODEL
+growth patterns and remain largely within the empirical un-
+certainty band. The results reproduce both rapid saturation in          Protected Asset. The primary protected asset is the integrity
+highly connected or hub-mediated structures and slower accu-            of the collaborative consensus. Our objective is to prevent the
+mulation in decentralized communication, which supports the             system from converging to a false consensus, defined as a state
+use of the mean-field abstraction for describing macroscopic            in which the final decision or generated artifact aligns with a
+error dynamics. The layered horizontal setting is included              shared yet incorrect belief that contradicts task requirements
+as an additional structure with both staged propagation and             and verifiable evidence.
+
+
+5
+
+    Endogenous Stochastic Errors. This mode constitutes the                 structural response of the topology from the randomness of
+    non-strategic, intrinsic failure mechanism of agents based on           error generation and treats the error as a calibrated signal for
+    Large Language Models. Even in the absence of external                  measuring the amplification gain of the system.
+    malice, errors emerge spontaneously due to normal operational           Mechanism. The amplification follows directly from the
+    factors, including stochastic decoding, restricted context win-         product-form adoption dynamics introduced in Section II.
+    dows, and inherent model hallucinations. Within this setting,           When internal correction is weak in the early stage, the
+    the seed s(0) is instantiated stochastically rather than through        state update is dominated by multi-neighbor exposure, since
+    optimization. The central challenge lies in robustness: de-             concurrent mentions from different upstream agents compound
+    termining whether communication topologies and interaction              rather than cancel:
+    dynamics amplify these sporadic, unintentional errors into
+    system-wide failures.                                                   si(t+1) ≈ si(t) +                            
+                                                                                1 - si(t)
+    Exogenous Strategic Adversary. This mode represents a                       1 -     Y     1 - βaij sj (t)     .
+    targeted attack executed by an external adversary aiming to                 j∈N(i)                                    
+    maximize downstream corruption. The adversary optimizes                 The non-linear term 1 - Q(·) captures that repeated exposure
+    the content of the seed s(0) and selects the injection position         raises the chance that agent i adopts the seed once any
+    (specifically, agent i at time t) to exploit structural vulnerabil-     neighbor has already adopted it. When the auxiliary indicator
+    ities.                                                                  R > 1 places the system in a supercritical regime, the
+    1) Capabilities. The adversary operates strictly through                dominant amplification mode associated with spectral radius
+    application-layer interfaces, including user prompts, untrusted         ρ(A) governs the early growth direction, and a single seed can
+    retrieved documents, and injected messages. The setting is              expand rapidly in coverage. Thus, Cascade Amplification is
+    defined as gray-box; it assumes knowledge of the graph G                not a quirk of a particular prompt, but a structural consequence
+    and the observed interaction history, but assumes no access to          of high exposure coupling under the given interaction graph.
+    the model weights. This model also generalizes to black-box
+    settings, where the adversary infers functional topology solely         Empirical Evidence. We measure propagation using S(t),
+    from the observed interaction traces without prior knowledge            the fraction of agents adopting the tracer error at message
+    of G.                                                                   step t. For simplicity, adoption in the logged interaction
+    2) Constraints and Scope The adversary cannot modify the                is operationalized as a binary state, indicating whether an
+    hidden instructions of the system, cannot execute code on the           agent incorporated or relied on the tracer seed in its cur-
+    host, and does not perform data poisoning during training.              rent output; explicit rejection or negation of the seed is not
+    The attack is restricted to the inference phase and operates            counted as adoption. Figure 4 shows consistent topology-
+    within a bounded interaction budget. These constraints keep             dependent signatures across six frameworks. In chain work-
+    the attack at the application layer, allowing us to isolate             flows (LangChain [26], MetaGPT [7]), the error advances
+    whether standard collaboration dynamics amplify small errors            sequentially and produces a stepwise increase in S(t). In star
+    without introducing stronger system-level or adaptive attacks.          workflows (LangGraph [27], CrewAI [28]), once the hub agent
+    3) Success Criteria An attack is considered successful if,              adopts the seed, it broadcasts the falsehood to all workers,
+    within the interaction budget, it significantly increases the           yielding a sharp jump in S(t) (for example, LangGraph
+    prevalence of false consensus S(t) (defined as the fraction             reaches high coverage by t=2). In mesh workflows (Auto-
+    of agents adopting the corrupted belief) or degrades the cor-           Gen [6], CAMEL [29]), broadcast-style interaction produces
+    rectness of the final task relative to the unperturbed baseline.        near-immediate contamination with t ≤ 3. Across the six
+                                                                            frameworks, cascades often saturate: five reach 100% final
+IV. ENDOGENOUS VULNERABILITIES                                              infection, including settings with explicit reviewer or QA roles,
+                                                                            so role assignment alone does not reliably stop propagation
+    A. Vulnerability I: Cascade Amplification                               once the seed starts spreading through the workflow. Statistics
+    This section examines whether a small, incidental error                 and experimental configurations are provided in Appendix B.
+    will stay contained during routine operation, or if the col-
+    laborative framework itself amplifies it into a full-system
+    failure. In practice, such errors may originate from benign
+    factors such as hallucinations or stale project context, but their
+    sporadic nature makes them difficult to measure consistently.
+    We therefore use controlled emulation to standardize the initial
+    condition. Concretely, we implant a TRACER SEED s(0) into
+    the system-level instructions of the entry agent. This system-
+    level injection is solely employed for measuring endogenous
+    vulnerabilities and does not fall within the attacker capabilities
+    defined in Section III. The seed is a plausible yet outdated            Fig. 4. The evolution of error coverage S(t).
+    notice about a data-source migration. This design isolates the
+
+
+    6
+
+    B. Vulnerability II: Topological Fragility                              TABLE III
+    We identify a structural failure mode where system re-       IMPACT OF INTERVENTION TIMING.
+    silience depends not solely on error content but on the en-            Timing (t)        Target Role        Polluted Rounds
+    try coordinates. Whereas Vulnerability I demonstrates error            t = 2        Architect                         1.0
+    spreading potential, Vulnerability II investigates where the           t = 4        QA Engineer                       2.9
+    graph is most susceptible.                                             t = 6        Architect                         3.9
+    Mechanism. The global divergence of outcomes is governed
+    by the adjacency matrix A. In the early linear regime, error
+    state s(t) grows primarily along the principal eigenvector              Empirical Evidence. We employ Accumulated Polluted
+    u1. A one-hot seed at node v excites the dominant cascade               Rounds as the primary metric for the rigidity of the system.
+    mode proportional to [u1]v, so the structurally most dangerous          We define this metric as the aggregate volume of erroneous
+    seed satisfies v∗ = arg maxv[u1]v. In centralized topologies,           context generated prior to intervention. This experimental
+    the hub maximizes [u1]v; hub corruption drives immediate                design validates the hypothesis that delayed interventions must
+    system-wide amplification, whereas a weakly coupled leaf                counteract a substantially more extensive history of errors.
+    seed spreads only upon hub adoption, yielding a measurable              Consequently, this approach quantifies Consensus Inertia as
+    Impact Factor gap.                                                      the cumulative burden of contextual debt.
+    Empirical Evidence. We conducted injections on two star-    V. EXOGENOUS ATTACK INSTANTIATION
+    topology frameworks to compare outcomes when the error                  We instantiate the Exogenous Strategic Adversary as an
+    originates from the Manager or Supervisor (Hub) versus a                indirect injection process. The objective of the attacker is
+    Worker (Leaf). We define the Impact Factor as the ratio                 to guide the collaborative outcome toward a target state that
+    of hub-driven to leaf-driven infection rates. As presented              maximizes utility under a bounded interaction budget. To
+    in Table II, the results confirm a consistent structural bias.          achieve this, the attacker exploits the endogenous vulner-
+    LangGraph exhibits extreme fragility at the central hub, where          abilities established in Section IV, effectively transforming
+    injection causes 100% system-wide failure. Injection at a leaf          standard collaboration steps into channels for amplification.
+    node is limited to 9.7%, confirming the Supervisor functions            Injection is designed to be fixed at t = 0 to maximize
+    as a strict informational cut-set. CrewAI demonstrates signif-          downstream exposure and evaluate the worst-case amplifica-
+    icant centrality dependence, where hub influence dominates              tion potential, which remains within the attacker capabilities
+    peripheral nodes. This disparity is evidenced by a 6.29×                defined in Section III. We present this attack as a generic
+    Impact Factor, validating that the hub's spectral vulnerability         pipeline design, adaptable to various injection modalities.
+    constitutes an intrinsic topological property.                          Attack Pipeline. The attack executes through a three-step
+            TABLE II                                                        pipeline involving the construction of a minimal seed, the
+ANALYSIS OF TOPOLOGICAL FRAGILITY                                           packaging of this seed into a credible artifact, and its injection
+                                                                            at a position of high impact.
+    Framework             Hub Inf.  Leaf Inf.  Impact Factor                Step 1: Seed Construction. The attacker constructs an Atomic
+    CrewAI                100.0%    15.9%          6.29                     Falsehood m∗ compatible with the format of the task while
+    LangGraph             100.0%    9.7%           10.31                    remaining sufficient to shift downstream decisions. Targeted
+                                                                            manipulations include modifying a dependency source, alter-
+                                                                            ing a constraint, or biasing a task criterion.
+    C. Vulnerability III: Consensus Inertia                                 Step 2: Credibility Packaging. The attacker packages the
+                                                                            atomic falsehood m∗ to align with local discourse patterns,
+                   We identify a temporal asymmetry regarding errors in     thereby increasing the transmission probability β and sup-
+    collaboration. The introduction of a falsehood is computa-              pressing the correction factor δ. We operationalize this pack-
+    tionally inexpensive; however, the cost of correction increases         aging process through two distinct strategies:
+    significantly as the workflow progresses. Distinct from instan-         1) Compliance. This strategy involves wrapping the seed in
+    taneous propagation, Consensus Inertia refers to the increasing         authoritative framing, utilizing phrases such as "per company
+    resistance of the system to state reversal once an erroneous            policy" or "verified by admin." This approach exploits the
+    trajectory is established through intermediate artifacts.               inherent instruction-following tendency of the agents.
+    Mechanism. In artifact-centric workflows, intermediate out-             2) Security FUD. This strategy frames the seed as a crit-
+    puts function as the state of the project. An initial error             ical resolution for a non-existent threat, including examples
+    crystallizes into constraints, including sources, assumptions,          such as an "emergency patch for CVE-2024-0001." Using
+    code skeletons, and evaluation criteria, upon which subsequent          fear, uncertainty, and doubt, this method bypasses verification
+    steps build. Consequently, a delayed correction conflicts not           mechanisms.
+    merely with a single statement but with a dependency chain              Step 3: Injection Placement. The attacker injects the pack-
+    that maintains internal consistency with the accumulated state.         aged seed at a location that maximizes downstream exposure
+
+
+                          7
+
+    Fig. 5. Overview of the Genealogy-Based Governance Layer.
+
+
+    within the fixed communication structure. In the gray-box                Goal 2: Facilitating early correction to prevent consensus
+    setting, the attacker targets high-influence nodes characterized         lock-in. When contradictions are detected, the system must
+    by structural metrics aligned with ρ(A). In the black-box                trigger correction before the belief hardens into stable con-
+    setting, the attacker targets functional roles inferred from the         sensus. The governance layer increases successful corrections
+    observable information flow, including agents responsible for            and disrupts self-reinforcing reuse. In our dynamics model,
+    aggregation, summarization, or final decision-making.                    this increases the effective recovery force, captured by the
+                                                                             damping factor in Section II.
+VI. DEFENSE: A GENEALOGY-BASED GOVERNANCE                                    Goal 3: Strategic allocation of the verification budget.
+                  LAYER                                                      Because comprehensive verification is costly, the governance
+    A. Problem Setting and Design Objectives                                 layer directs expensive validation toward high-impact positions
+                                                                             (agents with structural or functional influence) and toward
+            Our defense protects collaborative-consensus integrity under     claims with higher uncertainty or downstream risk.
+    the constrained setting in Section III. We assume a fixed multi-         Goal 4: Ensuring auditability and reproducibility. The
+    agent communication topology: the adjacency matrix A is not              governance layer maintains a traceable record of claim entry,
+    modified by the defense.                                                 propagation, and correction, enabling post hoc analysis and
+             In practice, the coordination topology is configured at the     reproducible evaluation.
+    framework or application layer and shared across workflows.
+    Rewiring connections would change role semantics and dis-                B. Architecture and Trust Boundary
+    rupt coordination logic, and such structural control is rarely
+    exposed as an interface to plugins. Since production systems                      We implement the defense as a middleware module inter-
+    often commit to specific orchestration frameworks and interac-           posed between agent interfaces. This layer intercepts outgoing
+    tion graphs, preserving A also eases deployment across diverse           messages, performs structured analysis, and releases sanitized
+    frameworks.                                                              messages downstream. Simultaneously, it maintains a global
+                    With A fixed, the system must maximally preserve the     provenance structure, the Lineage Graph, recording atomic-
+    original information flow to retain task utility. Meanwhile,             level claim history to support incremental comparison.
+    Section IV shows that once a false belief is assimilated into                  By default, all newly generated claims are treated as un-
+    shared context, collaboration does not reliably self-correct.            trusted. The only trusted anchors are: (i) claims validated and
+    We therefore introduce a lightweight governance layer on the             confirmed within the Lineage Graph; and (ii) external evidence
+    message path with four system-level objectives.                          from designated verification tools. This boundary is necessary
+    Goal 1: Mitigating the propagation of unverified claims.                 as both attacker and endogenous noise utilize standard textual
+    The main failure mode is a claim's acceptance, reuse, and so-            channels.
+    lidification as working context. The governance layer reduces                     For each message, the governance layer produces: (1) a
+    the probability that new, unverified claims are promoted into            downstream message from screened atomic units; (2) a feed-
+    shared context and later relied upon. In the dynamics model,             back package for the upstream agent if correction is required;
+    this lowers the effective per-hop adoption rate of corrupted             and (3) a Lineage Graph update for auditing and screening.
+    beliefs, captured by the transmission factor in Section II.              An overview of our methodology is shown in Figure 5.
+
+
+    8
+
+Fig. 6. Infection rate S(t) across communication turns under three topologies.
+
+
+C. Representation Layer                                                   1) Low-Intervention Policy. Verification is skipped. Yellow
+                                                                          atoms are forwarded with an uncertainty tag and recorded as
+                Given a message M, the governance layer decomposes it     unverified in L, preventing promotion to trusted context.
+into N atomic claims {ak}k=1,                where each ak is a mini-     2) Balanced Policy. Verification is selectively triggered based
+mal declarative message capable of independent verification.              on influence. Comprehensive verification is applied to Yel-
+Atomic claims fall into two categories: (i) Factuality claims             low atoms from functional hubs (aggregators, summarizers,
+regarding the external world (e.g., entities, numerical values,           decision-makers), as errors here have higher downstream ex-
+citations); and (ii) Faithfulness claims regarding task require-          posure under fixed adjacency A. Non-hub atoms follow Low-
+ments and internal states (e.g., constraints, decisions). This            Intervention handling.
+aligns with Definition 1, ensuring uniform processing of error            3) Strict Policy. All Yellow atoms undergo comprehensive
+types.                                                                    verification.
+Lineage Graph. We maintain a directed graph L = (V, E)                    Stage 3: Comprehensive verification and risk arbitration.
+to track atomic provenance. Each node v ∈ V represents an                 This stage combines external evidence retrieval with LLM-
+atomic claim, containing metadata such as source and times-               based adjudication. Yellow atoms resolve to: (i) Verified true:
+tamp. Edges encode dependency relations (e.g., supports,                  Promoted to Green and confirmed in L; (ii) Verified false:
+contradicts). Crucially, L distinguishes between confirmed                Reclassified as Red with rollback evidence; (iii) Unresolved:
+nodes (trusted context) and unverified nodes (excluded from               Retained as Yellow with uncertainty tags and recorded as
+trusted context).                                                         unverified to minimize risks. This gates blind reliance: only
+                 Upon arrival, new atomic claims are compared against     confirmed increments are endorsed as trusted context to influ-
+confirmed nodes in L to determine if they are restatements,               ence downstream agents.
+conflicts, or new content requiring processing.
+                                                                          E. Actuation Layer
+D. Decision Layer                                                         Following Stages 1-3, the layer assembles the message and
+                                                                          enforces decisions.
+         This layer executes control logic via a four-stage pipeline.     Stage 4: Assembly and rollback. Let Qreturn be the set of
+Stage 1: Decomposition and initial screening. For each                    Red atoms. Two scenarios ensue:
+message M, the system decomposes it into atomic claims                    Case A: Qreturn ̸= ∅ (Blocking with rollback). Transmis-
+{ak} and compares each ak against the confirmed portion of                sion is inhibited. A feedback package is returned containing
+the Lineage Graph, assigning a tri-state label: Green for facts           rejected atoms, conflict evidence, and a rewrite directive. This
+entailed by confirmed lineage, which are released downstream              localizes intervention at the atomic level.
+and recorded as confirmed; Red for facts that contradict                  Resubmitted atoms are re-processed. To prevent loops,
+confirmed lineage, which are blocked for correction with                  retries are capped at K. If failure persists, a circuit breaker
+conflict evidence attached; and Yellow for facts that are neither         applies: persistently Red atoms are excluded; persistently
+entailed nor contradicted, which are treated as uncertain and             Yellow atoms are forwarded with high-risk tags but excluded
+held for policy routing in Stage 2.                                       from confirmed lineage. This prevents deadlock while limiting
+Stage 2: Policy routing for uncertain atoms. Uncertain                    rejection propagation.
+(Yellow) atoms are routed via a configurable policy regulating            Case B: Qreturn = ∅ (Release). The outgoing message
+budget and risk.                                                          is assembled from Green and policy-handled Yellow atoms,
+
+
+9
+
+                                                TABLE IV
+                              ATTACK SUCCESS RATE (ASR, %) COMPARISON (REAL DATA).
+
+    Topology     Framework       Baseline              Compliance                      Security FUD
+                              M      Q       R    M         Q    R                    M      Q      R
+    Chain        LangChain    3.3   0.0      0.0    95.0  96.7                85.0  100.0  100.0  100.0
+                 MetaGPT      5.0  11.7      46.7  100.0  98.3               100.0  96.7   76.7   95.0
+    Mesh         AutoGen      0.0   5.0      0.0   100.0  100.0               95.0  98.3   100.0  98.3
+                 CAMEL        0.0   0.0      0.0   100.0  100.0              100.0  100.0  98.3   100.0
+    Star         CrewAI       0.0   0.0      3.3    46.7  51.7                31.7  46.7   43.3   33.3
+                 LangGraph    0.0   8.3      11.7  100.0  100.0              100.0  100.0  98.3   100.0
+
+
+    preserving sequence, and released downstream, updating L            single injected seed can be propagated through multi-round
+    accordingly.                                                        collaboration into an infected final artifact.
+                                                                        Defense settings. We evaluate NONE, three operating points of
+    F. Online and Offline Use                                           our governance layer, and three comparison baselines. We use
+    The genealogy-based governance layer deploys inline on              self-reflection as an agent-side self-check baseline, where the
+    the message path, intercepting messages to decompose them           agent reviews and revises its own output before sending it [33].
+    into atomic claims, screen, verify, and enforce blocking or         We adapt AGrail as a runtime guardrail baseline that checks
+    rollback in real time. Here, the layer shapes collaboration by      each outgoing inter-agent message before it enters downstream
+    controlling claim entry into the shared context and triggering      context [34]. We further include a control-flow guard (CFG)
+    early correction.                                                   baseline inspired by ControlValve [35], which checks runtime
+    The same logic applies offline to historical logs, including        transitions against admissible edge rules and attempts an
+    from systems deployed without our plugin. Given raw message         alternative valid route when a transition is rejected. AGrail and
+    traces, we replay content through the decomposition, lineage        CFG are evaluated at their native granularity. AGrail operates
+    construction, and screening pipeline, reconstructing the Lin-       on whole inter-agent messages, CFG operates on routing
+    eage Graph and atomic claims status without influencing ex-         transitions, and claim-lineage rollback is evaluated as part of
+    ecution. This mode supports forensic analysis and attribution:      our approach. To simplify the experimental design, we select
+    auditors can identify root or high-degree nodes introducing         one framework per topology for the defense experiments. For
+    corrupted beliefs, trace propagation across agents and time,        atomic decomposition, we adopt the FActScore protocol and
+    and approximate the corresponding S(t) trajectory.                  employ GPT-4o-mini to decompose agent messages [36]. For
+                                                                        entailment, we use a natural language inference (NLI) model
+VII. EVALUATION                                                         based on DeBERTa-v3-small [37]. We report a supplementary
+    A. Experimental Setup                                               evaluation of the NLI module on a human-annotated atomic-
+                                                                        fact set derived from our real tasks in Appendix C. For the
+    Tasks and scenarios. We evaluate three scenarios covering           verification layer, we use a self-built knowledge base and GPT-
+    code-centric collaboration, strict rule-following, and general      4o-mini.
+    knowledge question answering: QUANT, consisting of data             Metrics and observables. We report ASR, BICR, Safe Com-
+    analysis tasks constructed from the UCI repository [30];            pletion, Token/Safe, and Latency/Safe. Attack Success Rate
+    RIGID, comprising multi-step logic and calculation problems         (ASR) is the fraction of tasks whose final artifact is labeled
+    derived from MATH benchmarks [31]; and MMLU, adapting               infected. Benign Infection Control Rate (BICR) is defined as
+    general knowledge questions from the MMLU benchmark [32]            1 - ASR. BICR measures whether the final artifact avoids
+    into retrieval-based tasks.                                         infection. We additionally report Safe Completion, defined as
+    Frameworks and topologies. We test six mainstream MAS               the fraction of tasks that produce a usable and non-infected
+    frameworks spanning three interaction topologies. The chain         final artifact. Token/Safe is the average total token consump-
+    topology includes LANGCHAIN [26] and METAGPT [7]. The               tion over safe completions. Latency/Safe is the corresponding
+    mesh topology includes AUTOGEN [6] and CAMEL [29]. The              average runtime in seconds. Infection labels are computed
+    star topology includes CREWAI [28] and LANGGRAPH [27].              by a deterministic evaluation harness. In addition to final
+    Attack settings. We instantiate three attacker policies via         outcomes, we log per-round infection states and the trajectory-
+    application-level message injection, in contrast to the system-     level infection coverage S(t) to visualize whether corruption
+    level injection used in Section IV-A: BASELINE (direct inser-       remains local or escalates system-wide.
+    tion of the raw malicious claim), COMPLIANCE, and SECU-             Reproducibility details. All evaluation details (including
+    RITY FUD. For each task instance, we measure whether a              datasets, framework configurations, attack prompts, defense
+
+
+                                             10
+
+                               TABLE V
+BICR, SAFE COMPLETION, AND TOKEN COST ACROSS FRAMEWORKS AND DEFENSES.
+
+    Framework     Defense             BICR (%) ↑            Safe Completion (%) ↑     Token / Safe (103) ↓
+                                Base.    Comp.    Sec.     Base.    Comp.    Sec.     Base.   Comp.    Sec.
+
+                  Strict        100.0    95.0     100.0     95.0    89.2     97.5     52.9    49.6     52.0
+                  Balanced       97.5    88.3     100.0     93.3    88.3     92.5     24.3    23.2     24.0
+    MetaGPT       Speed          95.8    85.0     100.0     91.7    79.2     97.5     17.1    16.0     16.5
+                  Reflection     82.5     5.0     19.2      80.0     5.0     19.2      9.7     9.3      8.7
+                  AGrail         96.7    36.7     42.5      40.8     0.8      2.5     14.2    14.3     15.2
+                  CFG            80.8    40.0     40.8      53.3     0.0      3.3      6.7      -       7.1
+
+                  Strict         99.2    100.0    100.0     97.5    100.0    100.0    75.8    77.8     84.9
+                  Balanced      100.0    95.0     96.7     100.0    92.5     95.8     29.2    30.1     33.0
+    AutoGen       Speed         100.0    96.7     98.3      99.2    96.7     98.3     29.2    30.0     32.9
+                  Reflection    100.0     5.8      3.3      96.7     5.8      3.3     18.0    17.4     19.4
+                  AGrail        100.0    89.2     79.2       8.3     0.0      3.3     28.4      -      30.3
+                  CFG            99.2    84.2     75.8      35.0     0.8      5.8     26.8    29.1     27.1
+
+                  Strict         92.5    85.0     76.7      92.5    85.0     76.7     37.1    37.9     41.5
+                  Balanced       95.8    85.8     76.7      95.8    85.8     76.7     35.9    38.3     41.5
+    LangGraph     Speed          94.2    58.3     76.7      94.2    58.3     76.7     13.6    14.4     15.6
+                  Reflection     73.3     0.8      0.8      73.3     0.8      0.8      9.8    11.0     13.4
+                  AGrail         95.8    90.0     79.2      44.2     0.0      0.0     23.2      -        -
+                  CFG            98.3    90.0     77.5      48.3     0.0      0.0      9.4      -        -
+    Base., Comp., and Sec. refer to Baseline, Compliance, and Security FUD settings. "-" means no safe completion was produced under corresponding setting.
+
+
+    configuration, NLI module evaluation, and labeling rules) are       C. Defense Efficacy of the Governance Layer
+    provided in Appendix C.                                                      We evaluate whether the governance plug-in can contain
+                                                                        propagation under immutable topology and preserved agent
+                                                                        availability, by intervening only at the message layer. Table V
+    B. Adversarial Severity                                             reports BICR, Safe Completion, and Token/Safe across attack
+                                                                        settings and defense methods. The joint view is necessary
+    We quantify adversarial severity at the application layer. Ta-      because a method may obtain a non-infected output by in-
+    ble IV reports ASR for six frameworks across three scenarios        terrupting the workflow, so Safe Completion is used to check
+    and policies. Intent-hiding attackers consistently outperform       whether the output remains usable. Figure 6 further shows that
+    direct injection. While BASELINE is near zero in almost             Speed, Balanced, and Strict flatten S(t) earlier than NONE
+    all settings and only rises on METAGPT-RIGID (46.7%),               across all three topologies.
+    COMPLIANCE pushes ASR to mostly 85.0-100.0% outside                             Across MetaGPT and AutoGen, the proposed modes gen-
+    CREWAI, and SECURITY FUD further raises ASR to 76.7-                erally maintain high BICR and Safe Completion under intent-
+    100.0% in those settings, indicating that role-consistent pack-     hiding attacks. On MetaGPT, Speed reaches 85.0% BICR
+    aging substantially increases end-to-end corruption probability     under Compliance and 100.0% under Security FUD, with
+    over plain injection. The weakest intent-hiding point outside       Safe Completion at 79.2% and 97.5%. On AutoGen, all three
+    CREWAI appears on METAGPT-QUANT under SECURITY                      proposed modes keep BICR above 95.0% under Compliance
+    FUD (76.7%), suggesting that scenario constraints and work-         and Security FUD, and Safe Completion remains above 92.5%.
+    flow choices partially limit adoption.                              LangGraph is less stable, especially under Security FUD,
+    Cross-framework differences remain visible under the same           where Strict and Balanced both obtain 76.7% BICR. Even in
+    topology label. In mesh-style collaboration, both AUTOGEN           this setting, the proposed modes still provide higher usable
+    and CAMEL saturate under intent-hiding attacks, reaching            non-infected outputs than the agent-monitoring and graph-
+    up to 100.0% ASR across scenarios. In star-style orches-            control baselines in most cases.
+    tration, LANGGRAPH similarly reaches 100.0% ASR under                        Reflection preserves the original workflow but remains
+    COMPLIANCE and almost saturates under SECURITY FUD,                 weak against intent-hiding messages, with BICR falling to
+    whereas CREWAI is substantially lower. This gap suggests            5.0%/19.2% on MetaGPT, 5.8%/3.3% on AutoGen, and
+    implementation-level coordination and routing policies materi-      0.8%/0.8% on LangGraph under Compliance and Security
+    ally affect how injected content is reused and endorsed, beyond     FUD. AGrail and CFG show a different pattern: they can
+    coarse topology classification.                                     reduce final infection in some settings, but Safe Comple-
+
+
+                                                    11
+
+       TABLE VI                                                            TABLE VII
+ABLATION STUDY RESULTS.                                              SAFETY-COST SUMMARY.
+
+    Variant             BICR (%)            Tokens    Time (s)            Mode                      BICR Safe Comp. Tok./Safe Lat./Safe (s)
+    w/o Atomization     40.0 ± 49.0         11,663     77.9 ± 24.7        Reflection     0.32     0.32     12,749               91.8 ± 24.0
+    w/o Detection       14.4 ± 35.2         14,708     51.7 ± 13.0        Speed          0.89     0.88     21,227              149.7 ± 39.5
+    w/o Blocking             3.1 ± 10.1     34,991     85.7 ± 21.0        Balanced       0.93     0.91     30,844              179.6 ± 44.3
+    None                     2.2 ± 14.7     7,365      41.2 ± 11.9        Strict         0.94     0.93     57,610              217.9 ± 53.7
+                                                                          AGrail         0.79     0.11     19,902               98.8 ± 20.5
+    tion remains limited. Under Compliance, AutoGen reports               CFG            0.76     0.16     13,323               65.3 ± 25.2
+    89.2%/0.0% for AGrail and 84.2%/0.8% for CFG in BI-
+    CR/Safe Completion, while LangGraph reports 90.0%/0.0%
+    for both.                                                             rises from 0.32 to 0.89 and Safe Completion from 0.32 to
+    The separation between BICR and Safe Completion sug-                  0.88, while Token/Safe increases from 12,749 to 21,227 and
+    gests that final infection control should be interpreted together     Latency/Safe from 91.8 ± 24.0s to 149.7 ± 39.5s.
+    with usable task completion. Agent-monitoring and graph-                    Balanced and Strict further reduce residual infection, with
+    control baselines can stop part of the corrupted propagation,         BICR increasing from 0.89 under Speed to 0.93 and 0.94.
+    but they often reduce the chance of producing a usable final          Safe Completion also rises from 0.88 to 0.91 and 0.93. The
+    artifact. By removing unsafe atomic claims through screening          additional robustness requires a clear cost increase: Token/Safe
+    and rollback, the governance plug-in limits propagation while         grows from 21,227 under Speed to 30,844 under Balanced
+    keeping the downstream workflow usable in more attack                 and 57,610 under Strict, while Latency/Safe increases from
+    settings.                                                             149.7 ± 39.5s to 179.6 ± 44.3s and 217.9 ± 53.7s. This trend
+    Ablation study. To isolate the contribution of each layer,            supports using Speed as the cost-aware mode and Strict as the
+    we remove atomization (no_atomization), screening and                 high-assurance mode when the application can tolerate higher
+    verification (no_detection), and quarantine or rollback               latency and token usage.
+    (no_blocking); Table VI reports the corresponding over-                        AGrail and CFG have lower Latency/Safe than the proposed
+    heads under the Strict policy. The ablation results show a            modes, at 98.8±20.5s and 65.3±25.2s, respectively. However,
+    clear drop in containment once key components are removed.            their Safe Completion remains low, at 0.11 and 0.16, despite
+    Without atomization, BICR remains at 40.0±49.0%, which is             BICR values of 0.79 and 0.76. This gap indicates that lower
+    higher than the other ablated variants but also highly variable       runtime does not necessarily yield a better deployment trade-
+    across runs. Removing screening and verification lowers BICR          off. Agent-monitoring and graph-control baselines can reduce
+    to 14.4 ± 35.2%, indicating that explicit risk decisions are          final infection in some runs, but still produce limited usable
+    a major contributor to containment. Removing quarantine or            non-infected outputs. The proposed modes require more tokens
+    rollback further reduces BICR to 3.1 ± 10.1%, close to the            and time, yet preserve a larger fraction of safe completed
+    NONE setting at 2.2 ± 14.7%.                                          workflows.
+    The overhead pattern helps explain the role of enforce-
+    ment. The no_blocking variant consumes the most tokens,    VIII. LIMITATIONS AND FUTURE WORK
+    34,991, and takes 85.7 ± 21.0s, yet its BICR is only 3.1%.                          We isolate an LLM-MAS failure mechanism where local
+    This suggests that screening without an effective quaran-             errors propagate through message dependencies into an incor-
+    tine or rollback step can still spend substantial computation         rect final artifact. We contribute a propagation abstraction with
+    while leaving propagation largely uncontrolled. In contrast,          trajectory observables such as S(t), evidence of endogenous
+    no_atomization uses fewer tokens, 11,663, and achieves                vulnerabilities across major frameworks, and a message-layer
+    the highest BICR among the ablations, but the large variance          governance plug-in requiring no retraining. The model is
+    prevents a stronger stability claim. Overall, the results suggest     defined over continuous states si(t) ∈ [0, 1] and aggregate
+    that detection signals need enforceable isolation or rollback to      trajectories S(t), while evaluation uses a binary variable
+    affect downstream propagation, while atomization and screen-          Xi(t) ∈ {0, 1} as a simplified interface. This improves inter-
+    ing help make this enforcement more targeted.                         pretability and comparability but may miss cases where agents
+                                                                          partially internalize incorrect premises, relax constraints, or
+    D. The Cost of Safety                                                 show semantic drift without meeting strict adoption criteria.
+    We measure overhead with Token/Safe and Latency/Safe,                 The abstraction treats (β, δ) and structural term A as stationary
+    which report token use and runtime over safe completions.             summaries and captures role, task, or time variation only
+    Table VII summarizes the averaged safety-cost trade-off across        indirectly. Hence, the spectral indicator R is a theoretical
+    proposed modes and comparison baselines. Moving from                  heuristic for early analysis and evidence organization, not a
+    Reflection to Speed gives the largest robustness gain: BICR           deployment guarantee or calibrated risk predictor.
+
+
+                                            12
+
+    The injection study is a controlled probe of amplification,           observations motivate orchestration-layer governance, includ-
+    not a full characterization of adversarial behavior. We seed          ing trust policies and secure communication design rather than
+    application-layer messages to fix an initial condition and test       ad hoc per-agent defenses [46]-[48].
+    whether endogenous amplification propagates a small seed to           Failure Modes of LLM-MAS Even without adversaries, LLM
+    the final outcome. Here, the attacker lacks persistent system         multi-agent systems exhibit intrinsic failure modes, and empir-
+    access and execution-layer control, and the governance plug-          ical work finds chaining agents often yields limited reliability
+    in operates at the same interface to suppress downstream              gains while introducing multi agent specific breakdowns [12].
+    adoption. This isolates propagation effects from stronger capa-       Common symptoms include role misunderstanding, agents
+    bilities such as tool tampering and long-term profile poisoning;      overwriting each other's context, and stalling in unproductive
+    multi-stage adaptive adversaries that react to intermediate           loops, compounded by memory and context drift in long
+    states, or have richer access, remain out of scope and are a          interactions where earlier constraints are forgotten and critical
+    natural extension.                                                    details are dropped [12], [49], [50]. Without external verifica-
+    The governance plug-in incurs latency overhead in online              tion, agents can reinforce shared errors, creating echo effects
+    mode, reflecting the trade-off between runtime safety and             that inflate confidence in wrong conclusions, and small inac-
+    execution speed. It also maintains genealogical traces for            curacies accumulate over repeated cycles when no corrective
+    offline auditing, diagnosis, and post hoc analysis. Our defense       mechanism intervenes [43], [51]. A large-scale analysis of
+    evaluation measures safety gains under online deployment,             more than 1,600 MAS traces systematizes these issues into
+    with screening and verification integrated into the workflow.         14 failure modes across System Design Issues, Inter Agent
+    Synchronous execution on the interaction path can increase            Misalignment, and Task Verification Failures, highlighting
+    latency; decoupling or partial offloading shifts protection to        weak delegation and ambiguous instructions as recurring roots
+    non-critical analysis. Balancing these configurations to meet         [12]. SagaLLM further illustrates missing rollback and global
+    real-time latency budgets and safety targets remains a deploy-        state checks when parallel bookings conflict after a flight
+    ment constraint, not a resolved systems issue.                        cancellation, reflecting absent coordination and state manage-
+    Future Work. Future work will strengthen validation and               ment principles standard in distributed systems and leaving
+    broaden the settings where this propagation view and gov-             architectures unable to guarantee consistency, recovery, and
+    ernance logic apply. One direction studies longer-horizon             cross-agent transparency [50].
+    tool-using workflows where failures emerge as downstream              Defenses and Detectors for LLM-MAS To mitigate risks, de-
+    artifacts, decisions, or plans, testing whether similar amplifi-      fenses span per-agent guardrails and system-level monitoring.
+    cation signatures appear in software engineering and scientific       Structured prompts, output filters, and policy tools constrain
+    support. A second direction refines measurement by improving          individual behavior but operate locally [52]. Since isolated
+    adoption ground truth beyond binary observables and tighten-          protections lack visibility into cross-agent dependencies, they
+    ing estimation of structural quantities, including ρ(A), from         miss distributed attack sequences and workflow inconsisten-
+    real traces. A third direction refines system integration by cou-     cies arising after messages and tool calls traverse team [40],
+    pling message provenance, evidence retrieval, and verification        [53], [54]. System-level approaches add redundancy and cross-
+    scheduling, jointly tuning online and offline use to improve          checking, introducing validator agents, watchdog frameworks,
+    the safety-latency trade-off in realistic deployments.                and graph-based anomaly detection over interaction patterns,
+IX. RELATED WORK                                                          e.g., SentinelAgent's interaction graph plus LLM monitoring
+                                                                          and log audits like Audit-LLM for insider threats [43], [55],
+    Adversarial Attacks on LLM-MAS. Integrating LLMs into                 [56]. However, inter-agent links remain under-protected; multi-
+    multi-agent workflows expands the attack surface across user          hop attacks evade detectors, adversarial steering subverts con-
+    prompts, inter-agent messages, and tool interfaces; surveys           sensus reliability, and monitoring overhead limits deployment
+    catalog prompt injection, context hijacking, and protocol-level       [46], [57], [58]. A consistent direction places security controls
+    manipulation of agent communication [38], [39]. In multi-             in the orchestration layer via trust policies, unified logging,
+    agent settings, malicious outputs can propagate through down-         supervisory halt or rollback, least-privilege access, and com-
+    stream dependencies: indirect prompt injection can traverse           munication provenance, enabling global consistency through
+    multi-turn delegations, override system intent, and amplify im-       mechanisms like checkpointing or transactional memory while
+    pact beyond the originating agent [40], [41]. Attackers can also      limiting adversarial influence [53], [59].
+    bias group decisions by steering one agent or the coordination
+    channel, turning cooperative verification into an amplification    X. CONCLUSION
+    path and exposing system-spanning weaknesses uncovered by             We show that a single atomic falsehood can propagate and
+    model-local safeguards [42], [43]. Recent exploits demonstrate        stabilize as system-level false consensus in fixed LLM-MAS
+    this systemic gap, including Agent-in-the-Middle interception         workflows, and we make this process measurable by fitting
+    of inter-agent messages, and the web, tool, and shared memory         discrete-time IBMF dynamics on the communication graph
+    combination allowing one agent's unsafe intake to trigger             with si(t) ∈ [0, 1] and S(t). The fitted interface separates
+    harmful actions in another, with reports of MAS executing             transmission, driven by β and ρ(A), from correction, driven
+    attacker-supplied code at high success rates [43]-[45]. These         by δ, yielding the early amplification condition βρ(A) > δ
+
+
+    13
+
+and the auxiliary risk indicator R. In evaluation across mul-
+tiple mainstream frameworks, topologies, and task scenarios,
+plain injection is near zero in most settings, whereas role-
+consistent intent-hiding packaging sharply increases end-to-
+end corruption; the same lens also explains strong sensitivity
+to structurally central injection points and the decreasing re-
+versibility of late corrections as polluted context accumulates.
+Finally, we introduce a genealogy-based governance layer that
+keeps A unchanged and intervenes only on the message path
+via claim provenance, tri-state screening, targeted verification,
+and enforced rollback; results and ablations show strong
+containment, and further indicate that detection alone does not
+reliably contain propagation without rollback or isolation.
+
+
+
+
+
+
+
+
+
+
+14
+
+ETHICAL CONSIDERATIONS                                                                   anonymized repository link: https://anonymous.4open.science/
+    This paper studies how small local errors can propagate                             r/From-spark-to-fire-6E0C/. The release includes source code,
+    through collaboration in LLM-based multi-agent systems and                           datasets, and experiment scripts sufficient to reproduce the
+    lead to a shared but incorrect outcome, and it evaluates                          reported results. To reduce dual-use risk, the artifact package
+    mitigation mechanisms under controlled experimental settings.                           does not include any deployment-ready automation intended
+    Stakeholders. Potentially impacted stakeholders include (1)          for real-world misuse.
+    developers and operators of LLM-MAS frameworks, who may    REFERENCES
+    face higher risk when inter-agent message exchange is ma-                      [1] X. Huang, W. Liu, X. Chen, X. Wang, H. Wang, D. Lian, Y. Wang,
+    nipulated or adversarial content is injected into collaborative       R. Tang, and E. Chen, "Understanding the planning of llm agents: A
+    workflows. Our mitigation mechanisms aim to reduce this risk          survey," arXiv preprint arXiv:2402.02716, 2024.
+    by making unsupported claims harder to spread and easier to                    [2] L. Wang, C. Ma, X. Feng, Z. Zhang, H. Yang, J. Zhang, Z. Chen,
+                                                                          J. Tang, X. Chen, Y. Lin et al., "A survey on large language model based
+    correct during collaboration. (2) End users of applications built     autonomous agents," Frontiers of Computer Science, vol. 18, no. 6, p.
+    on LLM-MAS may be affected when collaborative outputs                 186345, 2024.
+                                                                              [3] T. Guo, X. Chen, Y. Wang, R. Chang, S. Pei, N. V. Chawla, O. Wiest,
+    drift from verifiable evidence, leading to reduced correctness        and X. Zhang, "Large language model based multi-agents: A survey of
+    or reliability in the final artifact. They also benefit when          progress and challenges," arXiv preprint arXiv:2402.01680, 2024.
+    the system can surface unsupported claims early and support                    [4] X. Li, S. Wang, S. Zeng, Y. Wu, and Y. Yang, "A survey on llm-
+                                                                          based multi-agent systems: workflow, infrastructure, and challenges,"
+    timely correction before the final output is produced. (3) secu-      Vicinagearth, vol. 1, no. 1, p. 9, 2024.
+    rity practitioners and researchers, who benefit from evidence          [5] Y. Talebirad and A. Nadiri, "Multi-agent collaboration: Harnessing the
+    about when and why collaboration fails; and (4) the broader           power of intelligent llm agents," arXiv preprint arXiv:2306.03314, 2023.
+                                                                            [6] Q. Wu, G. Bansal, J. Zhang, Y. Wu, B. Li, E. Zhu, L. Jiang, X. Zhang,
+    online ecosystem, where collaborative tooling can scale both          S. Zhang, J. Liu et al., "Autogen: Enabling next-gen llm applications via
+    beneficial and harmful content.                                       multi-agent conversations," in First Conference on Language Modeling,
+    Potential impacts. The primary risk is that the attack prin-          2024.
+                                                                               [7] S. Hong, M. Zhuge, J. Chen, X. Zheng, Y. Cheng, J. Wang, C. Zhang,
+    ciples studied here could be adapted to bias collaborative            Z. Wang, S. K. S. Yau, Z. Lin et al., "Metagpt: Meta programming
+    systems by packaging a false seed as credible and encouraging         for a multi-agent collaborative framework," in The twelfth international
+    repeated reuse across agents. At the same time, the core              conference on learning representations, 2023.
+                                                                               [8] J. Jiang, F. Wang, J. Shen, S. Kim, and S. Kim, "A survey on large
+    technical components studied in this work support responsible         language models for code generation," ACM Transactions on Software
+    mitigation. In particular, atomic claim decomposition and             Engineering and Methodology, vol. 35, no. 2, p. 1-72, Jan. 2026.
+    structured intervention mechanisms can improve transparency           [Online]. Available: http://dx.doi.org/10.1145/3747588
+                                                                                       [9] Z. Xi, W. Chen, X. Guo, W. He, Y. Ding, B. Hong, M. Zhang,
+    during collaboration, support post hoc analysis of how an             J. Wang, S. Jin, E. Zhou, R. Zheng, X. Fan, X. Wang, L. Xiong,
+    incorrect belief was adopted, and strengthen accountability           Y. Zhou, W. Wang, C. Jiang, Y. Zou, X. Liu, Z. Yin, S. Dou, R. Weng,
+    by making correction points explicit. We believe the benefits         W. Cheng, Q. Zhang, W. Qin, Y. Zheng, X. Qiu, X. Huang, and
+                                                                          T. Gui, "The rise and potential of large language model based agents:
+    outweigh the risks when disclosure is bounded and safeguards          A survey," 2023. [Online]. Available: https://arxiv.org/abs/2309.07864
+    are applied.                                                         [10] Y. Du, S. Li, A. Torralba, J. B. Tenenbaum, and I. Mordatch, "Improving
+                                                                          factuality and reasoning in language models through multiagent debate,"
+    Risk boundaries and safeguards. Our attack experiments are            in Forty-first International Conference on Machine Learning, 2023.
+    conducted only in controlled evaluation settings and do not                  [11] Y. Yang, Y. Ma, H. Feng, Y. Cheng, and Z. Han, "Minimizing hal-
+    target production systems or real user traffic. The injected          lucinations and communication costs: Adversarial debate and voting
+                                                                          mechanisms in llm-based multi-agents," Applied Sciences, vol. 15, no. 7,
+    content includes controlled, fictitious security-themed mes-          p. 3676, 2025.
+    sages that are intentionally synthetic and are not claims about           [12] M. Z. Pan, M. Cemri, L. A. Agrawal, S. Yang, B. Chopra, R. Tiwari,
+    real vulnerabilities in real infrastructure. We do not provide        K. Keutzer, A. Parameswaran, K. Ramchandran, D. Klein et al., "Why
+                                                                          do multiagent systems fail?" in ICLR 2025 Workshop on Building Trust
+    any one-click automated hacking toolkit or deployment-ready           in Language Models and Applications, 2025.
+    abuse pipeline. We release only attack principles and the              [13] S. Zhang, M. Yin, J. Zhang, J. Liu, Z. Han, J. Zhang, B. Li, C. Wang,
+    experimental scripts needed to reproduce the paper results, and       H. Wang, Y. Chen et al., "Which agent causes task failures and when? on
+                                                                          automated failure attribution of llm multi-agent systems," arXiv preprint
+    we avoid packaging guidance that would materially reduce the          arXiv:2505.00212, 2025.
+    barrier for misuse.                                                   [14] Z. Liao, K. Chen, Y. Lin, K. Li, Y. Liu, H. Chen, X. Huang, and Y. Yu,
+                                                                          "Attack and defense techniques in large language models: A survey and
+    Human subjects and annotation. When human annotation                  new perspectives," Neural Networks, p. 108388, 2025.
+    is used, annotators participate voluntarily and can stop at                    [15] K. Greshake, S. Abdelnabi, S. Mishra, C. Endres, T. Holz, and
+    any time. The annotation content does not involve sensitive           M. Fritz, "Not what you've signed up for: Compromising real-world llm-
+                                                                          integrated applications with indirect prompt injection," in Proceedings
+    personal information, and we report only aggregated results.          of the 16th ACM workshop on artificial intelligence and security, 2023,
+    Data and privacy. The released datasets are sanitized and do          pp. 79-90.
+    not contain real personal data. Any URLs, database identifiers,           [16] P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal,
+                                                                          H. Kuttler, M. Lewis, W.-t. Yih, T. Rockt¨    aschel ¨  et al., "Retrieval-
+    or similar fields appearing in artifacts are synthetic.               augmented generation for knowledge-intensive nlp tasks," Advances in
+                                                                          neural information processing systems, vol. 33, pp. 9459-9474, 2020.
+     OPEN SCIENCE                                                              [17] S. Es, J. James, L. E. Anke, and S. Schockaert, "Ragas: Automated
+                                                                          evaluation of retrieval augmented generation," in Proceedings of the 18th
+    To support reproducibility and NDSS artifact evaluation, we           Conference of the European Chapter of the Association for Computa-
+    release the artifacts needed to evaluate our contribution via an      tional Linguistics: System Demonstrations, 2024, pp. 150-158.
+
+
+    15
+
+     [18] X. Sun, J. Li, Y. Zhong, D. Zhao, and R. Yan, "Towards detecting llms       [41] Y. Wang, Y. Pan, S. Guo, and Z. Su, "Security of internet of agents:
+ hallucination via markov chain-based multi-agent debate framework," in                         Attacks and countermeasures," IEEE Open Journal of the Computer
+ ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech               Society, 2025.
+ and Signal Processing (ICASSP).      IEEE, 2025, pp. 1-5.                                    [42] Y. Wang, Y. Pan, Z. Su, Y. Deng, Q. Zhao, L. Du, T. H. Luan,
+  [19] S. Yi, Y. Liu, Z. Sun, T. Cong, X. He, J. Song, K. Xu, and Q. Li, "Jail-            J. Kang, and D. Niyato, "Large model based agents: State-of-the-art,
+ break attacks and defenses against large language models: A survey,"                     cooperation paradigms, security and privacy, and future trends," IEEE
+ arXiv preprint arXiv:2407.04295, 2024.                                            Communications Surveys & Tutorials, 2025.
+[20] S. Bikhchandani, D. Hirshleifer, and I. Welch, "A theory of fads, fashion,           [43] P. He, Y. Lin, S. Dong, H. Xu, Y. Xing, and H. Liu, "Red-teaming
+ custom, and cultural change as informational cascades," Journal of                      llm multi-agent systems via communication attacks," in Findings of the
+ political Economy, vol. 100, no. 5, pp. 992-1026, 1992.                                   Association for Computational Linguistics: ACL 2025, 2025, pp. 6726-
+      [21] S. Vosoughi, D. Roy, and S. Aral, "The spread of true and false news    6747.
+ online," science, vol. 359, no. 6380, pp. 1146-1151, 2018.                               [44] M. Lupinacci, F. A. Pironti, F. Blefari, F. Romeo, L. Arena, and
+      [22] Y. Xie, C. Zhu, X. Zhang, T. Zhu, D. Ye, M. Wang, and C. Liu, "Who's            A. Furfaro, "The dark side of llms: Agent-based attacks for complete
+ the mole? modeling and detecting intention-hiding malicious agents in             computer takeover," arXiv preprint arXiv:2507.06850, 2025.
+ llm-based multi-agent systems," arXiv preprint arXiv:2507.04724, 2025.                [45] C. J. D'Urso, "Nowhere to hide: investigating the use of unilateral
+      [23] D. J. Watts, "A simple model of global cascades on random networks,"      alternatives to extradition in united states prosecutions of transnational
+ Proceedings of the National Academy of Sciences, vol. 99, no. 9, pp.              cybercrime," Ph.D. dissertation, University of Oxford, 2021.
+ 5766-5771, 2002.                                                                      [46] H. Triedman, R. Jha, and V. Shmatikov, "Multi-agent systems execute
+     [24] R. Pastor-Satorras, C. Castellano, P. Van Mieghem, and A. Vespignani,    arbitrary malicious code," arXiv preprint arXiv:2503.12188, 2025.
+ "Epidemic processes in complex networks," Reviews of modern physics,                 [47] E. Zeydan, J. Baranda, J. Mangues-Bafalluy, and Y. Turk, "Blockchain
+ vol. 87, no. 3, pp. 925-979, 2015.                                                       for network service orchestration: Trust and adoption in multi-domain
+       [25] D. E. Denning, "A lattice model of secure information flow," Commu-                  environments," IEEE Communications Standards Magazine, vol. 7,
+ nications of the ACM, vol. 19, no. 5, pp. 236-243, 1976.                          no. 2, pp. 16-22, 2023.
+       [26] O. Topsakal and T. C. Akinci, "Creating large language model appli-          [48] A. Adimulam, R. Gupta, and S. Kumar, "The orchestration of multi-
+ cations utilizing langchain: A primer on developing llm apps fast," in                agent systems: Architectures, protocols, and enterprise adoption," arXiv
+ International conference on applied engineering and natural sciences,             preprint arXiv:2601.13671, 2026.
+ vol. 1, no. 1, 2023, pp. 1050-1056.                                                  [49] R. Sapkota, K. I. Roumeliotis, and M. Karkee, "Ai agents vs. agentic
+        [27] J. Wang and Z. Duan, "Agent ai with langgraph: A modular framework         ai: A conceptual taxonomy, applications and challenges," arXiv preprint
+ for enhancing machine translation using large language models," arXiv             arXiv:2505.10468, 2025.
+ preprint arXiv:2412.03801, 2024.                                                       [50] E. Y. Chang and L. Geng, "Sagallm: Context management, validation,
+             [28] Z. Duan and J. Wang, "Exploration of llm multi-agent applica-        and transaction guarantees for multi-agent llm planning," arXiv preprint
+ tion implementation based on langgraph+ crewai," arXiv preprint                   arXiv:2503.11951, 2025.
+ arXiv:2411.18241, 2024.                                                                      [51] B. Baker, J. Huizinga, L. Gao, Z. Dou, M. Y. Guan, A. Madry,
+        [29] G. Li, H. Hammoud, H. Itani, D. Khizbullin, and B. Ghanem, "Camel:             W. Zaremba, J. Pachocki, and D. Farhi, "Monitoring reasoning models
+ Communicative agents for" mind" exploration of large language model                    for misbehavior and the risks of promoting obfuscation," arXiv preprint
+ society," Advances in Neural Information Processing Systems, vol. 36,             arXiv:2503.11926, 2025.
+ pp. 51 991-52 008, 2023.                                                           [52] I. Adabara, B. O. Sadiq, A. N. Shuaibu, Y. I. Danjuma, and V. Maninti,
+                                                                                        "Trustworthy agentic ai systems: A cross-layer review of architectures,
+         [30] A. Asuncion, D. Newman et al., "Uci machine learning repository,"            threat models, and governance strategies for real-world deployment,"
+ 2007.                                                                             F1000Research, vol. 14, no. 905, p. 905, 2025.
+        [31] D. Hendrycks, C. Burns, S. Kadavath, A. Arora, S. Basart, E. Tang,    [53] P. P. Ray, "A review on agent-to-agent protocol: Concept, state-of-the-
+ D. Song, and J. Steinhardt, "Measuring mathematical problem solving               art, challenges and future directions," Authorea Preprints, 2025.
+ with the math dataset," arXiv preprint arXiv:2103.03874, 2021.                         [54] A. Foundjem, L. N. Tidjon, L. Da Silva, and F. Khomh, "Multi-agent
+       [32] D. Hendrycks, C. Burns, S. Basart, A. Zou, M. Mazeika, D. Song, and            framework for threat mitigation and resilience in ai-based systems,"
+ J. Steinhardt, "Measuring massive multitask language understanding,"              arXiv preprint arXiv:2512.23132, 2025.
+ arXiv preprint arXiv:2009.03300, 2020.                                              [55] T. Zoppi, A. Ceccarelli, and A. Bondavalli, "Exploring anomaly detec-
+   [33] Z. Ji, T. Yu, Y. Xu, N. Lee, E. Ishii, and P. Fung, "Towards mitigating         tion in systems of systems," in Proceedings of the Symposium on Applied
+ llm hallucination via self reflection," in Findings of the Association for        Computing, 2017, pp. 1139-1146.
+ Computational Linguistics: EMNLP 2023, 2023, pp. 1827-1843.                         [56] C. Song, L. Ma, J. Zheng, J. Liao, H. Kuang, and L. Yang, "Audit-llm:
+        [34] W. Luo, S. Dai, X. Liu, S. Banerjee, H. Sun, M. Chen, and C. Xiao,        Multi-agent collaboration for log-based insider threat detection," arXiv
+ "Agrail: A lifelong agent guardrail with effective and adaptive safety            preprint arXiv:2408.08902, 2024.
+ detection," in Proceedings of the 63rd Annual Meeting of the Association                [57] M. M. Aslam, Z. Ahmed, L. Du, M. Z. Hassan, S. Ali, and M. Nasir,
+ for Computational Linguistics (Volume 1: Long Papers), 2025, pp. 8104-                   "An overview of recent advances of resilient consensus for multiagent
+ 8139.                                                                                     systems under attacks," Computational Intelligence and Neuroscience,
+     [35] R. Jha, H. Triedman, J. Wagle, and V. Shmatikov, "Breaking and fixing    vol. 2022, no. 1, p. 6732343, 2022.
+ defenses against control-flow hijacking in multi-agent systems," arXiv              [58] H. Ishii, Y. Wang, and S. Feng, "An overview on multi-agent consensus
+ preprint arXiv:2510.17276, 2025.                                                      under adversarial attacks," Annual Reviews in Control, vol. 53, pp. 252-
+        [36] S. Min, K. Krishna, X. Lyu, M. Lewis, W.-t. Yih, P. Koh, M. Iyyer,    272, 2022.
+ L. Zettlemoyer, and H. Hajishirzi, "Factscore: Fine-grained atomic eval-           [59] C. Islam, M. A. Babar, and S. Nepal, "A multi-vocal review of security
+ uation of factual precision in long form text generation," in Proceedings                    orchestration," ACM Computing Surveys (CSUR), vol. 52, no. 2, pp.
+ of the 2023 Conference on Empirical Methods in Natural Language                   1-45, 2019.
+ Processing, 2023, pp. 12 076-12 100.
+      [37] P. He, X. Liu, J. Gao, and W. Chen, "Deberta: Decoding-enhanced bert                               APPENDIX A
+ with disentangled attention," arXiv preprint arXiv:2006.03654, 2020.                          MODEL FITTING AND TOPOLOGY CONFIGURATION
+          [38] M. A. Ferrag, N. Tihanyi, D. Hamouda, L. Maglaras, A. Lakas, and
+ M. Debbah, "From prompt injections to protocol exploits: Threats in                                            DETAILS
+ llm-powered ai agents workflows," ICT Express, 2025.                                                This appendix specifies the configuration and fitting pro-
+         [39] D. Kong, S. Lin, Z. Xu, Z. Wang, M. Li, Y. Li, Y. Zhang, H. Peng,
+ X. Chen, Z. Sha et al., "A survey of llm-driven ai agent communication:                            tocol omitted from II-C. In this calibration experiment, we
+ Protocols, security risks, and defense countermeasures," arXiv preprint                          operationalize "infection" using a neutral tracer: a randomly
+ arXiv:2506.19676, 2025.                                                                           generated codeword that carries no task semantics. A node is
+                 [40] X. He, D. Wu, Y. Zhai, and K. Sun, "Sentinelagent: Graph-
+ based anomaly detection in multi-agent systems," arXiv preprint                                    marked infected once its output contains the injected code-
+ arXiv:2505.24201, 2025.                                                                              word. This design avoids coupling the seed to correctness
+
+
+ 16
+
+    1.0       Observed    Chain Topology           Star Topology                  Mesh Topology                                    TABLE VIII
+           Product fit                                                                                                   FIT ON REAL ATTACK TRACES.
+    0.8    Poisson fit
+    0.6
+    0.4                                                                                              Framework Topology                   β            δ       MSE Final ASR
+
+    0.2                                                                                              AutoGen       Mesh           0.363        0.002        0.0274     0.986
+    0.0
+    0                1  2      3      4     0  2   4  6      8      10 120  2  4  6      8      10 12
+                 Message step t                    Message step t                 Message step t     CAMEL         Mesh           0.270        0.010        0.0216     0.997
+    Fig. 7. Real attack trace fitting under asynchronous message steps. The                          CrewAI        Star           0.220        0.020        0.0471     0.422
+    observed curve gives the mean infection rate S(t) over real attack traces                        LangChain     Chain          0.985        0.002        0.0001     0.961
+    grouped by topology. The shaded band is the central 50% run-level interval                       LangGraph     Star           0.470        0.000        0.0310     0.997
+    of the observed trajectories, computed from the 25th and 75th percentiles.                       MetaGPT       Chain          0.593        0.000        0.0468     0.944
+
+    and provides a clean signal for validating whether the fitted
+    dynamics and the communication topology match the observed                                       edited variants; inserted whitespace, case changes, dropped
+    adoption trajectories.                                                                           delimiters, or substituted characters are all treated as non-
+    Setup and topology definitions We fix the network size                                           infected.
+    to N = 5, the horizon to T = 5 synchronous interaction                                           Observed trajectory and fitting protocol Let Xi,r(t) ∈
+    rounds, and the number of independent trials to R = 20                                           {0, 1} denote whether agent i is marked infected at round t in
+    for each topology. Let G = (V, E) be a directed graph with                                       trial r under the codeword rule above. The observed system-
+    V = {0, 1, 2, 3, 4}. A directed edge (j, i) ∈ E means agent                                      level infection rate is
+    i can read messages produced by agent j in that round. The                                                                R N
+    adjacency matrix A ∈ {0, 1}                       N×N is defined by aij = 1 if                   Sobs(t) = 1              X    X-1Xi,r(t),      t ∈ {1, . . . , T}.
+    (j, i) ∈ E and aij = 0 otherwise.                                                                              RN         r=1  i=0
+        The centralized topology is a bidirectional star with node 0                                 If a trial reaches full infection at time tstop < T (that is,
+    as the hub:                                                                                      Xi,r(tstop) = 1 for all i), we set Xi,r(t) = 1 for all t ∈
+Estar = {(0, i) | i ∈ {1, . . . , 4}} ∪ {(i, 0) | i ∈ {1, . . . , 4}}.                               (tstop, T] so that steady-state segments are not truncated.
+                                                                                                             The update rule and infection functions follow II-C. Since
+    The layered topology is a unidirectional chain,                                                  round t = 0 contains only the seed injection, we align the
+                                                                                                     model initial condition to the first observed interaction round
+               Echain = {(i, i + 1) | i ∈ {0, 1, 2, 3}}.                                             by setting a homogeneous initialization
+    The layered-horizontal topology augments this chain with                                                       s model
+    static reverse edges that represent limited two-way commu-                                                       i        (0) ← Sobs(1)     for all i.
+    nication: for each adjacent pair (i, i + 1), we draw Bi ∼                                        The model then produces a predicted aggregate trajectory
+                                                                                                     Spred(t) = 1  P smodel
+    Bernoulli(Ph) once at the start of the experiment with Ph =                                          N              i  i        (t), which we compare to Sobs(t+ 1)
+    0.3; if Bi = 1, we add the reverse edge (i + 1, i) and obtain                                    for t = 1, . . . , T - 1. The mean squared error is
+                                                                                                                              1   T
+        Elh = Echain ∪ {(i + 1, i) | i ∈ {0, 1, 2, 3}, Bi = 1}.                                      MSE(β, δ) =         T - 1    X-1 Spred(t) - Sobs(t + 1)2    .
+    We do not generate skip connections; the jump probability is                                                                  t=1
+    fixed to Ps = 0. The decentralized topology is implemented                                                  We select (β∗, δ∗) through a two-stage grid search. The
+    as the complete directed graph without self-loops,                                               coarse stage evaluates (β, δ) ∈ [0, 1] × [0, 1] with step size
+               Ecomplete = {(j, i) | i ̸= j, i, j ∈ V }.                                             0.05. The fine stage evaluates an 11 × 11 grid centered at the
+                                                                                                     coarse optimum over a radius of ±0.05 with step size 0.01,
+    Codeword matching and tolerance rules In the modeling                                            clipping candidates to [0, 1] at the boundaries.
+    assessment part, at the beginning of each trial we sample a                                      Fitting on Real Attack Traces To further examine the
+    fresh codeword string c in a sentinel-delimited format (for                                      applicability of the model in real attack settings, we conduct
+    example, #TAG:ABC-1234#) and inject it at the seed posi-                                         an offline fitting analysis on the real attack logs used in
+    tion. Matching is literal and case sensitive. Before detection,                                  the application-level attack experiment. Compared with the
+    each agent output yi,r(t) is passed through a deterministic                                      neutral-codeword experiment, the propagated signal in real
+    normalization function norm(·) that applies Unicode normal-                                      attack traces is embedded in concrete malicious instructions
+    ization (NFKC), standardizes line endings, removes zero-width                                    and task contexts. Therefore, this experiment serves as a real-
+    characters, and strips a single layer of trivial wrappers such                                   scenario extension for evaluating the model's fitting ability.
+    as surrounding backticks or quotes around c. We then mark                                                     The product-form fit gives a mean MSE of 0.029 on the
+    agent i as infected at round t in trial r if and only if c appears                               pooled attack groups. This result shows that the propagation
+    as a substring of norm(yi,r(t)). We count only exact matches                                     model can also fit the coarse-grained adoption curves in real
+    of the full codeword and do not accept partial matches or                                        attack traces.
+
+
+                                                                                  17
+
+
+
+
+
+
+
+
+
+
+Infection rate S(t)
+
+                 TABLE IX                                TABLE X
+COMPACT PROPAGATION-THRESHOLD DIAGNOSTICS.    CASCADE SEVERITY BY TOPOLOGY.
+
+    Setting            Defense     β      δ      Margin Obs. S(T)     Framework     Topology    Agents    Final Rate    Std
+    LangGraph-Star None          0.42     0.08     0.65     0.80      MetaGPT       Chain          4        100.0%     0.0%
+    LangGraph-Star     Speed     0.07     0.00     0.12     0.18      LangChain     Chain          4         89.2%    22.1%
+    LangGraph-Star     Strict    0.04     0.00     0.07     0.04      LangGraph     Star           4        100.0%     0.0%
+                                                                      CrewAI        Star           4        100.0%     0.0%
+    AutoGen-Mesh       None      0.26     0.10     0.68     0.76      AutoGen       Mesh           3        100.0%     0.0%
+    AutoGen-Mesh       Speed     0.05     0.00     0.15     0.17      CAMEL         Mesh           3        100.0%     0.0%
+    AutoGen-Mesh       Strict    0.05     0.00     0.15     0.08
+
+
+    Compact threshold diagnostics. To complement the repre-               visibility is cumulative across artifacts rather than restricted to
+    sentative threshold-shift analysis, we further report compact         a single immediate predecessor, yielding a chain-like structure
+    fitted diagnostics on two representative governance settings,         with cross-stage carryover. In our setup, SOP stages align
+    LangGraph-Star and AutoGen-Mesh. Since the ratio R =                  with roles such as product manager, architect, engineer, and
+    βρ(A)/δ becomes ill-conditioned when δ is close to zero,              QA/reviewer, and the reviewer consumes the PRD, design,
+    we report the threshold margin βρ(A) - δ as the primary               and code artifacts produced in earlier stages. This mapping
+    diagnostic.                                                           matches MetaGPT's core design, where SOP stages and their
+    As shown in Table IX, both settings exhibit a clear reduction         artifacts are first-class objects reused in subsequent stages.
+    in fitted transmission strength after governance is enabled.          For CrewAI, we use a hierarchical process in which a
+    In LangGraph-Star, Speed reduces β from 0.42 to 0.07 and              manager agent issues directives, workers respond under those
+    lowers the observed final coverage from 0.80 to 0.18, while           directives, and the manager aggregates worker outputs before
+    Strict further reduces the final coverage to 0.04. In AutoGen-        issuing the next directive. Workers primarily interact through
+    Mesh, Speed and Strict reduce β from 0.26 to 0.05, with               the manager rather than directly with one another, producing a
+    the observed final coverage decreasing from 0.76 to 0.17              hub-and-spoke structure over rounds. In our configuration, the
+    and 0.08, respectively. These results provide additional fitted       crew contains a manager and worker roles such as researcher,
+    evidence for the trajectory-level results: the governance layer       developer, and reviewer, with the reviewer treated as a worker
+    reduces effective propagation strength and keeps finite-horizon       who responds to manager instructions but does not directly
+    infection coverage low under representative defense settings.         read other workers' raw messages. This mapping matches the
+                                                                          hierarchical delegation semantics, where a manager coordi-
+                                                                          nates and validates worker contributions.
+        APPENDIX B                                                        For LangGraph, we use a supervisor-worker team where a su-
+SUPPLEMENT TO VULNERABILITY                                               pervisor node routes control to a selected worker, receives the
+    Communication Structures We model each framework as a                 worker's result, updates the shared state, and continues routing.
+    discrete-time process that repeatedly selects an acting agent,        The supervisor maintains the global view of the evolving state,
+    exposes a context view to that agent, and appends the produced        while only the activated worker executes the next step, yielding
+    message or artifact to a shared state that may be visible to          a centralized routing structure with alternating supervisor-to-
+    others in later steps. The induced visibility pattern defines the     worker transitions. In our tasks, workers include roles such
+    effective communication structure and the path along which            as planner, coder, and reviewer, and the reviewer is activated
+    an injected seed can propagate.                                       when the supervisor routes evaluation or checking work to
+    For LangChain, we use a sequential, single-pass pipeline in           that node based on the current state. This mapping matches
+    which roles execute in a fixed order and each step consumes           the supervisor routing pattern used to construct hierarchical
+    the accumulated upstream outputs as context. Information              agent teams.
+    flows strictly forward, with no backward dependency from              For AutoGen, we use a group chat in which agents share
+    later roles to earlier roles, yielding a directed chain. In our       a broadcast conversation history, while the next speaker is
+    tasks this corresponds to a four-stage pipeline with roles such       selected dynamically from the same shared history. Each
+    as product manager, architect, engineer, and reviewer, where          produced message is appended to the shared state and becomes
+    the reviewer only sees artifacts that have been produced earlier      visible to all participants, yielding a mesh under broadcast
+    in the chain. This mapping matches the intended sequential            visibility with a data-dependent activation schedule. In our
+    composition model, where intermediate results are passed              configuration, the group contains agents such as a task co-
+    downstream as the next component's input.                             ordinator, coder, and reviewer, and the reviewer reads the
+    For MetaGPT, we use an SOP-style workflow in which roles              full conversation history before issuing comments or approval.
+    advance through staged production of intermediate artifacts,          This mapping matches the group-chat semantics that support
+    and downstream roles read multiple upstream artifacts as part         model-based next-speaker selection under shared context.
+    of their context view. Execution remains stage-ordered, but           For CAMEL, we use a role-playing, multi-round dialogue col-
+
+
+                                                            18
+
+                            TABLE XI                                                          APPENDIX C
+         FRAMEWORK INSTANTIATIONS USED IN SECTION VII-A.                               SUPPLEMENT TO EVALUATION
+
+    Framework            Topology    Agents                            Tasks and application-level adaptation. We evaluate three
+                                                                     scenarios: QUANT (constructed from the UCI repository [30]),
+    LangChain                 chain     4                              RIGID (derived from MATH-style multi-step reasoning prob-
+    MetaGPT                   chain     4                                  lems [31]), and MMLU (adapted from MMLU [32] into
+    AutoGen                   mesh      4                            retrieval-based question answering).
+    CAMEL                     mesh      4                            We apply an application-level adaptation that requires
+    CrewAI                    star      4                           agents to invoke external tools or retrieve external resources
+    LangGraph                 star      4                            during problem solving, which operationalizes a supply-chain
+                                                                      facing attack surface. QUANT is adapted from the UCI Adult
+                                                                      Income dataset: each instance explicitly requires loading a
+                                                                       remote CSV and completing the specified analysis through
+                                                                      a Python data-analysis toolchain rather than answering from
+ laboration in which role agents iteratively contribute messages         memory. RIGID is adapted from AMC 10/12-style number
+ to a shared dialogue state. The essential property is that the      theory and probability problems: agents are required to call
+ evolving dialogue history is the primary context for subsequent      MathAPI (or a designated calculator tool) to validate each
+  turns, yielding a mesh-like interaction under shared history;          step before proceeding. MMLU uses a subset from High
+ the concrete speaking order is treated as an operational choice     School Physics, Chemistry, and Biology, and is converted into
+    that does not change the role-playing dialogue semantics.          a retrieval-based setting backed by a Wikipedia API; each
+  In our experiments, roles include a task giver, an assistant    question is paired with a single target fact, and the task requires
+    coder, and a reviewer, and the reviewer participates as a       retrieving and verifying that fact from the external knowledge
+  dialogue agent that inspects the shared history and comments       source prior to producing the final answer.
+     on intermediate solutions. This mapping matches CAMEL's         Each scenario contains 20 task instances. In the attack
+   role-playing paradigm, where collaboration proceeds through        evaluation, each framework-scenario-attacker-policy cell is
+    iterative dialogue among role agents.                           repeated three times, yielding 20 × 3 runs per cell. In the de-
+                                                                      fense evaluation, each selected framework-scenario-defense-
+    Injection Definition and Node Mapping For the endogenous        method-attacker-policy cell is repeated twice, yielding 20 × 2
+propagation study, we realize the adversary as a single injected     runs per cell.
+ seed applied to a designated target agent by prefixing a fixed
+ instruction to that agent's system-level directive at the first                               TABLE XII
+step. This setting is used only to standardize the initial error          NLI COMPARISON RESULTS ON THE REAL EVALUATION SET.
+   condition for measuring endogenous amplification, and it is
+separated from the later application-layer attack instantiation.     Method        Acc.      FGR G-Prec.      Time      Tok.
+  Injection locations are normalized as entry, hub, and leaf :       gpt-4o-mini        78.8% 20.5% 43.8% 684.4ms 3993
+ entry denotes the earliest upstream role in chain or SOP work-      deberta-v3-small    71.2% 2.3%    80.0% 148.2ms        0
+  flows, hub denotes the central coordinator in star workflows,      deberta-v3-large       82.7% 0.0% 100.0% 91.1ms        0
+    and leaf denotes a non-coordinator worker role such as an        similarity (Jaccard) 11.5% 0.0%     N/A   0.0ms        0
+    engineer or reviewer.
+
+    Observables and Counting Rules We log a binary infection           Baseline Setup. We adapt three comparison baselines under
+  state Xi,r(t) for agent i in run r at step t by tracking the         the same task, framework, topology, prompt, attack injec-
+injected canonical seed in controlled traces. A state is counted    tion, and evaluation detector settings. Reflection serves as a
+ as adopted only when the seed is carried forward as part of the     sender-side self-check baseline: before message delivery, the
+ agent output, shared context, or downstream artifact; rejected        agent reviews and revises its own output. AGrail is used
+    or explicitly negated mentions are excluded. Beyond final          as an agent-monitoring baseline placed on the inter-agent
+  outcomes, we record polluted intermediate artifacts (PIA): an        message path [34]. It checks each outgoing message using
+   intermediate message or artifact is flagged as PIA if it is       task context, role information, safety criteria, and safety-
+  committed to the shared state, reused in downstream context,          check memory; messages judged unsafe are replaced with
+ and classified as adopted-infected by the same controlled-seed       a guardrail placeholder before entering downstream context.
+    counting rule.                                                    The CFG baseline follows the graph-control setting inspired
+                                                                    by ControlValve [35]. It derives admissible routing rules from
+   Extended Severity Statistics for Cascade Amplification Ta-       the agent list, topology, allowed tools, and task instruction,
+ble X reports the final infection rate and its standard deviation    then checks runtime agent transitions against these rules and
+   for the cascade amplification experiment in each framework.        supports bounded rejection or re-planning. These baselines
+
+
+                                             19
+
+                     TABLE XIII
+PER-DATASET AGGREGATE RESULTS ACROSS DEFENSE METHODS.
+
+    Defense            BICR (%) ↑             Safe Completion (%) ↑    Tok./Safe (103) ↓
+                    M       Q       R       M       Q       R       M          Q       R
+
+    Strict        89.4    98.9    94.4    88.3    98.9    90.6    54.9       63.2    50.9
+    Balanced      87.2    97.5    93.9    84.2    97.2    92.2    29.2       36.1    27.0
+    Speed         92.8    83.1    92.5    91.1    83.1    89.7    20.1       23.4    18.7
+    Reflection    35.3    29.7    31.9    35.0    29.7    30.3    12.8       12.9    12.4
+    AGrail        82.5    75.3    78.6    20.8     7.2     5.3    23.5       21.8    21.2
+    CFG           70.6    79.4    78.9    25.8    15.8     7.2    17.0       18.4    17.1
+
+
+    receive no extra oracle information beyond the normal task       APPENDIX D
+    text and data source.                             PER-DATASET AGGREGATE DEFENSE RESULTS
+                                                                    Table XIII reports the aggregate defense results on each
+    Prompt. The detailed prompt templates can be found in our    evaluation dataset. Values are averaged over frameworks and
+    open-source code repository.              attack settings within each dataset.
+
+    Framework instantiation budget. Appendix B specifies the
+    agent rosters, role names, message routing, and termination
+    criteria for each framework instantiation. Here we only sum-
+    marize the agent count used in our experiments.
+
+    Attacker policies and injection protocol. We instantiate
+    three application-level attacker policies via a single message
+    injection. BASELINE inserts the malicious claim verbatim;
+    COMPLIANCE frames the claim as a cooperative instruction
+    aligned with the local task objective; SECURITY FUD frames
+    the claim as a security-motivated caution that biases down-
+    stream decisions. For each run, we inject exactly one seed
+    message at a deterministic injection target determined by the
+    orchestration in Appendix B, then measure whether multi-
+    round collaboration propagates the seed into an infected final
+    artifact.
+
+    NLI module evaluation for conservative Green screening.
+    The local lightweight NLI model is not intended to be the
+    strongest three-way classifier. In the defense module, it is used
+    as a conservative first-pass screen for Green labels, where the
+    main risk is allowing unsupported claims to pass as entailment.
+    We evaluate this behavior on a human-annotated set whose
+    core samples are extracted from real collaboration logs of
+    METAGPT, LANGGRAPH, and AUTOGEN, covering interme-
+    diate factual statements produced under QUANT and RIGID.
+    Because real traces are typically dominated by neutral,
+    we add a small amount of synthetic augmentation by writing
+    entailment paraphrases and contradiction variants (numerical
+    conflicts) for selected ground-truth facts, then manually check-
+    ing all labels against the underlying evidence. FGR is the share
+    of non-entailment samples predicted as entailment (Green).
+    Green Precision is the share of predicted Green samples
+    that are truly entailment, and is undefined when no Green
+    prediction is made. We use DeBERTa-v3-small as the default
+    online NLI backend under local compute constraints.
+
+
+                                          20

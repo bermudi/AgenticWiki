@@ -1,13 +1,14 @@
 ---
 title: Agent Loop
 created: 2026-07-01
-updated: 2026-07-02
+updated: 2026-07-03
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-only-the-best-are-using-them.md
   - raw/yt-7-insane-loops-you-need-to-try-right-now.md
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
+  - raw/2511.09030-maker-million-step-zero-errors.txt
 unaudited_marginal: 0
 tags: [concept, agent-loops, autonomous-agents, claude-code, cron, orchestration]
 ---
@@ -53,6 +54,9 @@ The word "loop" caused a brawl because it hides at least five different things. 
 | **5. Orchestration loops** | 2026 | [[boris-cherny\|Boris Cherny]], [[peter-steinberger\|Peter Steinberger]] | See [[orchestration-loop]]. Loop becomes the unit of work (not the task); loops supervise loops; scheduling replaces the human kickoff; durability becomes explicit. |
 
 Stage 3 — the single-agent ralph loop — is "old hat by now" (in one practitioner's words). Stage 5 — the multi-agent orchestration loop on top of it — is the genuinely new layer. See [[ralph-loop]] for the full mechanics of Stage 3 and [[orchestration-loop]] for Stage 5.
+
+> [!note] Extension: a sixth paradigm — maximal decomposition
+> [[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] (Meyerson et al., 2025) add a sixth stage to the lineage: the loop body becomes a *single LLM step* executed by a focused microagent, with per-step voting as the convergence mechanism. Where Stage 3 (ralph) resets context per iteration to a fixed anchor file, Stage 6 (MDAP) reduces the iteration to one step and replaces the human-authored stopping condition with first-to-ahead-by-k voting. The million-step zero-error Towers of Hanoi result is the limit case: a loop of 1,048,575 single-step microagents, each verified by voting, with log-linear cost scaling. This is a reasonable but unvalidated extension of the lineage — the practitioner sources for Stages 1–5 do not name this paradigm; the MDAP paper supplies it from a different tradition (asymptotic analysis of LLM primitives, microservices architecture).
 
 > [!note] Departure: `/goal` (Linear) vs. Dynamic Workflow (Generative)
 > Stage 4's `/goal` and Stage 5's dynamic workflow look similar but differ in shape. [[theo-t3gg|Theo]] draws the line: `/goal` is a **linear, never-ending single thread** that keeps double-checking "did you finish the work? if no, keep going." A **dynamic workflow** takes a pre-planned goal and *generates* sub-threads and sub-loops based on the specific problem — "a dynamic workflow that was created based on the specific needs of this specific problem." Linear `/goal` plugs along on one thread; a dynamic workflow spawns the structure the work demands. Both are loops; only the latter creates loops (see [[orchestration-loop]]).
@@ -126,6 +130,8 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - [[jarred-sumner]] — The for-each-not-while refinement: loops work best around a bounded task queue
 - [[neetcode]] — The skeptic auditor: "it's just cron," the exponential-decay objection
 - [[discourse-slop]] — The meta-discourse around loops (the viral "designing loops" wave) is itself slop-prone
+- [[massively-decomposed-agentic-processes]] — the sixth paradigm in the lineage: single-step microagents + per-step voting; the million-step zero-error limit case
+- [[maker]] — the implementation; Towers of Hanoi as the execution-pole demonstration that per-step voting replaces the human-authored stopping condition
 
 ## Sources
 
@@ -134,3 +140,4 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - `raw/yt-7-insane-loops-you-need-to-try-right-now.md` — Concrete loop patterns sorted by goal type (the Loop Library), and the "loops can't build features" tension.
 - `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand cost receipts ($10K inference for $600 of subscriptions; the 8-hour/3M-token comment loop), the /goal-vs-dynamic-workflow distinction, and the "prompt yourself out of involvement" heuristic.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s skeptic audit: the "it's just cron" position, the for-each-not-while refinement (via [[jarred-sumner|Jarred Sumner]]), the exponential-decay objection (0.95¹⁰), and [[armin-ronacher|Armin Ronacher]]'s loop-experiment finding (review-only).
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (single-step microagents); §3.2 first-to-ahead-by-k voting as the convergence mechanism; §4.4 the million-step zero-error result. Source for the "sixth paradigm" Extension callout.

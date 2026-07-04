@@ -3,7 +3,8 @@ title: Self-Conditioning
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/the-illusion-of-diminishing-returns.txt
+  - raw/2511.09030-maker-million-step-zero-errors.txt
 tags: [concept, failure-mode, long-horizon, context, llm-behavior, execution]
 unaudited_marginal: 0
 ---
@@ -43,8 +44,11 @@ The synthetic task lets error rate be controlled exactly — impossible on messy
 | Remove prior history ([[context-engineering]]) | **Partially** | Sliding window helps, but only for Markovian tasks; generalizes to "minimize error accumulation in context" |
 | Prompted self-verification | **No** | Burns context; verification itself is error-prone; thinking models overthink |
 | Parallel majority voting | **No** | Marginal gain, does not match sequential thinking (Appendix D) |
+| [[massively-decomposed-agentic-processes\|Maximal decomposition]] | **Yes (architectural)** | Each microagent sees only the minimal context for its single step — no error-laden history to condition on; the failure mode is structurally unavailable |
 
 The context-engineering result is the actionable one for practitioners: actively limiting the model's exposure to its own past errors — a sliding window, or more generally any policy that keeps error-laden history out of context — mitigates self-conditioning. The general principle: **active context management that minimizes accumulation of errors in context improves long-horizon reliability.** (Appendix C.2)
+
+[[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] take this principle to its architectural limit: each microagent receives only the current state and the prior move, never the full error-laden trajectory. Self-conditioning is structurally unavailable — there is no long context to degrade, and no error-laden history to condition on. The million-step zero-error result is partly a consequence: the failure mode that caps horizon length in single-agent systems is sidestepped by construction, and per-step error rates stay stable as the task grows (the paper notes this stability explicitly as the encouraging sign that MAKER scales).
 
 ## Related Failure Modes
 
@@ -70,7 +74,10 @@ Self-conditioning is distinct from the wiki's existing taxonomy:
 - [[agent-floor]] — some tier-E "planning" collapses may be self-conditioning on prior errors within the trajectory
 - [[document-degradation]] — kindred long-chain degradation, but content-driven rather than length-driven
 - [[jagged-frontier]] — the frontier is jagged across context content: the same model reliable on healed history degrades on error-laden history, a long-horizon jaggedness invisible at one step
+- [[massively-decomposed-agentic-processes]] — the architectural mitigation: each microagent sees only minimal context, so self-conditioning is structurally unavailable
+- [[error-cascades]] — the multi-agent generalization: a MAS conditions on its own error-laden shared state (consensus inertia), the system-level analog of self-conditioning
 
 ## Sources
 
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Self-conditioning effect and counterfactual error-injection experiment (§3.2); scaling/thinking asymmetries (§3.2, Figs. 5–6); realistic-task estimates from AgentErrorBench (Appendix A); mitigation studies — self-verification (Appendix C.1), context engineering sliding window (Appendix C.2), parallel majority voting (Appendix D).
+- `raw/the-illusion-of-diminishing-returns.txt` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Self-conditioning effect and counterfactual error-injection experiment (§3.2); scaling/thinking asymmetries (§3.2, Figs. 5–6); realistic-task estimates from AgentErrorBench (Appendix A); mitigation studies — self-verification (Appendix C.1), context engineering sliding window (Appendix C.2), parallel majority voting (Appendix D).
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (each microagent receives minimal context — no error-laden history); §4.2 the per-step error rate is stable as the disk count grows, the empirical sign that self-conditioning is sidestepped. Source for the MDAP mitigation row and paragraph.

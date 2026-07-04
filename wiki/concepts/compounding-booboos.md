@@ -2,7 +2,7 @@
 title: Compounding Booboos
 created: 2026-04-25
 updated: 2026-07-03
-sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf, raw/yt-are-we-really-doing-this-again.md, raw/the-illusion-of-diminishing-returns.pdf]
+sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf, raw/yt-are-we-really-doing-this-again.md, raw/the-illusion-of-diminishing-returns.txt, raw/2511.09030-maker-million-step-zero-errors.txt, raw/2603.04474-spark-to-fire-error-cascades.txt]
 tags: [concept, ai, reliability]
 unaudited_marginal: 0
 ---
@@ -43,6 +43,19 @@ The p^t dynamic is symmetric, and the wiki has so far only told its risk face. S
 
 > [!note] Synthesis: one dynamic, two faces
 > Compounding is not inherently good or bad — it is an amplifier of the current per-step accuracy. Below the threshold it is the [[compounding-booboos|risk]] this page documents: errors sink you multiplicatively, and [[self-conditioning]] makes the decay worse than constant. Above the threshold it is the [[horizon-length|opportunity]]: accuracy gains compound into dramatic long-horizon capability. The practical upshot is that the *same* finding ("small errors compound") implies two opposite strategies depending on where you sit: below threshold, bound the horizon (hard stops, verification, short loops); above threshold, push accuracy, because each point buys an outsized jump in reachable task length.
+
+## The Multi-Agent Face: Cascade Amplification
+
+[[error-cascades|Xie, Zhu, Zhang et al. (2026)]] formalize the multi-agent analog: in an LLM-MAS, compounding is no longer just `p^t` over one agent's steps but a contagion process on the collaboration graph. The risk criterion `R ≈ βρ(A)/δ` is the compounding threshold for the multi-agent case — when structural amplification (`βρ(A)`) outpaces correction (`δ`), a single atomic error becomes system-wide false consensus. The three vulnerability classes map onto the compounding dynamic:
+
+- **Cascade amplification** = compounding at the multi-agent layer: concurrent mentions from different upstream agents compound via the non-linear `1 − Π(·)` term
+- **Consensus inertia** = the multi-agent [[self-conditioning]]: the system conditions on its own error-laden shared state and resists reversal; the cost of correction grows with accumulated contextual debt
+
+The single-injection attack (one seed → up to 100% infection across 6 frameworks) is the adversarial analog of a sparse [[critical-failure]]: one catastrophic event propagates through the dependency chain.
+
+## The Architectural Answer: Per-Step Error Correction
+
+[[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] (Meyerson et al., 2025) answer the compounding risk directly: if `p^t` sinks you, raise the *effective* `p` via per-step voting. The first-to-ahead-by-k scheme turns a per-step success rate `p` into a per-subtask success rate `p_sub = 1 / (1 + ((1-p)/p)^k)`, and the minimal `k` grows only logarithmically with `s` (`k_min = Θ(ln s)`). The cost of solving an `s`-step task with target reliability scales as `Θ(s ln s)` — log-linear, not exponential. The million-step zero-error result is the empirical proof that per-step error correction breaks the compounding ceiling on long-horizon execution.
 
 ## Mitigation
 
@@ -86,6 +99,10 @@ The p^t dynamic is symmetric, and the wiki has so far only told its risk face. S
 - [[agent-loop]] — An open loop that writes code with no feedback is a machine for generating compounding mistakes; hard stops and verification are the defense
 - [[neetcode]] — The exponential-decay articulation of per-iteration loop error compounding
 - [[rollback-posture]] — Undetected faults that stack up jam the rollback valve; compounding booboos are the mechanism
+- [[error-cascades]] — the multi-agent face of compounding: `βρ(A)/δ > 1` is the compounding threshold for MAS; cascade amplification and consensus inertia are the multi-agent analogs of compounding booboos and self-conditioning
+- [[genealogy-governance]] — the message-layer defense against multi-agent compounding; the ablation (no blocking → 3.1% BICR) shows detection alone doesn't break the compounding cycle — enforcement does
+- [[massively-decomposed-agentic-processes]] — the architectural answer: per-step voting raises effective `p` and breaks the `p^t` ceiling; cost scales log-linearly, not exponentially
+- [[maker]] — the million-step zero-error demonstration that per-step error correction breaks the compounding ceiling on long-horizon execution
 
 ## Sources
 
@@ -93,4 +110,6 @@ The p^t dynamic is symmetric, and the wiki has so far only told its risk face. S
 - `raw/slowing-the-fuck-down.md`
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors across 52 domains
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s exponential-decay framing: per-iteration error compounds multiplicatively across loop ticks (0.95¹⁰ ≈ 0.60)
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Proposition 1 (§2.1): H_s = ln(s)/ln(p) — the inverse of p^t compounding. Horizon length grows hyperbolically past ~80% step accuracy, so the same compounding that sinks low-accuracy agents lifts high-accuracy ones exponentially.
+- `raw/the-illusion-of-diminishing-returns.txt` — Sinha, Arun, Goel et al. (ICLR 2026). Proposition 1 (§2.1): H_s = ln(s)/ln(p) — the inverse of p^t compounding. Horizon length grows hyperbolically past ~80% step accuracy, so the same compounding that sinks low-accuracy agents lifts high-accuracy ones exponentially.
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 first-to-ahead-by-k voting (Eqs. 9–13): per-step error correction raises effective `p` to `p_sub`, breaking the `p^t` ceiling; §3.2 cost scaling (Eqs. 14–18): `Θ(s ln s)`, log-linear not exponential. Source for the "Architectural Answer" section.
+- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (`R ≈ βρ(A)/δ`); §IV three vulnerability classes (cascade amplification, topological fragility, consensus inertia). Source for the "Multi-Agent Face" section.

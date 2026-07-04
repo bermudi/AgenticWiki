@@ -3,8 +3,9 @@ title: MAST — Multi-Agent System Failure Taxonomy
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.txt
   - raw/2512.08296-scaling-agent-systems.pdf
+  - raw/2603.04474-spark-to-fire-error-cascades.txt
 tags: [concept, multi-agent, failure-modes, taxonomy, evaluation, empirical, mas-audit]
 unaudited_marginal: 0
 ---
@@ -121,6 +122,18 @@ The [[scaling-agent-systems|Kim et al. scaling study]] (260 configurations, 6 be
 
 The scaling study's [[capability-saturation|capability saturation]] finding (β = -0.236, the most robust predictor) also corroborates MAST's central conjecture: improvements in base-model capabilities will be insufficient to address the full taxonomy. As models improve and single-agent baselines rise above 45%, MAS coordination overhead becomes net cost — the failure modes MAST identifies don't disappear, they become *more* expensive relative to the alternative.
 
+## The Mechanism Layer: Error Cascades
+
+[[error-cascades|Xie, Zhu, Zhang et al. (2026)]] supply the formal propagation mechanism beneath MAST's diagnostic categories. Where MAST names *what* fails (14 modes), the cascade paper models *how* a single error becomes system-wide false consensus: the collaboration graph's spectral radius ρ(A) governs amplification, and once βρ(A) > δ the system is supercritical. The mapping:
+
+| MAST category | Cascade mechanism |
+|---|---|
+| FC1 System Design Issues (44.2%) | Topological fragility: the hub is the principal-eigenvector node; `ρ(A)` measures the structural vulnerability that bad design creates |
+| FC2 Inter-Agent Misalignment (32.3%) | Cascade amplification: errors propagate through the dependency graph via the non-linear `1 − Π(·)` term; concurrent mentions compound rather than cancel |
+| FC3 Task Verification (23.5%) | Consensus inertia: correction cost grows with accumulated contextual debt; verification that arrives after the error has crystallized into shared state is too late |
+
+The cascade paper's [[genealogy-governance|governance layer]] is the kind of structural defense MAST's "structural strategies" (Appendix G) call for: not agent-level self-reflection (which the cascade paper shows fails: BICR 0.32) but workflow-level enforcement (atomic-claim decomposition, tri-state screening, blocking with rollback). MAST's FC3 finding that "multi-level verification is needed" is implemented concretely as the governance layer's four-stage pipeline.
+
 ## Methodology
 
 MAST was built using Grounded Theory (Glaser & Strauss, 1967):
@@ -134,6 +147,7 @@ The Grounded Theory approach ensures the taxonomy emerges from empirical data ra
 
 ## Thread
 
+- [[the-multi-agent-theory]] — Layer 2 (the diagnosis): this page supplies the *why* — 14 failure modes, system design is the binding constraint. The thread traces the full theory across six papers.
 - [[agent-quality-engineering]] — MAST is the failure-mode taxonomy for the multi-agent layer of the quality infrastructure; the FC3 verification finding directly reinforces the multi-level verification thesis
 - [[the-agent-workflow]] — the failure modes diagnose where multi-agent workflows break in practice
 - [[the-verifiability-thesis]] — the FC3 finding (verifier is not a silver bullet; multi-level verification needed) is verifiability applied at the MAS architecture level
@@ -154,8 +168,12 @@ The Grounded Theory approach ensures the taxonomy emerges from empirical data ra
 - [[mert-cemri]] — lead author (with Melissa Z. Pan and Shuyi Yang) of the MAST paper
 - [[scaling-agent-systems]] — the quantitative companion: 260-config regression that measures the error amplification factors and coordination regimes MAST diagnoses qualitatively
 - [[capability-saturation]] — the quantitative corroboration of MAST's central conjecture (base-model improvements insufficient): the 45% threshold means MAS failure modes become *more* expensive as models improve
+- [[error-cascades]] — the formal propagation mechanism beneath MAST's diagnostic categories; βρ(A) > δ is the dynamic that produces the FC1/FC2/FC3 failure patterns
+- [[genealogy-governance]] — the structural defense MAST's "structural strategies" (Appendix G) call for; the four-stage pipeline implements the multi-level verification FC3 diagnoses
+- [[yizhe-xie]] — lead author of the cascade paper that supplies MAST's mechanism layer
 
 ## Sources
 
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (UC Berkeley + Intesa Sanpaolo, NeurIPS 2025 Datasets & Benchmarks, arXiv 2503.13657v3, 26 Oct 2025). §3 MAST-Data construction (Grounded Theory, IAA κ=0.88, LLM annotator κ=0.77); §4 MAST taxonomy (14 modes, 3 categories, 3 insights); §5 failure breakdown and primacy of system design; Appendix A failure mode definitions; Appendix B MAS details and failure rates (41–86.7%); Appendix G tactical vs structural strategies (Table 4); Appendix H intervention case studies (Table 5: AG2 +5pp, ChatDev +15.6pp); Appendix N failure mode examples.
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.txt` — Cemri, Pan, Yang et al. (UC Berkeley + Intesa Sanpaolo, NeurIPS 2025 Datasets & Benchmarks, arXiv 2503.13657v3, 26 Oct 2025). §3 MAST-Data construction (Grounded Theory, IAA κ=0.88, LLM annotator κ=0.77); §4 MAST taxonomy (14 modes, 3 categories, 3 insights); §5 failure breakdown and primacy of system design; Appendix A failure mode definitions; Appendix B MAS details and failure rates (41–86.7%); Appendix G tactical vs structural strategies (Table 4); Appendix H intervention case studies (Table 5: AG2 +5pp, ChatDev +15.6pp); Appendix N failure mode examples.
 - `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.4 error taxonomy (architecture-specific failure modes mapped to MAST categories); Table 5 trace-level error amplification factors (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes (under-coordination, optimal band, over-coordination). Source for the "Quantitative Corroboration" section.
+- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes mapped to MAST's FC1/FC2/FC3; §VI the governance layer as the structural defense MAST's Appendix G calls for. Source for the "Mechanism Layer" section.

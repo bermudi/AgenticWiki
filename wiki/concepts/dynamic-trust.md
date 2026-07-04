@@ -1,10 +1,11 @@
 ---
 title: Dynamic Trust
 created: 2026-05-08
-updated: 2026-06-18
+updated: 2026-07-03
 sources:
   - raw/yt-agent-trust-vector-study-2026.md
-  - raw/the-illusion-of-multi-agent-advantage.pdf
+  - raw/the-illusion-of-multi-agent-advantage.txt
+  - raw/2603.04474-spark-to-fire-error-cascades.txt
 tags: [concept, agents, trust, multi-agent, verification]
 unaudited_marginal: 0
 ---
@@ -57,6 +58,9 @@ A coherent world model would provide an objective reference for trust calculatio
 > [!note] Empirical Strengthening: "Expensive Witnesses"
 > The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., 2026) provides empirical support for a stronger version of the dynamic-trust thesis. The paper documents *intra-MAS* trust failures that static source-based assignment cannot detect: in MAS-Zero, the verifier selects the first worker's output 45%+ of the time despite the architecture claiming to coordinate multiple agents. In DyLAN, agents reach unanimous consensus in 70-90% of cases — the "diversity" mechanism is decorative. The paper names these agents "expensive witnesses": they incur full inference cost with near-zero causal influence. The implication for dynamic trust: the trust engine needs to measure the *causal contribution* of each agent to the final answer, not just its source role. An agent that costs 30% of the inference budget and contributes 0% to the decision is a tax. The dynamic-trust framework needs to discount such outputs before propagating them.
 
+> [!note] Implementation: the genealogy governance layer
+> [[genealogy-governance|Xie, Zhu, Zhang et al. (2026)]] implement dynamic trust as a hard boundary at the message layer. The governance layer decomposes every inter-agent message into atomic claims, tri-state labels each (Green/Red/Yellow) against a Lineage Graph of confirmed provenance, and enforces blocking with rollback for unverified or contradicted claims. The trust assignment is a property of the claim's verification status against the lineage graph — *not* the source agent's role. This is the "trust is a property of the output, not the source" thesis operationalized: a senior architect's unverified claim is Yellow (held for verification); a junior agent's claim entailed by confirmed lineage is Green (released downstream). The empirical result: ≥89% BICR across operating modes, vs. 0.32 for agent-level self-reflection — the static-trust baseline fails precisely because it trusts the source role over the claim's verifiability.
+
 ## Thread
 - [[agent-quality-engineering]] — Dynamic trust middleware is a proposed quality infrastructure component for multi-agent systems: trust scoring as a continuous eval
 - [[the-agent-workflow]] — Dynamic trust changes the workflow: agents don't just execute, they continuously verify and re-rank whose output to trust
@@ -71,7 +75,11 @@ A coherent world model would provide an objective reference for trust calculatio
 - [[multi-agent-illusion]] — the [[functional-collapse|expensive-witness]] finding strengthens the dynamic-trust thesis: trust should be a property of the output, measured causally
 - [[functional-collapse]] — the documented failure modes that dynamic trust middleware would need to address
 - [[multi-agent-code-orchestration]] — the broader topology taxonomy; the trust engine operates on instances of these topologies
+- [[genealogy-governance]] — the implemented dynamic-trust boundary: tri-state claim labeling against a Lineage Graph; trust is a property of the claim's verification status, not the source role
+- [[error-cascades]] — the propagation model the governance layer's dynamic trust is designed to break; βρ(A) > δ is the condition under which static source-based trust fails catastrophically
 
 ## Sources
+
 - `raw/yt-agent-trust-vector-study-2026.md` — [[discover-ai|Discover AI]]'s critique of static trust assignment and proposal for dynamic trust middleware based on source + context + provability
-- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). The "expensive witness" finding (MAS-Zero positional bias, DyLAN consensus collapse) is the empirical support for the dynamic-trust thesis's claim that trust should be a property of the output, not the source.
+- `raw/the-illusion-of-multi-agent-advantage.txt` — Jwalapuram, Lin et al. (2026). The "expensive witness" finding (MAS-Zero positional bias, DyLAN consensus collapse) is the empirical support for the dynamic-trust thesis's claim that trust should be a property of the output, not the source.
+- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (tri-state claim labeling against a Lineage Graph; ≥89% BICR vs. 0.32 for self-reflection). Source for the "Implementation" callout.

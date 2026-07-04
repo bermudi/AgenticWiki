@@ -3,9 +3,11 @@ title: Multi-Agent Illusion
 created: 2026-06-18
 updated: 2026-07-03
 sources:
-  - raw/the-illusion-of-multi-agent-advantage.pdf
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/the-illusion-of-multi-agent-advantage.txt
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.txt
   - raw/2512.08296-scaling-agent-systems.pdf
+  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/2603.04474-spark-to-fire-error-cascades.txt
 tags: [concept, multi-agent, orchestration, evaluation, negative-result, mas-audit]
 unaudited_marginal: 0
 ---
@@ -91,6 +93,17 @@ The scaling study also identifies a second robust predictor: the [[tool-coordina
 
 Together, the two findings specify the conditions under which the multi-agent illusion is most likely to hold: high single-agent baselines (capability saturation) and high tool counts (tool-coordination trade-off). The illusion is not universal — it is conditional, and the conditions are now measurable.
 
+## The Mechanism Layer: Error Cascades
+
+[[error-cascades|Xie, Zhu, Zhang et al. (2026)]] supply the formal *mechanism* beneath the illusion. Where this audit asks *whether* MAS beat CoT-SC and MAST asks *why* they fail, the cascade paper models *how* a single error becomes system-wide false consensus: the collaboration graph's spectral radius ρ(A) governs amplification, and once βρ(A) > δ the system is supercritical — a single seed expands along the principal eigenvector. The three vulnerability classes (cascade amplification, topological fragility, consensus inertia) are the dynamic propagation patterns that produce the static symptoms this audit documents as [[architectural-bloat|architectural bloat]] and [[functional-collapse|functional collapse]]. The hub-driven 100% infection (LangGraph, AutoGen, CAMEL) is the quantitative form of the "expensive witness" finding: when the hub adopts, every downstream agent becomes an expensive witness to the hub's error.
+
+## The Counter-Claim: Engineered Decomposition
+
+[[massively-decomposed-agentic-processes|MDAPs]] / [[maker|MAKER]] (Meyerson et al., 2025) frame their million-step zero-error result as a "multi-agent advantage" — a problem not solvable by a monolithic single-agent system at practical cost. The paper positions this as the opposite pole to building ever-larger single models.
+
+> [!note] Departure: MDAPs reinforce the illusion's corollary, not refute the illusion
+> The wiki's read: MDAPs do not refute the multi-agent illusion. The illusion is specifically about *auto-discovered* coordination topologies (DyLAN, AFlow, ADAS, MaAS, MAS-Orchestra) that search for or instantiate architectures at test time. MDAPs are the opposite design pole: a *hand-engineered*, deterministic, maximally-decomposed architecture with subtask-level voting. The [[expert-mas]] baseline — the one positive case in this audit — is the same pattern at smaller scale: hand-designed, code-driven, deterministic. MDAPs reinforce the audit's corollary: engineered decomposition works; auto-discovered topology doesn't. The "multi-agent advantage" MDAPs claim is real, but it is the same advantage the audit already conceded to Expert-MAS — the paradigm can work when engineered, not when searched.
+
 ## Implications
 
 1. **The cost efficiency gap matters more than the accuracy gap.** When a framework spends 10× tokens for 0% accuracy gain, the right conclusion is not "MAS doesn't help" but "this MAS framework is structurally misaligned with the task."
@@ -100,6 +113,7 @@ Together, the two findings specify the conditions under which the multi-agent il
 
 ## Thread
 
+- [[the-multi-agent-theory]] — Layer 1 (the audit): this page supplies the *whether* — automated MAS don't work. The thread traces the full theory across six papers, from audit through diagnosis, thresholds, mechanism, engineered escape, and defense.
 - [[the-benchmark-crisis]] — SMFR is designed to avoid the standard benchmark failure modes (static snapshots, isolated reasoning), yet the MAS-vs-SAS gap persists — the evaluation methodology needed fixing regardless
 - [[the-agent-workflow]] — multi-agent coordination is one of the strategies the workflow thread advocates; this paper sharpens the conditions under which it actually works
 - [[the-verifiability-thesis]] — the paper's "structural fidelity" proposal is verifiability applied at the multi-agent architecture level
@@ -122,9 +136,16 @@ Together, the two findings specify the conditions under which the multi-agent il
 - [[scaling-agent-systems]] — the quantitative refinement: 260-config regression that specifies *when* the illusion holds (capability saturation + tool-coordination trade-off)
 - [[capability-saturation]] — the quantitative version of the capability floor: the 45% threshold, β = -0.236, the most robust finding in the scaling study
 - [[tool-coordination-trade-off]] — the second robust predictor: tool-heavy tasks suffer disproportionately from MAS inefficiency
+- [[error-cascades]] — the mechanism layer: the propagation-dynamics model that explains *how* a single error becomes system-wide false consensus (βρ(A) > δ); the three vulnerability classes are the dynamic patterns beneath this audit's static symptoms
+- [[genealogy-governance]] — the message-layer defense against the cascades this audit's frameworks exhibit; the kind of structural enforcement the illusion implies is necessary (vs. agent-level self-reflection, which fails)
+- [[massively-decomposed-agentic-processes]] — the engineered-decomposition pole that reinforces the illusion's corollary (engineered works, auto-discovered doesn't); the [[expert-mas]] pattern at full scale
+- [[maker]] — the million-step zero-error demonstration; the strongest existing case for the engineered-decomposition escape from the illusion
+- [[elliot-meyerson]] — lead author of the MDAP/MAKER work
 
 ## Sources
 
-- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin, Li, Jiao, Wang, Ming, Ke, Qin, Carenini, Joty. *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2 (13 Jun 2026). §3 systematic evaluation across 6 frameworks and 5 benchmarks; §3.3 SMFR diagnostic benchmark + Expert-MAS; §4 architectural deconstruction (functional collapse, positional bias, motif analysis); §5 discussion (ensembling trap, capability floor); §6 conclusion.
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). §4 MAST taxonomy (14 modes, 3 categories); §5.3 primacy of system design; Appendix B 41–86.7% failure rates across 7 frameworks; Appendix H intervention studies (+9.4%, +15.6%). The diagnostic complement: explains *why* the architectures this audit indicts actually fail.
+- `raw/the-illusion-of-multi-agent-advantage.txt` — Jwalapuram, Lin, Li, Jiao, Wang, Ming, Ke, Qin, Carenini, Joty. *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2 (13 Jun 2026). §3 systematic evaluation across 6 frameworks and 5 benchmarks; §3.3 SMFR diagnostic benchmark + Expert-MAS; §4 architectural deconstruction (functional collapse, positional bias, motif analysis); §5 discussion (ensembling trap, capability floor); §6 conclusion.
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.txt` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). §4 MAST taxonomy (14 modes, 3 categories); §5.3 primacy of system design; Appendix B 41–86.7% failure rates across 7 frameworks; Appendix H intervention studies (+9.4%, +15.6%). The diagnostic complement: explains *why* the architectures this audit indicts actually fail.
 - `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 capability saturation (β = -0.236, the quantitative version of the capability floor); §4.3 tool-coordination trade-off (β = -0.096); §4.5 robustness (both survive Holm-Bonferroni). Source for the "Quantitative Refinement" section.
+- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). The "multi-agent advantage" framing (§1) and the million-step zero-error result (§4.4). Source for the "Counter-Claim: Engineered Decomposition" section and the Departure callout.
+- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes; §IV-A cascade amplification across 6 frameworks (Figure 4, 100% saturation in 5/6). Source for the "Mechanism Layer: Error Cascades" section.

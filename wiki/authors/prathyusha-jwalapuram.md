@@ -1,9 +1,9 @@
 ---
 title: Prathyusha Jwalapuram
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-03
 sources:
-  - raw/the-illusion-of-multi-agent-advantage.pdf
+  - raw/the-illusion-of-multi-agent-advantage.txt
 tags: [author, researcher, salesforce-research, multi-agent-evaluation, mas-audit]
 unaudited_marginal: 0
 ---
@@ -66,7 +66,8 @@ The future MAS evaluation the paper implies is one that controls for inference b
 - [[architectural-bloat]] and [[functional-collapse]] — the named failure modes
 - [[the-verifiability-thesis]] — the broader principle the paper's "structural fidelity" proposal extends
 - [[multi-agent-code-orchestration]] — the topology taxonomy the paper audits
+- [[the-multi-agent-theory]] — the thread that traces the full six-paper theory; Jwalapuram's work is Layer 1 (the audit)
 
 ## Sources
 
-- `raw/the-illusion-of-multi-agent-advantage.pdf` — Salesforce Research + HKUST-GZ + UBC + NTU (2026). *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2, 13 Jun 2026. Correspondence: pjwalapuram@salesforce.com, hlin709@connect.hkust-gz.edu.cn, zixuan.ke@salesforce.com, sjoty@salesforce.com.
+- `raw/the-illusion-of-multi-agent-advantage.txt` — Salesforce Research + HKUST-GZ + UBC + NTU (2026). *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2, 13 Jun 2026. Correspondence: pjwalapuram@salesforce.com, hlin709@connect.hkust-gz.edu.cn, zixuan.ke@salesforce.com, sjoty@salesforce.com.

@@ -1,12 +1,13 @@
 ---
 title: Agent Observability
 created: 2026-04-27
-updated: 2026-05-10
+updated: 2026-07-03
 sources:
   - raw/yt-the-observability-layer-your-ai-agent-is-missing.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
   - raw/yt-slop-watch-ideation.md
   - raw/2504.21625v6.txt
+  - raw/2603.04474-spark-to-fire-error-cascades.txt
 tags: ["agents", "observability", "tracing", "monitoring", "opentelemetry"]
 unaudited_marginal: 0
 ---
@@ -88,6 +89,14 @@ Different coding agents expose observability data differently. The research phas
 
 No single OpenTelemetry-based ingestion path exists across agents. Per-agent adapters are unavoidable.
 
+## Claim-Provenance Observability: The Lineage Graph
+
+[[genealogy-governance|Xie, Zhu, Zhang et al. (2026)]] extend observability from the decision-chain layer (Slop Watch's session → turn → model-request DAG) to the **atomic-claim layer**. The governance layer maintains a directed **Lineage Graph** `L = (V, E)` recording the provenance of every atomic claim that flows through the MAS: which agent emitted it, which agents received it, whether it was confirmed (Green), contradicted (Red), or held unverified (Yellow), and the correction history if rollback was triggered.
+
+This is observability applied to *claim propagation* rather than decision execution. Where Slop Watch answers "what did the agent do and why," the Lineage Graph answers "where did this belief come from, who propagated it, and was it ever verified?" The offline mode supports forensic analysis: auditors can replay historical logs through the pipeline to reconstruct the Lineage Graph, identify root or high-degree nodes that introduced corrupted beliefs, trace propagation across agents and time, and approximate the `S(t)` infection trajectory — the multi-agent analog of walking a trace tree to find where a single-agent decision went wrong.
+
+The two layers are complementary: Slop Watch's session/turn/model-request hierarchy captures *execution* observability (what the agent did); the Lineage Graph captures *epistemic* observability (what the agent believed and whether the belief was justified). A complete MAS observability stack needs both.
+
 ### Development Identity
 Observability events must be attributable to a person. Slop Watch V1 uses **admin-minted tokens**: the org admin creates a user record and provides a one-time token. The developer authenticates with it. Git config is trivially spoofable and insufficient.
 
@@ -115,6 +124,8 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - [[execution-apathy]] — Execution apathy is invisible to system metrics; only trace-level observability can detect the missing execution steps
 - [[blind-panic]] — Blind panic produces expensive failure traces that observability must distinguish from productive execution
 - [[iterative-self-correction]] — Meeseeks's evaluation-feedback cycle requires per-constraint observability to identify which constraints fail across turns
+- [[genealogy-governance]] — the Lineage Graph as claim-provenance observability: extends the session/turn/model-request hierarchy to the atomic-claim layer; epistemic observability (what was believed and whether it was justified) complementing execution observability
+- [[error-cascades]] — the propagation model the Lineage Graph makes observable; `S(t)` infection trajectory as the multi-agent analog of walking a trace tree
 
 ## Thread
 
@@ -128,3 +139,4 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — Mastra Studio traces in practice: span trees, agent runs, tool calls
 - `raw/yt-slop-watch-ideation.md` — Slop Watch architecture: sessions as DAGs of turns, per-session listener pattern, per-agent adapters, DRI-first UX
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): constraint-level evaluation requires observability at the individual constraint granularity across multiple self-correction turns
+- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the Lineage Graph as claim-provenance observability; offline replay mode for forensic analysis of belief propagation. Source for the "Claim-Provenance Observability" section.
