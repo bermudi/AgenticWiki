@@ -1,7 +1,7 @@
 ---
 title: Model Routing
 created: 2026-05-06
-updated: 2026-06-19
+updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
@@ -115,6 +115,7 @@ Conversely, for single-constraint or loose-constraint prompts where the model ha
 - [[execution-apathy]] — The failure mode that frontier models exhibit at model-routing's upper bounds
 - [[blind-panic]] — The failure mode that open-weight models exhibit at model-routing's upper bounds
 - [[jagged-frontier]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
+- [[horizon-length]] — Horizon length is a routing signal: match task length to model execution capability; the paper's frontier models separate by orders of magnitude on sustained execution length
 - [[afk-agent]] — Model routing enables cheaper, more scalable AFK execution
 - [[discover-ai]] — The source that presented the model routing framework
 - [[dynamic-trust]] — Parallel concept: model routing routes to the cheapest capable model; dynamic trust routes authority to the most verifiable output

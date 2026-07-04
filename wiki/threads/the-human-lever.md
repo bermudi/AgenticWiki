@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-02
+updated: 2026-07-03
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -32,6 +32,7 @@ sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-systems-building-systems.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
+  - raw/the-illusion-of-diminishing-returns.pdf
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -79,6 +80,9 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 > [!note] Departure: Prompting Can't Fix the Planning Ceiling
 > The Harvard AgentFloor study (May 2026) provides empirical evidence that complicates the thread's emphasis on human-level prompt engineering. The authors tried structured prompts — telling models to plan first, then execute — at tier E. It didn't help GPT-5. It **actively hurt** Gemma 4 26B, pushing it into the resignation failure mode it otherwise avoids. This suggests the human lever at high planning complexity is not better prompting but **task decomposition and [[model-routing|model routing]]** — breaking the task below the model's architectural ceiling before applying any prompt strategy. The human's authority over prompt design has an upper bound; decomposition is the escape valve.
+
+> [!note] Departure: The Planning Ceiling Is Partly an Execution Ceiling
+> Sinha, Arun, Goel et al. (ICLR 2026) sharpen the callout above: the tier-E ceiling AgentFloor treats as a *planning* horizon is partly an *execution* horizon, and execution yields to levers the human does not own. By isolating execution (carrying out a given plan) from planning, they show execution [[horizon-length|horizon]] improves non-diminishingly with model size and dramatically with RL-trained thinking — neither of which is a human-side intervention. The decomposition escape valve above helps because it shrinks *both* horizons: it reduces planning complexity *and* reduces the execution length over which [[self-conditioning]] drags the model down. The implication for this thread: the human lever's reach is bounded not just at the prompt layer (the callout above) but at the capability layer — some tier-E failures are not design-authority problems the human can decompose around, they are execution problems that resolve only with scale + thinking. See [[agent-floor]]'s parallel callout for the same contestation at the concept level.
 
 > [!note] Departure: The Trust Hierarchy Ceiling
 > The ManyIH study ([[instruction-hierarchy]], Zhang et al. 2026) reveals a second capability ceiling: **the human can design the perfect privilege hierarchy, but the model still fails to follow it 60% of the time when tiers exceed 2-3.** The human lever — define which sources to trust, assign privilege levels — works exactly as intended at the design level. The failure is at the execution level: the model resolves 12-tier combinatorial conflicts as semantic pattern-matching, not arithmetic. This parallels the AgentFloor planning ceiling: the human's design authority is bounded by the model's architectural limitations, and no amount of better hierarchy design or privilege tagging fixes the underlying combinatorial collapse. The escape valve is the same: keep conflict tiers low by decomposing agent swarms so any single resolution decision involves ≤3 privilege tiers.
@@ -381,4 +385,5 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: the automation frontier tension — software factory as the next step in automating the execution layer; the human lever shifts from steering to tuning
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — [[al-harris|Al Harris]] / [[kiro|Amazon Kiro]]: property-based testing as spec verification in the deterministic-verification theory-pressure callout; the spec automation of verification reduces the human's verification responsibility
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the "More Agents Is Not More Leverage" contradiction. Documents that multi-agent coordination is largely unverifiable and the model defaults to single-agent execution anyway (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier picks first worker 45%+ of the time, "expensive witnesses"). The human lever applies to (a) single-agent scenarios, (b) hand-designed multi-agent architectures ([[expert-mas]] 57%→96.5% on GPT-5), but NOT to automated multi-agent search — the case the field is increasingly defaulting to. §3 (cost-quality Pareto); §3.3 (Expert-MAS as the hand-designed control); §4 (functional collapse, positional bias); §5 (ensembling trap).
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Planning Ceiling Is Partly an Execution Ceiling" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers the human does not own. Bound the human lever's reach at the capability layer, not just the prompt layer.
 

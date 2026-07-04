@@ -84,6 +84,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[jarred-sumner]] — Creator of Bun; parallel-agent management, the Zig→Rust Bun port, and the for-each-not-while loop walk-back
 - [[mitchell-hashimoto]] — HashiCorp co-founder; balanced skeptic; the renderer-optimization metric-gaming caveat
 - [[neetcode]] — YouTube creator; the hype-cycle and discourse-slop critic of the loops wave
+- [[shashwat-goel]] — Researcher (MPI Tübingen / ELLS); conceived *The Illusion of Diminishing Returns* (ICLR 2026) — formalized horizon length and named self-conditioning.
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -93,6 +94,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
 - [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.
 - [[deepswe]] — A long-horizon coding benchmark with contamination-free tasks, behavioral verification, and 70-point model spread
+- [[horizon-length]] — The length of task a model can complete end-to-end; grows hyperbolically with step accuracy, so short-benchmark "diminishing returns" are an illusion.
 - [[benchmark-contamination]] — Training data leakage, verifier misgrading, and prompt distortion that make benchmarks unreliable
 - [[swe-bench-pro]] — The industry-standard coding benchmark; DeepSWE's audit found 32% verifier disagreement rate
 - [[ai-boilerplate-paradox]] — Verbose frameworks become preferable with AI because explicitness constrains LLM output; the DX/AX divergence
@@ -126,6 +128,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[expert-mas]] — Hand-designed, deterministic, code-driven multi-agent baseline (Meta-Agent + Python Executor + Extractor/Calculator). GPT-5: 57.0% → 96.5% on [[smfr]] at comparable cost. The experimental lever proving the multi-agent paradigm *can* work when engineered.
 - [[multi-agent-illusion]] — The empirical correction: across 6 automated MAS frameworks, automated MAS do not consistently outperform single-agent CoT-SC and are up to 10× more expensive. Three pillars: [[architectural-bloat|architectural bloat]], [[functional-collapse|functional collapse]], capability floor.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
+- [[self-conditioning]] — Models degrade on their own error-laden history; the failure mode that caps horizon length. Not fixed by scaling, fixed by thinking.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
 - [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks; `/init`-style auto-generated dumps that duplicate existing docs hurt.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.

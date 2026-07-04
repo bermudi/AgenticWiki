@@ -1,7 +1,7 @@
 ---
 title: Blind Panic
 created: 2026-05-06
-updated: 2026-06-01
+updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [llm, failure-mode, agent-quality, planning]
@@ -64,6 +64,7 @@ The key insight: both failure modes consume roughly the same token budget, but i
 
 - [[afk-agent]] — AFK agents with poor backpressure are susceptible to blind panic looping
 - [[failure-modes]] — Master playbook: blind panic mapped to detection signals and countermeasures
+- [[self-conditioning]] — Distinct from blind panic: the model degrades on its own errors rather than looping/hallucinating under load; both are long-horizon failure modes but with different mechanisms
 
 ## Sources
 

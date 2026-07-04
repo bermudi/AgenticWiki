@@ -1,13 +1,14 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-07-03
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
   - raw/the-illusion-of-multi-agent-advantage.pdf
+  - raw/the-illusion-of-diminishing-returns.pdf
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution]
 unaudited_marginal: 0
 ---
@@ -93,6 +94,17 @@ The result is a benchmark that exposes a previously hidden failure mode: [[state
 
 The implication for model selection: if you're choosing a coding agent for production deployment where the API evolves, the codebase accumulates, or user preferences shift, step accuracy on static benchmarks is incomplete evidence. Chain accuracy on evolving-environment benchmarks is the binding metric. Models that score similarly on [[swe-bench-pro|SWE-bench Pro]] (30-point spread) or [[deepswe|DeepSWE]] (70-point spread) may diverge substantially on EvoArena when chain accuracy is the criterion.
 
+## The Fifth Axis: Horizon Mismatch
+
+[[horizon-length]] (Sinha, Arun, Goel et al., ICLR 2026) exposes a fifth axis the prior four do not measure: **the gap between step accuracy and horizon length**. Short-task benchmarks measure per-step accuracy, where frontier models cluster near the top and gains look marginal — the "diminishing returns" picture. But because horizon length grows hyperbolically in step accuracy (H_s = ln(s)/ln(p)), past ~80% step accuracy, marginal per-step gains compound into *exponential* gains in the length of task a model can complete end-to-end. The benchmark crisis, then, has a fifth dimension:
+
+5. **Horizon mismatch**: benchmarks measure a quantity (step accuracy) that systematically understates the quantity that determines economic value (horizon length). Two models that look identical at the step level can have very different horizon lengths — the paper's single-turn benchmark separates GPT-5 (~2176 steps) from Claude-4 Sonnet (~432), Grok 4 (~384), and Gemini 2.5 Pro (~120) on a task where every model is near-perfect on a single step.
+
+This is a different failure mode from contamination or verifier error: the benchmark can be perfectly clean and still mislead, because it measures the wrong horizon. It also interacts with [[self-conditioning]]: that failure mode only emerges over long horizons, so any benchmark short enough to be convenient can't see it.
+
+> [!note] Synthesis: the five axes are not independent
+> Horizon mismatch is *why* contamination, verifier failure, and prompt distortion are so corrosive: they all perturb step accuracy, and because the horizon-length curve is steep at the frontier, a small step-level perturbation hides a large horizon-level difference. DeepSWE's 70-point spread and this paper's 2176-vs-432 gap are the same phenomenon viewed at different granularities — the real capability differences that short, clean benchmarks compress away.
+
 ## The Call for Community Benchmarks
 
 Theo's video makes a case that developers should build their own benchmarks from real failures:
@@ -124,3 +136,4 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 - `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.
 - `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "trace-rich benchmarks required" extension. §4.2 (the [[operational-mirror|operational mirror]]'s [[reward-hacking|reward-hacking]] pathology is enabled by scalar-reward benchmarks), §4.5 ([[variant-isolation]] ensemble routing as environment-aware evolution on heterogeneous task sets), §6.3 (Global 49.5% vs. Ensemble 87.4% on GAIA GPT-5.4), §7.2 ("the richness of the feedback signal bounds the sophistication of evolution that can be safely performed"), §7.7 (no held-out evaluation; same measurement limitation as DeepSWE and EvoArena).
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the "SMFR as a benchmark that resists typical failure modes" extension. §3 (cost-quality Pareto position, not just accuracy, as the right MAS evaluation criterion); §3.3 (SMFR procedural generation, immune to contamination); §3.3 (Expert-MAS GPT-5: 57.0% → 96.5% on SMFR, cost comparable to CoT-SC); §6 (the cost-efficiency gap as the central finding).
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Source for the "Fifth Axis: Horizon Mismatch" section. Proposition 1 (§2.1, H_s = ln(s)/ln(p)); frontier single-turn execution benchmark separating GPT-5 ~2176 / Claude-4 Sonnet ~432 / Grok 4 ~384 / Gemini 2.5 Pro ~120 on a task near-trivial at one step (§3.3); horizon-mismatch as a benchmark failure mode distinct from contamination and verifier error.

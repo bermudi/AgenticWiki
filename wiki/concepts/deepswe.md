@@ -1,7 +1,7 @@
 ---
 title: DeepSWE
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-07-03
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -105,6 +105,8 @@ All models run through `mini-swe-agent` — a model-agnostic harness exposing a 
 - [[jagged-frontier]] — DeepSWE reveals a wider jagged frontier than previously measured
 - [[the-verifiability-thesis]] — Behavioral verification as the mechanism that makes benchmarks reliable
 - [[the-agent-workflow]] — DeepSWE prompts mirror how developers actually talk to agents
+- [[horizon-length]] — DeepSWE is a long-horizon benchmark; its multi-step task design reaches toward the horizon-length dimension that reveals compounding gains invisible on short-task benchmarks
+- [[self-conditioning]] — As a long-horizon benchmark, DeepSWE's multi-step task design is the type of evaluation where self-conditioning (models degrading on their own error-laden history) would emerge; short-task benchmarks cannot observe this failure mode
 
 ## Sources
 - `raw/deepswe-benchmark.md` — Full benchmark description, methodology, results, and qualitative analysis from Datacurve

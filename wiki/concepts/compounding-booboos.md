@@ -1,8 +1,8 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-07-02
-sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf, raw/yt-are-we-really-doing-this-again.md]
+updated: 2026-07-03
+sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.pdf, raw/yt-are-we-really-doing-this-again.md, raw/the-illusion-of-diminishing-returns.pdf]
 tags: [concept, ai, reliability]
 unaudited_marginal: 0
 ---
@@ -37,6 +37,13 @@ This confirms the mechanism Mario Zechner described: small errors introduced in 
 
 The compounding is sharpest in an [[agent-loop]], where each iteration builds on the previous iteration's output. [[neetcode|NeetCode]] supplies the framing: if an agent is correct 95% of the time per iteration, ten iterations is not "10 × 95%" — it is 0.95¹⁰ ≈ 0.60 (NeetCode miscalculated the product as 0.5 on camera; the correct value is ~0.60 and the argument is unchanged). The system is right on only ~60% of its runs. The point generalizes: unless the agent operates at (effectively) perfect accuracy, "the crap just compounds and gets worse and worse the longer you let it go." This is the same multiplicative mechanism [[delegate-52|DELEGATE-52]] measured for document editing — degradation compounds with interaction length, monotonic and non-plateauing — now stated as the structural argument against unbounded ([[orchestration-loop|while]]) loops. It is also why the [[agent-loop|for-each-not-while]] discipline and hard stops are not optional polish: bounded iteration counts are the only thing that keeps the decay product above water.
 
+## The Inverse: Compounding as Upside
+
+The p^t dynamic is symmetric, and the wiki has so far only told its risk face. Sinha, Arun, Goel et al. (ICLR 2026) run the same math backwards and reach the opposite conclusion: past a per-step accuracy threshold (~80%), small improvements in p translate into *exponential* growth in the length of task a model can complete. [[horizon-length]] grows as H_s = ln(s)/ln(p) — flat and punishing below the threshold, then nearly vertical.
+
+> [!note] Synthesis: one dynamic, two faces
+> Compounding is not inherently good or bad — it is an amplifier of the current per-step accuracy. Below the threshold it is the [[compounding-booboos|risk]] this page documents: errors sink you multiplicatively, and [[self-conditioning]] makes the decay worse than constant. Above the threshold it is the [[horizon-length|opportunity]]: accuracy gains compound into dramatic long-horizon capability. The practical upshot is that the *same* finding ("small errors compound") implies two opposite strategies depending on where you sit: below threshold, bound the horizon (hard stops, verification, short loops); above threshold, push accuracy, because each point buys an outsized jump in reachable task length.
+
 ## Mitigation
 
 - **Frequent Verification**: Running tests and linting after every agent action.
@@ -68,6 +75,8 @@ The compounding is sharpest in an [[agent-loop]], where each iteration builds on
 - [[document-degradation]] — The core finding that documents silently degrade over delegation
 - [[failure-modes]] — Master playbook: compounding booboos mapped to detection signals and countermeasures
 - [[critical-failure]] — Sparse catastrophic errors explain ~80% of observed degradation
+- [[horizon-length]] — The inverse face of the same compounding: past ~80% step accuracy, p^t becomes the reason scaling pays, not just the reason it fails
+- [[self-conditioning]] — Makes compounding worse than constant: the per-step error rate itself rises as errors accumulate, so decay is super-multiplicative
 - [[round-trip-relay]] — The relay method quantifies how errors compound over long workflows
 - [[comprehension-debt]] — Comprehension debt is compounding booboos applied to the human's mental model
 - [[agent-observability]] — Tracing catches booboos in their decision context, not as isolated log lines; the trace tree tells the story the log feed can't.
@@ -84,3 +93,4 @@ The compounding is sharpest in an [[agent-loop]], where each iteration builds on
 - `raw/slowing-the-fuck-down.md`
 - `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors across 52 domains
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s exponential-decay framing: per-iteration error compounds multiplicatively across loop ticks (0.95¹⁰ ≈ 0.60)
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Proposition 1 (§2.1): H_s = ln(s)/ln(p) — the inverse of p^t compounding. Horizon length grows hyperbolically past ~80% step accuracy, so the same compounding that sinks low-accuracy agents lifts high-accuracy ones exponentially.

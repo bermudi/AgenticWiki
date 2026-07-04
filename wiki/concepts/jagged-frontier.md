@@ -1,7 +1,7 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-06-18
+updated: 2026-07-03
 sources:
   - raw/2604.15597v1.pdf
   - raw/many-tier-instruction-hierarchy.md
@@ -9,6 +9,7 @@ sources:
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/deepswe-benchmark.md
   - raw/2606.16707v1.txt
+  - raw/the-illusion-of-diminishing-returns.pdf
 tags: [concept, llm-capabilities, domain-variance, delegation, executable-memory]
 unaudited_marginal: 0
 ---
@@ -83,6 +84,8 @@ The jaggedness isn't just across models — it's within model families. Claude m
 
 DeepSWE also reveals that **prompt style** interacts with the jagged frontier. [[swe-bench-pro|SWE-bench Pro]]'s verbose, test-suppressing prompt compresses score differences. DeepSWE's short, behavioral prompt lets the frontier separate. The same model looks different depending on how you ask.
 
+[[horizon-length]] sharpens the same point at a different granularity: on a task where every frontier model is near-perfect on a single step, the *horizon length* they can sustain separates them by an order of magnitude (GPT-5 ~2176 steps vs Claude-4 Sonnet ~432, Grok 4 ~384, Gemini 2.5 Pro ~120) — step-accuracy clusters hide horizon-length spread, just as [[swe-bench-pro|SWE-bench Pro]]'s 30-point band hides DeepSWE's 70-point spread.
+
 ## Evidence from Model Regression
 
 The jagged frontier isn't just about different domains — it appears **within a single model generation on a single task**. Nate B Jones (2026) found that GPT 5.5, while dramatically better than its predecessor at catching semantically obvious traps in a data migration test (rejecting "Mickey Mouse" and "ASDF ASDF" as fake customers, flagging a planted $25,000 fake payment), **regressed on backend hygiene** that GPT 5.4 had handled better: missing service code conflicts, leaving payment statuses unnormalized (29 distinct raw values), and building a review UI where different panels disagreed on flagged item counts. The model advanced on semantic intuition while retreating on boring structural discipline — a jagged frontier within the same task, the same model family, the same release.
@@ -129,6 +132,8 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[the-human-lever]] — Humans must own domain boundary decisions because models can't
 - [[agent-floor]] — AgentFloor demonstrates the jagged frontier empirically: small models match GPT-5 on some tiers but all collapse at the same planning ceiling
 - [[model-routing]] — Model routing is a practical application of the jagged frontier: exploit model strengths, route around weaknesses
+- [[horizon-length]] — step-accuracy clusters hide horizon-length spread; execution length is an axis along which the frontier separates models by an order of magnitude
+- [[self-conditioning]] — a frontier that is long-horizon-jagged: the same model is reliable on healed history but degrades on error-laden history
 - [[instruction-hierarchy]] — The 2-tier → 12-tier gap is a single-axis case study of the jagged frontier: >99% at training distribution, ~40% one step beyond
 - [[knowledge-triplet]] — Model capability degrades precisely where the triplet is weakest: novel domains where neither codebase nor training data provides signal
 - [[domain-expertise-as-moat]] — Domain expertise is the deepest form of the jagged frontier: correctness is domain-specific and unverifiable without expertise
@@ -142,3 +147,4 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Within-model jaggedness: 5.5 advanced on semantic traps but regressed on backend hygiene vs its predecessor, demonstrating non-monotonic capability even within the same task
 - `raw/deepswe-benchmark.md` — DeepSWE reveals the true width of the jagged frontier in coding agents: 70-point spread vs. [[swe-bench-pro|SWE-bench Pro]]'s 30-point spread
 - `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete empirical evidence that the jagged frontier is a property of representation, not just domain. On the same user-history data with the same backbone: UaC reaches 99% on analytical inference while retrieval-based systems reach 6–43%; UaC + constraint pipeline reaches 100% on proactive alerts while retrieval-based systems reach 30–90%. The divide is between representations a code tool can read and representations only retrievable by similarity. Switching representations is a way to navigate the frontier.
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Evidence that the jagged frontier hides along the horizon-length axis: frontier models near-identical at one step separate by an order of magnitude in sustained execution length (§3.3); and the frontier is jagged across context *content* — the same model reliable on healed history degrades on error-laden history ([[self-conditioning]], §3.2).

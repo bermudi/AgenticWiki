@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-06-16
+updated: 2026-07-03
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -16,6 +16,7 @@ sources:
   - raw/thariq-unreasonable-effectiveness-of-html.md
   - raw/2605.18747.pdf
   - raw/yt-llms-are-killing-agent-harness.md
+  - raw/the-illusion-of-diminishing-returns.pdf
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -29,6 +30,9 @@ unaudited_marginal: 0
 
 > [!note] Departure: Model Capability as an Independent Bottleneck
 > This thread argues that tool design is the primary bottleneck for agent effectiveness. The Harvard AgentFloor study (May 2026) adds an independent constraint: **model capability**. At AgentFloor's tier E (8-12 step planning), all models collapse — including GPT-5 at ~10% task completion. This collapse occurs even with perfectly clean, deterministic tool interfaces that eliminate every confounding variable the thread identifies. At high planning complexity, the bottleneck is the model's architectural planning horizon, not the tool layer. Tool design and model capability are two independent axes — fixing both is necessary, and at the upper bounds, model capability becomes the binding constraint regardless of tool quality. See [[agent-floor]] for the empirical data.
+
+> [!note] Departure: The Capability Bottleneck Is Partly Execution, Not Just Planning
+> Sinha, Arun, Goel et al. (ICLR 2026) sharpen the callout above: the tier-E collapse AgentFloor attributes to a *planning* horizon is partly an *execution* horizon, and execution is responsive to levers tool design does not provide. By isolating execution (carrying out a given plan) from planning, they show execution [[horizon-length|horizon]] improves non-diminishingly with model size and dramatically with RL-trained thinking. Tool design cannot deliver either of those. The implication for this thread: the "model capability" axis the callout above names is itself bifurcated — a planning component that resists scale, and an execution component that yields to it. Tool design remains necessary (clean interfaces still bound the failure surface), but at the execution ceiling the binding interventions are upstream of the tool layer: model selection, thinking-mode routing, and active context management that limits exposure to the [[self-conditioning]] failure mode. See [[agent-floor]]'s parallel callout for the same contestation at the concept level.
 
 > [!note] Departure: Feature-Rich vs. Minimal, Both Can Work
 > This thread argues that minimal tools with clean contracts outperform feature-rich ones. [[dex-horthy|Dex Horthy]] provides a counterexample: he achieves exceptional results with Claude Code — a feature-rich, opinionated tool with thousands of open issues and a complex prompting model. His success doesn't come from tool minimalism but from **deep intuition built over months of intensive use with a single tool** ("pick one model, one tool, work with it for 1-2 months"). This suggests that **deep tool familiarity** can compensate for tool complexity, and that the minimalism vs. feature-richness axis may be secondary to the **consistency of use** axis. Both approaches converge on a shared principle: the agent's effectiveness is bounded by how well the human understands the tool's failure modes, not by the tool's feature count.
@@ -249,3 +253,4 @@ The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in
 - `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's practical playbook for HTML agent output: use cases, interactive documents, throwaway editors, and honest tradeoffs from Claude Code usage
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Provides a systematic taxonomy of tool use paradigms (§3.3) and positions tool design within the broader harness interface; code-for-acting layer (§2.2) identifies three paradigms corresponding to different levels of agent autonomy over tools; environment-interaction tool use (§3.3.2) is the theoretical foundation for CLI composability
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: the harness falls away as models improve; language servers are dead; the model just needs shell access; AMP deleted features as models got better; the knowledge triplet as the irreducible constraint
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Capability Bottleneck Is Partly Execution" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers upstream of the tool layer. Bound tool design's reach at the execution ceiling.

@@ -1,7 +1,7 @@
 ---
 title: Execution Apathy
 created: 2026-05-06
-updated: 2026-06-01
+updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
 tags: [llm, failure-mode, agent-quality, planning]
@@ -60,6 +60,7 @@ The AgentFloor study found that system prompts designed to prevent this (e.g., "
 
 - [[afk-agent]] — AFK agents may exhibit execution apathy: plausible plans with no real work behind them
 - [[failure-modes]] — Master playbook: execution apathy mapped to detection signals and countermeasures
+- [[self-conditioning]] — Distinct from execution apathy: the model is trying correctly but gets dragged down by its own error-laden context, rather than resigning
 
 ## Sources
 

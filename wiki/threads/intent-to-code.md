@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-06-08
+updated: 2026-07-03
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -17,6 +17,7 @@ sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
+  - raw/the-illusion-of-diminishing-returns.pdf
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -47,6 +48,9 @@ Four positions have emerged across sources. They're not points on a single "bett
 > 
 > [!note] Departure: A Missing Prerequisite — Task Decomposition
 > The Harvard AgentFloor study (May 2026) adds another blind spot to the axis: **all four positions assume the model can execute tasks of arbitrary planning complexity given adequate planning or alignment.** AgentFloor's tier E finding — that all models, including GPT-5, collapse at 8-12 step planning — shows that the model's own architectural planning horizon is an independent constraint that none of the four positions account for. This suggests a prerequisite dimension: **task decomposition** must happen before any of the four positions can work reliably. The intent-to-code pipeline implicitly requires breaking the intent into sub-tasks that fit within the model's capability ceiling. See [[agent-floor]] for the empirical data.
+
+> [!note] Departure: tier E is partly an execution ceiling, not purely a planning one
+> Sinha, Arun, Goel et al. (ICLR 2026) contest the framing above that tier E is purely a *planning* horizon. Their work isolates *execution* (carrying out a given plan) from planning and finds execution [[horizon-length|horizon]] improves non-diminishingly with model size — and dramatically with RL-trained thinking. Their thesis is that long-task failures are routinely *misattributed* to reasoning/planning when they are execution failures: in the Shojaee et al. setup the models follow the correct plan for many steps before failing, which is execution drift, not planning failure. The implication for this thread: task decomposition (the prerequisite above) helps in two distinct ways — it reduces planning complexity *and* it reduces execution horizon length (where [[self-conditioning]] bites). The four positions assume decomposition addresses planning; the Illusion paper suggests the execution component of tier-E collapse yields to scale + thinking, even when the planning component resists. This is a live tension, not a settled contradiction. See [[agent-floor]]'s parallel callout for the same contestation at the concept level.
 
 > [!note] Departure: Code as the Verifiable Interface
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) adds a missing dimension to the intent-to-code axis: code itself is the **verifiable interface** between intent and execution. All five positions implicitly rely on code's executability to verify that intent was realized — tests must pass, types must check, code must run. The survey's framing makes this explicit: code's defining property as a harness is that it is **executable**, meaning model outputs become operations with formally verifiable outcomes. The axis's blind spot is that every position except pure vibes depends on this property, but none explicitly names it. The survey's four desired properties — executable, inspectable, stateful, governed — are the prerequisites that make any position on the intent-to-code axis work reliably.
@@ -187,3 +191,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: "the Theo method" — start with minimal implementation, learn from it, then spec; write once, throw it away, build it right; AI makes experimentation cheaper
 - `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — DevCon Fall 2025: Cian Clarke's practitioner framing supports the plan-as-contract position
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Al Harris, Amazon Kiro: EARS requirements + PBT verification = hybrid of positions 2 and 5; LLM is in the generation step but not the verification step
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.

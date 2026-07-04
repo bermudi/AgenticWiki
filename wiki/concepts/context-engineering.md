@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-06-16
+updated: 2026-07-03
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -11,6 +11,7 @@ sources:
   - raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md
   - raw/yt-effect-opencode-dax-raad.md
   - raw/yt-systems-building-systems.md
+  - raw/the-illusion-of-diminishing-returns.pdf
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -85,6 +86,10 @@ A production-validated technique from the Arise team (building Alex, an AI agent
 3. **Smart truncation + memory** (what worked): Keep the head (first ~100 characters) and tail (last ~100 characters) of the conversation; store the middle in a retrievable memory store. The agent can query the memory store if it needs to recall something from the truncated middle. This preserves recent context while keeping the working window small, and gives the agent agency over what context it retrieves.
 
 The team reports this strategy has been stable in production for months. The Claude Code code leak later confirmed that Anthropic independently converged on a similar truncation-and-compression approach — validating the pattern through convergent design.
+
+### Sliding Window Against Self-Conditioning
+
+A distinct motivation for truncation, from Sinha et al. (ICLR 2026): keep only the N most recent turns in context to limit the model's exposure to its own accumulated errors. On their controlled long-horizon task, shrinking the context window *improved* sustained accuracy — because a smaller window means fewer of the model's past mistakes are present to trigger [[self-conditioning]] (the failure mode where models degrade on their own error-laden history). The caveat: a fixed sliding window only works for Markovian tasks without long-range dependencies. But it validates a general principle — **active context management that minimizes the accumulation of errors in context improves long-horizon reliability**, a reliability lever distinct from the usual token-budget motivation for truncation.
 
 ### Long Session Evals
 A specific eval technique for detecting context degradation in long conversations. As sessions grow, failures appear late and silently — users don't restart chats, so conversations accumulate turns until the agent starts forgetting. The Arise team's technique: **load 10 turns, test the 11th**. By systematically testing what the agent remembers at N+1 turns, context degradation becomes testable rather than waiting for user reports. This is a structured eval signal for context management quality, complementary to per-turn accuracy metrics.
@@ -184,6 +189,8 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[steering-docs]] — Kiro's branded operational context: surface operational notes (commit style, code style, hard-won CDK flags) in the system prompt at every turn, rather than re-learning them each session; the persistent-context layer of context engineering
 - [[kiro]] — Amazon's agentic IDE that codifies context engineering principles (EARS-formatted requirements, steering as operational context) into the IDE interface
 - [[recursive-agent-harness]] — Isolated subagent contexts (no shared memory, no communication) are an extreme form of context isolation
+- [[self-conditioning]] — the failure mode a sliding window mitigates; truncation as error-contamination control, not just token-budget control
+- [[horizon-length]] — context engineering as a reliability lever on the dimension that determines long-horizon capability
 
 ## Sources
 
@@ -195,3 +202,4 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md` — Practitioners' report from Arise: failure progression from naive truncation through summarization to smart truncation + memory, long session evals technique, context-vs-memory distinction, and context management as a product/UX problem.
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: Effect's verbosity as context engineering — explicit patterns in each file constrain LLM output. The framework's strictness means the AI "almost always does it correctly" because the context is unambiguous.
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: agent persistence as a context engineering problem; babysitter agent as dedicated context management infrastructure; instruction libraries as factory-level context engineering
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Sliding Window Against Self-Conditioning" technique (Appendix C.2): shrinking the context window improves sustained accuracy by limiting exposure to self-accumulated errors; reliability-driven truncation distinct from token-budget truncation.

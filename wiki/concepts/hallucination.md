@@ -1,7 +1,7 @@
 ---
 title: Hallucination
 created: 2026-04-25
-updated: 2026-05-16
+updated: 2026-07-03
 sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf, raw/synthetic-truths-gemini-has-a-secret-code.md, raw/2407.08440v4.txt]
 tags: [llm, reliability, engineering]
 unaudited_marginal: 0
@@ -87,6 +87,7 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 - [[llm-as-code-judge]] — LLM judge rationales exhibit hallucination-like behavior: strong symptom-level diagnosis but weak cause-level diagnosis (44–71% match)
 - [[overcorrection-bias]] — Added Requirement rejections in code review resemble extrinsic hallucination (fabricating unstated constraints as grounds for rejection)
 - [[knowledge-triplet]] — Hallucination reframed: the model fills gaps from its training distribution when knowledge exists in none of the three sources
+- [[self-conditioning]] — Self-conditioning is related to hallucination snowballing: the model conditions on its own prior errors and amplifies them, compounding mistakes across a long trajectory
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.

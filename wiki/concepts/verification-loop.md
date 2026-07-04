@@ -141,6 +141,7 @@ The practical implication for verification loop design: the loop is not a single
 - [[self-harness]] — Held-out regression testing extends the verification loop to the self-evolution process itself
 - [[recursive-agent-harness]] — The shared output file that all subagents write to is the verification substrate for the recursive decomposition
 - [[agent-loop]] — The feedback inside the loop is what makes an agent loop trustworthy; verification is the trust condition, not the loop itself
+- [[self-conditioning]] — Prompted self-verification (a form of verification loop) fails to break self-conditioning; the model conditions on its own error-laden history and makes more errors despite verification attempts
 
 ## Sources
 

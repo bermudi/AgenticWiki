@@ -1,7 +1,7 @@
 ---
 title: Critical Failure
 created: 2026-05-02
-updated: 2026-05-03
+updated: 2026-07-03
 sources:
   - raw/2604.15597v1.pdf
 tags: [failure-mode, llm, reliability, long-horizon]
@@ -61,6 +61,7 @@ This means the reliability problem is not about reducing average error rate — 
 - [[hallucination]] — Critical failures in document degradation are a structural form of hallucination: silent corruption at scale
 
 - [[deliberate-friction]] — Deliberate friction at safety boundaries prevents critical failures from compounding
+- [[self-conditioning]] — Self-conditioning can trigger critical failures: as the model degrades on its own error-laden history, the rising error rate produces the sparse catastrophic drops that define critical failure
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Critical failure analysis, Table 9, and discussion of dynamics in Section 5

@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-02
+updated: 2026-07-03
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.txt
@@ -218,6 +218,9 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 > 3. **The capability floor is the verifiable capability budget.** The paper's model-tier finding (a single-agent GPT-5 with CoT-SC beats the most sophisticated GPT-4o-based MAS at less than half the tokens) is the verifiability thesis at its sharpest: a higher-tier model has more *verifiable* capability per token, so coordination overhead (which is NOT in the verified circuits) does not dominate. A lower-tier model has less verifiable capability, so coordination overhead eats the budget before the task gets solved. The [[the-verifiability-thesis|verifiability thesis]] thus predicts a hard ceiling on multi-agent gain for any model tier, set by the proportion of total capability that is verifiable.
 > The unifying claim: the verifiability thesis generalizes to coordination. Multi-agent systems gain capability *only* when the coordination layer is engineered to be verifiable (hand-designed deterministic decomposition, not automated search). The paper's three findings — bloat, collapse, capability floor — are exactly the symptoms of an unverifiable coordination layer.
 
+> [!note] Extension: Horizon Length as the Verifiable-Capability Quantity
+> [[horizon-length]] (Sinha, Arun, Goel et al., ICLR 2026) sharpens the thesis's framing of "what can the model do?" into "how long can it reliably execute?" — and execution length is the quantity with direct economic value. The paper isolates execution from planning and knowledge: on a task where every frontier model is near-perfect at one step, the *horizon length* they sustain separates them by an order of magnitude (GPT-5 ~2176 steps vs Gemini 2.5 Pro ~120). RL-trained thinking dramatically extends this length while parallel majority voting does not — consistent with the thesis that RL training (verifiable reward) is what builds capability. The failure mode that caps horizon length, [[self-conditioning]], is itself a verifiability-gap pathology: the model conditions on its own unverifiable (incorrect) history and makes more errors, but RL-trained thinking re-derives each step independently, bypassing the corrupted context.
+
 > [!note] Extension: The Dollar-Cost Binding Constraint
 > The "designing loops" discourse ([[peter-steinberger|Steinberger]]'s June 2026 tweet; [[boris-cherny|Boris Cherny]]'s WorkOS definition) surfaces, and @runes_leo articulates in June 2026, a binding constraint not in the thesis's current causal chain: **the dollar cost of the loop that runs the verification itself**. As @runes_leo put it: "the costliest thing in AI coding is no longer writing code, it's managing the agent loop." The receipt: Uber capped engineers at $1,500/person/tool/month for Claude Code and Cursor after burning its annual AI budget in four months. Firsthand corroboration from [[theo-t3gg|Theo]]: roughly **$10,000 of inference in a month across his machines for $600 of flat-rate subscriptions**, finishing weeks at only 29% of his weekly limit — and the cautionary counter-datum in the same run, where a single generated workflow burned **eight hours and over three million tokens to address three review comments**. The thesis's existing bottlenecks are capability (RL distribution ceiling — the quality infrastructure cannot extend beyond trained circuits) and attention ([[armin-ronacher|Ronacher]]'s *The Final Bottleneck*: human review capacity as the new handoff ceiling). The cost-shift is a third, distinct axis: the *runtime cost of the loop that hosts the verification*. The three hard stops production converges on — maximum iteration count, no-progress detection, token-or-dollar budget ceiling — are the operationalization of this constraint: the dollar budget is the loop's *economic* hard stop, the cost guardrail that bounds the verification feedback channel. The [[agent-loop]] hard-stops discipline is the verifiability thesis applied to the loop's *economic* feedback channel. Gartner's "~17% of organizations actually deploying agentic AI" at the peak of inflated expectations is a deployment-reality data point consistent with cost as a binding constraint. Corroborated by [[theo-t3gg|Theo]]'s firsthand receipts; converges with [[armin-ronacher|Ronacher]]'s *The Final Bottleneck* (attention) and [[agent-quality-engineering]] (efficiency as a quality dimension), but the *dollar* framing is a distinct axis. See [[agent-loop]] and [[orchestration-loop]] for the full lineage and cost framing.
 
@@ -229,6 +232,8 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 [//]: # ([[agent-evals]] links here from its ## Related section)
 [//]: # ([[self-harness]] links here from its ## Thread section)
 [//]: # ([[recursive-agent-harness]] links here from its ## Thread section)
+[//]: # ([[horizon-length]] links here from its ## Thread section)
+[//]: # ([[shashwat-goel]] links here from its ## Thread section)
 
 ## Sources
 

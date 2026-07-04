@@ -1,9 +1,10 @@
 ---
 title: Iterative Self-Correction
 created: 2026-05-10
-updated: 2026-05-16
+updated: 2026-07-03
 sources:
   - raw/2504.21625v6.txt
+  - raw/the-illusion-of-diminishing-returns.pdf
 tags: [concept, self-correction, instruction-following, benchmarks, feedback-loops, agent-workflow]
 ---
 
@@ -94,6 +95,9 @@ A remarkable positive finding: o3-mini (high) was the only model capable of leve
 
 5. **Prompt modification is a distinct capability.** Asking an agent to modify a prompt rather than execute it requires explicit verification — most models fail silently.
 
+> [!note] Departure: self-verification can't break self-conditioning
+> Sinha et al. (ICLR 2026) tested exactly the "prompt the model to self-correct each turn" pattern on a long-horizon execution task and found it does *not* fix [[self-conditioning]] — and it makes things worse by burning context faster (CoT models exhaust the window sooner; thinking models "overthink" and fail the verification step itself). This reinforces Meeseeks's ceiling finding from the opposite direction: not only does self-correction plateau below 91%, the act of self-verifying is itself an error-prone execution task that can *accelerate* degradation. Reliable correction, where it happens, comes from RL-trained thinking that re-derives each step independently — not from prompted re-checking of a corrupted history.
+
 ## Catastrophic Overcorrection: A Distinct Failure Mode
 
 The most revealing finding from Meeseeks is catastrophic overcorrection — a failure mode where models receiving precise feedback about constraint violations do not converge smoothly but instead oscillate wildly:
@@ -148,6 +152,9 @@ This is why the reasoning-vs-non-reasoning gap widens over multiple turns — no
 - [[instruction-severity-inflation]] — The multi-constraint environment mirrors severity inflation: when every constraint calls for attention equally, model performance hits a ceiling — the formatting isn't the root cause, the capability gap is
 - [[overcorrection-bias]] — A distinct failure mode: LLM code reviewers systematically reject correct code when asked to explain and fix; catastrophic overcorrection in Meeseeks is the instruction-following analogue
 - [[semi-formal-reasoning]] — Structured evidence templates as an alternative to free-form self-correction; prevents unsupported claims structurally rather than relying on feedback cycles
+- [[self-conditioning]] — prompted self-verification fails to break it; reinforces self-correction's ceiling from the long-horizon side
+- [[horizon-length]] — the long-horizon dimension on which self-correction's limits bite
 
 ## Sources
 - `raw/2504.21625v6.txt` — Wang et al., "Meeseeks: A Feedback-Driven, Iterative Self-Correction Benchmark evaluating LLMs' Instruction Following Capability": framework design, code-guided evaluation, experimental results across 17 models over 20 turns
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the self-verification departure (Appendix C.1): turn-wise self-verification does not fix self-conditioning, burns context, and is itself an error-prone execution task — reinforcing the self-correction ceiling from the long-horizon side.

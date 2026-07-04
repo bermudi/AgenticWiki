@@ -1,10 +1,12 @@
 ---
 title: AgentFloor
 created: 2026-05-06
-updated: 2026-05-08
+updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
+  - raw/the-illusion-of-diminishing-returns.pdf
 tags: [benchmark, agent-evals, tool-use, model-evaluation]
+unaudited_marginal: 0
 ---
 
 # AgentFloor
@@ -41,6 +43,9 @@ Each tier introduces a new cognitive demand, with 5 tasks per tier (30 total):
 Tier E is where "all the models suddenly die." Even GPT-5 achieves only ~10% task completion rate at tier E. Gemma 4 26B drops to 0%. The failure is not a matter of scale — it is a fundamental architectural limitation of auto-regressive LLMs for long-horizon, multi-step contingent planning.
 
 The authors demonstrated that this collapse occurs **even in a perfectly clean, deterministic environment**. This proves that the limitation in agentic workflows is not just that "the real world is messy" — even when the world is perfectly clean, the fundamental architecture of auto-regressive LLMs breaks down after about 5-7 sequential contingent steps.
+
+> [!note] Departure: is tier E a planning ceiling or an execution ceiling?
+> Sinha, Arun, Goel et al. (ICLR 2026) would contest the framing that tier E is purely a planning/architectural ceiling that "scale alone cannot fix." Their work isolates *execution* (carrying out a given plan) from planning, and finds execution [[horizon-length|horizon]] improves non-diminishingly with model size — and dramatically with RL-trained thinking. Their thesis is that long-task failures are routinely *misattributed* to reasoning/planning when they are execution failures. The resolution may be that AgentFloor's tier E (8–12 contingent steps maintaining system constraints) blends planning and execution; the Illusion paper predicts the execution component should yield to scale + thinking even if the planning component resists. This is a live tension, not a settled contradiction.
 
 ### Small Models Can Match Frontier Performance
 
@@ -86,7 +91,10 @@ The authors tried structured prompting — telling models to plan first and then
 - [[tool-design-for-agents]] — The benchmark isolates tool-use capability from tool design confounds
 - [[discover-ai]] — The source that covered the Harvard AgentFloor study
 - [[instruction-hierarchy]] — ManyIH also demonstrates complexity-scaling collapse: models break at 12-tier conflicts, just as AgentFloor reveals break at 8-12 step planning
+- [[horizon-length]] — re-examines the tier-E ceiling through the execution lens: some "planning" collapse may be execution failure that yields to scale + thinking
+- [[self-conditioning]] — a candidate mechanism for in-trajectory tier-E collapse: models degrading on their own accumulated errors
 
 ## Sources
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's summary of the Harvard AgentFloor study, including the tier framework, comparative results, failure mode analysis, and cost implications
+- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the tier-E execution-vs-planning departure: isolating execution shows it improves with scale + thinking (§3.1), contesting the "scale alone cannot fix" reading of long-horizon collapse.
