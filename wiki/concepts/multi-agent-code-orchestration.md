@@ -8,6 +8,7 @@ sources:
   - raw/recursive-agent-harnesses.txt
   - raw/the-illusion-of-multi-agent-advantage.pdf
   - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2512.08296-scaling-agent-systems.pdf
 tags: [concept, multi-agent, orchestration, code-harness, collaboration, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -35,6 +36,14 @@ However, Eero Alvar raises a critical concern: **company-shaped hierarchies are 
 > - **FC3 Task Verification (23.5%)** — inadequate verification: premature termination (FM-3.1), no/incomplete verification (FM-3.2), incorrect verification (FM-3.3). These are the failures of the convergence patterns above — the survey's "implicit: fixed iteration budget" convergence (the most prevalent, also the most significant gap) is exactly what MAST's FC3 captures.
 >
 > The MAST intervention studies (Appendix H) confirm that topology-based changes (DAG → cyclic, role specialization) are more effective than prompt-only changes, but neither resolves all failure modes — supporting the survey's "topology complexity inversely correlates with harness-state formality" finding.
+
+> [!note] Quantitative Architecture Selection: The Scaling Framework
+> The [[scaling-agent-systems|Kim et al. scaling study]] (260 configurations, 6 agentic benchmarks, 3 LLM families) provides the quantitative architecture-selection rules the topology taxonomy above lacks. The regression model (R² = 0.373) predicts optimal architecture with 87% accuracy on held-out configurations using measurable properties: single-agent baseline, tool count, model capability, and empirical coordination metrics (efficiency, overhead, error amplification). Three findings directly inform topology choice:
+> - **[[capability-saturation|Capability saturation]]** (β = -0.236, the most robust finding): once single-agent baselines exceed ~45%, MAS yields negative returns. SWE-bench Verified (SA = 0.522) and PlanCraft (SA = 0.568) sit in the saturation regime — all MAS topologies degrade. The survey's topologies are not wrong; they are misapplied above the threshold.
+> - **[[tool-coordination-trade-off|Tool-coordination trade-off]]** (β = -0.096): tool-heavy tasks (16 tools, Workbench) suffer 2-6× efficiency penalties from MAS. High-overhead topologies (Hybrid at 515% overhead) collapse on tool-heavy benchmarks. The topology must match the tool surface.
+> - **Error amplification by topology**: Independent 17.2×, Decentralized 7.8×, Hybrid 5.1×, Centralized 4.4×. The validation bottlenecks in Centralized coordination contain errors 4× better than the unchecked propagation in Independent — quantifying the value of the orchestrator role the survey's hierarchical topologies (MAGIS, HyperAgent, SoA) instantiate.
+>
+> The scaling study's three coordination regimes (under-coordination <100% overhead, optimal band 200-300%, over-coordination >400%) provide the quantitative version of the survey's "topology complexity inversely correlates with harness-state formality" finding: the over-coordination regime is where Hybrid's protocol complexity introduces coordination-failure modes (12.4% error rate, 7× Centralized's 1.8%).
 
 ## Why Multi-Agent?
 
@@ -194,6 +203,9 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - [[self-harness]] — The complementary in-place pattern: a single harness that improves itself over time, rather than spawning fresh instances per task
 - [[orchestration-loop]] — The architectural vocabulary (roles, topologies, artifact-mediated communication) that production orchestration loops instantiate
 - [[gas-town]] — Steve Yegge's open-source orchestration loop (Mayor + patrol agents, git-backed state) as a concrete hierarchical-topology implementation
+- [[scaling-agent-systems]] — the quantitative architecture-selection framework: 260-config regression that predicts optimal topology from measurable task properties (baseline, tool count, capability)
+- [[capability-saturation]] — the 45% threshold that determines when the topologies above are misapplied: above the threshold, all MAS topologies degrade
+- [[tool-coordination-trade-off]] — the tool-count penalty that predicts which topologies fail on tool-heavy tasks (high-overhead topologies like Hybrid collapse)
 
 ## Sources
 
@@ -202,3 +214,4 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Introduces the code-driven subagent spawning topology: the parent writes executable code that instantiates subagents and runs them in parallel. The recursive unit is the full harness, not the model call. On Oolong-Synthetic, holding GPT-5 fixed, RAH improves Codex from 71.75% to 81.36% — gain attributable to harness architecture.
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the [[multi-agent-illusion]] contradiction callout. Documents [[architectural-bloat]] and [[functional-collapse]] across 6 automated frameworks. Validates the [[expert-mas|hand-designed]] case (GPT-5: 57.0% → 96.5% on SMFR) while showing the [[architectural-bloat|automated search]] case largely fails.
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] failure-mode callout. Provides the empirical vocabulary for *why* the topologies fail: 14 modes in 3 categories across 1642 traces from 7 frameworks (including ChatDev, MetaGPT, HyperAgent from the survey above). FC1 System Design Issues (44.2%) is the largest category — topology/role design is the binding constraint.
+- `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Quantitative Architecture Selection" callout. §4.3 regression model (R² = 0.373, 87% architecture-selection accuracy); §4.3 capability saturation (β = -0.236, 45% threshold); §4.3 tool-coordination trade-off (β = -0.096); Table 5 error amplification by topology (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes.

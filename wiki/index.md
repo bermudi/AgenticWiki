@@ -210,6 +210,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-loop]] — "Cron plus a decision-maker in the body": a program that prompts the agent, reads the result, decides whether to keep going. The five-stage lineage (ReAct → AutoGPT → ralph → /goal → orchestration).
 - [[orchestration-loop]] — Stage 5 of the agent-loop lineage: loops that supervise loops, concurrently and on cron, with git-backed durability so the system survives a restart.
 - [[compounding-loops]] — Independent agent loops cooperating laterally through a shared signals/artifacts/logs file system — peer cooperation via shared state, distinct from hierarchical orchestration.
+- [[scaling-agent-systems]] — The first quantitative scaling framework for agent systems (Kim et al., Google + MIT, 2026): 260 configurations across 6 benchmarks, 5 architectures, 3 LLM families; a 20-parameter regression (R²=0.373) predicting optimal architecture with 87% accuracy. The third leg of the multi-agent debate: where the illusion paper asks *whether* and MAST asks *why*, this asks *when*.
+- [[capability-saturation]] — The most robust finding from the scaling study: once single-agent baselines exceed ~45% accuracy, MAS yields diminishing/negative returns (β = -0.236, survives cluster-robust + Holm-Bonferroni). The quantitative version of the multi-agent illusion's capability floor.
+- [[tool-coordination-trade-off]] — Tool-heavy tasks suffer disproportionately from MAS inefficiency (β = -0.096, survives Holm-Bonferroni): multi-agent systems fragment the per-agent token budget, leaving insufficient capacity for complex tool orchestration.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.

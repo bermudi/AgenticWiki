@@ -36,6 +36,7 @@ sources:
   - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-are-we-really-doing-this-again.md
+  - raw/2512.08296-scaling-agent-systems.pdf
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -74,6 +75,8 @@ Karpathy's hiring proposal — give candidates a big project ("build a Twitter c
 > 3. **Cost-quality Pareto position is a first-class metric**: a workflow that costs 10× and gains 0% is *worse* than the single-agent baseline regardless of its absolute accuracy. The thread's advocacy of focus maxing and AFK swarms should be tempered: parallelize where the underlying tasks are genuinely parallelizable, but verify that the multi-agent infrastructure isn't just [[architectural-bloat|architectural bloat]] on top of CoT-SC.
 >
 > The [[mast]] taxonomy (Cemri, Pan, Yang et al., NeurIPS 2025) provides the diagnostic vocabulary for *why* multi-agent coordination fails in practice: 14 failure modes in 3 categories across 1642 traces from 7 popular MAS frameworks. System Design Issues (44.2%) is the largest category — confirming that the binding constraint is design, not model capability. The MAST intervention studies (+9.4% from role-spec fix, +15.6% from high-level verification step) reinforce the "engineered not discovered" thesis at smaller scale.
+>
+> The [[scaling-agent-systems|Kim et al. scaling study]] (260 configurations, 6 benchmarks, 3 LLM families) provides the quantitative thresholds that specify *when* multi-agent coordination helps: [[capability-saturation|capability saturation]] (once single-agent baselines exceed ~45%, MAS yields negative returns) and the [[tool-coordination-trade-off|tool-coordination trade-off]] (tool-heavy tasks suffer disproportionately from MAS inefficiency). The framework predicts optimal architecture with 87% accuracy on held-out configurations using measurable properties (single-agent baseline, tool count, model capability, coordination metrics). This is the quantitative answer to "when does multi-agent coordination help?" that the workflow thread needs.
 
 ## Thesis
 
@@ -403,7 +406,7 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 - **Two modes**: Fully automatic (trusted specs + deterministic feedback) vs collaborative (Claude as thinking partner loading project files). This refines the HITL/AFK split into a spectrum.
 - **"Reversible without embarrassment"**: Safety heuristic that operationalizes [[deliberate-friction]] for autonomous operation boundaries.
 
-See [[chris-parsons]] for full details, and [[ralph-loop#Chris Parsons' Evolution of the Pattern]] for the complete mechanism.
+See [[chris-parsons]] for full details, and [[ralph-loop]] for the complete mechanism.
 
 ## The Adoption Learning Curve
 
@@ -465,6 +468,7 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds an architectural layer beneath the workflow's operational focus; the three-layer framework provides the vocabulary for workflow phases; the multi-tier action space, context management, and verification loops are instantiations of the broader harness architecture
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] taxonomy addition to the "capability floor for multi-agent coordination" departure. Provides the diagnostic vocabulary for *why* multi-agent coordination fails: 14 failure modes in 3 categories across 1642 traces from 7 frameworks. System Design Issues (44.2%) is the largest category — design is the binding constraint. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). The [[multi-agent-illusion]] audit. Source for the "capability floor for multi-agent coordination" departure: automated MAS do not outperform CoT-SC, hand-designed [[expert-mas]] does; the cost-quality Pareto position is a first-class metric. §3 cost-quality results; §3.3 [[smfr]] + [[expert-mas]]; §4 architectural deconstruction; §5 ensembling trap and capability floor.
+- `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the quantitative thresholds in the "capability floor for multi-agent coordination" departure: [[capability-saturation|capability saturation]] (45% threshold, β = -0.236, the most robust finding) and [[tool-coordination-trade-off|tool-coordination trade-off]] (β = -0.096, tool-heavy tasks suffer disproportionately from MAS inefficiency). §4.3 scaling principles (Eq. 1 regression, architecture selection with 87% accuracy); §4.2 main results (per-benchmark MAS deltas, decomposability analysis); §4.4 coordination efficiency (turn power law, message density saturation, error amplification factors).
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph

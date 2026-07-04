@@ -4,6 +4,7 @@ created: 2026-07-03
 updated: 2026-07-03
 sources:
   - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2512.08296-scaling-agent-systems.pdf
 tags: [concept, multi-agent, failure-modes, taxonomy, evaluation, empirical, mas-audit]
 unaudited_marginal: 0
 ---
@@ -108,6 +109,18 @@ The paper's central conjecture: improvements in base-model capabilities will be 
 
 This positions MAST as the diagnostic vocabulary for the [[multi-agent-illusion]] finding: the illusion is not that MAS *cannot* work (the [[expert-mas]] baseline proves they can), but that *current* MAS designs fail in identifiable, classifiable ways — and the failure modes point to system design, not model capability, as the binding constraint.
 
+## Quantitative Corroboration: The Scaling Study
+
+The [[scaling-agent-systems|Kim et al. scaling study]] (260 configurations, 6 benchmarks, 3 LLM families) explicitly builds on MAST, categorizing observed errors into specification, inter-agent misalignment, and verification failures. It provides the quantitative companion to MAST's qualitative taxonomy:
+
+| MAST category | MAST share | Scaling study's quantitative measure |
+|---|---|---|
+| FC1 System Design Issues | 44.2% | The over-coordination regime (Hybrid at 515% overhead) produces 12.4% coordination-failure errors — 7× Centralized's 1.8%. Protocol complexity exceeding robust implementation is the quantitative version of system design failure. |
+| FC2 Inter-Agent Misalignment | 32.3% | Trace-level error amplification: Independent 17.2×, Decentralized 7.8×, Hybrid 5.1×. Errors propagate through debate rounds and unchecked channels — the quantitative version of inter-agent misalignment. |
+| FC3 Task Verification | 23.5% | Centralized coordination contains error amplification to 4.4× via validation bottlenecks, vs 17.2× for Independent (no verification). The 4× gap is the quantitative measure of verification's value — exactly what MAST's FC3 category diagnoses. |
+
+The scaling study's [[capability-saturation|capability saturation]] finding (β = -0.236, the most robust predictor) also corroborates MAST's central conjecture: improvements in base-model capabilities will be insufficient to address the full taxonomy. As models improve and single-agent baselines rise above 45%, MAS coordination overhead becomes net cost — the failure modes MAST identifies don't disappear, they become *more* expensive relative to the alternative.
+
 ## Methodology
 
 MAST was built using Grounded Theory (Glaser & Strauss, 1967):
@@ -139,7 +152,10 @@ The Grounded Theory approach ensures the taxonomy emerges from empirical data ra
 - [[backpressure]] — the FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs
 - [[operational-mirror]] — MAST's tactical-vs-structural strategy distinction parallels the operational mirror's per-edit-vs-distributional distinction: tactical fixes address individual modes, structural strategies address system-wide patterns
 - [[mert-cemri]] — lead author (with Melissa Z. Pan and Shuyi Yang) of the MAST paper
+- [[scaling-agent-systems]] — the quantitative companion: 260-config regression that measures the error amplification factors and coordination regimes MAST diagnoses qualitatively
+- [[capability-saturation]] — the quantitative corroboration of MAST's central conjecture (base-model improvements insufficient): the 45% threshold means MAS failure modes become *more* expensive as models improve
 
 ## Sources
 
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (UC Berkeley + Intesa Sanpaolo, NeurIPS 2025 Datasets & Benchmarks, arXiv 2503.13657v3, 26 Oct 2025). §3 MAST-Data construction (Grounded Theory, IAA κ=0.88, LLM annotator κ=0.77); §4 MAST taxonomy (14 modes, 3 categories, 3 insights); §5 failure breakdown and primacy of system design; Appendix A failure mode definitions; Appendix B MAS details and failure rates (41–86.7%); Appendix G tactical vs structural strategies (Table 4); Appendix H intervention case studies (Table 5: AG2 +5pp, ChatDev +15.6pp); Appendix N failure mode examples.
+- `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.4 error taxonomy (architecture-specific failure modes mapped to MAST categories); Table 5 trace-level error amplification factors (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes (under-coordination, optimal band, over-coordination). Source for the "Quantitative Corroboration" section.

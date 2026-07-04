@@ -5,6 +5,7 @@ updated: 2026-07-03
 sources:
   - raw/the-illusion-of-multi-agent-advantage.pdf
   - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2512.08296-scaling-agent-systems.pdf
 tags: [concept, multi-agent, orchestration, mas-baseline, code-driven, deterministic-orchestration]
 unaudited_marginal: 0
 ---
@@ -97,6 +98,18 @@ The [[mast]] taxonomy (Cemri, Pan, Yang et al., NeurIPS 2025) provides small-sca
 
 These are *tactical* interventions on a flawed existing architecture, not a clean-sheet design like Expert-MAS. The gains are smaller (+9.4%, +15.6% vs. Expert-MAS's +39.5pp on SMFR) and the authors emphasize that "not all failure modes are resolved, and task completion rates still remain low" — first-step interventions are insufficient, pointing to the need for structural redesign. But the direction is the same: design changes on the same backbone produce gains that model-only changes cannot. The Expert-MAS is the clean-sheet upper bound; the MAST interventions are the incremental-improvement lower bound on the same thesis.
 
+## Why Expert-MAS Escapes the Scaling Study's Negative Findings
+
+The [[scaling-agent-systems|Kim et al. scaling study]] identifies two robust thresholds where canonical MAS architectures degrade performance: [[capability-saturation|capability saturation]] (SA > 45%) and the [[tool-coordination-trade-off|tool-coordination trade-off]] (high tool count). Expert-MAS escapes both, and the scaling study's framework explains why:
+
+| Scaling study finding | Why Expert-MAS escapes |
+|---|---|
+| Capability saturation (SA > 45% → MAS degrades) | Expert-MAS takes GPT-5 from 57.0% to 96.5% on SMFR — well above the 45% threshold. The escape is **deterministic orchestration**: the Python executor's coordination is not stochastic LLM reasoning, so it doesn't consume the per-agent token budget that drives saturation. |
+| Tool-coordination trade-off (high tool count → MAS inefficiency) | SMFR uses a moderate tool count (5 tools). More importantly, the Meta-Agent parses the problem into a **typed schema** that drives tool dispatch — the tools are not orchestrated through inter-agent messages but through deterministic code. The token budget fragmentation that drives the trade-off doesn't occur. |
+| Error amplification (Independent 17.2×, Centralized 4.4×) | Expert-MAS instantiates the Centralized pattern (validation bottlenecks contain errors to 4.4×) but improves on it: the deterministic Aggregator provides **stronger** verification than an LLM orchestrator — it's not subject to the reasoning-action mismatch (MAST FM-2.6, 13.2% of failures). |
+
+SMFR's GPT-5 baseline (57.0%) places it in the [[capability-saturation|saturation regime]] (SA > 45%), where the scaling study predicts canonical MAS should degrade — and the Expert-MAS paper confirms this: automated MAS frameworks fail on SMFR. Expert-MAS is the exception that proves the rule: only engineered, deterministic orchestration escapes the saturation regime. The scaling study's Finance Agent benchmark (mean SA=0.349 across 9 models, below the threshold) is where canonical Centralized MAS *does* help (+80.8%) — a different regime from SMFR, illustrating that the saturation threshold is the binding constraint the Expert-MAS design transcends.
+
 ## Thread
 
 - [[the-verifiability-thesis]] — Expert-MAS is verifiability applied at the multi-agent level: every component is inspectable, every aggregation is deterministic
@@ -112,8 +125,12 @@ These are *tactical* interventions on a flawed existing architecture, not a clea
 - [[multi-agent-code-orchestration]] — the broader taxonomy; Expert-MAS instantiates the star topology
 - [[variant-isolation]] — HarnessX's alternative escape from automated MAS failure: K simple harnesses routed per task
 - [[mast]] — the failure taxonomy that provides the diagnostic vocabulary for *why* automated MAS fail; the MAST intervention studies (+9.4%, +15.6%) are the small-scale corroboration of the "engineered not discovered" thesis
+- [[scaling-agent-systems]] — the quantitative framework that explains *why* Expert-MAS escapes the negative findings: deterministic orchestration avoids the token-budget fragmentation that drives capability saturation and the tool-coordination trade-off
+- [[capability-saturation]] — the 45% threshold Expert-MAS operates above (57.0% → 96.5%), escaping via deterministic orchestration
+- [[tool-coordination-trade-off]] — the tool-count penalty Expert-MAS sidesteps via typed schema-driven tool dispatch
 
 ## Sources
 
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). §3.3 SMFR Expert-MAS construction; Figure 4 architecture diagram; Table 4 head-to-head results; Appendix D full configuration (Meta-Agent system prompt, Extractor/Calculator prompts, executor logic).
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Appendix H intervention case studies on ChatDev: +9.4% from role-spec fix, +15.6% from high-level verification step. Small-scale corroboration of the "engineered not discovered" thesis.
+- `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 architecture-selection rules (Centralized MAS predicted for T=5, SA=0.35 analysis tasks — the SMFR regime); §4.3 capability saturation (the 45% threshold Expert-MAS operates above); §4.3 tool-coordination trade-off (the penalty Expert-MAS sidesteps via typed schema-driven dispatch). Source for the "Why Expert-MAS Escapes" section.

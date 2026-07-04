@@ -5,6 +5,7 @@ updated: 2026-07-03
 sources:
   - raw/the-illusion-of-multi-agent-advantage.pdf
   - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2512.08296-scaling-agent-systems.pdf
 tags: [concept, multi-agent, orchestration, evaluation, negative-result, mas-audit]
 unaudited_marginal: 0
 ---
@@ -82,6 +83,14 @@ The paper's findings do not contradict results from hand-designed multi-agent sy
 
 The illusion is specifically about *automated* MAS design — frameworks that use MCTS, RL, importance scoring, or zero-shot coordination to discover or instantiate the architecture at test time or during validation.
 
+## The Quantitative Refinement: Capability Saturation
+
+The [[scaling-agent-systems|Kim et al. scaling study]] (260 configurations, 6 benchmarks, 3 LLM families) provides the quantitative thresholds that explain *when* the illusion manifests. The capability floor identified above is refined into [[capability-saturation|capability saturation]]: once a single-agent baseline exceeds ~45% accuracy on a task, MAS yields diminishing or negative returns (β = -0.236, p = 0.004, survives cluster-robust inference and Holm-Bonferroni correction). This is the most robustly supported finding in the scaling study and the quantitative version of the capability floor.
+
+The scaling study also identifies a second robust predictor: the [[tool-coordination-trade-off|tool-coordination trade-off]] (β = -0.096, p = 0.002, survives Holm-Bonferroni). Tool-heavy tasks suffer disproportionately from MAS inefficiency because multi-agent systems fragment the per-agent token budget. This explains why automated MAS frameworks — which don't account for tool complexity in their architecture search — fail on tool-heavy benchmarks like Workbench (16 tools).
+
+Together, the two findings specify the conditions under which the multi-agent illusion is most likely to hold: high single-agent baselines (capability saturation) and high tool counts (tool-coordination trade-off). The illusion is not universal — it is conditional, and the conditions are now measurable.
+
 ## Implications
 
 1. **The cost efficiency gap matters more than the accuracy gap.** When a framework spends 10× tokens for 0% accuracy gain, the right conclusion is not "MAS doesn't help" but "this MAS framework is structurally misaligned with the task."
@@ -110,8 +119,12 @@ The illusion is specifically about *automated* MAS design — frameworks that us
 - [[orchestration-loop]] — Production orchestration loops are the hand-designed case this audit vindicates; they are not the auto-searched architectures it indicts
 - [[compounding-loops]] — Lateral peer-loop coordination via shared state: another hand-designed pattern the audit vindicates, not auto-searched topology
 - [[mast]] — the diagnostic complement: the empirically grounded failure taxonomy that explains *why* the architectures collapse. MAST's System Design Issues (44.2%) is the largest failure category, confirming design — not model capability — as the binding constraint.
+- [[scaling-agent-systems]] — the quantitative refinement: 260-config regression that specifies *when* the illusion holds (capability saturation + tool-coordination trade-off)
+- [[capability-saturation]] — the quantitative version of the capability floor: the 45% threshold, β = -0.236, the most robust finding in the scaling study
+- [[tool-coordination-trade-off]] — the second robust predictor: tool-heavy tasks suffer disproportionately from MAS inefficiency
 
 ## Sources
 
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin, Li, Jiao, Wang, Ming, Ke, Qin, Carenini, Joty. *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2 (13 Jun 2026). §3 systematic evaluation across 6 frameworks and 5 benchmarks; §3.3 SMFR diagnostic benchmark + Expert-MAS; §4 architectural deconstruction (functional collapse, positional bias, motif analysis); §5 discussion (ensembling trap, capability floor); §6 conclusion.
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). §4 MAST taxonomy (14 modes, 3 categories); §5.3 primacy of system design; Appendix B 41–86.7% failure rates across 7 frameworks; Appendix H intervention studies (+9.4%, +15.6%). The diagnostic complement: explains *why* the architectures this audit indicts actually fail.
+- `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 capability saturation (β = -0.236, the quantitative version of the capability floor); §4.3 tool-coordination trade-off (β = -0.096); §4.5 robustness (both survive Holm-Bonferroni). Source for the "Quantitative Refinement" section.
