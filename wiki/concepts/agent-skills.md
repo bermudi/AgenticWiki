@@ -6,8 +6,8 @@ sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/skills-at-scale-workos-nisi-proser.md
-  - raw/2407.08440v4.txt
-  - raw/2605.18747.pdf
+  - raw/2407.08440v4.md
+  - raw/2605.18747.md
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
@@ -275,6 +275,6 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video explaining skill format, progressive disclosure, knowledge type comparison, cognitive science analogy, and the open standard
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Production operations: skills as documentation, skill discoverability ("use" verb trick), eval-driven development for skills, skill rot detection, skills+MCP complementarity
 - `raw/skills-at-scale-workos-nisi-proser.md` — Skill design craft: constraints over prescription, confidence scoring, script interpolation, anti-patterns; skills at team scale: sharing tiers, plugin marketplaces, non-technical users, CLI-driven skills, context mining
-- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): IRFT demonstrates the same pattern as skills — abstract procedural capability (rule-following) learned from synthetic data and generalized to real tasks
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Positions skills within the code-for-acting layer (§2.2); code-based skills as executable, inspectable, and stateful artifacts that can be verified through execution
+- `raw/2407.08440v4.md` — RuleBench (Sun et al.): IRFT demonstrates the same pattern as skills — abstract procedural capability (rule-following) learned from synthetic data and generalized to real tasks
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Positions skills within the code-for-acting layer (§2.2); code-based skills as executable, inspectable, and stateful artifacts that can be verified through execution
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Steinberger's general skills rule (turn repeated work into a skill) and Van Horn's framing of the consequence: a loop calling sharp named skills compounds; a loop with no skills is a "while-true around a stranger"

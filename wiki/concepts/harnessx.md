@@ -3,7 +3,7 @@ title: HarnessX
 created: 2026-06-17
 updated: 2026-06-17
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
 tags: [concept, agent-harness, harness-engineering, self-evolution, composition, harness-co-evolution, reinforcement-learning, aegis]
 unaudited_marginal: 0
 ---
@@ -165,7 +165,7 @@ The authors explicitly state: "The RL–symbolic-space mirror is a design heuris
 ## Relationship to the Wiki
 
 ### Relationship to the survey's vision
-`raw/2605.18747.pdf` §5.2.3 lists "Self-Evolving Harnesses without Regression" as an open problem. HarnessX is the most complete instantiation to date: typed composition enables safe programmatic mutation, the operational mirror formalizes what can go wrong, AEGIS is the four-stage defense architecture, the seesaw constraint enforces non-regression, and cross-harness GRPO breaks the scaffolding/training-signal ceilings.
+`raw/2605.18747.md` §5.2.3 lists "Self-Evolving Harnesses without Regression" as an open problem. HarnessX is the most complete instantiation to date: typed composition enables safe programmatic mutation, the operational mirror formalizes what can go wrong, AEGIS is the four-stage defense architecture, the seesaw constraint enforces non-regression, and cross-harness GRPO breaks the scaffolding/training-signal ceilings.
 
 ### Relationship to [[self-harness]]
 [[self-harness]] is the simpler 3-stage loop (Weakness Mining → Harness Proposal → Proposal Validation) with bounded edits and a conservative acceptance rule. HarnessX extends in three ways: (1) **typed composition** — the harness is a first-class, substitutable object with per-hook contracts, which Self-Harness lacks; (2) **explicit pathology taxonomy** — Self-Harness treats editing as a generic "propose and validate" loop, while HarnessX names three failure modes with dedicated architectural defenses (Critic for reward hacking, deterministic gate for forgetting, Planner for under-exploration); (3) **harness-model co-evolution** — HarnessX closes the loop with the model via cross-harness GRPO, an axis Self-Harness does not address. Self-Harness remains the simpler, more model-agnostic option when the harness is not yet a typed object; HarnessX is the more powerful option when the harness can be reified as typed components.
@@ -207,4 +207,4 @@ HarnessX is the most concrete "foundry" to instantiate the code-as-harness visio
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full paper: §3 harness composition (first-class object, processor, 9-dim taxonomy), §4 AEGIS (operational mirror, three pathologies, four-stage pipeline, adaptation loop, variant isolation), §5 co-evolution (iteration, cross-harness GRPO, off-policy buffer), §6 experiments (5 benchmarks × 3 model families × 15 rounds; 14/15 improve; +14.5% average, +44.0% peak), §7 discussion (compositional structure, trace richness, scope/limits of mirror, cost-performance). Codebase to be open-sourced in a future release.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full paper: §3 harness composition (first-class object, processor, 9-dim taxonomy), §4 AEGIS (operational mirror, three pathologies, four-stage pipeline, adaptation loop, variant isolation), §5 co-evolution (iteration, cross-harness GRPO, off-policy buffer), §6 experiments (5 benchmarks × 3 model families × 15 rounds; 14/15 improve; +14.5% average, +44.0% peak), §7 discussion (compositional structure, trace richness, scope/limits of mirror, cost-performance). Codebase to be open-sourced in a future release.

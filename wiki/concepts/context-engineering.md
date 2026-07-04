@@ -6,12 +6,12 @@ sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
-  - raw/2602.11988v1.txt
-  - raw/2601.20404v1.txt
+  - raw/2602.11988v1.md
+  - raw/2601.20404v1.md
   - raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md
   - raw/yt-effect-opencode-dax-raad.md
   - raw/yt-systems-building-systems.md
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/the-illusion-of-diminishing-returns.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -197,9 +197,9 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Full interview defining context engineering origins, principles, and practices
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Operational techniques catalog, context layers model, context isolation patterns
 - `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine architecture, the three myths, satisfaction of search, organizational memory, and expert bottling
-- `raw/2602.11988v1.txt` — Gloaguen et al. (2026). Context files as context engineering surface area; the first empirical validation that information-per-token density (minimal, operational-only files) outperforms verbose, LLM-generated alternatives.
-- `raw/2601.20404v1.txt` — Lulla et al. (2026). Efficiency evidence that well-designed context files reduce agent runtime and token consumption, consistent with context engineering goals.
+- `raw/2602.11988v1.md` — Gloaguen et al. (2026). Context files as context engineering surface area; the first empirical validation that information-per-token density (minimal, operational-only files) outperforms verbose, LLM-generated alternatives.
+- `raw/2601.20404v1.md` — Lulla et al. (2026). Efficiency evidence that well-designed context files reduce agent runtime and token consumption, consistent with context engineering goals.
 - `raw/yt-hierarchical-memory-context-management-in-agents-sally-ann-delucia.md` — Practitioners' report from Arise: failure progression from naive truncation through summarization to smart truncation + memory, long session evals technique, context-vs-memory distinction, and context management as a product/UX problem.
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: Effect's verbosity as context engineering — explicit patterns in each file constrain LLM output. The framework's strictness means the AI "almost always does it correctly" because the context is unambiguous.
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: agent persistence as a context engineering problem; babysitter agent as dedicated context management infrastructure; instruction libraries as factory-level context engineering
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Sliding Window Against Self-Conditioning" technique (Appendix C.2): shrinking the context window improves sustained accuracy by limiting exposure to self-accumulated errors; reliability-driven truncation distinct from token-budget truncation.
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Sliding Window Against Self-Conditioning" technique (Appendix C.2): shrinking the context window improves sustained accuracy by limiting exposure to self-accumulated errors; reliability-driven truncation distinct from token-budget truncation.

@@ -3,8 +3,8 @@ title: Self-Harness
 created: 2026-06-16
 updated: 2026-06-17
 sources:
-  - raw/self-harness-harnesses-that-improve-themselves.txt
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/self-harness-harnesses-that-improve-themselves.md
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
 tags: [concept, agent-harness, self-evolution, harness-engineering, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -74,7 +74,7 @@ A common thread: all three models receive edits targeting **artifact reliability
 ## Relationship to the Wiki
 
 ### Self-evolving harness as the open problem comes due
-`raw/2605.18747.pdf` §5.2.3 explicitly lists "Self-Evolving Harnesses without Regression" as an open problem. Self-Harness provides a concrete instantiation: a propose-evaluate-accept loop with a conservative acceptance rule, regression-tested on held-out splits, and bounded edits rather than free-form rewrites. The empirical results (held-out improvements of 14–21 pp across three models) show that the open problem is closer to solved than to speculative.
+`raw/2605.18747.md` §5.2.3 explicitly lists "Self-Evolving Harnesses without Regression" as an open problem. Self-Harness provides a concrete instantiation: a propose-evaluate-accept loop with a conservative acceptance rule, regression-tested on held-out splits, and bounded edits rather than free-form rewrites. The empirical results (held-out improvements of 14–21 pp across three models) show that the open problem is closer to solved than to speculative.
 
 ### Strictly weaker than Meta-Harness, but model-agnostic
 Meta-Harness (Lee et al., 2026) uses a stronger external agent to optimize a weaker target's harness — strictly more capable, but requires access to a stronger model. Self-Harness's contribution is that the same model can drive its own improvement without that external anchor. This matters for frontier models where no stronger model exists to provide guidance, and for deployment contexts where model families differ from training stacks.
@@ -166,5 +166,5 @@ The two are not competitors — they live at different points on the simplicity/
 
 ## Sources
 
-- `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Full paper: §1 motivation, §3 algorithm, §4 experiments, §5 conclusion. Empirical results on Terminal-Bench-2.0 with MiniMax M2.5, Qwen3.5-35B-A3B, GLM-5.
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). §3 (typed composition: processor abstraction, eight hook points, nine-dimension taxonomy), §4.1 (operational mirror), §4.2 (three predicted pathologies with architectural defenses), §4.3 (AEGIS pipeline), §4.5 (variant isolation), §5 (harness-model co-evolution), §6.4 (meta-agent effectiveness ablation). Source for the comparison section above.
+- `raw/self-harness-harnesses-that-improve-themselves.md` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Full paper: §1 motivation, §3 algorithm, §4 experiments, §5 conclusion. Empirical results on Terminal-Bench-2.0 with MiniMax M2.5, Qwen3.5-35B-A3B, GLM-5.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). §3 (typed composition: processor abstraction, eight hook points, nine-dimension taxonomy), §4.1 (operational mirror), §4.2 (three predicted pathologies with architectural defenses), §4.3 (AEGIS pipeline), §4.5 (variant isolation), §5 (harness-model co-evolution), §6.4 (meta-agent effectiveness ablation). Source for the comparison section above.

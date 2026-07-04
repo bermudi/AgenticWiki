@@ -2,7 +2,7 @@
 title: Verification Loop
 created: 2026-04-25
 updated: 2026-07-02
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.pdf", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.txt", "raw/2605.18747.pdf"]
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.md", "raw/2605.18747.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 unaudited_marginal: 0
 ---
@@ -147,8 +147,8 @@ The practical implication for verification loop design: the loop is not a single
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md`
 - `raw/yt-how-agents-use-dev-tools.md`
-- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: agentic tool use does not improve document fidelity; verification must be domain-aware and semantic.
+- `raw/2604.15597v1.md` — DELEGATE-52 benchmark: agentic tool use does not improve document fidelity; verification must be domain-aware and semantic.
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — "Outrunning your headlights" as the Pragmatic Programmer metaphor for why AI does too much at once; TDD as the discipline that enforces small steps.
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: verifiability as the economic driver of AI capability; the RL circuits framework that explains when verification loops work and when they don't.
-- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): executable verification against LLM reflection baseline; LLM reflection degrades compliance; deterministic error traces enable faster convergence; three-layer enforcement architecture
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies oracle adequacy and semantic verification (§5.2.1–5.2.2) as second-order constraints on verification loop effectiveness; proposes verification stacks with explicit scope
+- `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): executable verification against LLM reflection baseline; LLM reflection degrades compliance; deterministic error traces enable faster convergence; three-layer enforcement architecture
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies oracle adequacy and semantic verification (§5.2.1–5.2.2) as second-order constraints on verification loop effectiveness; proposes verification stacks with explicit scope

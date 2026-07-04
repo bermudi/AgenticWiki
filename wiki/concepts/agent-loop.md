@@ -8,7 +8,7 @@ sources:
   - raw/yt-7-insane-loops-you-need-to-try-right-now.md
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
-  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/2511.09030-maker-million-step-zero-errors.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, autonomous-agents, claude-code, cron, orchestration]
 ---
@@ -140,4 +140,4 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - `raw/yt-7-insane-loops-you-need-to-try-right-now.md` — Concrete loop patterns sorted by goal type (the Loop Library), and the "loops can't build features" tension.
 - `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand cost receipts ($10K inference for $600 of subscriptions; the 8-hour/3M-token comment loop), the /goal-vs-dynamic-workflow distinction, and the "prompt yourself out of involvement" heuristic.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s skeptic audit: the "it's just cron" position, the for-each-not-while refinement (via [[jarred-sumner|Jarred Sumner]]), the exponential-decay objection (0.95¹⁰), and [[armin-ronacher|Armin Ronacher]]'s loop-experiment finding (review-only).
-- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (single-step microagents); §3.2 first-to-ahead-by-k voting as the convergence mechanism; §4.4 the million-step zero-error result. Source for the "sixth paradigm" Extension callout.
+- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (single-step microagents); §3.2 first-to-ahead-by-k voting as the convergence mechanism; §4.4 the million-step zero-error result. Source for the "sixth paradigm" Extension callout.

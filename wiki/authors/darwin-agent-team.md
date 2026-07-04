@@ -3,7 +3,7 @@ title: Darwin Agent Team
 created: 2026-06-17
 updated: 2026-06-17
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
 tags: [author, agent-harness, self-evolution, reinforcement-learning]
 unaudited_marginal: 0
 ---
@@ -66,4 +66,4 @@ The processor abstraction, eight hook points with permitted-modification contrac
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full author list on the Contributions and Acknowledgments page (p. 27 of the PDF).
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full author list on the Contributions and Acknowledgments page (p. 27 of the PDF).

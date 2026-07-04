@@ -3,7 +3,7 @@ title: Jundong Xu
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md
 tags: [author, nus, agent-memory, benchmark, environment-evolution]
 unaudited_marginal: 0
 ---
@@ -50,4 +50,4 @@ Co-first authors with Qingchuan Li. Co-authors: Jiaying Wu (NUS), Yihuai Lan (SM
 
 ## Sources
 
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu, Li, Wu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). *EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments.* The full paper, 49 pages.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md` — Xu, Li, Wu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). *EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments.* The full paper, 49 pages.

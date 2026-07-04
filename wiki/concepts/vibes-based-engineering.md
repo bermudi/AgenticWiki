@@ -4,7 +4,7 @@ created: 2026-04-25
 updated: 2026-05-09
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
   - raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md
   - raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
@@ -91,7 +91,7 @@ The case reinforces the core argument: verification is not just about tests and 
 ## Sources
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Origin of the "No Vibes" term; definition of vibes-based engineering as an anti-pattern.
-- `raw/2604.15597v1.pdf` — Single-step myopia: documents can lose 25–50% of semantic content over 20 interactions even when each step looks correct.
+- `raw/2604.15597v1.md` — Single-step myopia: documents can lose 25–50% of semantic content over 20 interactions even when each step looks correct.
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Delegation mode scores below 40% on comprehension; cognitive cost of vibes-based engineering.
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Specs-to-code as vibe coding by another name; each recompilation degrades code quality.
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Practical workflow that contrasts with and replaces vibes-based engineering.

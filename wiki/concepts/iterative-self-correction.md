@@ -3,8 +3,8 @@ title: Iterative Self-Correction
 created: 2026-05-10
 updated: 2026-07-03
 sources:
-  - raw/2504.21625v6.txt
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/2504.21625v6.md
+  - raw/the-illusion-of-diminishing-returns.md
 tags: [concept, self-correction, instruction-following, benchmarks, feedback-loops, agent-workflow]
 ---
 
@@ -156,5 +156,5 @@ This is why the reasoning-vs-non-reasoning gap widens over multiple turns — no
 - [[horizon-length]] — the long-horizon dimension on which self-correction's limits bite
 
 ## Sources
-- `raw/2504.21625v6.txt` — Wang et al., "Meeseeks: A Feedback-Driven, Iterative Self-Correction Benchmark evaluating LLMs' Instruction Following Capability": framework design, code-guided evaluation, experimental results across 17 models over 20 turns
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the self-verification departure (Appendix C.1): turn-wise self-verification does not fix self-conditioning, burns context, and is itself an error-prone execution task — reinforcing the self-correction ceiling from the long-horizon side.
+- `raw/2504.21625v6.md` — Wang et al., "Meeseeks: A Feedback-Driven, Iterative Self-Correction Benchmark evaluating LLMs' Instruction Following Capability": framework design, code-guided evaluation, experimental results across 17 models over 20 turns
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the self-verification departure (Appendix C.1): turn-wise self-verification does not fix self-conditioning, burns context, and is itself an error-prone execution task — reinforcing the self-correction ceiling from the long-horizon side.

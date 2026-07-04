@@ -3,7 +3,7 @@ title: Shashwat Goel
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/the-illusion-of-diminishing-returns.md
 tags: [author, researcher, long-horizon-execution, scaling, execution]
 unaudited_marginal: 0
 ---
@@ -49,4 +49,4 @@ The paper supplies the mathematical inverse of [[compounding-booboos]]: the same
 
 ## Sources
 
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). *The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs.* arXiv 2509.09677v3. Author contributions and affiliations from the paper front matter.
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). *The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs.* arXiv 2509.09677v3. Author contributions and affiliations from the paper front matter.

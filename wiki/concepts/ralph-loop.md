@@ -8,7 +8,7 @@ sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
-  - raw/2504.21625v6.txt
+  - raw/2504.21625v6.md
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
 unaudited_marginal: 0
 tags: [concept, autonomous-agents, agent-loops, claude-code, workflow, skills]
@@ -206,5 +206,5 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Context isolation framing of the Ralph Loop pattern
 - `raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md` — Chris Parsons' workshop: loop evolution, sub-agent validation, skills-as-loop-package, worker loop, safety heuristics
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle as the parallelized Ralph Loop variant: Kanban DAG, four-stage pipeline, Docker sandboxes, separate reviewer agents
-- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): iterative self-correction as a micro-scale Ralph Loop — automated evaluation replaces human review at the per-response level
+- `raw/2504.21625v6.md` — Meeseeks (Wang et al.): iterative self-correction as a micro-scale Ralph Loop — automated evaluation replaces human review at the per-response level
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Locates the Ralph Loop as Stage 3 of the five-stage agent-loop lineage; the single-agent ralph loop is "old hat," the orchestration loop on top is the new layer

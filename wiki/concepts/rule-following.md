@@ -3,7 +3,7 @@ title: Rule-Following
 created: 2026-05-10
 updated: 2026-05-10
 sources:
-  - raw/2311.04235v3.txt
+  - raw/2311.04235v3.md
 tags: [concept, rule-following, benchmarks, llm-limits, instruction-following, safety]
 ---
 
@@ -78,4 +78,4 @@ Fine-tuning on Basic-like examples (non-adversarial direct requests with refusal
 - [[iterative-self-correction]] — Meeseeks explores whether iterative feedback can close the rule-following gap
 
 ## Sources
-- `raw/2311.04235v3.txt` — Mu et al., "Can LLMs Follow Simple Rules?": the RuLES benchmark, evaluation framework, and experimental results across 123+ models
+- `raw/2311.04235v3.md` — Mu et al., "Can LLMs Follow Simple Rules?": the RuLES benchmark, evaluation framework, and experimental results across 123+ models

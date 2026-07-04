@@ -5,13 +5,13 @@ updated: 2026-07-03
 sources:
   - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
   - raw/many-tier-instruction-hierarchy.md
   - raw/playground-in-prod-samuel-colvin.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
-  - raw/2603.25133v1.txt
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/2603.25133v1.md
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
   - raw/yt-llms-are-killing-agent-harness.md
 tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
@@ -134,11 +134,11 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 
 - `raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md` — The framework: four layers, four dimensions, CI for probabilistic systems
 - `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — LLM-as-judge in practice: groundedness scoring, prompt iteration from eval feedback
-- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon
+- `raw/2604.15597v1.md` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH: 853-sample benchmark for instruction conflict resolution across up to 12 privilege tiers
 - `raw/playground-in-prod-samuel-colvin.md` — Practitioner confirmation: most teams don't eval at all; deterministic evals strongly preferred over LLM-as-judge
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Skill-specific eval pattern: A/B test with/without the skill, deterministic assertions over LLM-as-judge
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve
-- `raw/2603.25133v1.txt` — RUBRICEVAL benchmark: first rubric-level meta-evaluation for instruction following; finds LLM judges unreliable at fine granularity (GPT-4o: 55.97% HARD BAcc); paradigm comparison (rubric-level vs. checklist-level, with/without reasoning); rubric taxonomy of failure modes
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST-Data is a labeled eval dataset for MAS (1642 traces, 7 frameworks). The LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.
+- `raw/2603.25133v1.md` — RUBRICEVAL benchmark: first rubric-level meta-evaluation for instruction following; finds LLM judges unreliable at fine granularity (GPT-4o: 55.97% HARD BAcc); paradigm comparison (rubric-level vs. checklist-level, with/without reasoning); rubric taxonomy of failure modes
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST-Data is a labeled eval dataset for MAS (1642 traces, 7 frameworks). The LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for general-purpose coding agents; formal evals less useful than direct usage experience for arbitrary codebases

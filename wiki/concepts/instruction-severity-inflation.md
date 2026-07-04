@@ -4,8 +4,8 @@ created: 2026-05-02
 updated: 2026-05-10
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
-  - raw/2311.04235v3.txt
-  - raw/2504.21625v6.txt
+  - raw/2311.04235v3.md
+  - raw/2504.21625v6.md
 tags: ["concept", "prompts", "context-engineering", "llm-limits"]
 unaudited_marginal: 0
 ---
@@ -54,5 +54,5 @@ The dynamic:
 ## Sources
 
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Dex Horthy describing the 100-200 instruction limit and instruction severity inflation
-- `raw/2311.04235v3.txt` — RuLES (Mu et al.): alignment tuning degrades rule-following, suggesting the problem is architectural, not just formatting
-- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): multi-constraint scenarios reveal a hard capability ceiling even with iterative feedback
+- `raw/2311.04235v3.md` — RuLES (Mu et al.): alignment tuning degrades rule-following, suggesting the problem is architectural, not just formatting
+- `raw/2504.21625v6.md` — Meeseeks (Wang et al.): multi-constraint scenarios reveal a hard capability ceiling even with iterative feedback

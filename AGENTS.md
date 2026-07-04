@@ -11,7 +11,7 @@ This wiki is bermudi's effort to compile the best ideas about how to do AI-assis
 Three layers following [the LLM Wiki Manifesto](meta/llm-wiki-manifesto.md):
 
 ```
-raw/              Source documents. Immutable — the LLM reads but never modifies them.
+raw/              Source documents. Immutable — the LLM reads but never modifies them. arXiv papers are kept as extracted markdown + provenance frontmatter, not the original PDF.
 raw/assets/       Downloaded images referenced by source documents.
 wiki/             LLM-generated wiki pages. You own this layer entirely.
 wiki/index.md     Content catalog — thread-first, updated after every change.
@@ -54,7 +54,7 @@ The wiki-ops skill references detailed sub-procedures in `references/`:
 | What you need | Where it lives |
 |---|---|
 | **The theory — what the wiki currently believes** | `wiki/index.md` (catalog), then `wiki/threads/*.md` (synthetic essays) |
-| Page formats, frontmatter spec, web/YouTube source templates | `meta/wiki-conventions.md` |
+| Page formats, frontmatter spec, web/YouTube/arXiv source templates | `meta/wiki-conventions.md` |
 | Ingest philosophy: theory pressure, thread emergence, contradictions | `.agents/skills/wiki-ops/references/ingest-philosophy.md` |
 | Design philosophy and manifesto | `meta/llm-wiki-manifesto.md` |
 | Ingest pipeline, query procedure, lint checklist | `.agents/skills/wiki-ops/SKILL.md` |
@@ -70,3 +70,4 @@ The wiki-ops skill references detailed sub-procedures in `references/`:
 5. **Prefer creating a page over leaving knowledge in chat history.** Good answers, comparisons, and analyses should be filed as wiki pages.
 6. **Note contradictions explicitly.** If a new source contradicts an existing claim, flag it with a `> [!warning]` callout, not a silent overwrite. Surface contradictions in the ingest summary and in the relevant thread page.
 7. **Ask before deleting pages.** Suggest merges or reorganizations, don't execute unilaterally.
+8. **arXiv papers: extract, don't archive.** Store the extracted text as `raw/<arxiv-id>.md` with `type: arxiv` / `arxiv_id` / `url` frontmatter. Never commit the original PDF — it's permanently re-downloadable from the versioned arXiv URL. The `.md` is the source-of-truth. (Non-arXiv papers with no stable URL are the exception: commit the PDF.)

@@ -4,7 +4,7 @@ created: 2026-05-02
 updated: 2026-05-21
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
-  - raw/2605.18747.pdf
+  - raw/2605.18747.md
 tags: [concept, architecture, context-engineering, agents, tool-design]
 ---
 
@@ -99,4 +99,4 @@ The multi-tier action space pattern maps to the [[harness-mechanisms]] taxonomy 
 ## Sources
 
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Full interview detailing the multi-tier architecture, supporting patterns, and the MCP lesson
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Provides the systematic taxonomy that situates the multi-tier action space within the broader harness interface and mechanisms framework
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Provides the systematic taxonomy that situates the multi-tier action space within the broader harness interface and mechanisms framework

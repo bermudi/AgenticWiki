@@ -3,12 +3,12 @@ title: Multi-Agent Code Orchestration
 created: 2026-05-21
 updated: 2026-07-03
 sources:
-  - raw/2605.18747.pdf
+  - raw/2605.18747.md
   - raw/yt-systems-building-systems.md
-  - raw/recursive-agent-harnesses.txt
-  - raw/the-illusion-of-multi-agent-advantage.pdf
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
-  - raw/2512.08296-scaling-agent-systems.pdf
+  - raw/recursive-agent-harnesses.md
+  - raw/the-illusion-of-multi-agent-advantage.md
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2512.08296-scaling-agent-systems.md
 tags: [concept, multi-agent, orchestration, code-harness, collaboration, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -209,9 +209,9 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 
 ## Sources
 
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §4: Scaling the Harness — Multi-Agent Orchestration over Code (pages 34–48). Defines the five role categories, four interaction modes, topology taxonomy, and convergence patterns.
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §4: Scaling the Harness — Multi-Agent Orchestration over Code (pages 34–48). Defines the five role categories, four interaction modes, topology taxonomy, and convergence patterns.
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: company-shaped hierarchy as a design approach; concern that human organizational patterns may not be optimal for agents
-- `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Introduces the code-driven subagent spawning topology: the parent writes executable code that instantiates subagents and runs them in parallel. The recursive unit is the full harness, not the model call. On Oolong-Synthetic, holding GPT-5 fixed, RAH improves Codex from 71.75% to 81.36% — gain attributable to harness architecture.
-- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the [[multi-agent-illusion]] contradiction callout. Documents [[architectural-bloat]] and [[functional-collapse]] across 6 automated frameworks. Validates the [[expert-mas|hand-designed]] case (GPT-5: 57.0% → 96.5% on SMFR) while showing the [[architectural-bloat|automated search]] case largely fails.
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] failure-mode callout. Provides the empirical vocabulary for *why* the topologies fail: 14 modes in 3 categories across 1642 traces from 7 frameworks (including ChatDev, MetaGPT, HyperAgent from the survey above). FC1 System Design Issues (44.2%) is the largest category — topology/role design is the binding constraint.
-- `raw/2512.08296-scaling-agent-systems.pdf` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Quantitative Architecture Selection" callout. §4.3 regression model (R² = 0.373, 87% architecture-selection accuracy); §4.3 capability saturation (β = -0.236, 45% threshold); §4.3 tool-coordination trade-off (β = -0.096); Table 5 error amplification by topology (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes.
+- `raw/recursive-agent-harnesses.md` — Lumer et al. (PwC, 2026). Introduces the code-driven subagent spawning topology: the parent writes executable code that instantiates subagents and runs them in parallel. The recursive unit is the full harness, not the model call. On Oolong-Synthetic, holding GPT-5 fixed, RAH improves Codex from 71.75% to 81.36% — gain attributable to harness architecture.
+- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (2026). Source for the [[multi-agent-illusion]] contradiction callout. Documents [[architectural-bloat]] and [[functional-collapse]] across 6 automated frameworks. Validates the [[expert-mas|hand-designed]] case (GPT-5: 57.0% → 96.5% on SMFR) while showing the [[architectural-bloat|automated search]] case largely fails.
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] failure-mode callout. Provides the empirical vocabulary for *why* the topologies fail: 14 modes in 3 categories across 1642 traces from 7 frameworks (including ChatDev, MetaGPT, HyperAgent from the survey above). FC1 System Design Issues (44.2%) is the largest category — topology/role design is the binding constraint.
+- `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Quantitative Architecture Selection" callout. §4.3 regression model (R² = 0.373, 87% architecture-selection accuracy); §4.3 capability saturation (β = -0.236, 45% threshold); §4.3 tool-coordination trade-off (β = -0.096); Table 5 error amplification by topology (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes.

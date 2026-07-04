@@ -3,7 +3,7 @@ title: Mert Cemri
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.txt
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
 tags: [author, researcher, multi-agent, failure-taxonomy]
 unaudited_marginal: 0
 ---
@@ -29,4 +29,4 @@ UC Berkeley — shared with the LMSys / Sky Computing lab (Ion Stoica, Joseph Go
 
 ## Sources
 
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.txt` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). Lead author (equal contribution with Melissa Z. Pan and Shuyi Yang). Co-created the [[mast]] taxonomy and MAST-Data (1642 traces, 7 frameworks, 4 model families).
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). Lead author (equal contribution with Melissa Z. Pan and Shuyi Yang). Co-created the [[mast]] taxonomy and MAST-Data (1642 traces, 7 frameworks, 4 model families).

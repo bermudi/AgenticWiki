@@ -3,13 +3,13 @@ title: Jagged Frontier
 created: 2026-05-02
 updated: 2026-07-03
 sources:
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
   - raw/many-tier-instruction-hierarchy.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/deepswe-benchmark.md
-  - raw/2606.16707v1.txt
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/2606.16707v1.md
+  - raw/the-illusion-of-diminishing-returns.md
 tags: [concept, llm-capabilities, domain-variance, delegation, executable-memory]
 unaudited_marginal: 0
 ---
@@ -141,10 +141,10 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - [[verifiability]] — Code is verifiable, retrieval is not; the model is only as capable as its verifiability allows
 
 ## Sources
-- `raw/2604.15597v1.pdf` — Domain-level results and implications for users of AI systems
+- `raw/2604.15597v1.md` — Domain-level results and implications for users of AI systems
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH results demonstrating the jagged frontier within a single capability axis: near-perfect at 2 tiers, catastrophic at 12
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the car wash example of jaggedness, RL circuits explanation, animals vs ghosts framing, and the practical implication that you must "figure out which circuits you're in for your application."
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Within-model jaggedness: 5.5 advanced on semantic traps but regressed on backend hygiene vs its predecessor, demonstrating non-monotonic capability even within the same task
 - `raw/deepswe-benchmark.md` — DeepSWE reveals the true width of the jagged frontier in coding agents: 70-point spread vs. [[swe-bench-pro|SWE-bench Pro]]'s 30-point spread
-- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete empirical evidence that the jagged frontier is a property of representation, not just domain. On the same user-history data with the same backbone: UaC reaches 99% on analytical inference while retrieval-based systems reach 6–43%; UaC + constraint pipeline reaches 100% on proactive alerts while retrieval-based systems reach 30–90%. The divide is between representations a code tool can read and representations only retrievable by similarity. Switching representations is a way to navigate the frontier.
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Evidence that the jagged frontier hides along the horizon-length axis: frontier models near-identical at one step separate by an order of magnitude in sustained execution length (§3.3); and the frontier is jagged across context *content* — the same model reliable on healed history degrades on error-laden history ([[self-conditioning]], §3.2).
+- `raw/2606.16707v1.md` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete empirical evidence that the jagged frontier is a property of representation, not just domain. On the same user-history data with the same backbone: UaC reaches 99% on analytical inference while retrieval-based systems reach 6–43%; UaC + constraint pipeline reaches 100% on proactive alerts while retrieval-based systems reach 30–90%. The divide is between representations a code tool can read and representations only retrievable by similarity. Switching representations is a way to navigate the frontier.
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Evidence that the jagged frontier hides along the horizon-length axis: frontier models near-identical at one step separate by an order of magnitude in sustained execution length (§3.3); and the frontier is jagged across context *content* — the same model reliable on healed history degrades on error-laden history ([[self-conditioning]], §3.2).

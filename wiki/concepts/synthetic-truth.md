@@ -4,7 +4,7 @@ created: 2026-05-05
 updated: 2026-07-02
 sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
-  - raw/2407.08440v4.txt
+  - raw/2407.08440v4.md
 tags: [concept, llm, reliability, failure-mode]
 unaudited_marginal: 0
 ---
@@ -85,4 +85,4 @@ This directly reinforces the [[the-human-lever|human lever]] thesis: verificatio
 ## Sources
 
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The original discovery of synthetic truth through a Gemini interaction; key quotes and analysis
-- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual rules expose the same mechanism — models prioritize internally consistent narrative (parametric knowledge) over explicit instructions
+- `raw/2407.08440v4.md` — RuleBench (Sun et al.): counterfactual rules expose the same mechanism — models prioritize internally consistent narrative (parametric knowledge) over explicit instructions

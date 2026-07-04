@@ -8,8 +8,8 @@ sources:
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
-  - raw/2603.00822v2.txt
-  - raw/2605.18747.pdf
+  - raw/2603.00822v2.md
+  - raw/2605.18747.md
   - raw/domain-expertise-has-always-been-the-real-moat.md
   - raw/yt-spec-driven-development-ai-assisted-coding-explained.md
   - raw/yt-spec-driven-dev-hype-or-future.md
@@ -17,7 +17,7 @@ sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/the-illusion-of-diminishing-returns.md
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -182,8 +182,8 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Alignment-first in practice: Grill Me → PRD → Kanban → Sandcastle AFK → QA; "don't review the PRD"
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Specs-to-code critique: vibe coding by another name, code is the battleground
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — The axis's blind spot: synthetic truth shows model trustworthiness is an independent variable; fabrication happens at content generation level, not instruction-following level
-- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): introduces a fifth position on the intent-to-code axis — Enforcement-as-Code; executable guardrails as the mediating artifact; mechanical enforcement at the environment level
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds code's executability as the missing explicit dimension: code as the verifiable interface between intent and execution; the four desired harness properties (executable, inspectable, stateful, governed) are prerequisites for any position on the axis
+- `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): introduces a fifth position on the intent-to-code axis — Enforcement-as-Code; executable guardrails as the mediating artifact; mechanical enforcement at the environment level
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds code's executability as the missing explicit dimension: code as the verifiable interface between intent and execution; the four desired harness properties (executable, inspectable, stateful, governed) are prerequisites for any position on the axis
 - `raw/domain-expertise-has-always-been-the-real-moat.md` — [[aaron-brethorst|Brethorst]]: the domain expert gap; all five positions assume engineering fluency, but domain experts + agents may be the most effective pairing
 - `raw/yt-spec-driven-development-ai-assisted-coding-explained.md` — IBM Technology's introductory explainer on SDD as the SDLC components added to AI coding
 - `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark (10x faster without SDD) is the wiki's strongest counter-evidence to positions 2 and 5
@@ -191,4 +191,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: "the Theo method" — start with minimal implementation, learn from it, then spec; write once, throw it away, build it right; AI makes experimentation cheaper
 - `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — DevCon Fall 2025: Cian Clarke's practitioner framing supports the plan-as-contract position
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Al Harris, Amazon Kiro: EARS requirements + PBT verification = hybrid of positions 2 and 5; LLM is in the generation step but not the verification step
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.

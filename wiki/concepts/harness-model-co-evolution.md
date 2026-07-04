@@ -3,7 +3,7 @@ title: Harness-Model Co-Evolution
 created: 2026-06-17
 updated: 2026-06-17
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
 tags: [concept, agent-harness, reinforcement-learning, grpo, self-evolution, co-evolution, cross-harness-grouping]
 unaudited_marginal: 0
 ---
@@ -157,4 +157,4 @@ Co-evolution is the most concrete instance of the quality flywheel applied to th
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §5.1 (co-evolution iteration, 7-step protocol), §5.2 (optimization substrates: non-parametric harness + parametric model), §5.3 (cross-harness GRPO, group-relative advantage, task-level alignment), §5.4 (off-policy training, behavior log-probs caching, bounded off-policy bias, replay reuse at no added rollout cost), §6.5 (Qwen3.5-9B experiments on GAIA + WebShop, +4.7% average over harness-only, end-of-run lift).
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §5.1 (co-evolution iteration, 7-step protocol), §5.2 (optimization substrates: non-parametric harness + parametric model), §5.3 (cross-harness GRPO, group-relative advantage, task-level alignment), §5.4 (off-policy training, behavior log-probs caching, bounded off-policy bias, replay reuse at no added rollout cost), §6.5 (Qwen3.5-9B experiments on GAIA + WebShop, +4.7% average over harness-only, end-of-run lift).

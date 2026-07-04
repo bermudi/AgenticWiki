@@ -3,7 +3,7 @@ title: Xuying Ning
 created: 2026-05-21
 updated: 2026-05-21
 sources:
-  - raw/2605.18747.pdf
+  - raw/2605.18747.md
 tags: [author, uiuc, agent-harness]
 unaudited_marginal: 0
 ---
@@ -40,4 +40,4 @@ The survey's core contributors span UIUC, Meta, and Stanford, including Katherin
 
 ## Sources
 
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness: Toward Executable, Verifiable, and Stateful Agent Systems.* arXiv:2605.18747.
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness: Toward Executable, Verifiable, and Stateful Agent Systems.* arXiv:2605.18747.

@@ -3,7 +3,7 @@ title: Minjae Kim
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md
 tags: [author, korea-university, agent-memory, compression]
 unaudited_marginal: 0
 ---
@@ -25,4 +25,4 @@ Lead author of the MemRefine paper, which formalizes [[storage-budgeted-memory|s
 
 ## Sources
 
-- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf` — First author of the MemRefine paper, Korea University (kmj200392@korea.ac.kr). Author block: "Minjae Kim¹ / Jinheon Baek² / Soyeong Jeong² / Sung Ju Hwang²,³ / ¹Korea University / ²KAIST / ³DeepAuto.ai".
+- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md` — First author of the MemRefine paper, Korea University (kmj200392@korea.ac.kr). Author block: "Minjae Kim¹ / Jinheon Baek² / Soyeong Jeong² / Sung Ju Hwang²,³ / ¹Korea University / ²KAIST / ³DeepAuto.ai".

@@ -4,8 +4,8 @@ created: 2026-05-06
 updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
-  - raw/the-illusion-of-diminishing-returns.txt
-  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/the-illusion-of-diminishing-returns.md
+  - raw/2511.09030-maker-million-step-zero-errors.md
 tags: [benchmark, agent-evals, tool-use, model-evaluation]
 unaudited_marginal: 0
 ---
@@ -103,5 +103,5 @@ The authors tried structured prompting — telling models to plan first and then
 ## Sources
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's summary of the Harvard AgentFloor study, including the tier framework, comparative results, failure mode analysis, and cost implications
-- `raw/the-illusion-of-diminishing-returns.txt` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the tier-E execution-vs-planning departure: isolating execution shows it improves with scale + thinking (§3.1), contesting the "scale alone cannot fix" reading of long-horizon collapse.
-- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §4.4 the million-step zero-result via maximal decomposition + voting. Source for the "Extension: maximal decomposition as an architectural answer" callout.
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the tier-E execution-vs-planning departure: isolating execution shows it improves with scale + thinking (§3.1), contesting the "scale alone cannot fix" reading of long-horizon collapse.
+- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §4.4 the million-step zero-result via maximal decomposition + voting. Source for the "Extension: maximal decomposition as an architectural answer" callout.

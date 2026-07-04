@@ -3,7 +3,7 @@ title: Inferential Rule-Following
 created: 2026-05-10
 updated: 2026-05-10
 sources:
-  - raw/2407.08440v4.txt
+  - raw/2407.08440v4.md
 tags: [concept, rule-following, reasoning, benchmarks, llm-limits]
 ---
 
@@ -109,4 +109,4 @@ This is structurally analogous to [[agent-skills]]: procedural knowledge (how to
 - [[agent-skills]] — IRFT's synthetic-to-real transfer mirrors how skills provide procedural knowledge that generalizes
 
 ## Sources
-- `raw/2407.08440v4.txt` — Sun et al., "Beyond Instruction Following: Evaluating Inferential Rule Following of Large Language Models": RuleBench construction, 5-dimension taxonomy, experimental results, IRFT proposal
+- `raw/2407.08440v4.md` — Sun et al., "Beyond Instruction Following: Evaluating Inferential Rule Following of Large Language Models": RuleBench construction, 5-dimension taxonomy, experimental results, IRFT proposal

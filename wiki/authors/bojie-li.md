@@ -3,7 +3,7 @@ title: Bojie Li
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/2606.16707v1.txt
+  - raw/2606.16707v1.md
 tags: [author, pine-ai, agent-memory, executable-memory, personalization]
 unaudited_marginal: 0
 ---
@@ -62,4 +62,4 @@ The **User as Code (UaC)** paradigm: a personalized agent's model of the user is
 
 ## Sources
 
-- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, June 2026). *User as Code: Executable Memory for Personalized Agents.* The full paper, 41 pages. Author-acknowledged: "Pine Copilot, Claude Code, and Claude Opus 4.8 were used during this research."
+- `raw/2606.16707v1.md` — Bojie Li (Pine AI, June 2026). *User as Code: Executable Memory for Personalized Agents.* The full paper, 41 pages. Author-acknowledged: "Pine Copilot, Claude Code, and Claude Opus 4.8 were used during this research."

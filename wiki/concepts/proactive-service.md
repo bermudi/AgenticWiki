@@ -3,7 +3,7 @@ title: Proactive Service
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/2606.16707v1.txt
+  - raw/2606.16707v1.md
 tags: [concept, agent-memory, proactivity, alert, constraint, agent-initiation]
 unaudited_marginal: 0
 ---
@@ -133,4 +133,4 @@ This is the same progressive-disclosure pattern as the broader [[context-enginee
 
 ## Sources
 
-- `raw/2606.16707v1.txt` — Bojie Li, Pine AI (June 2026). *User as Code: Executable Memory for Personalized Agents.* Sections 1, 3.3.2, 4.4, and Appendix F.2–F.4. The five Active Service categories, the 40 standard + 20 hard scenarios, the constraint pipeline as the decisive factor (no-alerts UaC at 52.5%), and the drug-allergy + wire-transfer worked examples.
+- `raw/2606.16707v1.md` — Bojie Li, Pine AI (June 2026). *User as Code: Executable Memory for Personalized Agents.* Sections 1, 3.3.2, 4.4, and Appendix F.2–F.4. The five Active Service categories, the 40 standard + 20 hard scenarios, the constraint pipeline as the decisive factor (no-alerts UaC at 52.5%), and the drug-allergy + wire-transfer worked examples.

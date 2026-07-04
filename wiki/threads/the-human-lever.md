@@ -8,7 +8,7 @@ sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-dhh-ai-pilled.md
-  - raw/2605.18747.pdf
+  - raw/2605.18747.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -18,7 +18,7 @@ sources:
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
-  - raw/the-illusion-of-multi-agent-advantage.pdf
+  - raw/the-illusion-of-multi-agent-advantage.md
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
@@ -32,7 +32,7 @@ sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-systems-building-systems.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
-  - raw/the-illusion-of-diminishing-returns.pdf
+  - raw/the-illusion-of-diminishing-returns.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -361,7 +361,7 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loops, code intelligence
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Observability, minimalism as a structural safeguard
 - `raw/yt-dhh-ai-pilled.md` — The "AI-pilled" workflow and aesthetics as truth
-- `raw/2605.18747.pdf` — HITL as permission governance: the survey reframes the human's safety role as multi-tier permission governance
+- `raw/2605.18747.md` — HITL as permission governance: the survey reframes the human's safety role as multi-tier permission governance
 - `raw/yt-how-agents-use-dev-tools.md` — Trust models, confidence levels, and constraining agents
 - `raw/how-to-ralph-wiggum.md` — Backpressure over direction, environmental design
 - `raw/ralph-wiggum-playbook.md` — Human roles shift to engineering conditions for good outcomes
@@ -384,6 +384,6 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the debugging story (understanding layers, not code); the population problem ("devs who are way out of bound for where their capabilities are"); AI as amplifier for existing skills vs. substitute for missing skills
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: the automation frontier tension — software factory as the next step in automating the execution layer; the human lever shifts from steering to tuning
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — [[al-harris|Al Harris]] / [[kiro|Amazon Kiro]]: property-based testing as spec verification in the deterministic-verification theory-pressure callout; the spec automation of verification reduces the human's verification responsibility
-- `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the "More Agents Is Not More Leverage" contradiction. Documents that multi-agent coordination is largely unverifiable and the model defaults to single-agent execution anyway (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier picks first worker 45%+ of the time, "expensive witnesses"). The human lever applies to (a) single-agent scenarios, (b) hand-designed multi-agent architectures ([[expert-mas]] 57%→96.5% on GPT-5), but NOT to automated multi-agent search — the case the field is increasingly defaulting to. §3 (cost-quality Pareto); §3.3 (Expert-MAS as the hand-designed control); §4 (functional collapse, positional bias); §5 (ensembling trap).
-- `raw/the-illusion-of-diminishing-returns.pdf` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Planning Ceiling Is Partly an Execution Ceiling" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers the human does not own. Bound the human lever's reach at the capability layer, not just the prompt layer.
+- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (2026). Source for the "More Agents Is Not More Leverage" contradiction. Documents that multi-agent coordination is largely unverifiable and the model defaults to single-agent execution anyway (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier picks first worker 45%+ of the time, "expensive witnesses"). The human lever applies to (a) single-agent scenarios, (b) hand-designed multi-agent architectures ([[expert-mas]] 57%→96.5% on GPT-5), but NOT to automated multi-agent search — the case the field is increasingly defaulting to. §3 (cost-quality Pareto); §3.3 (Expert-MAS as the hand-designed control); §4 (functional collapse, positional bias); §5 (ensembling trap).
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Planning Ceiling Is Partly an Execution Ceiling" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers the human does not own. Bound the human lever's reach at the capability layer, not just the prompt layer.
 

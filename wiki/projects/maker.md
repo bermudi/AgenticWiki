@@ -3,7 +3,7 @@ title: MAKER
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/2511.09030-maker-million-step-zero-errors.md
 tags: [project, multi-agent, long-horizon, error-correction, decomposition, cognizant-ai-lab]
 unaudited_marginal: 0
 ---
@@ -92,4 +92,4 @@ The paper draws an explicit analogy: microagents are the natural evolution of mi
 
 ## Sources
 
-- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson, Paolo, Dailey, Shahrzad, Francon, Hayes, Qiu, Hodjat, Miikkulainen (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3 MAKER implementation (Algorithms 1–3); §4.1 setup (Towers of Hanoi, prompt template); §4.2 single-step error rate estimation (Figure 6a, per-model error rates); §4.3 cost projection (Figure 6b, the cost table above); §4.4 the million-step result (Figure 7, Figure 8 convergence); §4.5 red-flagging impact (Figure 9, collision counts); §5 discussion (insight vs. execution, decorrelation, microservices parallel, limits, safety); Appendix F generalization to insight tasks.
+- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson, Paolo, Dailey, Shahrzad, Francon, Hayes, Qiu, Hodjat, Miikkulainen (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3 MAKER implementation (Algorithms 1–3); §4.1 setup (Towers of Hanoi, prompt template); §4.2 single-step error rate estimation (Figure 6a, per-model error rates); §4.3 cost projection (Figure 6b, the cost table above); §4.4 the million-step result (Figure 7, Figure 8 convergence); §4.5 red-flagging impact (Figure 9, collision counts); §5 discussion (insight vs. execution, decorrelation, microservices parallel, limits, safety); Appendix F generalization to insight tasks.

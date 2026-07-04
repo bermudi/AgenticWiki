@@ -1,3 +1,9 @@
+---
+type: arxiv
+arxiv_id: 2606.13681
+url: https://arxiv.org/abs/2606.13681
+---
+
 arXiv:2606.13681v1 [cs.CL] 11 Jun 2026
 
 

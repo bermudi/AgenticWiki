@@ -3,7 +3,7 @@ title: Christoph Treude
 created: 2026-05-10
 updated: 2026-05-10
 sources:
-  - raw/2601.20404v1.txt
+  - raw/2601.20404v1.md
 unaudited_marginal: 0
 tags: [author, empirical-se, ai-coding-agents]
 ---
@@ -33,4 +33,4 @@ The efficiency study is notable for its clean experimental design — same tasks
 
 ## Sources
 
-- `raw/2601.20404v1.txt` — Co-author of the AGENTS.md efficiency study
+- `raw/2601.20404v1.md` — Co-author of the AGENTS.md efficiency study

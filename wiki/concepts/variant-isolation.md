@@ -3,7 +3,7 @@ title: Variant Isolation
 created: 2026-06-17
 updated: 2026-06-17
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
 tags: [concept, agent-harness, harness-engineering, ensemble-routing, catastrophic-forgetting, evolution-strategy]
 unaudited_marginal: 0
 ---
@@ -129,4 +129,4 @@ K variants routed per-task is a degenerate multi-agent topology: each variant is
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.5 (variant isolation, ensemble routing, per-variant seesaw), §6.3 (GAIA GPT-5.4 strategy comparison: Ensemble 87.4% / Global 49.5%, peak–final gap, token cost), §6.6d (τ3-Bench Telecom catastrophic-forgetting case study — the limit of variant isolation), §7.1 (why compositional structure is the precondition).
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.5 (variant isolation, ensemble routing, per-variant seesaw), §6.3 (GAIA GPT-5.4 strategy comparison: Ensemble 87.4% / Global 49.5%, peak–final gap, token cost), §6.6d (τ3-Bench Telecom catastrophic-forgetting case study — the limit of variant isolation), §7.1 (why compositional structure is the precondition).

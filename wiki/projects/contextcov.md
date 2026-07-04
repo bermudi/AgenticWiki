@@ -3,7 +3,7 @@ title: ContextCov
 created: 2026-05-10
 updated: 2026-05-10
 sources:
-  - raw/2603.00822v2.txt
+  - raw/2603.00822v2.md
 tags: [project, enforcement, agent-tooling, verification, backpressure]
 unaudited_marginal: 0
 ---
@@ -143,4 +143,4 @@ Three trust boundaries are assumed: Agent Instructions are written by authorized
 
 ## Sources
 
-- `raw/2603.00822v2.txt` — The ContextCov paper (Sharma, 2026): full architecture, SWE-bench evaluation on 12 repos/300 tasks, fail-closed philosophy, Documentation as Code paradigm, and executable interpretability
+- `raw/2603.00822v2.md` — The ContextCov paper (Sharma, 2026): full architecture, SWE-bench evaluation on 12 repos/300 tasks, fail-closed philosophy, Documentation as Code paradigm, and executable interpretability

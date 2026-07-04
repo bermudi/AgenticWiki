@@ -46,6 +46,18 @@ Three cases, in order of frequency:
 
 User points you at `raw/some-file.md`, or you can see it there. Skip this step entirely. Just read it.
 
+### arXiv / paper sources (special case)
+
+For arXiv papers (and any paper with a stable versioned download URL), **do not commit the PDF.** The repo keeps only the extracted text as markdown + provenance frontmatter — the original is permanently re-downloadable from arXiv, and PDFs bloat clone/push/history. This overrides the default case-1 `mv the file to raw/` behavior for PDFs.
+
+Regardless of whether the source arrived as a URL or a local file:
+
+1. Get the PDF (download from the arXiv URL, or use the local file the user handed you)
+2. Extract: `lit parse paper.pdf --no-ocr -o "raw/<arxiv-id>.md"`
+3. Prepend frontmatter: `type: arxiv`, `arxiv_id`, `url` (see `meta/wiki-conventions.md` → "arXiv / Paper Source Format")
+4. **Verify the arXiv ID** against the paper's page-1 submission stamp (preserved in the extract)
+5. Do NOT `git add` the PDF. `trash` the local copy if you downloaded one.
+
 ### Verify acquisition
 
 After acquisition, before triage: confirm the file actually arrived in `raw/` (`ls raw/`). Downloads can silently fail, partial PDFs can corrupt, and `mv` across filesystems (e.g., `/tmp` → repo) is slower than it looks. Cheap to check, expensive to discover mid-edit.

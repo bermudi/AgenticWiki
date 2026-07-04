@@ -5,7 +5,7 @@ updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
-  - raw/2504.21625v6.txt
+  - raw/2504.21625v6.md
   - raw/yt-ai-agents-need-workflows-not-bigger-prompts.md
 tags: [workflow, cost-optimization, architecture, model-selection]
 unaudited_marginal: 1
@@ -128,5 +128,5 @@ Conversely, for single-constraint or loose-constraint prompts where the model ha
 
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's walkthrough of the AgentFloor results, the cost comparison framework, the capability heat map, and the practical guidance for sorting tasks by complexity tier
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Task-shape routing table (execution vs taste vs research vs data), the "inventing taste is hard, implementing to a target is easier" insight, and the system-over-model argument that execution environment multiplies model capability
-- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): reasoning vs. non-reasoning model divergence over self-correction turns; routing signal for constraint-type tasks (word counts, proportions, mixed-language)
+- `raw/2504.21625v6.md` — Meeseeks (Wang et al.): reasoning vs. non-reasoning model divergence over self-correction turns; routing signal for constraint-type tasks (word counts, proportions, mixed-language)
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza's sponsor email triage workflow: Ministral/Qwen routing split, deterministic reconciliation, and guardrail steps

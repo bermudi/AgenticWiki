@@ -4,12 +4,12 @@ created: 2026-05-09
 updated: 2026-06-17
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
-  - raw/2311.04235v3.txt
-  - raw/2407.08440v4.txt
-  - raw/2504.21625v6.txt
-  - raw/2603.25133v1.txt
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
-  - raw/2606.16707v1.txt
+  - raw/2311.04235v3.md
+  - raw/2407.08440v4.md
+  - raw/2504.21625v6.md
+  - raw/2603.25133v1.md
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2606.16707v1.md
 tags: [concept, ai-capability, reinforcement-learning, executable-memory]
 unaudited_marginal: 0
 ---
@@ -151,9 +151,9 @@ The 99% vs 6% gap on analytical inference is the most concrete empirical evidenc
 ## Sources
 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the chess example, the car wash example, and practical implications for founders and developers.
-- `raw/2311.04235v3.txt` — RuLES (Mu et al.): programmatic evaluation makes rule-following verifiable, enabling measurement and improvement
-- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual rules reveal that verifiability of the rule text doesn't guarantee the model follows it — parametric knowledge dominates
-- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided evaluation demonstrates that near-perfect verification is achievable, but convergence remains elusive
-- `raw/2603.25133v1.txt` — RUBRICEVAL (Pan et al., 2026): rubric-level meta-evaluation showing that even in structurally verifiable domains with structured rubrics, the LLM judge (verifier) may be unreliable at fine granularity (GPT-4o: 55.97% on hard cases) — adds a second-order constraint to the verifiability thesis: verifier capability bounds verifiability
-- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete evidence that verifiability is a property of representation, not just domain. Same data, same model, same question: 99% on aggregate queries with typed Python + interpreter vs 6% with text + retrieval. 100% on Active Service with constraint pipeline. The LLM is the writer of the constraint; the interpreter is the runner. This is the verifiability thesis at the architectural level: clear separation between "the LLM proposes" and "the deterministic system verifies."
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the layered bootstrap problem and output-vs-proposal verifiability synthesis. §4.1 (operational mirror formalism), §4.3 (AEGIS design principle: "Language-model subagents explore, hypothesize, and propose; typed structure and deterministic gates determine what ships"), §6.6 (case studies of the three named pathologies), §7.2 (trace richness as the bound on detection), §7.3 (the mirror is a design heuristic, not a predictive theory).
+- `raw/2311.04235v3.md` — RuLES (Mu et al.): programmatic evaluation makes rule-following verifiable, enabling measurement and improvement
+- `raw/2407.08440v4.md` — RuleBench (Sun et al.): counterfactual rules reveal that verifiability of the rule text doesn't guarantee the model follows it — parametric knowledge dominates
+- `raw/2504.21625v6.md` — Meeseeks (Wang et al.): code-guided evaluation demonstrates that near-perfect verification is achievable, but convergence remains elusive
+- `raw/2603.25133v1.md` — RUBRICEVAL (Pan et al., 2026): rubric-level meta-evaluation showing that even in structurally verifiable domains with structured rubrics, the LLM judge (verifier) may be unreliable at fine granularity (GPT-4o: 55.97% on hard cases) — adds a second-order constraint to the verifiability thesis: verifier capability bounds verifiability
+- `raw/2606.16707v1.md` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete evidence that verifiability is a property of representation, not just domain. Same data, same model, same question: 99% on aggregate queries with typed Python + interpreter vs 6% with text + retrieval. 100% on Active Service with constraint pipeline. The LLM is the writer of the constraint; the interpreter is the runner. This is the verifiability thesis at the architectural level: clear separation between "the LLM proposes" and "the deterministic system verifies."
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the layered bootstrap problem and output-vs-proposal verifiability synthesis. §4.1 (operational mirror formalism), §4.3 (AEGIS design principle: "Language-model subagents explore, hypothesize, and propose; typed structure and deterministic gates determine what ships"), §6.6 (case studies of the three named pathologies), §7.2 (trace richness as the bound on detection), §7.3 (the mirror is a design heuristic, not a predictive theory).

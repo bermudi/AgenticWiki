@@ -3,8 +3,8 @@ title: Horizon Length
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/the-illusion-of-diminishing-returns.txt
-  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/the-illusion-of-diminishing-returns.md
+  - raw/2511.09030-maker-million-step-zero-errors.md
 tags: [concept, evaluation, scaling, long-horizon, execution, compounding]
 unaudited_marginal: 0
 ---
@@ -79,5 +79,5 @@ Two reframes:
 
 ## Sources
 
-- `raw/the-illusion-of-diminishing-returns.txt` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). *The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs.* arXiv 2509.09677v3. Horizon-length metric and Proposition 1 (§2.1); execution-isolation methodology (§2.2, §3); scaling and frontier-execution results (§3.1, §3.3); METR reconciliation (§2.1).
-- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 first-to-ahead-by-k voting and the log-linear cost scaling (Eqs. 9–18, `k_min = Θ(ln s)`); §4.4 the million-step Towers of Hanoi result. Source for the "Pushing Horizon Length Without Raising Model Capability" section.
+- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). *The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs.* arXiv 2509.09677v3. Horizon-length metric and Proposition 1 (§2.1); execution-isolation methodology (§2.2, §3); scaling and frontier-execution results (§3.1, §3.3); METR reconciliation (§2.1).
+- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 first-to-ahead-by-k voting and the log-linear cost scaling (Eqs. 9–18, `k_min = Θ(ln s)`); §4.4 the million-step Towers of Hanoi result. Source for the "Pushing Horizon Length Without Raising Model Capability" section.

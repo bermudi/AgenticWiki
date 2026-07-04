@@ -3,7 +3,7 @@ title: DELEGATE-52
 created: 2026-05-02
 updated: 2026-05-08
 sources:
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
 tags: [benchmark, eval, agents, delegation, long-horizon]
 ---
 
@@ -70,4 +70,4 @@ Key results: Python is the **only domain** (out of 52) where most models (17 of 
 - [[instruction-hierarchy]] — MANYIH-BENCH adds a third axis to long-horizon eval: privilege-tier scaling (DELEGATE-52 covers domain breadth, AgentFloor covers planning depth, ManyIH covers conflict complexity)
 
 ## Sources
-- `raw/2604.15597v1.pdf` — Full benchmark design, domain list, work environment construction, and evaluation protocol
+- `raw/2604.15597v1.md` — Full benchmark design, domain list, work environment construction, and evaluation protocol

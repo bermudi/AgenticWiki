@@ -3,7 +3,7 @@ title: Rubric Evaluation
 created: 2026-05-10
 updated: 2026-05-16
 sources:
-  - raw/2603.25133v1.txt
+  - raw/2603.25133v1.md
 tags: [concept, evaluation, llm-judge, instruction-following, meta-evaluation]
 unaudited_marginal: 0
 ---
@@ -118,4 +118,4 @@ The RUBRICEVAL findings directly challenge key assumptions in agent eval infrast
 
 ## Sources
 
-- `raw/2603.25133v1.txt` — RUBRICEVAL benchmark design, RAF framework, evaluation results, rubric taxonomy, paradigm comparison, error analysis across rubric types
+- `raw/2603.25133v1.md` — RUBRICEVAL benchmark design, RAF framework, evaluation results, rubric taxonomy, paradigm comparison, error analysis across rubric types

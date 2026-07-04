@@ -3,7 +3,7 @@ title: EvoArena
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md
 tags: [concept, benchmark, evaluation, agent-memory, environment-evolution, chain-accuracy, code-as-agent-harness]
 unaudited_marginal: 0
 ---
@@ -140,4 +140,4 @@ State collapse is the failure mode that [[evomem]] is designed to prevent — se
 
 ## Sources
 
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). *EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments.* The full paper: benchmark construction pipelines (5-6 stages each), PE/IC/CE triplet, version chain assembly with oracle-state progression, main results across 8 backbones × 3 subsets × 5 benchmarks, mechanism analysis, efficiency analysis.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). *EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments.* The full paper: benchmark construction pipelines (5-6 stages each), PE/IC/CE triplet, version chain assembly with oracle-state progression, main results across 8 backbones × 3 subsets × 5 benchmarks, mechanism analysis, efficiency analysis.

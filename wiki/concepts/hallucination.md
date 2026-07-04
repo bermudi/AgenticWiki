@@ -2,7 +2,7 @@
 title: Hallucination
 created: 2026-04-25
 updated: 2026-07-03
-sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.pdf, raw/synthetic-truths-gemini-has-a-secret-code.md, raw/2407.08440v4.txt]
+sources: [raw/yt-why-llms-hallucinate.md, raw/2604.15597v1.md, raw/synthetic-truths-gemini-has-a-secret-code.md, raw/2407.08440v4.md]
 tags: [llm, reliability, engineering]
 unaudited_marginal: 0
 ---
@@ -91,6 +91,6 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment.
 
 ## Sources
 - `raw/yt-why-llms-hallucinate.md` — Matt Pocock's breakdown of intrinsic vs. extrinsic hallucinations; taxonomy used throughout this page.
-- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: document degradation and silent corruption as a related failure mode distinct from classical hallucination.
+- `raw/2604.15597v1.md` — DELEGATE-52 benchmark: document degradation and silent corruption as a related failure mode distinct from classical hallucination.
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Synthetic truth and temporal smoothing as related but distinct failure modes; Gemini's self-analysis of intent-aware fabrication.
-- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): counterfactual rule collapse demonstrates training-data override of given context — a structural form of intrinsic hallucination
+- `raw/2407.08440v4.md` — RuleBench (Sun et al.): counterfactual rule collapse demonstrates training-data override of given context — a structural form of intrinsic hallucination

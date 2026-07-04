@@ -9,19 +9,19 @@ sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-dhh-ai-pilled.md
   - raw/yt-why-llms-hallucinate.md
-  - raw/2605.18747.pdf
+  - raw/2605.18747.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/yt-slop-watch-ideation.md
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
-  - raw/2311.04235v3.txt
+  - raw/2311.04235v3.md
   - raw/yt-effect-opencode-dax-raad.md
   - raw/deepswe-benchmark.md
   - raw/agentic-coding-is-a-trap.md
@@ -240,13 +240,13 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Agents don't feel pain; training data ceiling; "slow the f down" math; 30-team interview findings; deliberate friction removal as slop accelerant.
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; agentic search low recall; untrustworthy tests; write architecture by hand; friction as understanding.
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Comprehension debt as cognitive slop; Anthropic RCT on comprehension loss; "let me ask Claude" as cultural diagnostic.
-- `raw/2604.15597v1.pdf` — DELEGATE-52 benchmark: quantitative evidence of compounding errors, sparse critical failures driving document degradation.
+- `raw/2604.15597v1.md` — DELEGATE-52 benchmark: quantitative evidence of compounding errors, sparse critical failures driving document degradation.
 - `raw/yt-slop-watch-ideation.md` — Slop Watch: the concrete observability platform built to measure and combat slop.
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Software entropy as the named mechanism from The Pragmatic Programmer; specs-to-code as a named movement that accelerates entropy; "code is not cheap" thesis.
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Fighting slop with slop concept, BEEPs design doc workflow, threading design process
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Synthetic truth and temporal smoothing as high-grade information slop; Gemini's self-analysis of narrative coherence vs. temporal reality
-- `raw/2311.04235v3.txt` — RuLES (Mu et al.): rule-following failures as a distinct slop vector; alignment-tuned models are worse at obeying developer-defined constraints, making every generation a potential slop event
-- `raw/2605.18747.pdf` — Ning et al.: Code as Agent Harness survey; overconfident verification as slop vector; oracle adequacy problem (§5.2.2)
+- `raw/2311.04235v3.md` — RuLES (Mu et al.): rule-following failures as a distinct slop vector; alignment-tuned models are worse at obeying developer-defined constraints, making every generation a potential slop event
+- `raw/2605.18747.md` — Ning et al.: Code as Agent Harness survey; overconfident verification as slop vector; oracle adequacy problem (§5.2.2)
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: explicit frameworks as slop prevention; Effect's strict patterns constrain LLM output so "it almost always does it correctly"
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: cognitive debt as the human-side complement to codebase slop; the inverted priority list (speed over understanding); the argument that AI accelerates the wrong parts of development
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the code-frequency distinction (ship vs. one-off); forced speed without earned competence produces slop; "most devs should not be allowed to code fast"

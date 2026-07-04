@@ -3,7 +3,7 @@ title: Round-Trip Relay
 created: 2026-05-02
 updated: 2026-05-02
 sources:
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
 tags: [eval-methodology, backtranslation, long-horizon, benchmarking]
 ---
 
@@ -67,4 +67,4 @@ In [[delegate-52|DELEGATE-52]], the main experiment uses *N* = 10 consecutive ro
 - [[philippe-laban]] — Co-developer of the round-trip relay evaluation method
 
 ## Sources
-- `raw/2604.15597v1.pdf` — Formal definition, mathematical formulation, validation, and experimental setup
+- `raw/2604.15597v1.md` — Formal definition, mathematical formulation, validation, and experimental setup

@@ -4,7 +4,7 @@ created: 2026-04-25
 updated: 2026-06-18
 sources:
   - "raw/yt-no-vibes-allowed-dex-horthy.md"
-  - raw/2606.16707v1.txt
+  - raw/2606.16707v1.md
 tags: ["static-analysis", "ai-context", "symbol-graph", "executable-memory"]
 unaudited_marginal: 0
 ---
@@ -57,4 +57,4 @@ The capability that follows: the agent can reason over the user with the same pr
 ## Sources
 
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Dex Horthy's articulation of code intelligence for AI workflows
-- `raw/2606.16707v1.txt` — Bojie Li (Pine AI, 2026). *User as Code.* Generalizes code intelligence from the codebase to the user: the user model is a directory of typed Python the agent reasons about like code. The schema is LLM-generated, regenerated from the full conversation history.
+- `raw/2606.16707v1.md` — Bojie Li (Pine AI, 2026). *User as Code.* Generalizes code intelligence from the codebase to the user: the user model is a directory of typed Python the agent reasons about like code. The schema is LLM-generated, regenerated from the full conversation history.

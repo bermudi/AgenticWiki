@@ -3,7 +3,7 @@ title: Philippe Laban
 created: 2026-05-02
 updated: 2026-05-02
 sources:
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
 tags: [author, researcher, microsoft, llm-evaluation]
 ---
 
@@ -35,4 +35,4 @@ Co-authors on the paper: **Tobias Schnabel** and **Jennifer Neville**.
 - Microsoft Research — Employer
 
 ## Sources
-- `raw/2604.15597v1.pdf` — Authorship, affiliation, acknowledgements, and prior work references
+- `raw/2604.15597v1.md` — Authorship, affiliation, acknowledgements, and prior work references

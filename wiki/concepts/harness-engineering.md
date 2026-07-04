@@ -3,10 +3,10 @@ title: Harness Engineering
 created: 2026-05-21
 updated: 2026-06-17
 sources:
-  - raw/2605.18747.pdf
-  - raw/self-harness-harnesses-that-improve-themselves.txt
-  - raw/recursive-agent-harnesses.txt
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/2605.18747.md
+  - raw/self-harness-harnesses-that-improve-themselves.md
+  - raw/recursive-agent-harnesses.md
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
 tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion, harness-co-evolution, operational-mirror]
 unaudited_marginal: 0
 ---
@@ -159,7 +159,7 @@ The survey concludes with four properties that define the next frontier for reli
 
 ## Sources
 
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §5: Emerging Fields and Open Problems (pages 49–66). Establishes the seven open problems including self-evolving harnesses without regression (§5.2.3).
-- `raw/self-harness-harnesses-that-improve-themselves.txt` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Provides the first concrete instantiation of the §5.2.3 open problem: a propose-evaluate-accept loop with weakness mining, harness proposal, and conservative regression testing. Empirical held-out gains of 14.2–21.4 percentage points absolute on Terminal-Bench-2.0 across MiniMax M2.5, Qwen3.5-35B-A3B, and GLM-5.
-- `raw/recursive-agent-harnesses.txt` — Lumer, Sen, Paul, Subbiah (PwC, 2026). *Recursive Agent Harnesses.* Complementary pattern: rather than editing the harness in place, recurse over fresh harness instances via code-driven parallel spawning. Demonstrates that harness architecture is a primary performance lever independent of the model.
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). The most complete instantiation of §5.2.3 to date: typed composition (processor abstraction, eight hook points, nine-dim taxonomy) + [[operational-mirror]] (RL ↔ symbolic-space correspondence; three predicted pathologies) + AEGIS (Digester → Planner → Evolver → Critic with deterministic gating) + [[variant-isolation]] (ensemble routing, +13.6pp on GAIA GPT-5.4) + [[harness-model-co-evolution]] (cross-harness GRPO, +4.7pp over harness-only). +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §5: Emerging Fields and Open Problems (pages 49–66). Establishes the seven open problems including self-evolving harnesses without regression (§5.2.3).
+- `raw/self-harness-harnesses-that-improve-themselves.md` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Provides the first concrete instantiation of the §5.2.3 open problem: a propose-evaluate-accept loop with weakness mining, harness proposal, and conservative regression testing. Empirical held-out gains of 14.2–21.4 percentage points absolute on Terminal-Bench-2.0 across MiniMax M2.5, Qwen3.5-35B-A3B, and GLM-5.
+- `raw/recursive-agent-harnesses.md` — Lumer, Sen, Paul, Subbiah (PwC, 2026). *Recursive Agent Harnesses.* Complementary pattern: rather than editing the harness in place, recurse over fresh harness instances via code-driven parallel spawning. Demonstrates that harness architecture is a primary performance lever independent of the model.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). The most complete instantiation of §5.2.3 to date: typed composition (processor abstraction, eight hook points, nine-dim taxonomy) + [[operational-mirror]] (RL ↔ symbolic-space correspondence; three predicted pathologies) + AEGIS (Digester → Planner → Evolver → Critic with deterministic gating) + [[variant-isolation]] (ensemble routing, +13.6pp on GAIA GPT-5.4) + [[harness-model-co-evolution]] (cross-harness GRPO, +4.7pp over harness-only). +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.

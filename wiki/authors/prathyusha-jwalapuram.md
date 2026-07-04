@@ -3,7 +3,7 @@ title: Prathyusha Jwalapuram
 created: 2026-06-18
 updated: 2026-07-03
 sources:
-  - raw/the-illusion-of-multi-agent-advantage.txt
+  - raw/the-illusion-of-multi-agent-advantage.md
 tags: [author, researcher, salesforce-research, multi-agent-evaluation, mas-audit]
 unaudited_marginal: 0
 ---
@@ -70,4 +70,4 @@ The future MAS evaluation the paper implies is one that controls for inference b
 
 ## Sources
 
-- `raw/the-illusion-of-multi-agent-advantage.txt` — Salesforce Research + HKUST-GZ + UBC + NTU (2026). *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2, 13 Jun 2026. Correspondence: pjwalapuram@salesforce.com, hlin709@connect.hkust-gz.edu.cn, zixuan.ke@salesforce.com, sjoty@salesforce.com.
+- `raw/the-illusion-of-multi-agent-advantage.md` — Salesforce Research + HKUST-GZ + UBC + NTU (2026). *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2, 13 Jun 2026. Correspondence: pjwalapuram@salesforce.com, hlin709@connect.hkust-gz.edu.cn, zixuan.ke@salesforce.com, sjoty@salesforce.com.

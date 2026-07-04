@@ -3,7 +3,7 @@ title: Elliot Meyerson
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/2511.09030-maker-million-step-zero-errors.txt
+  - raw/2511.09030-maker-million-step-zero-errors.md
 tags: [author, researcher, multi-agent, scaling, error-correction, cognizant-ai-lab]
 unaudited_marginal: 0
 ---
@@ -31,4 +31,4 @@ Cognizant AI Lab (Babak Hodjat, Risto Miikkulainen, Xin Qiu, Conor F. Hayes, Oli
 
 ## Sources
 
-- `raw/2511.09030-maker-million-step-zero-errors.txt` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). Lead author and corresponding author. Co-designed the MDAP framework and MAKER implementation; co-authored the AALPs analysis (§3.2) and the scaling-law derivations (Eqs. 9–19).
+- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). Lead author and corresponding author. Co-designed the MDAP framework and MAKER implementation; co-authored the AALPs analysis (§3.2) and the scaling-law derivations (Eqs. 9–19).

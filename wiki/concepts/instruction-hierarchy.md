@@ -5,10 +5,10 @@ updated: 2026-06-03
 sources:
   - raw/many-tier-instruction-hierarchy.md
   - raw/yt-agent-trust-vector-study-2026.md
-  - raw/2311.04235v3.txt
-  - raw/2407.08440v4.txt
-  - raw/2504.21625v6.txt
-  - raw/2603.00822v2.txt
+  - raw/2311.04235v3.md
+  - raw/2407.08440v4.md
+  - raw/2504.21625v6.md
+  - raw/2603.00822v2.md
 tags: [concept, agents, instruction-following, trust, safety, benchmarks]
 unaudited_marginal: 0
 ---
@@ -170,7 +170,7 @@ The two approaches are complementary rather than competing: ManyIH addresses how
 ## Sources
 - `raw/many-tier-instruction-hierarchy.md` — The ManyIH paper (Zhang et al., JHU, April 2026): paradigm definition, Privilege Prompt Interface design, MANYIH-BENCH construction, experimental results and analysis
 - `raw/yt-agent-trust-vector-study-2026.md` — Discover AI's video analysis: accessible explanation of the study, personal experience with multi-agent trust failures, critique of static trust assignment, dynamic trust proposal
-- `raw/2311.04235v3.txt` — RuLES (Mu et al.): empirical evidence that system messages don't reliably enforce rules; alignment tuning degrades rule-following
-- `raw/2407.08440v4.txt` — RuleBench (Sun et al.): inferential rule-following as a distinct capability; counterfactual collapse shows models don't actually follow given rules
-- `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): iterative feedback-driven self-correction; multi-constraint scenarios as a flattened hierarchy problem
-- `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): mechanical enforcement as an alternative to in-model instruction hierarchy resolution; fail-closed philosophy; PATH shims, Tree-sitter checks, and architectural validators bypass the combinatorial collapse problem for deterministically enforceable constraints
+- `raw/2311.04235v3.md` — RuLES (Mu et al.): empirical evidence that system messages don't reliably enforce rules; alignment tuning degrades rule-following
+- `raw/2407.08440v4.md` — RuleBench (Sun et al.): inferential rule-following as a distinct capability; counterfactual collapse shows models don't actually follow given rules
+- `raw/2504.21625v6.md` — Meeseeks (Wang et al.): iterative feedback-driven self-correction; multi-constraint scenarios as a flattened hierarchy problem
+- `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): mechanical enforcement as an alternative to in-model instruction hierarchy resolution; fail-closed philosophy; PATH shims, Tree-sitter checks, and architectural validators bypass the combinatorial collapse problem for deterministically enforceable constraints

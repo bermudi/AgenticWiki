@@ -1,3 +1,9 @@
+---
+type: arxiv
+arxiv_id: 2606.13177
+url: https://arxiv.org/abs/2606.13177
+---
+
 [liteparse] extract: 132.8ms (16 pages)
 [liteparse] ocr render: 251.3ms (6 pages)
 [liteparse] ocr: 23285.4ms

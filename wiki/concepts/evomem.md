@@ -3,7 +3,7 @@ title: EvoMem
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf
+  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md
 tags: [concept, agent-memory, memory-evolution, version-aware-memory, harness-mechanism, patch-history, code-as-agent-harness]
 unaudited_marginal: 0
 ---
@@ -160,4 +160,4 @@ The choice to patch **only** non-additive updates is principled. Additive update
 
 ## Sources
 
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.pdf` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). *EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments.* The full paper: EvoArena benchmark (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo), EvoMem paradigm (patch schema, recording algorithm, retrieval algorithm), four-agent instantiation (A-Mem, Memento-Skill, Terminus2, OpenHands), main results across 8 backbones × 3 subsets × 5 benchmarks, mechanism analysis (operationalization stratification), efficiency analysis, regression analysis on SWE-Chain-Evo.
+- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). *EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments.* The full paper: EvoArena benchmark (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo), EvoMem paradigm (patch schema, recording algorithm, retrieval algorithm), four-agent instantiation (A-Mem, Memento-Skill, Terminus2, OpenHands), main results across 8 backbones × 3 subsets × 5 benchmarks, mechanism analysis (operationalization stratification), efficiency analysis, regression analysis on SWE-Chain-Evo.

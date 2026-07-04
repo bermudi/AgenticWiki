@@ -3,7 +3,7 @@ title: Martin Vechev
 created: 2026-05-10
 updated: 2026-05-10
 sources:
-  - raw/2602.11988v1.txt
+  - raw/2602.11988v1.md
 unaudited_marginal: 0
 tags: [author, ai-coding-agents, formal-verification, eth-zurich]
 ---
@@ -30,4 +30,4 @@ The study's evaluation methodology — controlled experiments with measurable ou
 
 ## Sources
 
-- `raw/2602.11988v1.txt` — Senior author of the AGENTS.md evaluation paper
+- `raw/2602.11988v1.md` — Senior author of the AGENTS.md evaluation paper

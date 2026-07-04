@@ -180,3 +180,36 @@ ingested: YYYY-MM-DD
 ```
 
 This stub serves as the durable record of what was ingested. It's not the original video, but it's enough for future sessions to re-read and re-evaluate. Wiki source pages reference these stubs the same way they reference any `raw/` file.
+
+## arXiv / Paper Source Format
+
+arXiv papers are **never committed as PDFs** — the original is permanently re-downloadable from the versioned arXiv URL, and binaries bloat the repo (clone, push, history). The source-of-truth in `raw/` is the **extracted text as markdown**, with provenance frontmatter pointing back to arXiv.
+
+Acquire + extract in one step:
+
+```bash
+# Download from the versioned arXiv URL, then extract text
+curl -sL "https://arxiv.org/pdf/<ARXIV_ID>" -o /tmp/paper.pdf
+lit parse /tmp/paper.pdf --no-ocr -o "raw/<arxiv-id>.md"
+```
+
+Then prepend provenance frontmatter to the extracted file:
+
+```markdown
+---
+type: arxiv
+arxiv_id: 2512.08296
+url: https://arxiv.org/abs/2512.08296
+---
+
+<extracted text follows>
+```
+
+Rules:
+- **Never `git add` the `.pdf`.** It stays out of the repo entirely. If it arrived as a local file, extract the text and `trash` the original.
+- **Filename:** `raw/<arxiv-id>.md` (e.g. `raw/2512.08296.md`), or a descriptive slug if the ID isn't handy — the `arxiv_id` frontmatter is the canonical pointer either way.
+- **Verify the ID.** Confirm the arXiv ID against the paper's own page-1 submission stamp (preserved in the extract) before relying on it — filenames and citations can drift.
+- **Frontmatter travels with the file.** This is the "reference to the online arXiv"; there is no centralized source list (per the `index.md` rule).
+- Wiki pages cite these as `raw/<arxiv-id>.md` in their `sources` frontmatter and `## Sources` sections, same as any `raw/` file.
+
+For non-arXiv papers with no stable versioned URL, commit the PDF itself — it's the only durable copy.

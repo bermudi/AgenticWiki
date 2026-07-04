@@ -3,7 +3,7 @@ title: Sung Ju Hwang
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md
 tags: [author, kaist, deepauto, agent-memory, compression, nlp]
 unaudited_marginal: 0
 ---
@@ -25,4 +25,4 @@ Corresponding author of the MemRefine paper. The work formalizes [[storage-budge
 
 ## Sources
 
-- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf` — Corresponding author of the MemRefine paper, KAIST and DeepAuto.ai (sungju.hwang@kaist.ac.kr). Author block: "Minjae Kim¹ / Jinheon Baek² / Soyeong Jeong² / Sung Ju Hwang²,³ / ¹Korea University / ²KAIST / ³DeepAuto.ai".
+- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md` — Corresponding author of the MemRefine paper, KAIST and DeepAuto.ai (sungju.hwang@kaist.ac.kr). Author block: "Minjae Kim¹ / Jinheon Baek² / Soyeong Jeong² / Sung Ju Hwang²,³ / ¹Korea University / ²KAIST / ³DeepAuto.ai".

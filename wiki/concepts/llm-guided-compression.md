@@ -3,7 +3,7 @@ title: LLM-Guided Compression
 created: 2026-06-18
 updated: 2026-06-18
 sources:
-  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf
+  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md
 tags: [concept, llm-as-judge, compression, factual-judgment, redundancy-detection]
 unaudited_marginal: 0
 ---
@@ -92,4 +92,4 @@ Adjacent patterns in the wiki:
 
 ## Sources
 
-- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.pdf` — Kim, Baek, Jeong, Hwang (Korea U / KAIST / DeepAuto.ai, June 2026). *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* arXiv 2606.13177. The redundancy/complementarity/distinctness taxonomy in §3.2, the judge prompt structure, the model-family ablation in §5 (Figure 5: GPT-5-mini vs Qwen3-8B), the rule-based baseline comparison in §5 (Figure 4: RuleSim, RulePR).
+- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md` — Kim, Baek, Jeong, Hwang (Korea U / KAIST / DeepAuto.ai, June 2026). *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* arXiv 2606.13177. The redundancy/complementarity/distinctness taxonomy in §3.2, the judge prompt structure, the model-family ablation in §5 (Figure 5: GPT-5-mini vs Qwen3-8B), the rule-based baseline comparison in §5 (Figure 4: RuleSim, RulePR).

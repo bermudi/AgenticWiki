@@ -3,7 +3,7 @@ title: Harness Interface
 created: 2026-05-21
 updated: 2026-05-21
 sources:
-  - raw/2605.18747.pdf
+  - raw/2605.18747.md
 tags: [concept, agent-harness, code-for-reasoning, code-for-acting, environment-modeling]
 unaudited_marginal: 0
 ---
@@ -97,4 +97,4 @@ The harness interface connects to existing wiki concepts:
 
 ## Sources
 
-- `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §2: Harness Interface — Code for Reasoning, Acting, and Environment Modeling (pages 7–16).
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness.* §2: Harness Interface — Code for Reasoning, Acting, and Environment Modeling (pages 7–16).

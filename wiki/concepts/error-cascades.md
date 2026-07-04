@@ -3,7 +3,7 @@ title: Error Cascades in LLM-MAS
 created: 2026-07-03
 updated: 2026-07-03
 sources:
-  - raw/2603.04474-spark-to-fire-error-cascades.txt
+  - raw/2603.04474-spark-to-fire-error-cascades.md
 tags: [concept, multi-agent, error-propagation, security, failure-mode, mas-audit, graph-dynamics]
 unaudited_marginal: 0
 ---
@@ -133,4 +133,4 @@ The paper instantiates an exogenous adversary that exploits the three vulnerabil
 
 ## Sources
 
-- `raw/2603.04474-spark-to-fire-error-cascades.txt` — Xie, Zhu, Zhang, Zhu, Ye, Qi, Chen, Zhou (City University of Macau + Minzu University of China, arXiv 2603.04474v2, 11 May 2026). §II system modeling (atomic falsehood, adoption definition, IBMF dynamics, product-form infection function, spectral risk criterion R ≈ βρ(A)/δ); §III threat model (endogenous stochastic errors, exogenous strategic adversary, gray-box capabilities); §IV endogenous vulnerabilities (cascade amplification Figure 4, topological fragility Table II, consensus inertia Table III); §V exogenous attack instantiation (three-step pipeline, compliance + security FUD packaging); §VII evaluation (Tables IV–VII ASR/BICR/Safe Completion/Token/Latency); §VIII limitations; §X conclusion.
+- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang, Zhu, Ye, Qi, Chen, Zhou (City University of Macau + Minzu University of China, arXiv 2603.04474v2, 11 May 2026). §II system modeling (atomic falsehood, adoption definition, IBMF dynamics, product-form infection function, spectral risk criterion R ≈ βρ(A)/δ); §III threat model (endogenous stochastic errors, exogenous strategic adversary, gray-box capabilities); §IV endogenous vulnerabilities (cascade amplification Figure 4, topological fragility Table II, consensus inertia Table III); §V exogenous attack instantiation (three-step pipeline, compliance + security FUD packaging); §VII evaluation (Tables IV–VII ASR/BICR/Safe Completion/Token/Latency); §VIII limitations; §X conclusion.

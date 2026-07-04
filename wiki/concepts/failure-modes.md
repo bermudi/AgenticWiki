@@ -6,20 +6,20 @@ sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/slowing-the-fuck-down.md
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
   - raw/synthetic-truths-gemini-has-a-secret-code.md
-  - raw/2407.08440v4.txt
+  - raw/2407.08440v4.md
   - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
   - raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md
   - raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md
-  - raw/2311.04235v3.txt
-  - raw/2603.00822v2.txt
+  - raw/2311.04235v3.md
+  - raw/2603.00822v2.md
   - raw/bias-in-the-loop-llm-judge-code.md
-  - raw/2603.25133v1.txt
-  - raw/2605.18747.pdf
+  - raw/2603.25133v1.md
+  - raw/2605.18747.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
+  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
 tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolution]
 ---
 
@@ -160,17 +160,17 @@ The MAST finding that **System Design Issues is the largest category (44.2%)** i
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — AgentFloor: execution apathy and blind panic quantified
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Slop concept, agents don't feel pain, compounding booboos
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; training data ceiling
-- `raw/2604.15597v1.pdf` — DELEGATE-52: quantitative compounding booboos; deliberate friction as circuit breaker
+- `raw/2604.15597v1.md` — DELEGATE-52: quantitative compounding booboos; deliberate friction as circuit breaker
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Synthetic truth discovery and analysis
-- `raw/2407.08440v4.txt` — RuleBench: inferential rule-following collapse; same narrative-priority mechanism as synthetic truth
+- `raw/2407.08440v4.md` — RuleBench: inferential rule-following collapse; same narrative-priority mechanism as synthetic truth
 - `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Satisfaction of search in agent context retrieval
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Deliberate friction; automation bias; comprehension debt
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Comprehension debt: inquiry mode vs delegation mode
-- `raw/2311.04235v3.txt` — RuLES: system messages don't enforce rules; alignment tuning degrades rule-following
-- `raw/2603.00822v2.txt` — ContextCov: executable verification vs LLM reflection; mechanical enforcement architecture
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent System Failures section. [[mast]] taxonomy: 14 failure modes in 3 categories (FC1 System Design Issues 44.2%, FC2 Inter-Agent Misalignment 32.3%, FC3 Task Verification 23.5%) across 1642 traces from 7 MAS frameworks. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
+- `raw/2311.04235v3.md` — RuLES: system messages don't enforce rules; alignment tuning degrades rule-following
+- `raw/2603.00822v2.md` — ContextCov: executable verification vs LLM reflection; mechanical enforcement architecture
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent System Failures section. [[mast]] taxonomy: 14 failure modes in 3 categories (FC1 System Design Issues 44.2%, FC2 Inter-Agent Misalignment 32.3%, FC3 Task Verification 23.5%) across 1642 traces from 7 MAS frameworks. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
 - `raw/bias-in-the-loop-llm-judge-code.md` — Prompt-induced bias in eval pipelines: 40+ point swings from ordering
-- `raw/2603.25133v1.txt` — RUBRICEVAL: quantified LLM-as-judge unreliability
-- `raw/2605.18747.pdf` — Code-as-Agent Harness survey: oracle adequacy and semantic verification (§5.2.1–5.2.2)
+- `raw/2603.25133v1.md` — RUBRICEVAL: quantified LLM-as-judge unreliability
+- `raw/2605.18747.md` — Code-as-Agent Harness survey: oracle adequacy and semantic verification (§5.2.1–5.2.2)
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loop as the vibes antidote
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the three named harness-evolution failure modes (reward hacking §6.6a, catastrophic forgetting §6.6d, under-exploration §6.6g) and the sub-threshold coupling finding (§6.6d, §7.2). The [[operational-mirror|operational mirror]]'s pathology taxonomy is the most empirically validated in the self-evolution context. Variant isolation (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is the architectural defense against cross-cluster catastrophic forgetting; the deterministic gating layer (seesaw) is the defense against per-task regression; the Planner is the defense against under-exploration.
+- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the three named harness-evolution failure modes (reward hacking §6.6a, catastrophic forgetting §6.6d, under-exploration §6.6g) and the sub-threshold coupling finding (§6.6d, §7.2). The [[operational-mirror|operational mirror]]'s pathology taxonomy is the most empirically validated in the self-evolution context. Variant isolation (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is the architectural defense against cross-cluster catastrophic forgetting; the deterministic gating layer (seesaw) is the defense against per-task regression; the Planner is the defense against under-exploration.

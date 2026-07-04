@@ -1,3 +1,9 @@
+---
+type: arxiv
+arxiv_id: 2509.09677
+url: https://arxiv.org/abs/2509.09677
+---
+
                                          Published as a conference paper at ICLR 2026
 
 

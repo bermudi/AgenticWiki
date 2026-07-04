@@ -3,7 +3,7 @@ title: Document Degradation
 created: 2026-05-02
 updated: 2026-07-03
 sources:
-  - raw/2604.15597v1.pdf
+  - raw/2604.15597v1.md
 tags: [llm, reliability, delegation, failure-mode, long-horizon]
 ---
 
@@ -86,4 +86,4 @@ A small-scale extension to image generation models shows degradation is **far mo
 - [[self-conditioning]] — Kindred long-chain degradation, but self-conditioning is content-driven (error-laden history), not purely length-driven
 
 ## Sources
-- `raw/2604.15597v1.pdf` — Quantitative results across 19 LLMs, domain breakdowns, critical failure analysis, deletion vs. corruption decomposition, and factor experiments
+- `raw/2604.15597v1.md` — Quantitative results across 19 LLMs, domain breakdowns, critical failure analysis, deletion vs. corruption decomposition, and factor experiments
