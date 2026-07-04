@@ -1,7 +1,7 @@
 ---
 title: Context Files (AGENTS.md, CLAUDE.md)
 created: 2026-05-10
-updated: 2026-06-17
+updated: 2026-07-03
 sources:
   - raw/2602.11988v1.txt
   - raw/2601.20404v1.txt
@@ -43,16 +43,19 @@ This study introduces AGENTBENCH (138 instances across 12 repositories with deve
 
 | Finding | Detail |
 |---|---|
-| LLM-generated context files | Reduce task success rate by 0.5–2% across benchmarks |
+| LLM-generated context files (`/init`-style dumps) | Reduce task success rate by 0.5–2% across benchmarks |
 | Developer-provided context files | Marginal improvement (~4%) on AGENTBENCH, not consistent across agents |
 | Cost impact | Increases inference cost by >20% on average |
 | Behavioral change | Context files encourage broader exploration — more testing, more file traversal, more grep |
 | Instruction following | Agents faithfully follow context file instructions (e.g., using `uv` when mentioned, file reading patterns) |
-| Redundancy with docs | LLM-generated context files are highly redundant with existing documentation. When all other documentation is removed, LLM-generated files improve performance by 2.7% — explaining anecdotal reports of benefit in poorly-documented repos |
+| Redundancy with docs (**the key explanation**) | The `/init`-generated files duplicate existing documentation. When all other docs are removed, those same files *improve* performance by 2.7% and even outperform developer-written docs — so the degradation tracks with redundancy, not with generation as such |
 | Reasoning overhead | Context files increase reasoning tokens by 14–22%, suggesting they make tasks harder, not easier |
 | Overview ineffectiveness | The "repository overview" section, recommended by agent developers, does not help agents find relevant files faster |
 
 **Recommendation:** "Omitting LLM-generated context files for the time being" and including only minimal requirements (e.g., tooling commands) in human-written files.
+
+> [!warning] Scope — what was actually generated matters
+> The "LLM-generated" files here were produced by each agent's recommended `/init` initialization command, and are overwhelmingly overview-heavy: the paper found repository overviews in **100%** of Sonnet-4.5-generated files and **95–99%** of GPT-5.2 / Qwen-generated ones — the very section shown not to help agents find relevant files. Crucially, the degradation tracks with **redundancy**, not with generation as an act: when the authors stripped all other documentation, those same `/init` files *improved* performance by **+2.7%** and even outperformed developer-written docs. The finding therefore indicts **auto-generated `/init` dumps that duplicate existing documentation** — not LLM-assisted generation per se. Curated, non-redundant generation (human-guided, or the [[evolving-context]] pattern of incrementally filing operational learnings) was not tested and is not implicated by these results.
 
 ### Lulla et al. (2026) — "On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents"
 
@@ -99,7 +102,7 @@ Despite the tension, several findings are consistent across both studies:
 
 The evidence supports a minimalist, human-written approach to context files:
 
-- **Write your own.** LLM-generated context files perform worse than none in most settings. Developer-written files, while imperfect, outperform automated generation.
+- **Avoid `/init` dumps on documented repos.** Each agent's `/init` command produced verbose, overview-heavy files that performed worse than none — but this tracks with **redundancy**, not with generation itself (stripping all docs flipped the result to +2.7%). What the evidence condemns is regurgitating existing documentation into a context file. Curated generation — human-guided, non-redundant, or incrementally built per [[evolving-context]] — is a different artifact and was not what the study tested.
 - **Keep them short.** Include build commands, test commands, and critical constraints. Skip the repository overview — it is redundant with the code itself and does not help agents find relevant files faster.
 - **Avoid prescriptive instructions.** Context files that mandate specific tooling or workflows increase reasoning overhead and may lead agents astray.
 - **Remove them to debug.** If an agent is over-exploring or over-testing, try removing the context file and see if performance improves.

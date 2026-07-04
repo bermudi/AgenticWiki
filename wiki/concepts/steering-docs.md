@@ -1,7 +1,7 @@
 ---
 title: Steering Docs
 created: 2026-06-07
-updated: 2026-06-08
+updated: 2026-07-03
 sources:
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 unaudited_marginal: 0
@@ -53,7 +53,7 @@ The pattern: every SDD tooling vendor has its own term for the same artifact. Th
 
 ## Empirical Position
 
-The empirical evidence on [[context-files]] (Gloaguen et al. and Lulla et al., 2026) suggests steering docs sit on the right side of the design space: short, developer-written, minimal-by-design, and operational. The broader context-file literature is tracked on [[context-files]] rather than duplicated here, but the relevant findings are that LLM-generated context files *reduce* task success rate by 0.5-2% and *increase* cost by >20%, while developer-written minimal files are neutral-to-positive on simple tasks, and reasoning overhead increases by 14-22% with verbose context files. The "accumulated learnings" framing is the agent-side answer to "what should go in a context file" — operational knowledge the agent discovers, with the human in the loop curating what makes it in.
+The empirical evidence on [[context-files]] (Gloaguen et al. and Lulla et al., 2026) suggests steering docs sit on the right side of the design space: short, developer-written, minimal-by-design, and operational. The broader context-file literature is tracked on [[context-files]] rather than duplicated here, but the relevant findings are that **`/init`-style auto-generated dumps** *reduce* task success rate by 0.5-2% and *increase* cost by >20% — an effect driven by redundancy with existing documentation (stripping all docs flipped it to +2.7%), not by LLM generation as such. Kiro's "write what you learned into a steering doc" pattern is curated, incremental generation of operational learnings — exactly the kind of non-redundant generation the study did *not* test and does not implicate. Developer-written minimal files are neutral-to-positive on simple tasks, and reasoning overhead increases by 14-22% with verbose context files. The "accumulated learnings" framing is the agent-side answer to "what should go in a context file" — operational knowledge the agent discovers, with the human in the loop curating what makes it in.
 
 ## Relationship to the Wider Wiki
 

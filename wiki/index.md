@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-02
+updated: 2026-07-03
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -57,7 +57,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[lance-martin]] — Engineer at LangChain who built the Deep Agents harness and skill system; catalogued context engineering techniques and evolving context
 - [[the-gray-cat]] — YouTube creator; personal essay on living inside comprehension debt and recovering via teaching mode.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
-- [[thibaud-gloaguen]] — Lead author of the first rigorous evaluation of AGENTS.md files on coding agent performance; found LLM-generated context files degrade agent performance.
+- [[thibaud-gloaguen]] — Lead author of the first rigorous evaluation of AGENTS.md files on coding agent performance; found that `/init`-style auto-generated context files degrade agent performance — an effect driven by redundancy with existing docs, not by LLM generation as such.
 - [[martin-vechev]] — Professor at ETH Zurich and LogicStar.ai co-founder; senior author of the AGENTS.md evaluation study.
 - [[christoph-treude]] — Professor at SMU; co-author of the first empirical study on AGENTS.md efficiency impact.
 - [[thariq]] — Engineer on the Claude Code team; authored the practical playbook for using HTML instead of Markdown as agent output.
@@ -127,7 +127,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[multi-agent-illusion]] — The empirical correction: across 6 automated MAS frameworks, automated MAS do not consistently outperform single-agent CoT-SC and are up to 10× more expensive. Three pillars: [[architectural-bloat|architectural bloat]], [[functional-collapse|functional collapse]], capability floor.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
-- [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks, verbose LLM-generated files hurt.
+- [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks; `/init`-style auto-generated dumps that duplicate existing docs hurt.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
 - [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.

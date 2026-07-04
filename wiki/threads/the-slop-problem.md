@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-02
+updated: 2026-07-03
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -84,7 +84,7 @@ The degradation also **compounds multiplicatively** with document size and inter
 
 ## Why It Matters
 
-- **Context pollution**: Slop fills LLM context windows with noise, making it harder for the next agent session to reason about what matters. This pushes the system into the [[smart-zone-dumb-zone|Dumb Zone]]. Poorly designed [[context-files|context files]] (AGENTS.md, CLAUDE.md) are a vector for this — the empirical evidence shows that LLM-generated context files add reasoning overhead (14–22% more tokens) without improving outcomes. A minimal, operational-only context file reduces noise; a verbose, auto-generated one adds it. The same principle applies to [[steering-docs|Kiro's steering]] — well-designed steering constrains agent output to operational context, while verbose steering (per the same empirical evidence) adds the same reasoning overhead.
+- **Context pollution**: Slop fills LLM context windows with noise, making it harder for the next agent session to reason about what matters. This pushes the system into the [[smart-zone-dumb-zone|Dumb Zone]]. Poorly designed [[context-files|context files]] (AGENTS.md, CLAUDE.md) are a vector for this — the empirical evidence shows that `/init`-style auto-generated context files add reasoning overhead (14–22% more tokens) without improving outcomes, an effect driven by redundancy with existing docs rather than by generation itself. A minimal, operational-only context file reduces noise; a verbose, auto-generated one that duplicates existing documentation adds it. The same principle applies to [[steering-docs|Kiro's steering]] — well-designed steering constrains agent output to operational context, while verbose steering (per the same empirical evidence) adds the same reasoning overhead.
 - **Speed-review asymmetry**: AI generates faster than humans verify. Without a **[[verification-loop]]**, every generated line is an unreviewed line. [[verifiability]] explains the structural reason: code is auto-verifiable (tests, types) so RL-trained models excel at it, but the gap between generation and verification speed is exactly where slop accumulates.
 - **Design erosion**: Without a **[[shared-design-concept]]**, each agent session drifts further from the original architecture. The codebase becomes a Frankenstein of conflicting patterns.
 
