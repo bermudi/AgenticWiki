@@ -1,9 +1,9 @@
 ---
 title: HarnessX
 created: 2026-06-17
-updated: 2026-06-17
+updated: 2026-07-04
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2606.14249.md
 tags: [concept, agent-harness, harness-engineering, self-evolution, composition, harness-co-evolution, reinforcement-learning, aegis]
 unaudited_marginal: 0
 ---
@@ -207,4 +207,4 @@ HarnessX is the most concrete "foundry" to instantiate the code-as-harness visio
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full paper: §3 harness composition (first-class object, processor, 9-dim taxonomy), §4 AEGIS (operational mirror, three pathologies, four-stage pipeline, adaptation loop, variant isolation), §5 co-evolution (iteration, cross-harness GRPO, off-policy buffer), §6 experiments (5 benchmarks × 3 model families × 15 rounds; 14/15 improve; +14.5% average, +44.0% peak), §7 discussion (compositional structure, trace richness, scope/limits of mirror, cost-performance). Codebase to be open-sourced in a future release.
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full paper: §3 harness composition (first-class object, processor, 9-dim taxonomy), §4 AEGIS (operational mirror, three pathologies, four-stage pipeline, adaptation loop, variant isolation), §5 co-evolution (iteration, cross-harness GRPO, off-policy buffer), §6 experiments (5 benchmarks × 3 model families × 15 rounds; 14/15 improve; +14.5% average, +44.0% peak), §7 discussion (compositional structure, trace richness, scope/limits of mirror, cost-performance). Codebase to be open-sourced in a future release.

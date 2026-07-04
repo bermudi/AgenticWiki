@@ -1,9 +1,9 @@
 ---
 title: Recursive Agent Harness
 created: 2026-06-16
-updated: 2026-06-16
+updated: 2026-07-04
 sources:
-  - raw/recursive-agent-harnesses.md
+  - raw/2606.13643.md
 tags: [concept, agent-harness, harness-recursion, multi-agent, code-as-action, long-context]
 unaudited_marginal: 0
 ---
@@ -138,4 +138,4 @@ Recursive decomposition scales reasoning by adding indirection, but each indirec
 
 ## Sources
 
-- `raw/recursive-agent-harnesses.md` — Lumer, Sen, Paul, Subbiah (PricewaterhouseCoopers, 2026). *Recursive Agent Harnesses.* Full paper: §1 introduction, §2 related work, §3 RAH design, §4 experiments on Oolong-Synthetic, §5 limitations, §6 conclusion. Controlled evaluation with backbone held fixed at GPT-5 to match the Codex baseline.
+- `raw/2606.13643.md` — Lumer, Sen, Paul, Subbiah (PricewaterhouseCoopers, 2026). *Recursive Agent Harnesses.* Full paper: §1 introduction, §2 related work, §3 RAH design, §4 experiments on Oolong-Synthetic, §5 limitations, §6 conclusion. Controlled evaluation with backbone held fixed at GPT-5 to match the Codex baseline.

@@ -1,7 +1,7 @@
 ---
 title: Jagged Frontier
 created: 2026-05-02
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
   - raw/2604.15597v1.md
   - raw/many-tier-instruction-hierarchy.md
@@ -9,7 +9,7 @@ sources:
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/deepswe-benchmark.md
   - raw/2606.16707v1.md
-  - raw/the-illusion-of-diminishing-returns.md
+  - raw/2509.09677.md
 tags: [concept, llm-capabilities, domain-variance, delegation, executable-memory]
 unaudited_marginal: 0
 ---
@@ -147,4 +147,4 @@ Users of AI systems should be cautious not to generalize an LLM's capability in 
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Within-model jaggedness: 5.5 advanced on semantic traps but regressed on backend hygiene vs its predecessor, demonstrating non-monotonic capability even within the same task
 - `raw/deepswe-benchmark.md` — DeepSWE reveals the true width of the jagged frontier in coding agents: 70-point spread vs. [[swe-bench-pro|SWE-bench Pro]]'s 30-point spread
 - `raw/2606.16707v1.md` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete empirical evidence that the jagged frontier is a property of representation, not just domain. On the same user-history data with the same backbone: UaC reaches 99% on analytical inference while retrieval-based systems reach 6–43%; UaC + constraint pipeline reaches 100% on proactive alerts while retrieval-based systems reach 30–90%. The divide is between representations a code tool can read and representations only retrievable by similarity. Switching representations is a way to navigate the frontier.
-- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Evidence that the jagged frontier hides along the horizon-length axis: frontier models near-identical at one step separate by an order of magnitude in sustained execution length (§3.3); and the frontier is jagged across context *content* — the same model reliable on healed history degrades on error-laden history ([[self-conditioning]], §3.2).
+- `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Evidence that the jagged frontier hides along the horizon-length axis: frontier models near-identical at one step separate by an order of magnitude in sustained execution length (§3.3); and the frontier is jagged across context *content* — the same model reliable on healed history degrades on error-laden history ([[self-conditioning]], §3.2).

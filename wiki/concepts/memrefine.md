@@ -1,9 +1,9 @@
 ---
 title: MemRefine
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-04
 sources:
-  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md
+  - raw/2606.13177.md
 tags: [concept, agent-memory, compression, llm-as-judge, post-construction, harness-mechanism]
 unaudited_marginal: 0
 ---
@@ -115,4 +115,4 @@ return M′
 
 ## Sources
 
-- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md` — Kim, Baek, Jeong, Hwang (Korea U / KAIST / DeepAuto.ai, June 2026). *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* arXiv 2606.13177. The full paper, 16 pages. Defines the storage-budgeted memory management problem, introduces the LLM-guided pairwise refinement procedure, and validates across two memory frameworks (A-MEM graph, Mem0) and four benchmarks (LoCoMo, 3x LoCoMo, 10x LoCoMo, LongMemEvalS) with rule-based baselines (RuleSim, RulePR) and a judge-model ablation (GPT-5-mini vs Qwen3-8B).
+- `raw/2606.13177.md` — Kim, Baek, Jeong, Hwang (Korea U / KAIST / DeepAuto.ai, June 2026). *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* arXiv 2606.13177. The full paper, 16 pages. Defines the storage-budgeted memory management problem, introduces the LLM-guided pairwise refinement procedure, and validates across two memory frameworks (A-MEM graph, Mem0) and four benchmarks (LoCoMo, 3x LoCoMo, 10x LoCoMo, LongMemEvalS) with rule-based baselines (RuleSim, RulePR) and a judge-model ablation (GPT-5-mini vs Qwen3-8B).

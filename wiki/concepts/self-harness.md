@@ -1,10 +1,10 @@
 ---
 title: Self-Harness
 created: 2026-06-16
-updated: 2026-06-17
+updated: 2026-07-04
 sources:
-  - raw/self-harness-harnesses-that-improve-themselves.md
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2606.09498.md
+  - raw/2606.14249.md
 tags: [concept, agent-harness, self-evolution, harness-engineering, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -166,5 +166,5 @@ The two are not competitors — they live at different points on the simplicity/
 
 ## Sources
 
-- `raw/self-harness-harnesses-that-improve-themselves.md` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Full paper: §1 motivation, §3 algorithm, §4 experiments, §5 conclusion. Empirical results on Terminal-Bench-2.0 with MiniMax M2.5, Qwen3.5-35B-A3B, GLM-5.
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). §3 (typed composition: processor abstraction, eight hook points, nine-dimension taxonomy), §4.1 (operational mirror), §4.2 (three predicted pathologies with architectural defenses), §4.3 (AEGIS pipeline), §4.5 (variant isolation), §5 (harness-model co-evolution), §6.4 (meta-agent effectiveness ablation). Source for the comparison section above.
+- `raw/2606.09498.md` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Full paper: §1 motivation, §3 algorithm, §4 experiments, §5 conclusion. Empirical results on Terminal-Bench-2.0 with MiniMax M2.5, Qwen3.5-35B-A3B, GLM-5.
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). §3 (typed composition: processor abstraction, eight hook points, nine-dimension taxonomy), §4.1 (operational mirror), §4.2 (three predicted pathologies with architectural defenses), §4.3 (AEGIS pipeline), §4.5 (variant isolation), §5 (harness-model co-evolution), §6.4 (meta-agent effectiveness ablation). Source for the comparison section above.

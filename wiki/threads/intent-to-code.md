@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -17,7 +17,7 @@ sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
-  - raw/the-illusion-of-diminishing-returns.md
+  - raw/2509.09677.md
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -191,4 +191,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: "the Theo method" — start with minimal implementation, learn from it, then spec; write once, throw it away, build it right; AI makes experimentation cheaper
 - `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — DevCon Fall 2025: Cian Clarke's practitioner framing supports the plan-as-contract position
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Al Harris, Amazon Kiro: EARS requirements + PBT verification = hybrid of positions 2 and 5; LLM is in the generation step but not the verification step
-- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.
+- `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.

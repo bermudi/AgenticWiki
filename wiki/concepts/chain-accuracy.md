@@ -1,9 +1,9 @@
 ---
 title: Chain Accuracy
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-04
 sources:
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md
+  - raw/2606.13681.md
 tags: [concept, benchmark, evaluation, chain-of-tasks, environment-evolution]
 unaudited_marginal: 0
 ---
@@ -104,4 +104,4 @@ EvoMem helps most when success requires consistent behavior across dependent seq
 
 ## Sources
 
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). Defines chain accuracy as one of two primary metrics across all three EvoArena subsets and shows the step-to-chain accuracy gap as the headline finding.
+- `raw/2606.13681.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). Defines chain accuracy as one of two primary metrics across all three EvoArena subsets and shows the step-to-chain accuracy gap as the headline finding.

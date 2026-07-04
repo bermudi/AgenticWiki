@@ -1,9 +1,9 @@
 ---
 title: Catastrophic Forgetting
 created: 2026-06-17
-updated: 2026-06-17
+updated: 2026-07-04
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2606.14249.md
 tags: [concept, failure-mode, harness-evolution, operational-mirror, optimization, sub-threshold-coupling]
 unaudited_marginal: 0
 ---
@@ -89,4 +89,4 @@ But the strength has a cost: the seesaw is brittle to sub-threshold coupling. Th
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.2 (catastrophic forgetting as a predicted pathology), §6.3 (GAIA GPT-5.4 peak-final gap −24.3% under Global, +13.6% under Ensemble), §6.6(d) (τ3-Bench Sonnet 4.6 Telecom R7 case study, −14.0% from cross-rule coupling), §7.2 (sub-threshold coupling as residual risk of per-edit binary signals), §7.3 (mirror as design heuristic, not predictive theory).
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.2 (catastrophic forgetting as a predicted pathology), §6.3 (GAIA GPT-5.4 peak-final gap −24.3% under Global, +13.6% under Ensemble), §6.6(d) (τ3-Bench Sonnet 4.6 Telecom R7 case study, −14.0% from cross-rule coupling), §7.2 (sub-threshold coupling as residual risk of per-edit binary signals), §7.3 (mirror as design heuristic, not predictive theory).

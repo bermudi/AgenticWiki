@@ -1,8 +1,8 @@
 ---
 title: Compounding Booboos
 created: 2026-04-25
-updated: 2026-07-03
-sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.md, raw/yt-are-we-really-doing-this-again.md, raw/the-illusion-of-diminishing-returns.md, raw/2511.09030-maker-million-step-zero-errors.md, raw/2603.04474-spark-to-fire-error-cascades.md]
+updated: 2026-07-04
+sources: [raw/yt-building-pi-in-a-world-of-slop.md, raw/slowing-the-fuck-down.md, raw/2604.15597v1.md, raw/yt-are-we-really-doing-this-again.md, raw/2509.09677.md, raw/2511.09030-maker-million-step-zero-errors.md, raw/2603.04474-spark-to-fire-error-cascades.md]
 tags: [concept, ai, reliability]
 unaudited_marginal: 0
 ---
@@ -110,6 +110,6 @@ The single-injection attack (one seed → up to 100% infection across 6 framewor
 - `raw/slowing-the-fuck-down.md`
 - `raw/2604.15597v1.md` — DELEGATE-52 benchmark: quantitative evidence of compounding errors across 52 domains
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s exponential-decay framing: per-iteration error compounds multiplicatively across loop ticks (0.95¹⁰ ≈ 0.60)
-- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Proposition 1 (§2.1): H_s = ln(s)/ln(p) — the inverse of p^t compounding. Horizon length grows hyperbolically past ~80% step accuracy, so the same compounding that sinks low-accuracy agents lifts high-accuracy ones exponentially.
+- `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Proposition 1 (§2.1): H_s = ln(s)/ln(p) — the inverse of p^t compounding. Horizon length grows hyperbolically past ~80% step accuracy, so the same compounding that sinks low-accuracy agents lifts high-accuracy ones exponentially.
 - `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 first-to-ahead-by-k voting (Eqs. 9–13): per-step error correction raises effective `p` to `p_sub`, breaking the `p^t` ceiling; §3.2 cost scaling (Eqs. 14–18): `Θ(s ln s)`, log-linear not exponential. Source for the "Architectural Answer" section.
 - `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (`R ≈ βρ(A)/δ`); §IV three vulnerability classes (cascade amplification, topological fragility, consensus inertia). Source for the "Multi-Agent Face" section.

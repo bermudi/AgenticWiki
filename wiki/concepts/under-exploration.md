@@ -1,9 +1,9 @@
 ---
 title: Under-Exploration
 created: 2026-06-17
-updated: 2026-06-17
+updated: 2026-07-04
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2606.14249.md
 tags: [concept, failure-mode, harness-evolution, operational-mirror, optimization, structural-edit]
 unaudited_marginal: 0
 ---
@@ -99,4 +99,4 @@ The practical implication: under-exploration is *more likely* on strong models w
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.2 (under-exploration as a predicted pathology), §4.3 (Planner as the architectural defense; adaptation landscape), §6.2 (inverse-scaling: weaker models gain most), §6.6(g) (ALFWorld Sonnet 4.6 R4–R7 case study, ship-prediction accuracy decay), §6.6(h) (GAIA GPT-5.4 R1–R9 belated tool ship), §6.6(i) (WebShop Sonnet 4.6 R1–R7 tool bucket untouched), §7.3 (mirror as design heuristic, not predictive theory).
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.2 (under-exploration as a predicted pathology), §4.3 (Planner as the architectural defense; adaptation landscape), §6.2 (inverse-scaling: weaker models gain most), §6.6(g) (ALFWorld Sonnet 4.6 R4–R7 case study, ship-prediction accuracy decay), §6.6(h) (GAIA GPT-5.4 R1–R9 belated tool ship), §6.6(i) (WebShop Sonnet 4.6 R1–R7 tool bucket untouched), §7.3 (mirror as design heuristic, not predictive theory).

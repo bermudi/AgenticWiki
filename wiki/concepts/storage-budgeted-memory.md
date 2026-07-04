@@ -1,9 +1,9 @@
 ---
 title: Storage-Budgeted Memory
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-04
 sources:
-  - raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md
+  - raw/2606.13177.md
 tags: [concept, agent-memory, compression, problem-formulation, query-agnostic, max-min]
 unaudited_marginal: 0
 ---
@@ -83,4 +83,4 @@ Adjacent framings in the wiki:
 
 ## Sources
 
-- `raw/memrefine-llm-guided-compression-for-long-term-agent-memory.md` — Kim, Baek, Jeong, Hwang (Korea U / KAIST / DeepAuto.ai, June 2026). *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* arXiv 2606.13177. The full problem formulation in §3.1, the per-pair surrogate that operationalizes it in §3.2, the connection to existing compression literature in §2.
+- `raw/2606.13177.md` — Kim, Baek, Jeong, Hwang (Korea U / KAIST / DeepAuto.ai, June 2026). *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* arXiv 2606.13177. The full problem formulation in §3.1, the per-pair surrogate that operationalizes it in §3.2, the connection to existing compression literature in §2.

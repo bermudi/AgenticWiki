@@ -1,14 +1,14 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
-  - raw/the-illusion-of-multi-agent-advantage.md
-  - raw/the-illusion-of-diminishing-returns.md
+  - raw/2606.13681.md
+  - raw/2606.14249.md
+  - raw/2606.13003.md
+  - raw/2509.09677.md
   - raw/2512.08296-scaling-agent-systems.md
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution]
 unaudited_marginal: 0
@@ -137,8 +137,8 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 
 - `raw/deepswe-benchmark.md` — Datacurve's full benchmark description, methodology, audit results, and qualitative analysis
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective, SWE-bench Pro criticism, call for community benchmarks, cost/token analysis
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "trace-rich benchmarks required" extension. §4.2 (the [[operational-mirror|operational mirror]]'s [[reward-hacking|reward-hacking]] pathology is enabled by scalar-reward benchmarks), §4.5 ([[variant-isolation]] ensemble routing as environment-aware evolution on heterogeneous task sets), §6.3 (Global 49.5% vs. Ensemble 87.4% on GAIA GPT-5.4), §7.2 ("the richness of the feedback signal bounds the sophistication of evolution that can be safely performed"), §7.7 (no held-out evaluation; same measurement limitation as DeepSWE and EvoArena).
-- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (2026). Source for the "SMFR as a benchmark that resists typical failure modes" extension. §3 (cost-quality Pareto position, not just accuracy, as the right MAS evaluation criterion); §3.3 (SMFR procedural generation, immune to contamination); §3.3 (Expert-MAS GPT-5: 57.0% → 96.5% on SMFR, cost comparable to CoT-SC); §6 (the cost-efficiency gap as the central finding).
-- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Source for the "Fifth Axis: Horizon Mismatch" section. Proposition 1 (§2.1, H_s = ln(s)/ln(p)); frontier single-turn execution benchmark separating GPT-5 ~2176 / Claude-4 Sonnet ~432 / Grok 4 ~384 / Gemini 2.5 Pro ~120 on a task near-trivial at one step (§3.3); horizon-mismatch as a benchmark failure mode distinct from contamination and verifier error.
+- `raw/2606.13681.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "trace-rich benchmarks required" extension. §4.2 (the [[operational-mirror|operational mirror]]'s [[reward-hacking|reward-hacking]] pathology is enabled by scalar-reward benchmarks), §4.5 ([[variant-isolation]] ensemble routing as environment-aware evolution on heterogeneous task sets), §6.3 (Global 49.5% vs. Ensemble 87.4% on GAIA GPT-5.4), §7.2 ("the richness of the feedback signal bounds the sophistication of evolution that can be safely performed"), §7.7 (no held-out evaluation; same measurement limitation as DeepSWE and EvoArena).
+- `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). Source for the "SMFR as a benchmark that resists typical failure modes" extension. §3 (cost-quality Pareto position, not just accuracy, as the right MAS evaluation criterion); §3.3 (SMFR procedural generation, immune to contamination); §3.3 (Expert-MAS GPT-5: 57.0% → 96.5% on SMFR, cost comparable to CoT-SC); §6 (the cost-efficiency gap as the central finding).
+- `raw/2509.09677.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Source for the "Fifth Axis: Horizon Mismatch" section. Proposition 1 (§2.1, H_s = ln(s)/ln(p)); frontier single-turn execution benchmark separating GPT-5 ~2176 / Claude-4 Sonnet ~432 / Grok 4 ~384 / Gemini 2.5 Pro ~120 on a task near-trivial at one step (§3.3); horizon-mismatch as a benchmark failure mode distinct from contamination and verifier error.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Agentic vs Non-Agentic Benchmark Design" extension. §1 introduction (agentic task definition: sequential interdependence, partial observability, adaptive strategy formation); §4.2 main results (MAS deltas on agentic vs non-agentic benchmarks; 89% on HumanEval with 5 agents via ensemble effects; inverted dynamics on agentic benchmarks).

@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -18,7 +18,7 @@ sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - "raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md"
-  - raw/the-illusion-of-multi-agent-advantage.md
+  - raw/2606.13003.md
   - "raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md"
   - raw/yt-slop-watch-ideation.md
   - "raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md"
@@ -467,7 +467,7 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): mechanical enforcement as a practical answer to the rule-following ceiling; PATH shims, Tree-sitter checks, and architectural validators that don't depend on model reasoning; 88.3% compliance rate
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds an architectural layer beneath the workflow's operational focus; the three-layer framework provides the vocabulary for workflow phases; the multi-tier action space, context management, and verification loops are instantiations of the broader harness architecture
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] taxonomy addition to the "capability floor for multi-agent coordination" departure. Provides the diagnostic vocabulary for *why* multi-agent coordination fails: 14 failure modes in 3 categories across 1642 traces from 7 frameworks. System Design Issues (44.2%) is the largest category — design is the binding constraint. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
-- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (2026). The [[multi-agent-illusion]] audit. Source for the "capability floor for multi-agent coordination" departure: automated MAS do not outperform CoT-SC, hand-designed [[expert-mas]] does; the cost-quality Pareto position is a first-class metric. §3 cost-quality results; §3.3 [[smfr]] + [[expert-mas]]; §4 architectural deconstruction; §5 ensembling trap and capability floor.
+- `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). The [[multi-agent-illusion]] audit. Source for the "capability floor for multi-agent coordination" departure: automated MAS do not outperform CoT-SC, hand-designed [[expert-mas]] does; the cost-quality Pareto position is a first-class metric. §3 cost-quality results; §3.3 [[smfr]] + [[expert-mas]]; §4 architectural deconstruction; §5 ensembling trap and capability floor.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the quantitative thresholds in the "capability floor for multi-agent coordination" departure: [[capability-saturation|capability saturation]] (45% threshold, β = -0.236, the most robust finding) and [[tool-coordination-trade-off|tool-coordination trade-off]] (β = -0.096, tool-heavy tasks suffer disproportionately from MAS inefficiency). §4.3 scaling principles (Eq. 1 regression, architecture selection with 87% accuracy); §4.2 main results (per-benchmark MAS deltas, decomposability analysis); §4.4 coordination efficiency (turn power law, message density saturation, error amplification factors).
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.

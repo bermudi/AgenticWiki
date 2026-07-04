@@ -1,9 +1,9 @@
 ---
 title: Expert-MAS
 created: 2026-06-18
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
-  - raw/the-illusion-of-multi-agent-advantage.md
+  - raw/2606.13003.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
   - raw/2512.08296-scaling-agent-systems.md
 tags: [concept, multi-agent, orchestration, mas-baseline, code-driven, deterministic-orchestration]
@@ -131,6 +131,6 @@ SMFR's GPT-5 baseline (57.0%) places it in the [[capability-saturation|saturatio
 
 ## Sources
 
-- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (2026). §3.3 SMFR Expert-MAS construction; Figure 4 architecture diagram; Table 4 head-to-head results; Appendix D full configuration (Meta-Agent system prompt, Extractor/Calculator prompts, executor logic).
+- `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). §3.3 SMFR Expert-MAS construction; Figure 4 architecture diagram; Table 4 head-to-head results; Appendix D full configuration (Meta-Agent system prompt, Extractor/Calculator prompts, executor logic).
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Appendix H intervention case studies on ChatDev: +9.4% from role-spec fix, +15.6% from high-level verification step. Small-scale corroboration of the "engineered not discovered" thesis.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 architecture-selection rules (Centralized MAS predicted for T=5, SA=0.35 analysis tasks — the SMFR regime); §4.3 capability saturation (the 45% threshold Expert-MAS operates above); §4.3 tool-coordination trade-off (the penalty Expert-MAS sidesteps via typed schema-driven dispatch). Source for the "Why Expert-MAS Escapes" section.

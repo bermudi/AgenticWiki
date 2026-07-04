@@ -1,9 +1,9 @@
 ---
 title: Multi-Agent Illusion
 created: 2026-06-18
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
-  - raw/the-illusion-of-multi-agent-advantage.md
+  - raw/2606.13003.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
   - raw/2512.08296-scaling-agent-systems.md
   - raw/2511.09030-maker-million-step-zero-errors.md
@@ -144,7 +144,7 @@ Together, the two findings specify the conditions under which the multi-agent il
 
 ## Sources
 
-- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin, Li, Jiao, Wang, Ming, Ke, Qin, Carenini, Joty. *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2 (13 Jun 2026). §3 systematic evaluation across 6 frameworks and 5 benchmarks; §3.3 SMFR diagnostic benchmark + Expert-MAS; §4 architectural deconstruction (functional collapse, positional bias, motif analysis); §5 discussion (ensembling trap, capability floor); §6 conclusion.
+- `raw/2606.13003.md` — Jwalapuram, Lin, Li, Jiao, Wang, Ming, Ke, Qin, Carenini, Joty. *The Illusion of Multi-Agent Advantage.* arXiv 2606.13003v2 (13 Jun 2026). §3 systematic evaluation across 6 frameworks and 5 benchmarks; §3.3 SMFR diagnostic benchmark + Expert-MAS; §4 architectural deconstruction (functional collapse, positional bias, motif analysis); §5 discussion (ensembling trap, capability floor); §6 conclusion.
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. *Why Do Multi-Agent LLM Systems Fail?* NeurIPS 2025 Datasets & Benchmarks (arXiv 2503.13657v3, 26 Oct 2025). §4 MAST taxonomy (14 modes, 3 categories); §5.3 primacy of system design; Appendix B 41–86.7% failure rates across 7 frameworks; Appendix H intervention studies (+9.4%, +15.6%). The diagnostic complement: explains *why* the architectures this audit indicts actually fail.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 capability saturation (β = -0.236, the quantitative version of the capability floor); §4.3 tool-coordination trade-off (β = -0.096); §4.5 robustness (both survive Holm-Bonferroni). Source for the "Quantitative Refinement" section.
 - `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). The "multi-agent advantage" framing (§1) and the million-step zero-error result (§4.4). Source for the "Counter-Claim: Engineered Decomposition" section and the Departure callout.

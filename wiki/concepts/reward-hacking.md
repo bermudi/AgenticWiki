@@ -1,9 +1,9 @@
 ---
 title: Reward Hacking
 created: 2026-06-17
-updated: 2026-06-17
+updated: 2026-07-04
 sources:
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2606.14249.md
 tags: [concept, failure-mode, harness-evolution, operational-mirror, optimization]
 unaudited_marginal: 0
 ---
@@ -71,4 +71,4 @@ The mirror's reward-hacking defense is *necessary but not sufficient*. From Harn
 
 ## Sources
 
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.2 (reward hacking as a predicted pathology), §6.6(a) (GAIA Sonnet 4.6 R10 case study, format-match exploit), §6.6(b) (WebShop Sonnet 4.6 R1–R7, near-match reward climb), §6.6(c) (SWE-bench GPT-5.4 R5–R12, compliant ships that regress), §6.6(g) (ship-prediction accuracy as detection signal), §7.2 (trace richness as the bound on detection), §7.3 (mirror as design heuristic, not predictive theory).
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.2 (reward hacking as a predicted pathology), §6.6(a) (GAIA Sonnet 4.6 R10 case study, format-match exploit), §6.6(b) (WebShop Sonnet 4.6 R1–R7, near-match reward climb), §6.6(c) (SWE-bench GPT-5.4 R5–R12, compliant ships that regress), §6.6(g) (ship-prediction accuracy as detection signal), §7.2 (trace richness as the bound on detection), §7.3 (mirror as design heuristic, not predictive theory).

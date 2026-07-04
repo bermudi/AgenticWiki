@@ -1,9 +1,9 @@
 ---
 title: State Collapse
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-04
 sources:
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md
+  - raw/2606.13681.md
 tags: [concept, agent-memory, failure-mode, version-aware-memory, memory-evolution]
 unaudited_marginal: 0
 ---
@@ -114,4 +114,4 @@ In the regression analysis on SWE-Chain-Evo, base agents regress on Pass-to-Pass
 
 ## Sources
 
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). Names state collapse as the central failure mode exposed by EvoArena and motivates EvoMem as the remedy. The mechanism analysis and regression analysis quantify its impact.
+- `raw/2606.13681.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). Names state collapse as the central failure mode exposed by EvoArena and motivates EvoMem as the remedy. The mechanism analysis and regression analysis quantify its impact.

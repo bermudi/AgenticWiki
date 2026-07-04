@@ -1,7 +1,7 @@
 ---
 title: Failure Modes
 created: 2026-06-01
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -18,7 +18,7 @@ sources:
   - raw/2603.25133v1.md
   - raw/2605.18747.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
-  - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md
+  - raw/2606.14249.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
 tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolution]
 ---
@@ -173,4 +173,4 @@ The MAST finding that **System Design Issues is the largest category (44.2%)** i
 - `raw/2603.25133v1.md` — RUBRICEVAL: quantified LLM-as-judge unreliability
 - `raw/2605.18747.md` — Code-as-Agent Harness survey: oracle adequacy and semantic verification (§5.2.1–5.2.2)
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loop as the vibes antidote
-- `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the three named harness-evolution failure modes (reward hacking §6.6a, catastrophic forgetting §6.6d, under-exploration §6.6g) and the sub-threshold coupling finding (§6.6d, §7.2). The [[operational-mirror|operational mirror]]'s pathology taxonomy is the most empirically validated in the self-evolution context. Variant isolation (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is the architectural defense against cross-cluster catastrophic forgetting; the deterministic gating layer (seesaw) is the defense against per-task regression; the Planner is the defense against under-exploration.
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the three named harness-evolution failure modes (reward hacking §6.6a, catastrophic forgetting §6.6d, under-exploration §6.6g) and the sub-threshold coupling finding (§6.6d, §7.2). The [[operational-mirror|operational mirror]]'s pathology taxonomy is the most empirically validated in the self-evolution context. Variant isolation (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is the architectural defense against cross-cluster catastrophic forgetting; the deterministic gating layer (seesaw) is the defense against per-task regression; the Planner is the defense against under-exploration.

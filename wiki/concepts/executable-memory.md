@@ -1,10 +1,10 @@
 ---
 title: Executable Memory
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-04
 sources:
   - raw/2606.16707v1.md
-  - raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md
+  - raw/2606.13681.md
 tags: [concept, agent-memory, code-as-representation, harness, personalization, executable-verification]
 unaudited_marginal: 0
 ---
@@ -178,4 +178,4 @@ The trade-off is honest: the engineering scaffolding — the two-phase pipeline,
 ## Sources
 
 - `raw/2606.16707v1.md` — Bojie Li, Pine AI (June 2026). *User as Code: Executable Memory for Personalized Agents.* The full paper: two-phase architecture (append-only memorize + periodic structure), three capability tiers (recall, analytical inference, active service), generate-verify-review loop, manifest pattern, Active Service benchmark, Analytical Inference benchmark, Modularity/Progressive Disclosure ablation, retrieval-channel ablation, scaling discussion. Open-source implementation: github.com/19PINE-AI/user-as-code.
-- `raw/evoarena-tracking-memory-evolution-for-robust-llm-agents-in-dynamic-environments.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* EvoMem paradigm: append-only patch history preserving every non-additive memory update. The wiki's [[evomem]] page is filed separately; this page cross-references EvoMem and [[evoarena]] as complementary primitives — UaC structures the present user model as typed Python, EvoMem preserves the evolution history of any memory as append-only patches, and the two compose. Chain accuracy metric (where EvoMem helps most) and state-collapse failure mode (which UaC sidesteps via the recoverable append-only fact log).
+- `raw/2606.13681.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* EvoMem paradigm: append-only patch history preserving every non-additive memory update. The wiki's [[evomem]] page is filed separately; this page cross-references EvoMem and [[evoarena]] as complementary primitives — UaC structures the present user model as typed Python, EvoMem preserves the evolution history of any memory as append-only patches, and the two compose. Chain accuracy metric (where EvoMem helps most) and state-collapse failure mode (which UaC sidesteps via the recoverable append-only fact log).

@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -16,7 +16,7 @@ sources:
   - raw/thariq-unreasonable-effectiveness-of-html.md
   - raw/2605.18747.md
   - raw/yt-llms-are-killing-agent-harness.md
-  - raw/the-illusion-of-diminishing-returns.md
+  - raw/2509.09677.md
   - raw/2512.08296-scaling-agent-systems.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
@@ -257,5 +257,5 @@ The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in
 - `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's practical playbook for HTML agent output: use cases, interactive documents, throwaway editors, and honest tradeoffs from Claude Code usage
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Provides a systematic taxonomy of tool use paradigms (§3.3) and positions tool design within the broader harness interface; code-for-acting layer (§2.2) identifies three paradigms corresponding to different levels of agent autonomy over tools; environment-interaction tool use (§3.3.2) is the theoretical foundation for CLI composability
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: the harness falls away as models improve; language servers are dead; the model just needs shell access; AMP deleted features as models got better; the knowledge triplet as the irreducible constraint
-- `raw/the-illusion-of-diminishing-returns.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Capability Bottleneck Is Partly Execution" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers upstream of the tool layer. Bound tool design's reach at the execution ceiling.
+- `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Capability Bottleneck Is Partly Execution" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers upstream of the tool layer. Bound tool design's reach at the execution ceiling.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Tool-Coordination Trade-off in Multi-Agent Systems" extension. §4.3 scaling principles (ε × T interaction β = -0.096, p = 0.002); §4.2 Workbench results (16-tool task, efficiency penalty 2-6.3×, Hybrid collapse); Table 5 coordination metrics (efficiency per architecture).

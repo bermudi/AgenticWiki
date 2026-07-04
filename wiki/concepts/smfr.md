@@ -1,9 +1,9 @@
 ---
 title: SMFR (Synthetic Multi-Hop Financial Reasoning)
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-04
 sources:
-  - raw/the-illusion-of-multi-agent-advantage.md
+  - raw/2606.13003.md
 tags: [concept, benchmark, multi-agent, evaluation, diagnostic, financial-reasoning]
 unaudited_marginal: 0
 ---
@@ -103,4 +103,4 @@ The paper itself notes that the Expert-MAS design is most applicable to "reasoni
 
 ## Sources
 
-- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (2026). §3.3 SMFR construction and task structure; Figure 3 generation pipeline; Table 4 head-to-head results; Figure 4 Expert-MAS architecture; Appendix C dataset statistics; Appendix D Expert-MAS configuration.
+- `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). §3.3 SMFR construction and task structure; Figure 3 generation pipeline; Table 4 head-to-head results; Figure 4 Expert-MAS architecture; Appendix C dataset statistics; Appendix D Expert-MAS configuration.

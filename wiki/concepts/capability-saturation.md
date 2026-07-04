@@ -1,10 +1,10 @@
 ---
 title: Capability Saturation
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-04
 sources:
   - raw/2512.08296-scaling-agent-systems.md
-  - raw/the-illusion-of-multi-agent-advantage.md
+  - raw/2606.13003.md
 tags: [concept, multi-agent, scaling, empirical, threshold, mas-audit]
 unaudited_marginal: 0
 ---
@@ -92,4 +92,4 @@ Capability saturation does **not** say "never use MAS on easy tasks." It says: u
 ## Sources
 
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + Google DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 scaling principles (Eq. 1, Table 4 coefficients, SA × log(1+n) interaction β = -0.236); §4.5 robustness (cluster-robust p = 0.004, Holm-Bonferroni Holm = 0.018, 94% match rate); §4.2 main results (per-benchmark SAS baselines and MAS deltas); §5 limitations (vi); §6 conclusion (capability saturation as most robust effect).
-- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 Jun 2026). Source for the Expert-MAS reference in "What This Does Not Say": Expert-MAS takes GPT-5 from 57.0% to 96.5% on SMFR, demonstrating that hand-designed MAS can escape the saturation threshold through deterministic orchestration. §3.3 SMFR + Expert-MAS.
+- `raw/2606.13003.md` — Jwalapuram, Lin et al. (Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 Jun 2026). Source for the Expert-MAS reference in "What This Does Not Say": Expert-MAS takes GPT-5 from 57.0% to 96.5% on SMFR, demonstrating that hand-designed MAS can escape the saturation threshold through deterministic orchestration. §3.3 SMFR + Expert-MAS.

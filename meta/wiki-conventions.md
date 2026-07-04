@@ -200,6 +200,7 @@ Then prepend provenance frontmatter to the extracted file:
 type: arxiv
 arxiv_id: 2512.08296
 url: https://arxiv.org/abs/2512.08296
+date_saved: 2026-01-15
 ---
 
 <extracted text follows>
@@ -207,9 +208,10 @@ url: https://arxiv.org/abs/2512.08296
 
 Rules:
 - **Never `git add` the `.pdf`.** It stays out of the repo entirely. If it arrived as a local file, extract the text and `trash` the original.
-- **Filename:** `raw/<arxiv-id>.md` (e.g. `raw/2512.08296.md`), or a descriptive slug if the ID isn't handy — the `arxiv_id` frontmatter is the canonical pointer either way.
+- **Filename:** `raw/<arxiv-id>.md` (e.g. `raw/2512.08296.md`). Lead with the arXiv ID — avoid bare descriptive slugs. A version suffix (e.g. `raw/2311.04235v3.md`) is fine when the analyzed revision matters; the `arxiv_id` frontmatter (without version) is the canonical pointer.
 - **Verify the ID.** Confirm the arXiv ID against the paper's own page-1 submission stamp (preserved in the extract) before relying on it — filenames and citations can drift.
 - **Frontmatter travels with the file.** This is the "reference to the online arXiv"; there is no centralized source list (per the `index.md` rule).
+- **`date_saved`** records when the source entered `raw/` (date-only, e.g. `2026-06-17`, taken from git history). Mirrors the `date_saved` field on web/YouTube sources — those carry full ISO timestamps from the save tool; arXiv uses date-only since ingestion time is only known at commit granularity.
 - Wiki pages cite these as `raw/<arxiv-id>.md` in their `sources` frontmatter and `## Sources` sections, same as any `raw/` file.
 
 For non-arXiv papers with no stable versioned URL, commit the PDF itself — it's the only durable copy.

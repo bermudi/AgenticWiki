@@ -3,7 +3,7 @@ title: The Multi-Agent Theory
 created: 2026-07-04
 updated: 2026-07-04
 sources:
-  - raw/the-illusion-of-multi-agent-advantage.md
+  - raw/2606.13003.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
   - raw/2512.08296-scaling-agent-systems.md
   - raw/2603.04474-spark-to-fire-error-cascades.md
@@ -208,7 +208,7 @@ The governance layer is the MAS-specific quality infrastructure: observability (
 
 ## Sources
 
-- `raw/the-illusion-of-multi-agent-advantage.md` — Jwalapuram, Lin et al. (Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 Jun 2026). §3 systematic evaluation across 6 frameworks and 5 benchmarks; §3.3 SMFR diagnostic benchmark + Expert-MAS; §4 architectural deconstruction (functional collapse, positional bias, motif analysis); §5 discussion (ensembling trap, capability floor). Source for Layer 1 (the audit).
+- `raw/2606.13003.md` — Jwalapuram, Lin et al. (Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 Jun 2026). §3 systematic evaluation across 6 frameworks and 5 benchmarks; §3.3 SMFR diagnostic benchmark + Expert-MAS; §4 architectural deconstruction (functional collapse, positional bias, motif analysis); §5 discussion (ensembling trap, capability floor). Source for Layer 1 (the audit).
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (UC Berkeley + Intesa Sanpaolo, NeurIPS 2025 Datasets & Benchmarks, arXiv 2503.13657v3, 26 Oct 2025). §4 MAST taxonomy (14 modes, 3 categories); §5.3 primacy of system design; Appendix B 41–86.7% failure rates; Appendix H intervention studies. Source for Layer 2 (the diagnosis).
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 capability saturation (β = -0.236) and tool-coordination trade-off (β = -0.096); §4.4 error amplification factors (Independent 17.2×, Centralized 4.4×); three coordination regimes. Source for Layer 3 (the thresholds).
 - `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes; §V attack instantiation (up to 100% infection); §VI the governance layer; §VII evaluation and ablation. Source for Layers 4 and 6 (the mechanism and the defense).
