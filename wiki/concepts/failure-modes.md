@@ -1,7 +1,7 @@
 ---
 title: Failure Modes
 created: 2026-06-01
-updated: 2026-06-17
+updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -19,6 +19,7 @@ sources:
   - raw/2605.18747.pdf
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolution]
 ---
 
@@ -107,6 +108,16 @@ A *fourth* failure mode spans all three: **sub-threshold coupling**. The authors
 > [!note] Synthesis: The seesaw as a new quality primitive
 > The [[variant-isolation|seesaw constraint]] is the strongest empirical backpressure mechanism in the harness literature, but the authors explicitly bound their own claim: it cannot detect sub-threshold coupling. This is the same pattern as [[rubric-evaluation|RUBRICEVAL]] finding that LLM judges achieve only 55.97% on hard rubric judgments: the verifier is real, but its *precision* is bounded. The wiki's current treatment of verifiability does not distinguish *verifiability* (a yes/no signal) from *precision of verification* (how fine-grained the signal is). HarnessX §7.3 reinforces this: the [[operational-mirror|operational mirror]] is a *design heuristic, not a predictive theory* — it identifies what to defend against, not what will happen or when. The quality infrastructure must layer multiple verifiers (per-task binary, distributional metrics, trace-vs-trace comparison) to catch what any single verifier misses.
 
+### Multi-Agent System Failures
+
+These occur in Multi-Agent LLM Systems (MAS) where the failure is in the *coordination architecture*, not the individual agent. The [[mast]] taxonomy (Cemri, Pan, Yang et al., NeurIPS 2025) provides the first empirically grounded vocabulary, built via Grounded Theory on 1642 traces from 7 popular MAS frameworks (κ=0.88 inter-annotator agreement). Failure rates: 41–86.7% across frameworks. Three categories:
+
+- **FC1 System Design Issues (44.2%)** — failures in pre-execution design decisions: disobeying task/role specs, step repetition (FM-1.3, 15.7% — the single most prevalent mode), conversation-history loss, unaware of termination conditions. Countermeasure: [[mast|MAST]]-guided role-spec and topology interventions (+9.4% on ChatDev from role-spec fix alone); structural strategies (comprehensive verification, confidence quantification) for unresolved modes.
+- **FC2 Inter-Agent Misalignment (32.3%)** — breakdowns in information flow: conversation reset, no clarification, task derailment, information withholding, ignored input, reasoning-action mismatch (FM-2.6, 13.2%). Countermeasure: communication-protocol fixes (MCP, A2A) are insufficient — the paper attributes this to "theory of mind" collapse; needs structural improvements to message content + model-level advancements in communicative intelligence.
+- **FC3 Task Verification (23.5%)** — inadequate verification: premature termination, no/incomplete verification, incorrect verification. Countermeasure: multi-level verification (not just final-stage low-level checks); adding a high-level task-objective verification step to ChatDev yielded +15.6% on ProgramDev.
+
+The MAST finding that **System Design Issues is the largest category (44.2%)** is the empirical anchor for the [[multi-agent-illusion]] thesis: the binding constraint is design, not model capability. The [[expert-mas]] baseline (GPT-5: 57.0% → 96.5% on SMFR) demonstrates that engineered MAS can work; MAST explains *why* current designs fail and *where* the structural weaknesses lie. The MAST intervention studies confirm that topology-based changes are more effective than prompt-only changes, but neither resolves all failure modes — pointing to the need for structural strategies, not just tactical fixes.
+
 ## How to Use This Table
 
 1. **When something goes wrong**, scan the "What it looks like" column for your symptom.
@@ -157,6 +168,7 @@ A *fourth* failure mode spans all three: **sub-threshold coupling**. The authors
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Comprehension debt: inquiry mode vs delegation mode
 - `raw/2311.04235v3.txt` — RuLES: system messages don't enforce rules; alignment tuning degrades rule-following
 - `raw/2603.00822v2.txt` — ContextCov: executable verification vs LLM reflection; mechanical enforcement architecture
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent System Failures section. [[mast]] taxonomy: 14 failure modes in 3 categories (FC1 System Design Issues 44.2%, FC2 Inter-Agent Misalignment 32.3%, FC3 Task Verification 23.5%) across 1642 traces from 7 MAS frameworks. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
 - `raw/bias-in-the-loop-llm-judge-code.md` — Prompt-induced bias in eval pipelines: 40+ point swings from ordering
 - `raw/2603.25133v1.txt` — RUBRICEVAL: quantified LLM-as-judge unreliability
 - `raw/2605.18747.pdf` — Code-as-Agent Harness survey: oracle adequacy and semantic verification (§5.2.1–5.2.2)

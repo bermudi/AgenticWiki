@@ -85,6 +85,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[mitchell-hashimoto]] — HashiCorp co-founder; balanced skeptic; the renderer-optimization metric-gaming caveat
 - [[neetcode]] — YouTube creator; the hype-cycle and discourse-slop critic of the loops wave
 - [[shashwat-goel]] — Researcher (MPI Tübingen / ELLS); conceived *The Illusion of Diminishing Returns* (ICLR 2026) — formalized horizon length and named self-conditioning.
+- [[mert-cemri]] — Lead author (with Melissa Z. Pan and Shuyi Yang) of *Why Do Multi-Agent LLM Systems Fail?* (NeurIPS 2025); co-created the [[mast]] failure taxonomy and MAST-Data — the first empirically grounded MAS failure dataset.
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -127,6 +128,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[architectural-bloat]] — The structural failure mode of automated MAS: complex architectures that are functionally simpler than their appearance (e.g., AFlow 7/14 final workflows reduce to "iterate one prompt three times then aggregate" — literally CoT-SC)
 - [[expert-mas]] — Hand-designed, deterministic, code-driven multi-agent baseline (Meta-Agent + Python Executor + Extractor/Calculator). GPT-5: 57.0% → 96.5% on [[smfr]] at comparable cost. The experimental lever proving the multi-agent paradigm *can* work when engineered.
 - [[multi-agent-illusion]] — The empirical correction: across 6 automated MAS frameworks, automated MAS do not consistently outperform single-agent CoT-SC and are up to 10× more expensive. Three pillars: [[architectural-bloat|architectural bloat]], [[functional-collapse|functional collapse]], capability floor.
+- [[mast]] — The first empirically grounded Multi-Agent System Failure Taxonomy (Cemri et al., NeurIPS 2025): 14 failure modes in 3 categories (System Design 44.2%, Inter-Agent Misalignment 32.3%, Task Verification 23.5%) across 1642 traces from 7 MAS frameworks. The diagnostic complement to [[multi-agent-illusion]] — explains *why* MAS fail.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[self-conditioning]] — Models degrade on their own error-laden history; the failure mode that caps horizon length. Not fixed by scaling, fixed by thinking.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.

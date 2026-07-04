@@ -4,6 +4,7 @@ created: 2026-05-02
 updated: 2026-07-03
 sources:
   - raw/2604.15597v1.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [failure-mode, llm, reliability, long-horizon]
 ---
 
@@ -61,7 +62,9 @@ This means the reliability problem is not about reducing average error rate — 
 - [[hallucination]] — Critical failures in document degradation are a structural form of hallucination: silent corruption at scale
 
 - [[deliberate-friction]] — Deliberate friction at safety boundaries prevents critical failures from compounding
+- [[mast]] — MAST's per-mode failure percentages are the MAS analog of the sparse-catastrophic-error finding: a few modes (FM-1.3, FM-1.1, FM-2.6, FM-3.3) account for the majority of failures
 - [[self-conditioning]] — Self-conditioning can trigger critical failures: as the model degrades on its own error-laden history, the rising error rate produces the sparse catastrophic drops that define critical failure
 
 ## Sources
 - `raw/2604.15597v1.pdf` — Critical failure analysis, Table 9, and discussion of dynamics in Section 5
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's per-mode failure percentages show that a few modes (FM-1.3 Step Repetition 15.7%, FM-1.1 Disobey Task Specification 11.8%, FM-2.6 Reasoning-Action Mismatch 13.2%, FM-3.3 Incorrect Verification 9.1%) account for the majority of MAS failures — the sparse-catastrophic-error pattern in the multi-agent domain.

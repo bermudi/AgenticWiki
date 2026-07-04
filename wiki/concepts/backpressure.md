@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-07-02
+updated: 2026-07-03
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -10,6 +10,7 @@ sources:
   - raw/2504.21625v6.txt
   - raw/2603.00822v2.txt
   - raw/2605.18747.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
 unaudited_marginal: 0
 ---
@@ -104,6 +105,7 @@ This is the multi-agent extension of the backpressure principle: engineering the
 - [[aiming-problem]] — Backpressure is a mechanical aiming mechanism: tests, builds, and LLM-as-judge steer outputs toward the desirable subset
 - [[compounding-loops]] — Custom lint rules that mechanically reject wrong agent output are backpressure at the loop-coordination layer
 - [[rollback-posture]] — Backpressure rejects bad outputs before merge; rollback posture governs the merge cadence itself
+- [[mast]] — The FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs
 
 ## Sources
 
@@ -114,3 +116,4 @@ This is the multi-agent extension of the backpressure principle: engineering the
 - `raw/2504.21625v6.txt` — Meeseeks (Wang et al.): code-guided rule-augmented evaluation as automated mechanical backpressure at the constraint level
 - `raw/2603.00822v2.txt` — ContextCov (Sharma, 2026): executable guardrails as mechanical backpressure at process, source, and architectural levels; fail-closed philosophy; 88.3% compliance rate
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies transactional shared program state (§5.2.4) as the key challenge for scaling backpressure to multi-agent systems
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs. The ChatDev chess program example (compiled but had runtime bugs) illustrates this.

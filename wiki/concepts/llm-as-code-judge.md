@@ -1,10 +1,11 @@
 ---
 title: LLM as Code Judge
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-03
 sources:
   - raw/bias-in-the-loop-llm-judge-code.md
   - raw/llm-overcorrection-code-review.md
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [concept, llm-as-judge, code-review, evaluation, bias]
 unaudited_marginal: 0
 ---
@@ -28,8 +29,10 @@ The overcorrection study (pointwise setting) shows that when judges are asked to
 - [[rubric-evaluation]] — RUBRICEVAL shows frontier models struggle with fine-grained judging; related reliability concerns
 - [[hallucination]] — Overcorrection rationales exhibit hallucination-like behavior (fabricating unstated constraints)
 - [[verifiability]] — The Fix-guided Verification Filter uses execution evidence to ground judge decisions
+- [[mast]] — The MAST LLM-as-a-Judge annotator (κ=0.77 against human experts) is a data point for LLM-as-judge reliability in structured classification tasks (vs. the open-ended rubric evaluation where RUBRICEVAL found 55.97%)
 
 ## Sources
 
 - `raw/bias-in-the-loop-llm-judge-code.md` — Systematic audit of 12 prompt biases across 3 code tasks and 3 models
 - `raw/llm-overcorrection-code-review.md` — Overcorrection bias when requiring explanations and fixes from LLM judges
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. The MAST LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.

@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-06-19
+updated: 2026-07-03
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -15,6 +15,7 @@ sources:
   - raw/2605.18747.pdf
   - raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf
   - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 1
 ---
@@ -186,6 +187,31 @@ The survey proposes **harness-level metrics** that evaluate the operational subs
 
 These dimensions operate at a different layer than the four quality dimensions (effectiveness, efficiency, robustness, safety) in the Galarza framework. They evaluate the *harness* as a runtime system, not the *agent* as a task performer. See [[harness-engineering]] for the full treatment.
 
+## Multi-Agent Verification: The MAST Finding
+
+The [[mast]] taxonomy (Cemri, Pan, Yang et al., NeurIPS 2025) extends the quality infrastructure to the multi-agent layer — and reinforces the thread's emphasis on multi-level verification with the first empirical failure taxonomy for MAS.
+
+Across 1642 traces from 7 popular MAS frameworks, MAST identifies 14 failure modes in 3 categories. The headline finding for quality engineering: **Task Verification failures (FC3, 23.5%)** are the third-largest category, and the paper's Insight 3 states directly that "multi-level verification is needed; sole reliance on final-stage, low-level checks is inadequate."
+
+The empirical evidence:
+
+- Systems with explicit verifiers (MetaGPT, ChatDev) generally show fewer total failures — explicit checks help.
+- But the verifier is not a silver bullet: a ChatDev-generated chess program passed superficial checks (code compilation) but contained runtime bugs because verification never validated against actual game rules. The output was "unusable despite review phases."
+- Adding a high-level task-objective verification step to ChatDev yielded **+15.6% improvement** on ProgramDev — the single most effective intervention in the case studies.
+
+This is the MAS-layer analog of the thread's existing verification findings:
+
+| Existing finding (single-agent) | MAST finding (multi-agent) |
+|---|---|
+| [[rubric-evaluation|RUBRICEVAL]]: LLM judges achieve 55.97% on hard rubric judgments | FC3: even explicit verifiers perform only superficial checks despite thorough prompts |
+| [[bias-in-the-loop-llm-judge-code.md|Bias in the Loop]]: 40+ point swings from prompt framing | FC2: communication-protocol fixes insufficient; needs "theory of mind" |
+| [[contextcov|ContextCov]]: LLM reflection degrades compliance; mechanical enforcement needed | FC3: multi-level verification needed; final-stage low-level checks inadequate |
+| [[property-based-testing-as-spec|PBT-as-spec]]: remove the LLM from the verification loop | FC3 case study: adding a high-level objective check (deterministic) yields +15.6% |
+
+The convergence is striking: across single-agent and multi-agent settings, the verification layer is the binding constraint, and the fix is the same — *multi-level, deterministic verification* rather than single-stage LLM-judged checks. MAST provides the empirical vocabulary (FM-3.1, FM-3.2, FM-3.3) for the multi-agent manifestation of the verification gap.
+
+The MAST LLM-as-a-Judge annotator (κ=0.77 against human experts on failure classification) is itself a data point for the thread's LLM-as-judge reliability debate. The key difference from the open-ended rubric evaluation where RUBRICEVAL found 55.97%: MAST's annotator operates on a *structured* classification task (14 well-defined modes with few-shot examples), not open-ended quality judgment. This supports the thread's existing distinction — LLM-as-judge works better on structured classification than on open-ended rubric evaluation, but even there, κ=0.77 implies a ~23% disagreement rate with human experts (1 − κ).
+
 ## A Missing Quality Dimension: Trust Resolution
 
 The ManyIH study ([[instruction-hierarchy]]) reveals a quality dimension absent from existing agent quality frameworks: **can the agent correctly resolve conflicts among instructions from heterogeneous trusted sources?**
@@ -240,3 +266,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/2605.18747.pdf` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Proposes harness-level evaluation metrics (§5.2.1) that complement the quality loop by evaluating the operational substrate rather than only end-task success
 - `raw/harnessx-composable-adaptive-evolvable-agent-harness-foundry.pdf` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies are the failure modes the flywheel is designed to defend against. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): per-step scoring attached to workflow steps, deterministic guardrails as output validation between LLM calls; reconcile LLM + deterministic signals before routing decisions
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent Verification section. [[mast]] taxonomy: FC3 Task Verification (23.5%) is the third-largest failure category; Insight 3 states multi-level verification is needed; +15.6% from adding a high-level objective check to ChatDev. The LLM-as-a-Judge annotator (κ=0.77 on structured classification) is a data point for the LLM-as-judge reliability debate.

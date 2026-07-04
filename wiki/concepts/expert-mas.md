@@ -1,9 +1,10 @@
 ---
 title: Expert-MAS
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-03
 sources:
   - raw/the-illusion-of-multi-agent-advantage.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [concept, multi-agent, orchestration, mas-baseline, code-driven, deterministic-orchestration]
 unaudited_marginal: 0
 ---
@@ -84,6 +85,18 @@ The paper notes that the Expert-MAS design is most applicable to "reasoning-heav
 
 The Expert-MAS is a *baseline*, not a production architecture. Its value is as experimental evidence for what hand-designed multi-agent can do — and as the foil that exposes what automated search fails to discover.
 
+## Corroborating Evidence: MAST Intervention Studies
+
+The [[mast]] taxonomy (Cemri, Pan, Yang et al., NeurIPS 2025) provides small-scale experimental evidence for the same "engineered not discovered" thesis. Two intervention case studies on ChatDev — a system from the same framework family that the Expert-MAS is benchmarked against — show that *targeted* design fixes on existing MAS yield meaningful gains on the same backbone:
+
+| Intervention | Backbone | Benchmark | Gain |
+|---|---|---|---|
+| Role-spec fix (CPO can't terminate without CEO consensus) | GPT-4o | ProgramDev | **+9.4%** |
+| High-level task-objective verification step added | GPT-4o | ProgramDev | **+15.6%** |
+| Topology change (DAG → cyclic, CTO confirms all reviews) | GPT-4o | ProgramDev-v0 | 25.0% → 40.6% |
+
+These are *tactical* interventions on a flawed existing architecture, not a clean-sheet design like Expert-MAS. The gains are smaller (+9.4%, +15.6% vs. Expert-MAS's +39.5pp on SMFR) and the authors emphasize that "not all failure modes are resolved, and task completion rates still remain low" — first-step interventions are insufficient, pointing to the need for structural redesign. But the direction is the same: design changes on the same backbone produce gains that model-only changes cannot. The Expert-MAS is the clean-sheet upper bound; the MAST interventions are the incremental-improvement lower bound on the same thesis.
+
 ## Thread
 
 - [[the-verifiability-thesis]] — Expert-MAS is verifiability applied at the multi-agent level: every component is inspectable, every aggregation is deterministic
@@ -98,7 +111,9 @@ The Expert-MAS is a *baseline*, not a production architecture. Its value is as e
 - [[backpressure]] — the principle that Expert-MAS exemplifies
 - [[multi-agent-code-orchestration]] — the broader taxonomy; Expert-MAS instantiates the star topology
 - [[variant-isolation]] — HarnessX's alternative escape from automated MAS failure: K simple harnesses routed per task
+- [[mast]] — the failure taxonomy that provides the diagnostic vocabulary for *why* automated MAS fail; the MAST intervention studies (+9.4%, +15.6%) are the small-scale corroboration of the "engineered not discovered" thesis
 
 ## Sources
 
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). §3.3 SMFR Expert-MAS construction; Figure 4 architecture diagram; Table 4 head-to-head results; Appendix D full configuration (Meta-Agent system prompt, Extractor/Calculator prompts, executor logic).
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Appendix H intervention case studies on ChatDev: +9.4% from role-spec fix, +15.6% from high-level verification step. Small-scale corroboration of the "engineered not discovered" thesis.

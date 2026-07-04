@@ -1,9 +1,10 @@
 ---
 title: Functional Collapse
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-03
 sources:
   - raw/the-illusion-of-multi-agent-advantage.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [concept, multi-agent, orchestration, mas-audit, failure-mode, positional-bias]
 unaudited_marginal: 0
 ---
@@ -89,7 +90,9 @@ The dynamic-trust concept ([[dynamic-trust]]) anticipated this: trust should be 
 - MAS-Zero — the framework whose positional bias is the cleanest example
 - [[dynamic-trust]] — the trust-middleware proposal that the "expensive witness" finding strengthens
 - [[multi-agent-code-orchestration]] — the broader topology taxonomy; collapse is what happens when automated search attempts to discover instances of these topologies
+- [[mast]] — FC2 Inter-Agent Misalignment (32.3%) includes the runtime reduction patterns that functional-collapse documents: conversation reset, task derailment, information withholding, ignored input, reasoning-action mismatch
 
 ## Sources
 
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). §4 architectural deconstruction (DyLAN consensus collapse, MAS-Zero positional bias, MaAS operator distribution tables, MAS-Orchestra static policy, role-redundancy ablation); §5 discussion (signal saturation, positional and primacy biases).
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC2 Inter-Agent Misalignment (32.3%) includes the runtime reduction patterns that functional-collapse documents: conversation reset, task derailment, information withholding, ignored input, reasoning-action mismatch.

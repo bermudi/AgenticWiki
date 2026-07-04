@@ -1,12 +1,13 @@
 ---
 title: Multi-Agent Code Orchestration
 created: 2026-05-21
-updated: 2026-07-01
+updated: 2026-07-03
 sources:
   - raw/2605.18747.pdf
   - raw/yt-systems-building-systems.md
   - raw/recursive-agent-harnesses.txt
   - raw/the-illusion-of-multi-agent-advantage.pdf
+  - raw/2503.13657-why-multi-agent-llm-systems-fail.pdf
 tags: [concept, multi-agent, orchestration, code-harness, collaboration, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -26,6 +27,14 @@ However, Eero Alvar raises a critical concern: **company-shaped hierarchies are 
 
 > [!warning] Contradiction: Automated Multi-Agent Designs Do Not Outperform Single-Agent CoT-SC
 > The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., Salesforce Research + HKUST-GZ + UBC + NTU, arXiv 2606.13003v2, 13 Jun 2026) is a direct empirical correction to the optimistic framing of multi-agent topologies above. Across 6 representative frameworks (DyLAN, MAS-Zero, ADAS, AFlow, MaAS, MAS-Orchestra) and 5 benchmarks, automated MAS rarely outperform single-agent CoT-SC, and where they do, the cost premium is up to 10×. The paper documents [[architectural-bloat]] (complex structures with no functional purpose) and [[functional-collapse]] (architectures that reduce to single-agent execution at runtime). AFlow 7/14 final workflows are functionally identical to CoT-SC; DyLAN agents reach unanimous consensus in 70-90% of cases. The [[expert-mas|hand-designed deterministic]] baseline (GPT-5: 57.0% → 96.5% on SMFR) demonstrates that the multi-agent paradigm *can* work, but only when engineered — not when discovered by automated search. The wiki's positive multi-agent results (the survey §4 topology taxonomy, [[recursive-agent-harness]]) are specifically the *hand-designed* case the paper vindicates; the *automated search* case is empirically shown to largely fail.
+
+> [!note] Empirical Failure Modes: The [[mast]] Taxonomy
+> The [[mast]] failure taxonomy (Cemri, Pan, Yang et al., UC Berkeley, NeurIPS 2025) provides the empirical vocabulary for *why* the topologies above fail in practice. Across 1642 traces from 7 popular MAS frameworks (including ChatDev, MetaGPT, HyperAgent — systems in the survey above), MAST identifies 14 failure modes in 3 categories that map onto the topology/role taxonomy:
+> - **FC1 System Design Issues (44.2%)** — failures in pre-execution design decisions: disobeying task/role specs (FM-1.1, FM-1.2), step repetition (FM-1.3, 15.7% — the single most prevalent mode), conversation-history loss (FM-1.4), unaware of termination conditions (FM-1.5). These correspond to flaws in the topology/role design above.
+> - **FC2 Inter-Agent Misalignment (32.3%)** — breakdowns in information flow during coordination: conversation reset (FM-2.1), no clarification (FM-2.2), task derailment (FM-2.3), information withholding (FM-2.4), ignored input (FM-2.5), reasoning-action mismatch (FM-2.6, 13.2%). These are the runtime failures of the interaction modes (collaborative synthesis, critique/repair, debate) above.
+> - **FC3 Task Verification (23.5%)** — inadequate verification: premature termination (FM-3.1), no/incomplete verification (FM-3.2), incorrect verification (FM-3.3). These are the failures of the convergence patterns above — the survey's "implicit: fixed iteration budget" convergence (the most prevalent, also the most significant gap) is exactly what MAST's FC3 captures.
+>
+> The MAST intervention studies (Appendix H) confirm that topology-based changes (DAG → cyclic, role specialization) are more effective than prompt-only changes, but neither resolves all failure modes — supporting the survey's "topology complexity inversely correlates with harness-state formality" finding.
 
 ## Why Multi-Agent?
 
@@ -192,3 +201,4 @@ Convergence determines when to stop iterating. Code-centric MAS have distinctive
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: company-shaped hierarchy as a design approach; concern that human organizational patterns may not be optimal for agents
 - `raw/recursive-agent-harnesses.txt` — Lumer et al. (PwC, 2026). Introduces the code-driven subagent spawning topology: the parent writes executable code that instantiates subagents and runs them in parallel. The recursive unit is the full harness, not the model call. On Oolong-Synthetic, holding GPT-5 fixed, RAH improves Codex from 71.75% to 81.36% — gain attributable to harness architecture.
 - `raw/the-illusion-of-multi-agent-advantage.pdf` — Jwalapuram, Lin et al. (2026). Source for the [[multi-agent-illusion]] contradiction callout. Documents [[architectural-bloat]] and [[functional-collapse]] across 6 automated frameworks. Validates the [[expert-mas|hand-designed]] case (GPT-5: 57.0% → 96.5% on SMFR) while showing the [[architectural-bloat|automated search]] case largely fails.
+- `raw/2503.13657-why-multi-agent-llm-systems-fail.pdf` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] failure-mode callout. Provides the empirical vocabulary for *why* the topologies fail: 14 modes in 3 categories across 1642 traces from 7 frameworks (including ChatDev, MetaGPT, HyperAgent from the survey above). FC1 System Design Issues (44.2%) is the largest category — topology/role design is the binding constraint.
