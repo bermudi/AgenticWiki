@@ -1,8 +1,8 @@
 ---
 title: AI Design Loop
 created: 2026-04-24
-updated: 2026-05-05
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
+updated: 2026-07-06
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", "raw/yt-building-great-agent-skills-the-missing-manual.md"]
 tags: ["ai-workflow", "software-design"]
 ---
 
@@ -35,6 +35,12 @@ tags: ["ai-workflow", "software-design"]
 5. **Convergence to a PRD**: The session produces a Product Requirements Document with user stories (typically 15–20), implementation decisions, and testing decisions. The hard part is extracting ideas from the human brain; the LLM does the synthesis.
 
 The session produces not just requirements, but also updates the [[ubiquitous-language]] with new terms — ensuring the vocabulary for implementation is agreed before any code is written.
+
+### Split-Skill Technique: Grill With Docs → 2PRD
+
+Pocock's later skill-design work ("Building Great Agent Skills: The Missing Manual") reframes the grilling/planning flow as an instance of the **split-skill technique** for increasing leg work. The original `plan-mode` skill had two steps — ask clarifying questions, then create a plan — and the agent consistently under-invested in clarifying questions because it could see the plan was the real goal and rushed toward it.
+
+The fix: split into two separate skills — `grill-with-docs` (clarifying questions only) and `2prd` (planning only). When `grill-with-docs` runs, the agent's only visible goal is asking good questions — it cannot rush to a plan because the plan step is in a different skill it cannot yet see. Hiding the future goal increases leg work on the current step. See [[agent-skills]] → Pocock's Skill Design Checklist → Steering, and [[leading-words]] for the companion steering lever.
 
 ## Don't Review the PRD — QA Is Where Taste Enters
 
@@ -79,9 +85,11 @@ Keeping completed PRDs in the repo creates [[doc-rot|doc rot]]: future agent ses
 - [[sandcastle]] — The parallel AFK implementation pipeline that consumes the Kanban board produced by the design loop.
 
 - [[agent-skills]] — Skills are the tools that execute the implementation phase of each design loop iteration
+- [[leading-words]] — The companion steering lever to the split-skill technique; "vertical slice" is the canonical leading word for the journey phase
 
 ## Sources
 - `raw/yt-ai-coding-for-real-engineers.md`
 - `raw/yt-claude-code-feature-build.md`
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Grill Me skill as the mechanism for building a shared design concept; the skill went viral (13k stars) by turning the AI into an adversarial interviewer.
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full workshop demonstrating Grill Me → PRD → Kanban; "don't review the PRD" philosophy; push vs pull instruction strategy; doc rot in the design loop.
+- `raw/yt-building-great-agent-skills-the-missing-manual.md` — The split-skill technique: plan-mode split into `grill-with-docs` (clarifying questions) and `2prd` (planning) so the agent cannot see the future goal and under-invest in the current step; the design loop's grilling phase as an instance of hiding future goals to increase leg work.

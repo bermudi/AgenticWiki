@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-04
+updated: 2026-07-06
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -37,6 +37,7 @@ sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-are-we-really-doing-this-again.md
   - raw/2512.08296-scaling-agent-systems.md
+  - raw/yt-building-great-agent-skills-the-missing-manual.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -108,6 +109,13 @@ The key discipline: **never skip the Destination**. Going straight from a vague 
 - **AFK (Away-From-Keyboard)**: Once the plan is granular enough, an [[afk-agent]] executes autonomously. Each task is bounded by the interfaces and verified by the [[verification-loop]]. The [[verifiability]] framework explains why this split works: tasks that are auto-verifiable (code, tests, types) are safe to delegate to AFK agents because the verification loop can mechanically confirm correctness; tasks in unverifiable domains (design taste, domain knowledge) must remain in HITL.
 
 This isn't a one-time handoff — it's a cycle. After each AFK execution, the human reviews the outcome (via tests, not line-reading) and adjusts the plan before the next AFK session.
+
+> [!note] Marginal: In-Skill Steering — Leading Words and the Split-Skill Technique
+> [[matt-pocock|Pocock]]'s "Building Great Agent Skills" talk adds two in-workflow steering levers that operate *inside* the skill the workflow dispatches, complementing the HITL/AFK handoff:
+> - **Leading words** ([[leading-words]]): pack the desired behavior into a short, dense phrase ("vertical slice") and repeat it throughout the skill. The agent echoes the phrase in its reasoning traces, and the repetition shapes behavior. The verification signal is built in — if the traces show the phrase, the leading word took; if they show the wrong posture, it didn't. This is an in-skill steering mechanism the workflow depends on but doesn't itself describe: the workflow decides *which* skill fires when, the leading word decides *how* the agent executes once the skill is loaded.
+> - **Split-skill technique (hidden future goals)**: when an agent can see the ultimate goal of a multi-step skill, it under-invests in the current step — it does the minimum on step 1 to get to step 2. Pocock's `plan-mode` example: an "ask clarifying questions → create a plan" two-step skill produces shallow clarifying questions because the agent can see the plan is the real goal and rushes toward it. The fix is to split the skill so the agent only sees one step at a time (`grill-with-docs` for clarifying questions, `2prd` for planning). Hiding the future goal increases leg work on the current step. This is a workflow decomposition decision — the human structures the skill sequence so each step gets the agent's full attention. See [[ai-design-loop]] → Split-Skill Technique for the design-loop instance.
+>
+> Both levers shift load onto the human (selecting leading words, designing the skill decomposition) — see [[the-cognitive-cost]]'s "Good Skill Design Demands More of the Human" callout for the tension this creates with the cognitive-cost thesis.
 
 ## Tool Design as Workflow Infrastructure
 
@@ -474,4 +482,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The "designing loops" discourse: the cost-shift thesis (loop management as the new expensive part; Uber $1,500/person/tool/month cap) as the financial twin of the review bottleneck, and the five-stage agent-loop lineage in which the Ralph loop is Stage 3 and the orchestration loop is Stage 5
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s audit of the loops discourse as discourse slop; the incentive heuristic (Anthropic/OpenAI/Cursor hype, Google measured); the temporal walk-back (for-each not while; review not implementation); "there are no experts, only people who pretend."
+- `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's in-skill steering levers as workflow infrastructure: leading words ([[leading-words]]) as the in-skill mechanism the workflow dispatches (the workflow decides which skill fires when, the leading word decides how the agent executes once loaded), and the split-skill technique (hide future goals to increase leg work on the current step) as a workflow decomposition decision. See the "In-Skill Steering" marginal note.
 

@@ -1,7 +1,7 @@
 ---
 title: Steering Docs
 created: 2026-06-07
-updated: 2026-07-03
+updated: 2026-07-06
 sources:
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 unaudited_marginal: 0
@@ -60,6 +60,7 @@ The empirical evidence on [[context-files]] (Gloaguen et al. and Lulla et al., 2
 - [[context-files]] — The general category; steering is Kiro's specific instance
 - [[evolving-context]] — The principle of agents improving their own context over time
 - [[agent-skills]] — Skills provide procedural knowledge (how to do things); steering provides operational context (what to know about this project)
+- [[leading-words]] — Complementary steering lever: steering docs inject persistent constraints into the system prompt; leading words inject posture-shaping phrases into the skill body. Steering docs are always-on; leading words fire when the skill fires.
 - [[inferential-rule-following]] — Steering is one mechanism to compensate for the model's weak rule-following by making rules concrete and persistent
 - [[kiro]] — The product that uses steering
 
@@ -77,6 +78,7 @@ The empirical evidence on [[context-files]] (Gloaguen et al. and Lulla et al., 2
 - [[al-harris]] — The principal engineer who presented the steering pattern
 - [[context-files]] — The general category
 - [[agent-skills]] — Complementary: skills are procedural, steering is operational
+- [[leading-words]] — Complementary steering lever: steering docs inject persistent constraints into the system prompt; leading words inject posture-shaping phrases into the skill body
 - [[inferential-rule-following]] — The problem steering helps solve
 - [[cian-clarke]] — Names the synonymy problem across SDD tools
 

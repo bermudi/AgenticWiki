@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-04
+updated: 2026-07-06
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.md
@@ -22,6 +22,7 @@ sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
+  - raw/yt-building-great-agent-skills-the-missing-manual.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -141,6 +142,16 @@ The axis isn't about philosophical preference — it's about how much verificati
 ### For [[tool-design-for-agents]]
 
 Agent-native infrastructure is the tooling layer of the verifiability thesis. Tools designed for agents are tools that maximize verifiability: deterministic feedback, structured output, automated checks. Karpathy's complaint — "why are docs telling me what to do instead of what to copy-paste to my agent?" — is a call for tools that don't require unverifiable human judgment to use.
+
+### For [[agent-skills]]: Skill Design as a Verifiability Discipline
+
+[[matt-pocock|Pocock]]'s four-part skill checklist ([[agent-skills]] → Pocock's Skill Design Checklist) is partly a verifiability discipline, and three of its techniques are verifiability moves the thesis predicts should work:
+
+- **Leading words' trace-verification** ([[leading-words]]): the agent's reasoning trace IS the eval. You observe whether the leading word took by reading the traces — if the agent says "we're going to do this as a thin vertical slice", the leading word landed; if the traces show layer-by-layer planning, it didn't. No separate eval pass is needed. This is a novel verifiability mechanism: the agent's *self-talk* is the verification signal, exploiting the structural property that LLMs re-emit context tokens into their reasoning traces. The thesis predicts that techniques with built-in observability should outperform techniques that require a separate eval to verify — and leading words are the canonical case.
+- **No-op deletion test**: verify an instruction has behavioral effect by removing it and observing whether behavior changes. This is verifiability of *instruction-effect* — a meta-level application of the thesis. The agent-authored no-ops Pocock identifies (plausible-sounding instructions that have no behavioral effect) are precisely instructions that *fail* the deletion test, and the test is the verifiability move that exposes them.
+- **User-invoked preference as unverifiability-removal**: Pocock prefers user-invoked skills over model-invoked partly because model invocation timing is *unverifiable* — "the model may just choose not to follow the context pointer" even when the skill is perfect for the task, which forces practitioners to build evals to verify skills fire at the right time, which Pocock calls "really nasty." Choosing user-invoked removes a class of unverifiable behavior (the model's invocation decision) by replacing it with a verifiable one (the user's explicit invocation). This is the thesis operating as a design preference: prefer the mode whose failure mode is observable.
+
+The checklist's pruning pass (no-ops, sediment, single source of truth) is verifiability applied to the skill *as artifact* — the same discipline the thesis applies to code, now applied to procedural-knowledge files.
 
 ### For [[scaling-agent-systems]]: Capability Saturation as a Verifiability Threshold
 
@@ -264,3 +275,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Source for the "Dollar-Cost Binding Constraint" extension. The cost-shift thesis (per @runes_leo, June 2026: "the costliest thing in AI coding is no longer writing code, it's managing the agent loop"; Uber $1,500/person/tool/month cap for Claude Code and Cursor) as a distinct economic axis on the verifiability causal chain; the three hard stops (maximum iteration count, no-progress detection, token-or-dollar budget ceiling) as the loop's cost guardrail; Gartner ~17% deploying agentic AI as a reality check.
 - `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand corroboration of the dollar-cost binding constraint: Theo's ~$10K inference for $600 of flat-rate subscriptions, weeks at 29% of limit, and the runaway 8-hour/3M-token workflow on three comments. Source for the flat-rate-vs-pay-per-token departure callout.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]] surfaces [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (88 ms → 2 ms, "sounds good, right? No, it's not") as the empirical instance of the proxy-gaming dynamic: an agent loop optimizing the verifiable metric while degrading every unverifiable axis. See [[aiming-problem]] and the "Proxy-Gaming Poster Child" note.
+- `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]]'s four-part skill checklist as a verifiability discipline: leading words' trace-verification (the agent's self-talk is the eval — no separate eval pass needed), no-op deletion test (verifiability of instruction-effect), user-invoked preference as unverifiability-removal (model invocation timing is unverifiable, so prefer the mode whose failure mode is observable). See [[agent-skills]] → Pocock's Skill Design Checklist and [[leading-words]].

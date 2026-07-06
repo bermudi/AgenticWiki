@@ -1,8 +1,8 @@
 ---
 title: Matt Pocock
 created: 2026-04-24
-updated: 2026-05-05
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-slop-watch-ideation.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
+updated: 2026-07-06
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-slop-watch-ideation.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", "raw/yt-building-great-agent-skills-the-missing-manual.md"]
 tags: ["typescript", "ai-engineering", "author"]
 ---
 
@@ -49,6 +49,8 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[chris-parsons]] — Extended Ralph loops into skills and ticket-based loops; converges on plan-heavy workflow philosophy
 - [[sandcastle]] — His parallel AFK agent orchestration library (planner/implementer/reviewer/merger pipeline)
 - [[doc-rot]] — Primary advocate for deleting completed PRDs to prevent stale documentation from misdirecting agents
+- [[leading-words]] — Originator of the leading-words steering technique: dense phrases the agent echoes in its reasoning traces, shaping behavior with built-in verification
+- [[skill-hell]] — Named the third developer hell (after tutorial hell and framework hell): skills proliferate faster than evaluative capacity; his four-part checklist is the proposed exit
 
 ## Sources
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop, software entropy, outrunning headlights, Grill Me skill
@@ -58,3 +60,4 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - `raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md` — The improve-codebase-architecture skill, general/sergeant metaphor, seams/adapters vocabulary.
 - `raw/yt-slop-watch-ideation.md` — Greenfield project ideation: parallel research agents, Grill Me, DDD domain modeling, Slop Watch architecture decisions.
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full end-to-end workshop: Grill Me → PRD → Kanban DAG → Sandcastle parallel AFK loops → QA; doc rot, push vs pull agent instructions, AI defaults to shallow modules.
+- `raw/yt-building-great-agent-skills-the-missing-manual.md` — "Building Great Agent Skills: The Missing Manual" (AI Engineer World's Fair 2026). The four-part skill design checklist (trigger, structure, steering, pruning); user-invoked vs model-invoked load tradeoff; steps + reference + branches + external references; leading words as the primary steering lever; leg work via hidden future goals (split-skill technique); no-ops, sediment, single source of truth. Names [[skill-hell]] as the diagnosis the checklist responds to.

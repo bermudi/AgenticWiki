@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-04
+updated: 2026-07-06
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -96,6 +96,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
 - [[code-clarifies-spec]] — Implementing code improves the spec; the act of writing code generates new decisions that weren't anticipated in the spec, and these decisions should feed back into it.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
+- [[skill-hell]] — The third developer hell (after tutorial hell and framework hell): skills proliferate faster than evaluative capacity, nobody can tell good from bad, and nothing delivers what it promises. Pocock's four-part checklist is the proposed exit.
 - [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.
 - [[deepswe]] — A long-horizon coding benchmark with contamination-free tasks, behavioral verification, and 70-point model spread
 - [[horizon-length]] — The length of task a model can complete end-to-end; grows hyperbolically with step accuracy, so short-benchmark "diminishing returns" are an illusion.
@@ -164,6 +165,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[iterative-self-correction]] — Feedback-driven multi-turn correction loops; even with perfect feedback, models hit a sub-91% ceiling and exhibit catastrophic overcorrection.
 - [[jagged-frontier]] — LLM capabilities are unevenly distributed; strong in some domains, severely error-prone in others.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
+- [[leading-words]] — A steering technique for agent skills: pack a desired behavior into a short dense phrase ("vertical slice") and repeat it throughout the skill so the agent echoes it in reasoning traces, shaping behavior. The reasoning trace is the verification signal.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
 - [[model-routing]] — Decomposing tasks by complexity and routing each subtask to the cheapest model capable of handling it; up to 15× cost savings.
 - [[multi-agent-code-orchestration]] — Scaling the code-as-harness from single agents to multi-agent systems with specialized roles, interaction modes, and workflow topologies.

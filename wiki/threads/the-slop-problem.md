@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-03
+updated: 2026-07-06
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -28,6 +28,7 @@ sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-systems-building-systems.md
   - raw/yt-spec-driven-dev-hype-or-future.md
+  - raw/yt-building-great-agent-skills-the-missing-manual.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -118,6 +119,15 @@ This is slop at the meta-level: the benchmarks themselves are low-quality, unrel
 
 > [!note] Departure: Spec Slop — The Specification Artifact as a Maintenance Burden
 > [[colin-eberhardt|Colin Eberhardt]]'s head-to-head benchmark of [[spec-driven-development|SDD]] vs iterative development produced a new form of slop: the specification artifact itself. Spec Kit generated 2,500 lines of markdown to produce 689 lines of code — a 3.6:1 spec-to-code ratio. The 3.5 hours of human review time was dominated by reading and validating specification documents, not code. This is **spec slop**: the specification becomes a maintenance burden that rivals the codebase it governs. The slop problem thread currently tracks code slop and benchmark slop; spec slop is a third category that emerges when the mediating artifact (spec, PRD, design doc) grows faster than the code it describes. The question it raises: does SDD prevent slop in the codebase by producing it in the specification layer instead? See [[spec-driven-development]] and [[colin-eberhardt]] for the full benchmark data.
+
+> [!note] Departure: Skill Slop — The Procedural-Knowledge Artifact as a Slop Surface
+> [[matt-pocock|Matt Pocock]] names [[skill-hell|skill hell]] as the skills-flavored instance of the slop pattern: skills proliferate faster than evaluative capacity, the discourse around skills is slop-shaped ("10x your agent with this one skill"), and developers accumulate skills without compounding capability — "just one more skill, bro." Skill hell is the supply-outpaces-evaluation mechanism this thread already tracks for code and benchmarks, now operating on the procedural-knowledge artifact.
+>
+> Skill slop has two internal mechanisms Pocock's pruning pass identifies, both with direct analogues in this thread:
+> - **No-ops** are skill slop: instructions that appear to do something but do not actually influence agent behavior. Pocock's deletion test (remove the paragraph; does behavior change?) is the verifiability move that exposes them. Notably, no-ops accumulate most when *agents author skills* — the agent-author pads the skill with plausible-sounding instructions that have no behavioral effect. This is a new slop source that connects to the "Agents Don't Feel Pain" mechanism below: the agent-author doesn't feel the pain of the no-op because it doesn't experience the downstream behavior difference, so it doesn't prune it.
+> - **Sediment** is skill slop via the compounding-booboos mechanism: multiple people contribute to a shared markdown file, nobody feels brave enough to delete anyone else's additions, and the skill grows irrelevant or stale content. This is the same "thousand small compromises" pattern this thread tracks for codebases, now operating on the skill file.
+>
+> The four-part checklist (trigger → structure → steering → pruning) is the proposed evaluative framework — the rubric whose absence is what makes skill hell a slop variant rather than just a supply problem. See [[skill-hell]] for the diagnosis and [[agent-skills]] → Pocock's Skill Design Checklist for the full checklist. The cognitive-cost thread flags a tension here: the checklist demands *more* human judgment (to run the deletion test, select leading words, identify branches) at the moment the supply of that judgment is shrinking — see [[the-cognitive-cost]]'s "Good Skill Design Demands More of the Human" callout.
 
 ## Agents Don't Feel Pain
 
@@ -253,3 +263,4 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: slop defined as outputs outside the desirable subset in the software factory mapping; chaos property of spec→implementation mapping; the aiming problem as the inverse of the slop problem
 - `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark of Spec Kit vs iterative development (10x faster without SDD on the test problem) is the strongest empirical counter-evidence cited in the thread's theory-pressure callout; [[birgitta-boeckler|Birgitta Boeckler]] on spec drift is the source behind the open-source-SDD-tools "spec first, vague about spec maintenance" observation
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s [[discourse-slop]] category: the meta-discourse about agentic tools is itself AI-generated, hype-amplified slop (the 2M-view loop-engineering post); the incentive structure (Anthropic/OpenAI/Cursor hype, Google measured).
+- `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]] names [[skill-hell|skill hell]] as the skills-flavored slop variant: supply of skills outpaces evaluative capacity, discourse is slop-shaped. Skill slop's internal mechanisms: no-ops (instructions with no behavioral effect, especially when agents author skills) and sediment (compounding-booboos on the skill file). The four-part checklist is the proposed evaluative framework. See the "Skill Slop" departure callout.

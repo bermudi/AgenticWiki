@@ -1,7 +1,7 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-07-01
+updated: 2026-07-06
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
@@ -9,6 +9,7 @@ sources:
   - raw/2407.08440v4.md
   - raw/2605.18747.md
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
+  - raw/yt-building-great-agent-skills-the-missing-manual.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
@@ -140,6 +141,80 @@ Nisi discovered through evals that his Next.js installer skill was making Claude
 
 This is why the "constraints over prescription" principle matters: skills should fill gaps in the model's knowledge, not replace its competence.
 
+## Pocock's Skill Design Checklist
+
+[[matt-pocock|Matt Pocock]] ("Building Great Agent Skills: The Missing Manual", AI Engineer World's Fair 2026) proposes a four-part rubric for distinguishing good skills from bad — the proposed exit from [[skill-hell]]. The checklist is sequential: trigger → structure → steering → pruning. Each part names a design decision and a failure mode.
+
+### 1. Trigger — User-Invoked vs Model-Invoked
+
+Every skill can be invoked two ways:
+
+- **User-invoked**: The user explicitly tells the agent to load the skill (e.g. `/skill-name`). The skill's description is visible only to the user, not the agent. Marked in Pocock's skills with `disable_model_invocation: true`.
+- **Model-invoked**: The skill's `description` ends up in the agent's context window as a *context pointer*. The agent reads the description and decides whether to load the full `skill.md` body. This is the progressive-disclosure tier-2 transition.
+
+The tradeoff is a load-shift between two finite resources:
+
+| Invocation mode | Cost imposed |
+|---|---|
+| Model-invoked | **Context load on the agent** — every model-invoked skill's description occupies tokens on every request; 100 model-invoked skills = 100 descriptions in context. Also introduces *unpredictability*: the model may choose not to invoke a skill even when it's perfect for the task, which forces evals to verify skills fire at the right time. |
+| User-invoked | **Cognitive load on the user** — the user must know the skill exists, know when to invoke it, and remember to do so. The agent's context stays lean, but the pilot must hold more in their head. |
+
+Pocock prefers user-invoked skills (his `matt-pocock-skills` repo) because removing the unpredictability class — "the model may just choose not to follow the context pointer" — eliminates a whole category of eval burden. He contrasts this with `superpowers`, a primarily model-invoked skill set that gives the agent more autonomy at the cost of context load and invocation unreliability.
+
+> [!note] Synthesis: the load-shift is the design decision
+> The trigger choice is not "which is better" but *which load you are willing to bear*. Model-invoked shifts load to the agent's context and to eval infrastructure; user-invoked shifts load to the user's memory and discipline. The right answer depends on which failure mode is cheaper to detect and correct in your environment.
+
+### 2. Structure — Steps, Reference, and Branches
+
+A skill's internal layout has two main units:
+
+- **Steps** — the step-by-step procedure the skill walks through.
+- **Reference** — supporting information that helps the agent execute the steps (templates, definitions, examples).
+
+Skills can be all-steps, all-reference, or both. Pocock's `2prd` skill: three steps (find relevant context → confirm test seams with the user → write the PRD) plus two reference items (what is a test seam; the PRD template).
+
+The structural constraint is **make `skill.md` as small as possible**. Smaller skills are easier to maintain, easier to audit, and cheaper in tokens — every word shaved is a token shaved on every invocation. The technique for achieving this is **branch-aware reference placement**:
+
+- Identify the *branches* of the skill — the distinct ways it can be used.
+- Reference material needed on *every* branch belongs in `skill.md`.
+- Reference material needed on only *some* branches is moved behind a **context pointer** to a separate markdown file inside the skill folder (an *external reference*). The agent pulls it only when that branch fires.
+
+Pocock's `domain-modeling` skill has two-or-three branches (update `context.md`, create an ADR, or do neither). The ADR template and the `context.md` template are external references — pulled only when the corresponding branch fires. The `2prd` skill has one branch, so all its reference material stays in `skill.md`.
+
+This is progressive disclosure applied *within* the skill: the skill.md is tier 2, external references are tier 3.
+
+### 3. Steering — Leading Words and Leg Work
+
+Once the skill fires and is loaded, the problem is getting the agent to *do what the skill says*. Pocock identifies two steering levers:
+
+**Leading words** (see [[leading-words]] for the full treatment): pack the desired behavior into a short, dense phrase and repeat it throughout the skill. The agent echoes the phrase in its reasoning traces, and the repetition shapes behavior. "Vertical slice" is the canonical example — the phrase triggers the model's prior on vertical-slice development without the skill having to spell out the full doctrine. The verification signal is built in: if the reasoning traces say "we're going to do this as a thin vertical slice", the leading word took; if they show layer-by-layer planning, it didn't.
+
+**Leg work via hidden future goals**: when an agent can see the ultimate goal of a multi-step skill, it tends to under-invest in the current step — it does the minimum on step 1 to get to step 2. Pocock's `plan-mode` example: an "ask clarifying questions → create a plan" two-step skill produces shallow clarifying questions because the agent can see the plan is the real goal and rushes toward it.
+
+The fix is to **split the skill so the agent only sees one step at a time**. Pocock split plan-mode into two separate skills: `grill-with-docs` (the clarifying-questions phase) and `2prd` (the planning phase). When `grill-with-docs` runs, the agent's only visible goal is asking good questions — it cannot rush to a plan because the plan step is in a different skill it cannot yet see. Hiding the future goal increases leg work on the current step.
+
+> [!note] Departure: split skills vs. single-skill multi-step
+> This is a departure from the default progressive-disclosure pattern where one skill contains a full multi-step procedure. Pocock's split-skill technique trades skill-count for step-focus: more skills to manage, but each step gets the agent's full attention. The technique is not always necessary — it is reserved for steps where extra leg work is critical.
+
+### 4. Pruning — No-Ops, Sediment, Single Source of Truth
+
+The final pass removes what does not work. Three failure modes:
+
+- **No-ops**: Skill content that appears to do something but does not actually influence agent behavior. Pocock's deletion test: if you removed this paragraph, would the agent behave differently? A paragraph instructing the agent to "write a long detailed commit message" is likely a no-op — the agent would write a decent commit message anyway. Most no-ops accumulate when agents write skills (the agent-author pads the skill with plausible-sounding instructions that have no behavioral effect).
+- **Sediment**: Material that accumulates in a shared markdown file as multiple people contribute, nobody feels brave enough to delete anyone else's additions, and the skill grows irrelevant or stale content. The cure is structural: check each addition against the skill's branches, move branch-specific material behind context pointers, and kill dead material outright.
+- **Duplication / no single source of truth**: The same reference material (a template, a definition) repeated across multiple places in the skill. Each part of the skill should have a single source of truth; cross-reference rather than copy.
+
+Massive skills are usually a *symptom* of one of these failure modes, not a primary problem. Pocock attributes the smallness of his own skills to relentless application of deletion tests, compaction into leading words, and sediment removal — not to writing less in the first place.
+
+### The Full Sweep
+
+The checklist applied to a skill in order:
+
+1. **Trigger** — is it firing at the right times? Are we imposing context load (model-invoked) or cognitive load (user-invoked)?
+2. **Structure** — branches identified? Steps and reference separated? Branch-only reference moved behind context pointers? `skill.md` small?
+3. **Steering** — leading words chosen and repeated? Visible in reasoning traces? Leg work adequate, or should the skill be split to hide future goals?
+4. **Pruning** — no-ops deleted via deletion test? Sediment removed? Single source of truth enforced?
+
 ## Skills in Production
 
 Pedro Rodrigues (Supabase AI tooling engineer) provides operational lessons from two months of writing skills for a production product.
@@ -248,6 +323,8 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[tool-design-for-agents]] — Skills are the procedural complement to tool access; MCP provides reach, skills provide judgment
 - [[the-agent-workflow]] — Skills operationalize the "how" of agent execution within the workflow
 - [[the-slop-problem]] — Skills reduce slop by replacing guesswork with defined procedures
+- [[the-verifiability-thesis]] — Three of the four-part checklist's techniques are verifiability moves: leading words' trace-verification, the no-op deletion test, and user-invoked preference as unverifiability-removal
+- [[the-cognitive-cost]] — The four-part checklist systematically shifts load onto the human (trigger choice, branch identification, leading-word selection, pruning); the cognitive-cost thesis flags this as demanding more judgment at the moment capacity is eroding
 
 ## Related
 
@@ -269,6 +346,8 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[open-knowledge-format]] — Parallel precedent: both are minimal open format specs with reference implementations, betting that speaker count beats ownership
 - [[agent-loop]] — Skills are the reusable unit a loop dispatches; the loop is plumbing, the skill is the asset
 - [[peter-steinberger]] — Originator of the "skills, not loops, are the durable half" thesis
+- [[leading-words]] — Pocock's steering technique: dense phrases the agent echoes in reasoning traces, shaping behavior
+- [[skill-hell]] — The diagnosis Pocock's four-part checklist responds to: skills proliferate faster than evaluative capacity
 
 ## Sources
 
@@ -278,3 +357,4 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/2407.08440v4.md` — RuleBench (Sun et al.): IRFT demonstrates the same pattern as skills — abstract procedural capability (rule-following) learned from synthetic data and generalized to real tasks
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Positions skills within the code-for-acting layer (§2.2); code-based skills as executable, inspectable, and stateful artifacts that can be verified through execution
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Steinberger's general skills rule (turn repeated work into a skill) and Van Horn's framing of the consequence: a loop calling sharp named skills compounds; a loop with no skills is a "while-true around a stranger"
+- `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's four-part skill design checklist (trigger, structure, steering, pruning); user-invoked vs model-invoked load tradeoff; steps + reference + branches; leading words; leg work via hidden future goals; no-ops, sediment, single source of truth

@@ -1,7 +1,7 @@
 ---
 title: The Cognitive Cost
 created: 2026-06-03
-updated: 2026-07-02
+updated: 2026-07-06
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
@@ -10,6 +10,7 @@ sources:
   - raw/yt-spec-driven-dev-hype-or-future.md
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
+  - raw/yt-building-great-agent-skills-the-missing-manual.md
 tags: [thread, ai-engineering, cognitive-debt, failure-modes, human-in-the-loop]
 unaudited_marginal: 0
 ---
@@ -76,6 +77,15 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 > [!note] Departure: Two Skeptic Frames on the Loops Wave — Danger vs. Triviality
 > [[neetcode|NeetCode]] adds a second skeptic lens on the same "designing loops" wave the callout above addresses. This thread (via [[theo-t3gg|Theo]]) holds the **danger frame**: loops are the maximal-delegation frontier, and removing involvement is what drives [[cognitive-debt]]. NeetCode holds the **triviality frame**: the underlying idea is a simple cron-plus-sub-agents job, and the wave is mostly [[discourse-slop]] — performative, LLM-polished, incentive-driven hype whose substance-to-noise ratio is near zero. The two frames are complementary, not contradictory: NeetCode is loop-literate (he runs his own bug-triage loop) and does not dispute that delegation can erode skill. The distinction matters because it separates two different risks this thread conflates when it treats the loops wave monolithically: removing the human (the danger frame, which drives cognitive erosion) vs. mis-educating the human with slop (the triviality frame, which drives epistemic confusion about what the workflow even is). Notably, NeetCode's "there are no experts, only people who pretend" is an epistemic-humility claim about the *field*, distinct from this thread's population/skill-erosion claim about *individuals* — a different failure mode of the same hype cycle.
 
+> [!warning] Theory Pressure: Good Skill Design Demands More of the Human at the Moment Capacity Is Eroding
+> [[matt-pocock|Pocock]]'s four-part skill checklist ([[agent-skills]] → Pocock's Skill Design Checklist) is correct engineering advice for individuals, but its design choices systematically shift load *onto* the human at exactly the capacity this thread says is shrinking. The pattern repeats across all four parts of the checklist:
+> - **Trigger — user-invoked preference**: Pocock prefers user-invoked skills (his `matt-pocock-skills` repo) over model-invoked, explicitly to remove the unpredictability class ("the model may just choose not to follow the context pointer"). The cost he names is "cognitive load on the user" — the user must know the skill exists, know when to invoke it, and remember to do so. He accepts this trade; the cognitive-cost thesis says the population able to accept it is shrinking.
+> - **Structure — branch-aware reference placement**: the human must identify the skill's branches and decide which reference material belongs behind context pointers. This is design-authority work.
+> - **Steering — leading word selection**: the human must pick dense phrases that trigger the model's prior ([[leading-words]]). This is taste work — the same taste this thread (via Karpathy) says "currently exists outside the RL circuits" and is the human's irreducible domain.
+> - **Pruning — no-op deletion test, sediment removal**: the human must audit instructions for behavioral effect and kill dead material. More judgment work, and notably the no-ops accumulate when *agents author skills* — the agent-author pads skills with plausible-sounding instructions that have no behavioral effect, so the human must clean up after the agent's authoring as well as their execution.
+>
+> This sharpens the existing "Human Lever Requires Humans Who Can Pull It" contradiction with a second front: the first front is skill erosion through delegation; the second is that good skill *design* demands even more of the human than skill *use*. [[skill-hell|Skill hell]] is the diagnosis when this design capacity is absent — and Pocock frames it as operating at the organizational scale, not just the individual. The checklist may be individually optimal but population-pessimistic: it prescribes more human judgment at the moment the supply of human judgment is the binding constraint. See [[skill-hell]] for the diagnosis and [[the-human-lever]]'s parallel "Theory Pressure: Deterministic Verification May Shrink the Human's Role" callout for the inverse direction (automation contracting the human's role rather than expanding its demands).
+
 ## Sources
 
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
@@ -85,3 +95,4 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 - `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] benchmark (2,500 lines spec markdown for 689 LOC, 3.5h vs 24 min review) in the SDD cognitive-cost departure callout
 - `raw/yt-i-guess-were-writing-loops-now.md` — [[theo-t3gg|Theo]]: the loops conversion, the cost-as-challenge framing ("treat these limits like challenges"), and the "prompt yourself out of involvement" heuristic — the maximal-delegation frontier that accelerates this thread's cognitive-erosion mechanism.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]: the triviality/discourse-slop skeptic frame on the loops wave (vs. Theo's danger frame); "there are no experts, only people who pretend" as a field-level epistemic-humility claim distinct from this thread's individual skill-erosion claim.
+- `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]]'s four-part skill checklist as a second front on the "human lever requires humans who can pull it" contradiction: user-invoked preference, branch-aware structure, leading-word selection, and no-op/sediment pruning all demand more human judgment at the moment capacity is eroding. [[skill-hell]] as the organizational-scale diagnosis.
