@@ -57,6 +57,7 @@ Karpathy speculates about the long arc: "You could imagine completely neural com
 - [[agent-quality-engineering]] — Software 3.0 without quality infrastructure produces slop; evals and observability are the quality mechanisms for the new paradigm
 - LLM knowledge bases — Karpathy's favorite example of a software 3.0-native application (concept page TBD)
 - [[intent-to-code]] — Prompting-as-programming as the pure-vibes position on the intent-to-code axis
+- [[llm-ui-paradigms]] — A parallel Karpathy three-stage lineage: where the model lives in the workflow (website → app → persistent org-level entity), the UI/UX twin of Software 1/2/3's programming-substrate axis
 
 ## Sources
 

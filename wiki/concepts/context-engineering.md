@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-06
+updated: 2026-07-09
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -12,6 +12,8 @@ sources:
   - raw/yt-effect-opencode-dax-raad.md
   - raw/yt-systems-building-systems.md
   - raw/2509.09677.md
+  - raw/karpathy-claude-tag-third-paradigm.md
+  - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -103,6 +105,15 @@ Cache the invariant portion of chat history (system prompt, previous turns). Eac
 ### Context Layers
 A mental model articulated by the host (Dex Horthy) and engaged with by Lance Martin for thinking about where context comes from: **session context** (what's happening in the current agent session), **agent context** (multi-session — skills, memories, past sessions), **organizational context** (Slack, email, calendars, knowledge bases), **global context** (web search, external information). The goal: materialize a just-in-time view across these layers that enables the agent's best next action.
 
+### Channel as Context Boundary
+
+A granularity problem [[theo-t3gg|Theo]] isolates from [[andrej-karpathy|Karpathy]]'s [[llm-ui-paradigms|"third paradigm"]] framing: existing agent tools (Claude Code, Codex) scope context at only two grains — **global** (account-wide) or **project-specific** (the repo you're in). Real work is messier. You sometimes want four skills and two connectors, sometimes none, sometimes everything, sometimes an extra 2,000–5,000 tokens of `AGENTS.md` context for a specific kind of task. There is no clean abstraction for splitting context, tools, and memory across people, projects, teams, orgs, codebases, and tasks.
+
+The **channel** (a Slack/Discord channel, a thread) is a much closer fit. It maps naturally to how teams and work are already structured: one team works one way in one channel, a different team works differently in another, and an agent scoped to each can "feel entirely different" because its knowledge and tools differ. Crucially, the channel is independent of codebase topology — it doesn't matter how the monorepo is split or how microservices are carved up, because context lives at the channel, not the repo. This is what Anthropic's [[claude-tag|Claude Tag]] exploits: Claude's memory and tools are scoped per channel, so the same agent serves different teams with different context without configuration sprawl.
+
+> [!note] Departure: The Custom-Isolate Mirror
+> Theo reports reaching the same value prop by hand: his "Hermes agent" runs as one Docker **isolate per channel/purpose** (sponsor deals, content planning, codebase updates), each with its own skills, connectors, and backing. Every channel needs its own container to be properly isolated, and all the skills/context are built by hand — but the payoff is per-channel context that doesn't pollute other work (a scheduled 11 a.m. meme-scraping job lives in its own thread and never bleeds into a sponsor-deal conversation). The departure the wiki notes: the pattern is correct, but most users won't assemble it themselves or even realize they need per-channel configs — which is exactly the default-scoping value Claude Tag provides. The unresolved tension: per-channel isolation buys **model freedom** (swap GLM / GPT-5.5 / Claude / Fable per channel) that a productized single-lab harness removes. See [[llm-ui-paradigms]].
+
 ## The Context Engine Pattern
 
 [[peter-werry|Peter Werry]] (Unblocked) provides the most detailed public architecture for a **context engine** — a productized system that operationalizes context engineering at organizational scale. A context engine sits between data sources and agents, acting as a curated context pipeline. It goes beyond individual session management to understand:
@@ -192,6 +203,8 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[recursive-agent-harness]] — Isolated subagent contexts (no shared memory, no communication) are an extreme form of context isolation
 - [[self-conditioning]] — the failure mode a sliding window mitigates; truncation as error-contamination control, not just token-budget control
 - [[horizon-length]] — context engineering as a reliability lever on the dimension that determines long-horizon capability
+- [[llm-ui-paradigms]] — Karpathy's third paradigm; the channel as the natural context-scoping unit is its context-engineering primitive
+- [[claude-tag]] — Productized channel-scoped context (Anthropic, 2026); the default-scoping instance of the channel-as-boundary pattern
 
 ## Sources
 
@@ -204,3 +217,5 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: Effect's verbosity as context engineering — explicit patterns in each file constrain LLM output. The framework's strictness means the AI "almost always does it correctly" because the context is unambiguous.
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: agent persistence as a context engineering problem; babysitter agent as dedicated context management infrastructure; instruction libraries as factory-level context engineering
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Sliding Window Against Self-Conditioning" technique (Appendix C.2): shrinking the context window improves sustained accuracy by limiting exposure to self-accumulated errors; reliability-driven truncation distinct from token-budget truncation.
+- `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's "third paradigm" framing: the LLM as a persistent, async, org-wide entity. Source for the paradigm-level motivation behind channel-scoped context.
+- `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): the channel as context boundary (global vs. project scoping is too coarse), and the per-channel Docker-isolate "Hermes agent" practitioner experience.

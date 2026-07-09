@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-06
+updated: 2026-07-09
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -201,6 +201,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[recursive-agent-harness]] — Recursion over full agent harnesses (with filesystem, code execution, and tools) rather than bare model calls; 71.75% → 81.36% on Oolong-Synthetic with backbone held fixed
 - [[system-prompt-effects]] — System prompts have measurable, non-monotonic effects on LLM performance that interact with model scale, prompting strategy, and programming language.
 - [[llm-as-code-judge]] — Using LLMs to evaluate code quality; increasingly common in agentic SE pipelines but suffers from systematic prompt-induced biases.
+- [[llm-ui-paradigms]] — Karpathy's three-stage model of LLM interaction (website → app → persistent async org-level entity); the channel-scoped "org-level harness" instantiated by Claude Tag.
 - [[overcorrection-bias]] — The systematic tendency of LLMs to misclassify correct code as defective, especially when prompted to explain and fix.
 - [[semi-formal-reasoning]] — Structured prompting that requires explicit premises, execution traces, and formal conclusions to prevent unsupported claims.
 - [[strategic-vs-tactical-programming]] — Prioritizing long-term health over immediate tactical fixes.
@@ -231,6 +232,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.
 - [[axiom]] — Observability platform for high-cardinality, high-dimensionality log data at scale.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.
+- [[claude-tag]] — Anthropic's Slack-native, channel-scoped agent; the multiplayer/async/proactive counterpart to Claude Code. The paradigm-3 instance.
 - [[contextcov]] — Framework that transforms passive AGENTS.md instructions into executable guardrails; 88.3% constraint compliance on SWE-bench Lite.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
 - [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.

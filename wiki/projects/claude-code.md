@@ -1,7 +1,7 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-07-01
+updated: 2026-07-09
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md, raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md]
 tags: [tool, ai, agent, anthropic]
 unaudited_marginal: 0
@@ -87,6 +87,8 @@ This also applies in reverse: HTML files serve as high-context inputs for verifi
 - [[agent-loop]] — The concept Claude Code's `/loop` and `/goal` primitives instantiate
 - [[orchestration-loop]] — Stage 5: loops supervising loops on a schedule, made accessible by `/loop`
 - [[gas-town]] — Steve Yegge's open-source orchestration loop built on 20–30 Claude Code instances
+- [[claude-tag]] — The multiplayer/async/proactive sibling: Claude Code made a persistent, channel-scoped team member (paradigm 3)
+- [[llm-ui-paradigms]] — Karpathy's three-paradigm framing; Claude Code is paradigm 2 (app), Claude Tag is paradigm 3 (persistent org-level entity)
 
 ## Sources
 

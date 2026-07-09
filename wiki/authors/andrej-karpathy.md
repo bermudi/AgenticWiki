@@ -1,13 +1,14 @@
 ---
 title: Andrej Karpathy
 created: 2026-05-09
-updated: 2026-06-17
+updated: 2026-07-09
 unaudited_marginal: 0
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/karpathy-llm-knowledge-bases.md
   - raw/karpathy-farzapedia-explicit-memory.md
   - raw/karpathy-html-output.md
+  - raw/karpathy-claude-tag-third-paradigm.md
 tags: [author, ai-researcher, educator]
 ---
 
@@ -30,6 +31,10 @@ Karpathy articulates a three-stage paradigm shift in how we program computers:
 - **Software 3.0**: Prompting as programming — the context window is your lever over the LLM as interpreter
 
 He argues the transition isn't just "programming getting faster" — it's new categories of information processing becoming automatable. LLM knowledge bases are his favorite example: a category of software that literally couldn't exist before.
+
+### Three Paradigms of LLM UI/UX
+
+A second three-stage Karpathy lineage — this one about *where the model lives in the human's workflow*, not the programming substrate. Reacting to Anthropic's [[claude-tag|Claude Tag]] launch (June 2026), he posted that LLM interaction has gone through three paradigms: (1) the LLM as a **website** you visit, (2) the LLM as an **app** you download, (3) the LLM as a **self-contained, persistent, asynchronous entity** with org-wide tools and context working alongside teams of humans. When the post drew mockery, he defended it: this isn't a Slack bot, it's an **"org-level harness."** See [[llm-ui-paradigms]] for the full framing and [[theo-t3gg|Theo]]'s practitioner amplification (channel as context boundary, multiplayer, async, proactive).
 
 ### Vibe Coding → Agentic Engineering
 
@@ -82,6 +87,8 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 - [[verifiability]] — His economic theory of what gets automated
 - [[jagged-frontier]] — His "car wash" example is a canonical illustration of jaggedness
 - [[software-1-2-3]] — The paradigm progression he articulated
+- [[llm-ui-paradigms]] — A second Karpathy three-stage lineage: where the model lives in the workflow (website → app → persistent org-level entity)
+- [[claude-tag]] — The Anthropic product whose launch prompted the third-paradigm post
 - [[html-as-agent-output]] — His output fidelity progression ladder (text → md → HTML → neural video)
 - [[open-knowledge-format]] — Google Cloud's OKF spec formalizes Karpathy's LLM-wiki pattern into a portable, interoperable format; cites him by name in the announcement
 - LLM knowledge bases — His recipe for personal knowledge management via LLMs (concept page TBD)
@@ -92,3 +99,4 @@ A tweet Karpathy keeps returning to: "You can outsource your thinking but you ca
 - `raw/karpathy-llm-knowledge-bases.md` — Original tweet describing the raw/ → compile → Q&A → lint workflow; Obsidian frontend, Marp slides, CLI search engine, and manual-free wiki maintenance.
 - `raw/karpathy-farzapedia-explicit-memory.md` — Follow-up tweet endorsing Farza's personal Wikipedia as a concrete example; explicit memory, file over app, BYOAI philosophy.
 - `raw/karpathy-html-output.md` — Tweet thread on audio-in/vision-out asymmetry, output fidelity progression, and HTML as an emerging default output format for LLMs.
+- `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's X post (June 2026) framing Claude Tag as the third major redesign of LLM UI/UX (website → app → persistent async org-level entity) and the "org-level harness" defense reply.

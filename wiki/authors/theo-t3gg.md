@@ -1,10 +1,11 @@
 ---
 title: "Theo (t3.gg)"
 created: 2026-06-03
-updated: 2026-07-02
+updated: 2026-07-09
 sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-i-guess-were-writing-loops-now.md
+  - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
 tags: [author, ai-engineering, cognitive-debt, tool-design, agent-loops]
 unaudited_marginal: 0
 ---
@@ -43,6 +44,14 @@ A firsthand arc from loops skeptic to practitioner. Theo had written off autonom
 
 **Against predefined agent personas.** He dismisses the fashion for hardcoding agent roles in markdown ("the adversarial reviewer, the security reviewer, the grokker and finder") as fundamentally missing the point: "The agent can build the context it needs... without having everything pre-built and hard-coded ahead of time." This aligns with the [[multi-agent-illusion]] finding that elaborate auto-discovered multi-agent structure collapses to CoT-SC; the value is in dynamic, problem-shaped orchestration, not prefabricated personas.
 
+## The Org-Level Agent (Channel-Scoped)
+
+His next move after the loops conversion: the agent as a **persistent, channel-scoped teammate**, not a session you drive. Reacting to [[andrej-karpathy|Karpathy]]'s [[llm-ui-paradigms|"third paradigm"]] post about [[claude-tag|Claude Tag]], Theo isolates the property that makes it more than a Slack bot: **the channel as context boundary** (see [[context-engineering]]). Existing tools offer only global or project-specific scoping — too coarse for the real tangle of people, projects, teams, and tasks. A channel maps naturally to how teams already work, and — crucially — it's independent of codebase topology, so context lives at the channel, not the repo.
+
+**The custom-isolate mirror.** He had already built the same value prop by hand: a "Hermes agent" running in Discord as one Docker isolate per channel/purpose (sponsor deals, content planning, codebase updates), each with its own skills and connectors. Discord **threads**, not a single running thread, are the key — a single-thread agent (his failed OpenClaw setup) prunes context constantly and lets scheduled tasks pollute unrelated work. Per-thread/per-channel scoping fixes it; a scheduled 11 a.m. meme-scraping job lives in its own thread and never bleeds into a sponsor-deal conversation.
+
+**Model lock-in as the cost of productization.** His sharpest critique of Claude Tag: it binds the paradigm to one lab. His Hermes setup lets him **switch models freely** (GLM, GPT-5.5, Claude, Fable) per channel, and he routinely instructs one model to call another — Codex/GPT-5.5 calling Claude for API design and UI work, where GPT-5.5 is weak. Claude Tag offers none of that control. He frames it as a fork — full custom isolation with model freedom, versus Claude Tag where most of it works by default but you're locked to Anthropic — and explicitly wants competitors to clone the pattern so teams aren't "reliant on just one lab." (This extends his standing thesis that vendor lock-in is a competence failure.)
+
 ## Related
 
 - [[lars-faye]] — Author of the article Theo responds to
@@ -53,9 +62,14 @@ A firsthand arc from loops skeptic to practitioner. Theo had written off autonom
 - [[agent-loop]] — His firsthand cost receipts and the /goal-vs-dynamic-workflow distinction
 - [[multi-agent-illusion]] — His dismissal of predefined personas aligns with the audit
 - [[peter-steinberger]] — The "Pete" whose loops thesis Theo converted to
+- [[llm-ui-paradigms]] — Amplified Karpathy's third-paradigm framing with the channel-as-context-boundary insight
+- [[claude-tag]] — The product whose org-level-agent pattern Theo both praises and critiques (model lock-in)
+- [[context-engineering]] — Theo isolates the channel as the natural context-scoping unit
+- [[proactive-service]] — Claude Tag's ambient mode, via Theo's account
 - T3 Code — Theo's open-source coding agent (no wiki page yet)
 
 ## Sources
 
 - `raw/yt-we-all-fell-for-it.md` — "We all fell for it…" (June 2026); video response to Lars Faye's article; extensive commentary on cognitive debt, skill atrophy, token costs, vendor lock-in, and the code-frequency distinction
 - `raw/yt-i-guess-were-writing-loops-now.md` — "I guess we're writing loops now?" (2026); firsthand loops-conversion arc, dynamic loop generation, the "prompt yourself out of involvement" heuristic, cost-as-challenge framing (~$10K inference for $600 of plans), and the case against predefined agent personas.
+- `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — "The next paradigm shift (according to Karpathy)" (2026); reaction to Karpathy's Claude Tag post. Source for the channel-as-context-boundary insight, the per-channel Docker-isolate "Hermes agent" setup (Discord threads over single-thread agents), and the model-lock-in / agent-to-agent-delegation critique (switching GLM / GPT-5.5 / Claude / Fable per channel).

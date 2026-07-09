@@ -1,7 +1,7 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-07-04
+updated: 2026-07-09
 sources:
   - raw/2605.18747.md
   - raw/2606.09498.md
@@ -156,6 +156,7 @@ The survey concludes with four properties that define the next frontier for reli
 - [[variant-isolation]] — The ensemble routing strategy that resolves the catastrophic-forgetting pathology on heterogeneous task sets
 - [[harness-model-co-evolution]] — The cross-harness GRPO loop that closes the harness–model optimization cycle
 - [[darwin-agent-team]] — The author team behind HarnessX
+- [[llm-ui-paradigms]] — Karpathy's "org-level harness" framing for the paradigm-3 agent; harness-engineering is the discipline the org-level harness requires
 
 ## Sources
 

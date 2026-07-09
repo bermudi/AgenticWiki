@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-06
+updated: 2026-07-09
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -38,6 +38,8 @@ sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/2512.08296-scaling-agent-systems.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/karpathy-claude-tag-third-paradigm.md
+  - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -91,6 +93,9 @@ The agent workflow consists of two interdependent phases — human-in-the-loop d
 
 > [!note] Marginal: The Hype Cycle, Discourse Slop, and Rollback Posture
 > [[neetcode|NeetCode]] audits the very loops discourse the note above draws on and finds it largely [[discourse-slop]]: performative, LLM-polished, conceptually trivial once the styling is stripped. His epistemic heuristic is to weight hype by the speaker's incentive — Anthropic, OpenAI, and Cursor sell agentic coding and have strong incentives to build hype, while Google does not, which is one reason its internal talks run more measured. The practical upshot for this thread: the loops/skills workflow is real and documented above, but the *public conversation* about it moves faster than practitioners understand it ("there are no experts, only people who pretend"), and the popularizers themselves walked back their enthusiasm within weeks ([[jarred-sumner|for-each, not while]]; [[armin-ronacher|review, not implementation]]). NeetCode also surfaces [[rollback-posture]] as a systems counterweight: release cadence must not outpace detection cadence, or rollbacks jam — the deploy-layer version of the speed-review asymmetry this thread already documents at the code level. Treat the workflow as documented engineering; treat the discourse about it as a hype-amplified signal that needs the same verification discipline as the code it describes.
+
+> [!note] Marginal: The Agent Becomes a Persistent Teammate (Paradigm 3)
+> [[andrej-karpathy|Karpathy]]'s [[llm-ui-paradigms|"third paradigm of LLM UI/UX"]] reframes the workflow's substrate: the agent stops being a session the human drives and becomes a persistent, async, proactive teammate embedded in the team's coordination layer (a Slack/Discord channel), scoped per-channel rather than per-session. Anthropic's [[claude-tag|Claude Tag]] (2026) is the shipped instance — the multiplayer, async, proactive counterpart to solo Claude Code. This reshapes the HITL/AFK split toward **delegation to a teammate that can act without being asked** ([[proactive-service]]): the human's queue of AFK work is no longer something only the human feeds, and the context boundary moves from the repo to the [[context-engineering|channel]]. The open question this thread inherits: does productized channel-scoping preserve the [[verification-loop|verification discipline]] the workflow depends on, or does ambient/proactive execution outrun review capacity (the [[plan-vs-review|review bottleneck]])?
 
 ## The Two Phases
 
@@ -483,4 +488,6 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The "designing loops" discourse: the cost-shift thesis (loop management as the new expensive part; Uber $1,500/person/tool/month cap) as the financial twin of the review bottleneck, and the five-stage agent-loop lineage in which the Ralph loop is Stage 3 and the orchestration loop is Stage 5
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s audit of the loops discourse as discourse slop; the incentive heuristic (Anthropic/OpenAI/Cursor hype, Google measured); the temporal walk-back (for-each not while; review not implementation); "there are no experts, only people who pretend."
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's in-skill steering levers as workflow infrastructure: leading words ([[leading-words]]) as the in-skill mechanism the workflow dispatches (the workflow decides which skill fires when, the leading word decides how the agent executes once loaded), and the split-skill technique (hide future goals to increase leg work on the current step) as a workflow decomposition decision. See the "In-Skill Steering" marginal note.
+- `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's X post defining the third paradigm of LLM UI/UX: the agent as a persistent, async, org-level entity embedded in team coordination. Source for the "Agent Becomes a Persistent Teammate" marginal note — paradigm 3 reshapes the HITL/AFK split toward delegation to a proactive teammate.
+- `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): Claude Tag's mechanics (channel-scoped, multiplayer, async, proactive) as the paradigm-3 instance; the model-lock-in critique; the per-channel isolate practitioner experience. Source for the "Agent Becomes a Persistent Teammate" marginal note.
 

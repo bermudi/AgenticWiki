@@ -1,8 +1,9 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-07-01
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
+updated: 2026-07-09
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", raw/yt-the-next-paradigm-shift-according-to-karpathy.md]
+unaudited_marginal: 0
 tags: [concept, workflow, agents]
 ---
 
@@ -55,6 +56,10 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[the-agent-workflow]] — AFK is the "execution" phase of the modern agentic workflow.
 - [[the-human-lever]] — The human shifts from implementation to QA and design; AFK agents execute under human-owned boundaries.
 
+## Async, Proactive Team Agents
+
+[[claude-tag|Claude Tag]] (Anthropic, 2026) and [[theo-t3gg|Theo]]'s "Hermes agent" push AFK execution from the solo background loop toward a persistent **team member** that schedules its own tasks over hours or days and works asynchronously alongside humans in a shared channel. This is the [[llm-ui-paradigms|paradigm-3]] evolution of the AFK agent: not a sandboxed implementer you dispatch, but a teammate you delegate to and that can act without being asked (see [[proactive-service]]). The async/self-scheduling property means the human's queue of AFK work stops being something only the human feeds — the agent can queue its own follow-ups.
+
 ## Related
 
 - [[claude-code]] — Can be used to spawn AFK agents (e.g., "Ralph").
@@ -74,6 +79,9 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[software-factory]] — The software factory is the full automation of the AFK agent concept — replacing the human-in-the-loop with a system
 - [[wide-events]] — Wide events make AFK agent behavior inspectable without constant human attention
 - [[agent-loop]] — The agent loop is the canonical AFK execution pattern: a program that prompts the agent each tick instead of a human
+- [[claude-tag]] — Async, self-scheduling, persistent team agent; the paradigm-3 evolution of the AFK pattern
+- [[llm-ui-paradigms]] — Karpathy's third paradigm reframes AFK as delegation to a persistent teammate
+- [[proactive-service]] — Ambient/agent-initiated behavior is the proactive extension of AFK execution
 
 ## Sources
 
@@ -82,3 +90,4 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology.
 - `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Focus maxing / parallel AFK management as agents cross the 5-minute execution threshold.
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle: the parallelized AFK pipeline (planner → implementer → reviewer → merger), Docker sandboxing, Kanban DAG for parallelization
+- `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): Claude Tag's async, self-scheduling, proactive teammate model as the paradigm-3 evolution of the AFK agent; Theo's per-channel isolate equivalent.

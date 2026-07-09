@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-04
+updated: 2026-07-09
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -338,6 +338,7 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - [[supervision-paradox]] — The structural contradiction that makes the human lever self-undermining
 - [[the-cognitive-cost]] — The thread that frames the human lever's population-level challenge
 - [[plan-vs-review]] — The quantified tradeoff between planning depth and review burden
+- [[llm-ui-paradigms]] — Paradigm 3 shifts the human from driving sessions to delegating to a persistent teammate; the human lever moves from per-session design authority to managing a self-scheduling agent
 - [[ubiquitous-language]] — Defining the language is a high-leverage human task; the glossary is the artifact the human owns personally.
 - [[afk-agent]] — The human shifts from implementation to QA and design; AFK agents execute under human-owned boundaries
 - [[code-intelligence]] — High-fidelity context as the foundation for human design authority in grey box engineering

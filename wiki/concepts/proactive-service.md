@@ -1,9 +1,10 @@
 ---
 title: Proactive Service
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-09
 sources:
   - raw/2606.16707v1.md
+  - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
 tags: [concept, agent-memory, proactivity, alert, constraint, agent-initiation]
 unaudited_marginal: 0
 ---
@@ -85,6 +86,13 @@ The decisive factor is the **pipeline, not the representation**. UaC without pre
 
 The hard-scenario gap is genuinely hard. On hard arithmetic, UaC drops 15pp (100% → 85%); live Mem0 drops 10pp (90% → 80%); simulated Mem0 drops 27.5pp (92.5% → 65%); A-MEM falls to 30%. The one comparison the paper cannot resolve is live Mem0 at 80% on hard scenarios — CIs overlap heavily and McNemar gives p=0.69; n≈200 would be needed to resolve the 5pp effect at α=0.05. The headline claim is that the pipeline separates UaC from four of five baselines at p<0.01; the fifth (live Mem0 on hard) remains inconclusive at n=20.
 
+## A Shipped Instance: Claude Tag's Ambient Mode
+
+Anthropic's [[claude-tag|Claude Tag]] (2026) ships a productized, real-world instance of the initiation asymmetry. Its **ambient behavior** mode has Claude proactively keep the team updated, flag relevant information from across the channels and tools it's connected to, and follow up on threads or tasks that have gone quiet — all agent-initiated, driven by channel state rather than a user query. This is exactly the initiation asymmetry that defines proactive service: the alert is generated without being asked.
+
+> [!warning] Contradiction: Deterministic vs. LLM-Mediated Proactivity
+> The mechanism differs sharply from UaC's constraint pipeline. UaC fires **deterministic executable constraints** over typed state — the check runs every state change, guaranteed, and the LLM is out of the verification loop at check time. Claude Tag's ambient mode is **LLM-mediated**: the model itself decides what is "relevant" to flag and which quiet threads deserve a follow-up. That buys flexibility (it can notice things no pre-written constraint anticipated) at the cost of the deterministic guarantee — there is no `med.drug_class == allergy.drug_class` that fires no matter what. The two occupy different points on the proactivity spectrum: UaC is constraint-driven and certain; Claude Tag is judgment-driven and probabilistic. See [[llm-ui-paradigms]] for the framing and [[theo-t3gg|Theo]]'s account of the ambient mode.
+
 ## Constraint Generation
 
 Constraints are not pre-defined. The coding agent writes them when it sees a check that's worth running. The pattern is the **generate-verify-review loop** applied to memory:
@@ -130,7 +138,10 @@ This is the same progressive-disclosure pattern as the broader [[context-enginee
 - [[context-engineering]] — Manifest as always-loaded compact context
 - [[verification-loop]] — Continuous verification loop over user state
 - [[bojie-li]] — Author of UaC, Pine AI
+- [[claude-tag]] — A shipped, LLM-mediated instance of the initiation asymmetry (ambient mode)
+- [[llm-ui-paradigms]] — Paradigm 3 (persistent async org-level entity) is where proactive/ambient behavior becomes a default product property
 
 ## Sources
 
 - `raw/2606.16707v1.md` — Bojie Li, Pine AI (June 2026). *User as Code: Executable Memory for Personalized Agents.* Sections 1, 3.3.2, 4.4, and Appendix F.2–F.4. The five Active Service categories, the 40 standard + 20 hard scenarios, the constraint pipeline as the decisive factor (no-alerts UaC at 52.5%), and the drug-allergy + wire-transfer worked examples.
+- `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): Claude Tag's ambient/proactive mode as a shipped instance of the initiation asymmetry — LLM-mediated rather than deterministic constraint-driven, flagging relevant information and following up on quiet threads driven by channel state.
