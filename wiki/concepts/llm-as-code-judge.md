@@ -1,7 +1,7 @@
 ---
 title: LLM as Code Judge
 created: 2026-05-15
-updated: 2026-07-03
+updated: 2026-07-09
 sources:
   - raw/bias-in-the-loop-llm-judge-code.md
   - raw/llm-overcorrection-code-review.md
@@ -26,6 +26,7 @@ The overcorrection study (pointwise setting) shows that when judges are asked to
 
 ## Related
 
+- [[zixiao-zhao]] — Lead author of the Bias in the Loop study (the primary empirical basis for this page)
 - [[rubric-evaluation]] — RUBRICEVAL shows frontier models struggle with fine-grained judging; related reliability concerns
 - [[hallucination]] — Overcorrection rationales exhibit hallucination-like behavior (fabricating unstated constraints)
 - [[verifiability]] — The Fix-guided Verification Filter uses execution evidence to ground judge decisions

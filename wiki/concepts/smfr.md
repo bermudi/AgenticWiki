@@ -1,7 +1,7 @@
 ---
 title: SMFR (Synthetic Multi-Hop Financial Reasoning)
 created: 2026-06-18
-updated: 2026-07-04
+updated: 2026-07-09
 sources:
   - raw/2606.13003.md
 tags: [concept, benchmark, multi-agent, evaluation, diagnostic, financial-reasoning]
@@ -64,7 +64,7 @@ The Expert-MAS baseline on SMFR is the experimental lever. It is a deterministic
 - **CalculatorAgent**: reasons over isolated snippets, computes P&L and target prices
 - **Aggregator**: sorts qualifying dates, identifies winning investor (deterministic)
 
-The Expert-MAS is hand-engineered per Anthropic's [[https://www.anthropic.com/engineering/built-multi-agent-research-system|recommendation]] for MAS: explicit decomposition, role specialization, and deterministic orchestration. The fact that it works (and the automated variants don't) is the paper's strongest evidence that the failure is in the automated *search process*, not the multi-agent paradigm.
+The Expert-MAS is hand-engineered per Anthropic's [recommendation](https://www.anthropic.com/engineering/built-multi-agent-research-system) for MAS: explicit decomposition, role specialization, and deterministic orchestration. The fact that it works (and the automated variants don't) is the paper's strongest evidence that the failure is in the automated *search process*, not the multi-agent paradigm.
 
 ## Relationship to Other Benchmarks
 

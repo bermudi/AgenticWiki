@@ -1,7 +1,7 @@
 ---
 title: Semi-Formal Reasoning
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-09
 sources:
   - raw/agentic-code-reasoning.md
 tags: [concept, reasoning, code-review, verification, structured-prompting]
@@ -26,6 +26,7 @@ Remaining failure modes: incomplete execution tracing (assuming function behavio
 
 ## Related
 
+- [[shubham-ugare]] — Lead author of the agentic code reasoning paper introducing semi-formal reasoning
 - [[verifiability]] — Semi-formal certificates enable execution-free verification, aligning with Karpathy's verifiability thesis
 - [[iterative-self-correction]] — Unlike self-correction loops which can amplify errors, semi-formal templates prevent unsupported claims structurally
 - [[context-engineering]] — The template is a form of context engineering that constrains reasoning toward evidence

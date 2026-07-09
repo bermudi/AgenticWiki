@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-07-04
+updated: 2026-07-09
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -204,7 +204,7 @@ This is the MAS-layer analog of the thread's existing verification findings:
 | Existing finding (single-agent) | MAST finding (multi-agent) |
 |---|---|
 | [[rubric-evaluation|RUBRICEVAL]]: LLM judges achieve 55.97% on hard rubric judgments | FC3: even explicit verifiers perform only superficial checks despite thorough prompts |
-| [[bias-in-the-loop-llm-judge-code.md|Bias in the Loop]]: 40+ point swings from prompt framing | FC2: communication-protocol fixes insufficient; needs "theory of mind" |
+| [[llm-as-code-judge|Bias in the Loop]]: 40+ point swings from prompt framing | FC2: communication-protocol fixes insufficient; needs "theory of mind" |
 | [[contextcov|ContextCov]]: LLM reflection degrades compliance; mechanical enforcement needed | FC3: multi-level verification needed; final-stage low-level checks inadequate |
 | [[property-based-testing-as-spec|PBT-as-spec]]: remove the LLM from the verification loop | FC3 case study: adding a high-level objective check (deterministic) yields +15.6% |
 
