@@ -4,6 +4,7 @@ created: 2026-05-31
 updated: 2026-05-31
 sources:
   - raw/domain-expertise-has-always-been-the-real-moat.md
+unaudited_marginal: 0
 tags: [author, domain-expertise, career]
 ---
 

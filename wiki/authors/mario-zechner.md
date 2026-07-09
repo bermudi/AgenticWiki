@@ -7,6 +7,7 @@ sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
+unaudited_marginal: 0
 tags: [people, engineering, ai, game-development, austria]
 ---
 

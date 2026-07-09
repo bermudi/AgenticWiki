@@ -7,6 +7,7 @@ sources:
   - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
   - raw/yt-slop-watch-ideation.md
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
+unaudited_marginal: 0
 tags: [concept, ddd, ai-native, design]
 ---
 

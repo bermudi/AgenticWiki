@@ -6,6 +6,7 @@ sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
+unaudited_marginal: 0
 tags: [author, autonomous-agents, ralph-wiggum, claude-code]
 ---
 

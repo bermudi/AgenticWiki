@@ -6,6 +6,7 @@ sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-agent-trust-vector-study-2026.md
+unaudited_marginal: 0
 tags: [author, youtube]
 ---
 

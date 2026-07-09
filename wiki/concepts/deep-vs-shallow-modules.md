@@ -3,6 +3,7 @@ title: Deep vs. Shallow Modules
 created: 2026-04-24
 updated: 2026-05-05
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"]
+unaudited_marginal: 0
 tags: ["software-architecture", "clean-code"]
 ---
 

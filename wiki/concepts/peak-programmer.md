@@ -7,6 +7,7 @@ sources:
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/domain-expertise-has-always-been-the-real-moat.md
+unaudited_marginal: 0
 tags: [future-of-work, economics, ai]
 ---
 

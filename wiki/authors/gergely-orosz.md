@@ -3,6 +3,7 @@ title: Gergely Orosz
 created: 2026-04-25
 updated: 2026-05-01
 sources: ["raw/yt-dhh-ai-pilled.md", "raw/yt-reinventing-software-panel.md", "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"]
+unaudited_marginal: 0
 tags: [author, pragmatic-engineer, journalism]
 ---
 

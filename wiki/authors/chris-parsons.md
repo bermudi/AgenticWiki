@@ -4,6 +4,7 @@ created: 2026-05-04
 updated: 2026-05-04
 sources:
   - raw/ralph-loops-build-dumb-ai-loops-chris-parsons.md
+unaudited_marginal: 0
 tags: [author, ralph-loops, agent-loops, claude-code, skills, autonomous-agents]
 ---
 

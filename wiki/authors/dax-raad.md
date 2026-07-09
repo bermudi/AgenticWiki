@@ -4,6 +4,7 @@ created: 2026-05-31
 updated: 2026-05-31
 sources:
   - raw/yt-effect-opencode-dax-raad.md
+unaudited_marginal: 0
 tags: [author, effect, typescript, opencode, anomaly]
 ---
 

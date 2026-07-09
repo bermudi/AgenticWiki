@@ -3,6 +3,7 @@ title: Strategic vs. Tactical Programming
 created: 2026-04-25
 updated: 2026-05-03
 sources: ["raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "John Ousterhout, *A Philosophy of Software Design*", "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"]
+unaudited_marginal: 0
 tags: ["software-design", "ai-engineering", "strategy"]
 ---
 

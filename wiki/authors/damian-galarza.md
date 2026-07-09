@@ -3,6 +3,7 @@ title: Damian Galarza
 created: 2026-04-27
 updated: 2026-06-19
 sources: ["raw/yt-the-observability-layer-your-ai-agent-is-missing.md", "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md", "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md", "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"]
+unaudited_marginal: 0
 tags: ["author", "agent-quality", "observability", "evals"]
 ---
 

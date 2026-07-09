@@ -4,6 +4,7 @@ created: 2026-04-29
 updated: 2026-05-05
 sources:
   - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
+unaudited_marginal: 0
 tags: [project, skill, ai-engineering, refactoring, architecture]
 ---
 

@@ -4,6 +4,7 @@ created: 2026-05-02
 updated: 2026-05-02
 sources:
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
+unaudited_marginal: 0
 tags: [author, engineering]
 ---
 

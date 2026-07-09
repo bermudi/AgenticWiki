@@ -3,6 +3,7 @@ title: Matt Pocock
 created: 2026-04-24
 updated: 2026-07-06
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-slop-watch-ideation.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", "raw/yt-building-great-agent-skills-the-missing-manual.md"]
+unaudited_marginal: 0
 tags: ["typescript", "ai-engineering", "author"]
 ---
 

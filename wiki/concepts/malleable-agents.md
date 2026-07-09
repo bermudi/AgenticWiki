@@ -6,6 +6,7 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
+unaudited_marginal: 0
 tags: [concept, ai-agents, design-patterns, plugins, self-modifying-software]
 ---
 

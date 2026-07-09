@@ -3,6 +3,7 @@ title: Martin Fowler
 created: 2026-04-25
 updated: 2026-04-26
 sources: ["raw/yt-reinventing-software-panel.md"]
+unaudited_marginal: 0
 tags: ["author", "software-design", "agile", "refactoring"]
 ---
 

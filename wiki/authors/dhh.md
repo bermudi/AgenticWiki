@@ -3,6 +3,7 @@ title: David Heinemeier Hansson (DHH)
 created: 2026-04-25
 updated: 2026-04-26
 sources: [raw/yt-dhh-ai-pilled.md]
+unaudited_marginal: 0
 tags: [author, rails, basecamp, 37signals]
 ---
 

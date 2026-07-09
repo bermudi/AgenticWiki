@@ -4,6 +4,7 @@ created: 2026-05-04
 updated: 2026-05-04
 sources:
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
+unaudited_marginal: 0
 tags: [concept, tool-design, workflow, ai-engineering]
 ---
 

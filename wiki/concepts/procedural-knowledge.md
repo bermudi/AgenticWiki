@@ -4,6 +4,7 @@ created: 2026-05-04
 updated: 2026-05-04
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
+unaudited_marginal: 0
 tags: [concept, knowledge, memory, agents, cognitive-science]
 ---
 

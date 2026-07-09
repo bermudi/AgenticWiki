@@ -5,6 +5,7 @@ updated: 2026-05-08
 sources:
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - "Peter Naur, Programming as Theory Building (1985)"
+unaudited_marginal: 0
 tags: ["design", "ai-engineering", "mental-models"]
 ---
 

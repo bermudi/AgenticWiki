@@ -7,6 +7,7 @@ sources:
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
   - raw/2603.04474-spark-to-fire-error-cascades.md
   - raw/2511.09030-maker-million-step-zero-errors.md
+unaudited_marginal: 0
 tags: [failure-mode, llm, reliability, long-horizon]
 ---
 

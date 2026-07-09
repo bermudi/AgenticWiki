@@ -4,6 +4,7 @@ created: 2026-05-05
 updated: 2026-05-05
 sources:
   - raw/synthetic-truths-gemini-has-a-secret-code.md
+unaudited_marginal: 0
 tags: [concept, llm, reliability, failure-mode]
 ---
 

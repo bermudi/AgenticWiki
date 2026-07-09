@@ -5,6 +5,7 @@ updated: 2026-06-01
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-llms-are-killing-agent-harness.md
+unaudited_marginal: 0
 tags: [concept, ai-engineering, coding]
 ---
 

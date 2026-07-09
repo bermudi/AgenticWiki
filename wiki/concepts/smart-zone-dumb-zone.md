@@ -7,6 +7,7 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
+unaudited_marginal: 0
 tags: ["ai-limitations", "context-management", "tool-design"]
 ---
 

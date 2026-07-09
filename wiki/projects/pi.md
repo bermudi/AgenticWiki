@@ -6,6 +6,7 @@ sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
+unaudited_marginal: 0
 tags: [tool, ai-agents, open-source, self-modifying-software]
 ---
 

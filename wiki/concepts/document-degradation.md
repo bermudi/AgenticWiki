@@ -4,6 +4,7 @@ created: 2026-05-02
 updated: 2026-07-03
 sources:
   - raw/2604.15597v1.md
+unaudited_marginal: 0
 tags: [llm, reliability, delegation, failure-mode, long-horizon]
 ---
 

@@ -10,6 +10,7 @@ sources:
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+unaudited_marginal: 0
 tags: ["anti-pattern", "ai-engineering", "heuristics"]
 ---
 

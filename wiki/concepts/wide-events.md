@@ -3,6 +3,7 @@ title: Wide Events
 created: 2026-04-28
 updated: 2026-04-28
 sources: ["raw/yt-youre-logging-wrong.md"]
+unaudited_marginal: 0
 tags: ["observability", "logging", "production-engineering", "opentelemetry", "patterns"]
 ---
 

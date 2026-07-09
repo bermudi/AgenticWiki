@@ -4,6 +4,7 @@ created: 2026-05-09
 updated: 2026-05-09
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+unaudited_marginal: 0
 tags: [concept, paradigm, programming]
 ---
 

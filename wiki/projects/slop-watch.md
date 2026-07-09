@@ -4,6 +4,7 @@ created: 2026-05-02
 updated: 2026-05-04
 sources:
   - raw/yt-slop-watch-ideation.md
+unaudited_marginal: 0
 tags: [project, observability, coding-agents, self-hosted, matt-pocock]
 ---
 

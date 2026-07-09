@@ -4,6 +4,7 @@ created: 2026-05-02
 updated: 2026-05-02
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
+unaudited_marginal: 0
 tags: [author, ai-engineering, agent-workflow]
 ---
 

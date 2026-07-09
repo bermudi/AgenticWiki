@@ -3,6 +3,7 @@ title: Tracer Bullets
 created: 2026-04-25
 updated: 2026-07-06
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-building-pi-in-a-world-of-slop.md", "raw/yt-building-great-agent-skills-the-missing-manual.md"]
+unaudited_marginal: 0
 tags: ["software-architecture", "agile", "ai-workflow"]
 ---
 

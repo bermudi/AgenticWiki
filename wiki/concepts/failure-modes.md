@@ -20,6 +20,7 @@ sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/2606.14249.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+unaudited_marginal: 0
 tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolution]
 ---
 

@@ -9,6 +9,7 @@ sources:
   - raw/slowing-the-fuck-down.md
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
+unaudited_marginal: 0
 tags: [concept, ai, ethics, code-quality]
 ---
 

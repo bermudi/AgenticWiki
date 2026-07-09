@@ -3,6 +3,7 @@ title: Grey Box Engineering
 created: 2026-04-24
 updated: 2026-05-09
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"]
+unaudited_marginal: 0
 tags: ["software-design", "ai-workflow"]
 ---
 

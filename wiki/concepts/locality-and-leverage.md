@@ -4,6 +4,7 @@ created: 2026-04-29
 updated: 2026-04-29
 sources:
   - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
+unaudited_marginal: 0
 tags: [software-architecture, ai-engineering, module-design]
 ---
 

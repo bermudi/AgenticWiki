@@ -4,6 +4,7 @@ created: 2026-05-06
 updated: 2026-07-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
+unaudited_marginal: 0
 tags: [llm, failure-mode, agent-quality, planning]
 ---
 
