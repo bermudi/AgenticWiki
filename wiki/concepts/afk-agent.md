@@ -42,7 +42,7 @@ This is the parallelized evolution of the sequential Ralph Loop: instead of one 
 
 A key pattern from Matt's workflow: **QA runs concurrently with AFK implementation, not after it**. While the Ralph loop implements issues in the background, Matt simultaneously tests the application, finds bugs, and files new GitHub issues. These issues become fodder for the next Ralph iteration.
 
-This creates a temporal parallelism — sometimes called the **"day shift / night shift"** pattern (coined by Jamon on Twitter): the human does the day shift (grilling, PRD writing, QA) while the agent does the night shift (implementation). The human's work queues tasks for the agent; the agent's work provides material for the human's QA.
+This creates a temporal parallelism — sometimes called the **"day shift / night shift"** pattern ([[matt-pocock|Matt Pocock]]'s term, from his workflow workshop): the human does the day shift (grilling, PRD writing, QA) while the agent does the night shift (implementation). The human's work queues tasks for the agent; the agent's work provides material for the human's QA.
 
 ### Focus Maxing: Parallel AFK Streams
 

@@ -386,7 +386,7 @@ Once a project has been established, [[matt-pocock|Matt Pocock]] demonstrates th
 6. **QA in Parallel**: While the agent implements, the human tests the application manually, filing bugs as GitHub issues. The next Ralph iteration picks these up.
 7. **Repeat**: Ralph loop after Ralph loop until issues are exhausted.
 
-The key insight: **steps 5 and 6 happen concurrently**. The human doesn't wait for the agent to finish before starting QA. This is the "**day shift / night shift**" pattern (coined by Jamon on Twitter) — the human designs and QA's during the day, the agent implements at night.
+The key insight: **steps 5 and 6 happen concurrently**. The human doesn't wait for the agent to finish before starting QA. This is the "**day shift / night shift**" pattern ([[matt-pocock|Pocock]]'s term, from his workflow workshop) — the human designs and QA's during the day, the agent implements at night.
 
 ### Interface Review, Not Code Review
 
@@ -444,7 +444,7 @@ This is a fundamentally different mode from traditional software engineering, wh
 
 The key design constraint: agents must run for **long enough** that context-switching doesn't fry the human. Shifting attention every 30 seconds between agent outputs is unsustainable. The ideal is sessions of 5+ minutes where the agent produces a complete, reviewable unit — not incremental partial outputs that require constant mid-stream intervention.
 
-This parallels the "day shift / night shift" pattern (Jamon) from [[matt-pocock|Pocock]]'s pipeline: the human runs multiple agents during the day (each in different stages), not just one overnight batch. The [[verification-loop]] becomes a parallel concern — different streams may need different verification gates.
+This parallels the "day shift / night shift" pattern from [[matt-pocock|Pocock]]'s pipeline: the human runs multiple agents during the day (each in different stages), not just one overnight batch. The [[verification-loop]] becomes a parallel concern — different streams may need different verification gates.
 
 The team-scale extension of focus maxing is the [[single-player-to-multiplayer]] problem: at agentic team pace, the cost of merge conflicts and forgotten commits is magnified, requiring workflow primitives like staging gates and decomposition by contributor specialization.
 
