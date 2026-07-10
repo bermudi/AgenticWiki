@@ -33,6 +33,7 @@ sources:
   - raw/yt-systems-building-systems.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
   - raw/2509.09677.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -128,6 +129,8 @@ The design principle: **default to constraining agents more than humans**. This 
 
 The unifying principle across all sources: the more code the AI writes, the more consequential each design decision becomes. Bad code has always been expensive, but [[matt-pocock|Matt Pocock]] argues it is now *the most expensive it's ever been* because it blocks AI's ability to help.
 
+[[kun-chen|Kun Chen]] frames this shift as a role change from "sailor" to "captain." When the agent is one crewmate among many, the human stops executing and starts directing: setting the destination, holding the quality bar, and letting a [[first-mate|meta-agent]] manage the crew. In his workflow, the human reviews the [[no-mistakes]] risk assessment and evidence rather than every diff; the strategic bottleneck is not code review but deciding what matters (talking to users, understanding the market, crafting the "treasure map").
+
 Delegation without design authority is abdication. The human isn't less important in an AI-assisted workflow — they're *more* important, because the cost of a bad design decision is amplified by the speed at which the agent will faithfully implement it.
 
 > [!note] Departure: HITL as Permission Governance
@@ -138,6 +141,12 @@ Delegation without design authority is abdication. The human isn't less importan
 [[andrej-karpathy|Karpathy]] keeps returning to a tweet that crystallizes the human lever:
 
 > "You can outsource your thinking but you can't outsource your understanding."
+
+> [!note] Marginal: The Captain Becomes the Bottleneck
+> [[kun-chen|Kun Chen]]'s "first mate" observation sharpens the human-lever thesis: once a meta-agent manages the crew of implementation agents, the human's bottleneck moves from "how do I manage all these sessions?" to "what should I ask them to do?" The captain must now spend more time talking to users, understanding the competitive landscape, and crafting the "treasure map" that guides the crew. This is the human lever redirected from execution management to strategic direction.
+
+> [!warning] Theory Pressure: Risk-Based Review Without Reading the Diff
+> Kun Chen's [[no-mistakes]] pipeline goes further than this thread's claim that "you own the interfaces." For low-risk changes, he does not inspect the diff at all; he reviews the risk assessment and the recorded evidence (screenshots, logs, video). The pipeline still proposes, executes, verifies, and refines, but the human's role shifts from boundary-owner to risk-arbiter. If the risk classifier is wrong, or the recorded evidence is incomplete, the human is no longer reading the code that ships. This is the human lever applied to the risk model rather than the code itself.
 
 Information still has to make it into the human brain. The human becomes the bottleneck — knowing what to build, why it's worth doing, and how to direct agents. As Karpathy puts it: "I'm still part of the system and information still has to make it into my brain. I feel like I'm becoming a bottleneck of just even knowing what are we trying to build, why is it worth doing, how do I direct my agents."
 
@@ -387,4 +396,5 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — [[al-harris|Al Harris]] / [[kiro|Amazon Kiro]]: property-based testing as spec verification in the deterministic-verification theory-pressure callout; the spec automation of verification reduces the human's verification responsibility
 - `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). Source for the "More Agents Is Not More Leverage" contradiction. Documents that multi-agent coordination is largely unverifiable and the model defaults to single-agent execution anyway (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier picks first worker 45%+ of the time, "expensive witnesses"). The human lever applies to (a) single-agent scenarios, (b) hand-designed multi-agent architectures ([[expert-mas]] 57%→96.5% on GPT-5), but NOT to automated multi-agent search — the case the field is increasingly defaulting to. §3 (cost-quality Pareto); §3.3 (Expert-MAS as the hand-designed control); §4 (functional collapse, positional bias); §5 (ensembling trap).
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Planning Ceiling Is Partly an Execution Ceiling" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers the human does not own. Bound the human lever's reach at the capability layer, not just the prompt layer.
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: the captain/first-mate/crew metaphor as a reframing of the human lever; the human reviews risk assessment and evidence rather than diffs; the bottleneck moves to strategic direction.
 

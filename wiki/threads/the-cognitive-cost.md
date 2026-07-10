@@ -1,7 +1,7 @@
 ---
 title: The Cognitive Cost
 created: 2026-06-03
-updated: 2026-07-06
+updated: 2026-07-09
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
@@ -42,6 +42,9 @@ Faye: "What is happening right now is a trend where developers, who've never had
 Theo: "There's devs who are way out of bound for where their capabilities are, and they're not using the tools to learn to better their capabilities, they're using the tools to reach past their capabilities."
 
 The implication: the human lever may be correct as engineering advice but insufficient as industry strategy. If the population capable of providing design authority is shrinking, the model's assumptions break down at scale.
+
+> [!note] Departure: The Director's Skill Ceiling
+> Kun Chen's workflow is the most extreme instantiation of the "human as director" in this wiki: the human decides what to build, plans in [[lavish]], and reviews only risk assessment and evidence, while [[no-mistakes]] and [[first-mate]] handle execution. The role now requires product judgment, market understanding, and the ability to craft a "treasure map" for a crew of agents. This is the positive vision of the human lever, but it also sharpens the population problem: the director-level skills required are not the same as the coding skills being eroded, and the population capable of both is unknown. The workflow is a demonstration that the role is possible; it is not evidence that it is scalable across the developer population.
 
 ### The Pain Avoidance Mechanism
 

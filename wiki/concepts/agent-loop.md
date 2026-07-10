@@ -1,7 +1,7 @@
 ---
 title: Agent Loop
 created: 2026-07-01
-updated: 2026-07-03
+updated: 2026-07-09
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-only-the-best-are-using-them.md
@@ -9,6 +9,7 @@ sources:
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
   - raw/2511.09030-maker-million-step-zero-errors.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, autonomous-agents, claude-code, cron, orchestration]
 ---
@@ -49,9 +50,9 @@ The word "loop" caused a brawl because it hides at least five different things. 
 |---|---|---|---|
 | **1. Academic while-loop** | 2022 | ReAct paper | The model reasons, calls a tool, reads the result, repeats until done. One model, one loop, a human watching. |
 | **2. Goal-driven self-prompting** | 2023 | AutoGPT | Gave the loop a goal and let it prompt itself. Became famous for spinning forever doing nothing — seeding years of agents are a toy. |
-| **3. The ralph loop** | Jul 2025 | [[geoffrey-huntley\|Geoffrey Huntley]] | A bash one-liner that pipes the same prompt file into the agent over and over. Innovation was *discipline*: each iteration resets context to fixed anchor files instead of letting the conversation grow. Built a programming language with it for ~$297. |
+| **3. The ralph loop** | Jul 2025 | [[geoffrey-huntley|Geoffrey Huntley]] | A bash one-liner that pipes the same prompt file into the agent over and over. Innovation was *discipline*: each iteration resets context to fixed anchor files instead of letting the conversation grow. Built a programming language with it for ~$297. |
 | **4. Productized `/goal`** | Spring 2026 | Codex + Claude Code | Both shipped a `/goal` command that runs the ralph loop until a small validator model confirms the task is done. |
-| **5. Orchestration loops** | 2026 | [[boris-cherny\|Boris Cherny]], [[peter-steinberger\|Peter Steinberger]] | See [[orchestration-loop]]. Loop becomes the unit of work (not the task); loops supervise loops; scheduling replaces the human kickoff; durability becomes explicit. |
+| **5. Orchestration loops** | 2026 | [[boris-cherny|Boris Cherny]], [[peter-steinberger|Peter Steinberger]] | See [[orchestration-loop]]. Loop becomes the unit of work (not the task); loops supervise loops; scheduling replaces the human kickoff; durability becomes explicit. |
 
 Stage 3 — the single-agent ralph loop — is "old hat by now" (in one practitioner's words). Stage 5 — the multi-agent orchestration loop on top of it — is the genuinely new layer. See [[ralph-loop]] for the full mechanics of Stage 3 and [[orchestration-loop]] for Stage 5.
 
@@ -132,6 +133,7 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - [[discourse-slop]] — The meta-discourse around loops (the viral "designing loops" wave) is itself slop-prone
 - [[massively-decomposed-agentic-processes]] — the sixth paradigm in the lineage: single-step microagents + per-step voting; the million-step zero-error limit case
 - [[maker]] — the implementation; Towers of Hanoi as the execution-pole demonstration that per-step voting replaces the human-authored stopping condition
+- [[good-night-have-fun]] — Bounded, capped agent loop for overnight verifiable objectives
 
 ## Sources
 
@@ -141,3 +143,4 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand cost receipts ($10K inference for $600 of subscriptions; the 8-hour/3M-token comment loop), the /goal-vs-dynamic-workflow distinction, and the "prompt yourself out of involvement" heuristic.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s skeptic audit: the "it's just cron" position, the for-each-not-while refinement (via [[jarred-sumner|Jarred Sumner]]), the exponential-decay objection (0.95¹⁰), and [[armin-ronacher|Armin Ronacher]]'s loop-experiment finding (review-only).
 - `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (single-step microagents); §3.2 first-to-ahead-by-k voting as the convergence mechanism; §4.4 the million-step zero-error result. Source for the "sixth paradigm" Extension callout.
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: Good Night, Have Fun as a bounded agent loop with explicit token/iteration caps and stop conditions; comparison to `/goal` commands; overnight verifiable objectives.

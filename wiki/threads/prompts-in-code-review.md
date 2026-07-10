@@ -1,13 +1,14 @@
 ---
 title: Prompts in Code Review
 created: 2026-05-15
-updated: 2026-06-01
+updated: 2026-07-09
 sources:
   - raw/sprig-system-prompt-optimization.md
   - raw/empirical-system-prompts-code-generation.md
   - raw/bias-in-the-loop-llm-judge-code.md
   - raw/agentic-code-reasoning.md
   - raw/llm-overcorrection-code-review.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
 tags: [thread, code-review, prompting, llm-as-judge, overcorrection, bias]
 ---
@@ -78,6 +79,7 @@ The certificate structure directly counters the failure modes identified by the 
 - **Language-dependent sensitivity:** [[system-prompt-effects|System prompt effects]] are dramatically larger for Java than Python across all configurations. This raises the question of whether prompt engineering recommendations are language-specific in ways not yet documented.
 - **Judge consistency vs. correctness:** High consistency rates under bias cues do not indicate reliable judging — they indicate the model has found a shortcut. Reporting consistency without bias sensitivity gives false confidence.
 - **System prompt optimization vs. manual crafting:** SPRIG's genetically optimized prompts outperform hand-crafted CoT, but the overcorrection study shows that manually adding "think step by step" and fix requests worsens outcomes. Optimization and hand-crafting are not interchangeable.
+- **Voice input as a prompt-design variable:** Kun Chen's workflow uses local speech recognition (Open Super Whisper) for most prompts, claiming a 3× speed improvement over typing. Voice input adds a transcription-noise layer and may change the length and style of prompts. The prompts-in-code-review thread focuses on text framing, bias, and structure; the open question is whether voice prompts systematically produce different agent behavior than typed prompts, and whether the speed gain is offset by the need to correct transcription errors or by the difficulty of structuring complex requests by voice.
 
 ## Sources
 
@@ -86,3 +88,4 @@ The certificate structure directly counters the failure modes identified by the 
 - `raw/bias-in-the-loop-llm-judge-code.md` — 12 prompt-induced biases in LLM-as-judge for code; biases act as positional priors
 - `raw/agentic-code-reasoning.md` — Semi-formal reasoning templates improve code verification accuracy by preventing unsupported claims
 - `raw/llm-overcorrection-code-review.md` — Overcorrection bias in LLM code review; more detailed prompts increase false rejection; Fix-guided Verification Filter as mitigation
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's use of voice input for agent prompts; prompt-style differences introduced by transcription.

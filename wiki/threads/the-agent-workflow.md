@@ -40,13 +40,14 @@ sources:
   - raw/yt-building-great-agent-skills-the-missing-manual.md
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
 
 # The Agent Workflow
 
-> How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software. The agent harness architecture has converged on a [[multi-tier-action-space]] pattern (thin tool layer + computer primitive), while [[evolving-context|evolving context]] — agents improving their own prompts, skills, and memories over time — is the major unsolved frontier.
+> How to actually work day-to-day with an AI agent: plan with human in the loop, execute away from keyboard, manage context ruthlessly, and ship tracer bullets to validate early. The operational layer that turns [[the-human-lever|design discipline]] into shipped software. The agent harness architecture has converged on a [[multi-tier-action-space]] pattern (thin tool layer + computer primitive), while [[evolving-context|evolving context]] — agents improving their own prompts, skills, and memories over time — is the major unsolved frontier. Kun Chen's "captain / first mate / crew" model is the most concrete end-to-end instantiation: the human sets direction, a meta-agent manages the crew, and the crew runs bounded AFK loops with an autonomous PR pipeline.
 
 ## Agentic Engineering: The Origin Story
 
@@ -84,6 +85,9 @@ Karpathy's hiring proposal — give candidates a big project ("build a Twitter c
 ## Thesis
 
 The agent workflow consists of two interdependent phases — human-in-the-loop design (HITL) and away-from-keyboard execution (AFK) — joined by a tight feedback cycle. The HITL phase owns the [[shared-design-concept]] and tests; the AFK phase executes within those boundaries. Success depends on three supporting layers: [[context-engineering|context hygiene]] (keeping the model in the [[smart-zone-dumb-zone|Smart Zone]]), [[tool-design-for-agents|tool design]] (outputs that agents can consume), and [[verification-loop|verification infrastructure]] (mechanical backpressure that rejects wrong outputs). Without any of these, the workflow degrades into [[the-slop-problem|slop]].
+
+> [!note] Marginal: Kun Chen's Terminal-First Multi-Agent Workflow
+> [[kun-chen|Kun Chen]] (ex-L8 principal, Atlassian) reports shipping 40 to 50 well-tested production changes almost every day, sometimes more, with a terminal-centric, multi-agent stack. His workflow has three layers: the human "captain" sets direction, [[first-mate|First Mate]] (a meta-agent) manages the crew, and parallel agents run in tmux tabs and [[treehouse]] worktrees. Each task goes through [[lavish]] plan artifacts, agent execution, and the [[no-mistakes]] autonomous PR pipeline. This is the most concrete end-to-end instantiation of the thread's HITL/AFK/planning model, with the meta-agent layer explicitly solving the context-switching problem that emerges when many parallel sessions run at once.
 
 > [!note] Marginal: The Review Bottleneck
 > [[armin-ronacher|Ronacher]]'s 2026 post `raw/the-final-bottleneck.md` reframes the entire workflow by arguing that **writing code is no longer the bottleneck — human review capacity is**. When agents produce output faster than humans can meaningfully review it, the workflow stalls at the handoff regardless of AFK execution speed. The historical parallel (textile industry: each speed-up just shifted the bottleneck downstream) suggests this isn't a temporary imbalance — it's a structural feature of the speed-up. The open question for this thread: can mechanical verification ([[verification-loop]]) scale to cover what only human judgment could do?
@@ -232,6 +236,9 @@ The fix isn't bigger context windows — it's **ruthless context hygiene**:
 ## Model Switching Strategy: Stick With One
 
 [[dex-horthy|Dex Horthy]] makes a strong case against tool-switching: people who constantly swap between [[claude-code|Claude Code]], Cursor, Codex, and Deep Research "are only going to get to like 80% of the possible level of intuition" compared to focused practice. The engineers who get the best results have spent 1-2 months intensively with a single model family and tool.
+
+> [!warning] Contradiction: Agent-Agnostic vs. Stick With One
+> [[dex-horthy|Dex Horthy]] argues the best results come from deep, months-long practice with a single model and tool. [[kun-chen|Kun Chen]] explicitly rejects this: he maintains an agent-agnostic workflow using Claude Code, Codex CLI, [[pi|Pi]], and [[opencode|OpenCode]], because "the landscape is changing very fast" and he does not want to lock into one harness. The claims are incompatible: one says tool/model fluency is the binding constraint; the other says the ability to switch is the binding constraint. The wiki holds both without resolving — the correct strategy may depend on whether the task rewards depth (tool-specific intuition) or breadth (hedging against a rapidly shifting frontier).
 
 The intuition isn't about prompt syntax — it's about behavioral nuance:
 - Different models respond differently to instruction style (all caps helps Opus but de-tunes Codex)
@@ -490,4 +497,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's in-skill steering levers as workflow infrastructure: leading words ([[leading-words]]) as the in-skill mechanism the workflow dispatches (the workflow decides which skill fires when, the leading word decides how the agent executes once loaded), and the split-skill technique (hide future goals to increase leg work on the current step) as a workflow decomposition decision. See the "In-Skill Steering" marginal note.
 - `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's X post defining the third paradigm of LLM UI/UX: the agent as a persistent, async, org-level entity embedded in team coordination. Source for the "Agent Becomes a Persistent Teammate" marginal note — paradigm 3 reshapes the HITL/AFK split toward delegation to a proactive teammate.
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): Claude Tag's mechanics (channel-scoped, multiplayer, async, proactive) as the paradigm-3 instance; the model-lock-in critique; the per-channel isolate practitioner experience. Source for the "Agent Becomes a Persistent Teammate" marginal note.
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen (ex-L8 principal, Atlassian): the captain/first-mate/crew model, terminal-centric multi-agent workflow, tmux, Treehouse, No Mistakes, Lavish, AXI, and Good Night, Have Fun. Source for the "Kun Chen's Terminal-First Multi-Agent Workflow" marginal note.
 

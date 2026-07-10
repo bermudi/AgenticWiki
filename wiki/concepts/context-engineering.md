@@ -14,6 +14,7 @@ sources:
   - raw/2509.09677.md
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -76,6 +77,8 @@ This is context engineering applied not at the prompt level but at the codebase 
 
 ### Progressive Disclosure
 Don't dump all tools, skills, or instructions into the system prompt. Pull context in on demand: tool search (semantic search over indexed tool descriptions), skills as file-based SOPs that agents read only when needed, and MCP servers synced to the file system rather than bound as tools. The [[multi-tier-action-space]] architecture depends on this pattern.
+
+[[kun-chen|Kun Chen]] makes this operational in a file-based form: a **global memory file** shared across all agent harnesses via symlink, kept deliberately small because it is loaded into every session's system prompt; and a **project-level memory file** that grows as the agent is corrected. When sections of the project memory are only needed for certain tasks (e.g., end-to-end testing instructions), he extracts them into **skills** so the full text only loads when the agent decides it is relevant. This is progressive disclosure at the memory layer: global context is always present, project context is nearby, and skill context is gated by task relevance.
 
 ### Context Offloading
 Save tool results to the file system instead of accumulating them in chat history. Give the agent a pointer and summary; let it retrieve the full result if needed. This avoids both context bloat and the destructiveness of compaction (summarizing history loses precision). Anthropic's "context editing" SDK feature formalizes this. A variant: offload the agent's plan to a scratchpad file and re-read it for "recitation" — reinforcing objectives mid-task.
@@ -219,3 +222,4 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Sliding Window Against Self-Conditioning" technique (Appendix C.2): shrinking the context window improves sustained accuracy by limiting exposure to self-accumulated errors; reliability-driven truncation distinct from token-budget truncation.
 - `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's "third paradigm" framing: the LLM as a persistent, async, org-wide entity. Source for the paradigm-level motivation behind channel-scoped context.
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): the channel as context boundary (global vs. project scoping is too coarse), and the per-channel Docker-isolate "Hermes agent" practitioner experience.
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: global memory file (small, always loaded via symlink), project-level memory file (grows with corrections), and skill extraction for conditionally-used knowledge as progressive disclosure at the memory layer.

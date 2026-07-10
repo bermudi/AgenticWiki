@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-06
+updated: 2026-07-09
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -96,6 +96,9 @@ The degradation also **compounds multiplicatively** with document size and inter
 ## What the Sources Agree On
 
 All these sources agree: the answer isn't to use less AI. It's to change *how* you use it. The human must shift from writing code to **owning design boundaries and verifying outcomes**. [[aesthetics-is-truth|Aesthetic decay]] is often the first visible sign that slop is accumulating. That argument continues in [[the-human-lever]].
+
+> [!note] Departure: High-Throughput Autonomous Pipelines as Slop Containment
+> Kun Chen reports shipping 40 to 50 well-tested production changes almost every day, sometimes more, through an autonomous pipeline. This is a stress test of the slop thesis: the speed-up is real, but the quality gate is [[no-mistakes]], not human line-by-line review. The pipeline's adversarial review and recorded evidence are the containment mechanism. If the pipeline fails, the slop rate would scale with the throughput. The workflow is a high-stakes instantiation of the speed-review asymmetry — the review is automated, not manual. Whether this containment is robust for a broader population is an open question; the source reports it works for an experienced L8 principal, but it has not been independently benchmarked.
 
 ### Rule-Following Failure as a Slop Source
 

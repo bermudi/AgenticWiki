@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-06
+updated: 2026-07-09
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.md
@@ -120,6 +120,9 @@ If the verifiability thesis is the *why*, the verification loop is the *how*. Ve
 ### For [[agent-quality-engineering]]
 
 Evals are the attempt to make agent behavior verifiable. The quality loop (traces → evals → scorers → code) works by creating artificial verification rewards that mimic RL training. But there's a ceiling: evals can measure and improve behavior *within* the model's RL-trained circuits, but they can't create new capabilities outside them. If the model hasn't been trained on aesthetic judgment, no amount of eval infrastructure will make it develop taste.
+
+> [!note] Departure: No Mistakes as a Hybrid Verification System
+> The [[no-mistakes]] pipeline is a concrete instantiation of the verifiability thesis, but with a hybrid composition. The evidence layer (end-to-end tests, screenshots, logs) is deterministic and verifiable. The adversarial-review layer is an LLM judging another LLM's output, which is not. The thesis predicts that verifiable domains can be automated; the pipeline tests whether the verifiable part (evidence) can be strong enough to support a probabilistic review step. The open question is whether the deterministic evidence is the binding constraint or the LLM review is.
 
 The [[rubric-evaluation|RUBRICEVAL benchmark]] (Pan et al., 2026) adds a second dimension to this ceiling: even in verifiable domains like instruction following with structured rubrics, the LLM judge serving as the verifier may be unreliable at fine granularity. GPT-4o achieves only 55.97% accuracy on hard rubric-level judgments. This means the quality infrastructure's measurement layer has its own error rate that compounds with the model capability ceiling — the eval score itself is noisy. The thesis's causal chain (verifiability → RL → capability) implicitly assumes a reliable verifier; RUBRICEVAL shows that assumption may not hold in practice.
 

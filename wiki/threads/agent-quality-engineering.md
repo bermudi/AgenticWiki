@@ -16,13 +16,14 @@ sources:
   - raw/2606.14249.md
   - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 1
 ---
 
 # Agent Quality Engineering
 
-> AI agents fail differently than deterministic software — outputs look correct while decisions are wrong. Making agents shippable requires a quality infrastructure built on three layers: evals (probabilistic CI that measures quality on a spectrum), observability (decision-chain tracing that tells you why), and a feedback flywheel (production failures → eval cases → continuous improvement). Quality must be designed in from day one, not bolted on after shipping.
+> AI agents fail differently than deterministic software — outputs look correct while decisions are wrong. Making agents shippable requires a quality infrastructure built on three layers: evals (probabilistic CI that measures quality on a spectrum), observability (decision-chain tracing that tells you why), and a feedback flywheel (production failures → eval cases → continuous improvement). Quality must be designed in from day one, not bolted on after shipping. Kun Chen's [[no-mistakes]] pipeline is the most autonomous end-to-end instantiation: it takes first-pass code, rebases, runs adversarial review, end-to-end tests with recorded evidence, docs, lint, and PR babysitting.
 
 ## The Core Thesis
 
@@ -103,6 +104,13 @@ This flywheel makes agents shippable because it provides:
 - **Safety for tool changes**: Validate against historical failures
 - **Compounding regression prevention**: Every fixed failure becomes a permanent test case
 - **Aggregate quality signals**: Sampling (25% in production) catches drift without full-cost evals on every run
+
+## Autonomous PR Pipelines
+
+[[kun-chen|Kun Chen]]'s [[no-mistakes]] pipeline externalizes the quality loop into a single autonomous run. It treats the first-pass code as raw material and runs an explicit sequence: understand intent, rebase, adversarial review, end-to-end test with evidence, documentation pass, lint, push, PR, and babysit until merge. The human receives a risk assessment and recorded evidence (screenshots, video, logs) and decides whether to merge. This is the quality loop at the workflow layer rather than the framework layer.
+
+> [!warning] Theory Pressure: LLM-as-Judge Inside the Autonomous Pipeline
+> The no-mistakes pipeline relies on an **adversarial review** step in a fresh context window, plus a risk assessment. Both are LLM-judgment outputs, not deterministic checks. This is the same mechanism the [[agent-evals]] page and this thread identify as unreliable (RUBRICEVAL: 55.97% on hard rubric judgments; Dex Horthy: "never send an AI to do a linter's job"). The recorded evidence (tests, screenshots, logs) is deterministic; the adversarial review and risk rating are not. The pipeline's safety depends on whether deterministic evidence can carry the verification while the adversarial review acts as a context-fresh heuristic.
 
 ## A Counterpoint: Dex Horthy's Skepticism
 
@@ -267,3 +275,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies are the failure modes the flywheel is designed to defend against. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): per-step scoring attached to workflow steps, deterministic guardrails as output validation between LLM calls; reconcile LLM + deterministic signals before routing decisions
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent Verification section. [[mast]] taxonomy: FC3 Task Verification (23.5%) is the third-largest failure category; Insight 3 states multi-level verification is needed; +15.6% from adding a high-level objective check to ChatDev. The LLM-as-a-Judge annotator (κ=0.77 on structured classification) is a data point for the LLM-as-judge reliability debate.
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: No Mistakes autonomous PR pipeline; adversarial review, end-to-end testing with evidence, and PR babysitting as a workflow-level quality loop.

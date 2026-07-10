@@ -5,6 +5,7 @@ updated: 2026-07-09
 sources:
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
 tags: [concept, llm, ui-ux, agent-design, context-management, agents]
 ---
@@ -51,6 +52,9 @@ With ambient behavior enabled, Claude proactively keeps the team updated, flags 
 
 ## Tensions
 
+> [!note] Departure: Terminal-First Workflow as a Parallel UI Path
+> Kun Chen's "terminal-first" workflow is a significant departure from the paradigm-3 direction. His stack — Western, tmux, and Neovim — treats the terminal as the primary management surface for many parallel agents. Paradigm 3 (persistent async org-level entity) lives in Slack/channels; Kun's workflow lives in tmux tabs. The two are not incompatible (a terminal can host many channels), but the *primary interface* is different: Kun's is session/tile-based; paradigm 3's is channel/conversation-based. This suggests the "right" UI may be task-dependent: high-throughput parallel coding may favor the terminal dashboard; persistent team collaboration may favor the channel. The [[lavish]] HTML artifact is a point of convergence: rich output can be rendered in either substrate.
+
 > [!warning] Contradiction: Model Lock-In vs. the Paradigm
 > Theo's sharpest critique is that Claude Tag hard-binds paradigm 3 to a single lab. His own equivalent — a "Hermes agent" running in Discord, one Docker isolate per channel/purpose — lets him **switch models freely** (GLM, GPT-5.5, Claude, Fable) and even instruct one model to call another (he has Codex/GPT-5.5 call Claude for API design and UI work, where GPT-5.5 is weak). Claude Tag offers none of that control. Theo frames the choice as a fork: full custom isolation where you build every channel's skills/context yourself and can swap models, versus Claude Tag where most of it works by default but you're locked to Anthropic's models and boundaries. He explicitly wants competitors to clone the pattern so users aren't "reliant on just one lab." The tension — channel-scoped org-level entity as a *paradigm* versus as a *vendor product* — is unresolved.
 
@@ -76,8 +80,10 @@ With ambient behavior enabled, Claude proactively keeps the team updated, flags 
 - [[andrej-karpathy]] — Originator of the three-paradigm framing
 - [[theo-t3gg]] — Amplified it with practitioner experience and the model-lock-in critique
 - [[the-human-lever]] — Paradigm 3 shifts the human from driving sessions to delegating to a persistent teammate
+- [[lavish]] — HTML artifact editor as another example of richer agent output media
 
 ## Sources
 
 - `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's original X post defining the three paradigms and the "org-level harness" defense reply (June 2026).
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg) reacting to Karpathy's post; isolates the defining properties of paradigm 3 (channel as context boundary, multiplayer, async, proactive), provides the model-lock-in critique and the per-channel isolate practitioner experience.
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: Lavish as another example of richer agent output media (HTML artifacts instead of terminal text).

@@ -1,11 +1,12 @@
 ---
 title: Plan vs Review
 created: 2026-05-02
-updated: 2026-05-05
+updated: 2026-07-09
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
 tags: [concept, workflow, agent-design, human-in-the-loop, departure]
 ---
@@ -26,6 +27,9 @@ Knight-Webb's heuristic: investing in planning is always preferable because it s
 
 > [!note] Departure: Alignment-First Alternative
 > [[matt-pocock|Matt Pocock]]'s workflow represents a different philosophy: invest in conversational alignment (Grill Me), not document precision. The PRD is a destination hint; QA is where quality lives. See [[intent-to-code]] for the full comparison of plan-as-contract vs. alignment-first.
+
+> [!note] Departure: Visual Plan Artifacts
+> [[kun-chen|Kun Chen]]'s [[lavish]] is a different expression of plan-heavy investment. Instead of a Markdown PRD, the agent produces an HTML artifact in the project's design system; the human annotates and selects options in the browser. The goal is the same — front-load human design authority to reduce downstream review — but the medium is visual and interactive rather than textual. This is plan-heavy as a UI problem, not just a document problem.
 
 ## Empirical Support: 50%+ Design Time
 
@@ -74,9 +78,11 @@ The distinction parallels [[grey-box-engineering]]: plan-heavy corresponds to ow
 - [[fighting-slop-with-slop]] — The BEEPs workflow (50%+ design time) empirically validates the plan-heavy approach.
 - [[the-slop-problem]] — Plan-heavy design is a direct slop prevention strategy; review-heavy without verification accelerates it.
 - [[recursive-agent-harness]] — RAH is a structural implementation of plan-vs-review: the plan is a spawning script, the review is per-subagent output aggregation
+- [[lavish]] — Visual/interactive plan artifact that front-loads planning to reduce review
 
 ## Sources
 
 - `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — The full talk establishing the framework, quantified heuristic, and feature type matrix.
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Real-world validation: 50%+ design time at Boundary ML; 4 days of pure design on threading; one-shot implementation enabled by thorough design
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Pocock's alignment-first departure: don't review the PRD, QA is where quality lives; the grilling session as planning investment, not document precision
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's Lavish as a visual/interactive plan artifact that front-loads planning to reduce review.

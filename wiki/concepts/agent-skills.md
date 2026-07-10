@@ -1,7 +1,7 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-07-06
+updated: 2026-07-09
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
@@ -10,6 +10,7 @@ sources:
   - raw/2605.18747.md
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
@@ -138,6 +139,10 @@ Nisi discovered through evals that his Next.js installer skill was making Claude
 
 > [!warning] A skill can make the agent worse
 > Not every workflow needs a skill. If the model already handles a task well, a skill can degrade performance by being too prescriptive. Always eval with vs. without.
+
+## Skill Efficacy vs. Popularity
+
+The same progressive-disclosure pattern that makes skills efficient also makes them dangerous: because the description is always loaded, a bad skill pollutes every session. [[kun-chen|Kun Chen]] makes the stronger claim that popularity is not a proxy for efficacy. The "Android Skills" repository has 177,000 GitHub stars, but a Program Bench evaluation of one skill found it made the agent use **5% more tokens and produce worse results**. The stars measure viral spread, not measured benefit. Kun's rule: do not install a skill that claims to "magically make your agent perform better" unless it has published rigorous eval evidence. See [[skill-efficacy]] for the full treatment.
 
 This is why the "constraints over prescription" principle matters: skills should fill gaps in the model's knowledge, not replace its competence.
 
@@ -358,3 +363,4 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Positions skills within the code-for-acting layer (§2.2); code-based skills as executable, inspectable, and stateful artifacts that can be verified through execution
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Steinberger's general skills rule (turn repeated work into a skill) and Van Horn's framing of the consequence: a loop calling sharp named skills compounds; a loop with no skills is a "while-true around a stranger"
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's four-part skill design checklist (trigger, structure, steering, pruning); user-invoked vs model-invoked load tradeoff; steps + reference + branches; leading words; leg work via hidden future goals; no-ops, sediment, single source of truth
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skills as progressive disclosure for conditionally-used project memory, the Android Skills popularity vs efficacy example, and the warning against installing unbenchmarked skills.

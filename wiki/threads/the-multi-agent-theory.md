@@ -1,7 +1,7 @@
 ---
 title: The Multi-Agent Theory
 created: 2026-07-04
-updated: 2026-07-04
+updated: 2026-07-09
 sources:
   - raw/2606.13003.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
@@ -159,6 +159,9 @@ The multi-agent theory is the verifiability thesis applied to the coordination l
 ### For [[the-agent-workflow]]
 
 The multi-agent theory specifies the workflow design space. MDAPs are the maximal-decomposition pole (one step per microagent, voting as convergence). Expert-MAS is the hand-engineered pole (deterministic executor, LLM as subroutine). The governance layer is the message-layer pole (existing topology, governed messages). The auto-discovered topologies the audit indicts are the pole that doesn't work. The workflow thread's HITL/AFK split maps to: AFK for engineered-decomposition tasks (MDAPs, Expert-MAS); HITL for governance decisions (the Yellow-atom policy routing).
+
+> [!note] Departure: First Mate as a Hand-Designed Meta-Agent
+> Kun Chen's [[first-mate]] is a concrete hand-designed meta-agent that decomposes tasks, creates worktrees, dispatches agents, and runs the no-mistakes pipeline. It is not a multi-agent system in the sense tested by the multi-agent illusion audit; it is a single meta-agent orchestrating multiple single-agent sessions. The audit's findings about automated MAS do not apply directly because the coordination is hand-written and the sub-agents are not coordinating with each other. But the tool-coordination trade-off and the cost premium still matter: every worktree and every agent session costs tokens and latency. The question is whether the meta-agent's hand-written coordination can remain efficient as the crew grows.
 
 ### For [[agent-quality-engineering]]
 

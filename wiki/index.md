@@ -28,6 +28,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
 
 ## ✍️ Authors
+- [[kun-chen]] — Ex-L8 principal engineer (Meta, Microsoft, Atlassian); built frontier coding agents at Atlassian; author of the captain/first-mate/crew workflow and open-source tools [[no-mistakes]], [[lavish]], [[axi]], [[treehouse]], [[first-mate]], and [[good-night-have-fun]].
 - [[eero-alvar]] — YouTube creator; proposes software factories and the aiming problem as the next step in agentic engineering
 - [[lars-faye]] — Developer and writer; introduced "cognitive debt" and articulated the supervision paradox from Anthropic's research.
 - [[theo-t3gg]] — YouTube creator (t3.gg); commentary on cognitive debt, skill atrophy, and the code-frequency distinction; creator of T3 Stack.
@@ -141,6 +142,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
 - [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks; `/init`-style auto-generated dumps that duplicate existing docs hurt.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
+- [[skill-efficacy]] — A skill's popularity (GitHub stars) is not a reliable proxy for whether it makes an agent perform better; skills must be evaluated by measured task impact.
 - [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
@@ -227,6 +229,12 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[sourcegraph]] — Universal code search and intelligence platform.
 
 ## 🛠️ Projects & Tools
+- [[treehouse]] — Git worktree manager for parallel agent sessions.
+- [[no-mistakes]] — Autonomous PR pipeline from first-pass code to merged PR with adversarial review and evidence.
+- [[lavish]] — HTML artifact editor for planning and design review with an agent.
+- [[axi]] — Agent-ergonomic tool standard and implementations (GitHub, Chrome DevTools) with efficiency benchmarks.
+- [[good-night-have-fun]] — Bounded, long-running agent loop for overnight or away-from-keyboard objectives.
+- [[first-mate]] — Meta-agent that manages a crew of task agents from conversational direction.
 - [[effect]] — TypeScript framework bundling schema, services, streams, and tracing; its verbosity acts as AI guardrails
 - [[opencode]] — Open-source coding agent (~8M MAU) rewritten in Effect by Anomaly
 - [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.

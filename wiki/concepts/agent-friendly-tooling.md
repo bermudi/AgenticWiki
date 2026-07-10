@@ -1,16 +1,17 @@
 ---
 title: Agent-Friendly Tooling
 created: 2026-04-26
-updated: 2026-05-16
+updated: 2026-07-09
 sources:
   - raw/agentic-coding-recommendations.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
 tags: [concept, tool-design, agent-speed, observability]
 ---
 
 # Agent-Friendly Tooling
 
-> Tools, scripts, and infrastructure designed specifically so that AI agents can operate effectively: fast to invoke, observable by design, and protected against misuse. The practical craft beneath the abstract [[tool-design-for-agents]] theory.
+> Tools, scripts, and infrastructure designed specifically so that AI agents can operate effectively: fast to invoke, observable by design, and protected against misuse. The practical craft beneath the abstract [[tool-design-for-agents]] theory. Kun Chen's [[axi]] tools are a concrete case: a non-JSON, token-efficient output format can save ~40% tokens versus JSON, and the GitHub MCP server costs 3× tokens and 2×+ latency versus the `gh` CLI for the same tasks.
 
 ## The Core Principle
 
@@ -80,7 +81,9 @@ Ronacher uses MCP only when the alternative is unreliable. MCP servers themselve
 - [[ralph-loop]] — AGENTS.md as agent-friendly infrastructure for the Ralph loop
 - [[slop]] — Slow, noisy tools produce more slop by limiting verification cycles
 - [[system-prompt-effects]] — System prompts shape how agents interact with tooling; non-monotonic effects mean more constrained tool instructions aren't always better
+- [[axi]] — Kun Chen's agent-ergonomic tool standard and benchmark
 
 ## Sources
 
 - `raw/agentic-coding-recommendations.md` — Makefile patterns, daemon pattern, speed optimization
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's AXI benchmark: GitHub MCP vs CLI (3× tokens, 2×+ latency), token-efficient non-JSON output (~40% savings), and the ten principles for agent-ergonomic tools.

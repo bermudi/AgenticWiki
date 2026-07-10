@@ -1,12 +1,13 @@
 ---
 title: Orchestration Loop
 created: 2026-07-01
-updated: 2026-07-02
+updated: 2026-07-09
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-wtf-is-loop-engineer-how-to-setup-for-real.md
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, orchestration, multi-agent, durability, cron]
 ---
@@ -91,6 +92,7 @@ The orchestration loop inherits the [[agent-loop|hard-stops discipline]]: maximu
 - [[discourse-slop]] — The hype layer over Stage 5; the temporal walk-back as a symptom
 - [[neetcode]] — Skeptic auditor of the orchestration discourse
 - [[rollback-posture]] — Concurrent dispatch compresses release cadence without compressing detection; the systems consequence of orchestration loops
+- [[first-mate]] — Kun Chen's meta-agent that manages parallel agents and dispatches work to them
 
 ## Sources
 
@@ -98,3 +100,4 @@ The orchestration loop inherits the [[agent-loop|hard-stops discipline]]: maximu
 - `raw/yt-wtf-is-loop-engineer-how-to-setup-for-real.md` — The "loop engineer as outer harness" reframing (Stage 5 is the harness/environment layer, not model-side topology) and the shared-state cooperation that motivates [[compounding-loops]].
 - `raw/yt-i-guess-were-writing-loops-now.md` — Dynamic loop generation ("my loops created loops"), the overnight four-stacked-PR run, the /goal-vs-dynamic-workflow distinction, and the runaway-cost cautionary data.
 - `raw/yt-are-we-really-doing-this-again.md` — The temporal walk-back: [[jarred-sumner|Sumner]]'s for-each-not-while refinement and [[neetcode|NeetCode]]'s read of the discourse as discourse slop; the incentive-to-hype map (Anthropic/OpenAI).
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: First Mate as a hand-designed meta-agent orchestration loop.

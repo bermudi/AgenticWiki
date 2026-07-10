@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-07-04
+updated: 2026-07-09
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -62,6 +62,9 @@ Four positions have emerged across sources. They're not points on a single "bett
 > [[kiro|Amazon Kiro]]'s spec-driven pipeline doesn't fit cleanly into any of the five positions. It uses a plan-as-contract artifact ([[ears-notation|EARS]] requirements) but verifies it with downstream [[property-based-testing-as-spec|property-based testing]] — which is enforcement-as-code's mechanism applied at the spec level, not the code level. The LLM generates EARS requirements; the structured format enables downstream non-LLM verification; PBT verifies the code against properties derived from the requirements. The EARS-PBT pipeline ([[ears-notation]] + [[property-based-testing-as-spec]]) is the canonical instantiation: the spec is the contract (position 2), but verification is mechanical and the LLM is outside the verification loop (position 5). For the team-scale extension, see [[single-player-to-multiplayer]] — Clarke's framing of how SDD tooling must evolve to support parallel contributors at agentic team pace.
 
 ## The Four Positions
+
+> [!note] Departure: Visual Plan Artifact as a New Mediator
+> Kun Chen's [[lavish]] tool is a visual plan artifact: the agent renders design options as an HTML page in the project's design system, and the human annotates and selects. This is not the formal spec (position 1) or the disposable PRD (position 3) that the axis currently assumes. It is closer to plan-as-contract (position 2) but with a visual/interactive medium rather than a text spec. The axis's assumption that the mediator is a document gets pressure: the artifact between intent and code may be a rendered UI.
 
 ### 1. Specs-to-Code Compilation
 

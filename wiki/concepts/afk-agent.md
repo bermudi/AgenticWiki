@@ -2,7 +2,7 @@
 title: AFK Agent
 created: 2026-04-25
 updated: 2026-07-09
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", raw/yt-the-next-paradigm-shift-according-to-karpathy.md]
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", raw/yt-the-next-paradigm-shift-according-to-karpathy.md, raw/yt-l8-principal-s-agentic-engineering-workflow.md]
 unaudited_marginal: 0
 tags: [concept, workflow, agents]
 ---
@@ -52,6 +52,10 @@ This is distinct from the day-shift/night-shift pattern: instead of one agent se
 
 See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full pattern.
 
+## Kun Chen's Parallel AFK Sessions
+
+[[kun-chen|Kun Chen]] runs multiple AFK agents in parallel using [[treehouse]] worktrees and tmux tabs. Each agent gets its own isolated worktree so they do not conflict, and the human switches between tabs to check status. The key discipline: the middle of the task (implementation and validation) is left to the agents, while the human engages at the start (planning in [[lavish]]) and the end (reviewing the [[no-mistakes]] output). For longer objectives, [[good-night-have-fun]] runs an agent loop with explicit token/iteration caps overnight.
+
 ## Thread
 - [[the-agent-workflow]] — AFK is the "execution" phase of the modern agentic workflow.
 - [[the-human-lever]] — The human shifts from implementation to QA and design; AFK agents execute under human-owned boundaries.
@@ -82,6 +86,9 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[claude-tag]] — Async, self-scheduling, persistent team agent; the paradigm-3 evolution of the AFK pattern
 - [[llm-ui-paradigms]] — Karpathy's third paradigm reframes AFK as delegation to a persistent teammate
 - [[proactive-service]] — Ambient/agent-initiated behavior is the proactive extension of AFK execution
+- [[treehouse]] — Worktree manager that isolates parallel AFK agents
+- [[good-night-have-fun]] — Overnight, bounded AFK loop
+- [[no-mistakes]] — Autonomous PR pipeline that often validates AFK agent output
 
 ## Sources
 
@@ -91,3 +98,4 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - `raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md` — Focus maxing / parallel AFK management as agents cross the 5-minute execution threshold.
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle: the parallelized AFK pipeline (planner → implementer → reviewer → merger), Docker sandboxing, Kanban DAG for parallelization
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): Claude Tag's async, self-scheduling, proactive teammate model as the paradigm-3 evolution of the AFK agent; Theo's per-channel isolate equivalent.
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: parallel AFK sessions in Treehouse worktrees and tmux tabs; Good Night, Have Fun for overnight bounded loops; No Mistakes for autonomous PR validation.

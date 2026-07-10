@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-07-04
+updated: 2026-07-09
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -18,13 +18,14 @@ sources:
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/2509.09677.md
   - raw/2512.08296-scaling-agent-systems.md
+  - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
 
 # Tool Design for Agents
 
-> Developer tools were built for human consumption. As agents become the primary consumer, the tool layer needs fundamental redesign — not more features, but different interface contracts, output formats, and design priorities. Multiple independent sources converge on the same conclusion: the tool is the bottleneck, and the agent's effectiveness is bounded by the quality of the tools it calls.
+> Developer tools were built for human consumption. As agents become the primary consumer, the tool layer needs fundamental redesign — not more features, but different interface contracts, output formats, and design priorities. Multiple independent sources converge on the same conclusion: the tool is the bottleneck, and the agent's effectiveness is bounded by the quality of the tools it calls. Kun Chen's [[axi]] benchmark is the most direct practitioner evidence: the GitHub MCP server costs 3× tokens and 2× latency versus a CLI for the same tasks, and a token-efficient non-JSON output format can save ~40% tokens.
 
 > [!note] Departure: Tool Use Can Harm
 > This thread argues that better tools → better agent outcomes. [[philippe-laban|Laban]] et al. (2026) complicate this assumption: in [[delegate-52|DELEGATE-52]], four LLMs given file reading, writing, and code execution tools performed **worse** than without tools, incurring an average additional degradation of 6%. The tools introduced overhead (2–5× more input tokens), and models favored regenerating entire files over targeted edits. This doesn't refute the thread's thesis — the paper tested a basic harness, not redesigned tools — but it does show that **adding tools without careful design can actively harm**. The "tools fix it" assumption is not automatically true for current models in long-horizon workflows.
@@ -97,7 +98,7 @@ See [[agent-friendly-tooling]] for the full practical treatment of these pattern
 
 ## MCP vs CLI: The Structural Analysis
 
-Both [[mario-zechner|Mario Zechner]] and [[armin-ronacher|Armin Ronacher]] are firmly in the CLI camp, but the podcast reveals more nuance than their reputation suggests.
+[[mario-zechner|Mario Zechner]], [[armin-ronacher|Armin Ronacher]], and [[kun-chen|Kun Chen]] are all in the CLI-over-MCP camp for developer-facing tools, though each reaches that position through a different route.
 
 ### Mario's Three Problems with MCP
 
@@ -113,9 +114,16 @@ Armin sees MCP as a victim of its own success. It started as a consumer-side sol
 
 Both agree: for developer-facing agent tools, CLI composability (pipes, scripts) outperforms MCP's context-transit model. But MCP has a legitimate enterprise niche (auth, consumer integrations) that won't go away.
 
+### Kun's Efficiency Argument
+
+[[kun-chen|Kun Chen]] adds a quantitative angle to the CLI-over-MCP case. His [[axi]] benchmark of GitHub access for agents found the GitHub MCP server cost **3× more tokens and more than 2× the latency** than the `gh` CLI for the same tasks, with no clear benefit. He also reports that a token-efficient non-JSON output format can save ~40% tokens compared to JSON. The practical upshot: tool choice is not just an aesthetic preference; it is a first-class workflow cost variable.
+
 ## Layer 3: Minimalism as Performance
 
 [[mario-zechner|Mario Zechner]] approaches from a different angle. Rather than redesigning existing tools, he argues for fewer tools with simpler contracts. [[pi]]'s core is four tools: `read`, `write`, `edit`, `bash`. No MCP server, no protocol overhead, no feature negotiation. This minimalism is echoed in the [[ralph-loop]] pattern (Stage 3 of the [[agent-loop|agent-loop]] lineage), where a dumb bash loop and a plan file replace sophisticated orchestration — both converge on the same insight: fewer moving parts means fewer failure modes for the agent.
+
+> [!note] Departure: Terminal-First Customization vs. Minimalism
+> Kun Chen's terminal stack (a heavily customized Western terminal emulator, tmux, and Neovim) is not a "four tools" minimal core. It is a deep, personalized, high-maintenance environment. The thread's minimalism thesis says fewer tools with simpler contracts reduce failure modes. Kun's thesis is that terminal ubiquity, keyboard flow, and multiplexing matter more. The two positions are not mutually exclusive — a minimal tool core can be embedded in a customized terminal — but the terminal stack itself is an argument that the *interaction substrate* is the bottleneck, not the number of tools. See [[the-agent-workflow]] for the agent-agnostic vs. stick-with-one tension.
 
 The argument: complex tools create complex failure modes. A harness with 50 specialized tools gives the LLM 50 chances to pick the wrong one, misuse it, or get confused by overlapping functionality. A harness with 4 composable tools gives the LLM clarity and forces creativity into *how* the tools are composed, not *which* one to pick.
 
@@ -259,3 +267,4 @@ The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: the harness falls away as models improve; language servers are dead; the model just needs shell access; AMP deleted features as models got better; the knowledge triplet as the irreducible constraint
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Capability Bottleneck Is Partly Execution" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers upstream of the tool layer. Bound tool design's reach at the execution ceiling.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Tool-Coordination Trade-off in Multi-Agent Systems" extension. §4.3 scaling principles (ε × T interaction β = -0.096, p = 0.002); §4.2 Workbench results (16-tool task, efficiency penalty 2-6.3×, Hybrid collapse); Table 5 coordination metrics (efficiency per architecture).
+- `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's AXI tools and benchmark: GitHub MCP vs CLI (3× tokens, 2×+ latency), token-efficient non-JSON output (~40% savings), the ten principles for agent-ergonomic tools, and the [[lavish]] HTML artifact editor as another HTML-as-agent-output case.

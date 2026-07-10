@@ -1,7 +1,7 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-07-04
+updated: 2026-07-09
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -107,6 +107,9 @@ This is a different failure mode from contamination or verifier error: the bench
 > Horizon mismatch is *why* contamination, verifier failure, and prompt distortion are so corrosive: they all perturb step accuracy, and because the horizon-length curve is steep at the frontier, a small step-level perturbation hides a large horizon-level difference. DeepSWE's 70-point spread and this paper's 2176-vs-432 gap are the same phenomenon viewed at different granularities — the real capability differences that short, clean benchmarks compress away.
 
 ## The Call for Community Benchmarks
+
+> [!note] Departure: Skill Popularity as a Benchmark-Crisis Analog
+> The [[skill-efficacy]] concept argues that GitHub stars are not a proxy for whether a skill improves agent performance. This is a benchmark-crisis-like problem at the skill layer: the signal developers use to select a skill (social proof) is not aligned with the signal they should use (measured task impact). Kun Chen's example — the "Android Skills" repo with 177,000 stars, evaluated with Program Bench as using 5% more tokens and producing worse results — is a sibling case to SWE-bench Pro's verifier misgrading. The metric is wrong, not the underlying capability.
 
 Theo's video makes a case that developers should build their own benchmarks from real failures:
 
