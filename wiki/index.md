@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-09
+updated: 2026-07-10
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -90,10 +90,13 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[mert-cemri]] — Lead author (with Melissa Z. Pan and Shuyi Yang) of *Why Do Multi-Agent LLM Systems Fail?* (NeurIPS 2025); co-created the [[mast]] failure taxonomy and MAST-Data — the first empirically grounded MAS failure dataset.
 - [[elliot-meyerson]] — Lead author of *Solving a Million-Step LLM Task with Zero Errors* (Cognizant AI Lab + UT Austin, 2025); co-designed the [[massively-decomposed-agentic-processes|MDAP]] framework and [[maker|MAKER]]; co-authored the AALPs position paper that motivates asymptotic analysis of LLM primitives.
 - [[yizhe-xie]] — Lead author (with Congcong Zhu and Xinyue Zhang) of *From Spark to Fire: Modeling and Mitigating Error Cascades in LLM-Based Multi-Agent Collaboration* (City University of Macau + Minzu University, 2026); co-designed the [[error-cascades|propagation-dynamics model]] and [[genealogy-governance|genealogy-based governance layer]].
+- [[garry-tan]] — President & CEO of Y Combinator; creator of [[gstack]], the open-source software factory for Claude Code; reports shipping at ~810× his 2013 pace using AI-assisted development
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
 - [[babysitter-agent]] — An invisible agent managing another agent's context as its subconscious mind
+- [[boil-the-ocean]] — Garry Tan's ethos principle: AI makes the marginal cost of completeness near-zero, so "don't boil the ocean" has become an excuse. Do the complete thing, every time.
+- [[fresh-context-subagents]] — Architectural pattern for preventing context rot: thin orchestrators spawn specialist subagents with clean context windows, each writing output to disk. Systematized by GSD Core.
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
 - [[code-clarifies-spec]] — Implementing code improves the spec; the act of writing code generates new decisions that weren't anticipated in the spec, and these decisions should feed back into it.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
@@ -191,8 +194,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
 - [[state-collapse]] — The failure mode of single-latest-state memory systems in evolving environments: prior versions are silently overwritten and lost, even when they remain valid for older deployments or future rollbacks
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
-- [[spec-driven-development]] — Structured specification document as primary artifact driving AI-assisted implementation; PRD + architecture + task backlog stack (Clarke) or EARS + PBT pipeline (Kiro); empirical fit (greenfield MVP, modernization) and miss (brownfield, legacy langs, prototypes)
+- [[spec-driven-development]] — Structured specification document as primary artifact driving AI-assisted implementation; PRD + architecture + task backlog stack (Clarke) or EARS + PBT pipeline (Kiro) or Power Inversion thesis (Spec Kit); empirical fit (greenfield MVP, modernization) and miss (brownfield, legacy langs, prototypes)
 - [[spec-code-triangle]] — The spec-driven development equation is wrong; spec, tests, and code form a bidirectional feedback loop. Coined by Drew Breunig.
+- [[template-driven-quality]] — How structured templates act as constraint mechanisms that channel LLM output toward higher-quality specifications; seven mechanisms identified in Spec Kit's methodology
 - [[ears-notation]] — Easy Approach to Requirements Syntax: structured natural language (`When X, the system shall Y`) designed for downstream automated reasoning; the substrate for Kiro's property-based testing pipeline
 - [[evoarena]] — Benchmark suite for evaluating LLM agents under persistent environment evolution (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo); introduces the PE/IC/CE triplet and chain-accuracy metric
 - [[evomem]] — Patch-based memory paradigm: append-only patch history records every non-additive memory update with before-state, after-state, rationale, and evidence; memory-system-agnostic across A-Mem, Memento-Skill, Terminus2, OpenHands
@@ -254,7 +258,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[unblocked]] — Context engine for engineering organizations; pre-curates organizational context for AI coding agents.
 - [[kiro]] — Amazon's agentic IDE (code-OSS fork); first to codify SDD primitives into the interface: EARS, property-based testing pipeline, steering docs, MCP integration
 - [[bmad-method]] — Open-source SDD methodology that installs into Claude Code or Cursor; strong on specialized role definition (technical director, QA tester, backend engineer)
-- [[spec-kit]] — GitHub's open-source SDD toolkit (~92K stars); the "constitution" model for project-level agent rules; tooling-agnostic
+- [[spec-kit]] — GitHub's open-source SDD toolkit; the "constitution" model with nine immutable articles, template-driven quality, and the Power Inversion thesis; works with 30+ AI coding agents
+- [[gstack]] — Garry Tan's open-source software factory for Claude Code; 23 specialist slash-command skills chaining Think → Plan → Build → Review → Test → Ship → Reflect; designed for 10-15 parallel sprints
+- [[gsd-core]] — Open GSD's spec-driven workflow engine; five-step phase loop (Discuss → Plan → Execute → Verify → Ship) with fresh-context subagents and persistent `.planning/` artifacts; 65+ slash commands
 - [[mcp]] — Model Context Protocol; standard interface for connecting agents to external tools and data sources; Kiro uses it pervasively as the user-extensible tool surface
 - [[open-knowledge-format]] — Google Cloud's open spec (v0.1, June 2026) formalizing the Karpathy LLM-wiki pattern into a portable, interoperable markdown+frontmatter format; deliberately minimal — one required field, punts on taxonomy and link typing
 - [[memrefine]] — Post-construction, LLM-guided memory compression framework: similarity proposes candidate pairs, an LLM judge decides delete/merge/preserve on factual content, iterates until a fixed size budget is met. Framework-agnostic across A-MEM graph memory and Mem0 (Kim et al., Korea U / KAIST / DeepAuto.ai, 2026)

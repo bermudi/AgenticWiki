@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-09
+updated: 2026-07-10
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -15,6 +15,7 @@ sources:
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/gsd-core-opengsd-spec-driven-framework.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -101,6 +102,14 @@ A specific eval technique for detecting context degradation in long conversation
 
 ### Sub-Agent Isolation
 For atomic, parallelizable tasks, spawn sub-agents with clean context windows. Prevents task A's tool results from polluting task B's reasoning. Claude Code uses sub-agents for code review, migrations, and lint rules. The [[ralph-loop]] extends this to serial tasks: each iteration is a fresh context window, with a plan file as shared state between otherwise isolated executions.
+
+### Fresh-Context Subagent Architecture
+
+[[gsd-core|GSD Core]] generalizes sub-agent isolation from a technique for parallel tasks to the default execution model for all heavy work. Thin orchestrators spawn specialist subagents, each in its own isolated context window (up to 200K tokens, or 1M on models that support it), focused only on its assigned task and reading only the artifacts it needs. The subagent writes its output to disk and returns a compact result; the orchestrator's context never grows with the weight of the subagent's work.
+
+GSD Core names the problem this solves: **context rot** — the quality degradation that accumulates as an AI fills its context window with conversation history. The model's attention is finite; as the window fills, the signal-to-noise ratio drops, earlier content receives less attention, and output quality quietly degrades. The model does not warn you when this happens. Context rot is why an AI that produces excellent results on a fresh task produces mediocre results on the tenth task in the same session — the model has not changed, its context has degraded. This is the practical manifestation of the [[self-conditioning]] finding.
+
+GSD Core also ships a **context monitor hook** that watches context usage in real time and injects warnings: >35% normal, ≤35% WARNING (wrap up), ≤25% CRITICAL (save state and start new session). This makes context degradation visible — the model won't warn you, but the hook will. See [[fresh-context-subagents]] for the full pattern.
 
 ### KV Caching
 Cache the invariant portion of chat history (system prompt, previous turns). Each incremental turn only processes the new bit. Cache hit rate is one of the most important metrics for production agents — directly affects speed and cost.
@@ -208,6 +217,8 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[horizon-length]] — context engineering as a reliability lever on the dimension that determines long-horizon capability
 - [[llm-ui-paradigms]] — Karpathy's third paradigm; the channel as the natural context-scoping unit is its context-engineering primitive
 - [[claude-tag]] — Productized channel-scoped context (Anthropic, 2026); the default-scoping instance of the channel-as-boundary pattern
+- [[fresh-context-subagents]] — GSD Core's architectural pattern: fresh context per subagent as the default execution model for all heavy work
+- [[gsd-core]] — The framework that systematizes fresh-context subagents and ships a context monitor hook
 
 ## Sources
 
@@ -223,3 +234,4 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's "third paradigm" framing: the LLM as a persistent, async, org-wide entity. Source for the paradigm-level motivation behind channel-scoped context.
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): the channel as context boundary (global vs. project scoping is too coarse), and the per-channel Docker-isolate "Hermes agent" practitioner experience.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: global memory file (small, always loaded via symlink), project-level memory file (grows with corrections), and skill extraction for conditionally-used knowledge as progressive disclosure at the memory layer.
+- `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: context rot definition, fresh-context subagent architecture as the primary defense, context monitor hook with WARNING/CRITICAL thresholds, `.planning/` artifacts as cross-session persistence

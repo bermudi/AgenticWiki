@@ -1,13 +1,15 @@
 ---
 title: Spec-Driven Development
 created: 2026-06-07
-updated: 2026-06-16
+updated: 2026-07-10
 sources:
   - raw/yt-spec-driven-development-ai-assisted-coding-explained.md
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
   - raw/yt-spec-driven-dev-hype-or-future.md
   - raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md
+  - raw/spec-kit-github-sdd-toolkit.md
+  - raw/gsd-core-opengsd-spec-driven-framework.md
 unaudited_marginal: 0
 tags: [concept, ai-engineering, workflow, spec, design]
 ---
@@ -61,13 +63,23 @@ The negative space is also clear, from Clarke's practitioner report:
 
 The brownfield finding is a sharp contrast to vendor pitches. Harris (Kiro) explicitly says the spec agent will start by reading the working tree and can be augmented with MCP-based code search, but the practical limit is the codebase's separation of concerns: "if your system already had good separation of concerns, your components in your system are highly cohesive, and they're sort of highly coherent and highly cohesive, it's going to have a great job... versus if you took a lot of tech debt along the way that you need to unwind... your agent might actually have a much harder time traversing the codebase in the same way that a dev would."
 
-## The Three Dominant Tooling Stacks
+## The Power Inversion
 
-As of late 2025 / early 2026:
+[[spec-kit|Spec Kit]]'s primary-source methodology document (`raw/spec-kit-github-sdd-toolkit.md`) articulates the core SDD thesis as a power inversion: for decades, code has been king and specifications were scaffolding. SDD inverts this — specifications don't serve code, code serves specifications. The PRD isn't a guide for implementation; it's the source that generates implementation. Technical plans aren't documents that inform coding; they're precise definitions that produce code.
 
-- **GitHub Spec Kit** — open source, ~92,000 stars on GitHub, works with any AI coding agent. The "constitution" model. Friction: low. Tooling agnostic.
-- **Amazon Kiro** — full agentic IDE with spec-driven development baked into the interface. First IDE to codify SDD primitives. Adds EARS, property-based testing, MCP integration, and steering docs. Harris: "Probably the first ID in my eyes to really codify a lot of the techniques of spec driven driven development into an interface."
+In this framing, maintaining software means evolving specifications. Debugging means fixing specifications that generate incorrect code. The entire development workflow reorganizes around specifications as the central source of truth, with implementation plans and code as the continuously regenerated output. The process is 0 → 1, (1', ..), 2, 3, N — each new feature or parallel implementation revisits the specification.
+
+This is the strongest statement of the spec-first position in the wiki. It goes beyond Clarke's "spec as PRD stack" and Harris's "spec as EARS + PBT" by making the spec the *generative source* of code, not just a guide for it. The [[spec-code-triangle]] feedback loop (Breunig) and the [[code-clarifies-spec]] principle are the counterweight: the act of implementation generates decisions that feed back into the spec.
+
+## The Dominant Tooling Stacks
+
+As of mid-2026:
+
+- **GitHub [[spec-kit|Spec Kit]]** — open source, works with 30+ AI coding agents. The "constitution" model with nine immutable articles (library-first, CLI mandate, test-first, simplicity, anti-abstraction, integration-first testing). Adds [[template-driven-quality|template-driven quality]] — seven mechanisms by which templates constrain LLM output. Extensions/presets/bundles customization system. Friction: low. Tooling agnostic.
+- **Amazon [[kiro|Kiro]]** — full agentic IDE with spec-driven development baked into the interface. First IDE to codify SDD primitives. Adds EARS, property-based testing, MCP integration, and steering docs. Harris: "Probably the first ID in my eyes to really codify a lot of the techniques of spec driven driven development into an interface."
 - **BMAD Method** — open source, installs into Claude Code or Cursor. Heavy on specialized role definition (technical director, QA tester, backend engineer) and detailed workflow. Clarke: "if you've got a couple of days to devote and you really want to go deep on this stuff and see what maybe a little preview of the future might look like, the BMAD method... is a fantastic place to start."
+- **[[gstack]]** — Garry Tan's open-source software factory. 23 specialist slash-command skills chaining Think → Plan → Build → Review → Test → Ship → Reflect. Sprint-workflow enforcement layer with cross-model review and real-browser QA. Designed for 10-15 parallel sprints.
+- **[[gsd-core|GSD Core]]** — Open GSD's spec-driven workflow engine. Five-step phase loop (Discuss → Plan → Execute → Verify → Ship) with [[fresh-context-subagents|fresh-context subagents]] and a `.planning/` directory of persistent artifacts. 65+ slash commands, least-privilege agent permissions, context monitor hook. Solves context rot, session amnesia, and verification gaps.
 
 The 2025-2026 trajectory is convergence: Kiro shipping in mid-2025, Google Antigravity shipping spec-driven features "two days ago" as of Clarke's November 2025 talk, and BMAD in the open source ecosystem. "The best approximation of what specri development is going to look like in the future right now is living in the open source" (Clarke).
 
@@ -107,10 +119,14 @@ A head-to-head benchmark from [[colin-eberhardt|Colin Eberhardt]] (Scott Logic) 
 ## Related
 
 - [[context-files]] — The "project constitution" pattern (Spec Kit) is functionally equivalent to AGENTS.md / CLAUDE.md / .cursorrules; Kiro's "steering" is its branded version
+- [[template-driven-quality]] — How Spec Kit's templates constrain LLM output through seven mechanisms
 - [[kiro]] — Amazon's agentic IDE that codifies SDD with EARS, property-based testing, and steering
 - [[ears-notation]] — The structured natural language format Kiro uses for requirements, designed for downstream automated reasoning
 - [[property-based-testing-as-spec]] — Kiro's approach to translating EARS requirements into invariants
 - [[steering-docs]] — Kiro's branded equivalent of context files, treated as accumulated learnings
+- [[gstack]] — Sprint-workflow enforcement layer; complementary to SDD's spec-generation focus
+- [[gsd-core]] — Fresh-context subagent SDD framework with persistent `.planning/` artifacts
+- [[fresh-context-subagents]] — GSD Core's architectural solution to context rot in long SDD pipelines
 - [[single-player-to-multiplayer]] — Cian Clarke's framing of where SDD tooling needs to go: from individual to multi-contributor parallel work
 - [[intent-to-code]] — Plan-as-contract position, of which SDD is the most explicit practitioner instantiation
 - [[vibe-coding]] — The position SDD is positioned against
@@ -128,3 +144,5 @@ A head-to-head benchmark from [[colin-eberhardt|Colin Eberhardt]] (Scott Logic) 
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Al Harris, Amazon Kiro: EARS structured natural language for requirements; spec as artifacts + workflow + tools for reproducibility; property-based testing from EARS; steering docs as accumulated learnings; 200/400/800-grit sharpening model; bidirectional spec sync; neurosymbolic hybrid (LLM + automated reasoning); brownfield separation-of-concerns finding
 - `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark of Spec Kit vs iterative development (10x faster without SDD on the test problem); [[birgitta-boeckler|Birgitta Boeckler]] on spec drift ("spec first, vague about spec maintenance") and the sledgehammer-to-crack-a-nut critique
 - `raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md` — [[drew-breunig|Drew Breunig]] (Computer History Museum): the spec-code triangle critique of linear SDD; onewords postmortem (no-code library limits); decision extraction via plum-dev; software history framing (Hamilton, NATO crisis, waterfall/agile oscillation); "no-code libraries are toys because they are unproven"
+- `raw/spec-kit-github-sdd-toolkit.md` — Primary source for Spec Kit: Power Inversion thesis, nine constitutional articles, template-driven quality (7 constraint mechanisms), extensions/presets/bundles, 30+ agent integrations
+- `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: five-step phase loop, spec-driven pipeline with requirement-to-verification traceability, fresh-context subagents, `.planning/` artifact directory

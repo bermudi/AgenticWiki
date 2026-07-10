@@ -1,9 +1,11 @@
 ---
 title: Software Factory
 created: 2026-06-05
-updated: 2026-06-16
+updated: 2026-07-10
 sources:
   - raw/yt-systems-building-systems.md
+  - raw/gstack-garry-tan-software-factory.md
+  - raw/gsd-core-opengsd-spec-driven-framework.md
 tags: [concept, agentic-engineering, automation, orchestration]
 unaudited_marginal: 0
 ---
@@ -79,6 +81,19 @@ In a phase-decomposition architecture, verification agents run between phases. I
 
 Either way, **tuning is the slow, expensive, and difficult part**.
 
+## Shipped Instantiations
+
+As of mid-2026, two open-source frameworks provide concrete instantiations of the software factory concept:
+
+### gstack (Garry Tan)
+[[gstack]] is the most direct shipped instance: 23 specialist slash-command skills that turn Claude Code into a virtual engineering team (CEO, eng manager, designer, reviewer, QA lead, security officer, release engineer). The sprint structure (Think → Plan → Build → Review → Test → Ship → Reflect) is the process that makes parallelism safe — without it, ten agents is ten sources of chaos. Tan reports running 10-15 parallel sprints and shipping at ~810× his 2013 pace. The [[boil-the-ocean|Boil the Ocean]] ethos (completeness is cheap with AI) and User Sovereignty principle (AI recommends, user decides) are the tuning instructions. This maps to Eero Alvar's "company-shaped hierarchy" design, but with the human retained as CEO rather than fully automated.
+
+### GSD Core (Open GSD)
+[[gsd-core|GSD Core]] maps to Eero Alvar's "task decomposition" design: a five-step phase loop (Discuss → Plan → Execute → Verify → Ship) where each phase produces artifacts the next phase consumes. The key architectural innovation is [[fresh-context-subagents|fresh-context subagents]] — thin orchestrators spawn specialist agents with clean context windows, solving the agent persistence problem that Eero Alvar identified as the shared bottleneck. The `.planning/` directory of persistent Markdown/JSON artifacts is the shared memory that survives session boundaries. Verification agents run between phases as Eero Alvar proposed, with the verifier enforcing that every requirement mapped to the phase is actually implemented before the phase advances.
+
+### Convergence
+Both frameworks converge on the same structural insight: the workflow is the safety mechanism. Without a process, parallel agents produce slop. With a process — where each step produces an artifact the next step consumes — each agent knows what to do and when to stop. The divergence is architectural: gstack chains skills within sessions (sprint model, human as CEO), GSD Core spawns fresh agents per task (subagent model, orchestrator as coordinator). See [[the-agent-workflow]] for the full workflow treatment.
+
 ## Thread
 
 - [[the-slop-problem]] — The software factory framing defines slop precisely: outputs outside the desirable subset of production-ready, spec-aligned software
@@ -97,7 +112,13 @@ Either way, **tuning is the slow, expensive, and difficult part**.
 - [[plan-disposability]] — Fresh plans per session as a persistence strategy
 - [[the-human-lever]] — The software factory automates the execution layer of the human lever
 - [[self-harness]] — Self-Harness automates harness engineering; the software factory automates spec-to-software — both self-optimization at different layers of the stack
+- [[gstack]] — Shipped software factory: 23 specialist skills, sprint workflow, 10-15 parallel sprints
+- [[gsd-core]] — Shipped software factory: five-step phase loop, fresh-context subagents, persistent `.planning/` artifacts
+- [[fresh-context-subagents]] — GSD Core's architectural solution to the agent persistence problem
+- [[boil-the-ocean]] — gstack's completeness ethos: the tuning instruction for factory output quality
 
 ## Sources
 
 - `raw/yt-systems-building-systems.md` — Eero Alvar: the software factory concept, mapping analogy, chaos property, three design approaches, persistence mechanisms, tuning approaches
+- `raw/gstack-garry-tan-software-factory.md` — gstack: shipped software factory with 23 specialist skills, sprint workflow, parallel sprints, builder ethos
+- `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: shipped software factory with five-step phase loop, fresh-context subagents, persistent planning artifacts, verification gates

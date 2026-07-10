@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-09
+updated: 2026-07-10
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -41,6 +41,8 @@ sources:
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/gstack-garry-tan-software-factory.md
+  - raw/gsd-core-opengsd-spec-driven-framework.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -100,6 +102,9 @@ The agent workflow consists of two interdependent phases — human-in-the-loop d
 
 > [!note] Marginal: The Agent Becomes a Persistent Teammate (Paradigm 3)
 > [[andrej-karpathy|Karpathy]]'s [[llm-ui-paradigms|"third paradigm of LLM UI/UX"]] reframes the workflow's substrate: the agent stops being a session the human drives and becomes a persistent, async, proactive teammate embedded in the team's coordination layer (a Slack/Discord channel), scoped per-channel rather than per-session. Anthropic's [[claude-tag|Claude Tag]] (2026) is the shipped instance — the multiplayer, async, proactive counterpart to solo Claude Code. This reshapes the HITL/AFK split toward **delegation to a teammate that can act without being asked** ([[proactive-service]]): the human's queue of AFK work is no longer something only the human feeds, and the context boundary moves from the repo to the [[context-engineering|channel]]. The open question this thread inherits: does productized channel-scoping preserve the [[verification-loop|verification discipline]] the workflow depends on, or does ambient/proactive execution outrun review capacity (the [[plan-vs-review|review bottleneck]])?
+
+> [!note] Marginal: Shipped Software Factories — gstack and GSD Core
+> Two open-source frameworks now provide the most concrete shipped instantiations of this thread's workflow model. [[gstack]] ([[garry-tan|Garry Tan]], YC) packages a complete sprint as 23 specialist slash-command skills: Think → Plan → Build → Review → Test → Ship → Reflect. Each skill produces an artifact the next skill consumes. Tan reports running 10-15 parallel sprints and shipping at ~810× his 2013 pace. The [[boil-the-ocean|Boil the Ocean]] ethos principle (completeness is cheap with AI) and the User Sovereignty principle (AI recommends, user decides) are injected into every skill's preamble. [[gsd-core|GSD Core]] (Open GSD) takes a different architectural approach: a five-step phase loop (Discuss → Plan → Execute → Verify → Ship) with [[fresh-context-subagents|fresh-context subagents]] — thin orchestrators spawn specialist agents with clean context windows, each writing output to disk in a `.planning/` directory of persistent Markdown/JSON artifacts. This is the architectural solution to the context rot that degrades long single-session workflows. Both frameworks converge on the same structural insight: the workflow is the safety mechanism, and without it, parallel agents are chaos. The divergence is architectural: gstack chains skills within sessions (sprint model), GSD Core spawns fresh agents per task (subagent model). See [[software-factory]] for the broader pattern.
 
 ## The Two Phases
 
@@ -498,4 +503,6 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's X post defining the third paradigm of LLM UI/UX: the agent as a persistent, async, org-level entity embedded in team coordination. Source for the "Agent Becomes a Persistent Teammate" marginal note — paradigm 3 reshapes the HITL/AFK split toward delegation to a proactive teammate.
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): Claude Tag's mechanics (channel-scoped, multiplayer, async, proactive) as the paradigm-3 instance; the model-lock-in critique; the per-channel isolate practitioner experience. Source for the "Agent Becomes a Persistent Teammate" marginal note.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen (ex-L8 principal, Atlassian): the captain/first-mate/crew model, terminal-centric multi-agent workflow, tmux, Treehouse, No Mistakes, Lavish, AXI, and Good Night, Have Fun. Source for the "Kun Chen's Terminal-First Multi-Agent Workflow" marginal note.
+- `raw/gstack-garry-tan-software-factory.md` — Garry Tan's gstack: 23 specialist slash-command skills, sprint workflow (Think → Plan → Build → Review → Test → Ship → Reflect), Boil the Ocean ethos, User Sovereignty, 10-15 parallel sprints, cross-model review. Source for the "Shipped Software Factories" marginal note.
+- `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: five-step phase loop, fresh-context subagents, `.planning/` persistent artifacts, context monitor hook, slopcheck. Source for the "Shipped Software Factories" marginal note.
 

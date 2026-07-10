@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-09
+updated: 2026-07-10
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -29,6 +29,8 @@ sources:
   - raw/yt-systems-building-systems.md
   - raw/yt-spec-driven-dev-hype-or-future.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/gsd-core-opengsd-spec-driven-framework.md
+  - raw/gstack-garry-tan-software-factory.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -62,6 +64,9 @@ AI doesn't create new failure modes — it accelerates existing ones. The same e
 Karpathy's proposed answer is [[agentic-engineering]]: the professional discipline of coordinating agents without sacrificing quality. "You're not allowed to introduce vulnerabilities due to vibe coding." The slop problem is the gap between these two modes — between what's newly possible and what's professionally acceptable.
 
 His observation that the speed-up is "a lot more than 10x" cuts both ways: it means the gains are enormous, but the asymmetry between generation speed and verification speed (the core mechanism of slop) is even larger than previously estimated.
+
+> [!note] Marginal: Slopcheck and Verification Gates as Anti-Slop Infrastructure
+> Two open-source frameworks now ship concrete anti-slop mechanisms. [[gsd-core|GSD Core]]'s **Package Legitimacy Audit** (slopcheck) is a dependency-layer defense: every external package that AI researchers recommend gets a verdict (`[OK]`, `[SUS]`, or `[SLOP]`) in `RESEARCH.md` before the planner ever sees it. AI-suggested packages of dubious quality are removed before they enter the codebase — preventing slop at the dependency-selection layer, not just the code-generation layer. GSD Core also gates every phase with a verifier that performs a goal-backward check against requirements before declaring done. [[gstack]]'s `/review` (staff-engineer code review), `/qa` (real-browser testing), and `/cso` (OWASP + STRIDE security audit) are verification skills that catch bugs that pass CI but blow up in production. The `/codex` skill adds cross-model review — a completely different AI looking at the same diff — which catches issues a single model would miss. Both frameworks converge on the same insight: slop prevention requires verification infrastructure at multiple layers (dependencies, code, tests, security), not just a single review pass. See [[verification-loop]] for the general pattern.
 
 ## How It Happens
 
@@ -267,3 +272,5 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark of Spec Kit vs iterative development (10x faster without SDD on the test problem) is the strongest empirical counter-evidence cited in the thread's theory-pressure callout; [[birgitta-boeckler|Birgitta Boeckler]] on spec drift is the source behind the open-source-SDD-tools "spec first, vague about spec maintenance" observation
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s [[discourse-slop]] category: the meta-discourse about agentic tools is itself AI-generated, hype-amplified slop (the 2M-view loop-engineering post); the incentive structure (Anthropic/OpenAI/Cursor hype, Google measured).
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]] names [[skill-hell|skill hell]] as the skills-flavored slop variant: supply of skills outpaces evaluative capacity, discourse is slop-shaped. Skill slop's internal mechanisms: no-ops (instructions with no behavioral effect, especially when agents author skills) and sediment (compounding-booboos on the skill file). The four-part checklist is the proposed evaluative framework. See the "Skill Slop" departure callout.
+- `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: Package Legitimacy Audit (slopcheck) as dependency-layer anti-slop infrastructure; verification gates that perform goal-backward checks against requirements before declaring done. Source for the "Slopcheck and Verification Gates" marginal note.
+- `raw/gstack-garry-tan-software-factory.md` — gstack: `/review`, `/qa`, and `/cso` as multi-layer verification skills (code review, real-browser testing, security audit); `/codex` as cross-model review catching issues a single model would miss. Source for the "Slopcheck and Verification Gates" marginal note.

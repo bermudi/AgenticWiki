@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-09
+updated: 2026-07-10
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -34,6 +34,7 @@ sources:
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
   - raw/2509.09677.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/gstack-garry-tan-software-factory.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -43,6 +44,9 @@ tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 
 > [!note] Departure: Where to Apply the Lever
 > Sources disagree on where the human lever should be applied most forcefully. The [[plan-vs-review|plan-heavy]] camp says: invest leverage in **spec precision**. [[matt-pocock|Pocock]] says: invest leverage in **QA** — grilling aligns you, the PRD is a hint, quality enforcement happens against reality. See [[intent-to-code]] for the full fork.
+
+> [!note] Marginal: User Sovereignty as an Explicit Principle
+> [[garry-tan|Garry Tan]]'s [[gstack]] builder ethos articulates the human lever as an explicit principle: **User Sovereignty** — "AI models recommend. Users decide." The user always has context that models lack. Even when two models agree on a change (gstack's cross-model review via `/codex`), the user's "no" is final. This is the generation-verification loop made explicit: AI generates recommendations, the user verifies and decides. Tan cites [[andrej-karpathy|Karpathy]]'s "Iron Man suit" philosophy as the influence: great AI products augment the user, not replace them. This is the same position as [[dhh|Hansson]]'s [[peak-programmer]] — the human's strategic judgment is the differentiator that AI amplifies rather than replaces.
 
 ## Thesis
 
@@ -397,4 +401,5 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). Source for the "More Agents Is Not More Leverage" contradiction. Documents that multi-agent coordination is largely unverifiable and the model defaults to single-agent execution anyway (DyLAN: 70-90% unanimous consensus, MAS-Zero: verifier picks first worker 45%+ of the time, "expensive witnesses"). The human lever applies to (a) single-agent scenarios, (b) hand-designed multi-agent architectures ([[expert-mas]] 57%→96.5% on GPT-5), but NOT to automated multi-agent search — the case the field is increasingly defaulting to. §3 (cost-quality Pareto); §3.3 (Expert-MAS as the hand-designed control); §4 (functional collapse, positional bias); §5 (ensembling trap).
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Planning Ceiling Is Partly an Execution Ceiling" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers the human does not own. Bound the human lever's reach at the capability layer, not just the prompt layer.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: the captain/first-mate/crew metaphor as a reframing of the human lever; the human reviews risk assessment and evidence rather than diffs; the bottleneck moves to strategic direction.
+- `raw/gstack-garry-tan-software-factory.md` — Garry Tan's gstack: User Sovereignty as an explicit human-lever principle ("AI models recommend. Users decide."); the generation-verification loop; cross-model review where even two AIs agreeing doesn't override the user's "no." Source for the "User Sovereignty as an Explicit Principle" marginal note.
 
