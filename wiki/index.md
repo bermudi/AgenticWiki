@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-10
+updated: 2026-07-11
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -155,6 +155,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
 - [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
+- [[agent-memory-systems]] — Agent memory as a data-management system (M = ⟨R,S,Q,U⟩); benchmarking 12 systems finds no single architecture dominates — effectiveness depends on workload alignment, and append-only stores return stale facts ("hallucinations of the past").
 - [[executable-memory]] — The paradigm in which an agent's model of a user is a living software project: typed Python objects hold state, ordinary Python functions encode rules, and an interpreter runs the whole thing (User as Code, Bojie Li, Pine AI 2026)
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.

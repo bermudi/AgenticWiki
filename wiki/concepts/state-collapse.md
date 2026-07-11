@@ -1,9 +1,10 @@
 ---
 title: State Collapse
 created: 2026-06-18
-updated: 2026-07-04
+updated: 2026-07-11
 sources:
   - raw/2606.13681.md
+  - raw/2606.24775v1.md
 tags: [concept, agent-memory, failure-mode, version-aware-memory, memory-evolution]
 unaudited_marginal: 0
 ---
@@ -84,6 +85,10 @@ Solving isolated tasks does not translate into chain reliability — the gap is 
 
 In the regression analysis on SWE-Chain-Evo, base agents regress on Pass-to-Pass tests at 9.09% (averaged across backbones). EvoMem reduces this to 6.32% — a 2.77pp drop in regressions. The mechanism: agents that ignore prior implementation decisions break preserved behavior; agents that preserve them don't.
 
+### Independent corroboration
+
+A separate systems evaluation reaches the same conclusion from a different direction. Zhou et al. (2026, [[agent-memory-systems]]) benchmark 12 memory architectures from a data-management perspective and find that graph- and relation-organized memory handles fact revisions most reliably, while popular fact-extraction plugins and append-only stores **struggle with targeted overwrites and return stale facts — "hallucinations of the past."** This is independent confirmation of state collapse from a data-management (rather than benchmark-evolution) methodology, and it validates [[evomem]]'s version-aware remedy: systems lacking lifecycle management return outdated facts as if they were current.
+
 ## Relationship to Existing Wiki Concepts
 
 - [[evomem]] — The structural remedy; patch-augmented retrieval prevents state collapse by preserving the evolution trace
@@ -110,8 +115,11 @@ In the regression analysis on SWE-Chain-Evo, base agents regress on Pass-to-Pass
 - [[document-degradation]] — The broader pattern state collapse instantiates
 - [[executable-memory]] — A complementary structured-memory paradigm
 - [[memrefine]] — A complementary compression primitive
+- [[agent-memory-systems]] — Independent corroboration: append-only/overwrite stores return stale facts ("hallucinations of the past")
+- [[context-engineering]] — The boundary: context engineering curates the per-turn window; state collapse is the memory-layer failure that occurs when persistent memory is treated as single-latest-state
 - [[verifiability]] — Why state collapse is hard to detect without version-aware evidence
 
 ## Sources
 
 - `raw/2606.13681.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). Names state collapse as the central failure mode exposed by EvoArena and motivates EvoMem as the remedy. The mechanism analysis and regression analysis quantify its impact.
+- `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). Independent corroboration: the systems evaluation finds append-only stores and fact-extraction plugins return stale facts ("hallucinations of the past"), while graph-organized memory handles updates best — confirming state collapse from a data-management perspective.

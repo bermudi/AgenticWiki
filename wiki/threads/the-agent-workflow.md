@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-10
+updated: 2026-07-11
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -43,6 +43,7 @@ sources:
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/gstack-garry-tan-software-factory.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
+  - raw/2606.24775v1.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -284,11 +285,14 @@ MCP (Model Context Protocol) made it easy to add tools, which created a tool-blo
 [[evolving-context]] — continual learning in token space — is the major unsolved problem in agent workflows. Currently, all context management is hand-tuned heuristics: "offload after N turns," "spawn sub-agents for these task types." The emerging vision is agents that improve their own context over time:
 
 - **Task-specific prompt evolution**: Reflect over agent trajectories, score outcomes, and iteratively refine prompts (a paper Lance references as "Jeepa" from DSPy/Omar).
-- **Memory and preference learning**: Accumulate preferences across sessions — coding style, PR conventions, durable vs. temporary preferences. [[lance-martin|Lance Martin]]'s Claude Diary is a crude prototype.
+- **Memory and preference learning**: Accumulate preferences across sessions — coding style, PR conventions, durable vs. temporary preferences. [[lance-martin|Lance Martin]]'s Claude Diary is a crude prototype. The broader systems architecture of agent memory — representation, extraction, retrieval, maintenance — is surveyed as a first-class data-management problem in [[agent-memory-systems]].
 - **Skill learning**: When an agent discovers a reusable SOP, capture it as a skill file for future tasks (Let paper).
 
 > [!warning] Open Frontier
 > All three categories are currently "super hacky" — custom prompts and manual reflection loops. RLM (Recursive Language Models, trained to manage their own context) is an exciting direction, but the classifier heuristic (articulated by the host, Dex Horthy, and elaborated by Martin) suggests some decisions (user-specific preferences, nuanced memory salience) will always need user-supplied guardrails. The mechanics of storage and retrieval can be learned; the *values* for what to keep may stay external.
+
+> [!note] Calibration: Memory systems frequently underperform naive long-context
+> This frontier is unsolved, and the systems-evaluation evidence is sobering: across 12 architectures, [[agent-memory-systems]] (Zhou et al., 2026) finds **no single memory design dominates**, and for time-dependent queries **raw long-context retrieval still outperforms most memory-backed approaches** — because standard semantic consolidation destroys chronological cues. The recurring trap is building memory without lifecycle semantics — which surfaces as "hallucinations of the past" (stale facts returned as current), the data-management cousin of [[state-collapse]]. Practical implication: a memory system must justify itself against the long-context baseline on the specific workload — it is not automatically the better choice.
 
 ## Tracer Bullets
 
@@ -505,4 +509,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen (ex-L8 principal, Atlassian): the captain/first-mate/crew model, terminal-centric multi-agent workflow, tmux, Treehouse, No Mistakes, Lavish, AXI, and Good Night, Have Fun. Source for the "Kun Chen's Terminal-First Multi-Agent Workflow" marginal note.
 - `raw/gstack-garry-tan-software-factory.md` — Garry Tan's gstack: 23 specialist slash-command skills, sprint workflow (Think → Plan → Build → Review → Test → Ship → Reflect), Boil the Ocean ethos, User Sovereignty, 10-15 parallel sprints, cross-model review. Source for the "Shipped Software Factories" marginal note.
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: five-step phase loop, fresh-context subagents, `.planning/` persistent artifacts, context monitor hook, slopcheck. Source for the "Shipped Software Factories" marginal note.
+- `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the Evolving Context Frontier's memory bullet and its calibration callout: the four-module memory framework (representation/extraction/retrieval/maintenance) surveyed as a data-management problem; and the sobering finding that no single memory architecture dominates and long-context retrieval still beats most memory systems for time-dependent queries.
 

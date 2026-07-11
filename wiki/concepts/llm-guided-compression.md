@@ -1,7 +1,7 @@
 ---
 title: LLM-Guided Compression
 created: 2026-06-18
-updated: 2026-07-04
+updated: 2026-07-11
 sources:
   - raw/2606.13177.md
 tags: [concept, llm-as-judge, compression, factual-judgment, redundancy-detection]
@@ -84,6 +84,7 @@ Adjacent patterns in the wiki:
 ## Related
 
 - [[memrefine]] — The framework that operationalizes this pattern for agent memory
+- [[agent-memory-systems]] — Corroborates that abstraction is inherently lossy, validating why factual-judge compression (not surface similarity) is required
 - [[storage-budgeted-memory]] — The problem formulation this pattern solves
 - [[backpressure]] — LLM-as-judge for verification
 - [[rubric-evaluation]] — LLM-as-judge for evaluation

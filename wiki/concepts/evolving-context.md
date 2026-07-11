@@ -1,7 +1,7 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-07-04
+updated: 2026-07-11
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
@@ -10,6 +10,7 @@ sources:
   - raw/2606.16707v1.md
   - raw/2606.13177.md
   - raw/2606.13681.md
+  - raw/2606.24775v1.md
 tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion, executable-memory, memory-compression]
 unaudited_marginal: 0
 ---
@@ -17,6 +18,8 @@ unaudited_marginal: 0
 # Evolving Context
 
 > Continual learning in token space — the practice of agents progressively refining their own context (prompts, skills, memories, preferences) based on experience, without retraining model weights. An emerging frontier that is currently "super hacky" but represents one of the most important unsolved problems in agent engineering.
+
+**Scope.** This page covers how an agent's context *evolves* over time. The broader *systems architecture* of agent memory — representation, storage, extraction, retrieval, and the maintenance lifecycle (consolidation, forgetting, capacity) — is surveyed as a first-class data-management problem in [[agent-memory-systems]]. The maintenance axes below ([[memrefine]], [[evomem]]) operate within the lifecycle that paper formalizes as its module U.
 
 ## What It Is
 
@@ -197,7 +200,7 @@ The boundary with [[memrefine]]: MemRefine targets *what stays* (compression und
 - [[evomem]] — Extends evolving context to the memory-evolution layer: the append-only patch history records what changed and why across non-additive memory updates
 - [[comprehension-debt]] — Schema evolution is a counter-move at the schema layer: the user model stays readable as Python files, not opaque vector stores
 - [[bojie-li]] — Author of User as Code, the implementation of schema-level evolving context
-- [[evomem]] — The memory-evolution layer: append-only patch history preserves the change provenance of memory
+- [[agent-memory-systems]] — The systems-architecture survey of agent memory; formalizes the maintenance lifecycle (module U) that the evolution axes below operate within
 - [[jundong-xu]] — Lead author of the EvoArena paper that introduces EvoMem
 
 ## Sources
@@ -209,3 +212,4 @@ The boundary with [[memrefine]]: MemRefine targets *what stays* (compression und
 - `raw/2606.16707v1.md` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* Evolving context at the schema layer. The LLM writes its own dataclasses, domain partitioning, and constraints; the structured state is regenerated from the full fact corpus. Bitter-lesson framing: no human-designed schema, only human-designed scaffolding. Schema evolution is a strict extension of the three Lance Martin categories — a new fourth category where the *data model itself* evolves.
 - `raw/2606.13177.md` — Kim (Korea U), Baek, Jeong, Hwang (KAIST; Hwang also DeepAuto.ai), June 2026. *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* A seventh axis: evolving context at the **store level**. The pairwise LLM judge decides what stays in the memory store when it has outgrown a fixed size budget. The redundancy/complementarity/distinctness taxonomy is the action space; similarity is the proposal mechanism; factual judgment is the decision mechanism. LLM judge decisively outperforms fixed rule-based baselines (RuleSim, RulePR) as the budget tightens. Framework-agnostic: A-MEM graph memory and Mem0.
 - `raw/2606.13681.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* An eighth axis: evolving context at the **memory-evolution layer**. The append-only patch history records what changed and why across non-additive memory updates. The patch is the change record; the latest memory is the materialized view; the WAL is the patch log. Memory-system-agnostic: instantiated over A-Mem, Memento-Skill, Terminus2, OpenHands. Improves chain accuracy +6.1pp on Terminal-Bench-Evo. Mechanism: gain jumps from +2.6% to +8.3% when agents operationalize retrieved patches.
+- `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the scope note: formalizes the maintenance lifecycle (module U: consolidation, forgetting, capacity) as a first-class memory-system concern that the evolution axes above operate within.

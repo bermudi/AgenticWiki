@@ -1,9 +1,10 @@
 ---
 title: EvoMem
 created: 2026-06-18
-updated: 2026-07-04
+updated: 2026-07-11
 sources:
   - raw/2606.13681.md
+  - raw/2606.24775v1.md
 tags: [concept, agent-memory, memory-evolution, version-aware-memory, harness-mechanism, patch-history, code-as-agent-harness]
 unaudited_marginal: 0
 ---
@@ -126,6 +127,7 @@ The choice to patch **only** non-additive updates is principled. Additive update
 ## Relationship to Existing Wiki Concepts
 
 - [[state-collapse]] — EvoMem is the proposed remedy. Where state collapse is the failure mode (single latest state erases valid prior versions), EvoMem is the design pattern that prevents it (append-only patch history retains the evolution).
+- [[agent-memory-systems]] — Independent validation of the problem EvoMem solves. A systems evaluation of 12 memory architectures (Zhou et al., 2026) finds that graph/relation-organized memory handles fact revisions best, while append-only stores and fact-extraction plugins return stale facts ("hallucinations of the past") — the exact failure EvoMem's patch history prevents.
 - [[executable-memory]] — Both address long-term memory for personalized agents, but at different layers. Executable memory structures the **current user model** as typed Python; EvoMem structures the **evolution history of any memory** as versioned patches. They are complementary, not competing: an executable-memory agent could use EvoMem to track how its typed Python state evolved across structuring regenerations.
 - [[evolving-context]] — EvoMem is a specific implementation of evolving context at the **memory-evolution layer**: the agent's memory updates are the evolving object, and the patch history is the regenerated view. Sits alongside [[memrefine]] (store-level compression), [[self-harness]] (harness-surface evolution), [[executable-memory]] (schema evolution), and [[recursive-agent-harness]] (harness instantiation).
 - [[memrefine]] — Complements EvoMem along a different axis. MemRefine shrinks an already-constructed store to fit a budget (a compression primitive). EvoMem preserves the evolution history of a growing store (a provenance primitive). An agent could use both: MemRefine for size control, EvoMem for change provenance. The combined regime — bounded, versioned memory — is unexplored by either paper alone.
@@ -146,6 +148,7 @@ The choice to patch **only** non-additive updates is principled. Additive update
 
 - [[evoarena]] — The benchmark EvoMem improves
 - [[state-collapse]] — The failure mode EvoMem is designed to prevent
+- [[agent-memory-systems]] — Independent validation of the targeted-overwrite problem EvoMem solves
 - [[chain-accuracy]] — The evaluation metric where EvoMem's gains are largest
 - [[executable-memory]] — A complementary structured-memory paradigm
 - [[evolving-context]] — EvoMem as a memory-evolution-layer extension of evolving context
@@ -161,3 +164,4 @@ The choice to patch **only** non-additive updates is principled. Additive update
 ## Sources
 
 - `raw/2606.13681.md` — Xu et al. (NUS + collaborators, arXiv 2606.13681, June 2026). *EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments.* The full paper: EvoArena benchmark (Terminal-Bench-Evo, SWE-Chain-Evo, PersonaMem-Evo), EvoMem paradigm (patch schema, recording algorithm, retrieval algorithm), four-agent instantiation (A-Mem, Memento-Skill, Terminus2, OpenHands), main results across 8 backbones × 3 subsets × 5 benchmarks, mechanism analysis (operationalization stratification), efficiency analysis, regression analysis on SWE-Chain-Evo.
+- `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). Independent confirmation that append-only stores and fact-extraction plugins return stale facts while graph-organized memory handles updates best — the failure EvoMem's patch history is designed to prevent.

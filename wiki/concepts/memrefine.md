@@ -1,9 +1,10 @@
 ---
 title: MemRefine
 created: 2026-06-18
-updated: 2026-07-04
+updated: 2026-07-11
 sources:
   - raw/2606.13177.md
+  - raw/2606.24775v1.md
 tags: [concept, agent-memory, compression, llm-as-judge, post-construction, harness-mechanism]
 unaudited_marginal: 0
 ---
@@ -63,6 +64,8 @@ A-MEM F1 holds to within 0.4pp at 60% budget (0.4013 → 0.3977) and within 3.9p
 
 Rule-based methods remain competitive when the budget is loose (most decisions involve obvious near-duplicates), but fall off far more sharply as the budget tightens. Under aggressive compression, the difficult cases are no longer near-duplicate nodes but semantically related memories whose factual relationship must be interpreted. A fixed similarity threshold cannot separate redundant paraphrases from complementary facts; graph centrality does not indicate whether a memory holds evidence needed for future questions. The widening MemRefine advantage under tighter budgets is the paper's main empirical argument that **LLM-guided factual judgment is necessary, not just useful**.
 
+This is corroborated from a different angle by a broader systems evaluation ([[agent-memory-systems]], Zhou et al., 2026): its component ablations find that **each layer of abstraction — compression, summarization, fact extraction — progressively discards information**, and that retaining original content beats increasing abstraction or hierarchy. If abstraction is inherently lossy, compressing safely requires exactly the kind of factual judgment (not surface similarity) that MemRefine's judge performs — which is why rule-based similarity thresholds fall off sharply under tight budgets.
+
 **Effect of compression model (Figure 5).** GPT-5-mini and Qwen3-8B behave similarly under moderate compression, indicating MemRefine does not rely on a single proprietary judge. The gap widens under tighter budgets, where finer distinctions between redundant, complementary, and distinct memories matter more. Stronger judge models become more valuable as the storage constraint grows severe.
 
 **Algorithmic summary (paper's Algorithm 1).** The procedure is:
@@ -111,8 +114,12 @@ return M′
 - [[backpressure]] — LLM-as-judge for compression uses the same pattern as LLM-as-judge for verification
 - [[jagged-frontier]] — LLM judgment is necessary under tight budgets where rule-based heuristics fail
 - [[critical-failure]] — Pairwise judging avoids the per-entry scoring trap where a sparse catastrophic decision (deleting a load-bearing fact) is hard to detect
+- [[state-collapse]] — Complementary: MemRefine compresses redundancy without causing state collapse (operates on redundancy, not version-dependent rules)
+- [[evomem]] — Orthogonal primitive: MemRefine controls what stays (compression under budget); EvoMem preserves what changed (version provenance)
+- [[agent-memory-systems]] — Corroborates that abstraction is inherently lossy; validates why factual-judge compression beats similarity thresholds
 - [[minjae-kim]], [[jinheon-baek]], [[soyeong-jeong]], [[sung-ju-hwang]] — Authors of the MemRefine paper
 
 ## Sources
 
 - `raw/2606.13177.md` — Kim, Baek, Jeong, Hwang (Korea U / KAIST / DeepAuto.ai, June 2026). *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* arXiv 2606.13177. The full paper, 16 pages. Defines the storage-budgeted memory management problem, introduces the LLM-guided pairwise refinement procedure, and validates across two memory frameworks (A-MEM graph, Mem0) and four benchmarks (LoCoMo, 3x LoCoMo, 10x LoCoMo, LongMemEvalS) with rule-based baselines (RuleSim, RulePR) and a judge-model ablation (GPT-5-mini vs Qwen3-8B).
+- `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). Corroboration that abstraction is inherently lossy (each compression/summarization/extraction layer discards information), validating why factual-judge compression beats similarity thresholds.

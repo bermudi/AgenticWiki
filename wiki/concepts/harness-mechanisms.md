@@ -1,7 +1,7 @@
 ---
 title: Harness Mechanisms
 created: 2026-05-21
-updated: 2026-07-04
+updated: 2026-07-11
 sources:
   - raw/2605.18747.md
   - raw/2606.09498.md
@@ -198,6 +198,7 @@ The boundary with the other memory patterns: [[context-files|AGENTS.md]] is a st
 - [[ralph-loop]] — Minimal instantiation of planning + control mechanisms
 - [[self-harness]] — Concrete instantiation of governed harness mutation with empirical results
 - [[recursive-agent-harness]] — Code-driven parallel subagent spawning as a complementary self-optimization pattern
+- [[agent-memory-systems]] — The four-module memory framework (R/S/Q/U) that refines §3.2's memory taxonomy with a data-management lens
 - [[multi-agent-code-orchestration]] — Topology taxonomy; recursive agent harness is the "subagent from a script" pattern
 
 ## Sources

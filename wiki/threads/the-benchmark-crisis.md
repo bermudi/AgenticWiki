@@ -1,7 +1,7 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-07-09
+updated: 2026-07-11
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -10,6 +10,7 @@ sources:
   - raw/2606.13003.md
   - raw/2509.09677.md
   - raw/2512.08296-scaling-agent-systems.md
+  - raw/2606.24775v1.md
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution]
 unaudited_marginal: 0
 ---
@@ -95,6 +96,9 @@ The result is a benchmark that exposes a previously hidden failure mode: [[state
 
 The implication for model selection: if you're choosing a coding agent for production deployment where the API evolves, the codebase accumulates, or user preferences shift, step accuracy on static benchmarks is incomplete evidence. Chain accuracy on evolving-environment benchmarks is the binding metric. Models that score similarly on [[swe-bench-pro|SWE-bench Pro]] (30-point spread) or [[deepswe|DeepSWE]] (70-point spread) may diverge substantially on EvoArena when chain accuracy is the criterion.
 
+> [!note] Extension: The Memory-System Benchmark
+> [[agent-memory-systems]] (Zhou et al., SJTU + Tsinghua, June 2026) applies this thread's decomposition thesis to memory architectures. It argues existing memory benchmarks treat the system as a monolithic black box reporting only end-to-end task-success metrics, and instead decomposes evaluation into five dimensions measured independently — task effectiveness, evidence-level retrieval fidelity, dynamic-update robustness, long-horizon stability, and operational cost — with fine-grained ablations modifying one module at a time. The paper's finding that append-only stores return stale facts ("hallucinations of the past") independently corroborates [[state-collapse]] from a data-management perspective.
+
 ## The Fifth Axis: Horizon Mismatch
 
 [[horizon-length]] (Sinha, Arun, Goel et al., ICLR 2026) exposes a fifth axis the prior four do not measure: **the gap between step accuracy and horizon length**. Short-task benchmarks measure per-step accuracy, where frontier models cluster near the top and gains look marginal — the "diminishing returns" picture. But because horizon length grows hyperbolically in step accuracy (H_s = ln(s)/ln(p)), past ~80% step accuracy, marginal per-step gains compound into *exponential* gains in the length of task a model can complete end-to-end. The benchmark crisis, then, has a fifth dimension:
@@ -145,3 +149,4 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 - `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). Source for the "SMFR as a benchmark that resists typical failure modes" extension. §3 (cost-quality Pareto position, not just accuracy, as the right MAS evaluation criterion); §3.3 (SMFR procedural generation, immune to contamination); §3.3 (Expert-MAS GPT-5: 57.0% → 96.5% on SMFR, cost comparable to CoT-SC); §6 (the cost-efficiency gap as the central finding).
 - `raw/2509.09677.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Source for the "Fifth Axis: Horizon Mismatch" section. Proposition 1 (§2.1, H_s = ln(s)/ln(p)); frontier single-turn execution benchmark separating GPT-5 ~2176 / Claude-4 Sonnet ~432 / Grok 4 ~384 / Gemini 2.5 Pro ~120 on a task near-trivial at one step (§3.3); horizon-mismatch as a benchmark failure mode distinct from contamination and verifier error.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Agentic vs Non-Agentic Benchmark Design" extension. §1 introduction (agentic task definition: sequential interdependence, partial observability, adaptive strategy formation); §4.2 main results (MAS deltas on agentic vs non-agentic benchmarks; 89% on HumanEval with 5 agents via ensemble effects; inverted dynamics on agentic benchmarks).
+- `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the decomposition-thesis callout: argues existing memory benchmarks treat the system as a monolithic black box reporting only end-to-end task-success metrics, and decomposes evaluation into five independently-measured dimensions (task effectiveness, evidence-level retrieval fidelity, dynamic-update robustness, long-horizon stability, operational cost) with single-module ablations — the benchmark-crisis thesis applied to memory-system evaluation. Also independently corroborates [[state-collapse]] ("hallucinations of the past").

@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-10
+updated: 2026-07-11
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -16,6 +16,7 @@ sources:
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
+  - raw/2606.24775v1.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -31,6 +32,8 @@ Context engineering sits between prompt engineering and agent harness design. It
 The core heuristic: **information-per-token density**. Two prompts at the same token count can have dramatically different effectiveness depending on how densely they pack relevant signal. The hard part is knowing what to exclude — every extraneous token degrades attention on the relevant ones.
 
 A clean formulation from practitioner Sally-Ann Delucia (Arise): **context decides what the model sees, memory decides what survives.** They are distinct concerns that must be built together — separating them conceptually prevents conflating session-level context management with long-term knowledge retention. She also argues context management is a product and UX problem, not just an engineering one: bad context produces bad answers, and bad answers drive users away. The engineering strategies matter, but the ultimate test is whether the user gets the right answer.
+
+**The boundary with agent memory.** The distinction matters: context engineering curates the finite per-turn window, but an agent-memory system is persistent, updatable infrastructure governing the full lifecycle. Zhou et al. (2026, [[agent-memory-systems]]) draw an explicit three-way distinction — RAG is stateless read-only retrieval over a static corpus; context engineering is per-turn window curation; agent memory is persistent, updatable, lifecycle-governed. The distinction is load-bearing: their evaluation shows memory systems lacking lifecycle semantics fail at targeted overwrites and return stale facts as if current (“hallucinations of the past”) — the data-management cousin of [[state-collapse]], since both failures arise from missing update semantics.
 
 ## Key Principles
 
@@ -192,6 +195,7 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[instruction-severity-inflation]] — Instruction density management is a core context engineering skill
 - [[multi-tier-action-space]] — Context engineering techniques enable the thin-tool-layer architecture
 - [[evolving-context]] — Context engineering extended into the temporal dimension
+- [[agent-memory-systems]] — The persistent, updatable, lifecycle-governed infrastructure distinct from per-turn context engineering; the explicit three-way distinction (RAG vs context engineering vs agent memory)
 - [[lance-martin]] — Catalogued the operational techniques
 - [[ralph-loop]] — The Ralph Loop applies context isolation (sub-agent spawning) to serial tasks; each iteration gets a clean context window
 - [[ubiquitous-language]] — The context.md ub-lang file is the human-trusted artifact that survives context resets.
@@ -235,3 +239,4 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): the channel as context boundary (global vs. project scoping is too coarse), and the per-channel Docker-isolate "Hermes agent" practitioner experience.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: global memory file (small, always loaded via symlink), project-level memory file (grows with corrections), and skill extraction for conditionally-used knowledge as progressive disclosure at the memory layer.
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: context rot definition, fresh-context subagent architecture as the primary defense, context monitor hook with WARNING/CRITICAL thresholds, `.planning/` artifacts as cross-session persistence
+- `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). Source for the explicit three-way distinction (RAG vs context engineering vs agent memory) and the argument that treating memory as "RAG over a memory bank" produces state collapse.

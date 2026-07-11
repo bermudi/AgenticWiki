@@ -1,7 +1,7 @@
 ---
 title: Executable Memory
 created: 2026-06-18
-updated: 2026-07-04
+updated: 2026-07-11
 sources:
   - raw/2606.16707v1.md
   - raw/2606.13681.md
@@ -172,6 +172,7 @@ The trade-off is honest: the engineering scaffolding — the two-phase pipeline,
 - [[bojie-li]] — Author of UaC, Pine AI
 - [[evomem]] — A complementary memory-evolution primitive: where UaC structures the *current* user model as typed Python, EvoMem structures the *evolution history* of any memory as append-only patches. They compose: an executable-memory agent could use EvoMem to track how its typed state has been regenerated across structuring cycles
 - [[state-collapse]] — The failure mode EvoMem is designed to prevent; UaC sidesteps it via the recoverable append-only fact log
+- [[agent-memory-systems]] — The broader systems-architecture survey that UaC (a specific structured-memory paradigm) sits within
 - [[evoarena]] — The benchmark designed to evaluate EvoMem and the chain-accuracy metric; could host UaC or EvoMem as the memory backbone
 - [[jundong-xu]] — Lead author of the EvoArena paper
 
