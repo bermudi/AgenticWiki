@@ -1,7 +1,7 @@
 ---
 name: source-verifier
 description: Wiki source-anchored verification — compares wiki pages against their raw/ sources to detect hallucinations, omissions, and misattributions. Read-only, judgment-only.
-tools: read, bash
+tools: read, grep, find, ls
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: true

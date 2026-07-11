@@ -1,7 +1,7 @@
 ---
 name: temporal-editor
 description: Deprecated compatibility shim. Temporal drift and periodic semantic health are now owned by theory-editor.
-tools: read
+tools: read, edit, write, bash
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: true
