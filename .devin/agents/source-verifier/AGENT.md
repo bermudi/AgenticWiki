@@ -52,7 +52,7 @@ The `> One-paragraph summary` blockquote immediately after the page title. It mu
 ## How You Work
 
 1. Read the wiki page assigned to you. Parse its YAML frontmatter to identify the `sources:` list.
-2. For each source, read the corresponding file under `raw/`. Use `grep`/`glob` to locate files if needed.
+2. For each source, read the corresponding file under `raw/`.
 3. Compare the wiki page against its sources systematically. Go section by section.
 4. Produce your report. **Do not edit any files.**
 
