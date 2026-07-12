@@ -13,7 +13,6 @@ Retired compatibility shims:
 
 | Retired agent | Replacement |
 |---|---|
-| `content-editor` | `theory-editor` |
 | `temporal-editor` | `theory-editor` |
 
 Do not add more high-judgment editors unless the existing `theory-editor` becomes too broad to produce useful reports. The wiki's risk is not lack of editors; it is editors preserving every distinction they notice.
@@ -47,4 +46,4 @@ The theory editor is the wiki's compression and coherence layer. It replaces the
 
 ## Retired Editors
 
-`content-editor` and `temporal-editor` remain as compatibility shims so old references fail softly. They should not be invoked for new work.
+`temporal-editor` remains as a compatibility shim so old references fail softly. It should not be invoked for new work.
