@@ -1,13 +1,14 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-07-09
+updated: 2026-07-12
 sources:
   - raw/2605.18747.md
   - raw/2606.09498.md
   - raw/2606.13643.md
   - raw/2606.14249.md
-tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion, harness-co-evolution, operational-mirror]
+  - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion, harness-co-evolution, operational-mirror, practitioner]
 unaudited_marginal: 0
 ---
 
@@ -117,6 +118,38 @@ The survey concludes with four properties that define the next frontier for reli
 | **Stateful** | Preserving task-relevant information across long trajectories and multiple agents |
 | **Governed** | Constraining autonomy by permissions, verification, and accountability |
 
+## Practitioner Patterns from the Factory Floor
+
+[[steve-yegge|Steve Yegge]]'s 2026 panel (with Tessl's [[dru-knox|Dru Knox]]) contributes three practitioner patterns that the survey's open-problems framework doesn't directly address. These are operational heuristics from running production factories, not theoretical extensions of the survey.
+
+### 1. Determinism at the Boundary, Freedom in the Middle
+
+The Tessl pattern: every piece of deterministic code that tries to orchestrate the agent's reasoning becomes a source of brittleness. Tessl built six orchestrators; "everyone starts with a lot of plumbing and ends with no plumbing, because we always realized that it was more hassle than it was worth." The lesson: put deterministic checks at the *boundaries* (where state commits) and leave the middle to the agent.
+
+Concrete boundary hooks, per Tessl:
+
+- **Before `git push` / `git commit`** — run the unit tests and linter. If they don't pass, lock the tool call and tell the agent to fix them first.
+- **Before `stop session`** — check that all work is committed and a PR is up. If not, you can't stop; you have to go do that.
+- **In CI** — run the same checks the local hooks ran, plus any expensive integration tests.
+
+This pattern is consistent with the survey's [[backpressure|multi-tier permissions]] idea and the [[harnessx|hook points]] in the HarnessX typed composition, but reframes them: the question is not "how much governance," it is "where in the trajectory governance is cheap." The middle of the trajectory is where governance is expensive (orchestration brittleness); the boundaries are where it is cheap (deterministic checks on tool calls).
+
+### 2. Swarming as the Anti-Bitter-Lesson
+
+Yegge's quality argument, drawn from years of building agentic systems: don't fight the bitter lesson. He spent a year trying to make one agent solve a problem in one perfect pass, and the answer is always:
+
+> "You're just fighting the bitter lesson. The answer is you do multiple passes and the answer is always swarming. Swarm. Swarm. Swarm. Adversarial. Adversarial reviews. Consensus. Like just like painting these walls — don't think about how can I build a machine that will paint the wall perfectly on the first coat every time? No, multiple passes, multiple coats."
+
+The factory has to be **stochastic**, and **quality becomes a dial** — how many tokens you're willing to spend on adversarial review and consensus. This is the practitioner version of the [[scaling-agent-systems|scaling study]]'s coordination-cost trade-off: rather than minimizing the cost of one pass, dial the number of passes.
+
+The wiki's existing treatment (the [[harnessx|HarnessX]] seesaw, the [[verifiability|verifiability]] layer) is mostly about *making one pass reliable*. The Yegge pattern says: stop trying. Multiple passes plus adversarial review is the architectural answer.
+
+### 3. The Factory Is a Living System (Sweeps and Maintenance)
+
+Every factory bit-rots. Skills drift, systems change, failure modes emerge. The structural answer is **sweep agents** — scheduled scans (architecture, test-quality, documentation) that look for improvements. The procedural answer is Yegge's rule: before leaving a PR comment, rewind and make changes to the harness that would have prevented the mistake. See [[factory-maintenance]].
+
+This pattern is the operational version of the survey's [[self-harness|§5.2.3 self-evolution]] open problem, but reframes it as a maintenance burden rather than an automated evolution mechanism. The wiki's existing treatment (HarnessX's AEGIS, Self-Harness's propose-evaluate-accept loop) is the formal version; the Yegge pattern is the human-in-the-loop, lower-ceremony version that the survey's formalization is overkill for in most factory settings.
+
 ## Relationship to Platform Concepts
 
 - [[agent-quality-engineering]] — The quality infrastructure (evals, observability, flywheel) is a subset of harness engineering; harness-level evaluation addresses the "what to measure" gap in current quality frameworks
@@ -157,6 +190,12 @@ The survey concludes with four properties that define the next frontier for reli
 - [[harness-model-co-evolution]] — The cross-harness GRPO loop that closes the harness–model optimization cycle
 - [[darwin-agent-team]] — The author team behind HarnessX
 - [[llm-ui-paradigms]] — Karpathy's "org-level harness" framing for the paradigm-3 agent; harness-engineering is the discipline the org-level harness requires
+- [[steve-yegge]] — Practitioner patterns: determinism at the boundary, swarming as anti-bitter-lesson, sweeps as factory maintenance
+- [[tessl]] — The productized determinism-at-the-boundary pattern; Tessl's six-orchestrator lesson and verifier-as-focused-lint instantiate harness-engineering principles
+- [[software-factory]] — The factory is the harness as a system; the survey's open problems apply at the factory level
+- [[factory-maintenance]] — The ongoing-hygiene problem; sweeps are the operational version of §5.2.3 self-evolution
+- [[beads-work-ledger]] — The work substrate the factory's harness operates on
+- [[intelligence-tier-routing]] — The factory as a routing layer across model tiers; harness-engineering's concern at the model-selection axis
 
 ## Sources
 
@@ -164,3 +203,4 @@ The survey concludes with four properties that define the next frontier for reli
 - `raw/2606.09498.md` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Provides the first concrete instantiation of the §5.2.3 open problem: a propose-evaluate-accept loop with weakness mining, harness proposal, and conservative regression testing. Empirical held-out gains of 14.2–21.4 percentage points absolute on Terminal-Bench-2.0 across MiniMax M2.5, Qwen3.5-35B-A3B, and GLM-5.
 - `raw/2606.13643.md` — Lumer, Sen, Paul, Subbiah (PwC, 2026). *Recursive Agent Harnesses.* Complementary pattern: rather than editing the harness in place, recurse over fresh harness instances via code-driven parallel spawning. Demonstrates that harness architecture is a primary performance lever independent of the model.
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). The most complete instantiation of §5.2.3 to date: typed composition (processor abstraction, eight hook points, nine-dim taxonomy) + [[operational-mirror]] (RL ↔ symbolic-space correspondence; three predicted pathologies) + AEGIS (Digester → Planner → Evolver → Critic with deterministic gating) + [[variant-isolation]] (ensemble routing, +13.6pp on GAIA GPT-5.4) + [[harness-model-co-evolution]] (cross-harness GRPO, +4.7pp over harness-only). +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.
+- `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Practitioner patterns from the panel: determinism-at-the-boundary (Tessl/Dru Knox: the six-orchestrator lesson, the git push / stop session hooks), swarming-as-anti-bitter-lesson (Yegge: multiple passes, adversarial reviews, consensus, quality as a token-spend dial), the factory as a living system needing sweeps (Yegge)

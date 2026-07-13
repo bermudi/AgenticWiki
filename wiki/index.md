@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-11
+updated: 2026-07-12
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -91,10 +91,13 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[elliot-meyerson]] — Lead author of *Solving a Million-Step LLM Task with Zero Errors* (Cognizant AI Lab + UT Austin, 2025); co-designed the [[massively-decomposed-agentic-processes|MDAP]] framework and [[maker|MAKER]]; co-authored the AALPs position paper that motivates asymptotic analysis of LLM primitives.
 - [[yizhe-xie]] — Lead author (with Congcong Zhu and Xinyue Zhang) of *From Spark to Fire: Modeling and Mitigating Error Cascades in LLM-Based Multi-Agent Collaboration* (City University of Macau + Minzu University, 2026); co-designed the [[error-cascades|propagation-dynamics model]] and [[genealogy-governance|genealogy-based governance layer]].
 - [[garry-tan]] — President & CEO of Y Combinator; creator of [[gstack]], the open-source software factory for Claude Code; reports shipping at ~810× his 2013 pace using AI-assisted development
+- [[steve-yegge]] — Ex-Amazon/Google/Sourcegraph engineer; creator of [[gas-town|Gas Town]] (20–30 Claude Code instances with Mayor agent); coined the orchestration-loop vocabulary and continues to push factory patterns: [[beads-work-ledger|Beads]] work-ledger, [[factory-maintenance|factory maintenance]]/sweeps, [[intelligence-tier-routing|intelligence-tier routing]]
+- [[dru-knox]] — Head of product at [[tessl|Tessl]]; the Tessl voice on [[steve-yegge|Yegge]]'s July 2026 panel. Contributed the fix-the-harness rule, the six-orchestrators-then-no-plumbing lesson, and verifier-as-focused-linting.
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
 - [[babysitter-agent]] — An invisible agent managing another agent's context as its subconscious mind
+- [[beads-work-ledger]] — Work as a first-class entity tracked in a graph with three views (public future / hidden in-progress / public finished); the substrate that makes software factories legible across human and agent participants. Yegge's tool.
 - [[boil-the-ocean]] — Garry Tan's ethos principle: AI makes the marginal cost of completeness near-zero, so "don't boil the ocean" has become an excuse. Do the complete thing, every time.
 - [[fresh-context-subagents]] — Architectural pattern for preventing context rot: thin orchestrators spawn specialist subagents with clean context windows, each writing output to disk. Systematized by GSD Core.
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
@@ -159,6 +162,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[executable-memory]] — The paradigm in which an agent's model of a user is a living software project: typed Python objects hold state, ordinary Python functions encode rules, and an interpreter runs the whole thing (User as Code, Bojie Li, Pine AI 2026)
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
+- [[factory-maintenance]] — A software factory bit-rots faster than it gets used: skills drift, systems change, failure modes emerge. Yegge's pattern is to leave every interaction with the factory slightly better than you found it, and to schedule sweep agents (architecture, test-quality, documentation) on a cadence.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
 - [[functional-collapse]] — The runtime failure mode of automated MAS: complex architecture reduces to single-agent execution. Five documented manifestations: DyLAN consensus collapse, MAS-Zero positional bias, MaAS signal saturation, MAS-Orchestra static policy, role redundancy.
 - [[smfr]] — Synthetic Multi-Hop Financial Reasoning: a procedurally generated diagnostic benchmark designed to expose the [[multi-agent-illusion]] under conditions where MAS *should* help. Immune to contamination; the [[expert-mas]] control demonstrates the multi-agent paradigm can work.
@@ -166,6 +170,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
 - [[html-as-agent-output]] — Using HTML instead of Markdown for agent output: richer density, visual clarity, two-way interaction, at the cost of tokens and version control pain.
 - [[inferential-rule-following]] — Applying abstract conditional rules to concrete reasoning problems; models pattern-match against training data rather than following given rules.
+- [[intelligence-tier-routing]] — Tag work with intelligence tiers so it can be routed across frontier Claude (planning) and open-source / local models (implementation). The factory is the routing layer; the bottleneck is "intelligence arbitrage" — finding open-source models capable enough to carry the load.
 - [[instruction-hierarchy]] — The mechanism by which LLMs resolve conflicting instructions from heterogeneous sources; current models fail at >3 privilege tiers.
 - [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
 - [[iterative-self-correction]] — Feedback-driven multi-turn correction loops; even with perfect feedback, models hit a sub-91% ceiling and exhibit catastrophic overcorrection.
@@ -262,6 +267,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[spec-kit]] — GitHub's open-source SDD toolkit; the "constitution" model with nine immutable articles, template-driven quality, and the Power Inversion thesis; works with 30+ AI coding agents
 - [[gstack]] — Garry Tan's open-source software factory for Claude Code; 23 specialist slash-command skills chaining Think → Plan → Build → Review → Test → Ship → Reflect; designed for 10-15 parallel sprints
 - [[gsd-core]] — Open GSD's spec-driven workflow engine; five-step phase loop (Discuss → Plan → Execute → Verify → Ship) with fresh-context subagents and persistent `.planning/` artifacts; 65+ slash commands
+- [[tessl]] — AI-native development platform and productized [[software-factory|software factory]]; Linear/GitHub bridges, LLM-powered verifier-as-lint rules, and the practitioner lessons (six orchestrators → no plumbing; determinism at the boundary) cited by [[steve-yegge|Yegge]]'s 2026 panel
 - [[mcp]] — Model Context Protocol; standard interface for connecting agents to external tools and data sources; Kiro uses it pervasively as the user-extensible tool surface
 - [[open-knowledge-format]] — Google Cloud's open spec (v0.1, June 2026) formalizing the Karpathy LLM-wiki pattern into a portable, interoperable markdown+frontmatter format; deliberately minimal — one required field, punts on taxonomy and link typing
 - [[memrefine]] — Post-construction, LLM-guided memory compression framework: similarity proposes candidate pairs, an LLM judge decides delete/merge/preserve on factual content, iterates until a fixed size budget is met. Framework-agnostic across A-MEM graph memory and Mem0 (Kim et al., Korea U / KAIST / DeepAuto.ai, 2026)

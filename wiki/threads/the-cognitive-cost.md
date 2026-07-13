@@ -1,7 +1,7 @@
 ---
 title: The Cognitive Cost
 created: 2026-06-03
-updated: 2026-07-09
+updated: 2026-07-12
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
@@ -11,6 +11,7 @@ sources:
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
 tags: [thread, ai-engineering, cognitive-debt, failure-modes, human-in-the-loop]
 unaudited_marginal: 0
 ---
@@ -89,6 +90,14 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 >
 > This sharpens the existing "Human Lever Requires Humans Who Can Pull It" contradiction with a second front: the first front is skill erosion through delegation; the second is that good skill *design* demands even more of the human than skill *use*. [[skill-hell|Skill hell]] is the diagnosis when this design capacity is absent — and Pocock frames it as operating at the organizational scale, not just the individual. The checklist may be individually optimal but population-pessimistic: it prescribes more human judgment at the moment the supply of human judgment is the binding constraint. See [[skill-hell]] for the diagnosis and [[the-human-lever]]'s parallel "Theory Pressure: Deterministic Verification May Shrink the Human's Role" callout for the inverse direction (automation contracting the human's role rather than expanding its demands).
 
+> [!warning] Theory Pressure: Yegge's Factory as the Shipped Maximal-Delegation Frontier
+> [[steve-yegge|Steve Yegge]] is the wiki's most ambitious *shipped* delegation practitioner — [[gas-town|Gas Town]] (20–30 Claude Code instances), [[beads-work-ledger|Beads]], and a continuous stream of bespoke [[software-factory|factories]]. His 2026 panel testimony is the positive-case counterpoint to this thread's erosion thesis: he reports liberation, not loss — "I didn't want to write A* search, I wanted monsters to chase me," and a dopamine shift from implementing Bresenham's algorithm to directing agents. Two things make this a theory pressure rather than a refutation:
+>
+> 1. **He is exactly the population this thread says is safe.** Yegge has 40+ years of foundation (Amazon, Google, Sourcegraph). The thread's population problem is about developers *without* that foundation placed in orchestrator roles. Yegge confirms the rule, not the exception: the factory works for someone who already has the deep skills; the open question is whether it works for someone who doesn't. He is a third data point for the "Director's Skill Ceiling" callout above (alongside [[kun-chen|Kun Chen]]), sharpening it: the director-level skills the factory demands are not the coding skills being eroded, and the population capable of both is unknown.
+> 2. **The org-scale training dimension is new.** Yegge's Flat Curve Society thesis (citing Netflix's internal program: ~5 hours of instructor-led work with one's actual manager, in cohorts ≤10, flips people to 4M tokens/day) introduces an *organizational* literacy layer this thread doesn't track. The cognitive-cost thesis is individual-focused (skill erosion through delegation); Yegge adds that the binding constraint may be org-wide AI literacy — without it, "there's a big train wreck." This is a departure, not a contradiction: the erosion mechanism is still real, but the factory builder's race is against the org's literacy gap, not just the individual's skill decay.
+>
+> The factory does not resolve the [[supervision-paradox]]; it accelerates its inputs (more delegation, faster). Yegge's thriving is consistent with the thread — he has the foundation — but it is not transferable evidence that the factory preserves cognition for those who don't.
+
 ## Sources
 
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
@@ -99,3 +108,4 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 - `raw/yt-i-guess-were-writing-loops-now.md` — [[theo-t3gg|Theo]]: the loops conversion, the cost-as-challenge framing ("treat these limits like challenges"), and the "prompt yourself out of involvement" heuristic — the maximal-delegation frontier that accelerates this thread's cognitive-erosion mechanism.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]: the triviality/discourse-slop skeptic frame on the loops wave (vs. Theo's danger frame); "there are no experts, only people who pretend" as a field-level epistemic-humility claim distinct from this thread's individual skill-erosion claim.
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]]'s four-part skill checklist as a second front on the "human lever requires humans who can pull it" contradiction: user-invoked preference, branch-aware structure, leading-word selection, and no-op/sediment pruning all demand more human judgment at the moment capacity is eroding. [[skill-hell]] as the organizational-scale diagnosis.
+- `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]] as the shipped maximal-delegation frontier (Gas Town, Beads, bespoke factories); the 40-year-vet exception that confirms the population problem; the Flat Curve Society org-training thesis as an organizational-literacy departure from the thread's individual-focused erosion model.

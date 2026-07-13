@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-11
+updated: 2026-07-12
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -252,7 +252,7 @@ The intuition isn't about prompt syntax — it's about behavioral nuance:
 - Prompts optimized for one model need complete rework for another
 - Maintaining multiple prompt sets means updating all of them every time models change
 
-This creates a tension with multi-model architectures: if specialization across models is valuable, but deep intuition requires focus, the right strategy may be to develop deep intuition with one primary model/tool, and only bring in secondary models for well-defined, eval-gated sub-tasks.
+This creates a tension with multi-model architectures: if specialization across models is valuable, but deep intuition requires focus, the right strategy may be to develop deep intuition with one primary model/tool, and only bring in secondary models for well-defined, eval-gated sub-tasks. [[steve-yegge|Yegge]]'s [[intelligence-tier-routing]] thesis formalizes this: tag work with intelligence tiers so frontier models handle planning while local/open-source models handle implementation — the factory *is* the routing layer.
 
 ### Fast Orchestrator + Smart Oracle Pattern
 
@@ -354,7 +354,7 @@ Putting it together:
 
 ## Architecture Review Cadence
 
-Separate from the feature-building loop, [[matt-pocock|Matt Pocock]] identifies a slower, architectural rhythm: running the [[improve-codebase-architecture]] skill **every couple of days**, especially in fast-moving codebases.
+Separate from the feature-building loop, [[matt-pocock|Matt Pocock]] identifies a slower, architectural rhythm: running the [[improve-codebase-architecture]] skill **every couple of days**, especially in fast-moving codebases. This is a subset of the broader [[factory-maintenance]] pattern: [[steve-yegge|Yegge]]'s "sweeps" agents extend the same cadence from architecture review to test-quality and documentation maintenance.
 
 This is not feature work — it's structural triage:
 
@@ -456,7 +456,7 @@ As agents run for longer — Copilot (seconds per line) → Cursor (~30s per fil
 3. Send corrections or approve while others keep running
 4. Repeat
 
-This is a fundamentally different mode from traditional software engineering, where the human locks into one piece of deep work at a time. Focus maxing treats the human as a manager of multiple concurrent streams of work, each in different stages of the plan-execute-review lifecycle.
+This is a fundamentally different mode from traditional software engineering, where the human locks into one piece of deep work at a time. Focus maxing treats the human as a manager of multiple concurrent streams of work, each in different stages of the plan-execute-review lifecycle. The tracking problem this creates — where does each parallel agent's work actually live? — is what [[beads-work-ledger]] addresses: a graph-backed ledger with three visibility views (public future, hidden in-progress, public finished) that makes parallel work legible without drowning in markdown files.
 
 The key design constraint: agents must run for **long enough** that context-switching doesn't fry the human. Shifting attention every 30 seconds between agent outputs is unsustainable. The ideal is sessions of 5+ minutes where the agent produces a complete, reviewable unit — not incremental partial outputs that require constant mid-stream intervention.
 

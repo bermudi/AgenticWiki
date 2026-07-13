@@ -1,13 +1,14 @@
 ---
 title: The Multi-Agent Theory
 created: 2026-07-04
-updated: 2026-07-09
+updated: 2026-07-12
 sources:
   - raw/2606.13003.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
   - raw/2512.08296-scaling-agent-systems.md
   - raw/2603.04474-spark-to-fire-error-cascades.md
   - raw/2511.09030-maker-million-step-zero-errors.md
+  - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
 tags: [thread, multi-agent, mas-audit, scaling, error-propagation, decomposition, theory]
 unaudited_marginal: 0
 ---
@@ -130,7 +131,7 @@ Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline
 
 ## The Through-Line: The Coordination Layer Is the Binding Constraint
 
-Every layer of the theory converges on the same claim: the binding constraint on MAS is the coordination layer, not the model.
+Every layer of the theory converges on the same claim: the binding constraint on MAS is the coordination layer, not the model. A shared work substrate — what [[beads-work-ledger]] formalizes as a graph-backed ledger with three visibility views — is the artifact-mediated communication channel that makes multi-agent coordination inspectable and recoverable.
 
 - The **audit** shows coordination overhead dominates cost (10× for 0% gain).
 - The **diagnosis** shows system design is the largest failure category (44.2%).
@@ -181,6 +182,11 @@ The governance layer is the MAS-specific quality infrastructure: observability (
 > [!warning] The Theory's Coverage Gap: Adversarial vs. Stochastic Errors
 > The cascade paper models two error sources: endogenous stochastic errors (the natural failure mode) and exogenous strategic adversaries (the attack). The governance layer is evaluated primarily against the adversarial case. MDAPs address the stochastic case (per-step voting catches random errors). The theory does not yet test whether the governance layer's blocking-with-rollback is cost-effective against *stochastic* errors (where the error rate is low and the cost of blocking + resampling may exceed the cost of the errors that slip through). The two error regimes may require different defenses: voting for stochastic, governance for adversarial. The theory is stronger on the adversarial side than the stochastic side.
 
+> [!note] Departure: Adversarial Swarming as the Quality Variant of Engineered Decomposition
+> The theory's two engineered-decomposition poles are *execution*-focused: [[massively-decomposed-agentic-processes|MDAPs]] (maximal decomposition + voting for execution reliability) and [[genealogy-governance|genealogy governance]] (message-layer defense against propagation). [[steve-yegge|Yegge]]'s swarming pattern — adversarial reviewers, consensus, multiple passes — is a *quality*-focused variant the theory's six papers don't explicitly cover. It is closest to MDAPs' first-to-ahead-by-k voting, but applied to *review* rather than *execution*: generate multiple reviews, adversarially challenge, converge by consensus. The theory predicts this should work (it is hand-designed, deterministic-in-shape, removes the LLM from the convergence loop), but no paper tests adversarial review-swarming directly. The open question: does adversarial swarming escape the [[error-cascades|consensus-inertia]] failure (a delayed correction conflicting with an internalized error chain), or fall to it? The governance layer's ablation (detection without blocking → 3.1% BICR) suggests swarming *without* enforceable isolation may amplify rather than correct bias.
+>
+> Separately, [[intelligence-tier-routing|intelligence-tier routing]] is the *alternative* to coordination this theory does not frame: instead of multiple agents on one work item (the coordination question the theory answers), route different work items to different model tiers (one agent per item, but different classes). The theory's "when does coordination help?" question has a sibling — "when do you route to a different tier instead of coordinating?" — that the theory does not yet pose. The link from [[intelligence-tier-routing]] to this thread is therefore aspirational: the conceptual relationship (tier routing as coordination's complement) is real, but the theory's six papers do not discuss model tiering.
+
 ## Related
 
 - [[multi-agent-illusion]] — Layer 1: the audit
@@ -216,3 +222,4 @@ The governance layer is the MAS-specific quality infrastructure: observability (
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 capability saturation (β = -0.236) and tool-coordination trade-off (β = -0.096); §4.4 error amplification factors (Independent 17.2×, Centralized 4.4×); three coordination regimes. Source for Layer 3 (the thresholds).
 - `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes; §V attack instantiation (up to 100% infection); §VI the governance layer; §VII evaluation and ablation. Source for Layers 4 and 6 (the mechanism and the defense).
 - `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3 MDAP framework (maximal decomposition, first-to-ahead-by-k voting, red-flagging); §3.2 log-linear cost scaling (Θ(s ln s), k_min = Θ(ln s)); §4.4 the million-step zero-error result; §5 discussion (insight vs. execution, microservices parallel, safety). Source for Layer 5 (the engineered escape).
+- `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s swarming pattern (adversarial multi-pass review, consensus) as a quality-focused variant of engineered decomposition the theory's execution-focused poles (MDAPs, governance) don't cover; intelligence-tier routing as coordination's complement (the sibling question the theory does not yet pose).

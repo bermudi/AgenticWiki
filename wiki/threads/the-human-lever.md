@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-10
+updated: 2026-07-12
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
@@ -307,7 +307,7 @@ This extends Grey Box Engineering: the human doesn't just own the interface (typ
 
 ### The Automation Frontier
 
-[[eero-alvar|Eero Alvar]]'s [[software-factory]] concept pushes the automation frontier further than this thread's current consensus. The thread argues the human is essential for design authority, taste, and verification. The factory says: automate the execution layer entirely, keep the human at the spec and tuning layer.
+[[eero-alvar|Eero Alvar]]'s [[software-factory]] concept pushes the automation frontier further than this thread's current consensus. The thread argues the human is essential for design authority, taste, and verification. The factory says: automate the execution layer entirely, keep the human at the spec and tuning layer. The [[factory-maintenance]] pattern complicates this: even a fully automated factory requires ongoing human maintenance — Yegge's "fix the harness before leaving the comment" rule relocates the human lever from PR-level review to factory-level hygiene.
 
 Three positions are emerging:
 1. **Human as essential lever** — current thread consensus; the human owns design boundaries, verification, and taste

@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-09
+updated: 2026-07-12
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.md
@@ -23,6 +23,7 @@ sources:
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -249,6 +250,12 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 > [!note] Departure: Flat-Rate vs. Pay-Per-Token — Constraint to Bound or Budget to Maximize?
 > The extension frames loop cost as a *constraint to bound* (hard stops, budget ceilings — the production discipline). The same receipts expose a regime split in the *default posture*. Under pay-per-token / API economics (Uber's case), cost is a ceiling that forces the three hard stops. Under flat-rate subscriptions (Theo's case), idle capacity is *wasted money*, so the rational posture inverts: "treat these limits like challenges" and maximize utilization. The runaway 8-hour/3-million-token workflow proves the hard-stops discipline still bites even on flat-rate plans — but only *after* a loop has already over-rotated. The binding constraint is the same; the efficient default posture depends on the pricing regime, and sources disagree on whether to hoard or to max out — both rational given their economics.
 
+> [!note] Departure: Verifier-Tier Independence and Stochastic Verification
+> Two practitioner patterns from [[steve-yegge|Yegge]]'s 2026 panel pressure the thesis's assumption that verification is a fixed property of the domain.
+>
+> 1. **Verifier tier is an independent axis from agent tier.** [[tessl|Tessl]]'s verifiers — "very, very focused linting rules powered by LLMs" — illustrate that the verifier can run on a *lower capability tier* than the agent that wrote the code: the panel notes models are "much better at reviewing than generating," so review can use "a whole class lower" model, and narrowing the verifier's scope (file-scoped, single-concern) makes down-tiering safer. The thesis says verifiability determines capability (verifiable domains → RL training → capability peaks) but does not separate the *verifier's* capability tier from the *agent's*. This is the [[rubric-evaluation|RUBRICEVAL]] finding (rubric-level beats checklist-level) instantiated as a product: narrow the verifier's scope and it can run on a lower tier. The implication: the verifiability frontier is not just "can this domain be verified?" but "can this *check* be down-tiered?" — a routing question ([[intelligence-tier-routing]]), not just a training-distribution question. This is also the practitioner middle ground between [[dex-horthy|Horthy]]'s "never send an AI to do a linter's job" (use deterministic linters) and broad LLM-as-judge review: a *focused* LLM verifier may be reliable where a broad one isn't.
+> 2. **Stochastic multi-pass verification vs. structural verification.** Yegge's "swarming as anti-bitter-lesson" — multiple adversarial passes, consensus, quality as a token-spend dial — is a *statistical* verification strategy. The thesis's existing verification moves are *structural*: evidence certificates ([[semi-formal-reasoning]]), behavioral tests ([[deepswe|DeepSWE]]), executable checks ([[contextcov|ContextCov]]). Yegge's pattern says: don't try to make one verification pass complete; dial the number of passes. This connects to [[prompts-in-code-review]]'s single-pass bias problem — if one LLM judge is biased, multiple adversarial passes may average out the bias (untested) — but the thesis does not currently track stochastic verification as a distinct strategy. It treats verification as a property to be made reliable, not a dial to be turned.
+
 [//]: # ([[rubric-evaluation]] links here from its ## Thread section)
 [//]: # ([[verifiability]] links here from its ## Thread section)
 [//]: # ([[agent-evals]] links here from its ## Related section)
@@ -279,3 +286,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/yt-i-guess-were-writing-loops-now.md` — Firsthand corroboration of the dollar-cost binding constraint: Theo's ~$10K inference for $600 of flat-rate subscriptions, weeks at 29% of limit, and the runaway 8-hour/3M-token workflow on three comments. Source for the flat-rate-vs-pay-per-token departure callout.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]] surfaces [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (88 ms → 2 ms, "sounds good, right? No, it's not") as the empirical instance of the proxy-gaming dynamic: an agent loop optimizing the verifiable metric while degrading every unverifiable axis. See [[aiming-problem]] and the "Proxy-Gaming Poster Child" note.
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]]'s four-part skill checklist as a verifiability discipline: leading words' trace-verification (the agent's self-talk is the eval — no separate eval pass needed), no-op deletion test (verifiability of instruction-effect), user-invoked preference as unverifiability-removal (model invocation timing is unverifiable, so prefer the mode whose failure mode is observable). See [[agent-skills]] → Pocock's Skill Design Checklist and [[leading-words]].
+- `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s practitioner patterns pressuring the thesis: Tessl's verifier-as-focused-LLM-lint (verifier tier as an axis independent from agent tier), and swarming-as-anti-bitter-lesson (stochastic multi-pass verification as a distinct strategy from structural verification).

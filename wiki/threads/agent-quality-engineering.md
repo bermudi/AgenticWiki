@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-07-09
+updated: 2026-07-12
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
@@ -238,7 +238,7 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - [[malleable-agents]] — The quality loop provides the guardrails that make malleability safe. If an agent can modify its own tools, the eval set catches regressions.
 
 > [!note] Departure: A Quality Ceiling That Infrastructure Cannot Fix
-> The [[agent-floor|AgentFloor]] finding that all models collapse at tier E (long-horizon planning) introduces a quality ceiling that no amount of eval infrastructure, observability, or feedback loops can address. If the model cannot perform 8-12 sequential tool steps regardless of the quality infrastructure around it, the quality problem shifts from "how do we measure this?" to "how do we avoid needing this?" — task decomposition and [[model-routing|model routing]] become quality strategies as much as architectural ones. This doesn't contradict the thread's thesis (quality infrastructure remains essential for tiers A0-D), but it establishes an upper bound on what infrastructure alone can achieve.
+> The [[agent-floor|AgentFloor]] finding that all models collapse at tier E (long-horizon planning) introduces a quality ceiling that no amount of eval infrastructure, observability, or feedback loops can address. If the model cannot perform 8-12 sequential tool steps regardless of the quality infrastructure around it, the quality problem shifts from "how do we measure this?" to "how do we avoid needing this?" — task decomposition and [[model-routing|model routing]] become quality strategies as much as architectural ones. See [[intelligence-tier-routing]] for the practitioner framing of model routing as a factory-level quality decision: tag work with intelligence tiers so frontier models handle planning while cheaper models handle implementation. This doesn't contradict the thread's thesis (quality infrastructure remains essential for tiers A0-D), but it establishes an upper bound on what infrastructure alone can achieve.
 
 > [!warning] Contradiction: The RL Distribution Ceiling
 > [[andrej-karpathy|Karpathy]]'s [[verifiability|verifiability thesis]] introduces a structural ceiling on the quality loop. If a capability is outside the model's RL training distribution — not rewarded during training — no amount of eval infrastructure, observability, or feedback flywheels can create it. The quality loop can measure and improve behavior *within* the model's trained circuits, but it can't extend beyond them. Karpathy: "If you're not in the circuits, then you have to really look at fine-tuning." This doesn't invalidate the quality infrastructure — it remains necessary — but it establishes that quality engineering is bounded by the model's training distribution. See [[the-verifiability-thesis]] for the full argument.

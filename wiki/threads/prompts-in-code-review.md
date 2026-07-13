@@ -1,7 +1,7 @@
 ---
 title: Prompts in Code Review
 created: 2026-05-15
-updated: 2026-07-09
+updated: 2026-07-12
 sources:
   - raw/sprig-system-prompt-optimization.md
   - raw/empirical-system-prompts-code-generation.md
@@ -9,6 +9,7 @@ sources:
   - raw/agentic-code-reasoning.md
   - raw/llm-overcorrection-code-review.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
 unaudited_marginal: 0
 tags: [thread, code-review, prompting, llm-as-judge, overcorrection, bias]
 ---
@@ -81,6 +82,9 @@ The certificate structure directly counters the failure modes identified by the 
 - **System prompt optimization vs. manual crafting:** SPRIG's genetically optimized prompts outperform hand-crafted CoT, but the overcorrection study shows that manually adding "think step by step" and fix requests worsens outcomes. Optimization and hand-crafting are not interchangeable.
 - **Voice input as a prompt-design variable:** Kun Chen's workflow uses local speech recognition (Open Super Whisper) for most prompts, claiming a 3× speed improvement over typing. Voice input adds a transcription-noise layer and may change the length and style of prompts. The prompts-in-code-review thread focuses on text framing, bias, and structure; the open question is whether voice prompts systematically produce different agent behavior than typed prompts, and whether the speed gain is offset by the need to correct transcription errors or by the difficulty of structuring complex requests by voice.
 
+> [!note] Departure: Multi-Pass Swarming vs. Single-Pass Bias
+> This thread treats LLM-as-judge as a *single-pass* bias-control problem: one judge, one prompt, one verdict, and the framing systematically distorts it. [[steve-yegge|Yegge]]'s "swarming as anti-bitter-lesson" reframes review as a *stochastic multi-pass* activity — adversarial reviewers, consensus, quality as a token-spend dial ("swarm, swarm, swarm, adversarial, consensus — like painting walls, multiple coats"). The departure is the unit of analysis: this thread optimizes the single review pass; Yegge dials the *number* of passes. If single-pass judges carry directional bias ([[llm-as-code-judge|Bias in the Loop]]: 40+ point swings from framing), the open question is whether multi-pass adversarial swarming averages out the bias — or amplifies it via [[error-cascades|consensus inertia]]. No source tests this. The thread's structural fix ([[semi-formal-reasoning|semi-formal reasoning]] — evidence certificates per pass) and Yegge's statistical fix (more passes) are complementary but distinct levers; the wiki should not conflate them. See [[the-verifiability-thesis]]'s "Stochastic Multi-Pass Verification" departure for the thesis-level framing.
+
 ## Sources
 
 - `raw/sprig-system-prompt-optimization.md` — System prompt optimization via genetic algorithm; system and task prompts are complementary
@@ -89,3 +93,4 @@ The certificate structure directly counters the failure modes identified by the 
 - `raw/agentic-code-reasoning.md` — Semi-formal reasoning templates improve code verification accuracy by preventing unsupported claims
 - `raw/llm-overcorrection-code-review.md` — Overcorrection bias in LLM code review; more detailed prompts increase false rejection; Fix-guided Verification Filter as mitigation
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's use of voice input for agent prompts; prompt-style differences introduced by transcription.
+- `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's "swarming as anti-bitter-lesson": adversarial multi-pass review, consensus, quality as a token-spend dial; reframes LLM code review from a single-pass bias problem to a stochastic multi-pass problem.

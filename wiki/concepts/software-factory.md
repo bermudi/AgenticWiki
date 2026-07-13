@@ -1,11 +1,12 @@
 ---
 title: Software Factory
 created: 2026-06-05
-updated: 2026-07-10
+updated: 2026-07-12
 sources:
   - raw/yt-systems-building-systems.md
   - raw/gstack-garry-tan-software-factory.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
+  - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
 tags: [concept, agentic-engineering, automation, orchestration]
 unaudited_marginal: 0
 ---
@@ -81,6 +82,34 @@ In a phase-decomposition architecture, verification agents run between phases. I
 
 Either way, **tuning is the slow, expensive, and difficult part**.
 
+## Practitioner View: Bespoke, Not Framework
+
+[[steve-yegge|Steve Yegge]]'s contribution is the practitioner's correction: the framing above is correct as theory, but in practice every factory ends up being **bespoke, not framework-shaped**. Yegge reports he has built software factories continuously across his projects; the habit of building them is now muscle memory. Common components recur — but the assembly is per-project.
+
+Recurring components Yegge identifies:
+
+- **A "brain"** — a context store separate from the work. Yegge uses Obsidian. The brain holds design docs, conventions, and accumulated context that the agents reference. The exact tooling is incidental; the role — a persistent, agent-readable context store — is the load-bearing piece.
+- **An issue-tracker-to-source-control bridge** — the minimum viable primitive. A Linear or GitHub Issues entry delegates to a GitHub app that runs CI. Tessl's two-app implementation is the productized version; the pattern recurs because every factory needs it.
+- **Deterministic checks at the boundaries** — hooks that gate `git push` (run tests first), `stop session` (check committed), and CI (the same checks the local hooks ran, plus integration). See [[factory-maintenance]].
+- **A two-mode agent topology** — a small "crew" of agents for deep design work (heavy context, deep review) plus a stream of well-specified throwaway work thrown at ephemeral agents. The two modes recur across Yegge's projects.
+- **The factory is the routing layer** — the setup you have for swapping agents in and out for the appropriate work, tagged by [[intelligence-tier-routing|intelligence tier]], is the factory. See [[intelligence-tier-routing]].
+
+> [!note] Departure: Framework vs. Bespoke
+> Eero Alvar's framing is framework-shaped: pick one of three designs, tune it. Yegge's practice is the opposite: every project rebuilds the assembly, but the components converge. The frameworks ([[gstack]], [[gsd-core]]) are *one* such assembly each — useful as concrete instantiations, but not a one-size-fits-all. The wiki's existing framing (three architectural approaches) is necessary but not sufficient; the practitioner's correction is that the components are common, the assembly is bespoke.
+
+## Stochastic Factory, Quality as a Dial
+
+Yegge's quality argument: don't try to make one agent paint a wall perfectly on the first coat. The factory has to be **very stochastic**, and quality becomes a dial — how many tokens you're willing to spend on adversarial review, consensus, and swarming.
+
+The mechanism:
+
+- **Multiple passes, multiple coats** — like painting walls
+- **Adversarial reviews** — agents that check other agents' output
+- **Consensus** — multiple agents independently solving the same well-specified problem, with the factory picking the result
+- **Quality as token spend** — the same stochastic factory produces different quality at different cost; the dial is up to the human
+
+This is the practitioner version of the [[scaling-agent-systems|coordination-cost trade-off]]: the scaling study's 4.4× error amplification under Centralized coordination is bounded, in Yegge's framing, by choosing the right number of swarming passes for the work. The cost is dialed, not architectural.
+
 ## Shipped Instantiations
 
 As of mid-2026, two open-source frameworks provide concrete instantiations of the software factory concept:
@@ -116,9 +145,14 @@ Both frameworks converge on the same structural insight: the workflow is the saf
 - [[gsd-core]] — Shipped software factory: five-step phase loop, fresh-context subagents, persistent `.planning/` artifacts
 - [[fresh-context-subagents]] — GSD Core's architectural solution to the agent persistence problem
 - [[boil-the-ocean]] — gstack's completeness ethos: the tuning instruction for factory output quality
+- [[steve-yegge]] — Yegge's practitioner view: factories are bespoke, not framework-shaped; quality is a token-spend dial
+- [[beads-work-ledger]] — The work-as-first-class-entity substrate the factory operates on
+- [[factory-maintenance]] — The ongoing-hygiene problem the factory must budget for
+- [[intelligence-tier-routing]] — The factory as the routing layer across model tiers
 
 ## Sources
 
 - `raw/yt-systems-building-systems.md` — Eero Alvar: the software factory concept, mapping analogy, chaos property, three design approaches, persistence mechanisms, tuning approaches
 - `raw/gstack-garry-tan-software-factory.md` — gstack: shipped software factory with 23 specialist skills, sprint workflow, parallel sprints, builder ethos
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: shipped software factory with five-step phase loop, fresh-context subagents, persistent planning artifacts, verification gates
+- `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's practitioner corrections: bespoke-not-framework, the recurring components (brain, issue-tracker bridge, boundary hooks, two-mode topology, routing layer), the stochastic-factory-with-quality-dial argument, the two-mode crew-vs-throwaway pattern

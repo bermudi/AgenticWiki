@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-10
+updated: 2026-07-12
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -31,6 +31,7 @@ sources:
   - raw/yt-building-great-agent-skills-the-missing-manual.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
   - raw/gstack-garry-tan-software-factory.md
+  - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -170,6 +171,8 @@ Mario raises an underappreciated consequence: when you let agents write tests al
 - Scale to 100 agents ("dark factory") → simple, devastating math.
 - Humans can review ~1.5k LOC/day meaningfully. Agents produce 10-15k/day. The review bottleneck is structural.
 
+The review bottleneck is also a legibility bottleneck: when agents produce more work than humans can review, the factory needs a [[beads-work-ledger|work ledger]] that makes intermediate state inspectable without requiring humans to read every line. The ledger's three-view design — hidden in-progress, public finished — is the factory's structural defense against slop leakage: intermediate noisy work stays hidden until it converges. Without ongoing [[factory-maintenance]] — sweeps agents that scan for drift, and the procedural rule of fixing the harness before leaving a PR comment — the factory's output drifts toward the undesirable subset the slop problem defines.
+
 ## Ronacher on Slop Prevention
 
 [[armin-ronacher|Armin Ronacher]] adds language choice and tooling speed as slop prevention mechanisms:
@@ -274,3 +277,4 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]] names [[skill-hell|skill hell]] as the skills-flavored slop variant: supply of skills outpaces evaluative capacity, discourse is slop-shaped. Skill slop's internal mechanisms: no-ops (instructions with no behavioral effect, especially when agents author skills) and sediment (compounding-booboos on the skill file). The four-part checklist is the proposed evaluative framework. See the "Skill Slop" departure callout.
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: Package Legitimacy Audit (slopcheck) as dependency-layer anti-slop infrastructure; verification gates that perform goal-backward checks against requirements before declaring done. Source for the "Slopcheck and Verification Gates" marginal note.
 - `raw/gstack-garry-tan-software-factory.md` — gstack: `/review`, `/qa`, and `/cso` as multi-layer verification skills (code review, real-browser testing, security audit); `/codex` as cross-model review catching issues a single model would miss. Source for the "Slopcheck and Verification Gates" marginal note.
+- `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s [[beads-work-ledger|Beads]] work-ledger as a structural slop defense: the three-view design (hidden in-progress, public finished) makes intermediate agent state inspectable without humans reading every line, so noisy intermediate work stays hidden until it converges. Source for the review-bottleneck-as-legibility-bottleneck paragraph.
