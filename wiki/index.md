@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-12
+updated: 2026-07-13
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -93,6 +93,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[garry-tan]] — President & CEO of Y Combinator; creator of [[gstack]], the open-source software factory for Claude Code; reports shipping at ~810× his 2013 pace using AI-assisted development
 - [[steve-yegge]] — Ex-Amazon/Google/Sourcegraph engineer; creator of [[gas-town|Gas Town]] (20–30 Claude Code instances with Mayor agent); coined the orchestration-loop vocabulary and continues to push factory patterns: [[beads-work-ledger|Beads]] work-ledger, [[factory-maintenance|factory maintenance]]/sweeps, [[intelligence-tier-routing|intelligence-tier routing]]
 - [[dru-knox]] — Head of product at [[tessl|Tessl]]; the Tessl voice on [[steve-yegge|Yegge]]'s July 2026 panel. Contributed the fix-the-harness rule, the six-orchestrators-then-no-plumbing lesson, and verifier-as-focused-linting.
+- [[katrina-schleisman]] — Researcher at Galois (Minneapolis); co-author (with [[eric-davis|Davis]]) of the episodic + semantic memory architecture for machine teammates, the meta-episode (intervention-as-transition) idea, and the default-mode after-action framing.
+- [[eric-davis]] — Researcher at Galois (Portland); first author of the episodic + semantic memory architecture for machine teammates; the co-learning/co-training framing.
+- [[mathis-pink]] — Researcher at Max Planck Institute for Software Systems; lead author of the position paper arguing episodic memory is the missing piece for long-term LLM agents (the five-property framework).
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -158,6 +161,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
 - [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
+- [[episodic-memory-for-agents]] — Episodic memory — specific, contextualized, single-shot experiences — is the missing piece for long-term LLM agents. Pink et al.'s five-property framework + Davis & Schleisman's SOM-and-meta-episode architecture.
 - [[agent-memory-systems]] — Agent memory as a data-management system (M = ⟨R,S,Q,U⟩); benchmarking 12 systems finds no single architecture dominates — effectiveness depends on workload alignment, and append-only stores return stale facts ("hallucinations of the past").
 - [[executable-memory]] — The paradigm in which an agent's model of a user is a living software project: typed Python objects hold state, ordinary Python functions encode rules, and an interpreter runs the whole thing (User as Code, Bojie Li, Pine AI 2026)
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.

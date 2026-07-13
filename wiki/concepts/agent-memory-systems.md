@@ -1,7 +1,7 @@
 ---
 title: Agent Memory Systems
 created: 2026-07-11
-updated: 2026-07-11
+updated: 2026-07-12
 sources:
   - raw/2606.24775v1.md
 tags: [concept, agent-memory, data-management, memory-architecture, retrieval, benchmark, memory-maintenance]
@@ -92,6 +92,7 @@ The paper's methodological contribution is itself notable against [[the-benchmar
 - [[context-engineering]] — The paper draws an explicit three-way distinction: RAG (stateless retrieval) vs context engineering (per-turn window curation) vs agent memory (persistent, updatable, full lifecycle)
 - [[self-conditioning]] — Finding 4's long-horizon degradation: flat memory suffers as evidence distance grows, mirroring error-accumulation in context
 - [[horizon-length]] — Long-horizon stability recast as a memory-architecture problem, not just a model-capability problem
+- [[episodic-memory-for-agents]] — The cognitive-science type-system complement to this data-management module view: the five memory *types/properties* an agent should have, versus the four modules that store and maintain them
 - [[harness-mechanisms]] — Memory as a harness mechanism; the four-module framework refines the memory portion of that taxonomy
 - [[the-benchmark-crisis]] — The decomposition-based evaluation methodology as an instance of the benchmark-crisis thesis
 

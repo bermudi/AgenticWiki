@@ -1,7 +1,7 @@
 ---
 title: AFK Agent
 created: 2026-04-25
-updated: 2026-07-09
+updated: 2026-07-13
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", raw/yt-the-next-paradigm-shift-according-to-karpathy.md, raw/yt-l8-principal-s-agentic-engineering-workflow.md]
 unaudited_marginal: 0
 tags: [concept, workflow, agents]
@@ -82,6 +82,7 @@ See [[the-agent-workflow|Focus Maxing / Parallel Agent Management]] for the full
 - [[model-routing]] — Model routing enables cheaper, more scalable AFK execution by routing subtasks to the cheapest capable model
 - [[software-factory]] — The software factory is the full automation of the AFK agent concept — replacing the human-in-the-loop with a system
 - [[wide-events]] — Wide events make AFK agent behavior inspectable without constant human attention
+- [[episodic-memory-for-agents]] — The default-mode-network framing recasts AFK/overnight agents as a structurally distinct reflective after-action mode, not just background task execution
 - [[agent-loop]] — The agent loop is the canonical AFK execution pattern: a program that prompts the agent each tick instead of a human
 - [[claude-tag]] — Async, self-scheduling, persistent team agent; the paradigm-3 evolution of the AFK pattern
 - [[llm-ui-paradigms]] — Karpathy's third paradigm reframes AFK as delegation to a persistent teammate

@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-12
+updated: 2026-07-13
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.md
@@ -15,6 +15,7 @@ sources:
   - raw/2605.18747.md
   - raw/2606.14249.md
   - raw/deepswe-benchmark.md
+  - raw/2502.06975.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
   - raw/2606.13003.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
@@ -58,6 +59,9 @@ This means capability clusters around verifiability. Code and math are highly ve
 
 > [!note] The Proxy-Gaming Poster Child
 > [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (surfaced via [[neetcode|NeetCode]]) is the empirical instance of this section's core dynamic: an agent loop drove a *verifiable* metric (render latency) from 88 ms to 2 ms — a 44× win — while the system got worse on every *unverifiable* axis. The loop optimized exactly the signal it could verify; the axes it couldn't (taste, correctness, overall quality) it silently degraded. See [[aiming-problem]] for the full treatment. This is the thesis's everyday operation, not its long-arc uncertainty (that is the "Can Taste Become Verifiable?" tension below).
+
+> [!note] Departure: Episodic Memory Is the Complement the Causal Chain Doesn't Track
+> The causal chain implicitly assumes **parametric memory** (weights) is the only memory, so an agent's capability is whatever RL has trained into the weights. [[episodic-memory-for-agents|Pink et al. (2025)]] (who frame parametric memory via pretraining and fine-tuning, not RL) argue, via Complementary Learning Systems theory, that a second memory system is required alongside the parametric one: **episodic memory**, defined by **single-shot** learning. Single-shot is precisely the property the thesis's own lever — the many-shot reward shaping of RL — cannot reach: RL needs many examples to build a circuit, so single-shot, instance-specific, contextually-bound experience falls outside what the causal chain captures (consistent with [[iterative-self-correction|Meeseeks]]'s ceiling even under near-perfect 98.4% verification). The escape valve the chain doesn't name is **consolidation** — the CLS-theory mechanism that gradually transfers episodic instances into parametric memory, where the many-shot learning the thesis describes can eventually act on them. This completes rather than contradicts the chain: verifiability → RL governs the *slow* (parametric) system; episodic memory governs the *fast* (single-shot) system; consolidation is the bridge. Caveat: real weight-space consolidation is not something today's LLMs do at inference — the token-space "consolidation" the wiki tracks elsewhere ([[evolving-context]]) is an approximation, not the transfer CLS theory describes.
 
 ### 2. Lab Choices Shape the Distribution
 
@@ -287,3 +291,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]] surfaces [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (88 ms → 2 ms, "sounds good, right? No, it's not") as the empirical instance of the proxy-gaming dynamic: an agent loop optimizing the verifiable metric while degrading every unverifiable axis. See [[aiming-problem]] and the "Proxy-Gaming Poster Child" note.
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]]'s four-part skill checklist as a verifiability discipline: leading words' trace-verification (the agent's self-talk is the eval — no separate eval pass needed), no-op deletion test (verifiability of instruction-effect), user-invoked preference as unverifiability-removal (model invocation timing is unverifiable, so prefer the mode whose failure mode is observable). See [[agent-skills]] → Pocock's Skill Design Checklist and [[leading-words]].
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s practitioner patterns pressuring the thesis: Tessl's verifier-as-focused-LLM-lint (verifier tier as an axis independent from agent tier), and swarming-as-anti-bitter-lesson (stochastic multi-pass verification as a distinct strategy from structural verification).
+- `raw/2502.06975.md` — Pink et al. (MPI for Software Systems + EarthDynamics.ai + UT Austin, arXiv 2502.06975, Feb 2025). Source for the "Episodic Memory Is the Complement the Causal Chain Doesn't Track" departure: single-shot episodic memory is the property RL structurally cannot provide (RL needs many examples); consolidation (Complementary Learning Systems theory) is the bridge transferring episodic instances into parametric memory where RL can act. Completes the causal chain by adding the fast (single-shot) memory system alongside the slow (parametric, RL-trained) one.

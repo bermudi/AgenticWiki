@@ -1,9 +1,10 @@
 ---
 title: Procedural Knowledge
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-07-13
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
+  - raw/2502.06975.md
 unaudited_marginal: 0
 tags: [concept, knowledge, memory, agents, cognitive-science]
 ---
@@ -21,6 +22,8 @@ Cognitive science identifies three types of human memory. Agent architectures ar
 | **Semantic** | Facts | Rome is the capital of Italy | RAG, knowledge bases |
 | **Episodic** | Experiences | I went to Rome last summer | Conversation logs, interaction history |
 | **Procedural** | Skills | How to ride a scooter through Roman traffic | [[agent-skills|Skill files]] |
+
+> [!warning] Refinement: This triad is a useful simplification, but the row mappings are loose. [[mathis-pink|Pink]] et al. (2025) argue the LLM's **parametric memory (trained weights)** is the true semantic-memory analog — a general knowledge base — and cast RAG as *external* memory that lacks the contextual property, not as semantic memory itself. And "conversation logs" are at best a rudimentary episodic memory missing instance-specificity, contextual binding, and the consolidation loop. The rigorous version is the **five-property framework** (long-term, explicit, single-shot, instance-specific, contextualized) on [[episodic-memory-for-agents]], which no current LLM memory method satisfies in combination.
 
 ## Why Agents Need It
 
@@ -58,7 +61,9 @@ Procedural knowledge being file-based (not weight-based) has several important p
 - [[evolving-context]] — Skill learning as a mechanism for agents to capture procedural knowledge from experience
 - [[context-engineering]] — Progressive disclosure of procedural knowledge
 - [[hallucination]] — Lack of procedural knowledge is a key source of agent guesswork and hallucination
+- [[episodic-memory-for-agents]] — The rigorous five-property version of this triad; refines the semantic=RAG / episodic=logs simplification
 
 ## Sources
 
 - `raw/yt-what-ai-agent-skills-are-and-how-they-work.md` — IBM Technology video explaining the cognitive science framing of procedural memory, the knowledge type comparison, and how skills implement procedural knowledge for agents
+- `raw/2502.06975.md` — Pink et al. (2025). Source for the refinement callout: the five-property episodic-memory framework and the argument that parametric memory (not RAG) is the semantic-memory analog.

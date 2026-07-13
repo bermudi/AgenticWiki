@@ -1,7 +1,7 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-07-11
+updated: 2026-07-13
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
@@ -201,6 +201,7 @@ The boundary with [[memrefine]]: MemRefine targets *what stays* (compression und
 - [[comprehension-debt]] — Schema evolution is a counter-move at the schema layer: the user model stays readable as Python files, not opaque vector stores
 - [[bojie-li]] — Author of User as Code, the implementation of schema-level evolving context
 - [[agent-memory-systems]] — The systems-architecture survey of agent memory; formalizes the maintenance lifecycle (module U) that the evolution axes below operate within
+- [[episodic-memory-for-agents]] — Consolidation (episodic → parametric) is the Complementary-Learning-Systems mechanism underlying token-space continual learning; [[eric-davis|Davis]] & [[katrina-schleisman|Schleisman]]'s default-mode after-action framing recasts context evolution as a structurally distinct reflective mode
 - [[jundong-xu]] — Lead author of the EvoArena paper that introduces EvoMem
 
 ## Sources

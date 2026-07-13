@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-12
+updated: 2026-07-13
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -44,6 +44,7 @@ sources:
   - raw/gstack-garry-tan-software-factory.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
   - raw/2606.24775v1.md
+  - raw/episodic-semantic-memory-machine-teammates.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -285,8 +286,11 @@ MCP (Model Context Protocol) made it easy to add tools, which created a tool-blo
 [[evolving-context]] — continual learning in token space — is the major unsolved problem in agent workflows. Currently, all context management is hand-tuned heuristics: "offload after N turns," "spawn sub-agents for these task types." The emerging vision is agents that improve their own context over time:
 
 - **Task-specific prompt evolution**: Reflect over agent trajectories, score outcomes, and iteratively refine prompts (a paper Lance references as "Jeepa" from DSPy/Omar).
-- **Memory and preference learning**: Accumulate preferences across sessions — coding style, PR conventions, durable vs. temporary preferences. [[lance-martin|Lance Martin]]'s Claude Diary is a crude prototype. The broader systems architecture of agent memory — representation, extraction, retrieval, maintenance — is surveyed as a first-class data-management problem in [[agent-memory-systems]].
+- **Memory and preference learning**: Accumulate preferences across sessions — coding style, PR conventions, durable vs. temporary preferences. [[lance-martin|Lance Martin]]'s Claude Diary is a crude prototype. The broader systems architecture of agent memory — representation, extraction, retrieval, maintenance — is surveyed as a first-class data-management problem in [[agent-memory-systems]]. The cognitive-science complement — what *types* of memory an agent should have, and which properties distinguish them — is [[episodic-memory-for-agents]], which argues that episodic memory (single-shot, instance-specific, contextualized) is the missing piece for long-horizon agents.
 - **Skill learning**: When an agent discovers a reusable SOP, capture it as a skill file for future tasks (Let paper).
+
+> [!note] Departure: A Third Mode Beyond HITL and AFK
+> [[eric-davis|Davis]] & [[katrina-schleisman|Schleisman]] (2024) argue the two-phase model (HITL design + AFK execution) inherits a blind spot from how AI is built: systems are "mission-focused" and "lay inert once the task is completed." They propose a structurally distinct **reflective after-action mode** — modeled on the brain's default-mode network — in which the agent uses downtime to recognize patterns in past episodes and simulate future ones, rather than executing any task. This reframes the reflection loops above (Claude Diary, skill capture) not as a task variant within AFK but as a *third mode*: HITL (human designs) → AFK (agent executes) → **reflective consolidation** (agent reviews and consolidates past episodes). It also offers a structural answer to [[the-slop-problem]]'s "agents don't feel pain" — a default-mode loop is the missing feedback mechanism by which an agent could recognize recurring failure patterns across episodes. See [[episodic-memory-for-agents]] for the full architecture and the consolidation operation, and [[afk-agent]] for how AFK/overnight agents are recast by this framing.
 
 > [!warning] Open Frontier
 > All three categories are currently "super hacky" — custom prompts and manual reflection loops. RLM (Recursive Language Models, trained to manage their own context) is an exciting direction, but the classifier heuristic (articulated by the host, Dex Horthy, and elaborated by Martin) suggests some decisions (user-specific preferences, nuanced memory salience) will always need user-supplied guardrails. The mechanics of storage and retrieval can be learned; the *values* for what to keep may stay external.
@@ -510,4 +514,5 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/gstack-garry-tan-software-factory.md` — Garry Tan's gstack: 23 specialist slash-command skills, sprint workflow (Think → Plan → Build → Review → Test → Ship → Reflect), Boil the Ocean ethos, User Sovereignty, 10-15 parallel sprints, cross-model review. Source for the "Shipped Software Factories" marginal note.
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: five-step phase loop, fresh-context subagents, `.planning/` persistent artifacts, context monitor hook, slopcheck. Source for the "Shipped Software Factories" marginal note.
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the Evolving Context Frontier's memory bullet and its calibration callout: the four-module memory framework (representation/extraction/retrieval/maintenance) surveyed as a data-management problem; and the sobering finding that no single memory architecture dominates and long-context retrieval still beats most memory systems for time-dependent queries.
+- `raw/episodic-semantic-memory-machine-teammates.md` — Davis & Schleisman (Galois, AHFE 2024). Source for the "A Third Mode Beyond HITL and AFK" departure: AI systems are mission-focused and "lay inert once the task is completed"; the default-mode-network framing proposes a reflective after-action mode in which the agent recognizes patterns in past episodes and simulates future ones — a third mode distinct from HITL design and AFK execution.
 
