@@ -1,7 +1,7 @@
 ---
 title: MCP (Model Context Protocol)
 created: 2026-06-07
-updated: 2026-06-07
+updated: 2026-07-14
 sources:
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
 unaudited_marginal: 0
@@ -28,6 +28,7 @@ MCP is what makes an agent's tool surface *user-extensible* without a vendor rel
 - [[al-harris]] — The Kiro engineer who demonstrated the per-phase MCP integration
 - [[tool-design-for-agents]] — MCP is the tool-level interface for shaping agent capability
 - [[agent-friendly-tooling]] — Speed, observability, and misuse resistance as practical craft; MCP is the integration layer
+- [[harness-monoculture]] — Custom MCP tools lose invocation share when models are RL-trained on a harness with different built-in tools (effect #4)
 
 ## Sources
 

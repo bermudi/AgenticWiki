@@ -1,7 +1,7 @@
 ---
 title: pi
 created: 2026-04-25
-updated: 2026-05-04
+updated: 2026-07-14
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
@@ -101,6 +101,7 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 - [[agent-skills]] — Pi's skill system follows the skill.md pattern; malleable agents create and modify skills mid-session
 - [[mastra]] — Both are agent frameworks offering observability and eval infrastructure; Pi emphasizes malleability, Mastra emphasizes the quality flywheel
 - [[thorsten-ball]] — Philosophical alignment on minimalism: Ball's "harness falls away" echoes Pi's four-tool core
+- [[grammar-constrained-sampling]] — Pi's strict edit tool surfaced the ~20% tool-call failure rate that Claude Code's leniency masks
 
 ## Sources
 

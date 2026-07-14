@@ -1,12 +1,13 @@
 ---
 title: Armin Ronacher
 created: 2026-04-26
-updated: 2026-07-02
+updated: 2026-07-14
 sources:
   - raw/agentic-coding-recommendations.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/the-final-bottleneck.md
   - raw/yt-are-we-really-doing-this-again.md
+  - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
 tags: [author, python, flask, go, agentic-coding, austria]
 unaudited_marginal: 0
 ---
@@ -73,12 +74,23 @@ Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and 
 > [!note] Marginal: Loop Experiments — Review Works, Implementation Doesn't (Yet)
 > In mid-2026, Ronacher ran his own loop experiments over a weekend and reported a candid, narrow result: "The only cases where they work so far for me are a review." He uses review loops himself — running a reviewer (CodeRabbit or similar) continuously and addressing issues until none remain — but he openly asked whether anyone had made loops work for *actual implementation* on a medium-sized project. This is an empirical, from-a-trusted-practitioner instance of the [[agent-loop|loops-can't-build-features]] wall and a direct corroboration of his own review-bottleneck thesis (from `raw/the-final-bottleneck.md`): where loops help is exactly where the bottleneck already lives. See [[neetcode|NeetCode]] for the surrounding discourse and [[jarred-sumner|Jarred Sumner]]'s for-each-not-while refinement, which replies directly to this experiment.
 
+## Capability Regression, Cost, and the Loop Quality Question
+
+On the *State of Agentic Coding* podcast (July 2026), Ronacher's contribution was less the harness-monoculture formulation itself (which [[mario-zechner|Zechner]] primarily articulates — see [[harness-monoculture]]) than three sharper points about its consequences. First, the **incentive alignment**: "Anthropic makes most money with Claude Code at this point, so the incentives within the company are [aligned]" — the monoculture is not an accident the vendor will naturally correct. Second, **capability regression off the trained path**: models "reinforced-learned to death" on the orchestrator/sub-agent workflows regress on use cases that deviate from that distribution. Third, an **epistemic** claim stronger than "the spec is undocumented": "I also don't even know if the people at Anthropic necessarily know where the line is" — if the de-facto spec is an emergent property of a non-deterministic harness, no single engineer may hold an accurate model of it, including at the vendor.
+
+He extends his review-bottleneck thesis into loop territory. The naive autonomous loop — generate from scratch, review, feed the findings back in, repeat — does not converge on good code. It converges on "the most complex and ungodly code possibly imaginable," because the reviewer always finds *something* to improve and the loop never reaches a stable "satisfied" state (an unstable equilibrium). A mitigation he relays having heard (not his own prescription): run the reviewer at lower reasoning budget so it does not "hang itself" finding ever-more nits. This is a loop-level restatement of his *Final Bottleneck* argument — the review step is both where loops help *and* where, unbounded, they inflate complexity.
+
+He is openly skeptical that the loops wave serves users rather than vendors. The more agents run in the background, the less control he has, and the free time loops were supposed to return has been replaced by "pure anxiety" — loops fill him "with the idea that it's going to get back to being in control" without delivering it.
+
+On model economics, he observes that the cost of *solving* a problem is rising across generations: "the cost of solving problems seems to be going up rather than down," and the cheap model tier keeps being replaced by a slightly more expensive cheap tier, so the headline price points earlier flagships hit are gone even as benchmark scores inch up (see [[the-benchmark-crisis]]'s cost-blind-scoring axis).
+
 ## Thread
 
 - [[the-slop-problem]] — Armin's 30-team interview findings, deliberate friction removal as slop accelerant, and conservative upgrade patterns
 - [[the-human-lever]] — Deliberate friction as a tool of human design authority; simplicity imperative as grey-box enabler
 - [[the-agent-workflow]] — Go as the workflow language, Makefiles as agent interfaces, the adoption learning curve, and the "prompt request" pattern
 - [[tool-design-for-agents]] — Go over Python argument, MCP analysis, tooling speed as quality factor, misuse-resistant infrastructure
+- [[the-benchmark-crisis]] — His cost-to-solve observation (the Sixth Axis: cost-blind scoring)
 
 ## Related
 
@@ -94,6 +106,8 @@ Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and 
 - [[agent-loop]] — Armin's loop-experiment result (review-only) is an empirical instance of the loops-can't-build-features wall
 - [[jarred-sumner]] — Sumner's for-each/while reply came directly in response to Armin's loop experiments
 - [[neetcode]] — Surfaced and contextualized Armin's loop experiments in the discourse audit
+- [[harness-monoculture]] — He contributed the incentive-alignment, capability-regression, and epistemic-unknowability points to the thesis Zechner primarily articulates
+- [[grammar-constrained-sampling]] — The tool-call-corruption symptom measured alongside the monoculture thesis
 
 ## Sources
 
@@ -101,3 +115,4 @@ Part of an Austrian engineering circle with [[mario-zechner|Mario Zechner]] and 
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — 30-team interviews, agentic regret, deliberate friction, industrial revolution parallel, MCP analysis, Austrian circle
 - `raw/the-final-bottleneck.md` — Accountability as the final bottleneck; human review capacity as hard ceiling on agentic output; textile industry parallel
 - `raw/yt-are-we-really-doing-this-again.md` — Armin's weekend loop experiments: "the only cases where they work so far for me are a review"; the open question of whether loops work for implementation on medium-sized projects.
+- `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — His incentive-alignment point ("Anthropic makes most money with Claude Code"), the off-path capability regression ("reinforced-learned to death"), and the epistemic claim that the de-facto spec may be unknowable even to the vendor; the generate-review loop converging on "ungodly code" (unstable equilibrium) and the lower-reasoning-budget mitigation he relays having heard; loops-as-anxiety ("pure anxiety," loss of control); the cost-to-solve rising across generations (Sonnet 5 costing more per solve; cheap-tier replacement inflation).

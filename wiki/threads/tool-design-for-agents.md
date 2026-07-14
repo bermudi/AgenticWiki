@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-07-12
+updated: 2026-07-14
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/agentic-coding-recommendations.md
@@ -19,6 +19,7 @@ sources:
   - raw/2509.09677.md
   - raw/2512.08296-scaling-agent-systems.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -47,6 +48,9 @@ unaudited_marginal: 0
 
 > [!note] Departure: The Harness Interface Taxonomy
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) provides a systematic taxonomy that subsumes this thread's tool categories. The survey organizes tool use within [[harness-mechanisms|harness mechanisms]] (§3.3) and identifies three acting paradigms within the code-for-acting layer (§2.2) — grounded skill selection, programmatic policy generation, and lifelong code-based agents — that correspond to different levels of agent autonomy over tools. The environment-interaction tool use paradigm (§3.3.2) — where the agent writes scripts rather than calling bound tools — is the theoretical foundation for why CLI composability outperforms MCP for developer-facing tools. The survey's key framing: the tool interface is one component of the broader **[[harness-interface|harness interface]]**, which also includes code for reasoning and code for environment modeling.
+
+> [!note] Departure: The Training Harness Is Now a Tool-Reliability Factor
+> This thread argues that tool reliability is bounded by tool design (interface contracts, output formats, minimalism). [[mario-zechner|Mario Zechner]] identifies an independent variable the thread did not account for: **the harness the model was RL-trained on.** A perfectly-designed, strict tool — [[pi]]'s edit tool, which validates tool calls against their schema — exhibits a ~20% failure rate on newer Anthropic models, because those models were (hypothesized) trained against [[claude-code|Claude Code]]'s lenient harness and never received a negative signal for emitting malformed calls. The defect is invisible to Claude Code (lenient) and fatal to Pi (strict). See [[grammar-constrained-sampling]] for the decoding-level mechanism and [[harness-monoculture]] for the ecosystem thesis: training on one dominant lenient harness propagates as (a) tool-call corruption in stricter harnesses, (b) spec pollution (third parties must accept the dominant harness's slop), (c) capability regression off the trained path, and (d) custom-tool ([[mcp|MCP]]) invocation share loss. Tool design is still necessary — clean interfaces still bound the failure surface — but it is no longer sufficient: a tool's observed reliability now depends on whether its strictness matches the leniency the model was trained to expect.
 
 ## The Core Thesis
 
@@ -268,3 +272,4 @@ The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Capability Bottleneck Is Partly Execution" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers upstream of the tool layer. Bound tool design's reach at the execution ceiling.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Tool-Coordination Trade-off in Multi-Agent Systems" extension. §4.3 scaling principles (ε × T interaction β = -0.096, p = 0.002); §4.2 Workbench results (16-tool task, efficiency penalty 2-6.3×, Hybrid collapse); Table 5 coordination metrics (efficiency per architecture).
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's AXI tools and benchmark: GitHub MCP vs CLI (3× tokens, 2×+ latency), token-efficient non-JSON output (~40% savings), the ten principles for agent-ergonomic tools, and the [[lavish]] HTML artifact editor as another HTML-as-agent-output case.
+- `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[mario-zechner|Zechner]] on the training-harness-as-tool-reliability-factor: [[pi]]'s strict edit tool showing ~20% failure on newer Anthropic models while [[claude-code|Claude Code]]'s lenient harness masks it. Source for the "Training Harness Is Now a Tool-Reliability Factor" departure; cross-refs [[grammar-constrained-sampling]] and [[harness-monoculture]].

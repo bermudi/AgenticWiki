@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-13
+updated: 2026-07-14
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -180,6 +180,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[smfr]] — Synthetic Multi-Hop Financial Reasoning: a procedurally generated diagnostic benchmark designed to expose the [[multi-agent-illusion]] under conditions where MAS *should* help. Immune to contamination; the [[expert-mas]] control demonstrates the multi-agent paradigm can work.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
+- [[grammar-constrained-sampling]] — JSON grammar-constrained decoding forces fabricated schema-invalid keys after a stray comma; the malformed call poisons context (~20% edit failure). A regression attributed to RL training on Claude Code's lenient harness.
+- [[harness-monoculture]] — When frontier models are RL-trained on one dominant proprietary harness (Claude Code), its leniency and slop propagate as a de-facto spec the ecosystem must match — corrupting strict tools, polluting specs, regressing off-path capability, and starving custom MCP tools.
 - [[html-as-agent-output]] — Using HTML instead of Markdown for agent output: richer density, visual clarity, two-way interaction, at the cost of tokens and version control pain.
 - [[inferential-rule-following]] — Applying abstract conditional rules to concrete reasoning problems; models pattern-match against training data rather than following given rules.
 - [[intelligence-tier-routing]] — Tag work with intelligence tiers so it can be routed across frontier Claude (planning) and open-source / local models (implementation). The factory is the routing layer; the bottleneck is "intelligence arbitrage" — finding open-source models capable enough to carry the load.

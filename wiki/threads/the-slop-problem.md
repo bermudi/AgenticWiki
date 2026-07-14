@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-12
+updated: 2026-07-14
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -32,6 +32,7 @@ sources:
   - raw/gsd-core-opengsd-spec-driven-framework.md
   - raw/gstack-garry-tan-software-factory.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -152,6 +153,9 @@ Combined with **automation bias** — you see one brilliant agent output, lower 
 
 In his blog post, Mario extends this further: agents are **"merchants of learned complexity"**. They've seen many bad architectural decisions in their training data and RL training. When you let them architect your application, the result is "an amalgam of terrible cargo cult 'industry best practices'." Your agents never see each other's runs, never see the full codebase, never see all prior decisions — so their decisions are always *local*, leading to immense code duplication and abstractions for abstractions' sake. This is the same mess found in human-made enterprise codebases, but those take years; with agents and 2 humans, you reach it within weeks.
 
+> [!note] Extension: Training-Harness Slop Propagates Through Model Weights
+> The slop this thread documents is mostly about what agents *do* to a codebase. [[harness-monoculture|Harness monoculture]] identifies a deeper propagation path: when frontier models are RL-trained on [[claude-code|Claude Code]]'s lenient harness — which silently accepts malformed tool calls and invalid YAML — the slop is baked into model *weights*. Claude Code's permissiveness becomes a de-facto spec the ecosystem must match, and models never learn to avoid the malformed output the reference harness swallowed. The result: strict third-party harnesses like [[pi]] surface a ~20% tool-call failure rate ([[grammar-constrained-sampling]]) that the dominant harness masks entirely. This is slop at the training layer — not generated in the codebase, but encoded in the model's behavior prior.
+
 ## Agentic Search Has Low Recall
 
 [[mario-zechner|Mario Zechner]] identifies a distinct failure mode beyond context window size: **agentic search has low recall**. Before an agent can fix or extend code, it needs to find *all* the relevant code. Whether it uses ripgrep, codebase indexes, LSP servers, or vector databases — the bigger the codebase, the lower the recall. Low recall means the agent misses existing code, duplicates things, introduces inconsistencies. This is the root cause of code-smell booboos: not that the agent writes bad code per se, but that it can't find all the code it needs to write good code. The shit flower blossoms from there.
@@ -177,7 +181,7 @@ The review bottleneck is also a legibility bottleneck: when agents produce more 
 
 [[armin-ronacher|Armin Ronacher]] adds language choice and tooling speed as slop prevention mechanisms:
 
-- **Language as slop factor**: Python's magic (pytest fixtures, async event loops) produces incorrect code that even the agent loop struggles to fix. Go's simplicity and explicitness reduce the surface area for agent errors.
+- **Language as slop factor**: Python's magic (pytest fixtures, async event loops) produces incorrect code that even the [[agent-loop|agent loop]] struggles to fix. Go's simplicity and explicitness reduce the surface area for agent errors.
 - **Tooling speed as slop factor**: Slow tools mean fewer verification cycles per session. The agent writes more code between checks, increasing the chance of uncaught errors.
 - **Upgrade-induced slop**: Agent-cheapened upgrades invalidate stale decision comments and patterns. The agent builds on outdated assumptions — a subtle form of slop that passes tests.
 
@@ -234,7 +238,7 @@ Kevin Gregory frames it: "You're using slop to build these internal tools that m
 
 This is not a contradiction of the thread's thesis — it's a refinement. The threat isn't slop itself, it's **uncontained** slop. When slop is bounded to a disposable context (internal tooling, non-customer-facing infrastructure) with no path into the production codebase, it can be a net positive. [[fighting-slop-with-slop|Fighting slop with slop]] is the discipline of knowing where to accept it and what it buys you.
 
-This echoes [[mario-zechner|Mario Zechner]]'s own practice: he accepts slop in [[pi|Pi]]'s HTML export but guards the agent loop. The BEEPs workflow extends the same containment principle to organizational scale.
+This echoes [[mario-zechner|Mario Zechner]]'s own practice: he accepts slop in [[pi|Pi]]'s HTML export but guards the [[agent-loop|agent loop]]. The BEEPs workflow extends the same containment principle to organizational scale.
 
 > [!warning] Unresolved Tension: Toolchain Degradation
 > The same degradation mechanisms this thread documents — [[delegate-52|DELEGATE-52]]'s finding that LLMs silently corrupt content over 20+ interactions, the compounding effect of document size on error rates — apply to the AI-generated toolchain BEEPs relies on. If the tooling silently drops content, generates wrong diffs, or corrupts version history, the design docs themselves degrade. Nobody is watching, because "nobody reads the code." Whether the BEEPs team has simply been lucky, or whether design-doc content is somehow less susceptible to the [[critical-failure|critical-failure]] pattern, is an open question — and the answer determines whether this approach scales to other teams and longer timeframes.
@@ -278,3 +282,4 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: Package Legitimacy Audit (slopcheck) as dependency-layer anti-slop infrastructure; verification gates that perform goal-backward checks against requirements before declaring done. Source for the "Slopcheck and Verification Gates" marginal note.
 - `raw/gstack-garry-tan-software-factory.md` — gstack: `/review`, `/qa`, and `/cso` as multi-layer verification skills (code review, real-browser testing, security audit); `/codex` as cross-model review catching issues a single model would miss. Source for the "Slopcheck and Verification Gates" marginal note.
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s [[beads-work-ledger|Beads]] work-ledger as a structural slop defense: the three-view design (hidden in-progress, public finished) makes intermediate agent state inspectable without humans reading every line, so noisy intermediate work stays hidden until it converges. Source for the review-bottleneck-as-legibility-bottleneck paragraph.
+- `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[mario-zechner|Zechner]] and [[armin-ronacher|Ronacher]] on training-harness slop: Claude Code's lenient harness masking malformed tool calls so models never learn to avoid them; the harness-monoculture thesis that slop propagates through model weights as a de-facto spec. Source for the "Training-Harness Slop" extension callout.

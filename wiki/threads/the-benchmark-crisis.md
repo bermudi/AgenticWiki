@@ -1,7 +1,7 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-07-11
+updated: 2026-07-14
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -11,7 +11,8 @@ sources:
   - raw/2509.09677.md
   - raw/2512.08296-scaling-agent-systems.md
   - raw/2606.24775v1.md
-tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution]
+  - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
+tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution, cost]
 unaudited_marginal: 0
 ---
 
@@ -110,6 +111,19 @@ This is a different failure mode from contamination or verifier error: the bench
 > [!note] Synthesis: the five axes are not independent
 > Horizon mismatch is *why* contamination, verifier failure, and prompt distortion are so corrosive: they all perturb step accuracy, and because the horizon-length curve is steep at the frontier, a small step-level perturbation hides a large horizon-level difference. DeepSWE's 70-point spread and this paper's 2176-vs-432 gap are the same phenomenon viewed at different granularities — the real capability differences that short, clean benchmarks compress away.
 
+## The Sixth Axis: Cost-Blind Scoring
+
+[[armin-ronacher|Armin Ronacher]] names a sixth axis the prior five ignore: **benchmarks score pass-rate and ignore cost, and the cost-to-solve is rising across model generations.** A leaderboard that ranks only by correctness is cost-blind by construction, and once per-solve cost begins inflating, cost-blindness stops being a harmless omission and becomes an active misleader — a "better" model can arrive alongside worse economics.
+
+His inversion, observed around the Sonnet 5 release: the model climbs coding benchmarks yet costs *more* to complete them than the model it ostensibly surpassed — "the cost of solving problems seems to be going up rather than down." The benchmarks most cited by the discourse do not help: "Terminal-Bench or something like that doesn't take anything into account. Not cost, not runtime, not anything." A few leaderboards (e.g. Artificial Analysis) do factor cost or turns, but the dominant public ones do not.
+
+He generalizes the inflation to the cheap tier: inexpensive models keep being replaced by slightly-more-expensive inexpensive models, so the price point earlier "cheap" flagships hit is gone — "the cost to solve a problem actually gets more expensive" even as headline scores inch up. The same dynamic shows up across vendors (Gemini Flash included).
+
+This generalizes the cost-quality Pareto point already flagged for multi-agent systems ([[smfr]]): a framework that costs 10× and gains 0% is on the wrong side of the Pareto frontier regardless of accuracy. The same logic applies at the model layer — a model that improves on a cost-blind leaderboard while raising per-solve cost is moving sideways on the Pareto frontier, not forward. The fix is the one the SMFR extension already proposed for MAS: **report cost-quality Pareto position, not just accuracy.**
+
+> [!note] Extension: cost-blindness may be compounded by [[harness-monoculture]]
+> Rising cost-to-solve is plausibly connected to effect #3 of harness monoculture: models RL-trained on loop-heavy, sub-agent-spawning workflows ("built for loops and token maxing," in Zechner's phrase) tend to solve problems in more turns and with more spawned sub-agents than a less-reinforced model would. If the RL reward optimized for task completion without penalizing token expenditure, the model converges on solution strategies that spend more to win — and a cost-blind benchmark rewards exactly that. This link between training distribution and per-solve cost is the wiki author's synthesis, not stated directly by either speaker; treat it as a hypothesis connecting [[harness-monoculture]] to the cost axis.
+
 ## The Call for Community Benchmarks
 
 > [!note] Departure: Skill Popularity as a Benchmark-Crisis Analog
@@ -150,3 +164,4 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 - `raw/2509.09677.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Source for the "Fifth Axis: Horizon Mismatch" section. Proposition 1 (§2.1, H_s = ln(s)/ln(p)); frontier single-turn execution benchmark separating GPT-5 ~2176 / Claude-4 Sonnet ~432 / Grok 4 ~384 / Gemini 2.5 Pro ~120 on a task near-trivial at one step (§3.3); horizon-mismatch as a benchmark failure mode distinct from contamination and verifier error.
 - `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Agentic vs Non-Agentic Benchmark Design" extension. §1 introduction (agentic task definition: sequential interdependence, partial observability, adaptive strategy formation); §4.2 main results (MAS deltas on agentic vs non-agentic benchmarks; 89% on HumanEval with 5 agents via ensemble effects; inverted dynamics on agentic benchmarks).
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the decomposition-thesis callout: argues existing memory benchmarks treat the system as a monolithic black box reporting only end-to-end task-success metrics, and decomposes evaluation into five independently-measured dimensions (task effectiveness, evidence-level retrieval fidelity, dynamic-update robustness, long-horizon stability, operational cost) with single-module ablations — the benchmark-crisis thesis applied to memory-system evaluation. Also independently corroborates [[state-collapse]] ("hallucinations of the past").
+- `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[armin-ronacher|Ronacher]] on the sixth axis (cost-blind scoring): the cost-of-solving inversion (a model climbs benchmarks yet costs more per solve, observed around the Sonnet 5 release; "the cost of solving problems seems to be going up rather than down"), Terminal-Bench ignoring cost/runtime entirely, and the cheap-tier replacement inflation (price points earlier "cheap" flagships hit are gone; cheap flagships getting more expensive per solve). Source for the "Sixth Axis: Cost-Blind Scoring" section and its [[harness-monoculture]] synthesis callout.

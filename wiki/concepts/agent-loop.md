@@ -1,7 +1,7 @@
 ---
 title: Agent Loop
 created: 2026-07-01
-updated: 2026-07-09
+updated: 2026-07-14
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-only-the-best-are-using-them.md
@@ -10,6 +10,7 @@ sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/2511.09030-maker-million-step-zero-errors.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, autonomous-agents, claude-code, cron, orchestration]
 ---
@@ -107,6 +108,9 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 > [!warning] Contradiction: Loops Can't Build Features (Yet)
 > Even the technique's popularizers concede the wall. Berman: *"I have not really found a way to build features with loops. You cannot say 'loop until we build a full permissioning system'... I don't know which direction the AI is going to go."* [[armin-ronacher|Armin Ronacher]]'s own weekend loop experiments hit the same wall from the opposite direction: "The only cases where they work so far for me are a review" — and he openly asked whether anyone had made loops work for *implementation* on a medium-sized project. Loops optimize toward an end state they can recognize; they do not *choose* the end state. Day-zero feature building — where the goal is itself discovered through exploration — is precisely where the goal-verification grammar breaks down. This is the [[aiming-problem]] at the loop level: a loop can pursue a goal but cannot aim one.
 
+> [!warning] The Review-Until-Satisfied Loop Inflates Complexity
+> The natural shape of an LLM-as-judge loop — generate from scratch, review, feed the review findings back in, repeat until "satisfied" — does not converge on minimal code. [[armin-ronacher|Armin Ronacher]] reports it converges on "the most complex and ungodly code possibly imaginable," because a reviewer can always find *something* to improve, so the loop chases an unstable equilibrium it can never settle. The reviewer never returns "done"; it returns "more." (He relays a mitigation he has heard: run the review pass at lower reasoning budget so it does not over-engage and manufacture endless nits.) This is the [[aiming-problem]] at a second remove: even when the loop *has* a goal, a reviewer with no stopping discipline turns "satisfice" into "maximize," and maximized code is rarely the goal. It is also the loop-level form of [[iterative-self-correction]]'s overcorrection ceiling — unbounded review does not improve quality, it inflates it.
+
 ## Thread
 
 - [[the-agent-workflow]] — The agent loop is the AFK execution substrate; the cost-shift and hard-stops discipline belong in the workflow's production layer
@@ -144,3 +148,4 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s skeptic audit: the "it's just cron" position, the for-each-not-while refinement (via [[jarred-sumner|Jarred Sumner]]), the exponential-decay objection (0.95¹⁰), and [[armin-ronacher|Armin Ronacher]]'s loop-experiment finding (review-only).
 - `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (single-step microagents); §3.2 first-to-ahead-by-k voting as the convergence mechanism; §4.4 the million-step zero-error result. Source for the "sixth paradigm" Extension callout.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: Good Night, Have Fun as a bounded agent loop with explicit token/iteration caps and stop conditions; comparison to `/goal` commands; overnight verifiable objectives.
+- `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[armin-ronacher|Ronacher]] on the review-until-satisfied loop converging on "the most complex and ungodly code" (unstable equilibrium, reviewer always finds more) and the lower-reasoning-budget mitigation he relays having heard. Source for the "Review-Until-Satisfied Loop Inflates Complexity" warning.
