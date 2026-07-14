@@ -26,6 +26,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[the-verifiability-thesis]] — Karpathy's unified theory: verifiability drives RL training, which creates the jagged frontier, which makes vibe coding possible on the peaks and demands agentic engineering to manage the boundary.
 - [[the-multi-agent-theory]] — Six papers converge on a layered theory of LLM-based Multi-Agent Systems: *whether* automated MAS work (no), *why* they fail (system design), *when* coordination helps (conditional), *how* errors propagate (graph dynamics), and *how to make MAS reliable* (engineered decomposition + message-layer governance). The binding constraint is the coordination layer, not the model.
 - [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
+- [[graphrag-quality-problems]] — GraphRAG systems share a root cause (isolated local extraction) producing three deficiencies: thematic irrelevance, logical inconsistency, structural fragmentation. MemGraphRAG breaks the recall-relevance trade-off via Three-Layer Global Memory + multi-agent construction.
+- [[construction-time-memory]] — Memory as a quality-control substrate *during offline construction*, not just at query time: MemGraphRAG's Three-Layer Global Memory lets extraction/conflict agents enforce relevance, consistency, and cohesion before the graph is frozen. Same "memory-as-coordination" pattern as engineered MAS.
 
 ## ✍️ Authors
 - [[kun-chen]] — Ex-L8 principal engineer (Meta, Microsoft, Atlassian); built frontier coding agents at Atlassian; author of the captain/first-mate/crew workflow and open-source tools [[no-mistakes]], [[lavish]], [[axi]], [[treehouse]], [[first-mate]], and [[good-night-have-fun]].
@@ -35,7 +37,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[aaron-brethorst]] — Software engineer; argues domain expertise is the real professional moat because agentic AI commoditized implementation but not verification.
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
 - [[andrej-karpathy]] — AI researcher and educator; co-founder of OpenAI, led Autopilot at Tesla; coined "vibe coding" and "agentic engineering."
-- [[discover-ai]] — YouTube creator (code4AI); documented the synthetic truth phenomenon through a Gemini interaction.
+- [[discover-ai]] — YouTube creator (code4AI); detailed paper walkthroughs on RAG 3.0, GraphRAG, multi-agent systems; documented the synthetic truth phenomenon through a Gemini interaction.
 - [[chris-parsons]] — Ex-CTO and AI adoption consultant; operationalized Ralph Loops as skills; introduced the worker loop pattern, sub-agent validation, and the "reversible without embarrassment" safety heuristic.
 - [[zanie-blue]] — Engineer at Astral, advocate for redesigning tools for agentic consumption.
 - [[philippe-laban]] — Researcher at Microsoft Research; lead author of DELEGATE-52 benchmark on LLM document corruption.
@@ -95,6 +97,12 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[dru-knox]] — Head of product at [[tessl|Tessl]]; the Tessl voice on [[steve-yegge|Yegge]]'s July 2026 panel. Contributed the fix-the-harness rule, the six-orchestrators-then-no-plumbing lesson, and verifier-as-focused-linting.
 - [[katrina-schleisman]] — Researcher at Galois (Minneapolis); co-author (with [[eric-davis|Davis]]) of the episodic + semantic memory architecture for machine teammates, the meta-episode (intervention-as-transition) idea, and the default-mode after-action framing.
 - [[eric-davis]] — Researcher at Galois (Portland); first author of the episodic + semantic memory architecture for machine teammates; the co-learning/co-training framing.
+- [[zhishang-xiang]] — PhD student, Xiamen University; co-first author of MemGraphRAG (KDD 2026) and HippoRAG; multi-agent GraphRAG, memory architectures.
+- [[chuanjie-wu]] — PhD student, Xiamen University; co-first author of MemGraphRAG (KDD 2026); memory-based multi-agent GraphRAG.
+- [[yunbo-tang]] — PhD student, Xiamen University; co-first author of MemGraphRAG (KDD 2026); GraphRAG retrieval, memory architectures.
+- [[zerui-chen]] — PhD student, Xiamen University; co-author of MemGraphRAG (KDD 2026); GraphRAG experiments and implementation.
+- [[qinggang-zhang]] — Researcher, Jilin University; corresponding author of MemGraphRAG (KDD 2026) and HippoRAG; GraphRAG, associative memory, multi-agent systems.
+- [[jinsong-su]] — Professor, Xiamen University; corresponding author of MemGraphRAG (KDD 2026) and HippoRAG; NLP, machine translation, GraphRAG.
 - [[mathis-pink]] — Researcher at Max Planck Institute for Software Systems; lead author of the position paper arguing episodic memory is the missing piece for long-term LLM agents (the five-property framework).
 
 ## 🧠 Concepts
@@ -238,6 +246,18 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[scaling-agent-systems]] — The first quantitative scaling framework for agent systems (Kim et al., Google + MIT, 2026): 260 configurations across 6 benchmarks, 5 architectures, 3 LLM families; a 20-parameter regression (R²=0.373) predicting optimal architecture with 87% accuracy. The third leg of the multi-agent debate: where the illusion paper asks *whether* and MAST asks *why*, this asks *when*.
 - [[capability-saturation]] — The most robust finding from the scaling study: once single-agent baselines exceed ~45% accuracy, MAS yields diminishing/negative returns (β = -0.236, survives cluster-robust + Holm-Bonferroni). The quantitative version of the multi-agent illusion's capability floor.
 - [[tool-coordination-trade-off]] — Tool-heavy tasks suffer disproportionately from MAS inefficiency (β = -0.096, survives Holm-Bonferroni): multi-agent systems fragment the per-agent token budget, leaving insufficient capacity for complex tool orchestration.
+- [[graphrag-thematic-irrelevance]] — Core GraphRAG failure mode: isolated local extraction introduces off-topic triples; solved by global schema frequency filtering in MemGraphRAG.
+- [[graphrag-logical-inconsistency]] — Core GraphRAG failure mode: independent extraction creates contradictory facts (mutually exclusive, temporal, granularity); solved by evidence-driven conflict resolution agents.
+- [[graphrag-recall-relevance-tradeoff]] — GraphRAG expands recall but crashes relevance (GFM-RAG: 84.3% recall vs 38.5% relevance); MemGraphRAG breaks the trade-off via construction-time fixes.
+- [[graphrag-structural-fragmentation]] — Core GraphRAG failure mode: missing coreference resolution scatters entities across disconnected subgraphs; solved by memory-guided bridging (type + similarity).
+- [[memgraphrag]] — Memory-based multi-agent GraphRAG (KDD 2026): Three-Layer Global Memory + three-agent society + PPR retrieval; outperforms all baselines.
+- [[memory-based-multi-agent-system]] — Engineered three-agent society (extraction, detection, resolution) operating on shared global memory; separation of concerns makes MAS reliable.
+- [[memory-guided-bridging]] — Structural unification in MemGraphRAG: type-based (shared ontology) + similarity-based (embedding) edges connect fragmented graph islands.
+- [[personalized-pagerank-rag]] — PPR over heterogeneous graph for GraphRAG retrieval; hub suppression + info density initialization; 0.061s query time.
+- [[three-layer-global-memory]] — MemGraphRAG's memory substrate: Ontology (schemas+freq), Fact (grounded triples), Passage (evidence); bidirectional cross-layer enforcement.
+- [[hipporag]] — Associative-memory GraphRAG using Personalized PageRank; no multi-agent construction, no conflict resolution, no bridging; baseline outperformed by MemGraphRAG.
+- [[lightrag]] — Lightweight GraphRAG with two-level retrieval (entity + chunk); no global memory, no conflict resolution; 46.09% G-Medical vs MemGraphRAG 57.41%.
+- [[microsoft-graphrag]] — Early GraphRAG using community detection + recursive summarization; error propagation in summaries; 41.43% overall avg vs MemGraphRAG 59.25%.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.
@@ -279,4 +299,5 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[llm-guided-compression]] — The compression pattern in which surface similarity only proposes candidate pairs and an LLM judge decides the action (DELETE/MERGE/PRESERVE) on factual content. The redundancy/complementarity/distinctness taxonomy is the action space
 - [[gas-town]] — Steve Yegge's open-source orchestration loop: 20–30 Claude Code instances coordinated by a Mayor agent, with patrol agents and git-backed state.
 - [[maker]] — The first implementation of the [[massively-decomposed-agentic-processes|MDAP]] framework (Meyerson et al., Cognizant AI Lab + UT Austin, 2025): maximal decomposition + first-to-ahead-by-k voting + red-flagging. Solved Towers of Hanoi with 20 disks (1,048,575 steps) with zero errors using gpt-4.1-mini. The first demonstration that LLM-based systems can scale to million-step reliability.
+- [[memgraphrag-project]] — Open-source implementation of MemGraphRAG (KDD 2026): Three-Layer Global Memory, three-agent construction, PPR retrieval; GitHub: XMUDeepLIT/MemGraphRAG.
 

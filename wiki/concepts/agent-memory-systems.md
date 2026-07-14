@@ -56,6 +56,8 @@ Graph- and relation-organized memory handles fact revisions most reliably (Zep l
 
 > [!note] Synthesis: This is independent empirical support for [[state-collapse]] and the [[evomem]] remedy — from a *different* research group (SJTU data-management) using a *different* methodology (systems benchmarking) than the EvoArena paper (NUS, benchmark evolution). Two independent lines of work converge on the same failure mode of single-latest-state memory.
 
+> [!warning] Departure — Construction-time invariants (MemGraphRAG, KDD 2026): This finding frames update-robustness as a *maintenance-time* property of module U. MemGraphRAG's **Three-Layer Global Memory** shows staleness can also be prevented *at representation-design time*: bidirectional cross-layer enforcement (schema ↔ instance alignment + fact ↔ evidence grounding) makes a fact un-returnable without its grounding passage, so a corrected fact propagates by construction rather than by record surgery. This extends the finding — representation module (R) should carry construction-time invariants, not just post-hoc maintenance. See [[memgraphrag]] and [[construction-time-memory]].
+
 ### Finding 4 — Long-horizon stability requires structure; long-context beats memory for time-dependent queries
 Many append-only stores suffer catastrophic degradation as evidence becomes more distant. Strikingly, for time-dependent queries **raw long-context retrieval still outperforms most memory-backed approaches** — because standard semantic consolidation destroys chronological cues. Graph/consolidated memory (Cognee, MemOS, MemoryOS) stays substantially higher across widening evidence gaps; flat Embedding RAG falls from 37.1 → 7.4 Answer F1 as the gap widens.
 
