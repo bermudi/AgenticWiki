@@ -1,7 +1,7 @@
 ---
 title: Boil the Ocean
 created: 2026-07-10
-updated: 2026-07-10
+updated: 2026-07-14
 sources:
   - raw/gstack-garry-tan-software-factory.md
 unaudited_marginal: 0
@@ -39,7 +39,7 @@ The ocean is the destination — 100% test coverage for a module, full feature i
 
 ## Relationship to Existing Concepts
 
-Boil the Ocean is a productivity ethos, not a workflow prescription. It complements [[the-agent-workflow]]'s verification discipline: the workflow ensures you're building the right thing, Boil the Ocean ensures you're building the complete thing. It stands in productive tension with [[strategic-vs-tactical-programming|strategic programming]]'s caution against over-engineering — the resolution is that completeness (full edge cases, full tests, full error paths) is not the same as over-engineering (speculative features, unnecessary abstraction). The [[spec-kit]] constitution's anti-abstraction articles (VII and VIII) make the same distinction: do the complete thing, but don't add complexity that isn't needed.
+Boil the Ocean is a productivity ethos, not a workflow prescription. It complements [[the-agent-workflow]]'s verification discipline: the workflow ensures you're building the right thing, Boil the Ocean ensures you're building the complete thing. It stands in productive tension with [[strategic-vs-tactical-programming|strategic programming]]'s caution against over-engineering — the resolution is that completeness (full edge cases, full tests, full error paths) is not the same as [[over-engineering]] (speculative features, unnecessary abstraction). The [[spec-kit]] constitution's anti-abstraction articles (VII and VIII) make the same distinction: do the complete thing, but don't add complexity that isn't needed.
 
 ## Thread
 
@@ -51,6 +51,7 @@ Boil the Ocean is a productivity ethos, not a workflow prescription. It compleme
 - [[garry-tan]] — Coined the principle as part of the [[gstack]] builder ethos
 - [[gstack]] — The framework where this principle is injected into every skill's preamble
 - [[strategic-vs-tactical-programming]] — The tension: completeness vs. over-engineering, resolved by distinguishing "complete" from "speculative"
+- [[over-engineering]] — The failure mode Boil the Ocean is defined against: speculative abstraction and unnecessary indirection, not completeness
 - [[verifiability]] — Boil the Ocean assumes the verification infrastructure exists to check the complete implementation
 
 ## Sources

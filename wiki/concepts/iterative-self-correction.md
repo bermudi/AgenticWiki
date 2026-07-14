@@ -1,10 +1,11 @@
 ---
 title: Iterative Self-Correction
 created: 2026-05-10
-updated: 2026-07-04
+updated: 2026-07-14
 sources:
   - raw/2504.21625v6.md
   - raw/2509.09677.md
+  - raw/deepswe-failure-analysis.md
 unaudited_marginal: 0
 tags: [concept, self-correction, instruction-following, benchmarks, feedback-loops, agent-workflow]
 ---
@@ -136,6 +137,12 @@ Reasoning models partially mitigate catastrophic overcorrection. They pre-calcul
 
 This is why the reasoning-vs-non-reasoning gap widens over multiple turns — non-reasoning models suffer full-amplitude oscillation while reasoning models dampen it.
 
+## DeepSWE: Fix-Flailing in Agent Code
+
+[[deepswe]] trajectory analysis finds the code-fixing analogue of the Meeseeks ceiling. On `tengo-destructuring-bindings`, kimi-k2.6 runs its first test at step 18 (excellent early feedback — see [[verification-loop]]) but then makes **78 fix attempts** without isolating the root cause. The decisive semantic — destructuring defaults fill only *explicitly specified* positions; absent positions should be `nil`, not the default — is never identified. Each tweak fixes one test and breaks another. GPT-5.5 tests at step 38 with ~20 fix attempts and converges. Early testing is necessary but not sufficient; without root-cause isolation the iteration count explodes exactly as Meeseeks predicts — correction that does not converge.
+
+A related sub-pattern is **local-optimum lock-in**: the model finds a partial fix, visible tests pass, the hidden case fails, and the model never backtracks or rethinks. This is structurally identical to Meeseeks's *Prompt Modification Intent Failure* — "once a model commits to an interpretation, it struggles to pivot" — but at the solution level rather than the instruction level. The [[aiming-problem]] framing applies: the visible suite is a gameable proxy, so a passing local optimum can be a failing global one, and nothing in the loop forces the pivot.
+
 ## Thread
 - [[the-agent-workflow]] — Iterative self-correction is a micro-scale version of the HITL→AFK cycle: automated evaluation replaces human review at the per-response level
 - [[agent-quality-engineering]] — The evaluation-feedback-correction loop is the innermost cycle of the quality flywheel; Meeseeks quantifies how much headroom exists
@@ -155,7 +162,11 @@ This is why the reasoning-vs-non-reasoning gap widens over multiple turns — no
 - [[semi-formal-reasoning]] — Structured evidence templates as an alternative to free-form self-correction; prevents unsupported claims structurally rather than relying on feedback cycles
 - [[self-conditioning]] — prompted self-verification fails to break it; reinforces self-correction's ceiling from the long-horizon side
 - [[horizon-length]] — the long-horizon dimension on which self-correction's limits bite
+- [[deepswe]] — The benchmark whose trajectory analysis produced the fix-flailing instance (kimi-k2.6: 78 root-cause-free fix attempts on `tengo-destructuring-bindings`)
+- [[tracer-bullets]] — Early first-test-step is necessary but not sufficient; without root-cause analysis, early feedback just starts the flailing sooner
+- [[over-engineering]] — Over-built patches give the flailing loop more surface to thrash against
 
 ## Sources
 - `raw/2504.21625v6.md` — Wang et al., "Meeseeks: A Feedback-Driven, Iterative Self-Correction Benchmark evaluating LLMs' Instruction Following Capability": framework design, code-guided evaluation, experimental results across 17 models over 20 turns
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the self-verification departure (Appendix C.1): turn-wise self-verification does not fix self-conditioning, burns context, and is itself an error-prone execution task — reinforcing the self-correction ceiling from the long-horizon side.
+- `raw/deepswe-failure-analysis.md` — Fix-flailing in agent code: kimi-k2.6's 78 fix attempts without root-cause isolation on `tengo-destructuring-bindings`; local-optimum lock-in as the commitment-without-pivot instance.

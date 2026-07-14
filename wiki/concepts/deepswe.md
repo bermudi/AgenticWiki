@@ -1,10 +1,11 @@
 ---
 title: DeepSWE
 created: 2026-05-31
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
+  - raw/deepswe-failure-analysis.md
 tags: [concept, benchmark, coding-agents, evaluation, verification]
 unaudited_marginal: 0
 ---
@@ -93,6 +94,18 @@ All models run through `mini-swe-agent` — a model-agnostic harness exposing a 
 - Five languages only; C++ and Java absent
 - Prompts are shorter than SWE-bench Pro's but still longer than real developer messages
 
+## Behavioral Failure Analysis
+
+Beyond the leaderboard, DeepSWE's trajectories are mineable for *why* models fail. Comparing, per task, the trajectory + patch + verifier output of each failing open-weight model against GPT-5.5's passing reference surfaces a small set of recurring behavioral responses — all of which crystallize existing wiki concepts into concrete, failure-correlated exemplars:
+
+- **Hidden oracle / test-blindness** — every agent is test-blind by construction (the harness applies challenge tests at grading time). GPT-5.5 wins by *generalizing*, not by testing better. The canonical [[aiming-problem]] instance: the visible suite is a gameable proxy.
+- **Late testing** — first-test-step is the strongest pass/fail signal (GPT-5.5 ~step 30–40 vs failing models at 80–220). The [[verification-loop]] / [[tracer-bullets]] principle as the top behavioral correlate.
+- **Fix-flailing** — many edit attempts against failing tests without root-cause isolation; the [[iterative-self-correction]] ceiling hit in agent code.
+- **[[infrastructure-blindness]]** — locating the relevant code but reimplementing its machinery instead of calling it (csstree's `lexer.match()` ignored; dasel's XML format not copied as a template).
+- **[[over-engineering]]** — patches 2–3× the reference size, where the speculative abstraction is the bug surface (GLM's 2483-line HTML parser; indirection layers introducing race conditions).
+
+The framing rule that keeps this useful: test-blindness is a *benchmark condition*, not a model flaw; the actionable lesson is generalization, not "run more tests." And the step/sed/attempt counts are artifacts of this harness — the *concepts* they evidence are what transfer.
+
 ## Thread
 - [[the-benchmark-crisis]] — DeepSWE is the primary evidence for this thread: existing benchmarks are contaminated and unreliable
 - [[the-verifiability-thesis]] — DeepSWE instantiates the verifiability thesis recursively: the benchmark's contribution is making the *verification* of agent output verifiable
@@ -107,7 +120,12 @@ All models run through `mini-swe-agent` — a model-agnostic harness exposing a 
 - [[the-agent-workflow]] — DeepSWE prompts mirror how developers actually talk to agents
 - [[horizon-length]] — DeepSWE is a long-horizon benchmark; its multi-step task design reaches toward the horizon-length dimension that reveals compounding gains invisible on short-task benchmarks
 - [[self-conditioning]] — As a long-horizon benchmark, DeepSWE's multi-step task design is the type of evaluation where self-conditioning (models degrading on their own error-laden history) would emerge; short-task benchmarks cannot observe this failure mode
+- [[aiming-problem]] — DeepSWE's hidden oracle is the canonical instance: the visible suite is a gameable proxy, the hidden tests are the real property
+- [[verification-loop]] — First-test-step telemetry shows early feedback is the strongest pass/fail correlate
+- [[infrastructure-blindness]] — Isolated and named in DeepSWE trajectory analysis
+- [[over-engineering]] — Quantified here: failing patches run 2–3× the reference size
 
 ## Sources
 - `raw/deepswe-benchmark.md` — Full benchmark description, methodology, results, and qualitative analysis from Datacurve
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective on DeepSWE results, SWE-bench Pro criticism, and the call for community-built benchmarks
+- `raw/deepswe-failure-analysis.md` — Original empirical failure analysis: the 98 GPT-passes/open-fails contrast tasks, the behavioral-response taxonomy (late testing, fix-flailing, infrastructure blindness, over-engineering, fragile shell editing), and per-task human-annotated commentary with the hidden-oracle framing.

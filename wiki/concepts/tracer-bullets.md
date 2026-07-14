@@ -1,7 +1,7 @@
 ---
 title: Tracer Bullets
 created: 2026-04-25
-updated: 2026-07-06
+updated: 2026-07-14
 sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-building-pi-in-a-world-of-slop.md", "raw/yt-building-great-agent-skills-the-missing-manual.md"]
 unaudited_marginal: 0
 tags: ["software-architecture", "agile", "ai-workflow"]
@@ -29,6 +29,7 @@ A term popularized by *The Pragmatic Programmer* and championed by [[matt-pocock
 
 - [[grey-box-engineering]] — Using vertical slices to validate human designs.
 - [[verification-loop]] — Tracer bullets are verified within the loop.
+- [[deepswe]] — First-test-step telemetry shows early end-to-end feedback is the strongest pass/fail correlate across 98 contrast tasks
 - [[ai-design-loop]] — The first "Journey" step after the design loop completes.
 - [[agent-quality-loop]] — Tracer bullet results feed back into eval design and quality metrics.
 - [[matt-pocock]] — Primary advocate in the AI engineering context.

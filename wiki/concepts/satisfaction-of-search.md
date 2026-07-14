@@ -1,7 +1,7 @@
 ---
 title: Satisfaction of Search
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-07-14
 sources:
   - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
 unaudited_marginal: 0
@@ -55,6 +55,7 @@ Unblocked's approach to mitigating satisfaction of search in context retrieval:
 - [[code-intelligence]] — Related: deep code understanding as an alternative to naive search
 - [[slop]] — Satisfaction of search produces slop when agents accept plausible-sounding but wrong context
 - [[the-slop-problem]] — A downstream failure mode when satisfaction of search feeds wrong context to agents
+- [[infrastructure-blindness]] — Adjacent but distinct: the agent found the right context and still didn't leverage it as a capability, instead reimplementing it
 
 ## Sources
 

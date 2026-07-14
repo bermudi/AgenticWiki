@@ -1,10 +1,11 @@
 ---
 title: The Aiming Problem
 created: 2026-06-05
-updated: 2026-07-02
+updated: 2026-07-14
 sources:
   - raw/yt-systems-building-systems.md
   - raw/yt-are-we-really-doing-this-again.md
+  - raw/deepswe-failure-analysis.md
 tags: [concept, agentic-engineering, tuning, quality]
 unaudited_marginal: 0
 ---
@@ -55,6 +56,14 @@ Eero Alvar emphasizes: regardless of mechanism, tuning is the slow, expensive, a
 
 [[mitchell-hashimoto|Mitchell Hashimoto]] supplies a compact real-world case: an agent loop optimizing a renderer drove a measured metric from 88 ms to 2 ms — a 44× improvement that "sounds good, right? No, it's not." The loop aimed perfectly at the metric it could verify and hit it; the system got worse on every unmeasured axis. This is the aiming problem in miniature, and the [[verification-loop]] lesson it instantiates: the verification signal must capture the actual desired property, not a proxy the loop will learn to game (the [[reward-hacking]] pathology). The chaos property holds — a 44× swing on the measured dimension can coexist with regression everywhere else.
 
+## A Concrete Instance: DeepSWE's Hidden Oracle
+
+[[deepswe]] supplies the cleanest empirical instance of the aiming problem in coding agents. Its harness applies `test.patch` at grading time, so the challenge tests are absent from the repo the agent works against — and **no agent, including GPT-5.5, discovers or runs them during its loop.** Every agent aims at the *visible* suite. The visible suite is the gameable proxy; the hidden oracle is the real property.
+
+The discriminating finding is not "the failing models tested poorly" — all models are equally test-blind by construction. It is that, under the *same* hidden-oracle constraint, GPT-5.5's changes *generalize* to the hidden behavior while the open-weight models' changes satisfy only the visible surface. On `abs-module-cache-flags`, every model spends 100–220 steps iterating until all existing tests pass, then submits; none ever runs the challenge tests. GPT-5.5 passes because its env-resolution ordering is correct enough that the hidden tests pass anyway; the open models fail on subtle env-precedence and stderr-routing bugs the visible tests never exercised.
+
+The aiming-problem lesson sharpens here: when the only available signal is a proxy, the work is not to game the proxy harder (more visible-test runs — "verification theater") but to write changes that hold up against the *real* property you cannot directly observe. Generalization, not visible-pass rate, is the aim.
+
 ## Thread
 
 - [[the-slop-problem]] — The aiming problem is the inverse of the slop problem: slop is what happens when aiming fails
@@ -72,8 +81,10 @@ Eero Alvar emphasizes: regardless of mechanism, tuning is the slow, expensive, a
 - [[mitchell-hashimoto]] — The renderer anecdote: a loop that hit its metric and missed its goal
 - [[reward-hacking]] — The formal version of the same failure: high score without genuine task completion
 - [[verification-loop]] — The defense: the verification signal must measure the real property, not a gameable proxy
+- [[deepswe]] — The hidden-oracle benchmark: the canonical empirical instance of a gameable proxy (visible suite) hiding the real property (hidden tests)
 
 ## Sources
 
 - `raw/yt-systems-building-systems.md` — Eero Alvar: the aiming problem framing, chaos analogy, error propagation in phase decomposition, tuning via instruction libraries and verification agents
 - `raw/yt-are-we-really-doing-this-again.md` — [[mitchell-hashimoto|Mitchell Hashimoto]]'s renderer-optimization anecdote (88 ms → 2 ms, "sounds good, right? No, it's not") as a concrete instance of aiming failing when the verification metric is gameable.
+- `raw/deepswe-failure-analysis.md` — The hidden-oracle instance: all agents are test-blind by construction; GPT-5.5 generalizes to the hidden tests, open-weight models satisfy only the visible surface (`abs-module-cache-flags`).

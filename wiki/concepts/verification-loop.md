@@ -1,8 +1,8 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-07-02
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.md", "raw/2605.18747.md"]
+updated: 2026-07-14
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.md", "raw/2605.18747.md", "raw/deepswe-failure-analysis.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 unaudited_marginal: 0
 ---
@@ -63,6 +63,10 @@ See [[contextcov|ContextCov project page]] for full architecture and results.
 
 The LLM's default behavior is to do too much at once: produce a huge code change, then belatedly think "I should probably type-check that." The verification loop isn't just a quality gate — it's the mechanism that keeps the agent's speed proportional to its ability to verify.
 
+### DeepSWE: First-Test-Step as the Strongest Pass/Fail Signal
+
+[[deepswe]] trajectory analysis makes Pocock's "rate of feedback is your speed limit" literal. Telemetry on the step at which an agent *first* runs a test is the single largest behavioral delta between passing and failing runs. GPT-5.5 first tests around step 30–40 and converges; the open-weight models that fail first test at step 80–220, and the ~150-step gap between writing code and first closing the loop is where most bugs get baked in. On `effect-sse-httpapi-streaming`, GPT-5.5 tests at step 36 and finishes in 113 steps; glm-5.1 runs its first test at step 220, discovers compilation errors, and submits anyway at 296 steps. Early feedback is not aesthetic advice here — it is the strongest correlate of success. The failure compounds: a model that tests late has already over-built (see [[over-engineering]]) and is about to start [[iterative-self-correction|flailing]] against failures it accumulated in the unverified gap.
+
 ## Tool Feedback as the Engine
 
 [[zanie-blue|Zanie Blue]] (Astral) emphasizes that the verification loop depends on tools providing deterministic, specialized feedback. Agents are stochastic — they need static analysis, test runners, and linters to mechanically prove correctness. Research shows agents can't perform complex static analysis even with fine-tuning; they *need* tools for this. The design of [[tool-design-for-agents|tool output]] directly affects how efficiently the loop operates — verbose output floods context, while context-optimized output keeps the agent in the [[smart-zone-dumb-zone|Smart Zone]].
@@ -101,6 +105,7 @@ The practical implication for verification loop design: the loop is not a single
 - [[grey-box-engineering]] — Emphasizes the loop as a replacement for trust.
 - [[ai-design-loop]] — The broader process of which the verification loop is a part.
 - [[tracer-bullets]] — A technique often used within a verification loop to prove a vertical slice works.
+- [[deepswe]] — First-test-step telemetry is the empirical evidence that early feedback is the strongest pass/fail correlate
 - [[aesthetics-is-truth]] — The qualitative counterpart to the mechanical verification loop.
 - [[hallucination]] — Verification loops catch hallucinated code.
 - [[vibes-based-engineering]] — The anti-pattern the verification loop replaces.
@@ -152,3 +157,4 @@ The practical implication for verification loop design: the loop is not a single
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: verifiability as the economic driver of AI capability; the RL circuits framework that explains when verification loops work and when they don't.
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): executable verification against LLM reflection baseline; LLM reflection degrades compliance; deterministic error traces enable faster convergence; three-layer enforcement architecture
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies oracle adequacy and semantic verification (§5.2.1–5.2.2) as second-order constraints on verification loop effectiveness; proposes verification stacks with explicit scope
+- `raw/deepswe-failure-analysis.md` — First-test-step telemetry: GPT-5.5 tests at ~step 30–40 vs failing open-weight models at step 80–220; the unverified gap is where bugs bake in (`effect-sse-httpapi-streaming` case)

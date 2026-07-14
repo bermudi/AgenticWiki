@@ -187,6 +187,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[intelligence-tier-routing]] — Tag work with intelligence tiers so it can be routed across frontier Claude (planning) and open-source / local models (implementation). The factory is the routing layer; the bottleneck is "intelligence arbitrage" — finding open-source models capable enough to carry the load.
 - [[instruction-hierarchy]] — The mechanism by which LLMs resolve conflicting instructions from heterogeneous sources; current models fail at >3 privilege tiers.
 - [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
+- [[infrastructure-blindness]] — A coding agent finds the relevant code but reimplements its machinery instead of calling it; the rewrite fails where the existing machinery already succeeded.
 - [[iterative-self-correction]] — Feedback-driven multi-turn correction loops; even with perfect feedback, models hit a sub-91% ceiling and exhibit catastrophic overcorrection.
 - [[jagged-frontier]] — LLM capabilities are unevenly distributed; strong in some domains, severely error-prone in others.
 - [[locality-and-leverage]] — The two payoff properties of deep modules: concentrated changes and interface power.
@@ -229,6 +230,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[llm-as-code-judge]] — Using LLMs to evaluate code quality; increasingly common in agentic SE pipelines but suffers from systematic prompt-induced biases.
 - [[llm-ui-paradigms]] — Karpathy's three-stage model of LLM interaction (website → app → persistent async org-level entity); the channel-scoped "org-level harness" instantiated by Claude Tag.
 - [[overcorrection-bias]] — The systematic tendency of LLMs to misclassify correct code as defective, especially when prompted to explain and fix.
+- [[over-engineering]] — A coding-agent failure mode where the patch adds speculative abstraction beyond the requirement; the extra surface is where the bugs live. Distinct from [[boil-the-ocean]]'s completeness and [[architectural-bloat]]'s inert MAS structure.
 - [[semi-formal-reasoning]] — Structured prompting that requires explicit premises, execution traces, and formal conclusions to prevent unsupported claims.
 - [[strategic-vs-tactical-programming]] — Prioritizing long-term health over immediate tactical fixes.
 - [[synthetic-truth]] — Intent-aware AI fabrication where the model constructs what it infers the user wants, not what is true.

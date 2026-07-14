@@ -1,7 +1,7 @@
 ---
 title: Failure Modes
 created: 2026-06-01
-updated: 2026-07-04
+updated: 2026-07-14
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -20,6 +20,7 @@ sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/2606.14249.md
   - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/deepswe-failure-analysis.md
 unaudited_marginal: 0
 tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolution]
 ---
@@ -48,6 +49,8 @@ tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolut
 | [[llm-as-code-judge|LLM-as-judge]] unreliability | Judge says yes to everything; scores swing 25+ points with framing | Same code gets different scores based on prompt phrasing; checklist-level evaluation | Deterministic checks where possible; [[rubric-evaluation|rubric-level]] + reasoning; bias sensitivity analysis |
 | oracle inadequacy | Tests pass but behavior is wrong; weak test suites exploited | Agent passes visible tests while breaking implicit invariants; false acceptance | Verification stack with explicit scope; evidence bundles declaring what is and isn't verified |
 | agentic search low recall | Agent misses existing code, duplicates implementations | Code duplication increases; inconsistencies across similar features; agent can't find relevant code | Better indexing; [[code-intelligence]]; explicit codebase maps; [[unblocked|context engines]] |
+| [[infrastructure-blindness]] | Agent *finds* existing machinery but reimplements it instead of calling it | New parser/matcher/walker parallel to an existing one; patch larger than the machinery it duplicates | Before implementing, ask what existing path produces the behavior; treat a sibling format/module as a template |
+| [[over-engineering]] | Patch adds speculative abstraction/indirection beyond the requirement | Patch 2–3× a reference size; new wrapper types/parallel pipelines no requirement asks for | Minimality as default; watch the size ratio; each new layer must earn the invariant it enforces |
 | prompt-induced bias | Eval scores depend on candidate order and prompt framing | Swapping candidate order changes winner; 40+ point swings from ordering | Neutral prompt templates; candidate order randomization; structured rubrics |
 | [[operational-mirror#Reward Hacking\|Reward hacking]] (harness evolution) | A harness edit passes the gate by exploiting format regularities or other verifier artifacts, not by genuinely improving task performance | Trace inspection reveals "passed by format match, not by actual retrieval"; verification score rises but the underlying task isn't solved | [[operational-mirror\|Operational mirror]] Critic + guard edits that require outputs to be cross-checkable; restrict tools to cross-checkable paths |
 | [[operational-mirror#Catastrophic Forgetting\|Catastrophic forgetting]] (harness evolution) | Per-edit checks pass but cross-edit coupling causes aggregate regression (e.g., −14% from accumulated same-type edits that each passed individual regression tests) | Per-task binary signal shows no flips; aggregate accuracy drops over rounds; "concentration" warning when N consecutive edits target the same dimension | [[variant-isolation\|Variant isolation]] scopes the per-edit seesaw per-variant; structural-edit replacement when concentration is detected; [[operational-mirror\|operational mirror]]'s deterministic gate |
@@ -95,6 +98,15 @@ These occur when the quality infrastructure itself is compromised:
 - **[[llm-as-code-judge|LLM-as-judge]] unreliability** — RUBRICEVAL: GPT-4o achieves 55.97% on hard rubric judgments. Countermeasure: deterministic checks where possible; rubric-level evaluation with reasoning when LLM judge is unavoidable.
 - **Oracle inadequacy** — Tests pass but don't capture the real requirement. Countermeasure: verification stacks with explicit scope; evidence bundles.
 - **Prompt-induced bias** — 40+ point accuracy swings from candidate ordering. Countermeasure: neutral templates; order randomization; structured rubrics.
+
+### Coding-Agent Workflow Failures
+
+These surface in [[deepswe]] trajectory analysis — patterns in *how* an agent works a task, correlated with pass/fail across 98 contrast tasks:
+
+- **[[infrastructure-blindness]]** — The agent locates the relevant code but reimplements its machinery instead of calling it. Found the module; didn't recognize it as the capability to invoke. The rewrite passes simple visible cases and fails the complex ones the existing machinery already handled (csstree's `lexer.match()` ignored; dasel's XML format not copied as a template).
+- **[[over-engineering]]** — Patches 2–3× the reference size; the speculative abstraction and indirection are where the bugs live. Distinct from [[boil-the-ocean]]'s *completeness* (full edge cases/error paths, which the dataset rewards) and from [[architectural-bloat]] (inert structure in a multi-agent topology) — over-engineering is *harmful* structure in a single patch.
+- **Late testing** — deferring the first [[verification-loop]] close to step 100–220; the strongest single pass/fail correlate. See [[tracer-bullets]].
+- **Fix-flailing** — many edits against failing tests without root-cause isolation; the [[iterative-self-correction]] ceiling hit in agent code.
 
 ### Harness Evolution Failures
 
@@ -175,3 +187,4 @@ The MAST finding that **System Design Issues is the largest category (44.2%)** i
 - `raw/2605.18747.md` — Code-as-Agent Harness survey: oracle adequacy and semantic verification (§5.2.1–5.2.2)
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loop as the vibes antidote
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the three named harness-evolution failure modes (reward hacking §6.6a, catastrophic forgetting §6.6d, under-exploration §6.6g) and the sub-threshold coupling finding (§6.6d, §7.2). The [[operational-mirror|operational mirror]]'s pathology taxonomy is the most empirically validated in the self-evolution context. Variant isolation (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) is the architectural defense against cross-cluster catastrophic forgetting; the deterministic gating layer (seesaw) is the defense against per-task regression; the Planner is the defense against under-exploration.
+- `raw/deepswe-failure-analysis.md` — Source for the coding-agent workflow failures ([[infrastructure-blindness]], [[over-engineering]], late testing, fix-flailing): 98 contrast tasks where GPT-5.5 passes and open-weight models fail, with trajectory telemetry and per-task human-annotated commentary.
