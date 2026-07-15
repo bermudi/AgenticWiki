@@ -153,11 +153,36 @@ ingested: YYYY-MM-DD
 
 The slug should be human-readable and descriptive (e.g., `how-to-ralph-wiggum.md`). If the source has no clear date, use the ingestion date. The `ingested` date is always today.
 
-## YouTube Source Stub Format
+## YouTube Source Format
 
-YouTube content may arrive either as a transcript file already in `raw/` or as inline content from a Gemini extension. **Only create a source stub in `raw/` when the content arrived inline and no file already exists on disk.** If a transcript file (`raw/*.md`) already exists, it IS the source — do not create a stub.
+YouTube content arrives in two shapes. **Use the shape that matches what you actually have — do not invent a third.**
 
-Create `raw/yt-<descriptive-slug>.md`:
+### A. Transcript file (most common)
+
+When a transcript file already exists in `raw/` (produced by the media/liteparse pipeline), it **is** the source — do not create a stub. It holds the full transcript, not extracted key points.
+
+```markdown
+---
+type: youtube
+url: https://youtube.com/watch?v=VIDEO_ID
+title: Video Title
+channel: Channel Name            # the uploader — NOT the speakers
+date_saved: 2026-07-14T01:23:49Z   # full ISO timestamp from the save tool
+speakers:                         # REQUIRED for panels/debates; omit for solo
+  - Mario Zechner
+  - Armin Ronacher
+  - Ben (host)
+---
+
+<full transcript; may include [mm:ss] timestamps>
+```
+
+> [!warning] Transcripts usually lack speaker labels
+> Transcript files from the media pipeline carry `[mm:ss]` timestamps but **no per-line speaker labels**. The written transcript therefore cannot establish *who said what*. For any multi-speaker source (panel, debate, podcast), populate `speakers:` and **verify attribution against the audio** via the media skill before citing a quote under a speaker's name. The `source-verifier` treats misattributed quotes in multi-speaker sources as a first-class CRITICAL (see verification-pass.md).
+
+### B. Inline stub (only when no file exists)
+
+Only create a stub in `raw/` when content arrived inline (e.g. a Gemini extension) and **no transcript file is already on disk**.
 
 ```markdown
 ---
@@ -165,8 +190,7 @@ type: youtube
 url: https://youtube.com/watch?v=VIDEO_ID
 title: Video Title
 channel: Channel Name
-date: YYYY-MM-DD
-ingested: YYYY-MM-DD
+date_saved: YYYY-MM-DD
 ---
 
 # Key points extracted during ingest
@@ -175,11 +199,13 @@ ingested: YYYY-MM-DD
 - Point 2
 - Point 3
 
-> Full content was processed via Gemini's native video understanding.
+> Full content was processed via the model's native video understanding.
 > This file captures extracted knowledge, not the raw transcript.
 ```
 
-This stub serves as the durable record of what was ingested. It's not the original video, but it's enough for future sessions to re-read and re-evaluate. Wiki source pages reference these stubs the same way they reference any `raw/` file.
+This stub is the durable record of what was ingested — enough for future sessions to re-read and re-evaluate, but strictly inferior to a real transcript. Prefer acquiring the transcript file whenever possible.
+
+> Some existing transcript files use `author:` instead of `channel:` — both mean the uploader; standardize new files to `channel:`.
 
 ## arXiv / Paper Source Format
 

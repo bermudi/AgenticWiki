@@ -158,6 +158,41 @@ validate_one() {
   [ "$count" -ge 5 ] && check WARN "$f: unaudited_marginal=$count (needs source verification)"
 }
 
+# --- Raw source provenance (invariant #8) ---
+# raw/ files must carry provenance frontmatter so future sessions can
+# re-derive wiki pages. Lighter contract than wiki pages: a
+# type/url/arxiv_id is the minimum.
+validate_raw() {
+  echo "=== Raw Source Provenance ==="
+  local raw_total=0 raw_bad=0
+  shopt -s nullglob
+  for f in raw/*.md; do
+    raw_total=$((raw_total + 1))
+    local slug
+    slug=$(basename "$f" .md)
+    if ! head -1 "$f" | grep -q '^---$'; then
+      check ERROR "raw/$slug.md: missing YAML frontmatter (no provenance)"
+      raw_bad=$((raw_bad + 1))
+      continue
+    fi
+    if ! awk '/^---$/{n++; next} n==1 && /^(type|url|arxiv_id):/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
+      check ERROR "raw/$slug.md: missing provenance field (need type/url/arxiv_id)"
+      raw_bad=$((raw_bad + 1))
+      continue
+    fi
+    if awk '/^---$/{n++; next} n==1 && /^type: *arxiv/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
+      if ! echo "$slug" | grep -qP '^[0-9]{4}\.[0-9]{4,5}(v\d+)?$'; then
+        check WARN "raw/$slug.md: arXiv source should be named <arxiv-id>.md (e.g. 2603.01896.md)"
+      fi
+      if ! awk '/^---$/{n++; next} n==1 && /^arxiv_id:/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
+        check WARN "raw/$slug.md: arXiv source missing arxiv_id frontmatter"
+      fi
+    fi
+  done
+  shopt -u nullglob
+  [ "$raw_bad" -eq 0 ] && echo "  All $raw_total raw sources carry provenance frontmatter."
+}
+
 # --- Main ---
 
 echo "=== Wiki Page Validator ==="
@@ -169,6 +204,7 @@ else
   for f in $(find wiki/ -name "*.md" | sort); do
     validate_one "$f"
   done
+  validate_raw
 fi
 
 echo ""

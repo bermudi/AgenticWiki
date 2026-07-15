@@ -131,6 +131,7 @@ Health-checking the wiki. Run when asked, or when you notice issues during other
 - [ ] **Stale claims**: Information superseded by newer sources (check `updated` dates and source timelines)
 - [ ] **Thin pages**: Pages under 10 lines that could be merged or expanded
 - [ ] **Missing frontmatter**: Pages without title, created, updated, sources, tags
+- [ ] **Raw provenance**: Every `raw/*.md` carries provenance frontmatter (`type`/`url`/`arxiv_id`); arXiv sources use `<arxiv-id>.md` filenames. `./scripts/validate-page` now checks `raw/` too.
 - [ ] **Index accuracy**: Every wiki page is in `index.md`; every `index.md` entry points to an existing page
 - [ ] **Unaudited marginal accumulation**: Pages where `unaudited_marginal >= 5` need a source verification audit
 
@@ -139,7 +140,7 @@ Health-checking the wiki. Run when asked, or when you notice issues during other
 Run the unified validator first:
 
 ```bash
-./scripts/validate-page      # Frontmatter, links, sources, structure, orphans
+./scripts/validate-page      # Frontmatter, links, sources, structure, orphans — now incl. raw/ provenance
 ./scripts/validate-page wiki/concepts/some-page.md  # Single page
 ```
 

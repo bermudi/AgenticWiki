@@ -129,6 +129,9 @@ Priority 3 (skip): Pages with only mechanical changes
   → Frontmatter, links, formatting, typo fixes
 ```
 
+> [!warning] Multi-speaker sources: verify speaker attribution
+> When the ingested source is a panel, debate, or podcast (multiple speakers), the transcript usually has **no per-line speaker labels** — only `[mm:ss]` timestamps. The written transcript cannot establish *who said what*. Before citing any quote under a speaker's name, the verifier must confirm attribution: for audio/video, verify against the recording via the media skill. Treat misattributed quotes in multi-speaker sources as **CRITICAL**, not WARNING — a who-said-what inversion silently corrupts author pages and is easy to miss when the transcript looks authoritative.
+
 ### Run verifiers
 
 ```
@@ -184,7 +187,7 @@ The editors auto-fix mechanical issues. For source fidelity issues flagged by th
 
 **Before aggregating, filter source-verifier findings for actual inaccuracies.** The verifier flags synthesis, paraphrases, and logical inferences as WARNINGs because they go beyond the source text. These are not inaccuracies — the wiki is a synthetic artifact that draws connections between sources.
 
-**Fix**: Misattributions, fabricated quotes, made-up numbers, claims contradicted by the source, concepts attributed to a source that doesn't contain them.
+**Fix**: Misattributions (including speaker attribution in multi-speaker sources — verify who-said-what against the recording via the media skill), fabricated quotes, made-up numbers, claims contradicted by the source, concepts attributed to a source that doesn't contain them.
 
 **Skip**: Reasonable paraphrases, logical inferences from stated premises, analytical synthesis connecting multiple sources, wiki-specific framing of source ideas. Epistemic callout territory — `Synthesis:`, `Extension:`, and `Departure:` callouts explicitly mark claims that go beyond individual sources. These are wiki-author judgments, not hallucinations.
 

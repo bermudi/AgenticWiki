@@ -6,7 +6,7 @@ Specialized subagents for wiki quality. Keep the active set small: mechanical ed
 |---|---|---|---|
 | Structural | `structural-editor` | Copy desk — frontmatter, source-list sync, index accuracy, orphan pages | Post-ingest verification, periodic lint |
 | Link | `link-editor` | Weaver — bidirectional links, thread↔concept coverage, dangling refs | Post-ingest verification, when cross-references feel sparse |
-| Source Verifier | `source-verifier` | Fact-checker — hallucinations, omissions, misattributions (read-only) | Post-ingest verification, when fidelity is uncertain |
+| Source Verifier | `source-verifier` | Fact-checker — hallucinations, omissions, misattributions (incl. speaker attribution for multi-speaker audio), summary accuracy (read-only) | Post-ingest verification, when fidelity is uncertain |
 | Theory | `theory-editor` | Semantic health — page quality, thread coherence, temporal drift, contradiction pressure, ontology compression | Periodic deep audit, after several ingests, or when the theory feels bloated |
 
 > [!note] Source of truth
