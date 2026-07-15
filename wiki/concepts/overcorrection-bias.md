@@ -1,9 +1,9 @@
 ---
 title: Overcorrection Bias
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-14
 sources:
-  - raw/llm-overcorrection-code-review.md
+  - raw/2603.00539.md
 tags: [concept, bias, code-review, overcorrection, false-negative]
 unaudited_marginal: 0
 ---
@@ -33,4 +33,4 @@ Mitigation via a Fix-guided Verification Filter — treating the model's propose
 
 ## Sources
 
-- `raw/llm-overcorrection-code-review.md` — First systematic quantification of overcorrection bias across 5 LLMs and 3 benchmarks
+- `raw/2603.00539.md` — First systematic quantification of overcorrection bias across 5 LLMs and 3 benchmarks

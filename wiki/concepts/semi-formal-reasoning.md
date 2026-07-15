@@ -1,9 +1,9 @@
 ---
 title: Semi-Formal Reasoning
 created: 2026-05-15
-updated: 2026-07-09
+updated: 2026-07-14
 sources:
-  - raw/agentic-code-reasoning.md
+  - raw/2603.01896.md
 tags: [concept, reasoning, code-review, verification, structured-prompting]
 unaudited_marginal: 0
 ---
@@ -33,4 +33,4 @@ Remaining failure modes: incomplete execution tracing (assuming function behavio
 
 ## Sources
 
-- `raw/agentic-code-reasoning.md` — Introduces semi-formal reasoning and evaluates across patch equivalence, code QA, and fault localization
+- `raw/2603.01896.md` — Introduces semi-formal reasoning and evaluates across patch equivalence, code QA, and fault localization

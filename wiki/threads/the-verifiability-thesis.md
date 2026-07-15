@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-13
+updated: 2026-07-14
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.md
@@ -9,9 +9,9 @@ sources:
   - raw/2504.21625v6.md
   - raw/2603.25133v1.md
   - raw/2603.00822v2.md
-  - raw/bias-in-the-loop-llm-judge-code.md
-  - raw/llm-overcorrection-code-review.md
-  - raw/agentic-code-reasoning.md
+  - raw/2604.16790.md
+  - raw/2603.00539.md
+  - raw/2603.01896.md
   - raw/2605.18747.md
   - raw/2606.14249.md
   - raw/deepswe-benchmark.md
@@ -278,9 +278,9 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/2603.25133v1.md` — RUBRICEVAL (Pan et al., 2026): provides evidence that the verifier's own reliability is a second-order constraint on the verifiability thesis — LLM judges achieve only 55.97% accuracy on hard rubric judgments, qualifying the thesis's assumption that verifiable domains have reliable verification
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): direct instantiation of the verifiability thesis applied to Agent Instructions; verifiable enforcement (88.3%) outperforms passive (67.0%) and unverifiable LLM reflection (50.3%); Executable Interpretability extends the thesis by making the verifier debuggable
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — [[al-harris|Al Harris]] / [[kiro|Amazon Kiro]]: EARS+PBT as deliberate-verifiability-design — engineered the artifact for verifiability via structured natural language and property-based tests; the EARS+PBT pipeline extends the thesis by making verifiability a designable property of the artifact rather than an inherited property of the domain
-- `raw/bias-in-the-loop-llm-judge-code.md` — Zhao et al. (2026): prompt-induced biases in LLM-as-judge for code; biases act as positional priors, qualifying the thesis's assumption of reliable verification
-- `raw/llm-overcorrection-code-review.md` — Jin & Chen (2026): overcorrection bias in LLM code review; detailed prompts shift the decision boundary toward conservatism, undermining verifier reliability
-- `raw/agentic-code-reasoning.md` — Ugare & Chandra (Meta, 2026): semi-formal reasoning as verifiable certificate structure for code verification; enables execution-free RL reward signals, directly instantiating the verifiability thesis recursively (verifiability of the verification)
+- `raw/2604.16790.md` — Zhao et al. (2026): prompt-induced biases in LLM-as-judge for code; biases act as positional priors, qualifying the thesis's assumption of reliable verification
+- `raw/2603.00539.md` — Jin & Chen (2026): overcorrection bias in LLM code review; detailed prompts shift the decision boundary toward conservatism, undermining verifier reliability
+- `raw/2603.01896.md` — Ugare & Chandra (Meta, 2026): semi-formal reasoning as verifiable certificate structure for code verification; enables execution-free RL reward signals, directly instantiating the verifiability thesis recursively (verifiability of the verification)
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Extends the verifiability thesis from model capabilities to the harness infrastructure; harness-level evaluation, semantic verification, and self-evolving harnesses are the thesis operating recursively; the four desired harness properties (executable, inspectable, stateful, governed) are the thesis expressed as design principles
 - `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). Source for the "Functional Collapse as the Multi-Agent Instantiation of the Thesis" extension. Three connections: (1) coordination is unverifiable, so models default to single-agent behavior (DyLAN consensus collapse, MAS-Zero positional bias); (2) Expert-MAS is verifiability engineering applied to multi-agent architecture (deterministic Python orchestrator replaces LLM-orchestrated coordination); (3) the capability floor is the verifiable capability budget — coordination overhead consumes fixed budget, lower-tier models don't have enough left. The paper vindicates the [[expert-mas|deliberate-verifiability-design]] departure and generalizes the thesis to coordination itself. §3 (cost-quality Pareto); §3.3 (SMFR + Expert-MAS 57%→96.5% on GPT-5); §4 (architectural deconstruction: functional collapse, positional bias, ensemble-stalling); §5 (ensembling trap, capability floor).
 - `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the "MAST provides the diagnostic vocabulary" addition to the multi-agent instantiation extension. [[mast]] taxonomy: 14 failure modes in 3 categories across 1642 traces. FC1 System Design Issues (44.2%) confirms the coordination layer is the binding constraint. FC3 Task Verification (23.5%) is the multi-agent manifestation of the verifier-reliability finding; the +15.6% fix is engineered verifiability at the MAS layer. LLM-as-a-Judge annotator κ=0.77 on structured classification vs. RUBRICEVAL's 55.97% on open-ended rubric — confirms structured classification is more verifiable.

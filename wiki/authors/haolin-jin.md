@@ -1,9 +1,9 @@
 ---
 title: Haolin Jin
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-14
 sources:
-  - raw/llm-overcorrection-code-review.md
+  - raw/2603.00539.md
 tags: [author, researcher, code-review, overcorrection]
 unaudited_marginal: 0
 ---
@@ -20,4 +20,4 @@ First author of the study revealing that LLMs systematically misclassify correct
 - [[prompts-in-code-review]] — Jin's findings on the prompt-overcorrection relationship are a core thread component
 
 ## Sources
-- `raw/llm-overcorrection-code-review.md` — Lead author of the overcorrection study
+- `raw/2603.00539.md` — Lead author of the overcorrection study

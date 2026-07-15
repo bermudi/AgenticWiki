@@ -1,9 +1,9 @@
 ---
 title: Zaiyu Cheng
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-14
 sources:
-  - raw/empirical-system-prompts-code-generation.md
+  - raw/2602.15228.md
 tags: [author, researcher, code-generation, system-prompts]
 unaudited_marginal: 0
 ---
@@ -19,4 +19,4 @@ Conducted the first large-scale controlled study examining how system-level inst
 - [[prompts-in-code-review]] — Cheng's findings on prompt-code interactions inform the code review thread
 
 ## Sources
-- `raw/empirical-system-prompts-code-generation.md` — Lead author of the 360-config empirical study
+- `raw/2602.15228.md` — Lead author of the 360-config empirical study

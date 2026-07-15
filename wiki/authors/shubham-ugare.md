@@ -1,9 +1,9 @@
 ---
 title: Shubham Ugare
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-14
 sources:
-  - raw/agentic-code-reasoning.md
+  - raw/2603.01896.md
 tags: [author, researcher, code-reasoning, meta]
 unaudited_marginal: 0
 ---
@@ -21,4 +21,4 @@ Introduced semi-formal reasoning, a structured prompting methodology that requir
 
 ## Sources
 
-- `raw/agentic-code-reasoning.md` — Lead author; introduces semi-formal reasoning and evaluates across three tasks
+- `raw/2603.01896.md` — Lead author; introduces semi-formal reasoning and evaluates across three tasks

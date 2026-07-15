@@ -1,13 +1,13 @@
 ---
 title: Prompts in Code Review
 created: 2026-05-15
-updated: 2026-07-12
+updated: 2026-07-14
 sources:
-  - raw/sprig-system-prompt-optimization.md
-  - raw/empirical-system-prompts-code-generation.md
-  - raw/bias-in-the-loop-llm-judge-code.md
-  - raw/agentic-code-reasoning.md
-  - raw/llm-overcorrection-code-review.md
+  - raw/2410.14826.md
+  - raw/2602.15228.md
+  - raw/2604.16790.md
+  - raw/2603.01896.md
+  - raw/2603.00539.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
 unaudited_marginal: 0
@@ -87,10 +87,10 @@ The certificate structure directly counters the failure modes identified by the 
 
 ## Sources
 
-- `raw/sprig-system-prompt-optimization.md` — System prompt optimization via genetic algorithm; system and task prompts are complementary
-- `raw/empirical-system-prompts-code-generation.md` — 360-config sweep showing non-monotonic effects of system prompt specificity on code generation
-- `raw/bias-in-the-loop-llm-judge-code.md` — 12 prompt-induced biases in LLM-as-judge for code; biases act as positional priors
-- `raw/agentic-code-reasoning.md` — Semi-formal reasoning templates improve code verification accuracy by preventing unsupported claims
-- `raw/llm-overcorrection-code-review.md` — Overcorrection bias in LLM code review; more detailed prompts increase false rejection; Fix-guided Verification Filter as mitigation
+- `raw/2410.14826.md` — System prompt optimization via genetic algorithm; system and task prompts are complementary
+- `raw/2602.15228.md` — 360-config sweep showing non-monotonic effects of system prompt specificity on code generation
+- `raw/2604.16790.md` — 12 prompt-induced biases in LLM-as-judge for code; biases act as positional priors
+- `raw/2603.01896.md` — Semi-formal reasoning templates improve code verification accuracy by preventing unsupported claims
+- `raw/2603.00539.md` — Overcorrection bias in LLM code review; more detailed prompts increase false rejection; Fix-guided Verification Filter as mitigation
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's use of voice input for agent prompts; prompt-style differences introduced by transcription.
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's "swarming as anti-bitter-lesson": adversarial multi-pass review, consensus, quality as a token-spend dial; reframes LLM code review from a single-pass bias problem to a stochastic multi-pass problem.

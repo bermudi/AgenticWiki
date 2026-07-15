@@ -1,10 +1,10 @@
 ---
 title: System Prompt Effects
 created: 2026-05-15
-updated: 2026-05-31
+updated: 2026-07-14
 sources:
-  - raw/sprig-system-prompt-optimization.md
-  - raw/empirical-system-prompts-code-generation.md
+  - raw/2410.14826.md
+  - raw/2602.15228.md
 tags: [concept, system-prompt, prompt-engineering, code-generation, generalization]
 unaudited_marginal: 0
 ---
@@ -36,5 +36,5 @@ However, the 360-configuration empirical study on code generation reveals that s
 
 ## Sources
 
-- `raw/sprig-system-prompt-optimization.md` — SPRIG genetic algorithm for system prompt optimization; complementary with task prompts
-- `raw/empirical-system-prompts-code-generation.md` — 360-config empirical study showing non-monotonic, language-dependent system prompt effects
+- `raw/2410.14826.md` — SPRIG genetic algorithm for system prompt optimization; complementary with task prompts
+- `raw/2602.15228.md` — 360-config empirical study showing non-monotonic, language-dependent system prompt effects

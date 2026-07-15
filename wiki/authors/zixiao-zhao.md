@@ -1,9 +1,9 @@
 ---
 title: Zixiao Zhao
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-14
 sources:
-  - raw/bias-in-the-loop-llm-judge-code.md
+  - raw/2604.16790.md
 tags: [author, researcher, llm-as-judge, bias, university-of-british-columbia]
 unaudited_marginal: 0
 ---
@@ -21,4 +21,4 @@ Designed and executed the systematic audit of 12 prompt-induced biases in LLM co
 
 ## Sources
 
-- `raw/bias-in-the-loop-llm-judge-code.md` — Lead author; systematic audit of 12 biases in LLM code judges
+- `raw/2604.16790.md` — Lead author; systematic audit of 12 biases in LLM code judges
