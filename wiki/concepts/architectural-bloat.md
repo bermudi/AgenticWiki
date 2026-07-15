@@ -4,7 +4,7 @@ created: 2026-06-18
 updated: 2026-07-14
 sources:
   - raw/2606.13003.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2503.13657.md
 tags: [concept, multi-agent, orchestration, mas-audit, anti-pattern]
 unaudited_marginal: 0
 ---
@@ -75,4 +75,4 @@ The paper proposes a mechanistic-interpretability criterion for MAS: **evaluate 
 ## Sources
 
 - `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). §4 architectural deconstruction (AFlow 7/14 collapse, ADAS non-monotonic search, motif analysis); §5 discussion (the ensembling trap, "architectural complexity is an inefficient substitute for simple stochastic sampling").
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC1 System Design Issues (44.2%) are the empirical manifestation of architectural bloat: complex architectures with flawed design decisions (disobeying task/role specs, step repetition, conversation-history loss, unaware of termination conditions).
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC1 System Design Issues (44.2%) are the empirical manifestation of architectural bloat: complex architectures with flawed design decisions (disobeying task/role specs, step repetition, conversation-history loss, unaware of termination conditions).

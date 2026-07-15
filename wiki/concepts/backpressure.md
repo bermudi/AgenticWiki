@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -10,9 +10,9 @@ sources:
   - raw/2504.21625v6.md
   - raw/2603.00822v2.md
   - raw/2605.18747.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
-  - raw/2511.09030-maker-million-step-zero-errors.md
-  - raw/2603.04474-spark-to-fire-error-cascades.md
+  - raw/2503.13657.md
+  - raw/2511.09030.md
+  - raw/2603.04474.md
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
 unaudited_marginal: 0
 ---
@@ -143,6 +143,6 @@ Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline
 - `raw/2504.21625v6.md` — Meeseeks (Wang et al.): code-guided rule-augmented evaluation as automated mechanical backpressure at the constraint level
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): executable guardrails as mechanical backpressure at process, source, and architectural levels; fail-closed philosophy; 88.3% compliance rate
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies transactional shared program state (§5.2.4) as the key challenge for scaling backpressure to multi-agent systems
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs. The ChatDev chess program example (compiled but had runtime bugs) illustrates this.
-- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.3 red-flagging (discard malformed/overlong responses without repair); §4.5 empirical impact (red-flagging reduces correlated errors — the collisions where both first two votes are incorrect). Source for the "Response-Level Backpressure" section.
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (atomic-claim decomposition, tri-state screening, blocking with rollback); §VII.D ablation (Table VI: w/o blocking → 3.1% BICR, the empirical validation that detection without enforcement is insufficient). Source for the "Atomic-Claim Backpressure" section.
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs. The ChatDev chess program example (compiled but had runtime bugs) illustrates this.
+- `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.3 red-flagging (discard malformed/overlong responses without repair); §4.5 empirical impact (red-flagging reduces correlated errors — the collisions where both first two votes are incorrect). Source for the "Response-Level Backpressure" section.
+- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (atomic-claim decomposition, tri-state screening, blocking with rollback); §VII.D ablation (Table VI: w/o blocking → 3.1% BICR, the empirical validation that detection without enforcement is insufficient). Source for the "Atomic-Claim Backpressure" section.

@@ -1,9 +1,9 @@
 ---
 title: Yizhe Xie
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
-  - raw/2603.04474-spark-to-fire-error-cascades.md
+  - raw/2603.04474.md
 tags: [author, researcher, multi-agent, error-propagation, security, graph-dynamics]
 unaudited_marginal: 0
 ---
@@ -31,4 +31,4 @@ Faculty of Data Science, City University of Macau (with Wanlei Zhou, Tianqing Zh
 
 ## Sources
 
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang, Zhu, Ye, Qi, Chen, Zhou (City University of Macau + Minzu University of China, arXiv 2603.04474v2, 11 May 2026). Lead author (equal contribution with Congcong Zhu and Xinyue Zhang). Co-designed the propagation-dynamics model (§II), the threat model (§III), the endogenous-vulnerability analysis (§IV), the attack instantiation (§V), and the governance-layer defense (§VI).
+- `raw/2603.04474.md` — Xie, Zhu, Zhang, Zhu, Ye, Qi, Chen, Zhou (City University of Macau + Minzu University of China, arXiv 2603.04474v2, 11 May 2026). Lead author (equal contribution with Congcong Zhu and Xinyue Zhang). Co-designed the propagation-dynamics model (§II), the threat model (§III), the endogenous-vulnerability analysis (§IV), the attack instantiation (§V), and the governance-layer defense (§VI).

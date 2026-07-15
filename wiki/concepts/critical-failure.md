@@ -1,12 +1,12 @@
 ---
 title: Critical Failure
 created: 2026-05-02
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
   - raw/2604.15597v1.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
-  - raw/2603.04474-spark-to-fire-error-cascades.md
-  - raw/2511.09030-maker-million-step-zero-errors.md
+  - raw/2503.13657.md
+  - raw/2603.04474.md
+  - raw/2511.09030.md
 unaudited_marginal: 0
 tags: [failure-mode, llm, reliability, long-horizon]
 ---
@@ -83,6 +83,6 @@ This means the reliability problem is not about reducing average error rate — 
 ## Sources
 
 - `raw/2604.15597v1.md` — Critical failure analysis, Table 9, and discussion of dynamics in Section 5
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's per-mode failure percentages show that a few modes (FM-1.3 Step Repetition 15.7%, FM-1.1 Disobey Task Specification 11.8%, FM-2.6 Reasoning-Action Mismatch 13.2%, FM-3.3 Incorrect Verification 9.1%) account for the majority of MAS failures — the sparse-catastrophic-error pattern in the multi-agent domain.
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §IV-A cascade amplification (single seed → up to 100% infection across 6 frameworks); §II the supercritical condition βρ(A) > δ. Source for the "Multi-Agent Analog" section.
-- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §4.5 decorrelation evidence (zero steps with errors in both independent runs); §4.4 the million-step zero-error result. Source for the "Architectural Mitigation" section.
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's per-mode failure percentages show that a few modes (FM-1.3 Step Repetition 15.7%, FM-1.1 Disobey Task Specification 11.8%, FM-2.6 Reasoning-Action Mismatch 13.2%, FM-3.3 Incorrect Verification 9.1%) account for the majority of MAS failures — the sparse-catastrophic-error pattern in the multi-agent domain.
+- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §IV-A cascade amplification (single seed → up to 100% infection across 6 frameworks); §II the supercritical condition βρ(A) > δ. Source for the "Multi-Agent Analog" section.
+- `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §4.5 decorrelation evidence (zero steps with errors in both independent runs); §4.4 the million-step zero-error result. Source for the "Architectural Mitigation" section.

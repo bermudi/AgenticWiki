@@ -1,9 +1,9 @@
 ---
 title: Massively Decomposed Agentic Processes
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
-  - raw/2511.09030-maker-million-step-zero-errors.md
+  - raw/2511.09030.md
 tags: [concept, multi-agent, scaling, long-horizon, error-correction, decomposition, mas-paradigm]
 unaudited_marginal: 0
 ---
@@ -98,4 +98,4 @@ Extreme decomposition has a safety corollary the paper develops: if each step ha
 
 ## Sources
 
-- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson, Paolo, Dailey, Shahrzad, Francon, Hayes, Qiu, Hodjat, Miikkulainen (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §1 introduction (MDAP framework, million-step result); §3.1 maximal agentic decomposition (Eqs. 1–8); §3.2 first-to-ahead-by-k voting and scaling laws (Eqs. 9–18, log-linear cost, k_min = Θ(ln s)); §3.3 red-flagging (Eqs. 19, malformed-output correlation); §5 discussion (insight vs. execution, decorrelated errors, microservices parallel, limits of decomposition, safety); §6 conclusion.
+- `raw/2511.09030.md` — Meyerson, Paolo, Dailey, Shahrzad, Francon, Hayes, Qiu, Hodjat, Miikkulainen (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §1 introduction (MDAP framework, million-step result); §3.1 maximal agentic decomposition (Eqs. 1–8); §3.2 first-to-ahead-by-k voting and scaling laws (Eqs. 9–18, log-linear cost, k_min = Θ(ln s)); §3.3 red-flagging (Eqs. 19, malformed-output correlation); §5 discussion (insight vs. execution, decorrelated errors, microservices parallel, limits of decomposition, safety); §6 conclusion.

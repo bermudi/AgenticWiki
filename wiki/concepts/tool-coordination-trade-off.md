@@ -1,9 +1,9 @@
 ---
 title: Tool-Coordination Trade-off
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
-  - raw/2512.08296-scaling-agent-systems.md
+  - raw/2512.08296.md
 tags: [concept, multi-agent, scaling, tools, empirical, mas-audit, token-budget]
 unaudited_marginal: 0
 ---
@@ -84,4 +84,4 @@ The trade-off connects to the [[tool-design-for-agents]] thread but from a diffe
 
 ## Sources
 
-- `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + Google DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 scaling principles (ε × T interaction β = -0.096, p = 0.002); §4.5 robustness (Holm-Bonferroni Holm = 0.026); Table 5 coordination metrics (efficiency per architecture); §4.2 Workbench results (16-tool task, Hybrid collapse); §5 limitation iii (tool-intensive coordination protocols as future work).
+- `raw/2512.08296.md` — Kim, Gu, Park et al. (Google Research + Google DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.3 scaling principles (ε × T interaction β = -0.096, p = 0.002); §4.5 robustness (Holm-Bonferroni Holm = 0.026); Table 5 coordination metrics (efficiency per architecture); §4.2 Workbench results (16-tool task, Hybrid collapse); §5 limitation iii (tool-intensive coordination protocols as future work).

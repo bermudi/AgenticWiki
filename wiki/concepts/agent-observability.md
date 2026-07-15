@@ -1,13 +1,13 @@
 ---
 title: Agent Observability
 created: 2026-04-27
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
   - raw/yt-the-observability-layer-your-ai-agent-is-missing.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
   - raw/yt-slop-watch-ideation.md
   - raw/2504.21625v6.md
-  - raw/2603.04474-spark-to-fire-error-cascades.md
+  - raw/2603.04474.md
 tags: ["agents", "observability", "tracing", "monitoring", "opentelemetry"]
 unaudited_marginal: 0
 ---
@@ -139,4 +139,4 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — Mastra Studio traces in practice: span trees, agent runs, tool calls
 - `raw/yt-slop-watch-ideation.md` — Slop Watch architecture: sessions as DAGs of turns, per-session listener pattern, per-agent adapters, DRI-first UX
 - `raw/2504.21625v6.md` — Meeseeks (Wang et al.): constraint-level evaluation requires observability at the individual constraint granularity across multiple self-correction turns
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the Lineage Graph as claim-provenance observability; offline replay mode for forensic analysis of belief propagation. Source for the "Claim-Provenance Observability" section.
+- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the Lineage Graph as claim-provenance observability; offline replay mode for forensic analysis of belief propagation. Source for the "Claim-Provenance Observability" section.

@@ -5,7 +5,7 @@ updated: 2026-07-14
 sources:
   - raw/2604.16790.md
   - raw/2603.00539.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2503.13657.md
 tags: [concept, llm-as-judge, code-review, evaluation, bias]
 unaudited_marginal: 0
 ---
@@ -36,4 +36,4 @@ The overcorrection study (pointwise setting) shows that when judges are asked to
 
 - `raw/2604.16790.md` — Systematic audit of 12 prompt biases across 3 code tasks and 3 models
 - `raw/2603.00539.md` — Overcorrection bias when requiring explanations and fixes from LLM judges
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. The MAST LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. The MAST LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.

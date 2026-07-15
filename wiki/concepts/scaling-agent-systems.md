@@ -1,11 +1,11 @@
 ---
 title: Scaling Agent Systems
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
-  - raw/2512.08296-scaling-agent-systems.md
-  - raw/2511.09030-maker-million-step-zero-errors.md
-  - raw/2603.04474-spark-to-fire-error-cascades.md
+  - raw/2512.08296.md
+  - raw/2511.09030.md
+  - raw/2603.04474.md
 tags: [concept, multi-agent, scaling, empirical, regression, architecture-selection, mas-audit]
 unaudited_marginal: 0
 ---
@@ -251,6 +251,6 @@ Two 2025–2026 papers extend the theory beyond the three-leg structure:
 
 ## Sources
 
-- `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park, Park, Schmidgall, Heydari, Yan, Zhang, Zhuang, Liu, Malhotra, Liang, Park, Yang, Xu, Du, Patel, Althoff, McDuff, Liu (Google Research + Google DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §1 introduction (260 configurations, agentic task definition); §3 system definition (5 architectures, formal model); §4.1 setup (benchmarks, LLMs, metrics); §4.2 main results (per-benchmark MAS deltas, decomposability analysis, family-specific signatures); §4.3 scaling principles (Eq. 1 regression, Table 4 coefficients, architecture selection, 87% accuracy); §4.4 coordination efficiency (turn power law, message density saturation, error absorption, error taxonomy, three regimes); §4.5 robustness (cluster-robust, Holm-Bonferroni, ACI, LODO); §5 limitations; §6 conclusion.
-- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 MDAP scaling laws (Θ(s ln s), `k_min = Θ(ln s)`) — the orthogonal scaling axis (decomposition granularity + vote budget) this study doesn't vary. Source for the "Engineered escape" leg.
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ) — the formal mechanism beneath this study's error-amplification factors. Source for the "Mechanism" leg.
+- `raw/2512.08296.md` — Kim, Gu, Park, Park, Schmidgall, Heydari, Yan, Zhang, Zhuang, Liu, Malhotra, Liang, Park, Yang, Xu, Du, Patel, Althoff, McDuff, Liu (Google Research + Google DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §1 introduction (260 configurations, agentic task definition); §3 system definition (5 architectures, formal model); §4.1 setup (benchmarks, LLMs, metrics); §4.2 main results (per-benchmark MAS deltas, decomposability analysis, family-specific signatures); §4.3 scaling principles (Eq. 1 regression, Table 4 coefficients, architecture selection, 87% accuracy); §4.4 coordination efficiency (turn power law, message density saturation, error absorption, error taxonomy, three regimes); §4.5 robustness (cluster-robust, Holm-Bonferroni, ACI, LODO); §5 limitations; §6 conclusion.
+- `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 MDAP scaling laws (Θ(s ln s), `k_min = Θ(ln s)`) — the orthogonal scaling axis (decomposition granularity + vote budget) this study doesn't vary. Source for the "Engineered escape" leg.
+- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ) — the formal mechanism beneath this study's error-amplification factors. Source for the "Mechanism" leg.

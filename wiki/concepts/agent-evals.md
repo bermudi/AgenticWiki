@@ -1,7 +1,7 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-07-09
+updated: 2026-07-14
 sources:
   - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
@@ -11,7 +11,7 @@ sources:
   - raw/skill-issue-supabase-pedro-rodrigues.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/2603.25133v1.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2503.13657.md
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
@@ -143,6 +143,6 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - `raw/skill-issue-supabase-pedro-rodrigues.md` — Skill-specific eval pattern: A/B test with/without the skill, deterministic assertions over LLM-as-judge
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve
 - `raw/2603.25133v1.md` — RUBRICEVAL benchmark: first rubric-level meta-evaluation for instruction following; finds LLM judges unreliable at fine granularity (GPT-4o: 55.97% HARD BAcc); paradigm comparison (rubric-level vs. checklist-level, with/without reasoning); rubric taxonomy of failure modes
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST-Data is a labeled eval dataset for MAS (1642 traces, 7 frameworks). The LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST-Data is a labeled eval dataset for MAS (1642 traces, 7 frameworks). The LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for general-purpose coding agents; formal evals less useful than direct usage experience for arbitrary codebases
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skill efficacy heuristic (popularity is not a proxy for measured benefit); the Android Skills benchmark (177k stars, 5% more tokens, worse results).

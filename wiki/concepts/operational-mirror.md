@@ -1,10 +1,10 @@
 ---
 title: Operational Mirror
 created: 2026-06-17
-updated: 2026-07-04
+updated: 2026-07-14
 sources:
   - raw/2606.14249.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2503.13657.md
 tags: [concept, agent-harness, reinforcement-learning, self-evolution, harness-engineering, pathology-taxonomy]
 unaudited_marginal: 0
 ---
@@ -133,4 +133,4 @@ The trace store T is the observability substrate that makes the mirror operation
 ## Sources
 
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* §4.1 (operational mirror, MDP instantiation, open-ended action space), §4.2 (three predicted pathologies), §6.6 (empirical confirmation of all three), §7.2 (trace richness), §7.3 (scope and limits of the mirror).
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's tactical-vs-structural strategy distinction (Appendix G) parallels the operational mirror's per-edit-vs-distributional distinction: tactical fixes address individual failure modes, structural strategies address system-wide patterns.
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's tactical-vs-structural strategy distinction (Appendix G) parallels the operational mirror's per-edit-vs-distributional distinction: tactical fixes address individual failure modes, structural strategies address system-wide patterns.

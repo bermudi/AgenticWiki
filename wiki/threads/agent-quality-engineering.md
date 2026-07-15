@@ -15,7 +15,7 @@ sources:
   - raw/2605.18747.md
   - raw/2606.14249.md
   - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2503.13657.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 1
@@ -274,5 +274,5 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Proposes harness-level evaluation metrics (§5.2.1) that complement the quality loop by evaluating the operational substrate rather than only end-task success
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies are the failure modes the flywheel is designed to defend against. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families.
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): per-step scoring attached to workflow steps, deterministic guardrails as output validation between LLM calls; reconcile LLM + deterministic signals before routing decisions
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent Verification section. [[mast]] taxonomy: FC3 Task Verification (23.5%) is the third-largest failure category; Insight 3 states multi-level verification is needed; +15.6% from adding a high-level objective check to ChatDev. The LLM-as-a-Judge annotator (κ=0.77 on structured classification) is a data point for the LLM-as-judge reliability debate.
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent Verification section. [[mast]] taxonomy: FC3 Task Verification (23.5%) is the third-largest failure category; Insight 3 states multi-level verification is needed; +15.6% from adding a high-level objective check to ChatDev. The LLM-as-a-Judge annotator (κ=0.77 on structured classification) is a data point for the LLM-as-judge reliability debate.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: No Mistakes autonomous PR pipeline; adversarial review, end-to-end testing with evidence, and PR babysitting as a workflow-level quality loop.

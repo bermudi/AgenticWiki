@@ -1,10 +1,10 @@
 ---
 title: Self-Conditioning
 created: 2026-07-03
-updated: 2026-07-04
+updated: 2026-07-14
 sources:
   - raw/2509.09677.md
-  - raw/2511.09030-maker-million-step-zero-errors.md
+  - raw/2511.09030.md
 tags: [concept, failure-mode, long-horizon, context, llm-behavior, execution]
 unaudited_marginal: 0
 ---
@@ -80,4 +80,4 @@ Self-conditioning is distinct from the wiki's existing taxonomy:
 ## Sources
 
 - `raw/2509.09677.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). Self-conditioning effect and counterfactual error-injection experiment (§3.2); scaling/thinking asymmetries (§3.2, Figs. 5–6); realistic-task estimates from AgentErrorBench (Appendix A); mitigation studies — self-verification (Appendix C.1), context engineering sliding window (Appendix C.2), parallel majority voting (Appendix D).
-- `raw/2511.09030-maker-million-step-zero-errors.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (each microagent receives minimal context — no error-laden history); §4.2 the per-step error rate is stable as the disk count grows, the empirical sign that self-conditioning is sidestepped. Source for the MDAP mitigation row and paragraph.
+- `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (each microagent receives minimal context — no error-laden history); §4.2 the per-step error rate is stable as the disk count grows, the empirical sign that self-conditioning is sidestepped. Source for the MDAP mitigation row and paragraph.

@@ -1,9 +1,9 @@
 ---
 title: Genealogy-Based Governance Layer
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
-  - raw/2603.04474-spark-to-fire-error-cascades.md
+  - raw/2603.04474.md
 tags: [concept, multi-agent, defense, governance, provenance, verification, message-layer, mas-audit]
 unaudited_marginal: 0
 ---
@@ -127,4 +127,4 @@ The layer deploys inline on the message path (real-time decomposition, screening
 
 ## Sources
 
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang, Zhu, Ye, Qi, Chen, Zhou (City University of Macau + Minzu University of China, arXiv 2603.04474v2, 11 May 2026). §VI the governance layer (problem setting, architecture, trust boundary, representation layer with atomic claims + Lineage Graph, four-stage decision pipeline, actuation layer with blocking/rollback, online and offline use); §VII.C defense efficacy (Table V BICR/Safe Completion/Token across frameworks and defenses); §VII.D cost of safety (Table VII); §VII ablation study (Table VI); §VIII limitations (latency overhead, binary adoption simplification, stationary (β, δ) assumption, controlled-injection scope).
+- `raw/2603.04474.md` — Xie, Zhu, Zhang, Zhu, Ye, Qi, Chen, Zhou (City University of Macau + Minzu University of China, arXiv 2603.04474v2, 11 May 2026). §VI the governance layer (problem setting, architecture, trust boundary, representation layer with atomic claims + Lineage Graph, four-stage decision pipeline, actuation layer with blocking/rollback, online and offline use); §VII.C defense efficacy (Table V BICR/Safe Completion/Token across frameworks and defenses); §VII.D cost of safety (Table VII); §VII ablation study (Table VI); §VIII limitations (latency overhead, binary adoption simplification, stationary (β, δ) assumption, controlled-injection scope).

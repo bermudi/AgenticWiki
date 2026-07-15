@@ -19,7 +19,7 @@ sources:
   - raw/2605.18747.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/2606.14249.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2503.13657.md
   - raw/deepswe-failure-analysis.md
 unaudited_marginal: 0
 tags: [concept, ai-engineering, failure-modes, playbook, quality, harness-evolution]
@@ -181,7 +181,7 @@ The MAST finding that **System Design Issues is the largest category (44.2%)** i
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Comprehension debt: inquiry mode vs delegation mode
 - `raw/2311.04235v3.md` — RuLES: system messages don't enforce rules; alignment tuning degrades rule-following
 - `raw/2603.00822v2.md` — ContextCov: executable verification vs LLM reflection; mechanical enforcement architecture
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent System Failures section. [[mast]] taxonomy: 14 failure modes in 3 categories (FC1 System Design Issues 44.2%, FC2 Inter-Agent Misalignment 32.3%, FC3 Task Verification 23.5%) across 1642 traces from 7 MAS frameworks. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent System Failures section. [[mast]] taxonomy: 14 failure modes in 3 categories (FC1 System Design Issues 44.2%, FC2 Inter-Agent Misalignment 32.3%, FC3 Task Verification 23.5%) across 1642 traces from 7 MAS frameworks. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
 - `raw/2604.16790.md` — Prompt-induced bias in eval pipelines: 40+ point swings from ordering
 - `raw/2603.25133v1.md` — RUBRICEVAL: quantified LLM-as-judge unreliability
 - `raw/2605.18747.md` — Code-as-Agent Harness survey: oracle adequacy and semantic verification (§5.2.1–5.2.2)

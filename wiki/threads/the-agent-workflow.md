@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-13
+updated: 2026-07-14
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -31,12 +31,12 @@ sources:
   - raw/2603.00822v2.md
   - raw/the-final-bottleneck.md
   - raw/2605.18747.md
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
+  - raw/2503.13657.md
   - raw/yt-effect-opencode-dax-raad.md
   - "raw/yt-ai-agents-need-workflows-not-bigger-prompts.md"
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-are-we-really-doing-this-again.md
-  - raw/2512.08296-scaling-agent-systems.md
+  - raw/2512.08296.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
@@ -499,9 +499,9 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/2407.08440v4.md` — RuleBench (Sun et al.): inferential rule-following as distinct capability gap; counterfactual collapse proves models pattern-match rules rather than follow them
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): mechanical enforcement as a practical answer to the rule-following ceiling; PATH shims, Tree-sitter checks, and architectural validators that don't depend on model reasoning; 88.3% compliance rate
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Adds an architectural layer beneath the workflow's operational focus; the three-layer framework provides the vocabulary for workflow phases; the multi-tier action space, context management, and verification loops are instantiations of the broader harness architecture
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] taxonomy addition to the "capability floor for multi-agent coordination" departure. Provides the diagnostic vocabulary for *why* multi-agent coordination fails: 14 failure modes in 3 categories across 1642 traces from 7 frameworks. System Design Issues (44.2%) is the largest category — design is the binding constraint. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] taxonomy addition to the "capability floor for multi-agent coordination" departure. Provides the diagnostic vocabulary for *why* multi-agent coordination fails: 14 failure modes in 3 categories across 1642 traces from 7 frameworks. System Design Issues (44.2%) is the largest category — design is the binding constraint. Intervention studies: +9.4% (role-spec fix), +15.6% (high-level verification step).
 - `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). The [[multi-agent-illusion]] audit. Source for the "capability floor for multi-agent coordination" departure: automated MAS do not outperform CoT-SC, hand-designed [[expert-mas]] does; the cost-quality Pareto position is a first-class metric. §3 cost-quality results; §3.3 [[smfr]] + [[expert-mas]]; §4 architectural deconstruction; §5 ensembling trap and capability floor.
-- `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the quantitative thresholds in the "capability floor for multi-agent coordination" departure: [[capability-saturation|capability saturation]] (45% threshold, β = -0.236, the most robust finding) and [[tool-coordination-trade-off|tool-coordination trade-off]] (β = -0.096, tool-heavy tasks suffer disproportionately from MAS inefficiency). §4.3 scaling principles (Eq. 1 regression, architecture selection with 87% accuracy); §4.2 main results (per-benchmark MAS deltas, decomposability analysis); §4.4 coordination efficiency (turn power law, message density saturation, error amplification factors).
+- `raw/2512.08296.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the quantitative thresholds in the "capability floor for multi-agent coordination" departure: [[capability-saturation|capability saturation]] (45% threshold, β = -0.236, the most robust finding) and [[tool-coordination-trade-off|tool-coordination trade-off]] (β = -0.096, tool-heavy tasks suffer disproportionately from MAS inefficiency). §4.3 scaling principles (Eq. 1 regression, architecture selection with 87% accuracy); §4.2 main results (per-benchmark MAS deltas, decomposability analysis); §4.4 coordination efficiency (turn power law, message density saturation, error amplification factors).
 - `raw/the-final-bottleneck.md` — Ronacher (2026): human review capacity, not code generation, is the new bottleneck; the workflow stalls at the HITL handoff regardless of AFK execution speed; structural parallel to textile industry speed-up dynamics
 - `raw/yt-effect-opencode-dax-raad.md` — [[dax-raad|Dax Raad]]: OTEL as agent feedback loop — the agent queries its own traces to diagnose performance issues autonomously; Effect's auto-instrumented tracing makes every function call observable without manual instrumentation.
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): typed workflow graph as decomposition substrate; per-step model selection, deterministic reconciliation between LLM calls, per-step evals wired into the graph

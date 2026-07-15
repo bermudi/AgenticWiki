@@ -1,11 +1,11 @@
 ---
 title: MAST — Multi-Agent System Failure Taxonomy
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-14
 sources:
-  - raw/2503.13657-why-multi-agent-llm-systems-fail.md
-  - raw/2512.08296-scaling-agent-systems.md
-  - raw/2603.04474-spark-to-fire-error-cascades.md
+  - raw/2503.13657.md
+  - raw/2512.08296.md
+  - raw/2603.04474.md
 tags: [concept, multi-agent, failure-modes, taxonomy, evaluation, empirical, mas-audit]
 unaudited_marginal: 0
 ---
@@ -174,6 +174,6 @@ The Grounded Theory approach ensures the taxonomy emerges from empirical data ra
 
 ## Sources
 
-- `raw/2503.13657-why-multi-agent-llm-systems-fail.md` — Cemri, Pan, Yang et al. (UC Berkeley + Intesa Sanpaolo, NeurIPS 2025 Datasets & Benchmarks, arXiv 2503.13657v3, 26 Oct 2025). §3 MAST-Data construction (Grounded Theory, IAA κ=0.88, LLM annotator κ=0.77); §4 MAST taxonomy (14 modes, 3 categories, 3 insights); §5 failure breakdown and primacy of system design; Appendix A failure mode definitions; Appendix B MAS details and failure rates (41–86.7%); Appendix G tactical vs structural strategies (Table 4); Appendix H intervention case studies (Table 5: AG2 +5pp, ChatDev +15.6pp); Appendix N failure mode examples.
-- `raw/2512.08296-scaling-agent-systems.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.4 error taxonomy (architecture-specific failure modes mapped to MAST categories); Table 5 trace-level error amplification factors (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes (under-coordination, optimal band, over-coordination). Source for the "Quantitative Corroboration" section.
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes mapped to MAST's FC1/FC2/FC3; §VI the governance layer as the structural defense MAST's Appendix G calls for. Source for the "Mechanism Layer" section.
+- `raw/2503.13657.md` — Cemri, Pan, Yang et al. (UC Berkeley + Intesa Sanpaolo, NeurIPS 2025 Datasets & Benchmarks, arXiv 2503.13657v3, 26 Oct 2025). §3 MAST-Data construction (Grounded Theory, IAA κ=0.88, LLM annotator κ=0.77); §4 MAST taxonomy (14 modes, 3 categories, 3 insights); §5 failure breakdown and primacy of system design; Appendix A failure mode definitions; Appendix B MAS details and failure rates (41–86.7%); Appendix G tactical vs structural strategies (Table 4); Appendix H intervention case studies (Table 5: AG2 +5pp, ChatDev +15.6pp); Appendix N failure mode examples.
+- `raw/2512.08296.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.4 error taxonomy (architecture-specific failure modes mapped to MAST categories); Table 5 trace-level error amplification factors (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes (under-coordination, optimal band, over-coordination). Source for the "Quantitative Corroboration" section.
+- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes mapped to MAST's FC1/FC2/FC3; §VI the governance layer as the structural defense MAST's Appendix G calls for. Source for the "Mechanism Layer" section.

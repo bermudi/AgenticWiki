@@ -1,11 +1,11 @@
 ---
 title: Dynamic Trust
 created: 2026-05-08
-updated: 2026-07-04
+updated: 2026-07-14
 sources:
   - raw/yt-agent-trust-vector-study-2026.md
   - raw/2606.13003.md
-  - raw/2603.04474-spark-to-fire-error-cascades.md
+  - raw/2603.04474.md
 tags: [concept, agents, trust, multi-agent, verification]
 unaudited_marginal: 0
 ---
@@ -82,4 +82,4 @@ A coherent world model would provide an objective reference for trust calculatio
 
 - `raw/yt-agent-trust-vector-study-2026.md` — [[discover-ai|Discover AI]]'s critique of static trust assignment and proposal for dynamic trust middleware based on source + context + provability
 - `raw/2606.13003.md` — Jwalapuram, Lin et al. (2026). The "expensive witness" finding (MAS-Zero positional bias, DyLAN consensus collapse) is the empirical support for the dynamic-trust thesis's claim that trust should be a property of the output, not the source.
-- `raw/2603.04474-spark-to-fire-error-cascades.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (tri-state claim labeling against a Lineage Graph; ≥89% BICR vs. 0.32 for self-reflection). Source for the "Implementation" callout.
+- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (tri-state claim labeling against a Lineage Graph; ≥89% BICR vs. 0.32 for self-reflection). Source for the "Implementation" callout.
