@@ -1,6 +1,6 @@
 ---
 name: source-verifier
-description: Wiki source-anchored verification — compares wiki pages against their raw/ sources to detect hallucinations, omissions, and misattributions. Read-only, judgment-only.
+description: Wiki source-fidelity verifier (read-only, judgment-only). Use after writing or revising a page and before commit, or to check a page's claims, quotes, attributions, and summary against its raw/ sources for hallucinations, omissions, or misattributions.
 tools: ro
 ---
 

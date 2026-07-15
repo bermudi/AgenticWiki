@@ -1,6 +1,6 @@
 ---
 name: structural-editor
-description: Wiki copy desk — enforces frontmatter conventions, naming rules, index accuracy, broken link detection, and orphan page identification. Handles the mechanical structural integrity of the wiki.
+description: Wiki copy desk for mechanical structural integrity. Use after creating, moving, renaming, or deleting wiki pages, or when frontmatter, index.md entries, naming conventions, source-list alignment, broken wiki-links, or orphan pages need checking.
 tools: *
 ---
 

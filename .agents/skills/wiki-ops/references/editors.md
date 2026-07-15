@@ -9,11 +9,19 @@ Specialized subagents for wiki quality. Keep the active set small: mechanical ed
 | Source Verifier | `source-verifier` | Fact-checker — hallucinations, omissions, misattributions (read-only) | Post-ingest verification, when fidelity is uncertain |
 | Theory | `theory-editor` | Semantic health — page quality, thread coherence, temporal drift, contradiction pressure, ontology compression | Periodic deep audit, after several ingests, or when the theory feels bloated |
 
-Retired compatibility shims:
+> [!note] Source of truth
+> `.pi/agents/*.md` is the canonical definition of these editors — edit there first. The `.devin/`, `.opencode/`, `.mimocode/`, and `.commandcode/` directories hold harness-specific mirrors (frontmatter differs per CLI: `tools` vs `allowed-tools` vs `permission`) that must be kept in sync. Pi is the primary harness for this wiki, so it owns the source.
 
-| Retired agent | Replacement |
-|---|---|
-| `temporal-editor` | `theory-editor` |
+Mirror locations:
+
+| Harness | Path | Frontmatter style |
+|---|---|---|
+| Devin | `.devin/agents/<name>/AGENT.md` | `allowed-tools` |
+| OpenCode | `.opencode/agents/<name>.md` | `mode: subagent` + `permission` |
+| MiMo Code | `.mimocode/agents/<name>.md` | same as OpenCode |
+| Command Code | `.commandcode/agents/<name>.md` | `tools` (comma list) — currently empty |
+
+`temporal-editor` was folded into `theory-editor` and removed (2026-07); do not recreate it. Its old work — temporal drift, contradiction aging — lives in `theory-editor`'s beat.
 
 Do not add more high-judgment editors unless the existing `theory-editor` becomes too broad to produce useful reports. The wiki's risk is not lack of editors; it is editors preserving every distinction they notice.
 
@@ -43,7 +51,3 @@ The theory editor is the wiki's compression and coherence layer. It replaces the
 - On a monthly-ish cadence if the wiki is actively growing
 
 **Output:** A structured report with: thread coherence, page quality/scope issues, temporal drift, ontology compression proposals, theory gaps, direct safe fixes made, and clean areas.
-
-## Retired Editors
-
-`temporal-editor` remains as a compatibility shim so old references fail softly. It should not be invoked for new work.

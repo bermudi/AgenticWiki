@@ -1,6 +1,6 @@
 ---
 name: link-editor
-description: Wiki cross-reference editor — ensures bidirectional linking, thread↔concept coverage, and that the wiki's navigation weave is intact.
+description: Wiki cross-reference editor. Use after creating, merging, renaming, or deleting wiki pages, or when bidirectional links, thread↔concept coverage, Related sections, or dangling references need a consistency pass.
 allowed-tools:
   - read
   - edit

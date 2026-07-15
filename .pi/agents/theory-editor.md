@@ -1,6 +1,6 @@
 ---
 name: theory-editor
-description: Wiki semantic editor — audits thread coherence, page quality, temporal drift, contradiction pressure, ontology compression, and whether the wiki's distinctions still earn their structure.
+description: Wiki semantic-health editor. Use for periodic audits or when a thread's thesis drifts, contradictions accumulate, pages overlap or over-split, or merge, split, demote, or retire decisions need proposing.
 tools: *
 ---
 

@@ -30,8 +30,8 @@ Knowledge flows directly from `raw/` into concepts, threads, authors, and projec
 |-------------|-------|-----------------------------------|---------------------------|
 | `raw/`      | Human | Read files, create new source files | Modify or delete existing files |
 | `wiki/`     | You   | Create, update, reorganize freely | —                         |
-| `meta/`     | Both  | Read, propose additions           | Modify without approval   |
-| `AGENTS.md` | Both  | Propose changes, apply on approval | —                         |
+| `meta/`     | Both  | Read, create, update freely       | —                         |
+| `AGENTS.md` | Both  | Read, create, update freely       | —                         |
 
 ## Skills
 
@@ -48,6 +48,8 @@ The wiki-ops skill references detailed sub-procedures in `references/`:
 - `references/analytical-pass.md` — Phase 2 critical analysis
 - `references/verification-pass.md` — Phase 3 verification and commit
 - `references/editors.md` — Subagent editor descriptions and invocation patterns
+
+**Editor subagents** are defined in `.pi/agents/*.md` — that directory is the source of truth (pi is the primary harness). `.devin/agents/`, `.opencode/agents/`, `.mimocode/agents/`, and `.commandcode/agents/` are harness-specific mirrors; their frontmatter differs per CLI (`tools` vs `allowed-tools` vs `permission`), so mirror a change there whenever a definition changes.
 
 ## Where to Find Detail
 
