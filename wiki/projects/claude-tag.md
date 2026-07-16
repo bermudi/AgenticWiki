@@ -1,7 +1,7 @@
 ---
 title: Claude Tag
 created: 2026-07-09
-updated: 2026-07-09
+updated: 2026-07-15
 sources:
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
@@ -51,6 +51,8 @@ At launch (June 2026): beta, for Claude Enterprise and Team plans, on Slack — 
 
 - [[llm-ui-paradigms]] — Karpathy's three-paradigm framing; Claude Tag is the paradigm-3 instance
 - [[claude-code]] — The solo/synchronous sibling; Claude Tag is its team-oriented, async, proactive counterpart
+- [[notion]] — Notion's collaborative workspace and embedded coding agents provide a similar shared-space pattern for human/agent collaboration, but in a document-centric rather than chat-centric substrate
+- [[shared-understanding]] — Both Claude Tag and Notion are infrastructure for team-level shared understanding
 - [[context-engineering]] — Channel-scoped context is Claude Tag's context boundary
 - [[proactive-service]] — Ambient mode is agent-initiated, state-change-driven alerting
 - [[afk-agent]] — Async, self-scheduling task execution over hours/days

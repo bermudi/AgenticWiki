@@ -1,7 +1,7 @@
 ---
 title: Ubiquitous Language
 created: 2026-04-25
-updated: 2026-05-03
+updated: 2026-07-15
 sources:
   - raw/yt-claude-code-feature-build.md
   - raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md
@@ -97,6 +97,7 @@ Matt updates the ubiquitous language document after each grill-me session, addin
 ## Related
 
 - [[shared-design-concept]] — The internal mental model that the language describes.
+- [[shared-understanding]] — Shared terminology is a prerequisite for team-level shared understanding.
 - [[ai-design-loop]] — The process of refining the language through interaction.
 - [[the-human-lever]] — Defining the language is a high-leverage human task.
 - [[grey-box-engineering]] — The language defines the boundaries of the grey box.

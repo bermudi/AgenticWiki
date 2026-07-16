@@ -1,9 +1,10 @@
 ---
 title: The Multi-Agent Theory
 created: 2026-07-04
-updated: 2026-07-14
+updated: 2026-07-15
 sources:
   - raw/2606.13003.md
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/2503.13657.md
   - raw/2512.08296.md
   - raw/2603.04474.md
@@ -105,6 +106,9 @@ The empirical demonstration: Towers of Hanoi with 20 disks (1,048,575 steps) sol
 ### The Counter-Claim and the Wiki's Read
 
 The paper frames MDAPs as demonstrating a "multi-agent advantage" — a problem not solvable by a monolithic single-agent system at practical cost. The wiki's read: MDAPs do not refute the [[multi-agent-illusion]]; they reinforce its corollary. The illusion is specifically about *auto-discovered* coordination topologies. MDAPs are the opposite design pole: a *hand-engineered*, deterministic, maximally-decomposed architecture with subtask-level voting. The [[expert-mas]] baseline — the one positive case in the audit — is the same pattern at smaller scale: hand-designed, code-driven, deterministic. The paradigm can work when engineered, not when searched. MDAPs are the engineered-decomposition pole taken to its limit.
+
+> [!note] Departure: A Production-Scale Positive Case — Dreaming
+> [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) is a *production*, fleet-scale instance of the theory's engineered-decomposition pole — and a positive case that lives outside any benchmark. An orchestrator deploys a fleet of subject agents that review session transcripts against a shared memory store, propose evidence-backed changes (transcripts + prevalence statistics), and hand them to a human for accept/reject. The coordination is hand-written (orchestrator + subjects), the substrate is shared memory, and the agents coordinate *through the memory store* — the [[memory-based-multi-agent-system|memory-as-coordination]] pattern the theory names. The theory predicts engineered MAS work and auto-discovered ones don't; dreaming is production corroboration that the "engineered, not searched" principle holds beyond Expert-MAS and MDAPs — at the scale of a real memory infrastructure serving thousands of agents, not a controlled benchmark.
 
 ### The Insight-vs-Execution Boundary
 
@@ -214,6 +218,8 @@ The governance layer is the MAS-specific quality infrastructure: observability (
 - [[mert-cemri]] — lead author of the diagnosis (Layer 2)
 - [[yizhe-xie]] — lead author of the mechanism and defense (Layers 4 and 6)
 - [[elliot-meyerson]] — lead author of the engineered escape (Layer 5)
+- [[dreaming]] — a production-scale, hand-engineered MAS (orchestrator + subject fleet over shared memory); corroboration that the "engineered, not searched" principle holds outside benchmarks
+- [[lamis-mukta]] — described dreaming's production architecture (Anthropic)
 
 ## Sources
 
@@ -223,3 +229,4 @@ The governance layer is the MAS-specific quality infrastructure: observability (
 - `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes; §V attack instantiation (up to 100% infection); §VI the governance layer; §VII evaluation and ablation. Source for Layers 4 and 6 (the mechanism and the defense).
 - `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3 MDAP framework (maximal decomposition, first-to-ahead-by-k voting, red-flagging); §3.2 log-linear cost scaling (Θ(s ln s), k_min = Θ(ln s)); §4.4 the million-step zero-error result; §5 discussion (insight vs. execution, microservices parallel, safety). Source for Layer 5 (the engineered escape).
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s swarming pattern (adversarial multi-pass review, consensus) as a quality-focused variant of engineered decomposition the theory's execution-focused poles (MDAPs, governance) don't cover; intelligence-tier routing as coordination's complement (the sibling question the theory does not yet pose).
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "A Production-Scale Positive Case — Dreaming" departure: dreaming as a production, fleet-scale hand-engineered MAS (orchestrator + subject fleet reviewing transcripts against shared memory, evidence-backed proposals, human accept/reject) — corroboration that the "engineered, not searched" principle holds outside benchmarks.

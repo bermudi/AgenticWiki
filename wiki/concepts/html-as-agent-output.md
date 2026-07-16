@@ -1,10 +1,11 @@
 ---
 title: HTML as Agent Output
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-07-15
 sources:
   - raw/karpathy-html-output.md
   - raw/thariq-unreasonable-effectiveness-of-html.md
+  - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
 unaudited_marginal: 0
 tags: [concept, agent-output, html, visualization, agent-workflow]
 ---
@@ -66,6 +67,10 @@ Thariq catalogs six categories (five top-level sections in the article, plus PR 
 | **Custom editing interfaces** | Manual text editing | "Build a form-based editor with export-as-prompt button" |
 | **PR writeups** | Markdown PR descriptions | HTML explainer attached to every PR |
 
+### Interactive Understanding
+
+[[geoffrey-litt|Geoffrey Litt]] uses HTML as the output substrate for agent-generated **understanding artifacts** rather than just deliverables. His [[explain-diff|Explain Diff]] outputs HTML or Notion pages with interactive figures: drag a rock in a garden simulation and see the Z-layer coordinate updates; scrub a timeline through an interpreter's state; click through a framework migration. The interactivity is not decorative — it is a learning mechanism. The constraint is that the interactive element must provide understanding that static text cannot, otherwise it is "slop." This is the two-way interaction pattern applied specifically to the human's learning loop.
+
 ### The "Pretend You Don't Know" Pattern
 
 A prompting technique from Thariq's examples: phrasing requests as if you don't understand the topic (e.g., "I don't understand how our rate limiter works") steers the model to create explainer output suitable for someone encountering the topic for the first time — useful for generating reports and artifacts meant for teammates or stakeholders.
@@ -101,8 +106,12 @@ He also flags a gap at the **input** side: audio, text, and video alone aren't e
 - [[claude-code]] — The primary tool context for the HTML workflow; Claude Code's filesystem, MCP, git, and browser access make it the richest source for generating HTML from real project data
 - [[andrej-karpathy]] — Theoretical framing: vision as preferred output, output format progression ladder
 - [[thariq]] — Practical playbook: use cases, prompt patterns, honest tradeoffs from daily Claude Code usage
+- [[geoffrey-litt]] — Interactive understanding artifacts: Explain Diff and microworlds as learning output
+- [[explain-diff]] — HTML/Notion explainer docs with interactive figures
+- [[code-microworlds]] — Agent-built interactive simulations for understanding
 
 ## Sources
 
 - `raw/karpathy-html-output.md` — Karpathy's tweet thread introducing the audio-in/vision-out asymmetry, the output fidelity progression ladder (text → markdown → HTML → neural video), and the observation that output format constraints shape reasoning quality.
 - `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's article cataloging six use cases for HTML agent output (specs, code review, design, reports, custom editors, PR writeups), the two-way interaction pattern with export buttons, the throwaway editor pattern, and honest tradeoffs including version control pain and 2–4× generation time.
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: interactive figures in Explain Diff and code microworlds as HTML/Notion output; the interactivity is a learning mechanism, not decoration.

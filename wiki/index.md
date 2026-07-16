@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-14
+updated: 2026-07-15
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -53,6 +53,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[peter-werry]] — Founder of Unblocked; context engine architecture, satisfaction of search, and hard lessons building organizational context retrieval.
 - [[dhh]] — Creator of Rails and advocate for AI-pilled development and aesthetics.
 - [[geoffrey-huntley]] — Originator of the Ralph Wiggum technique for autonomous agent loops.
+- [[geoffrey-litt]] — Design engineer at Notion; advocate for understanding as the agentic-coding bottleneck; creator of [[explain-diff|Explain Diff]].
 - [[gergely-orosz]] — Tech industry analyst and author of The Pragmatic Engineer.
 - [[kent-beck]] — Pioneer of TDD and Extreme Programming (XP).
 - [[louis-knight-webb]] — Articulated the plan-vs-review tradeoff and focus maxing as the new software engineering workflow.
@@ -104,6 +105,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[qinggang-zhang]] — Researcher, Jilin University; corresponding author of MemGraphRAG (KDD 2026) and HippoRAG; GraphRAG, associative memory, multi-agent systems.
 - [[jinsong-su]] — Professor, Xiamen University; corresponding author of MemGraphRAG (KDD 2026) and HippoRAG; NLP, machine translation, GraphRAG.
 - [[mathis-pink]] — Researcher at Max Planck Institute for Software Systems; lead author of the position paper arguing episodic memory is the missing piece for long-term LLM agents (the five-property framework).
+- [[lamis-mukta]] — Member of technical staff on Anthropic's applied AI team; described dreaming — Anthropic's out-of-band memory consolidation paradigm — and its production architecture.
 
 ## 🧠 Concepts
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -113,6 +115,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[fresh-context-subagents]] — Architectural pattern for preventing context rot: thin orchestrators spawn specialist subagents with clean context windows, each writing output to disk. Systematized by GSD Core.
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
 - [[code-clarifies-spec]] — Implementing code improves the spec; the act of writing code generates new decisions that weren't anticipated in the spec, and these decisions should feed back into it.
+- [[code-microworlds]] — Ephemeral, interactive, agent-built simulations that let a human inhabit a codebase or algorithm to build intuition.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
 - [[skill-hell]] — The third developer hell (after tutorial hell and framework hell): skills proliferate faster than evaluative capacity, nobody can tell good from bad, and nothing delivers what it promises. Pocock's four-part checklist is the proposed exit.
 - [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.
@@ -169,10 +172,12 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
 - [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
+- [[dreaming]] — Anthropic's name for out-of-band memory consolidation: a batch, asynchronous process where reviewing agents survey a fleet's session transcripts and propose evidence-backed memory changes. The engineering instantiation of the biological sleep/consolidation analogy — the temporal complement to in-band evolving context.
 - [[episodic-memory-for-agents]] — Episodic memory — specific, contextualized, single-shot experiences — is the missing piece for long-term LLM agents. Pink et al.'s five-property framework + Davis & Schleisman's SOM-and-meta-episode architecture.
 - [[agent-memory-systems]] — Agent memory as a data-management system (M = ⟨R,S,Q,U⟩); benchmarking 12 systems finds no single architecture dominates — effectiveness depends on workload alignment, and append-only stores return stale facts ("hallucinations of the past").
 - [[executable-memory]] — The paradigm in which an agent's model of a user is a living software project: typed Python objects hold state, ordinary Python functions encode rules, and an interpreter runs the whole thing (User as Code, Bojie Li, Pine AI 2026)
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
+- [[explain-diff]] — A skill that generates a personalized, literate explainer doc for a code change, with background, intuition, interactive figures, and an embedded quiz.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
 - [[factory-maintenance]] — A software factory bit-rots faster than it gets used: skills drift, systems change, failure modes emerge. Yegge's pattern is to leave every interaction with the factory slightly better than you found it, and to schedule sweep agents (architecture, test-quality, documentation) on a cadence.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
@@ -209,6 +214,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
+- [[shared-understanding]] — The collective mental model that lets a team communicate and generate ideas together; built through shared spaces where humans and agents co-discuss work.
 - [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[discourse-slop]] — AI-generated thought-leadership slop circulating through the meta-discourse about AI tools; the hype cycle and incentive-to-hype map.
@@ -238,6 +244,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[under-exploration]] — A predicted pathology in the [[operational-mirror|operational mirror]]: the optimizer converges on local prompt-level edits, missing structural changes. Detection signal: ship-prediction accuracy decay (e.g., 80% → 0%). Empirically confirmed in [[harnessx]] §6.6(g–i)
+- [[understanding-quizzes]] — Short, spaced-repetition-style checks appended to code explainer docs, used as a "speed regulator" to verify understanding before review.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[rollback-posture]] — Rollbacks only work when you release slower than you can detect problems; agents shipping faster than detection jams the safety valve.
 - [[verifiability]] — Karpathy's framework: LLMs automate what you can verify; the driver of jagged AI capability.
@@ -269,6 +276,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 ## 🛠️ Projects & Tools
 - [[treehouse]] — Git worktree manager for parallel agent sessions.
 - [[no-mistakes]] — Autonomous PR pipeline from first-pass code to merged PR with adversarial review and evidence.
+- [[notion]] — Workspace platform; shared documents, HTML blocks, and embedded coding agents as infrastructure for shared understanding.
 - [[lavish]] — HTML artifact editor for planning and design review with an agent.
 - [[axi]] — Agent-ergonomic tool standard and implementations (GitHub, Chrome DevTools) with efficiency benchmarks.
 - [[good-night-have-fun]] — Bounded, long-running agent loop for overnight or away-from-keyboard objectives.

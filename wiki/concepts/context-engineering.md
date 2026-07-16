@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-11
+updated: 2026-07-14
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
@@ -17,6 +17,7 @@ sources:
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
   - raw/2606.24775v1.md
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -95,6 +96,12 @@ A production-validated technique from the Arise team (building Alex, an AI agent
 3. **Smart truncation + memory** (what worked): Keep the head (first ~100 characters) and tail (last ~100 characters) of the conversation; store the middle in a retrievable memory store. The agent can query the memory store if it needs to recall something from the truncated middle. This preserves recent context while keeping the working window small, and gives the agent agency over what context it retrieves.
 
 The team reports this strategy has been stable in production for months. The Claude Code code leak later confirmed that Anthropic independently converged on a similar truncation-and-compression approach — validating the pattern through convergent design.
+
+### Memory as a File System; In-Band vs Out-of-Band
+
+Anthropic's perceived state of the art for agent memory (mid-2026) is the simplest thing that works: model the memory system as a file system — fill it with markdown, and let agents read/write/search it with ordinary tools (bash, grep) rather than bespoke memory-tool APIs. [[lamis-mukta|Lamis Mukta]] (Anthropic) frames the year-long path to this as CLAUDE.md → in-band memory tools → skills ([[agent-skills]]) → file-system-as-memory: each step kept markdown's human-readability and agent-writability while shedding unnecessary opinion about the tool surface.
+
+The harder distinction Mukta draws is **temporal**: *in-band* memory (agents read/write during their own session, competing for the same context/token budget as the task) vs *out-of-band* memory consolidation — a batch, asynchronous reviewing process with its own compute and fleet-wide visibility. In-band memory has structural limits (split focus, fleet-blindness, staleness); out-of-band consolidation is what closes the loop at scale. Anthropic calls its out-of-band process **dreaming** — see [[dreaming]].
 
 ### Sliding Window Against Self-Conditioning
 
@@ -195,6 +202,8 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[instruction-severity-inflation]] — Instruction density management is a core context engineering skill
 - [[multi-tier-action-space]] — Context engineering techniques enable the thin-tool-layer architecture
 - [[evolving-context]] — Context engineering extended into the temporal dimension
+- [[dreaming]] — Out-of-band memory consolidation: the temporal complement to in-band context engineering, where a dedicated reviewing process maintains the memory store off the task's critical path
+- [[lamis-mukta]] — File-system-as-memory and the in-band/out-of-band distinction (Anthropic)
 - [[agent-memory-systems]] — The persistent, updatable, lifecycle-governed infrastructure distinct from per-turn context engineering; the explicit three-way distinction (RAG vs context engineering vs agent memory)
 - [[lance-martin]] — Catalogued the operational techniques
 - [[ralph-loop]] — The Ralph Loop applies context isolation (sub-agent spawning) to serial tasks; each iteration gets a clean context window
@@ -240,3 +249,4 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: global memory file (small, always loaded via symlink), project-level memory file (grows with corrections), and skill extraction for conditionally-used knowledge as progressive disclosure at the memory layer.
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: context rot definition, fresh-context subagent architecture as the primary defense, context monitor hook with WARNING/CRITICAL thresholds, `.planning/` artifacts as cross-session persistence
 - `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). Source for the explicit three-way distinction (RAG vs context engineering vs agent memory) and the argument that treating memory as "RAG over a memory bank" produces state collapse.
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the memory-primitives timeline (CLAUDE.md → memory tools → skills → file-system-as-memory), the in-band vs out-of-band distinction, and the [[dreaming]] paradigm. Production memory guardrails (versioning, concurrency/locking, permissions, portability).

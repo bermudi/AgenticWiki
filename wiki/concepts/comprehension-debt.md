@@ -1,11 +1,12 @@
 ---
 title: Comprehension Debt
 created: 2026-05-02
-updated: 2026-06-03
+updated: 2026-07-15
 sources:
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
+  - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
 tags: [concept, ai-engineering, cognitive-debt, code-quality]
 unaudited_marginal: 0
 ---
@@ -81,6 +82,16 @@ What you need to hold:
 
 That is the part the model cannot hold for you, because that is the part you are being paid to hold.
 
+## Accelerating Teaching Mode
+
+[[geoffrey-litt|Geoffrey Litt]]'s work is a set of tooling accelerators for the teaching mode described above. Instead of asking the agent to produce code and then reading the diff, he has the agent produce **understanding artifacts**:
+
+- [[explain-diff|Explain Diff]] — a literate explainer doc for each change, with background, intuition, interactive figures, and an embedded quiz.
+- [[code-microworlds|Code microworlds]] — ephemeral interactive simulations that let the human inhabit the algorithm and build intuition.
+- [[understanding-quizzes|Understanding quizzes]] — a short check at the end of the explainer doc to verify the human actually understood it.
+
+The insight is that AI can either replace the work of understanding or amplify it. The same tool that generates a diff can generate the textbook that teaches you what the diff means. The cost is not eliminated; it is shifted from the agent writing the code to the agent writing the explanation — and the human remains the one who must pass the quiz.
+
 ## Thread
 
 - [[the-cognitive-cost]] — Comprehension debt is a core concept in the cognitive cost thread; the gap between code and understanding that cognitive debt widens
@@ -104,9 +115,14 @@ That is the part the model cannot hold for you, because that is the part you are
 - [[cognitive-debt]] — Sibling concept: cognitive debt tracks degradation of the *capacity* to understand; comprehension debt tracks the gap between code and understanding
 - [[skill-atrophy]] — The mechanism by which comprehension debt accelerates (as skills erode, the gap widens faster)
 - [[the-cognitive-cost]] — The thread that frames comprehension debt as part of a larger cognitive cost structure
+- [[geoffrey-litt]] — Explain Diff, microworlds, and quizzes as teaching-mode accelerators
+- [[explain-diff]] — Literate explainer docs for each code change
+- [[code-microworlds]] — Interactive simulations that build intuition
+- [[understanding-quizzes]] — Quizzes as a speed regulator for understanding
 
 ## Sources
 
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Core source: definition, Anthropic RCT, inquiry-vs-delegation, personal drift and recovery, cultural signal
 - `raw/agentic-coding-is-a-trap.md` — Lars Faye: cognitive debt as the broader frame (comprehension debt is a symptom of cognitive debt); the Anthropic supervision paradox quote; the argument that comprehension loss is faster than previous transitions
 - `raw/yt-we-all-fell-for-it.md` — Theo: the debugging story as a case where comprehension debt was avoided through deep system understanding; the code-frequency distinction (comprehension debt matters more for ship code than one-off code)
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: teaching-mode accelerators (Explain Diff, microworlds, quizzes); understanding-to-participate vs. understanding-to-verify.

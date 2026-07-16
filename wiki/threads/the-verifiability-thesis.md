@@ -1,9 +1,10 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-14
+updated: 2026-07-15
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/2311.04235v3.md
   - raw/2407.08440v4.md
   - raw/2504.21625v6.md
@@ -206,6 +207,9 @@ The [[code-as-agent-harness]] survey (Ning et al., 2026), organized into the [[h
 
 The survey's four desired properties for future harness systems — **executable**, **inspectable**, **stateful**, **governed** — are the verifiability thesis expressed as design principles. Executable/inspectable are verifiability's preconditions; stateful is verifiability extended across time; governed is verifiability applied to agent autonomy.
 
+> [!note] Extension: Memory Mutation as a Verifiability Domain
+> [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) extends the thesis recursively onto the **memory layer**: making memory *mutations* themselves verifiable. The production guardrails are verifiability engineering applied to agent memory — versioning with transcript provenance is the *stateful + inspectable* property; optimistic-locking concurrency via hashing is a *deterministic verifier* (re-read-on-mismatch replaces trust-by-role); tiered permissions are *governed*; portability is inspectability across surfaces. At the memory layer the thesis's "verifiability determines capability" becomes "verifiability determines whether autonomous memory is safe to deploy at fleet scale." The audience's challenge that this is "reinventing databases" is the thesis in plain words: as signal accumulates, primitives migrate from agent discretion into deterministic, inspectable, governed infrastructure — the verifiability frontier expanding into memory.
+
 > [!note] Extension: The thesis generalizes to the harness — with a precision caveat
 > The [[harnessx|HarnessX]] paper (Darwin Agent Team, arXiv 2606.14249v1, 12 June 2026) operationalizes the verifiability thesis at the *harness* layer. The thesis predicts: capability clusters around what the verifier rewards. HarnessX shows: *harness capability* clusters around what the harness's *type system* permits. A typed harness (processor abstraction, eight hook points with permitted-modification contracts, nine-dimension taxonomy) is *more evolvable* than an untyped one because the type system bounds the action space. The empirical proof: typed composition enables the per-variant [[variant-isolation|seesaw]] that resolves the catastrophic-forgetting failure on heterogeneous task sets (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4). Without compositional structure, the intended scope of an edit is undefined, and variant isolation is ill-posed.
 >
@@ -292,3 +296,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]]'s four-part skill checklist as a verifiability discipline: leading words' trace-verification (the agent's self-talk is the eval — no separate eval pass needed), no-op deletion test (verifiability of instruction-effect), user-invoked preference as unverifiability-removal (model invocation timing is unverifiable, so prefer the mode whose failure mode is observable). See [[agent-skills]] → Pocock's Skill Design Checklist and [[leading-words]].
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s practitioner patterns pressuring the thesis: Tessl's verifier-as-focused-LLM-lint (verifier tier as an axis independent from agent tier), and swarming-as-anti-bitter-lesson (stochastic multi-pass verification as a distinct strategy from structural verification).
 - `raw/2502.06975.md` — Pink et al. (MPI for Software Systems + EarthDynamics.ai + UT Austin, arXiv 2502.06975, Feb 2025). Source for the "Episodic Memory Is the Complement the Causal Chain Doesn't Track" departure: single-shot episodic memory is the property RL structurally cannot provide (RL needs many examples); consolidation (Complementary Learning Systems theory) is the bridge transferring episodic instances into parametric memory where RL can act. Completes the causal chain by adding the fast (single-shot) memory system alongside the slow (parametric, RL-trained) one.
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Memory Mutation as a Verifiability Domain" extension: dreaming's production guardrails (versioning+provenance, hashing/concurrency, tiered permissions, portability) as verifiability engineering applied to the memory layer — the four harness properties (executable/inspectable/stateful/governed) instantiated at the memory-mutation layer; the "reinventing databases" tension as the verifiability frontier expanding into memory infrastructure.

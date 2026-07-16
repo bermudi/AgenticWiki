@@ -1,10 +1,11 @@
 ---
 title: Skill Atrophy
 created: 2026-06-03
-updated: 2026-06-03
+updated: 2026-07-15
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
+  - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
 tags: [concept, ai-engineering, cognitive-debt, failure-modes]
 unaudited_marginal: 0
 ---
@@ -37,6 +38,10 @@ A senior engineer "getting rusty" as they move into management is a different ph
 
 **The gap widens**. Theo observes: "AI has made it easier to avoid that pain and feel that reward... your ability to say no as a developer has never mattered more." Developers who already had strong fundamentals (from open source, team leadership, debugging experience) find AI amplifies their skills. Developers who were already marginal find AI erodes what they had.
 
+## Countermeasures
+
+[[geoffrey-litt|Geoffrey Litt]] treats the problem not as an inevitable trade-off but as a design target. His understanding-building tools — [[explain-diff|Explain Diff]] (literate explainer docs that end in an [[understanding-quizzes|understanding quiz]]) and [[code-microworlds|code microworlds]] (interactive simulations) — are designed to preserve the human's conceptual engagement while still using agents for implementation. The agent generates the explanation, the playground, and the quiz; the human must still pass the quiz. The friction is still present, but the agent is used to make the friction richer rather than to eliminate it.
+
 ## Open Source as a Buffer
 
 Theo notes that open source maintainers "are massively outperforming average devs in the AI world" because they're accustomed to reviewing contributions from varying skill levels, debugging unfamiliar code, and maintaining complex systems. This experience — the constant friction of engagement — provides a natural buffer against skill atrophy.
@@ -58,8 +63,13 @@ Theo notes that open source maintainers "are massively outperforming average dev
 - [[deliberate-friction]] — The countermeasure: intentional engagement to maintain skills
 - [[peak-programmer]] — Skill atrophy as evidence for the peak programmer hypothesis
 - [[domain-expertise-as-moat]] — Domain knowledge as the skill that's hardest to atrophy (and hardest to acquire)
+- [[geoffrey-litt]] — Explain Diff, microworlds, and quizzes as countermeasures
+- [[explain-diff]] — Literate explainer docs for each code change
+- [[code-microworlds]] — Interactive simulations that build intuition
+- [[understanding-quizzes]] — Quizzes that verify the human still understands
 
 ## Sources
 
 - `raw/agentic-coding-is-a-trap.md` — Lars Faye: the "different this time" argument; empirical vs. speculative fears; junior developer impact; Anthropic 47% debugging stat; Simon Willison's self-report
 - `raw/yt-we-all-fell-for-it.md` — Theo: the gap between great and mediocre engineers widening; open source as a buffer; the skateboarding metaphor for pain avoidance
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: Explain Diff, microworlds, and quizzes as understanding-preserving countermeasures; the agent can be used to make the human's learning loop richer, not just faster.

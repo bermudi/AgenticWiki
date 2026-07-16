@@ -1,10 +1,11 @@
 ---
 title: Cognitive Debt
 created: 2026-06-03
-updated: 2026-06-03
+updated: 2026-07-15
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
+  - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
 tags: [concept, ai-engineering, cognitive-debt, skill-atrophy]
 unaudited_marginal: 0
 ---
@@ -26,6 +27,12 @@ Faye argues that the impact is already measurable: Anthropic documented a 47% dr
 Faye frames the speed critique: AI inverts the developer priority list, putting speed (volume of code generated per time frame) above understanding, conciseness, and alignment. Faye argues that "speed is a natural byproduct of high aptitude. When it's forced, it always leads to lower accuracy."
 
 Theo agrees: "Most devs should not be allowed to code fast." He adds nuance — AI enables speed in areas where it was previously too expensive (one-off scripts, exploratory code), and the issue isn't speed per se but **forced speed without earned competence**. The distinction: speed earned through deep understanding is valuable; speed imposed by AI tooling on developers who haven't earned it produces slop.
+
+## Understanding to Verify vs. Understanding to Participate
+
+[[geoffrey-litt|Geoffrey Litt]] adds a useful distinction. People often justify human understanding as **understanding to verify** — checking that the agent did not make a mistake. This is a thumbs-up/thumbs-down decision, and Litt agrees that agents are getting better at it. The deeper reason to understand, he argues, is **understanding to participate**: the rich conceptual structures in your head that let you recombine ideas fluently and generate the next idea. When you review an agent's output, the understanding you gain is what you take to the next loop. If that understanding degrades, you stop being an active creative participant and become a spectator.
+
+This reframes cognitive debt not just as skill loss, but as a loss of the capacity to stay in the creative loop. Litt's response is to use agents to make understanding richer, not just faster: [[explain-diff|Explain Diff]], [[code-microworlds|code microworlds]], and [[understanding-quizzes|understanding quizzes]] are concrete countermeasures.
 
 ## The Skateboarding Metaphor
 
@@ -52,8 +59,13 @@ AI removes the pain of feeling stupid. But that pain was the learning signal. Th
 - [[deliberate-friction]] — Potential countermeasure: intentional engagement to prevent cognitive debt
 - [[grey-box-engineering]] — The practice that requires the skills cognitive debt erodes
 - [[peak-programmer]] — Cognitive debt as evidence for the peak programmer hypothesis
+- [[geoffrey-litt]] — Understanding-to-participate distinction and Litt's countermeasures
+- [[explain-diff]] — A tool that turns agent code changes into explainer docs
+- [[code-microworlds]] — Interactive simulations that build back lost intuition
+- [[understanding-quizzes]] — Quizzes as a speed regulator against false fluency
 
 ## Sources
 
 - `raw/agentic-coding-is-a-trap.md` — Lars Faye: introduces the term "cognitive debt"; the inverted priority list; the "not just another abstraction" argument; Anthropic's supervision paradox and 47% debugging drop-off; Simon Willison's mental model loss
 - `raw/yt-we-all-fell-for-it.md` — Theo (t3.gg): the skateboarding metaphor; forced speed vs. earned competence; AI as pain avoidance; the slot machine framing
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: understanding-to-participate vs. understanding-to-verify; cognitive debt as the reason to maintain understanding; Explain Diff, microworlds, and quizzes as countermeasures.

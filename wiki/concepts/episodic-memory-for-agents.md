@@ -1,10 +1,11 @@
 ---
 title: Episodic Memory for Agents
 created: 2026-07-12
-updated: 2026-07-13
+updated: 2026-07-14
 sources:
   - raw/2502.06975.md
   - raw/episodic-semantic-memory-machine-teammates.md
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
 unaudited_marginal: 0
 tags: [concept, memory, episodic-memory, semantic-memory, cognitive-science, agent-memory, continual-learning]
 ---
@@ -72,6 +73,8 @@ Pink et al. is a position paper. Davis & Schleisman (2024) demonstrate a working
 
 Davis & Schleisman make a broader architectural argument worth flagging: AI development has focused almost exclusively on "mission-focused" task systems that **lay inert once the task is completed** — very unlike a human teammate. Humans have a reflective mode (associated with the brain's default mode network) for after-action review: recognizing patterns in past episodes and simulating future ones. They argue the next generation of AI systems needs an analogous **reflective capability that learns during downtime**, leveraging idle compute to calibrate future behavior. This reframes [[afk-agent|AFK/overnight agents]] and [[evolving-context]] as not just "more compute applied to the same task" but as a structurally distinct *reflective after-action mode*.
 
+> [!note] Realized as a production pattern ([[dreaming]]): The default-mode after-action mode is no longer purely theoretical. [[lamis-mukta|Lamis Mukta]] (Anthropic, AI Native DevCon June 2026) describes **dreaming** — a batch, asynchronous, out-of-band process in which dedicated reviewing agents survey a fleet's session transcripts and consolidate memory. This is the engineering instantiation of both ideas on this page: it is the offline **consolidation** operation (Complementary Learning Systems, operation (a)) performed in token space by agents rather than in weight space, and it is precisely the **reflective capability that learns during downtime** leveraging idle compute that Davis & Schleisman argue for. The biological sleep metaphor the term borrows is architectural, not decorative — it names the separation between task-execution (waking) and memory-consolidation (sleeping) processes.
+
 ## How This Reframes the Wiki's Memory Map
 
 > [!note] Synthesis: The wiki's existing memory pages are largely *systems*-shaped ([[agent-memory-systems]]'s M = ⟨R,S,Q,U⟩ modules, [[evomem]]'s patches, [[memrefine]]'s compression, [[executable-memory]]'s schemas). Episodic-memory-for-agents supplies the missing *cognitive-science* axis: what *types* of memory an agent should have, and what properties distinguish them. The two views compose — the five properties are design constraints on the representation module (R); the meta-episode transition system is a novel structure within the retrieval/maintenance modules (Q, U); and the consolidation operation (episodic → parametric) is the parametric sub-mechanism within module U's broader lifecycle.
@@ -92,6 +95,8 @@ Davis & Schleisman make a broader architectural argument worth flagging: AI deve
 - [[evolving-context]] — Consolidation and the reflective after-action mode as drivers of context evolution
 - [[executable-memory]] — Another structured-memory paradigm (typed user model); meta-episodes are a different structuring (intervention-as-transition) of the same impulse to make memory an active, queryable structure
 - [[afk-agent]] — The default-mode framing recasts AFK/overnight agents as a reflective after-action mode, not just background task execution
+- [[dreaming]] — The production instantiation of the default-mode after-action mode and the CLS consolidation operation (Anthropic)
+- [[lamis-mukta]] — Described dreaming as the out-of-band consolidation process
 - [[context-engineering]] — Episodic memory is the long-term counterpart to per-turn context curation
 - [[mathis-pink]] — Lead author of the episodic-memory position paper (five-property framework)
 
@@ -99,3 +104,4 @@ Davis & Schleisman make a broader architectural argument worth flagging: AI deve
 
 - `raw/2502.06975.md` — Pink, Wu, Vo, Turek, Mu, Huth, Toneva (Max Planck Institute for Software Systems + EarthDynamics.ai + UT Austin, arXiv 2502.06975, Feb 2025). *Position: Episodic Memory is the Missing Piece for Long-Term LLM Agents.* Source for the five-property framework (long-term, explicit, single-shot, instance-specific, contextualized), the coverage-gap table (in-context × long-term; external/RAG × contextual; parametric × single-shot), the unifying architecture (external memory bridging parametric↔in-context via consolidation/encoding/retrieval, grounded in Complementary Learning Systems theory), the Linux-kernel motivating example, and the four-direction roadmap (encoding, retrieval, consolidation, benchmarks) with six research questions.
 - `raw/episodic-semantic-memory-machine-teammates.md` — Davis & Schleisman (Galois, Inc., AHFE 2024, DOI 10.54941/ahfe1005003). *Integrating Episodic and Semantic Memory in Machine Teammates to Enable Explainable After-Action Review and Intervention Planning in HAA Operations.* Source for the concrete architecture: semantic memory as a self-organizing map (topographic, invertible, codebook-vector exemplars), episodic events embedded by performance-feature vectors, **meta-episodes** (interventions as labeled directed edges between clusters forming a transition system), the default-mode-network reflective-learning framing, and the HAA trajectory evaluation (avg error <1 cell, single-core CPU). Contrasts with standard NN training where specific training data is not preserved in the final embedding.
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Realized as a production pattern" note: dreaming as the engineering instantiation of the CLS consolidation operation and the default-mode after-action framing — out-of-band, token-space, agent-driven.

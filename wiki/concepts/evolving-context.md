@@ -1,7 +1,7 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-07-13
+updated: 2026-07-14
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
@@ -11,6 +11,7 @@ sources:
   - raw/2606.13177.md
   - raw/2606.13681.md
   - raw/2606.24775v1.md
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
 tags: [concept, context-engineering, agents, memory, continual-learning, self-evolution, harness-recursion, executable-memory, memory-compression]
 unaudited_marginal: 0
 ---
@@ -20,6 +21,8 @@ unaudited_marginal: 0
 > Continual learning in token space — the practice of agents progressively refining their own context (prompts, skills, memories, preferences) based on experience, without retraining model weights. An emerging frontier that is currently "super hacky" but represents one of the most important unsolved problems in agent engineering.
 
 **Scope.** This page covers how an agent's context *evolves* over time. The broader *systems architecture* of agent memory — representation, storage, extraction, retrieval, and the maintenance lifecycle (consolidation, forgetting, capacity) — is surveyed as a first-class data-management problem in [[agent-memory-systems]]. The maintenance axes below ([[memrefine]], [[evomem]]) operate within the lifecycle that paper formalizes as its module U.
+
+> [!note] The temporal axis — in-band vs out-of-band: The categories and extensions below organize evolving context by *what* evolves. [[lamis-mukta|Lamis Mukta]] (Anthropic, AI Native DevCon June 2026) introduces an orthogonal dimension: *when* and *by whom* the evolution happens. All of the axes below are **in-band** — the task-performing agent evolves its own context during its own session, competing for the same token/context budget as the task. Mukta argues this has structural limits (split focus; an agent cannot see cross-session or fleet-wide patterns) and that scaled continual learning needs an **out-of-band** consolidation process — a batch, asynchronous reviewer with dedicated compute and fleet visibility — which Anthropic calls [[dreaming]]. The out-of-band mode is not a ninth "what evolves" axis; it is a separate execution channel that can drive any of the axes above.
 
 ## What It Is
 
@@ -202,6 +205,8 @@ The boundary with [[memrefine]]: MemRefine targets *what stays* (compression und
 - [[bojie-li]] — Author of User as Code, the implementation of schema-level evolving context
 - [[agent-memory-systems]] — The systems-architecture survey of agent memory; formalizes the maintenance lifecycle (module U) that the evolution axes below operate within
 - [[episodic-memory-for-agents]] — Consolidation (episodic → parametric) is the Complementary-Learning-Systems mechanism underlying token-space continual learning; [[eric-davis|Davis]] & [[katrina-schleisman|Schleisman]]'s default-mode after-action framing recasts context evolution as a structurally distinct reflective mode
+- [[dreaming]] — The orthogonal *temporal* axis (in-band vs out-of-band memory consolidation); the out-of-band execution channel any evolution axis above can be driven by
+- [[lamis-mukta]] — Described dreaming and articulated the in-band/out-of-band distinction (Anthropic)
 - [[jundong-xu]] — Lead author of the EvoArena paper that introduces EvoMem
 
 ## Sources
@@ -214,3 +219,4 @@ The boundary with [[memrefine]]: MemRefine targets *what stays* (compression und
 - `raw/2606.13177.md` — Kim (Korea U), Baek, Jeong, Hwang (KAIST; Hwang also DeepAuto.ai), June 2026. *MemRefine: LLM-Guided Compression for Long-Term Agent Memory.* A seventh axis: evolving context at the **store level**. The pairwise LLM judge decides what stays in the memory store when it has outgrown a fixed size budget. The redundancy/complementarity/distinctness taxonomy is the action space; similarity is the proposal mechanism; factual judgment is the decision mechanism. LLM judge decisively outperforms fixed rule-based baselines (RuleSim, RulePR) as the budget tightens. Framework-agnostic: A-MEM graph memory and Mem0.
 - `raw/2606.13681.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* An eighth axis: evolving context at the **memory-evolution layer**. The append-only patch history records what changed and why across non-additive memory updates. The patch is the change record; the latest memory is the materialized view; the WAL is the patch log. Memory-system-agnostic: instantiated over A-Mem, Memento-Skill, Terminus2, OpenHands. Improves chain accuracy +6.1pp on Terminal-Bench-Evo. Mechanism: gain jumps from +2.6% to +8.3% when agents operationalize retrieved patches.
 - `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the scope note: formalizes the maintenance lifecycle (module U: consolidation, forgetting, capacity) as a first-class memory-system concern that the evolution axes above operate within.
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the temporal-axis note: the in-band vs out-of-band distinction, and [[dreaming]] as the out-of-band consolidation process that is a separate execution channel rather than a ninth "what evolves" axis.

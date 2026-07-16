@@ -1,10 +1,11 @@
 ---
 title: Shared Design Concept
 created: 2026-04-25
-updated: 2026-05-08
+updated: 2026-07-15
 sources:
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - "Peter Naur, Programming as Theory Building (1985)"
+  - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
 unaudited_marginal: 0
 tags: ["design", "ai-engineering", "mental-models"]
 ---
@@ -34,6 +35,10 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
     - *Try:* "Refactor this using a Strategy pattern because we expect to add more payment providers in the future."
 3.  **The "Vibe Check"**: If the AI's code feels "wrong" even if it works, it's usually a sign that your shared design concept has diverged. Stop and realign.
 
+## Shared Design Concept vs. Shared Understanding
+
+The shared design concept is the code-level "theory of the code" that a human and agent must share to produce coherent work (Naur, Pocock). [[geoffrey-litt|Geoffrey Litt]]'s [[shared-understanding|shared understanding]] is the team-level counterpart: not one person's theory of the code, but the collective model a whole team needs to communicate and generate ideas together, built through shared spaces. (Mapping Litt onto the shared-design-concept framework is this wiki's synthesis; Litt himself frames it as solo understanding vs. team understanding, not in code-theory terms.)
+
 ## Related
 
 - [[ubiquitous-language]] — The textual representation of the shared design concept.
@@ -49,6 +54,8 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 - [[vibes-based-engineering]] — Specs-to-code bypasses building a shared design concept; the user never develops a theory of the code.
 - [[agent-evals]] — Evals operationalize the shared design concept: "design so quality is measurable" means the quality criteria are part of the shared concept
 - [[agent-quality-engineering]] — The quality engineering thread treats the shared design concept as infrastructure: quality must be designed in from day one
+- [[shared-understanding]] — The team-level model that the shared design concept supports
+- [[geoffrey-litt]] — Distinguishes code-level theory from team-level shared understanding
 
 ## Thread
 - [[the-human-lever]] — The shared design concept as the core of human design authority
@@ -59,3 +66,4 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 ## Sources
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Matt Pocock on making the design concept explicit for AI agents; Grill Me skill as the mechanism for building shared understanding
 - Peter Naur, *Programming as Theory Building* (1985) — The theoretical origin: programming as building a shared theory of the system
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: shared understanding as the team-level counterpart to the shared design concept; shared spaces as the infrastructure for building collective understanding.

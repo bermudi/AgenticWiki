@@ -1,9 +1,10 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-07-14
+updated: 2026-07-15
 sources:
   - raw/yt-how-agents-use-dev-tools.md
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/agentic-coding-recommendations.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
@@ -121,6 +122,9 @@ Both agree: for developer-facing agent tools, CLI composability (pipes, scripts)
 ### Kun's Efficiency Argument
 
 [[kun-chen|Kun Chen]] adds a quantitative angle to the CLI-over-MCP case. His [[axi]] benchmark of GitHub access for agents found the GitHub MCP server cost **3× more tokens and more than 2× the latency** than the `gh` CLI for the same tasks, with no clear benefit. He also reports that a token-efficient non-JSON output format can save ~40% tokens compared to JSON. The practical upshot: tool choice is not just an aesthetic preference; it is a first-class workflow cost variable.
+
+> [!note] Extension: The Memory Store as an Agent-Navigable Tool Surface (Dreaming)
+> [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) extends this thread's CLI-over-MCP / minimalism thesis to the memory layer. Anthropic's perceived state of the art for agent memory is **memory as a file system** — markdown files read/written/searched with ordinary tools (bash, grep) rather than bespoke memory-tool APIs or opaque vector databases. The memory store is itself an agent- and human-navigable tool surface, and Mukta's year-long path to it (CLAUDE.md → memory tools → skills → file-system-as-memory) is the same "shed unnecessary opinion about the tool surface" arc this thread tracks for dev tools. Dreaming's versioning + transcript provenance is, correspondingly, inspectable tool feedback — the [[contextcov|ContextCov]] pattern (deterministic, reviewable checks) applied to memory mutation rather than code.
 
 ## Layer 3: Minimalism as Performance
 
@@ -273,3 +277,4 @@ The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in
 - `raw/2512.08296.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Tool-Coordination Trade-off in Multi-Agent Systems" extension. §4.3 scaling principles (ε × T interaction β = -0.096, p = 0.002); §4.2 Workbench results (16-tool task, efficiency penalty 2-6.3×, Hybrid collapse); Table 5 coordination metrics (efficiency per architecture).
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's AXI tools and benchmark: GitHub MCP vs CLI (3× tokens, 2×+ latency), token-efficient non-JSON output (~40% savings), the ten principles for agent-ergonomic tools, and the [[lavish]] HTML artifact editor as another HTML-as-agent-output case.
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[mario-zechner|Zechner]] on the training-harness-as-tool-reliability-factor: [[pi]]'s strict edit tool showing ~20% failure on newer Anthropic models while [[claude-code|Claude Code]]'s lenient harness masks it. Source for the "Training Harness Is Now a Tool-Reliability Factor" departure; cross-refs [[grammar-constrained-sampling]] and [[harness-monoculture]].
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Memory Store as an Agent-Navigable Tool Surface" extension: memory-as-file-system (markdown + ordinary tools over bespoke memory APIs/vector DBs) as the CLI-over-MCP thesis applied to the memory layer; versioning+provenance as inspectable tool feedback.

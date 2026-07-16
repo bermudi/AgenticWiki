@@ -1,10 +1,11 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-12
+updated: 2026-07-15
 unaudited_marginal: 0
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-dhh-ai-pilled.md
@@ -35,6 +36,7 @@ sources:
   - raw/2509.09677.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/gstack-garry-tan-software-factory.md
+  - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -140,11 +142,16 @@ Delegation without design authority is abdication. The human isn't less importan
 > [!note] Departure: HITL as Permission Governance
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) reframes the human's safety role as **multi-tier permission governance** — a structured hierarchy where actions are classified by risk and higher-risk operations (editing files, executing code, accessing the network, modifying production) require human approval while low-risk operations (reading files, inspecting logs) remain autonomous. This is narrower than the thread's framing, which blends **design authority** (taste, judgment, architecture ownership) with **safety governance** (preventing harm). The survey treats these as distinct concerns: the human as design authority (this thread) vs. the human as safety governor (a separate mechanism in [[harness-engineering]]). Both are valid — they describe different aspects of the human's role — but the survey's mechanical framing suggests the wiki should track them separately rather than under a single "human lever."
 
+> [!note] Extension: Fleet-Level Memory Governance (Dreaming)
+> [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) relocates the human lever to fleet-level **memory governance**: across all sessions, a human reviews and accepts or rejects each proposed memory change — reviewing the *memory diff* (what should be added, fixed, or cut), not the session that produced it. Mukta's tiered permissions make the memory store itself a governed surface (org-wide context read-only to individual agents; an agent's scratchpad read-write). This is the "reviewing outputs, not code" pattern and the permission-governance departure above, applied to the memory layer — the human owns which memory changes ship across the fleet, the way Kun Chen owns which PRs merge via risk assessment rather than line-by-line diff.
+
 ## Outsource Thinking, Not Understanding
 
 [[andrej-karpathy|Karpathy]] keeps returning to a tweet that crystallizes the human lever:
 
 > "You can outsource your thinking but you can't outsource your understanding."
+
+[[geoffrey-litt|Geoffrey Litt]] sharpens this into a distinction between **understanding to verify** (correctness checking, which agents are getting better at) and **understanding to participate** (the rich conceptual structures that let you generate the next idea). The latter, he argues, is what the human must still hold. Reviewing an agent's output is not just a gate; it is the loop that changes you and carries you into the next loop. If that understanding degrades, you stop being the general and become the spectator. Litt extends this to the team level with [[shared-understanding|shared understanding]] — the collective mental model that lets teams communicate and reason together, built through shared spaces where humans and agents can co-discuss work. His work is built on [[notion|Notion]], which provides the collaborative substrate (HTML blocks, shared documents, embedded coding agents) for these understanding practices.
 
 > [!note] Marginal: The Captain Becomes the Bottleneck
 > [[kun-chen|Kun Chen]]'s "first mate" observation sharpens the human-lever thesis: once a meta-agent manages the crew of implementation agents, the human's bottleneck moves from "how do I manage all these sessions?" to "what should I ask them to do?" The captain must now spend more time talking to users, understanding the competitive landscape, and crafting the "treasure map" that guides the crew. This is the human lever redirected from execution management to strategic direction.
@@ -346,6 +353,7 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - [[software-factory]] — The automation of the execution layer; the human lever shifts from steering to tuning
 - [[aiming-problem]] — Tuning the factory is the new form of the human lever — slow, expensive, and difficult
 - [[babysitter-agent]] — Invisible context management as infrastructure that frees the human from session-level concerns
+- [[dreaming]] — fleet-level memory governance: the human accepts/rejects proposed memory changes across all sessions; tiered permissions make the memory store a governed surface
 - [[cognitive-debt]] — The erosion of the skills the human lever requires
 - [[skill-atrophy]] — The mechanism by which the human lever's prerequisites degrade
 - [[supervision-paradox]] — The structural contradiction that makes the human lever self-undermining
@@ -402,4 +410,6 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "Planning Ceiling Is Partly an Execution Ceiling" departure: isolating execution from planning shows execution horizon improves with model size + RL-trained thinking (§3.1, §3.2) — levers the human does not own. Bound the human lever's reach at the capability layer, not just the prompt layer.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: the captain/first-mate/crew metaphor as a reframing of the human lever; the human reviews risk assessment and evidence rather than diffs; the bottleneck moves to strategic direction.
 - `raw/gstack-garry-tan-software-factory.md` — Garry Tan's gstack: User Sovereignty as an explicit human-lever principle ("AI models recommend. Users decide."); the generation-verification loop; cross-model review where even two AIs agreeing doesn't override the user's "no." Source for the "User Sovereignty as an Explicit Principle" marginal note.
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Fleet-Level Memory Governance" extension: the human accepts/rejects proposed memory changes across all sessions; tiered permissions (org-wide read-only, agent scratchpad read-write) make the memory store a governed surface.
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: understanding-to-participate vs. understanding-to-verify; the human as the one who must hold the system's conceptual model; Explain Diff, microworlds, and quizzes as tools for keeping the human in the creative loop.
 

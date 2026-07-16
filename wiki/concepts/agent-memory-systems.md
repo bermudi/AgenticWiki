@@ -1,9 +1,10 @@
 ---
 title: Agent Memory Systems
 created: 2026-07-11
-updated: 2026-07-12
+updated: 2026-07-14
 sources:
   - raw/2606.24775v1.md
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
 tags: [concept, agent-memory, data-management, memory-architecture, retrieval, benchmark, memory-maintenance]
 unaudited_marginal: 0
 ---
@@ -74,6 +75,8 @@ Highly structured systems (Cognee, Zep, MemoryOS) incur **orders-of-magnitude** 
 
 The component ablations converge on one principle: **each layer of abstraction — compression, summarization, fact extraction — progressively discards information.** Representation granularity (M1) and the late-filtering principle (M2) are two faces of it: high-retention forms best support detail recovery, and aggressive write-time filtering removes details whose value only emerges in combination. This is precisely why [[memrefine]] finds that safe compression requires an LLM judge reasoning over *factual content* rather than surface similarity — the lossiness is not in the storage, it is in the abstraction.
 
+> [!note] Out-of-band consolidation ([[dreaming]]): Module U (maintenance) is described above as a property of the memory system. [[lamis-mukta|Lamis Mukta]] (Anthropic, AI Native DevCon June 2026) makes explicit that maintenance has a *temporal-mode* question: it can run **in-band** (the task agent maintains memory during its own session, competing for context/tokens) or **out-of-band** (a separate batch process with dedicated compute and fleet-wide transcript visibility). Dreaming is the out-of-band instance of U — an orchestrator + subject-agent fleet reviews session transcripts against the store, proposes evidence-backed consolidations/forgetting/additions, and a human accepts or rejects. The production guardrails Mukta enumerates (versioning with transcript provenance, optimistic-locking concurrency via hashing, tiered permissions, portability) are module U hardened for multi-agent concurrency and prompt-injection abuse — and echo the audience's observation that this is "reinventing databases," which Mukta frames as the harness absorbing module-U concerns into deterministic infrastructure.
+
 ## Evaluation Methodology
 
 The paper's methodological contribution is itself notable against [[the-benchmark-crisis]]: it argues existing memory benchmarks treat the system as a monolithic black box and report only end-to-end task-success metrics (F1, BLEU). Instead it decomposes evaluation into five dimensions measured independently — task effectiveness, evidence-level retrieval fidelity, dynamic-update robustness, long-horizon stability, and operational cost — and runs fine-grained ablations that modify one module at a time.
@@ -91,6 +94,8 @@ The paper's methodological contribution is itself notable against [[the-benchmar
 - [[memrefine]] — The safe-compression primitive; Finding 6 shows why each abstraction layer is lossy and why factual judgment is needed
 - [[llm-guided-compression]] — The LLM-as-judge compression pattern at the memory layer
 - [[evolving-context]] — This page surveys the maintenance/lifecycle dimension (U) that evolving-context's memory-evolution axes operate within
+- [[dreaming]] — The out-of-band, fleet-wide instance of module U; an asynchronous reviewer that consolidates memory off the task agent's critical path
+- [[lamis-mukta]] — Described dreaming and the production guardrails that harden module U (Anthropic)
 - [[context-engineering]] — The paper draws an explicit three-way distinction: RAG (stateless retrieval) vs context engineering (per-turn window curation) vs agent memory (persistent, updatable, full lifecycle)
 - [[self-conditioning]] — Finding 4's long-horizon degradation: flat memory suffers as evidence distance grows, mirroring error-accumulation in context
 - [[horizon-length]] — Long-horizon stability recast as a memory-architecture problem, not just a model-capability problem
@@ -101,3 +106,4 @@ The paper's methodological contribution is itself notable against [[the-benchmar
 ## Sources
 
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* The full paper: the four-module framework M = ⟨R, S, Q, U⟩; the taxonomy of 12 systems across three paradigms; end-to-end evaluation across 5 workloads / 11 datasets (RQ1–RQ5); fine-grained component ablations (M1–M4); nine named findings (workload alignment, evidence-centric retrieval, temporal update fidelity / "hallucinations of the past", horizon-structured memory, operational scaling rule, representation granularity, late filtering, retrieval guidance, conservative maintenance). Code at github.com/OpenDataBox/MemoryData.
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the out-of-band consolidation note: dreaming as the out-of-band instance of module U (temporal-mode question: in-band vs out-of-band maintenance), and the production guardrails (versioning, optimistic-locking concurrency, permissions, portability) as module U hardened for fleet-scale concurrency and abuse.

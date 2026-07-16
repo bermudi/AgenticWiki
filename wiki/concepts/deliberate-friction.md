@@ -1,11 +1,12 @@
 ---
 title: Deliberate Friction
 created: 2026-04-30
-updated: 2026-07-02
+updated: 2026-07-15
 sources:
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/2604.15597v1.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
+  - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
 unaudited_marginal: 0
 tags: [concept, engineering-process, ai-engineering, code-review, quality]
 ---
@@ -29,6 +30,8 @@ In well-run engineering organizations, friction serves a specific cognitive func
 - **SLO requirements**: Before a service can be promoted to production, it must meet reliability criteria. This is friction that prevents premature promotion.
 
 The pattern: friction at inflection points where the cost of error justifies the cost of deliberation.
+
+[[geoffrey-litt|Geoffrey Litt]]'s [[understanding-quizzes|understanding quizzes]] are a lighter, personal form of deliberate friction: before sending a PR to review, he must pass a short quiz on what his agents wrote. The quiz is a speed regulator against the AI-driven pressure to ship faster than you understand. It forces the same pause at a decision point where the cost of false fluency is high.
 
 ## What Agents Break
 
@@ -75,9 +78,14 @@ Don't remove friction wholesale to enable agent autonomy. Audit which friction i
 - [[chris-parsons]] — "Reversible without embarrassment" as an operational instantiation of deliberate friction for safety boundaries
 - [[ralph-loop]] — Fresh-context-per-iteration and plan disposability as deliberate friction against compounding errors
 - [[rollback-posture]] — Refusing to release at full generation speed is deliberate friction at the release layer
+- [[geoffrey-litt]] — Understanding quizzes as a personal speed regulator
+- [[understanding-quizzes]] — Short quiz before code review to verify actual understanding
+- [[explain-diff]] — The explainer doc that ends with the quiz
+- [[code-microworlds]] — Interactive simulations as a slowdown that builds intuition
 
 ## Sources
 
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Armin's analysis of deliberate vs. accidental friction, the "ship without friction" incident
 - `raw/2604.15597v1.md` — DELEGATE-52 paper: degradation compounds multiplicatively with interaction length; deliberate friction at delegation boundaries as a circuit breaker
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — Teaching mode as deliberate friction; inquiry vs. delegation in the Anthropic RCT
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: understanding quizzes as a speed regulator; the pause before shipping to verify understanding; Explain Diff and microworlds as deliberate, understanding-building friction.

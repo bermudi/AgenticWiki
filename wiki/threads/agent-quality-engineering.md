@@ -1,9 +1,10 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-07-14
+updated: 2026-07-15
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
+  - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - "raw/yt-the-observability-layer-your-ai-agent-is-missing.md"
   - "raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md"
   - "raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md"
@@ -104,6 +105,9 @@ This flywheel makes agents shippable because it provides:
 - **Safety for tool changes**: Validate against historical failures
 - **Compounding regression prevention**: Every fixed failure becomes a permanent test case
 - **Aggregate quality signals**: Sampling (25% in production) catches drift without full-cost evals on every run
+
+> [!note] Extension: The Quality Loop Lifted to the Memory Layer (Dreaming)
+> [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) is the quality flywheel applied to the agent's own *memory store*, run out-of-band with fleet-wide visibility. The loop becomes: fleet session transcripts → recurring-failure patterns → proposed memory change (add missing knowledge, fix stale entry, cut irrelevance) → human accept/reject. "Every production failure becomes an eval case" becomes "every fleet-wide failure becomes a proposed memory edit." Two details sharpen the connection to this thread's layers: (1) the highest-signal failures live in **tool-call metadata**, not conversational text — the "radians vs degrees" misconfiguration is detectable only by scrutinizing repeated tool errors, extending the observability thesis (Layer 2) into the tool-call trace; (2) the process is asynchronous with dedicated compute, so memory curation no longer competes for the in-band token budget. The thread's thesis — quality infrastructure makes agents shippable — generalizes: the infrastructure must cover not just the code the agent writes but the memory it reads.
 
 ## Autonomous PR Pipelines
 
@@ -276,3 +280,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/yt-ai-agents-need-workflows-not-bigger-prompts.md` — Galarza (2026): per-step scoring attached to workflow steps, deterministic guardrails as output validation between LLM calls; reconcile LLM + deterministic signals before routing decisions
 - `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the Multi-Agent Verification section. [[mast]] taxonomy: FC3 Task Verification (23.5%) is the third-largest failure category; Insight 3 states multi-level verification is needed; +15.6% from adding a high-level objective check to ChatDev. The LLM-as-a-Judge annotator (κ=0.77 on structured classification) is a data point for the LLM-as-judge reliability debate.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: No Mistakes autonomous PR pipeline; adversarial review, end-to-end testing with evidence, and PR babysitting as a workflow-level quality loop.
+- `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Quality Loop Lifted to the Memory Layer" extension: dreaming as the out-of-band, fleet-wide quality flywheel over the memory store (transcripts → recurring failures → proposed memory edits → human accept/reject); tool-call metadata as the highest-signal failure source, extending observability into the tool-call trace.
