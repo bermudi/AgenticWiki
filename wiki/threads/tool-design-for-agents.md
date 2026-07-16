@@ -61,6 +61,9 @@ The wiki already has the [[the-agent-workflow|workflow]] and [[the-human-lever|h
 2. **Language and infrastructure are tooling decisions.** Choosing Go over Python, a Makefile over an MCP server — these are tool design choices that directly affect agent performance.
 3. **Minimalism beats feature richness.** Fewer, composable tools with clear contracts outperform feature-rich ones because they reduce the failure surface for the LLM.
 
+> [!note] Extension: Queryable Traces as Agent Tooling
+> [[vibv|Vibv]] (Boundary ML) argues that observability infrastructure is itself agent tooling: traces must be **queryable by agents**, not just visualizable for humans. Type-safe trace queries (`find everything where latency > 1s and the prompt contained "generate image"`) turn traces into machine-readable data the agent can introspect — the agent is a primary consumer of its own execution history, not just a viewer. This is Layer-1 interface design applied to the observability surface, and it sharpens the thesis that "tools must change because the consumer changed." See [[tracing-spectrum]] for the full treatment.
+
 ## Layer 1: Redesigning the Interface Contract
 
 [[zanie-blue|Zanie Blue]] (Astral) provides the most systematic treatment. She identifies five qualities tools provide to agents — correctness, quality, efficiency, safety, and context discovery — and argues that each one requires different design when the consumer is an agent rather than a human.

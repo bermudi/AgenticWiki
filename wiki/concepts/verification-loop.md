@@ -132,6 +132,7 @@ The practical implication for verification loop design: the loop is not a single
 - [[rollback-posture]] — Per-change verification is necessary but not sufficient; rollback posture demands system-level detection cadence
 - [[matt-pocock]] — "Outrunning your headlights" metaphor; TDD as the discipline for keeping agent speed proportional to verification ability.
 - [[agent-observability]] — Traces as the input to the verification loop: you can only verify what you can see.
+- [[tracing-spectrum]] — Design-time tracing makes the design layer verifiable; the loop extends to back-to-design
 - [[fighting-slop-with-slop]] — The BEEPs workflow uses the verification loop differently: the design doc is the verification target, the tooling is the throwaway means.
 - [[plan-vs-review]] — The verification loop is the review side of the plan-vs-review tradeoff.
 - [[chris-parsons]] — Sub-agent validation with fresh contexts as a concrete verification technique

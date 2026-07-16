@@ -49,6 +49,7 @@ This is only safe when the interface is testable. The [[verification-loop]] must
 - [[tracer-bullets]] — Vertical slices to verify Grey Box designs.
 - [[deep-vs-shallow-modules]] — Deep modules are the ideal targets for Grey Box delegation.
 - [[verification-loop]] — The mechanical process of validating the implementation.
+- [[tracing-spectrum]] — Code-time tracing is the grey box in action: see boundaries without reading internals
 - [[vibes-based-engineering]] — The anti-pattern that Grey Box engineering seeks to avoid.
 - [[code-intelligence]] — Enables high-fidelity context for grey box verification.
 - [[compounding-booboos]] — Grey box engineering catches booboos before they compound.

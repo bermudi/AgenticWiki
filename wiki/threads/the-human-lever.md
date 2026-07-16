@@ -4,6 +4,7 @@ created: 2026-04-25
 updated: 2026-07-15
 unaudited_marginal: 0
 sources:
+  - "raw/yt-stop-reading-code-start-understanding-systems.md"
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -110,6 +111,20 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 A deeper challenge for the verification contract: even when rules are explicitly given, models may not follow them. [[inferential-rule-following|RuleBench]] demonstrates that when rules contradict a model's parametric knowledge (e.g., counterfactual kinship rules), performance collapses — GPT-4o drops from 99.7% to 8.2%. The model isn't following the rule; it's pattern-matching it to training data. This means the human's verification responsibility extends beyond testing outputs to testing *whether the model actually used the rules you gave it* — a far harder problem.
 
+## The Closed Loop: Design → Code → Execution → Feedback
+
+The [[verification-loop]] contract between human and agent has traditionally been: propose → execute → verify → refine. [[vibv|Vibv]] (Boundary ML) extends this to include the design layer, creating a closed loop:
+
+```
+design → code → execution → agent feedback → improved design
+```
+
+The critical insight: post-execution tracing feeds back into design. When an agent runs and produces unexpected behavior, you can ask: "What's missing in the design that made the actual trace differ from the call site you drew me?" The agent can then refine the design — not just fix the code, but fix the *understanding* that produced the code.
+
+This is the full-circle version of the [[agent-quality-loop]]: the existing quality loop is `code → traces → evals → scorers → back to code`. The closed loop extends it to include the design layer: `design → code → traces → evals → scorers → back to design`. You're not just debugging code — you're debugging the design assumptions that produced the code.
+
+The closed loop means the human lever isn't static. Each iteration aligns what you expected with what actually happened. The [[tracing-spectrum|tracing spectrum]] is the tool that makes this visible: design-time tracing shows what you expected, post-execution tracing shows what happened, and the delta between them is where the next design iteration focuses.
+
 ## Schema-First Design as the Human Lever
 
 [[dax-raad|Dax Raad]] provides a concrete instantiation of the human lever — and the [[ai-boilerplate-paradox|AI boilerplate paradox]]: his team at [[opencode|OpenCode]] aligns on data shapes using [[effect|Effect]]'s schema system *before* implementation, then lets AI fill in the details. "We try to model reality using schema and we kind of align on what makes sense, and then the implementation kind of AI does."
@@ -138,6 +153,14 @@ The unifying principle across all sources: the more code the AI writes, the more
 [[kun-chen|Kun Chen]] frames this shift as a role change from "sailor" to "captain." When the agent is one crewmate among many, the human stops executing and starts directing: setting the destination, holding the quality bar, and letting a [[first-mate|meta-agent]] manage the crew. In his workflow, the human reviews the [[no-mistakes]] risk assessment and evidence rather than every diff; the strategic bottleneck is not code review but deciding what matters (talking to users, understanding the market, crafting the "treasure map").
 
 Delegation without design authority is abdication. The human isn't less important in an AI-assisted workflow — they're *more* important, because the cost of a bad design decision is amplified by the speed at which the agent will faithfully implement it.
+
+### The Expectation Gap
+
+[[vibv|Vibv]] (Boundary ML) introduces a model for why the human lever becomes *more* critical as systems improve. The argument: as your system gets more capable, users build expectations about what it can do. User expectations grow faster than system capability. The delta between expected and actual is the real problem — not that the system is bad, but that the gap is widening. More capability → more "reds" (unmet expectations).
+
+This reframes the human lever's urgency. The traditional argument is "the human must own design boundaries because AI writes bad code." The expectation gap argument is stronger: "the human must own design boundaries because the failure surface is *expanding* as the system improves." Every new capability the agent ships creates a new class of user expectations that the design didn't account for. The human's job isn't just to prevent bad code — it's to prevent the gap between what users expect and what the system can deliver from growing faster than the system can close it.
+
+The implication: design authority isn't a one-time investment. It's a continuous process of aligning system capabilities with user expectations. The [[tracing-spectrum|tracing spectrum]] is the tool that makes this visible — you need tracing at all three layers (design, code, execution) to see where the gap is growing.
 
 > [!note] Departure: HITL as Permission Governance
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) reframes the human's safety role as **multi-tier permission governance** — a structured hierarchy where actions are classified by risk and higher-risk operations (editing files, executing code, accessing the network, modifying production) require human approval while low-risk operations (reading files, inspecting logs) remain autonomous. This is narrower than the thread's framing, which blends **design authority** (taste, judgment, architecture ownership) with **safety governance** (preventing harm). The survey treats these as distinct concerns: the human as design authority (this thread) vs. the human as safety governor (a separate mechanism in [[harness-engineering]]). Both are valid — they describe different aspects of the human's role — but the survey's mechanical framing suggests the wiki should track them separately rather than under a single "human lever."
@@ -180,6 +203,14 @@ He's unsure whether taste and judgment will become automatable over time: "I do 
 The key insight: planning and reviewing are not substitutable forms of the same work. One is proactive design authority (the human lever in action), the other is reactive quality assurance. Choosing the plan-heavy approach when the domain allows it is the human's most efficient use of strategic attention.
 
 This directly reinforces the [[grey-box-engineering|Grey Box]] model: upfront planning corresponds to defining the box (interfaces, types, invariants), and review corresponds to verifying the box was built correctly. The tradeoff is about where you invest — specifying the boundary or inspecting the contents.
+
+### Design-Level Alignment: The Human Layer Technical Design Doc
+
+[[dex-horthy|Dex Horthy]] provides a specific instantiation of the planning investment: the **Technical Design Doc** pattern at Human Layer. The principle: anything the LLM can't get right 99% of the time is worth aligning on at the design level. Five minutes of alignment at the design layer saves hours of code review.
+
+This extends the planning-as-investment thesis. Louis Knight-Webb's "5 minutes of planning saves 30 minutes of reviewing" is about planning depth. Dex's framing is about *where* to invest: not just planning in general, but specifically aligning on the spec, the interfaces, and the design decisions that the agent will faithfully implement whether or not they're correct. The design doc becomes the human's primary output — not the code, not the review, but the specification that makes the code correct by construction.
+
+The connection to the [[tracing-spectrum|tracing spectrum]]: design-level alignment is the design-time tracing layer made practical. You're not just sketching architecture — you're creating the specification that the agent will implement, and the tracing system will verify against.
 
 ## Comprehension Debt: The Inside View
 
@@ -376,6 +407,9 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - [[vibe-coding]] — The capability shift that makes the human lever critical: when machines write code, design authority and verification become the human's core job
 - [[the-agent-workflow]] — Sister thread: how the workflow operationalizes the human lever through HITL/AFK splits and delegation patterns
 - [[boris-cherny]] — The practitioner who embodies the thesis: "great engineers matter more than ever"; the job moved up an altitude from writing code to writing the thing that writes the code
+- [[tracing-spectrum]] — The tool that makes the closed loop (design → code → execution → feedback) visible at all three layers
+- [[baml]] — BAML's compiler-level auto-instrumentation and BEEPs workflow: the human lever operationalized at organizational scale
+- [[vibv]] — Source of the expectation gap model and the closed-loop extension to the quality loop
 
 ## Sources
 
@@ -412,4 +446,5 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - `raw/gstack-garry-tan-software-factory.md` — Garry Tan's gstack: User Sovereignty as an explicit human-lever principle ("AI models recommend. Users decide."); the generation-verification loop; cross-model review where even two AIs agreeing doesn't override the user's "no." Source for the "User Sovereignty as an Explicit Principle" marginal note.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Fleet-Level Memory Governance" extension: the human accepts/rejects proposed memory changes across all sessions; tiered permissions (org-wide read-only, agent scratchpad read-write) make the memory store a governed surface.
 - `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: understanding-to-participate vs. understanding-to-verify; the human as the one who must hold the system's conceptual model; Explain Diff, microworlds, and quizzes as tools for keeping the human in the creative loop.
+- `raw/yt-stop-reading-code-start-understanding-systems.md` — Vibv (Boundary ML) and Dex Horthy (Human Layer): the expectation gap model (user expectations grow faster than capability); design-level alignment via Technical Design Docs; the closed loop (design → code → execution → feedback); tracing as the tool that makes the human lever visible at all three layers.
 

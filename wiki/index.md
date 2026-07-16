@@ -106,8 +106,10 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[jinsong-su]] — Professor, Xiamen University; corresponding author of MemGraphRAG (KDD 2026) and HippoRAG; NLP, machine translation, GraphRAG.
 - [[mathis-pink]] — Researcher at Max Planck Institute for Software Systems; lead author of the position paper arguing episodic memory is the missing piece for long-term LLM agents (the five-property framework).
 - [[lamis-mukta]] — Member of technical staff on Anthropic's applied AI team; described dreaming — Anthropic's out-of-band memory consolidation paradigm — and its production architecture.
+- [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework.
 
 ## 🧠 Concepts
+- [[tracing-spectrum]] — Observability at three layers (design/code/execution) closing a feedback loop: design → code → execution → agent feedback → improved design. Extends the quality loop to include the design layer.
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
 - [[babysitter-agent]] — An invisible agent managing another agent's context as its subconscious mind
 - [[beads-work-ledger]] — Work as a first-class entity tracked in a graph with three views (public future / hidden in-progress / public finished); the substrate that makes software factories legible across human and agent participants. Yegge's tool.
@@ -274,6 +276,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[sourcegraph]] — Universal code search and intelligence platform.
 
 ## 🛠️ Projects & Tools
+- [[baml]] — Programming language for the AI era (Boundary ML); compiler-level auto-instrumentation, type-safe tracing, OTEL type-system critique.
 - [[treehouse]] — Git worktree manager for parallel agent sessions.
 - [[no-mistakes]] — Autonomous PR pipeline from first-pass code to merged PR with adversarial review and evidence.
 - [[notion]] — Workspace platform; shared documents, HTML blocks, and embedded coding agents as infrastructure for shared understanding.

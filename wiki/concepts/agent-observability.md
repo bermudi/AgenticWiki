@@ -1,13 +1,14 @@
 ---
 title: Agent Observability
 created: 2026-04-27
-updated: 2026-07-14
+updated: 2026-07-15
 sources:
   - raw/yt-the-observability-layer-your-ai-agent-is-missing.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
   - raw/yt-slop-watch-ideation.md
   - raw/2504.21625v6.md
   - raw/2603.04474.md
+  - raw/yt-stop-reading-code-start-understanding-systems.md
 tags: ["agents", "observability", "tracing", "monitoring", "opentelemetry"]
 unaudited_marginal: 0
 ---
@@ -52,6 +53,48 @@ Without quality metrics, agent failures get discovered manually, after the fact,
 ## The OpenTelemetry Connection
 
 The same primitives that trace requests through microservices trace decisions through agents: spans, trace IDs, parent-child relationships. Tools like Arize Phoenix, Langfuse, Braintrust, and Mastra all speak OpenTelemetry. What's new isn't the infrastructure — it's what you're looking at: a decision chain instead of a request path.
+
+### The OTEL Type-System Limitation
+
+[[vibv|Vibv]] (Boundary ML) critiques OpenTelemetry's type system as insufficient for rich agent tracing. OTEL accepts only: string, boolean, int, float, and sequences of each. The result:
+
+- People JSON-serialize rich data into string attributes
+- This bloats wire size by approximately **8x** (100 bytes of real data → 800 bytes on the wire)
+- The JSON strings can't be queried — you can't write SQL-like queries against serialized JSON
+- Performance suffers, forcing tradeoffs about what to trace and what to skip
+
+This is the same pattern [[wide-events]] identifies: OTEL is plumbing, not semantics. The type-system limitation means that even when you have rich tracing data, the transport layer degrades it to unqueryable strings. BAML's approach (typed traces with compiler-level knowledge of data shapes) is one solution; the broader lesson is that tracing infrastructure needs richer type systems than OTEL currently provides.
+
+## Compiler-Level Auto-Instrumentation
+
+[[baml|BAML]] takes a different approach to instrumentation: the compiler knows which functions call LLMs and automatically captures their inputs and outputs. No manual `@trace` decorators, no opt-in span creation. Security-sensitive data (environment variables, HTTP headers) is redacted by default, and repeated values are deduplicated.
+
+The argument: "The fundamental flaw in most tracing systems is users have to opt in." If agents are writing code, they won't consistently add tracing — you'll get partial coverage with gaps that are invisible until you need them. Compiler-level instrumentation makes tracing complete by default for the functions that matter most.
+
+This is the [[tracing-spectrum|code-time tracing]] layer made concrete: the tracing is embedded in the code structure, not bolted on after. The compiler's knowledge of the code's shape becomes the tracing's knowledge of the execution's shape.
+
+## Agents as Trace Consumers
+
+A critical requirement for agent observability: traces must be queryable by **agents**, not just visualizable for humans. [[vibv|Vibv]] argues for type-safe, schema-aware queryability — the ability to write queries like:
+
+```
+find everything where latency > 1s and the prompt contained "generate image"
+```
+
+with full type safety on the query. This turns traces from human-readable artifacts into machine-queryable data. The agent can introspect its own execution history, asking questions like: "Did I call `send`? How many times was `http.send` called?"
+
+This is the next evolution of agent observability: not just "can a human see what the agent did?" but "can the agent see what it did?" The agent becomes the primary consumer of its own traces, using them to close the [[tracing-spectrum|feedback loop]] between execution and design.
+
+## The Expectation Gap
+
+[[vibv|Vibv]] introduces a model for why observability becomes more important as systems improve. The argument:
+
+- As your system gets more capable, users build expectations about what it can do
+- User expectations grow faster than system capability
+- The delta between expected and actual is the real problem — not that the system is bad, but that the gap is widening
+- More capability → more "reds" (unmet expectations)
+
+This reframes the observability imperative. The traditional argument for tracing is "debug failures." The expectation gap argument is "the better your system, the more you need tracing — because the failure surface grows with user expectations." Tracing isn't a cost you pay when things go wrong; it's an investment in understanding a system whose failure modes are expanding as it improves.
 
 ## Designed In, Not Added Later
 
@@ -126,6 +169,9 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - [[iterative-self-correction]] — Meeseeks's evaluation-feedback cycle requires per-constraint observability to identify which constraints fail across turns
 - [[genealogy-governance]] — the Lineage Graph as claim-provenance observability: extends the session/turn/model-request hierarchy to the atomic-claim layer; epistemic observability (what was believed and whether it was justified) complementing execution observability
 - [[error-cascades]] — the propagation model the Lineage Graph makes observable; `S(t)` infection trajectory as the multi-agent analog of walking a trace tree
+- [[tracing-spectrum]] — extends observability from post-execution to design-time and code-time layers; the closed loop between execution traces and design refinement
+- [[baml]] — compiler-level auto-instrumentation that makes tracing automatic for LLM-calling functions; addresses the "opt-in" problem
+- [[vibv]] — advocate for agents as trace consumers and the expectation gap model
 
 ## Thread
 
@@ -140,3 +186,4 @@ Slop Watch is designed for a **team/org** context, not solo developers. The prim
 - `raw/yt-slop-watch-ideation.md` — Slop Watch architecture: sessions as DAGs of turns, per-session listener pattern, per-agent adapters, DRI-first UX
 - `raw/2504.21625v6.md` — Meeseeks (Wang et al.): constraint-level evaluation requires observability at the individual constraint granularity across multiple self-correction turns
 - `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the Lineage Graph as claim-provenance observability; offline replay mode for forensic analysis of belief propagation. Source for the "Claim-Provenance Observability" section.
+- `raw/yt-stop-reading-code-start-understanding-systems.md` — Vibv (Boundary ML): OTEL type-system critique (8x wire bloat, unqueryable JSON), compiler-level auto-instrumentation in BAML, agents as type-safe trace consumers, the expectation gap model

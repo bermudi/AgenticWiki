@@ -58,6 +58,7 @@ Not every production run needs to go through full LLM-as-judge evals. Sampling (
 
 - [[agent-evals]] — The measurement layer the loop depends on
 - [[agent-observability]] — Traces as the input to the loop
+- [[tracing-spectrum]] — Extends the loop to the design layer: design → code → traces → evals → back to design
 - [[mastra]] — Mastra implements the quality loop: traces → evals → groundedness scores → prompt iteration
 - [[wide-events]] — Same feedback loop shape: production gaps → add missing data → next time you have it
 - [[verification-loop]] — The deterministic sibling: test → fail → fix → retest

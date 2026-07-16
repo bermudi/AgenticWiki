@@ -1,8 +1,10 @@
 ---
 title: Wide Events
 created: 2026-04-28
-updated: 2026-04-28
-sources: ["raw/yt-youre-logging-wrong.md"]
+updated: 2026-07-15
+sources:
+  - raw/yt-youre-logging-wrong.md
+  - raw/yt-stop-reading-code-start-understanding-systems.md
 unaudited_marginal: 0
 tags: ["observability", "logging", "production-engineering", "opentelemetry", "patterns"]
 ---
@@ -49,6 +51,12 @@ The mental model shift: **don't log what your code is doing, log what happened t
 ## The Role of OpenTelemetry
 
 OTEL is plumbing — a protocol and SDK for collecting telemetry. It standardizes format and avoids vendor lock-in. **It does not decide what to log.** You still instrument deliberately. OTEL without business context is just standardized noise.
+
+### The Type-System Limitation
+
+[[vibv|Vibv]] (Boundary ML) adds a sharper critique: OTEL's type system accepts only string, boolean, int, float, and sequences of each. The result is that people JSON-serialize rich data into string attributes — bloating wire size by approximately **8x** (100 bytes → 800 bytes) and rendering the data unqueryable. You can't write SQL-like queries against serialized JSON strings.
+
+This is a structural limitation on wide events at scale. If you want 50+ fields per event with rich nested types, OTEL's type system forces you into a choice: either serialize to strings (losing queryability and bloating bandwidth) or flatten your data model (losing structure). [[baml|BAML]]'s approach — compiler-level type knowledge embedded in traces — is one escape from this constraint. The broader lesson: wide events need richer type systems than OTEL currently provides.
 
 The right approach: use OTEL as the delivery mechanism, but attach wide-event context to spans. In practice with Effect (TypeScript), this means annotating the current span throughout the request:
 
@@ -118,7 +126,12 @@ This is the same shape as the [[agent-quality-loop]] — production failures dri
 - [[afk-agent]] — AFK agents ship code to production; that code needs wide events
 - [[backpressure]] — Wide events provide the data that backpressure decisions depend on
 - [[axiom]] — Observability platform that makes wide events economically viable at scale (retention-based pricing, columnar backend)
+- [[baml]] — BAML's typed tracing approach addresses the OTEL type-system limitation that wide events face
+- [[vibv]] — Source of the OTEL type-system critique
+- [[tracing-spectrum]] — Wide events address the post-execution layer; tracing spectrum extends to design-time and code-time layers
+- [[the-human-lever]] — Wide events are the production observability layer that the human lever requires to verify agent-shipped code
 
 ## Sources
 
 - `raw/yt-youre-logging-wrong.md` — Theo (t3.gg) reacting to Boris's article on wide events, canonical log lines, OTEL, and tail sampling
+- `raw/yt-stop-reading-code-start-understanding-systems.md` — Vibv (Boundary ML): OTEL type-system critique (8x wire bloat, unqueryable JSON), compiler-level type knowledge as escape from OTEL constraints
