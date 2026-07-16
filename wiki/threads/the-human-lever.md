@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-15
+updated: 2026-07-16
 unaudited_marginal: 0
 sources:
   - "raw/yt-stop-reading-code-start-understanding-systems.md"
@@ -38,6 +38,7 @@ sources:
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/gstack-garry-tan-software-factory.md
   - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -211,6 +212,9 @@ This directly reinforces the [[grey-box-engineering|Grey Box]] model: upfront pl
 This extends the planning-as-investment thesis. Louis Knight-Webb's "5 minutes of planning saves 30 minutes of reviewing" is about planning depth. Dex's framing is about *where* to invest: not just planning in general, but specifically aligning on the spec, the interfaces, and the design decisions that the agent will faithfully implement whether or not they're correct. The design doc becomes the human's primary output — not the code, not the review, but the specification that makes the code correct by construction.
 
 The connection to the [[tracing-spectrum|tracing spectrum]]: design-level alignment is the design-time tracing layer made practical. You're not just sketching architecture — you're creating the specification that the agent will implement, and the tracing system will verify against.
+
+> [!note] Marginal: Three Postures, One Leverage Point
+> [[dex-horthy|Dex Horthy]] reduces the "where to apply the lever" question to three operating postures, calibration included: turn the [[dark-factory|lights off]] (highest speed, but the codebase becomes easier to rewrite than fix in ~3–6 months); read every line (caps the AI lift at ~30–50%); or **find leverage** ([[token-harder-vs-token-smarter|token smarter]]) — the points where an hour of human planning prevents four hours of rework, for ~2–3× speed at ~99% of hand-written quality. The leverage posture is this thread's human lever applied at the planning checkpoint, and it is the position Dex's whole [[dex-horthy-agentic-engineering|worldview]] is built around.
 
 ## Comprehension Debt: The Inside View
 
@@ -415,6 +419,7 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 
 - `raw/yt-ai-coding-for-real-engineers.md` — Grey box engineering, HITL/AFK, deep modules
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loops, code intelligence
+- `raw/yt-context-engineering-with-dex-horthy.md` — The three operating postures (lights off / read every line / find leverage) with calibration, and the SRE scaling analogy for leverage via good architecture (59:56–1:01:00, 1:16:25–1:18:40).
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Observability, minimalism as a structural safeguard
 - `raw/yt-dhh-ai-pilled.md` — The "AI-pilled" workflow and aesthetics as truth
 - `raw/2605.18747.md` — HITL as permission governance: the survey reframes the human's safety role as multi-tier permission governance

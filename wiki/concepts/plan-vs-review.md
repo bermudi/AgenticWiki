@@ -1,12 +1,13 @@
 ---
 title: Plan vs Review
 created: 2026-05-02
-updated: 2026-07-09
+updated: 2026-07-16
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 unaudited_marginal: 0
 tags: [concept, workflow, agent-design, human-in-the-loop, departure]
 ---
@@ -40,6 +41,9 @@ This aligns directly with Knight-Webb's quantified heuristic. At Boundary ML, th
 > "I spend a lot of time writing design docs and plans for almost all of my work now. I would say it's more than 50%. Most of my time I spend writing docs, coming up with plans. I heer on the side of more detail." — Fib, Boundary AI
 
 The qualitative claim behind the quantitative allocation: good design enables one-shot implementation. The design doc absorbs complexity so the implementation doesn't have to.
+
+> [!note] Departure: The Anti-Leverage Finding
+> [[dex-horthy|Dex Horthy]]'s RPI retrospective supplies the strongest counter-evidence to unconstrained plan-heavy investment. His original plans enumerated every line of code in diff blocks; the intended "read the plan, then the PR" practice collapsed into skimming, and the plan-plus-PR burden *doubled* review time — the opposite of the 5-minutes-saves-30 leverage this page quantifies. The nuance: planning is leverage when the artifact is a *steerable, disposable* design doc (current state / desired end state / open questions), and anti-leverage when it tries to be a line-level diff spec. See [[research-plan-implement]] and [[dex-horthy-agentic-engineering]].
 
 ## When to Use Each Mode
 
@@ -86,3 +90,4 @@ The distinction parallels [[grey-box-engineering]]: plan-heavy corresponds to ow
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Real-world validation: 50%+ design time at Boundary ML; 4 days of pure design on threading; one-shot implementation enabled by thorough design
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Pocock's alignment-first departure: don't review the PRD, QA is where quality lives; the grilling session as planning investment, not document precision
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's Lavish as a visual/interactive plan artifact that front-loads planning to reduce review.
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's RPI retrospective: detailed line-level plans as anti-leverage (doubled review time), and the disposable-artifact resolution (1:02:53–1:06:16).

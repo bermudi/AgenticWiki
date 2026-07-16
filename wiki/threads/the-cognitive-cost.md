@@ -1,7 +1,7 @@
 ---
 title: The Cognitive Cost
 created: 2026-06-03
-updated: 2026-07-15
+updated: 2026-07-16
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
@@ -13,6 +13,7 @@ sources:
   - raw/yt-building-great-agent-skills-the-missing-manual.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, ai-engineering, cognitive-debt, failure-modes, human-in-the-loop]
 unaudited_marginal: 0
 ---
@@ -65,6 +66,9 @@ A subtle but important point from Faye: developers are being asked to perform ro
 
 Theo adds his own experience: "I was kind of an early vibe coder... I've been slinging far too many lines of code for my levels of expertise for my entire career." But he had the foundation — years of shipping, debugging, team leadership, open source. The difference between him and the developer who learned to code last month with AI is the foundation, not the tool usage.
 
+> [!note] Departure: First-Person Evidence for Comprehension Debt
+> [[dex-horthy|Dex Horthy]]'s [[dark-factory|dark-factory]] retrospective is the wiki's most concrete first-person account of [[comprehension-debt|comprehension debt]] accumulating in real time. After ~3–6 months of shipping code nobody read, his team hit a wall no amount of expert prompting could crack (a primary key routed through the system as the wrong object type) — and they spent **three weeks re-onboarding** into a codebase they had stopped reading three months earlier ([`raw/yt-context-engineering-with-dex-horthy.md`](../raw/yt-context-engineering-with-dex-horthy.md), 45:42). This is the cognitive-cost thesis with a name, a date, and a recovery cost attached: comprehension debt is not a vague, slow degradation — it is a quantified, dated tax that comes due when something finally breaks. It also sharpens the [[supervision-paradox|supervision paradox]]: the dark factory is the maximal-delegation endpoint of this thread's trajectory, and Dex's [[token-harder-vs-token-smarter|token-smarter]] posture (keep the human reading at the leverage points) is precisely the *mitigation* camp — preserve comprehension by keeping the human in the loop — rather than Faye's *prevention* camp (demote AI). The dark factory does not resolve the paradox; it is the controlled experiment that shows what the loss looks like when the lever is dropped entirely. See [[dark-factory]] and [[dex-horthy-agentic-engineering]].
+
 ## Tensions
 
 > [!note] Departure: SDD's Cognitive Cost Direction Is Unknown
@@ -114,3 +118,4 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]]'s four-part skill checklist as a second front on the "human lever requires humans who can pull it" contradiction: user-invoked preference, branch-aware structure, leading-word selection, and no-op/sediment pruning all demand more human judgment at the moment capacity is eroding. [[skill-hell]] as the organizational-scale diagnosis.
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]] as the shipped maximal-delegation frontier (Gas Town, Beads, bespoke factories); the 40-year-vet exception that confirms the population problem; the Flat Curve Society org-training thesis as an organizational-literacy departure from the thread's individual-focused erosion model.
 - `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — [[geoffrey-litt|Geoffrey Litt]]: understanding as the bottleneck (not review/correctness); understanding-to-participate vs. understanding-to-verify; Explain Diff, code microworlds, and understanding quizzes as the optimistic understanding hypothesis.
+- `raw/yt-context-engineering-with-dex-horthy.md` — [[dex-horthy|Dex Horthy]]'s dark-factory retrospective (3–6 months of unread code → a wall no prompting could crack → three weeks re-onboarding) as the wiki's most concrete first-person account of comprehension debt coming due; the token-smarter posture as the mitigation camp. Source for the "First-Person Evidence for Comprehension Debt" departure (45:42).

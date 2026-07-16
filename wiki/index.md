@@ -15,6 +15,7 @@ unaudited_marginal: 0
 Synthetic essays that trace themes across multiple sources. Start here.
 
 - [[the-cognitive-cost]] — Agentic coding trades cognitive capacity for output volume. The skills needed to supervise agents erode through sustained use. The population of humans capable of providing design authority may be shrinking.
+- [[dex-horthy-agentic-engineering]] — *(worldview thread)* Dex Horthy's position traced as one coherent system: context engineering as deabstracting to the token layer, the Smart Zone and trajectory, research/plan/implement and its anti-leverage retrospective, slow lights-on loops, and token-smarter-not-harder. The thesis the wiki's other sources argue with.
 - [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. SWE-bench Pro misgrades ~32% of trials and suppresses self-verification. DeepSWE exposes the gap.
 
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
@@ -44,7 +45,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[armin-ronacher]] — Creator of Flask and Sentry. Advocate for Go in agentic workflows, tooling minimalism, and simplicity as an agent force multiplier.
 - [[damian-galarza]] — Multi-agent system operator and author of the three-part agent quality series (evals, observability, quality loop).
 - [[drew-breunig]] — Co-founder of Compound; coined the spec-code triangle; created onewords (no-code library) and plum-dev (decision-tracking CLI). Editing the Context Engineering Handbook for O'Reilly.
-- [[dex-horthy]] — Creator of "12 Factor Agents," co-creator of [[context-engineering]], and advocate for agentic engineering over vibe coding.
+- [[dex-horthy]] — Coined [[context-engineering]] and authored [[12-factor-agents|12 Factor Agents]] and the [[research-plan-implement|RPI workflow]]; founder of [[humanlayer]]. His worldview is traced in [[dex-horthy-agentic-engineering]]. Advocate for agentic engineering over vibe coding — and the wiki's strongest first-person source on the [[dark-factory|lights-off factory]] failure.
 - [[lechen-zhang]] — Researcher at UIUC; lead author of SPRIG (ICLR 2026) on system prompt optimization via genetic algorithms.
 - [[zaiyu-cheng]] — Researcher at William & Mary; lead author of the 360-configuration empirical study on system prompt effects in code generation.
 - [[haolin-jin]] — Researcher at University of Sydney; lead author of the systematic overcorrection study in LLM code review.
@@ -110,6 +111,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## 🧠 Concepts
 - [[tracing-spectrum]] — Observability at three layers (design/code/execution) closing a feedback loop: design → code → execution → agent feedback → improved design. Extends the quality loop to include the design layer.
+- [[12-factor-agents]] — Dex Horthy's framework for reliable production agents; factor three ("own your context window") seeded context engineering.
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
 - [[babysitter-agent]] — An invisible agent managing another agent's context as its subconscious mind
 - [[beads-work-ledger]] — Work as a first-class entity tracked in a graph with three views (public future / hidden in-progress / public finished); the substrate that makes software factories legible across human and agent participants. Yegge's tool.
@@ -164,10 +166,12 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
 - [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks; `/init`-style auto-generated dumps that duplicate existing docs hurt.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
+- [[context-trajectory]] — The fourth property of the context window: the autoregressive history that conditions the next message ("you're absolutely right" = time to reset).
 - [[skill-efficacy]] — A skill's popularity (GitHub stars) is not a reliable proxy for whether it makes an agent perform better; skills must be evaluated by measured task impact.
 - [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
+- [[dark-factory]] — A fully-automated software factory where no human reads the code; Dex built one (Jul→Nov 2025) and shut it down — the wiki's strongest first-person failure source.
 - [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
 - [[decision-extraction]] — Mining decisions from code diffs and agent traces at commit time; presenting them for human approval; logging as structured artifacts for intent traceability.
 - [[deliberate-friction]] — Intentional engineering slowdowns at high-stakes decision points. Not all friction is bad DX.
@@ -221,6 +225,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[discourse-slop]] — AI-generated thought-leadership slop circulating through the meta-discourse about AI tools; the hype cycle and incentive-to-hype map.
 - [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
+- [[token-harder-vs-token-smarter]] — Dex's dichotomy: maximize token throughput (the dark-factory/token-harder bet) vs. seek leverage (token-smarter, 2–3× faster at ~99% quality).
+- [[slow-loops]] — Dex's preferred loop engineering: a nightly cron fixes one thing and opens one human-reviewed PR — the lights-on counter to the dark factory.
 - [[state-collapse]] — The failure mode of single-latest-state memory systems in evolving environments: prior versions are silently overwritten and lost, even when they remain valid for older deployments or future rollbacks
 - [[smart-zone-dumb-zone]] — Managing LLM reasoning quality based on context volume.
 - [[spec-driven-development]] — Structured specification document as primary artifact driving AI-assisted implementation; PRD + architecture + task backlog stack (Clarke) or EARS + PBT pipeline (Kiro) or Power Inversion thesis (Spec Kit); empirical fit (greenfield MVP, modernization) and miss (brownfield, legacy langs, prototypes)
@@ -234,6 +240,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[single-player-to-multiplayer]] — Cian Clarke's framing of where SDD tooling needs to evolve: from individual to multi-contributor parallel work via specialization-by-architecture-area and staging gates
 - [[self-harness]] — A paradigm where the same fixed model iteratively improves its own harness via weakness mining, harness proposal, and regression-tested validation; held-out gains of 14.2–21.4 pp on Terminal-Bench-2.0 across three diverse base models
 - [[recursive-agent-harness]] — Recursion over full agent harnesses (with filesystem, code execution, and tools) rather than bare model calls; 71.75% → 81.36% on Oolong-Synthetic with backbone held fixed
+- [[research-plan-implement]] — Dex's signature workflow (research → design → plan → implement, each in a fresh context window); its retrospective found detailed plans anti-leverage.
 - [[system-prompt-effects]] — System prompts have measurable, non-monotonic effects on LLM performance that interact with model scale, prompting strategy, and programming language.
 - [[llm-as-code-judge]] — Using LLMs to evaluate code quality; increasingly common in agentic SE pipelines but suffers from systematic prompt-induced biases.
 - [[llm-ui-paradigms]] — Karpathy's three-stage model of LLM interaction (website → app → persistent async org-level entity); the channel-scoped "org-level harness" instantiated by Claude Tag.
@@ -295,6 +302,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
+- [[humanlayer]] — Dex Horthy's agent-first IDE and collaboration platform; "kill the pull request" in favor of real-time Google-Doc-style review of agent work.
 - [[plum-dev]] — CLI decision-tracking tool that keeps spec, tests, and code in sync via git hooks; extracts decisions from diffs and agent traces at commit time.
 - [[slop-watch]] — Self-hosted coding agent observability platform; sessions, tokens, traces, and quality metrics for agent-driven teams.
 - [[sandcastle]] — Matt Pocock's TypeScript library for parallelizing AFK agent loops in Docker sandboxes.

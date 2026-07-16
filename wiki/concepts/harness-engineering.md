@@ -1,13 +1,14 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-07-12
+updated: 2026-07-16
 sources:
   - raw/2605.18747.md
   - raw/2606.09498.md
   - raw/2606.13643.md
   - raw/2606.14249.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion, harness-co-evolution, operational-mirror, practitioner]
 unaudited_marginal: 0
 ---
@@ -15,6 +16,15 @@ unaudited_marginal: 0
 # Harness Engineering
 
 > The emerging science of designing and evolving reliable agent harnesses. Code-as-harness systems shift the central challenge from isolated model generation to the reliability of the complete execution loop — and harness engineering is the discipline that addresses this shift. It covers evaluation beyond SWE-bench, semantic verification, self-evolving harnesses, multi-agent state coordination, human-in-the-loop safety, multimodal extensions, and the broader science of building executable, inspectable, stateful, and governed agent systems.
+
+## The Inner/Outer Harness Distinction
+
+The vocabulary the wiki finds most useful is **Martin Fowler's**, surfaced and popularized by [[dex-horthy|Dex Horthy]]:
+
+- **Inner harness** — the tool definitions and integration points a coding agent *exposes*: what [[claude-code|Claude Code]], Codex, or AMP ship. The product's own surface.
+- **Outer harness** — what the human builds *around* it to customize for a specific codebase, language, and workflow: commands, [[mcp|MCPs]], [[agent-skills|skills]], codebase organization.
+
+[[harness-engineering|Harness engineering]] is the discipline of engineering against both — and the term, Dex warns (again via Fowler), is vulnerable to **semantic diffusion**: like "agents" and "software factory," it risks being overloaded until it means everything and therefore nothing. He credits [[vibv|Vib (Boundary/LangChain)]] for the underlying intuition that every step is just tokens-in/tokens-out and the engineer's job is to maximize the chance the tokens-out are good. See [[dex-horthy-agentic-engineering]] for the framing in context.
 
 ## Open Problems
 
@@ -191,6 +201,8 @@ This pattern is the operational version of the survey's [[self-harness|§5.2.3 s
 - [[darwin-agent-team]] — The author team behind HarnessX
 - [[llm-ui-paradigms]] — Karpathy's "org-level harness" framing for the paradigm-3 agent; harness-engineering is the discipline the org-level harness requires
 - [[steve-yegge]] — Practitioner patterns: determinism at the boundary, swarming as anti-bitter-lesson, sweeps as factory maintenance
+- [[dex-horthy-agentic-engineering]] — Dex's harness-engineering framing: Fowler's inner/outer distinction, semantic diffusion, the tokens-in/tokens-out intuition
+- [[humanlayer]] — Dex's productized outer-harness platform
 - [[tessl]] — The productized determinism-at-the-boundary pattern; Tessl's six-orchestrator lesson and verifier-as-focused-lint instantiate harness-engineering principles
 - [[software-factory]] — The factory is the harness as a system; the survey's open problems apply at the factory level
 - [[factory-maintenance]] — The ongoing-hygiene problem; sweeps are the operational version of §5.2.3 self-evolution
@@ -204,3 +216,4 @@ This pattern is the operational version of the survey's [[self-harness|§5.2.3 s
 - `raw/2606.13643.md` — Lumer, Sen, Paul, Subbiah (PwC, 2026). *Recursive Agent Harnesses.* Complementary pattern: rather than editing the harness in place, recurse over fresh harness instances via code-driven parallel spawning. Demonstrates that harness architecture is a primary performance lever independent of the model.
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). The most complete instantiation of §5.2.3 to date: typed composition (processor abstraction, eight hook points, nine-dim taxonomy) + [[operational-mirror]] (RL ↔ symbolic-space correspondence; three predicted pathologies) + AEGIS (Digester → Planner → Evolver → Critic with deterministic gating) + [[variant-isolation]] (ensemble routing, +13.6pp on GAIA GPT-5.4) + [[harness-model-co-evolution]] (cross-harness GRPO, +4.7pp over harness-only). +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Practitioner patterns from the panel: determinism-at-the-boundary (Tessl/Dru Knox: the six-orchestrator lesson, the git push / stop session hooks), swarming-as-anti-bitter-lesson (Yegge: multiple passes, adversarial reviews, consensus, quality as a token-spend dial), the factory as a living system needing sweeps (Yegge)
+- `raw/yt-context-engineering-with-dex-horthy.md` — Martin Fowler's inner/outer harness definition (26:56–27:32); the semantic-diffusion warning (53:05–53:16); credit to Vib for the tokens-in/tokens-out intuition (17:26).

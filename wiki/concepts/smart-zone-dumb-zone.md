@@ -1,12 +1,13 @@
 ---
 title: Smart Zone vs. Dumb Zone
 created: 2026-04-25
-updated: 2026-06-05
+updated: 2026-07-16
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 unaudited_marginal: 0
 tags: ["ai-limitations", "context-management", "tool-design"]
 ---
@@ -20,6 +21,8 @@ tags: ["ai-limitations", "context-management", "tool-design"]
 The **Smart Zone** refers to the initial segment of an LLM's context window (roughly the first 100k tokens) where the model's reasoning, instruction-following, and attention to detail are at their peak.
 
 As the context window fills, the model enters the **Dumb Zone**. This is caused by the quadratic scaling of attention relationships; even as models support million-token windows, their ability to "connect the dots" across that entire window degrades.
+
+[[dex-horthy|Dex Horthy]] gives the canonical training-wheels guideline: stay within the **first ~100,000 tokens** for smaller models, **~200,000** for the largest (e.g. Opus 4.8); beyond that, expect degradation. The aphorism he traces back to the [[ralph-loop|Ralph Wiggum]] demos ([[geoffrey-huntley|Geoffrey Huntley]]): *"the less context window you use, the better outcomes you'll get — always."* A longer window is not a smarter model; the model's *intelligence* is what selects which tokens matter, and that selection degrades as the window fills. The biggest tell that you've drifted into the Dumb Zone is the model flailing to get a test to pass at 200k+ tokens — trying increasingly extreme fixes, even deleting files. The recovery move is intentional compaction: write state to a file and start a fresh session at 30–50k tokens.
 
 ### Symptoms of the Dumb Zone
 - Ignoring negative constraints ("Don't use library X").
@@ -60,6 +63,7 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[matt-pocock]] — The Memento Strategy (clear context, reload only what matters) is his operational response to the Dumb Zone.
 
 - [[context-engineering]] — The Smart Zone/Dumb Zone distinction is a core concept in context engineering
+- [[context-trajectory]] — The fourth context-window property (autoregressive history); orthogonal to the size axis that defines the Smart/Dumb Zone
 - [[system-prompt-effects]] — The non-monotonic relationship between prompt detail and quality echoes the Smart Zone/Dumb Zone pattern: too much prompt detail can push agents into the Dumb Zone
 - [[babysitter-agent]] — The babysitter aims to keep the master agent in the Smart Zone by managing context size
 
@@ -69,3 +73,4 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-how-agents-use-dev-tools.md`
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Dex Horthy describing the Smart Zone/Dumb Zone in the context of context engineering
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's canonical 100k/200k guideline, the "less context window you use the better outcomes" aphorism (traced to Geoffrey Huntley/Ralph Wiggum), the flailing-to-pass-tests tell, and the compaction-then-reset recovery move (1:09:46–1:11:40).

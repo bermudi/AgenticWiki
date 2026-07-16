@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-07-09
+updated: 2026-07-16
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -18,6 +18,7 @@ sources:
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
   - raw/2509.09677.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -57,6 +58,9 @@ Four positions have emerged across sources. They're not points on a single "bett
 
 > [!warning] Theory Pressure: SDD Effectiveness is Empirically Contested
 > [[colin-eberhardt|Colin Eberhardt]] (Scott Logic) ran the first head-to-head benchmark of SDD vs iterative development: GitHub Spec Kit took 33 minutes of agent time, produced 2,500 lines of markdown for 689 lines of code, and required 3.5 hours of human review. The iterative approach took 8 minutes, produced 1,000 lines of code, and needed 24 minutes of review — with zero bugs. End-to-end: **10× faster without SDD** on the test problem. This directly challenges positions 2 (plan-as-contract) and 5 (enforcement-as-code), both of which assume the upfront investment in spec precision pays off. The test problem is not characterized in the source, so external validity is unknown. Eberhardt's result may reflect a poor SDD fit, or a senior engineer whose "iterative" approach already had mental specs. But the wiki treats this as the strongest counter-evidence that the plan-as-contract predicate can fail in practice.
+
+> [!warning] Theory Pressure: Detailed Plans Can Be Anti-Leverage
+> [[dex-horthy|Dex Horthy]]'s [[research-plan-implement|RPI]] retrospective pressures the plan-as-contract position (position 2) from the *implementation* side. After a year of running detailed plans that enumerated every line of code in diff blocks, his verdict was that the plans were "terrible" and gave *anti-leverage*: reviewing the plan (20 min) plus reviewing the PR (20 min) doubled reading time rather than reducing it, and people skimmed the plans rather than reading them ([`raw/yt-context-engineering-with-dex-horthy.md`](../raw/yt-context-engineering-with-dex-horthy.md), 1:02:53). The reconciliation with plan-as-contract is nuance — planning is leverage when it produces a *steerable, disposable* artifact (current state / desired end state / open design questions), and anti-leverage when it tries to specify every line of code in advance. This is the same axis as the Eberhardt benchmark above, but approached from a different direction: Eberhardt measures the *cost* of spec precision; Dex measures the *diminishing return* of plan precision once the plan tries to be a diff. The [[dex-horthy-agentic-engineering|elevation thread]] treats this as the load-bearing tension between Dex's worldview and the plan-heavy camp. See [[plan-disposability]].
 
 > [!note] Departure: EARS+PBT as a Hybrid Position
 > [[kiro|Amazon Kiro]]'s spec-driven pipeline doesn't fit cleanly into any of the five positions. It uses a plan-as-contract artifact ([[ears-notation|EARS]] requirements) but verifies it with downstream [[property-based-testing-as-spec|property-based testing]] — which is enforcement-as-code's mechanism applied at the spec level, not the code level. The LLM generates EARS requirements; the structured format enables downstream non-LLM verification; PBT verifies the code against properties derived from the requirements. The EARS-PBT pipeline ([[ears-notation]] + [[property-based-testing-as-spec]]) is the canonical instantiation: the spec is the contract (position 2), but verification is mechanical and the LLM is outside the verification loop (position 5). For the team-scale extension, see [[single-player-to-multiplayer]] — Clarke's framing of how SDD tooling must evolve to support parallel contributors at agentic team pace.
@@ -195,3 +199,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — DevCon Fall 2025: Cian Clarke's practitioner framing supports the plan-as-contract position
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Al Harris, Amazon Kiro: EARS requirements + PBT verification = hybrid of positions 2 and 5; LLM is in the generation step but not the verification step
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.
+- `raw/yt-context-engineering-with-dex-horthy.md` — [[dex-horthy|Dex Horthy]]'s [[research-plan-implement|RPI]] retrospective (detailed plans = anti-leverage: doubled review surface, plans skimmed not read) pressuring the plan-as-contract position from the implementation side. Source for the "Detailed Plans Can Be Anti-Leverage" theory-pressure callout (1:02:53).

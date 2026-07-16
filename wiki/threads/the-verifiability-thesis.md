@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-15
+updated: 2026-07-16
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -26,6 +26,7 @@ sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -122,6 +123,9 @@ The workflow isn't an arbitrary discipline — it's the operationalization of th
 ### For [[verification-loop]]
 
 If the verifiability thesis is the *why*, the verification loop is the *how*. Verification loops operationalize the thesis at the workflow level: they create the closed-loop feedback that the thesis argues is necessary for reliable agent output. The thesis predicts that verification loops should be most effective in domains with strong deterministic verification (code, types, tests) — which matches the empirical evidence from the ContextCov paper, where deterministic executable checks (88.3% compliance) vastly outperform LLM-based reflection (50.3%).
+
+> [!note] Departure: Verifiable → Loopable Black Box
+> [[dex-horthy|Dex Horthy]] states the practitioner's one-line corollary to this thesis: **if you can make a problem very verifiable, you can treat it as a black box and loop on it.** Programming languages are the canonical infinitely-verifiable problem (compile, run, fix); auto-research (a metric as verifier) is another. This is the link between the thesis and [[backpressure]]/loop engineering: backpressure is the mechanism that makes a problem verifiable enough to loop on safely. The [[dark-factory|dark factory]] failure is the thesis's warning realized — treating "users didn't complain" as the verification signal is the weakest possible oracle, and a loop on that signal converges on [[the-slop-problem|slop]]. See [[dex-horthy-agentic-engineering]].
 
 ### For [[agent-quality-engineering]]
 
@@ -275,6 +279,7 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 ## Sources
 
 - `raw/deepswe-benchmark.md` — Datacurve (2026): DeepSWE instantiates the verifiability thesis recursively; behavioral verification makes agent output verifiable; audit shows SWE-bench Pro's verifier fails on 32% of trials; prompt-induced behavior distortion suppresses self-verification
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's "verifiable → loopable black box" corollary (programming languages and auto-research as canonical verifiable problems), and the dark-factory failure as the weakest-oracle realization (34:43–36:04, 41:55).
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: full articulation of verifiability as the driver of jagged capability, the RL circuits framework, the chess example, the car wash example, the vibe coding → agentic engineering arc, and the uncertainty about whether taste can enter the RL distribution.
 - `raw/2311.04235v3.md` — RuLES (Mu et al.): programmatic rule-following evaluation as a case study in making a domain verifiable; best-of-N improvement confirms the verifiability → improvement pattern
 - `raw/2407.08440v4.md` — RuleBench (Sun et al.): counterfactual collapse as evidence that without process-level verification, parametric knowledge dominates given rules

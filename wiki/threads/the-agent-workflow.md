@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-15
+updated: 2026-07-16
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -47,6 +47,7 @@ sources:
   - raw/episodic-semantic-memory-machine-teammates.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -209,6 +210,9 @@ The results are dramatic: 88.3% constraint compliance vs 67.0% for passive instr
 The key workflow implication: **don't treat rule-following as a model capability problem. Treat it as an environment design problem.** If the environment physically prevents the action (PATH shim) or immediately catches the violation (Tree-sitter check), the agent doesn't need to be good at following rules — it only needs to be good at responding to error messages. And responding to error messages is something even weak models can do reliably, because the feedback is deterministic and the required correction is locally scoped.
 
 This shifts the workflow design burden from "how do we get the model to follow instructions?" to "which constraints can we convert to executable checks?" — a significantly more tractable engineering question.
+
+> [!note] Marginal: Research/Plan/Implement — and Its Retrospective
+> [[dex-horthy|Dex Horthy]]'s [[research-plan-implement|RPI workflow]] is a concrete, widely-adopted instantiation of the HITL→AFK cycle with [[context-engineering|intentional compaction]] at each handoff: research (read the codebase into a compressed doc) → design (current/desired state, human-in-the-loop) → plan → implement, each phase in a fresh context window. The retrospective matters for this thread: after a year, Dex concluded the detailed plans were *anti-leverage* (they doubled review surface) and should be treated as [[plan-disposability|disposable tactical artifacts]]. The reconciliation with the plan-heavy advocacy below: planning is leverage when it produces a steerable, disposable artifact (design questions), and anti-leverage when it specifies every line in advance. See [[dex-horthy-agentic-engineering]].
 
 ## Planning Depth: The Plan-Vs-Review Axis
 
@@ -480,6 +484,7 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: origin of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm for agentic proficiency
 - `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK, tracer bullets, Smart Zone
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's RPI workflow (research/design/plan/implement with compaction at each handoff) and its anti-leverage retrospective; the slow-loop pattern; the lights-off factory cautionary tale (1:01:16–1:09:34, 36:56–38:01, 41:55–46:33).
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Context management, malleability, minimalism
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — AI design loop, shared design concept, outrunning headlights, software entropy, code is not cheap
 - `raw/yt-dhh-ai-pilled.md` — DHH on the shift from manual implementation to agentic workflows

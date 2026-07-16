@@ -1,12 +1,13 @@
 ---
 title: Software Factory
 created: 2026-06-05
-updated: 2026-07-12
+updated: 2026-07-16
 sources:
   - raw/yt-systems-building-systems.md
   - raw/gstack-garry-tan-software-factory.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [concept, agentic-engineering, automation, orchestration]
 unaudited_marginal: 0
 ---
@@ -14,6 +15,24 @@ unaudited_marginal: 0
 # Software Factory
 
 > A system that maps spec-like inputs to finished, ready-to-ship software — the next logical step in [[agentic-engineering]], where the human shifts from building software to designing the systems that build the software. Proposed by [[eero-alvar|Eero Alvar]] as the next step beyond sitting in the terminal steering agents one feature at a time.
+
+## Historical Origin
+
+The term is older than AI. [[dex-horthy|Dex Horthy]] traces "software factory" to a **1968 NATO conference** — where the idea was a system of discrete steps (coding, testing, validation, integration) laid out like a factory floor, before CI/CD or even reliable version control existed. Toshiba and others adopted it; the next inflection was **DevOps** (Chef, Ansible, Puppet, Nagios) — feedback loops where a server hitting 90% disk triggers Nagios, which triggers Chef, which grows the disk. In 2018, Nicolas Chaillan (then chief software officer of the US Air Force; transcript garbles the name as "Chalane") wrote a ~100-page essay arguing the DoD needed a "DevSecOps factory" to ship daily instead of every quarter or year.
+
+The agentic factory replaces the *person* building the ticket with an *agent* building it: build time drops from hours to minutes, the bottleneck shifts to code review, then to agentic testing, and — at the limit — to the [[dark-factory|lights-off factory]] where nobody reads the code at all.
+
+## Three Operating Postures
+
+Dex frames the strategic choice for a team building an agentic factory as three postures, calibration included:
+
+| Posture | Speed | Quality risk |
+|---|---|---|
+| Lights off ([[dark-factory|dark factory]]) | Highest | Codebase becomes easier to rewrite than fix in ~3–6 months |
+| Read every line | Slow | Caps the AI lift at ~30–50% |
+| **Find leverage** ([[token-harder-vs-token-smarter|token smarter]]) | **2–3× faster** | **~99% of hand-written quality** |
+
+The leverage posture — a little human planning before implementation — is the [[the-human-lever|human lever]] applied at the planning checkpoint. See [[dex-horthy-agentic-engineering]] for Dex's lived experience shutting a lights-off factory down.
 
 ## The Mapping Analogy
 
@@ -146,6 +165,10 @@ Both frameworks converge on the same structural insight: the workflow is the saf
 - [[fresh-context-subagents]] — GSD Core's architectural solution to the agent persistence problem
 - [[boil-the-ocean]] — gstack's completeness ethos: the tuning instruction for factory output quality
 - [[steve-yegge]] — Yegge's practitioner view: factories are bespoke, not framework-shaped; quality is a token-spend dial
+- [[dark-factory]] — The fully-automated limit and its failure mode (Dex's lived account)
+- [[slow-loops]] — The "lights-on" incremental alternative
+- [[token-harder-vs-token-smarter]] — The three-posture strategic framing
+- [[dex-horthy-agentic-engineering]] — Dex's worldview, including the lights-off factory shutdown
 - [[beads-work-ledger]] — The work-as-first-class-entity substrate the factory operates on
 - [[factory-maintenance]] — The ongoing-hygiene problem the factory must budget for
 - [[intelligence-tier-routing]] — The factory as the routing layer across model tiers
@@ -156,3 +179,4 @@ Both frameworks converge on the same structural insight: the workflow is the saf
 - `raw/gstack-garry-tan-software-factory.md` — gstack: shipped software factory with 23 specialist skills, sprint workflow, parallel sprints, builder ethos
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: shipped software factory with five-step phase loop, fresh-context subagents, persistent planning artifacts, verification gates
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's practitioner corrections: bespoke-not-framework, the recurring components (brain, issue-tracker bridge, boundary hooks, two-mode topology, routing layer), the stochastic-factory-with-quality-dial argument, the two-mode crew-vs-throwaway pattern
+- `raw/yt-context-engineering-with-dex-horthy.md` — The NATO-1968 origin, the DevOps and Nicolas Chaillan/DoD-2018 history, the pre-AI→agentic factory evolution, and the three operating postures with calibration (46:44–52:14, 59:56–1:01:00).

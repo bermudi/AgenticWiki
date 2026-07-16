@@ -1,10 +1,11 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-14
+updated: 2026-07-16
 sources:
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
+  - raw/yt-context-engineering-with-dex-horthy.md
   - raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md
   - raw/2602.11988v1.md
   - raw/2601.20404v1.md
@@ -24,7 +25,12 @@ tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 
 # Context Engineering
 
-> The practice of getting the most out of LLMs by putting the right information in, keeping it as small and dense as possible — maximizing information-per-token density rather than token count. Emerged independently in April 2025 from Jeff Huber (Chroma CEO) and [[dex-horthy|Dex Horthy]], then refined by practitioners like [[lance-martin|Lance Martin]] who catalogued the techniques that operationalize it: progressive disclosure, context offloading, sub-agent isolation, caching, and evolving context.
+> The practice of getting the most out of LLMs by putting the right information in, keeping it as small and dense as possible — maximizing information-per-token density rather than token count. Coined by [[dex-horthy|Dex Horthy]] (April 2025, via the [[12-factor-agents|12 Factor Agents]] factor "own your context window"), then popularized by Toby Lütke and Andrej Karpathy. [[lance-martin|Lance Martin]] later catalogued the techniques that operationalize it: progressive disclosure, context offloading, sub-agent isolation, caching, and evolving context.
+>
+> [[dex-horthy|Dex Horthy]]'s root definition: context engineering is **deabstracting** the abstractions layered on top of the model — RAG, memory, agentic history, structured output are "all different ways to pass tokens into a model" ([`raw/yt-context-engineering-with-dex-horthy.md`](../raw/yt-context-engineering-with-dex-horthy.md), 21:13). Frameworks get you to an 80% demo; the jump from 80% to 95–99% requires going *down a level* and engineering the tokens deliberately.
+
+> [!warning] Attribution correction
+> Earlier versions of this page credited "Jeff Huber (Chroma CEO)" as context engineering's co-creator. **No `raw/` source mentions Jeff Huber.** Dex names the figures associated with the term as himself, Toby Lütke (Shopify), and Andrej Karpathy. The "Jeff Huber" attribution has been removed as unsourced.
 
 ## Definition
 
@@ -33,6 +39,19 @@ Context engineering sits between prompt engineering and agent harness design. It
 The core heuristic: **information-per-token density**. Two prompts at the same token count can have dramatically different effectiveness depending on how densely they pack relevant signal. The hard part is knowing what to exclude — every extraneous token degrades attention on the relevant ones.
 
 A clean formulation from practitioner Sally-Ann Delucia (Arise): **context decides what the model sees, memory decides what survives.** They are distinct concerns that must be built together — separating them conceptually prevents conflating session-level context management with long-term knowledge retention. She also argues context management is a product and UX problem, not just an engineering one: bad context produces bad answers, and bad answers drive users away. The engineering strategies matter, but the ultimate test is whether the user gets the right answer.
+
+### Two Budgets, Not One
+
+[[dex-horthy|Dex Horthy]] splits context engineering into two budgets most builders conflate:
+
+- **Information budget** — the familiar one. RAG chunks vs. dumping the whole book into context; pull only the pages that matter.
+- **Instruction budget** — the overlooked one. Models follow roughly **150–250 instructions** before attention spreads too thin, and *conflicting* instructions — especially mid-conversation course corrections ("actually, I don't want any of that, let's do this instead") — are expensive because the model must compute that it should ignore the earlier path. When both the old and new instructions sit far enough back in the window to be only half-attended, the odds the model honors a 100,000-token-old instruction drop sharply.
+
+Managing both budgets — not just selecting information, but rationing and deconflicting instructions — is the core skill. The instruction-budget limit is the mechanism behind [[instruction-severity-inflation]].
+
+### Cost: Make It Run, Make It Right, Make It Fast
+
+Dex's cost model is a stage gate, not an upfront optimization. First see if the smartest available model can solve the problem and whether people want the result. Only at volume does it pay to do context engineering to move the task down the cost ladder — break it into calls, get pieces running on a small model (e.g. a 12B at ~1/1000th the cost of Opus), reserving frontier intelligence for the steps that actually need it. Engineering time is the binding constraint early on; per-request cost only matters at scale.
 
 **The boundary with agent memory.** The distinction matters: context engineering curates the finite per-turn window, but an agent-memory system is persistent, updatable infrastructure governing the full lifecycle. Zhou et al. (2026, [[agent-memory-systems]]) draw an explicit three-way distinction — RAG is stateless read-only retrieval over a static corpus; context engineering is per-turn window curation; agent memory is persistent, updatable, lifecycle-governed. The distinction is load-bearing: their evaluation shows memory systems lacking lifecycle semantics fail at targeted overwrites and return stale facts as if current (“hallucinations of the past”) — the data-management cousin of [[state-collapse]], since both failures arise from missing update semantics.
 
@@ -198,7 +217,9 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[agent-skills]] — Progressive disclosure is the core context engineering technique that skills implement; skills are the canonical use case for tiered context loading
 - [[procedural-knowledge]] — Context engineering manages how procedural knowledge (skills) is loaded via progressive disclosure
 - [[dex-horthy]] — Co-creator of the term and practice
+- [[dex-horthy-agentic-engineering]] — A thread tracing how Dex's context-engineering worldview connects to his workflow, loops, and harness thinking
 - [[smart-zone-dumb-zone]] — Context engineering operationalizes staying in the Smart Zone
+- [[context-trajectory]] — The fourth property of the context window: the autoregressive history that conditions the next message
 - [[instruction-severity-inflation]] — Instruction density management is a core context engineering skill
 - [[multi-tier-action-space]] — Context engineering techniques enable the thin-tool-layer architecture
 - [[evolving-context]] — Context engineering extended into the temporal dimension
@@ -207,6 +228,7 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[agent-memory-systems]] — The persistent, updatable, lifecycle-governed infrastructure distinct from per-turn context engineering; the explicit three-way distinction (RAG vs context engineering vs agent memory)
 - [[lance-martin]] — Catalogued the operational techniques
 - [[ralph-loop]] — The Ralph Loop applies context isolation (sub-agent spawning) to serial tasks; each iteration gets a clean context window
+- [[research-plan-implement]] — RPI is context engineering applied as a lifecycle: each phase compresses state into a fresh context window
 - [[ubiquitous-language]] — The context.md ub-lang file is the human-trusted artifact that survives context resets.
 - [[slop-watch]] — Matt's research compaction workflow (parallel sub-agents → research doc → reset) is context engineering applied to greenfield ideation.
 - [[satisfaction-of-search]] — A context engineering failure mode: agents stopping context retrieval too early
@@ -250,3 +272,4 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: context rot definition, fresh-context subagent architecture as the primary defense, context monitor hook with WARNING/CRITICAL thresholds, `.planning/` artifacts as cross-session persistence
 - `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). Source for the explicit three-way distinction (RAG vs context engineering vs agent memory) and the argument that treating memory as "RAG over a memory bank" produces state collapse.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the memory-primitives timeline (CLAUDE.md → memory tools → skills → file-system-as-memory), the in-band vs out-of-band distinction, and the [[dreaming]] paradigm. Production memory guardrails (versioning, concurrency/locking, permissions, portability).
+- `raw/yt-context-engineering-with-dex-horthy.md` — The Pragmatic Engineer interview. Source for the root "deabstracting" definition, the two-budgets (information vs. instruction) distinction with the 150–250 instruction-following limit, and the make-it-run/make-it-right/make-it-fast cost-stage model.

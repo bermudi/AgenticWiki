@@ -1,9 +1,10 @@
 ---
 title: Factory Maintenance
 created: 2026-07-12
-updated: 2026-07-12
+updated: 2026-07-16
 sources:
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 unaudited_marginal: 0
 tags: [concept, factory, maintenance, harness, hygiene, sweeps, organizational-adoption]
 ---
@@ -71,6 +72,10 @@ The training is *not* about tools or techniques (those change every model releas
 
 The wiki has not yet seen evidence for when to refactor the factory's structure vs. when to add another sweep. Tessl's heuristic: "find one thing each week and make it a little better" — a soft principle, not a metric. The empirical question (does more sweeps = better maintenance, or do sweeps accumulate into a maintenance tax?) is open.
 
+### Slow Loops: The Minimum Viable Sweep
+
+[[dex-horthy|Dex Horthy]] ships the most concrete, adopt-today version of the sweep pattern: a [[slow-loops|slow loop]] — a cron job in GitHub Actions that runs nightly, fixes exactly one anti-pattern, and opens one small PR for human review. The team wakes up to a codebase slightly better than they left it. Two scaling dimensions match the sweep philosophy exactly: add more feedback conditions (wake up to more PRs), and increase scope per PR as confidence grows. Where the sweeps literature describes the *role*, Dex's nightly cron is the shippable implementation any team can adopt now — and the deliberate "lights-on" counter to the [[dark-factory|dark factory]].
+
 ## Thread
 
 - [[the-agent-workflow]] — Maintenance is the recurring cost of running a factory; the workflow must budget for it
@@ -88,9 +93,12 @@ The wiki has not yet seen evidence for when to refactor the factory's structure 
 - [[harnessx]] — The most complete harness-evolution system; AEGIS's Critic is an automated version of the "fix the harness" rule
 - [[fresh-context-subagents]] — Read-only verifiers are the verification-layer analog of the sweeps pattern
 - [[tessl]] — Tessl's verifier-as-focused-linting-rule is the productized version of the maintenance hook
+- [[slow-loops]] — The minimum viable, adopt-today sweep: a nightly cron that fixes one thing and opens one PR
+- [[dex-horthy-agentic-engineering]] — Dex's loop-engineering posture: incremental, human-reviewed, lights-on
 - [[claude-code]] — The substrate whose hooks make boundary-gating easy
 - [[verification-loop]] — The general verification pattern; maintenance sweeps are verification loops at the factory level
 
 ## Sources
 
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's craftsman's-workshop metaphor and Gas Town "dogs" role; Dru Knox (Tessl)'s "fix the harness before leaving the comment" rule, the sweeps pattern (architecture / test-quality / documentation agents), and deterministic checks at boundaries (git push → run tests; stop session → check committed); Yegge's Flat Curve Society training formula and the token-maxing → token-restraining training arc
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's slow-loop pattern as the minimum viable sweep: nightly cron, fix one thing, one PR, two scaling dimensions (36:56–38:01).

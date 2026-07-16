@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-07-14
+updated: 2026-07-16
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -13,6 +13,7 @@ sources:
   - raw/2503.13657.md
   - raw/2511.09030.md
   - raw/2603.04474.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
 unaudited_marginal: 0
 ---
@@ -24,6 +25,10 @@ unaudited_marginal: 0
 ## The Core Insight
 
 [[geoffrey-huntley|Geoffrey Huntley]]'s principle: "Backpressure beats direction." Instead of telling the agent what to do, create conditions where wrong outputs get rejected automatically. The human's role shifts from directing to **engineering the environment**.
+
+### The Verifiability Move: Loopable Black Boxes
+
+[[dex-horthy|Dex Horthy]] states the enabling insight bluntly: **if you can make a problem very verifiable, you can treat it like a black box and loop on it.** Programming languages are the canonical case — write code, compile; if the compiler fails, fix the compiler; run the program; if it fails, fix it again. The verification is infinite and deterministic, so an agent can be set loose to converge without a human in the loop. Auto-research ("go make this model twice as fast") is the same pattern with a metric as the verifier. Backpressure is the mechanism that makes a problem verifiable enough to loop on; verifiability is what makes loops safe. See [[the-verifiability-thesis]].
 
 ## Three Layers
 
@@ -114,6 +119,7 @@ Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline
 - [[compounding-booboos]] — Backpressure catches booboos before they compound
 - [[deliberate-friction]] — Deliberate friction operates before the change (cognitive); backpressure operates after (mechanical). Both needed.
 - [[geoffrey-huntley]] — Originator of the "backpressure beats direction" principle
+- [[dex-horthy-agentic-engineering]] — Dex's "verifiable → loopable black box" framing ties backpressure to the verifiability thesis
 - [[ralph-loop]] — The Ralph loop uses backpressure as its primary convergence mechanism
 - [[plan-disposability]] — Backpressure catches bad implementations; plan disposability catches bad plans
 - [[chris-parsons]] — "Reversible without embarrassment" as a practical safety backpressure heuristic
@@ -146,3 +152,4 @@ Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline
 - `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST's FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs. The ChatDev chess program example (compiled but had runtime bugs) illustrates this.
 - `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.3 red-flagging (discard malformed/overlong responses without repair); §4.5 empirical impact (red-flagging reduces correlated errors — the collisions where both first two votes are incorrect). Source for the "Response-Level Backpressure" section.
 - `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (atomic-claim decomposition, tri-state screening, blocking with rollback); §VII.D ablation (Table VI: w/o blocking → 3.1% BICR, the empirical validation that detection without enforcement is insufficient). Source for the "Atomic-Claim Backpressure" section.
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's "if you can make a problem very verifiable, you can treat it like a black box and loop" framing, with programming languages and auto-research as canonical verifiable problems (34:43–36:04).

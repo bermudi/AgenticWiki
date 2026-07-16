@@ -1,7 +1,7 @@
 ---
 title: Spec-Driven Development
 created: 2026-06-07
-updated: 2026-07-10
+updated: 2026-07-16
 sources:
   - raw/yt-spec-driven-development-ai-assisted-coding-explained.md
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
@@ -10,6 +10,7 @@ sources:
   - raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md
   - raw/spec-kit-github-sdd-toolkit.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 unaudited_marginal: 0
 tags: [concept, ai-engineering, workflow, spec, design]
 ---
@@ -111,6 +112,9 @@ A head-to-head benchmark from [[colin-eberhardt|Colin Eberhardt]] (Scott Logic) 
 
 ## Thread
 
+> [!note] Departure: Dex Horthy's Skepticism
+> [[dex-horthy|Dex Horthy]] is markedly more skeptical than most sources on this page. His verdict: outside maintenance and migration work, spec-driven development "didn't really work." The intractable problem is the [[spec-code-triangle|two-sources-of-truth]] drift — edit the spec, edit the code, and they diverge; a Spec Kit GitHub issue complaining about exactly this has been open for a year. He has never known a team to find maintaining spec/code parity worth the effort. His alternative: treat planning docs as [[plan-disposability|disposable tactical artifacts]] and treat the code as the only durable source of truth (see [[research-plan-implement]]). This tensions the bullish practitioner reports above and the [[spec-code-triangle]] bidirectional-sync hope; it may be resolved only by GPT-7-class models, if then.
+
 - [[intent-to-code]] — SDD is the most explicit realization of the plan-as-contract position; the Cian Clarke / Kiro stacks are practitioner reports of what that position looks like in production
 - [[the-agent-workflow]] — SDD is a workflow discipline: spec → clarify → plan → implement → verify, with planning the highest-leverage stage
 - [[the-slop-problem]] — SDD is positioned as the discipline that prevents vibe-coding slop from accumulating
@@ -131,6 +135,9 @@ A head-to-head benchmark from [[colin-eberhardt|Colin Eberhardt]] (Scott Logic) 
 - [[intent-to-code]] — Plan-as-contract position, of which SDD is the most explicit practitioner instantiation
 - [[vibe-coding]] — The position SDD is positioned against
 - [[plan-vs-review]] — The underlying tradeoff: 5 minutes of planning saves 30 minutes of review
+- [[research-plan-implement]] — Dex's disposable-docs counter-position to evergreen specs
+- [[plan-disposability]] — The principle Dex's SDD skepticism reduces to
+- [[dex-horthy-agentic-engineering]] — The spec-vs-code drift problem is a stated tension in Dex's worldview
 - [[cian-clarke]] — Near Form engineer; primary practitioner report on SDD workflow at team scale
 - [[al-harris]] — Amazon Kiro principal engineer; primary technical source on EARS, property-based testing, and the Kiro SDD pipeline
 - [[drew-breunig]] — Creator of onewords and plum-dev; coined the spec-code triangle that reframes SDD as a feedback loop
@@ -146,3 +153,4 @@ A head-to-head benchmark from [[colin-eberhardt|Colin Eberhardt]] (Scott Logic) 
 - `raw/yt-learnings-from-a-no-code-library-keeping-the-spec-driven-development-triangle-in-sync.md` — [[drew-breunig|Drew Breunig]] (Computer History Museum): the spec-code triangle critique of linear SDD; onewords postmortem (no-code library limits); decision extraction via plum-dev; software history framing (Hamilton, NATO crisis, waterfall/agile oscillation); "no-code libraries are toys because they are unproven"
 - `raw/spec-kit-github-sdd-toolkit.md` — Primary source for Spec Kit: Power Inversion thesis, nine constitutional articles, template-driven quality (7 constraint mechanisms), extensions/presets/bundles, 30+ agent integrations
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: five-step phase loop, spec-driven pipeline with requirement-to-verification traceability, fresh-context subagents, `.planning/` artifact directory
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's skeptic's case: SDD "didn't really work" outside maintenance, the unsolved spec/code drift problem, the year-old GitHub issue, and the disposable-docs alternative (1:03:33–1:06:16).

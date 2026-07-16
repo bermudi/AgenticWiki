@@ -1,7 +1,7 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-07-14
+updated: 2026-07-16
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -12,6 +12,7 @@ sources:
   - raw/2512.08296.md
   - raw/2606.24775v1.md
   - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution, cost]
 unaudited_marginal: 0
 ---
@@ -19,6 +20,9 @@ unaudited_marginal: 0
 # The Benchmark Crisis
 
 > The benchmarks developers rely on to choose coding models are unreliable. [[swe-bench-pro|SWE-bench Pro]], the industry standard, misgrades ~32% of trials, is contaminated by leaked solutions, and suppresses the self-verification behavior that makes strong models reliable. The result: models that look similar on leaderboards deliver wildly different results in practice. [[deepswe|DeepSWE]] (Datacurve, 2026) exposes the gap and proposes a fix — but the crisis runs deeper than any single benchmark.
+
+> [!note] Marginal: The Maintainability Gap
+> [[dex-horthy|Dex Horthy]] names a dimension no benchmark in this thread measures: **does this model write code that makes the codebase more or less maintainable over 3–6 months?** SWE-bench-style tasks train on "here's a commit, here's an issue, reproduce the fix" — and the cost function of bad architecture can't be evaluated by a unit test; it surfaces months later as an unmaintainable ball of spaghetti. The newer FrontierCode/Marathon maintainability benchmarks (two-layer model review: functional-equivalence judge + code-quality judge) are better but, in Dex's view, still insufficient. This is a fifth crisis axis alongside contamination, verifier failure, prompt distortion, and environment evolution: **no benchmark captures long-horizon maintainability**, which is exactly the axis the [[dark-factory|dark factory]] fails on. See [[dex-horthy-agentic-engineering]].
 
 ## Thesis
 
@@ -157,6 +161,7 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 ## Sources
 
 - `raw/deepswe-benchmark.md` — Datacurve's full benchmark description, methodology, audit results, and qualitative analysis
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's "maintainability gap": no benchmark measures whether a model writes code that improves or degrades codebase maintainability over 3–6 months; SWE-bench trains on reproduce-the-fix, and the cost function of bad architecture can't be caught by a unit test (43:18–43:56, 54:25–56:22).
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective, SWE-bench Pro criticism, call for community benchmarks, cost/token analysis
 - `raw/2606.13681.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "trace-rich benchmarks required" extension. §4.2 (the [[operational-mirror|operational mirror]]'s [[reward-hacking|reward-hacking]] pathology is enabled by scalar-reward benchmarks), §4.5 ([[variant-isolation]] ensemble routing as environment-aware evolution on heterogeneous task sets), §6.3 (Global 49.5% vs. Ensemble 87.4% on GAIA GPT-5.4), §7.2 ("the richness of the feedback signal bounds the sophistication of evolution that can be safely performed"), §7.7 (no held-out evaluation; same measurement limitation as DeepSWE and EvoArena).

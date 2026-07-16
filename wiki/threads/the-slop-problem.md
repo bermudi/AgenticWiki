@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-15
+updated: 2026-07-16
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -35,6 +35,7 @@ sources:
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
   - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -121,6 +122,9 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 [[eero-alvar|Eero Alvar]] offers the most precise definition of slop to date. In his [[software-factory]] framework, the output space of an automated software production system is enormous, and only a tiny subset constitutes **desirable outputs** — production-ready, spec-aligned, no vulnerabilities, no bugs. Everything outside that subset is slop.
 
 The insight: building machinery that produces *something resembling* finished software is trivial. The hard part is **[[aiming-problem|aiming the system]]** to land in the desirable subset. This reframes the slop problem from a quality issue to a targeting problem — and the targeting problem is likely **chaotic**: small changes to the input spec produce wildly different outputs. Tuning the system to reliably produce quality output is the core engineering challenge.
+
+> [!note] Marginal: The Lights-Off Factory Is the Maximal Slop Architecture
+> [[dex-horthy|Dex Horthy]] is the wiki's strongest first-person source on the dark-factory endgame because he built one and shut it down (July→November 2025). The mechanism is the slop spiral this thread documents, run to completion: agents ship faster than humans can review → review becomes the bottleneck → replace review with agentic review/testing → but those reviewers have no architecture intuition (no benchmark trains 3–6-month maintainability) → the codebase becomes easier to rewrite than fix. His "users didn't complain" is the weakest-possible oracle — exactly the verifiability gap slop exploits. See [[dark-factory]] and [[dex-horthy-agentic-engineering]].
 
 This connects to [[matt-pocock|Matt Pocock]]'s software entropy framing: entropy is the mechanism by which outputs drift out of the desirable subset. The software factory framing makes the destination explicit where Pocock describes the drift.
 
@@ -262,6 +266,7 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 ## Sources
 
 - `raw/deepswe-benchmark.md` — Datacurve (2026): benchmark contamination as evaluation slop; SWE-bench Pro verifier failure rates; prompt-induced behavior distortion; the need for reliable verification at the benchmark level
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's first-person dark-factory build-and-shutdown (July→November 2025), the 3–6-month rewrite-vs-fix threshold, and "users didn't complain" as the weakest verification oracle (41:55–46:33).
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the vibe coding → agentic engineering arc; the capability threshold of December 2024; the structural gap between floor-raising and quality-preserving
 - `raw/yt-building-pi-in-a-world-of-slop.md` — Defines slop and compounding booboos
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Diagnosis of vibes-based engineering in complex codebases

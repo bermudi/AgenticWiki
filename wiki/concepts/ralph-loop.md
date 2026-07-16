@@ -1,7 +1,7 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-07-01
+updated: 2026-07-16
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -10,6 +10,7 @@ sources:
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
   - raw/2504.21625v6.md
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 unaudited_marginal: 0
 tags: [concept, autonomous-agents, agent-loops, claude-code, workflow, skills]
 ---
@@ -32,6 +33,10 @@ while :; do cat PROMPT.md | claude ; done
 Each iteration: the agent reads `PROMPT.md` + `AGENTS.md` + `IMPLEMENTATION_PLAN.md`, picks the most important task, implements it, updates the plan, commits, exits. The loop restarts with fresh context. The plan file persists on disk as shared state between iterations.
 
 No sophisticated orchestration needed — just a dumb bash loop that keeps restarting the agent, and the agent figures out what to do next by reading the plan file each time.
+
+### The Origin Demo
+
+[[dex-horthy|Dex Horthy]] dates the technique's breakout to [[geoffrey-huntley|Geoffrey Huntley]] visiting San Francisco and dropping the original "Ralph Wiggum" demo: run Sonnet around the clock, spend ~$6,000 in six weeks, and produce an entire Gen Z programming language — complete with a stage-two compiler written in the language itself. The core lesson the community took from it was [[backpressure|backpressure]]: let the model check its own work, and a sufficiently verifiable problem (like a programming language, which can be infinitely compiled and run) can be treated as a black box and looped on.
 
 ### Why It Works (Context Isolation)
 
@@ -185,6 +190,8 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - [[lance-martin]] — Framed the Ralph Loop as a serial context isolation pattern for long-running tasks
 - [[context-engineering]] — The Ralph Loop is a context isolation technique; context engineering provides the theoretical framework for why fresh context per iteration works
 - [[chris-parsons]] — Operationalized Ralph Loops as skills; traced the evolution through three stages; introduced the worker loop and sub-agent validation
+- [[slow-loops]] — Dex's "lights-on" cousin: the same fresh-context-per-iteration instinct, but scoped to one small human-reviewed PR per night rather than long unattended runs
+- [[dex-horthy-agentic-engineering]] — Dex's conservative posture on loops ("everything except stop reading the code is good advice")
 - [[agent-skills]] — Skills provide the procedural knowledge; the loop provides the execution infrastructure
 - [[evolving-context]] — Parsons evolves his Ralph loop skills via post-session reflection; skill learning is a category of evolving context
 - [[delegate-52]] — Sub-agent validation mirrors DELEGATE-52's finding that separate verification sessions are architecturally more reliable
@@ -208,3 +215,4 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Sandcastle as the parallelized Ralph Loop variant: Kanban DAG, four-stage pipeline, Docker sandboxes, separate reviewer agents
 - `raw/2504.21625v6.md` — Meeseeks (Wang et al.): iterative self-correction as a micro-scale Ralph Loop — automated evaluation replaces human review at the per-response level
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Locates the Ralph Loop as Stage 3 of the five-stage agent-loop lineage; the single-agent ralph loop is "old hat," the orchestration loop on top is the new layer
+- `raw/yt-context-engineering-with-dex-horthy.md` — The Geoffrey Huntley origin demo (Sonnet around the clock, $6k/6 weeks, Gen Z programming language) and the backpressure lesson the community drew from it (33:32–35:38); Dex's contrast between big unreviewable Ralph PRs and incremental slow loops (36:31–38:01).
