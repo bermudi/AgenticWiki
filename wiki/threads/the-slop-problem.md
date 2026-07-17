@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-16
+updated: 2026-07-17
 sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -30,6 +30,7 @@ sources:
   - raw/yt-systems-building-systems.md
   - raw/yt-spec-driven-dev-hype-or-future.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
   - raw/gsd-core-opengsd-spec-driven-framework.md
   - raw/gstack-garry-tan-software-factory.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
@@ -147,6 +148,9 @@ This is slop at the meta-level: the benchmarks themselves are low-quality, unrel
 > - **Sediment** is skill slop via the compounding-booboos mechanism: multiple people contribute to a shared markdown file, nobody feels brave enough to delete anyone else's additions, and the skill grows irrelevant or stale content. This is the same "thousand small compromises" pattern this thread tracks for codebases, now operating on the skill file.
 >
 > The four-part checklist (trigger → structure → steering → pruning) is the proposed evaluative framework — the rubric whose absence is what makes skill hell a slop variant rather than just a supply problem. See [[skill-hell]] for the diagnosis and [[agent-skills]] → Pocock's Skill Design Checklist for the full checklist. The cognitive-cost thread flags a tension here: the checklist demands *more* human judgment (to run the deletion test, select leading words, identify branches) at the moment the supply of that judgment is shrinking — see [[the-cognitive-cost]]'s "Good Skill Design Demands More of the Human" callout.
+
+> [!note] Tension: Skills as slop reducer vs. slop amplifier
+> [[matt-pocock|Pocock]]'s skills thesis implies that *well-authored* skills reduce slop: they encode patterns, shrink the reasoning surface, and ship a built-in verification gate (the `code-review` subagent). This sits in apparent tension with the "Skill Slop" departure above, which frames skills as a slop surface (skill hell). The resolution the wiki holds: skills are **slop-neutral** — they amplify the discipline (or indiscipline) already wired in by the human. A cargo-culted 660-token skill with no review step is a slop accelerant, not a guardrail; the same skill structure with a `code-review` subagent and a human-owned spec is a slop reducer. The four-part checklist (trigger → structure → steering → pruning) is what converts a skill from potential slop into anti-slop infrastructure. See [[mattpocock-skills]] and [[agent-skills]].
 
 ## Agents Don't Feel Pain
 
@@ -298,3 +302,4 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[mario-zechner|Zechner]] and [[armin-ronacher|Ronacher]] on training-harness slop: Claude Code's lenient harness masking malformed tool calls so models never learn to avoid them; the harness-monoculture thesis that slop propagates through model weights as a de-facto spec. Source for the "Training-Harness Slop" extension callout.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Dreaming as the Out-of-Band Pain Signal for Memory Slop" extension: the out-of-band, fleet-wide reviewer that detects stale/recurring-failure memory slop the individual agent structurally cannot feel.
 - `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — [[geoffrey-litt|Geoffrey Litt]]: understanding infrastructure (Explain Diff, microworlds, quizzes) as a distinct anti-slop mechanism; slop is produced when human judgment atrophies, so tools that keep the human's conceptual model alive are slop prevention.
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's end-to-end skills-repo walkthrough. Source for the "Skills as slop reducer vs. amplifier" tension callout: well-authored skills (with `code-review` subagent + human-owned spec) reduce slop, but cargo-culted skills accelerate it — skills are slop-neutral amplifiers of whatever discipline the human wired in.

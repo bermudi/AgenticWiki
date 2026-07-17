@@ -1,13 +1,14 @@
 ---
 title: Smart Zone vs. Dumb Zone
 created: 2026-04-25
-updated: 2026-07-16
+updated: 2026-07-17
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
 unaudited_marginal: 0
 tags: ["ai-limitations", "context-management", "tool-design"]
 ---
@@ -42,6 +43,15 @@ Instead of "compacting" or summarizing a long chat history (which preserves the 
 ### Connection to [[pi]]
 The [[pi]] agent harness is designed to help stay in the Smart Zone by providing a minimal core and allowing for "sessions" that can be easily reset or partitioned to keep context fresh and relevant.
 
+### Per-Ticket Context Budget
+
+[[matt-pocock|Matt Pocock]]'s `mattpocock/skills` repo operationalizes the smart zone as a **per-ticket context budget**: when the workflow decomposes work via the `to-tickets` skill, each ticket is sized to fit in a single context window. His working threshold is ~140k tokens as the smart-zone ceiling — beyond that, "you end up sort of with attention degradation. It ends up getting stupider, does weird hallucinations." The ticket is the unit at which context hygiene is enforced: one ticket, one smart zone, one `implement` invocation, then a fresh session for the next ticket.
+
+This generalizes the [[ralph-loop|Ralph Loop]]'s "one-task-per-iteration" rule. Where the Ralph loop enforces per-iteration freshness by terminating after each task, the [[mattpocock-skills]] flow enforces per-ticket freshness by sizing tickets to a single context window *and* explicitly clearing the session between tickets. The two approaches converge on the same operational rule from opposite ends: the Ralph loop starts with a fixed iteration size and adapts the task to fit; the skills flow starts with the spec and slices it into tasks that fit. See [[plan-disposability]] for the related finding that detailed plans are anti-leverage when they try to specify every line in advance.
+
+> [!note] Synthesis: The Ticket Is the Atomic Unit of Context Hygiene
+> Decomposition into per-session slices is the only reliable way to keep a multi-day workflow inside the smart zone. The wiki already documents this at the [[multi-tier-action-space]] tier (sub-agents for parallelizable tasks) and the [[ralph-loop]] tier (per-iteration freshness). The per-ticket budget is a third tier: **the user's own task graph is the decomposition substrate.** A workflow that doesn't slice work into smart-zone-sized tickets will eventually drift into the dumb zone, regardless of how good the agent or the model is. The memento strategy (clear and restart) only works if the work has been sliced into slices that can stand alone — which is exactly what `to-tickets` produces.
+
 ## Thread
 - [[the-slop-problem]] — Context degradation produces slop that compounds across loop iterations; the Dumb Zone is a slop source
 - [[the-agent-workflow]] — Context hygiene as the operational challenge of the workflow
@@ -61,6 +71,7 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - [[agent-friendly-tooling]] — Verbose tool output is a primary cause of Dumb Zone drift.
 - [[instruction-severity-inflation]] — The same attention limits that create the Dumb Zone for context also constrain instruction following
 - [[matt-pocock]] — The Memento Strategy (clear context, reload only what matters) is his operational response to the Dumb Zone.
+- [[mattpocock-skills]] — Operationalizes the smart zone as a per-ticket context budget; each ticket is sized to one context window.
 
 - [[context-engineering]] — The Smart Zone/Dumb Zone distinction is a core concept in context engineering
 - [[context-trajectory]] — The fourth context-window property (autoregressive history); orthogonal to the size axis that defines the Smart/Dumb Zone
@@ -74,3 +85,4 @@ The [[pi]] agent harness is designed to help stay in the Smart Zone by providing
 - `raw/yt-how-agents-use-dev-tools.md`
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Dex Horthy describing the Smart Zone/Dumb Zone in the context of context engineering
 - `raw/yt-context-engineering-with-dex-horthy.md` — Dex's canonical 100k/200k guideline, the "less context window you use the better outcomes" aphorism (traced to Geoffrey Huntley/Ralph Wiggum), the flailing-to-pass-tests tell, and the compaction-then-reset recovery move (1:09:46–1:11:40).
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's per-ticket context budget: each ticket sized to ~140k tokens (his smart-zone ceiling), then clear context between tickets. The `to-tickets` skill is the explicit decomposition step that enforces this rule.

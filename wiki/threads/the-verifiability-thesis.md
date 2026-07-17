@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-16
+updated: 2026-07-17
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -25,6 +25,7 @@ sources:
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-context-engineering-with-dex-horthy.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
@@ -268,6 +269,9 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 > 1. **Verifier tier is an independent axis from agent tier.** [[tessl|Tessl]]'s verifiers — "very, very focused linting rules powered by LLMs" — illustrate that the verifier can run on a *lower capability tier* than the agent that wrote the code: the panel notes models are "much better at reviewing than generating," so review can use "a whole class lower" model, and narrowing the verifier's scope (file-scoped, single-concern) makes down-tiering safer. The thesis says verifiability determines capability (verifiable domains → RL training → capability peaks) but does not separate the *verifier's* capability tier from the *agent's*. This is the [[rubric-evaluation|RUBRICEVAL]] finding (rubric-level beats checklist-level) instantiated as a product: narrow the verifier's scope and it can run on a lower tier. The implication: the verifiability frontier is not just "can this domain be verified?" but "can this *check* be down-tiered?" — a routing question ([[intelligence-tier-routing]]), not just a training-distribution question. This is also the practitioner middle ground between [[dex-horthy|Horthy]]'s "never send an AI to do a linter's job" (use deterministic linters) and broad LLM-as-judge review: a *focused* LLM verifier may be reliable where a broad one isn't.
 > 2. **Stochastic multi-pass verification vs. structural verification.** Yegge's "swarming as anti-bitter-lesson" — multiple adversarial passes, consensus, quality as a token-spend dial — is a *statistical* verification strategy. The thesis's existing verification moves are *structural*: evidence certificates ([[semi-formal-reasoning]]), behavioral tests ([[deepswe|DeepSWE]]), executable checks ([[contextcov|ContextCov]]). Yegge's pattern says: don't try to make one verification pass complete; dial the number of passes. This connects to [[prompts-in-code-review]]'s single-pass bias problem — if one LLM judge is biased, multiple adversarial passes may average out the bias (untested) — but the thesis does not currently track stochastic verification as a distinct strategy. It treats verification as a property to be made reliable, not a dial to be turned.
 
+> [!note] Extension: Spec/Standard-Conformance as a Verification Channel
+> [[matt-pocock|Pocock]]'s `mattpocock/skills` set adds a verification channel the thread's test-pass framing doesn't name: the `code-review` subagent checks the implementation against the **original spec** (every acceptance criterion cross-checked) and against **coding standards** (Martin Fowler's defaults, or the repo's own), not just against tests. This is verification by *conformance to intent* rather than by *executable signal*. It is distinct from — and complementary to — the deterministic checks the thesis centers on: a ticket can pass all tests and still violate the spec, or still violate the team's coding standards, and Pocock's reviewer catches both. The thread's "For [[agent-skills]]" section already treats the four-part checklist as verifiability discipline; this extends that to the *review* step — the spec and standards are the oracle the reviewer checks against, making verification multi-channel (test-pass + spec-conformance + standard-conformance) rather than test-only. See [[mattpocock-skills]] and [[spec-code-triangle]].
+
 [//]: # ([[rubric-evaluation]] links here from its ## Thread section)
 [//]: # ([[verifiability]] links here from its ## Thread section)
 [//]: # ([[agent-evals]] links here from its ## Related section)
@@ -302,3 +306,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s practitioner patterns pressuring the thesis: Tessl's verifier-as-focused-LLM-lint (verifier tier as an axis independent from agent tier), and swarming-as-anti-bitter-lesson (stochastic multi-pass verification as a distinct strategy from structural verification).
 - `raw/2502.06975.md` — Pink et al. (MPI for Software Systems + EarthDynamics.ai + UT Austin, arXiv 2502.06975, Feb 2025). Source for the "Episodic Memory Is the Complement the Causal Chain Doesn't Track" departure: single-shot episodic memory is the property RL structurally cannot provide (RL needs many examples); consolidation (Complementary Learning Systems theory) is the bridge transferring episodic instances into parametric memory where RL can act. Completes the causal chain by adding the fast (single-shot) memory system alongside the slow (parametric, RL-trained) one.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Memory Mutation as a Verifiability Domain" extension: dreaming's production guardrails (versioning+provenance, hashing/concurrency, tiered permissions, portability) as verifiability engineering applied to the memory layer — the four harness properties (executable/inspectable/stateful/governed) instantiated at the memory-mutation layer; the "reinventing databases" tension as the verifiability frontier expanding into memory infrastructure.
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's skills set: the `code-review` subagent verifies against the original spec and coding standards, a verification channel (conformance to intent) distinct from test-pass. Source for the spec/standard-conformance Extension callout.

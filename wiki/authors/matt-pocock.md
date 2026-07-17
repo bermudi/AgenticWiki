@@ -1,8 +1,8 @@
 ---
 title: Matt Pocock
 created: 2026-04-24
-updated: 2026-07-06
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-slop-watch-ideation.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", "raw/yt-building-great-agent-skills-the-missing-manual.md"]
+updated: 2026-07-17
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-why-llms-hallucinate.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-how-to-de-slop-a-codebase-ruined-by-ai-with-one-skill.md", "raw/yt-slop-watch-ideation.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", "raw/yt-building-great-agent-skills-the-missing-manual.md", "raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md"]
 unaudited_marginal: 0
 tags: ["typescript", "ai-engineering", "author"]
 ---
@@ -52,6 +52,7 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - [[doc-rot]] — Primary advocate for deleting completed PRDs to prevent stale documentation from misdirecting agents
 - [[leading-words]] — Originator of the leading-words steering technique: dense phrases the agent echoes in its reasoning traces, shaping behavior with built-in verification
 - [[skill-hell]] — Named the third developer hell (after tutorial hell and framework hell): skills proliferate faster than evaluative capacity; his four-part checklist is the proposed exit
+- [[mattpocock-skills]] — The full skill set he ships as `mattpocock/skills`; the `setup → grill-with-docs → to-spec → to-tickets → implement → code-review` flow is the operational instantiation of every concept listed above
 
 ## Sources
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Grey-box engineering, smart-zone/dumb-zone, deep vs shallow modules, AI design loop, software entropy, outrunning headlights, Grill Me skill
@@ -62,3 +63,4 @@ Matt Pocock is a TypeScript expert, educator, and developer advocate known for h
 - `raw/yt-slop-watch-ideation.md` — Greenfield project ideation: parallel research agents, Grill Me, DDD domain modeling, Slop Watch architecture decisions.
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full end-to-end workshop: Grill Me → PRD → Kanban DAG → Sandcastle parallel AFK loops → QA; doc rot, push vs pull agent instructions, AI defaults to shallow modules.
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — "Building Great Agent Skills: The Missing Manual" (AI Engineer World's Fair 2026). The four-part skill design checklist (trigger, structure, steering, pruning); user-invoked vs model-invoked load tradeoff; steps + reference + branches + external references; leading words as the primary steering lever; leg work via hidden future goals (split-skill technique); no-ops, sediment, single source of truth. Names [[skill-hell]] as the diagnosis the checklist responds to.
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — End-to-end tutorial of the `mattpocock/skills` repo itself. The full idea-to-ship flow: `setup-matt-pocock-skills` configures the issue tracker, triage labels, and single vs multi domain context; `ask-matt` as a meta-skill entrypoint; `grill-with-docs` → fork between `implement` (one session) and `to-spec` → `to-tickets` (multi-session); `implement` auto-runs `code-review` in subagents against the spec and coding standards. New claims: 660-token total footprint of all 38 skills via user-invoked progressive disclosure; each ticket sized to one context window (~140k smart zone); subagent code review because "agents are bad at editing code they've just written"; spec = destination, tickets = path; issue-tracker pluggability (GitHub/Linear/Jira/local markdown) as a configuration step.

@@ -1,7 +1,7 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-07-09
+updated: 2026-07-17
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
@@ -11,6 +11,7 @@ sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
@@ -220,6 +221,27 @@ The checklist applied to a skill in order:
 3. **Steering** — leading words chosen and repeated? Visible in reasoning traces? Leg work adequate, or should the skill be split to hide future goals?
 4. **Pruning** — no-ops deleted via deletion test? Sediment removed? Single source of truth enforced?
 
+## Skills as a Flow: The `mattpocock/skills` Set
+
+The checklist above treats a skill in isolation. The [[mattpocock-skills]] repo (`mattpocock/skills`) is the empirical demonstration that the user-invoked tradeoff scales to a *full workflow* — 38 skills chained across an idea-to-ship pipeline, with a combined context footprint of ~660 tokens. The mechanics that make this work are flow-level, not skill-level:
+
+### User-Invoked as a Flow Property
+
+The whole set is `disable_model_invocation: true`. The user calls each skill with `/skill-name`; the agent never decides which skill fires next. This is not just a per-skill choice — it is the property that keeps the aggregate footprint bounded. If even a handful of skills were model-invoked, the description of every matching skill would compete for context on every request, and the bounded footprint would collapse.
+
+The deeper claim this demonstrates: **progressive disclosure scales when the disclosure is gated by the user, not the model.** The 38-skill footprint is achievable because the agent never holds all 38 descriptions in its working context. The user holds the next-skill decision in their head, and the agent sees only the current skill's body.
+
+### Subagent Code Review as a Skill Boundary
+
+The `implement` skill does not run code review itself. It dispatches the `code-review` skill into a subagent and waits for the result. The boundary is deliberate: "if you do it in the main agent, it means that the main agent already has written the code and agents are often really bad at editing code or improving code they've just written." The subagent's fresh context is the audit mechanism. See [[fresh-context-subagents]] for the general principle and [[spec-code-triangle]] for the broader separation-of-concerns argument.
+
+### Skill Decomposition as a Cognitive Lever, Not Just a Context Lever
+
+`plan-mode` was one skill with two steps (grill then plan); the agent under-invested in grilling because it could see the plan as the real goal. The fix was not to improve the skill's instructions — it was to **split the skill into two** (`grill-with-docs` and `2prd`). Splitting the skill is a cognitive lever: each skill now owns a single visible goal, and the agent cannot rush to the next step. The full treatment is in [[leading-words]] and the [[ai-design-loop]] → Split-Skill Technique section.
+
+> [!note] Synthesis: Skills as Orchestrator
+> The set is not a library the agent browses; it is an **orchestrator the user conducts**. The user picks the next skill, decides whether to fork to `to-spec` after grilling, decides how many tickets to run before clearing context. The agent never decides which skill fires next — that decision lives outside the agent's context. This is a different design point from the [[multi-tier-action-space]] tool layer (which the agent *does* navigate), and it is the architectural reason 38 skills cost only 660 tokens. The cognitive load on the user is the price; the context load on the agent is the budget.
+
 ## Skills in Production
 
 Pedro Rodrigues (Supabase AI tooling engineer) provides operational lessons from two months of writing skills for a production product.
@@ -353,6 +375,7 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[peter-steinberger]] — Originator of the "skills, not loops, are the durable half" thesis
 - [[leading-words]] — Pocock's steering technique: dense phrases the agent echoes in reasoning traces, shaping behavior
 - [[skill-hell]] — The diagnosis Pocock's four-part checklist responds to: skills proliferate faster than evaluative capacity
+- [[mattpocock-skills]] — The 38-skill repo that demonstrates the user-invoked tradeoff scales to a full workflow at 660 tokens of context
 
 ## Sources
 
@@ -364,3 +387,4 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Steinberger's general skills rule (turn repeated work into a skill) and Van Horn's framing of the consequence: a loop calling sharp named skills compounds; a loop with no skills is a "while-true around a stranger"
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's four-part skill design checklist (trigger, structure, steering, pruning); user-invoked vs model-invoked load tradeoff; steps + reference + branches; leading words; leg work via hidden future goals; no-ops, sediment, single source of truth
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skills as progressive disclosure for conditionally-used project memory, the Android Skills popularity vs efficacy example, and the warning against installing unbenchmarked skills.
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's end-to-end walkthrough of the `mattpocock/skills` repo. Establishes the empirical 660-token context footprint across 38 user-invoked skills; the subagent code review rule ("agents are bad at editing code they've just written"); the spec = destination / tickets = path framing; the per-ticket context budget enforcement. Demonstrates that the user-invoked tradeoff scales to a full workflow.

@@ -300,6 +300,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[contextcov]] — Framework that transforms passive AGENTS.md instructions into executable guardrails; 88.3% constraint compliance on SWE-bench Lite.
 - [[cody]] — AI coding assistant powered by repository-wide code intelligence.
 - [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.
+- [[mattpocock-skills]] — The 38-skill user-invoked set (`mattpocock/skills`); the full idea-to-ship pipeline `setup → grill-with-docs → to-spec → to-tickets → implement → code-review` at 660 tokens of context. The shipped instantiation of [[agent-skills|Pocock's user-invoked checklist]].
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
 - [[humanlayer]] — Dex Horthy's agent-first IDE and collaboration platform; "kill the pull request" in favor of real-time Google-Doc-style review of agent work.

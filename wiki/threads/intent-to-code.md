@@ -1,11 +1,12 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-07-16
+updated: 2026-07-17
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
+  - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
   - raw/2603.00822v2.md
@@ -126,6 +127,9 @@ Both positions rely on a [[verification-loop]] — they just disagree on what to
 
 See [[plan-vs-review]] for the complete framework.
 
+> [!note] Extension: Pocock's evolved flow reconciles positions 2 and 3
+> [[matt-pocock|Pocock]]'s current `mattpocock/skills` set refines the alignment-first position (3) documented above. The `grill-with-docs` step is pure position 3 — shared understanding, no document review. But the multi-session fork is `to-spec` → `to-tickets` → `implement`, and the `implement` skill auto-dispatches a `code-review` subagent that checks the code **against the spec** (every acceptance criterion) — which is position 2's verification mechanism (verify against the spec), not position 3's (QA against reality). The evolved flow is thus a hybrid: alignment-first to *get* to the spec, plan-as-contract to *verify* against it. The `to-tickets` step is the strongest instantiation of "the spec decouples intent from implementation" in the wiki: it decomposes the spec (intent) into tickets (the handoff artifact) without ever producing code, each ticket sized to one context window. The durable spec is the intent; the disposable tickets are the path; the code is produced only inside `implement` against the ticket. See [[mattpocock-skills]] and [[ai-design-loop]].
+
 ## Why This Matters
 
 The intent-to-code axis isn't academic. It determines:
@@ -200,3 +204,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Al Harris, Amazon Kiro: EARS requirements + PBT verification = hybrid of positions 2 and 5; LLM is in the generation step but not the verification step
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.
 - `raw/yt-context-engineering-with-dex-horthy.md` — [[dex-horthy|Dex Horthy]]'s [[research-plan-implement|RPI]] retrospective (detailed plans = anti-leverage: doubled review surface, plans skimmed not read) pressuring the plan-as-contract position from the implementation side. Source for the "Detailed Plans Can Be Anti-Leverage" theory-pressure callout (1:02:53).
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's evolved skills flow: `grill-with-docs` (alignment) → `to-spec` → `to-tickets` → `implement` + `code-review`-against-spec. Source for the "Pocock's evolved flow reconciles positions 2 and 3" extension callout.

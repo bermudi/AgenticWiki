@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-16
+updated: 2026-07-17
 sources:
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -38,6 +38,7 @@ sources:
   - raw/yt-are-we-really-doing-this-again.md
   - raw/2512.08296.md
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
   - raw/karpathy-claude-tag-third-paradigm.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
@@ -415,6 +416,9 @@ Once a project has been established, [[matt-pocock|Matt Pocock]] demonstrates th
 6. **QA in Parallel**: While the agent implements, the human tests the application manually, filing bugs as GitHub issues. The next Ralph iteration picks these up.
 7. **Repeat**: Ralph loop after Ralph loop until issues are exhausted.
 
+> [!note] Shipped as a skill set
+> The packaged, version-controlled form of this pipeline now ships as [[mattpocock-skills]] (`mattpocock/skills`). The walkthrough above predates the current skill names: "Grill Me" became `grill-with-docs`, the PRD-to-Issues split became `to-spec` → `to-tickets`, the Ralph Loop AFK step became `implement`, and the human QA phase is now backed by an automated `code-review` subagent. The destination/journey framing and the interface-review discipline are unchanged. The skills set is the most concrete shipped instantiation of the HITL/AFK cycle in this thread.
+
 The key insight: **steps 5 and 6 happen concurrently**. The human doesn't wait for the agent to finish before starting QA. This is the "**day shift / night shift**" pattern ([[matt-pocock|Pocock]]'s term, from his workflow workshop) — the human designs and QA's during the day, the agent implements at night.
 
 ### Interface Review, Not Code Review
@@ -518,6 +522,7 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — The "designing loops" discourse: the cost-shift thesis (loop management as the new expensive part; Uber $1,500/person/tool/month cap) as the financial twin of the review bottleneck, and the five-stage agent-loop lineage in which the Ralph loop is Stage 3 and the orchestration loop is Stage 5
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s audit of the loops discourse as discourse slop; the incentive heuristic (Anthropic/OpenAI/Cursor hype, Google measured); the temporal walk-back (for-each not while; review not implementation); "there are no experts, only people who pretend."
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's in-skill steering levers as workflow infrastructure: leading words ([[leading-words]]) as the in-skill mechanism the workflow dispatches (the workflow decides which skill fires when, the leading word decides how the agent executes once loaded), and the split-skill technique (hide future goals to increase leg work on the current step) as a workflow decomposition decision. See the "In-Skill Steering" marginal note.
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's end-to-end tutorial of the shipped `mattpocock/skills` set. The packaged form of the pipeline above: `ask-matt` orients, `grill-with-docs` (the renamed "Grill Me") aligns, `to-spec` → `to-tickets` (the PRD-to-Issues split) decomposes, `implement` runs each ticket and auto-dispatches `code-review` in a subagent. Establishes the 660-token user-invoked footprint, the per-ticket ~140k smart-zone budget, and the spec = destination / tickets = path framing. See [[mattpocock-skills]].
 - `raw/karpathy-claude-tag-third-paradigm.md` — Karpathy's X post defining the third paradigm of LLM UI/UX: the agent as a persistent, async, org-level entity embedded in team coordination. Source for the "Agent Becomes a Persistent Teammate" marginal note — paradigm 3 reshapes the HITL/AFK split toward delegation to a proactive teammate.
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — Theo (t3.gg): Claude Tag's mechanics (channel-scoped, multiplayer, async, proactive) as the paradigm-3 instance; the model-lock-in critique; the per-channel isolate practitioner experience. Source for the "Agent Becomes a Persistent Teammate" marginal note.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen (ex-L8 principal, Atlassian): the captain/first-mate/crew model, terminal-centric multi-agent workflow, tmux, Treehouse, No Mistakes, Lavish, AXI, and Good Night, Have Fun. Source for the "Kun Chen's Terminal-First Multi-Agent Workflow" marginal note.

@@ -1,9 +1,10 @@
 ---
 title: Fresh-Context Subagents
 created: 2026-07-10
-updated: 2026-07-10
+updated: 2026-07-17
 sources:
   - raw/gsd-core-opengsd-spec-driven-framework.md
+  - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
 unaudited_marginal: 0
 tags: [concept, context-engineering, multi-agent, agent-architecture]
 ---
@@ -44,6 +45,9 @@ This pattern holds throughout the phase loop:
 - **Verify:** The verifier reads all summaries and performs a goal-backward check in its own clean window
 - **Map codebase:** Four mapper subagents explore different dimensions in parallel
 
+> [!note] Extension: Code-review as a second instantiation
+> [[matt-pocock|Pocock]]'s `mattpocock/skills` set provides a second independent instantiation of this pattern: the `implement` skill auto-dispatches a `code-review` subagent in a fresh context window to review the code it just wrote. The rationale is behavioral, not just architectural: "agents are often really bad at editing code or improving code they've just written" — the implementer's own reasoning traces are anchored to its implementation choices, so a fresh-context reviewer reads only the spec, the standards, and the diff. This extends the pattern from GSD Core's execute/verify separation to the specific self-review failure mode, and adds a verification channel GSD Core's formulation lacks: the reviewer checks conformance against the *original spec and coding standards*, not just a goal-backward check. See [[mattpocock-skills]] and [[spec-code-triangle]].
+
 ## Least Privilege
 
 Each agent has access only to the tools it needs for its role. This keeps agents focused and prevents unintended side effects:
@@ -77,7 +81,10 @@ Even with fresh-context subagents, some workflows run in the main session for ex
 - Sub-agent isolation — The simpler pattern this generalizes (documented in [[context-engineering]])
 - [[babysitter-agent]] — An alternative persistence mechanism; fresh-context subagents avoid the need for a babysitter by design
 - [[plan-disposability]] — Fresh plans per session as a persistence strategy
+- [[mattpocock-skills]] — Pocock's `implement` skill auto-dispatches a `code-review` subagent, a second independent instantiation of this pattern
+- [[spec-code-triangle]] — The code-review subagent checks conformance against the spec and standards, the triangle's separation-of-concerns boundary
 
 ## Sources
 
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — Full documentation of GSD Core's fresh-context subagent architecture, agent categories, tool permissions, spawn patterns, context monitor hook.
+- `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's `mattpocock/skills`: the `implement` skill auto-dispatches a `code-review` subagent in a fresh context window, a second independent instantiation of this pattern (GSD Core is the first). Rationale: agents are bad at reviewing their own code. Source for the code-review Extension callout.
