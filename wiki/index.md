@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-15
+updated: 2026-07-18
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -258,6 +258,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[rollback-posture]] — Rollbacks only work when you release slower than you can detect problems; agents shipping faster than detection jams the safety valve.
 - [[verifiability]] — Karpathy's framework: LLMs automate what you can verify; the driver of jagged AI capability.
 - [[vibe-coding]] — The term Karpathy coined: coding where you fully trust the LLM's output. Raises the floor for everyone.
+- [[yolo-mode-philosophy]] — Pi's no-permission-gates-by-default design: ship complete or don't ship, force real security thinking at the container boundary instead of at a misconfigurable prompt boundary. [[pi]]'s seventh design principle.
 - [[vibes-based-engineering]] — Anti-pattern of accepting AI output without verification or context.
 - [[wide-events]] — One context-rich log event per request: what agents should ship instead of console.log.
 - [[agent-loop]] — "Cron plus a decision-maker in the body": a program that prompts the agent, reads the result, decides whether to keep going. The five-stage lineage (ReAct → AutoGPT → ralph → /goal → orchestration).

@@ -78,6 +78,8 @@ Don't remove friction wholesale to enable agent autonomy. Audit which friction i
 - [[chris-parsons]] — "Reversible without embarrassment" as an operational instantiation of deliberate friction for safety boundaries
 - [[ralph-loop]] — Fresh-context-per-iteration and plan disposability as deliberate friction against compounding errors
 - [[rollback-posture]] — Refusing to release at full generation speed is deliberate friction at the release layer
+- [[yolo-mode-philosophy]] — The sharpest security-domain application: ship incomplete or misconfigurable sandbox features vs. ship no sandbox at all and force the user to think at the container boundary
+- [[pi]] — Pi's auto-close + human-voice-issue + whitelist as a deliberate-friction contribution gate
 - [[geoffrey-litt]] — Understanding quizzes as a personal speed regulator
 - [[understanding-quizzes]] — Short quiz before code review to verify actual understanding
 - [[explain-diff]] — The explainer doc that ends with the quiz

@@ -1,8 +1,9 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-17
+updated: 2026-07-18
 sources:
+  - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/yt-building-pi-in-a-world-of-slop.md
@@ -117,6 +118,9 @@ All these sources agree: the answer isn't to use less AI. It's to change *how* y
 ### Rule-Following Failure as a Slop Source
 
 [[rule-following|Failed rule-following]] is a distinct class of slop: when the model cannot obey persistent developer-specified constraints ("never reveal the secret key"), every violation produces unusable output. The RuLES benchmark found that even alignment-tuned models fail at basic rule-following, and alignment tuning often makes things *worse*. This means slop isn't just about code quality — it's about the model's structural inability to respect constraints that the developer explicitly defined. An agent that can't follow rules can't be trusted to produce constraint-compliant output, making every generation a potential slop event.
+
+> [!note] Departure: The Slop Velocity Scale and the Verification Gap
+> [[mario-zechner|Zechner]]'s 500,000-lines-in-a-week observation is the wiki's most concrete empirical anchor for slop production velocity ([`raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md`](../raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md), ~35:00). Combined with the chained framing "how are you expecting to maintain it if you cannot read it? [...] That's just a little bit more sophisticated approach to vibe coding, but not much," the anchor sharpens this thread's previous focus on *quality degradation speed* with an explicit concern about *verification capacity* — the human's ability to review is itself a fixed budget, and the agent's velocity exceeds it categorically. Empirical confirmation that the production rate outruns human review: Zechner's Kotlin/Ralph-loop experiment (he doesn't know Kotlin; the resulting PR "was just utter trash, complete nonsense"; "I had no chance to verify it [...] I couldn't justify or have any way to reason about it") — a clean case where the orchestrator cannot verify the output because of language specialization. The lesson: slop erodes not just on review time but on review ground — domain specialists become the only ones who can verify their own AI-generated code. This connects to [[domain-expertise-as-moat]]: the binding constraint on slop prevention at agentic-team pace is *who can say "right"*, and that requires deep domain knowledge the agent's orchestrator may not have.
 
 ## The Software Factory Framing: Slop as the Missed Subset
 
@@ -269,6 +273,7 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 
 ## Sources
 
+- `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — [[mario-zechner|Mario Zechner]]'s sharpest articulation of the thread: "code is never free — you've just delayed the punishment"; 500,000 lines of code shipped through agents in a week as the concrete slop-production number; the Kotlin/Ralph-loop experiment where a non-Kotlin-familiar human could not verify a non-mergeable PR ("utter trash... I had no chance to verify it"); the spec-driven-development "hyper-waterfall" sharpening (the most detailed spec you can write is the program itself; everything shorter leaves planks that the agent fills from the median of internet code); the Pi auto-close contribution-gate as the deliberate-friction instantiation; the four-month AI-psychosis that snapped out only when Zechner noticed he was producing no value. All empirical anchors for the thread.
 - `raw/deepswe-benchmark.md` — Datacurve (2026): benchmark contamination as evaluation slop; SWE-bench Pro verifier failure rates; prompt-induced behavior distortion; the need for reliable verification at the benchmark level
 - `raw/yt-context-engineering-with-dex-horthy.md` — Dex's first-person dark-factory build-and-shutdown (July→November 2025), the 3–6-month rewrite-vs-fix threshold, and "users didn't complain" as the weakest verification oracle (41:55–46:33).
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: the vibe coding → agentic engineering arc; the capability threshold of December 2024; the structural gap between floor-raising and quality-preserving

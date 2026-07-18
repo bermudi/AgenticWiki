@@ -1,11 +1,12 @@
 ---
 title: pi
 created: 2026-04-25
-updated: 2026-07-14
+updated: 2026-07-18
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md"
   - raw/slowing-the-fuck-down.md
+  - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
 unaudited_marginal: 0
 tags: [tool, ai-agents, open-source, self-modifying-software]
 ---
@@ -32,6 +33,7 @@ Mario's reaction: "How hard can it be?" He built his own.
 4. **Observability**: Full transparency into the LLM's thought process and tool calls.
 5. **Malleability**: Both the human and the agent can modify the environment, add new tools, and define custom workflows.
 6. **Model agnostic**: Can be used with different LLM providers and models.
+7. **[[yolo-mode-philosophy|YOLO mode by default]]**: Pi ships with **no permission gates** — every tool call runs without asking. The label "YOLO mode is dangerous" is itself the friction: it pushes the user to do real security thinking (container boundaries, sandboxed tools) rather than accept a half-measure the user can misconfigure. See [[yolo-mode-philosophy]] for the full argument.
 
 ## Architecture
 
@@ -43,6 +45,15 @@ Pi is composed of several modules:
 
 The extensibility comes from hook points — simple TypeScript modules loaded into the same Node process that let you provide custom tools, custom compaction, or fully revamp the TUI.
 
+## Planned Architecture (mid-2026 refactor on `main`)
+
+Mario is mid-refactor as of July 2026, working directly on the `main` branch because the underlying rebuild is "piece by piece" — Pi users should not notice the swap. Goals:
+
+- **Web and native UI surfaces**: TUI's line-based rendering caps what self-modifying software can express; the planning is to make third-party extensions work across web (via the SDK) and native surfaces by separating server-side and UI-side components. A permission dialog, for example, would be a server-side handler that asks "show this component with this name in the UI and give me the result" — and the UI could be a TUI, a web page, or a native Android surface.
+- **Remote-ability**: One Pi session on machine A, connectable from machine B.
+- **Durability & observability**: Git-backed durability (a gas-town inheritance) so a closed laptop doesn't lose work. Observability improvements (better tracing of agent decisions) so "if you can remote into agents, can you tell what they did?"
+- **Deployment surface**: Make Pi's SDK deployable on Cloudflare Workers, Vercel, etc. The agent as a target environment, not just a local CLI.
+
 ## Self-Modification
 
 Pi's deepest feature: you can ask Pi to modify itself. Non-technical friends of Mario's have asked Pi to rebuild Pi's own UI because the extension points make it trivial. The core stays small; the periphery is emergent. This is Mario's first foray into what he calls **self-modifying software** — software that adapts itself on behalf of the user's wishes and needs. He believes this paradigm extends beyond coding tools to all knowledge work.
@@ -52,6 +63,7 @@ Examples of what users have built through self-modification:
 - **Plan modes**: Multiple implementations explored, iterated, sometimes abandoned (Armin went through five before deciding plan mode is useless).
 - **RL environments**: Someone reconfigured Pi as the agent in a reinforcement learning execution environment for open-weight models.
 - **Cosmetic UI changes**: Different editor box styles, visual tweaks.
+- **Pi extension for diff review with line annotations**: a small extension that pulls up a diff of all changes an agent made, lets the human annotate individual lines inside the diff viewer, and feeds the annotations back to the agent when "finish review" is clicked. The pattern: pre-implementation issue analysis → human review with code-level annotations → agent iterate. Mario uses this for every core-mechanic change; for "I don't care" code paths he just types "fine" and moves on.
 
 ## The OpenClaw Relationship
 
@@ -59,7 +71,8 @@ Peter Steinberger's personal AI assistant **OpenClaw** runs on Pi. The relations
 
 - **Pi got compaction because OpenClaw needed it**. Peter was "crying in chat" about needing it. Mario built it but tells his own users "don't use compaction, it's bad for you."
 - **OpenClaw drove PR/issue explosion**. OpenClaw instances autonomously file issues and PRs on the Pi repo. Mario built a 3D visualization tool to cluster similar issues in 3D space and bulk-select/close them.
-- **Auto-close workflow**: Every PR from an unknown account gets auto-closed. A GitHub workflow posts a comment asking the human to resubmit as a human-voice issue. Agents don't read the comment — making it an effective human/bot filter.
+- **PR scale: 50–60 clanker PRs per day**. Pre-agent, a successful Pi-sized open source project got "one or two PRs per week." After agents, Pi gets 50–60/day by Clankers. Each PR description is "kind of like a full Harry Potter book" — typically with 10 to 1,000 file changes. OpenClaw's scale is "orders of magnitude bigger" than Pi — Mario's manual triage (50 issues, 2 reopen) does not transfer. This is the wiki's most concrete data point for the magnitude of agent-driven PR-flood in 2026.
+- **Auto-close workflow**: Every PR from an unknown account gets auto-closed with a comment. Re-submission requires the prospective contributor to **first file an issue in their human voice, no longer than a screen, explaining exactly what they want to do and why**. If Mario approves the issue, a GitHub workflow tags the account into a whitelist that allows future PRs to bypass auto-close. Agents don't read the comment streak — they don't know why their PR was closed, so they don't retry — which is what makes the workflow an effective human/bot filter. This is the concrete instantiation of [[yolo-mode-philosophy]] for the contribution gate: ship complete or don't ship.
 - Peter originally forked Pi into "towel" before switching back to using Pi directly.
 
 ## Quality Philosophy
@@ -83,7 +96,9 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 - [[the-agent-workflow]] — Pi's minimalism and session model as structural safeguards for context management
 - [[the-human-lever]] — Observability as the mechanism that enables grey box engineering; "refactor mercilessly" as the human-in-the-code practice
 - [[tool-design-for-agents]] — Four-tool minimalism as the extreme end of tool design for agents; MCP vs CLI; context transparency as a founding principle
-- [[the-slop-problem]] — "Slow the f down" math; agents don't feel pain; training data quality
+- [[the-slop-problem]] — "Slow the f down" math; agents don't feel pain; training data quality; the "if you cannot read it, how are you expecting to maintain it" reconfirmation
+- [[deliberate-friction]] — Pi's auto-close + human-voice-issue + whitelist as a deliberate-friction contribution gate; see also [[yolo-mode-philosophy]] for the parallel security-side application
+- [[harness-monoculture]] — Pi's strict edit tool is the harness that surfaced the [[grammar-constrained-sampling]] ~20% failure rate
 
 ## Related
 
@@ -102,9 +117,12 @@ Mario plans a web-based alternative UI to the TUI. The terminal's line-based ren
 - [[mastra]] — Both are agent frameworks offering observability and eval infrastructure; Pi emphasizes malleability, Mastra emphasizes the quality flywheel
 - [[thorsten-ball]] — Philosophical alignment on minimalism: Ball's "harness falls away" echoes Pi's four-tool core
 - [[grammar-constrained-sampling]] — Pi's strict edit tool surfaced the ~20% tool-call failure rate that Claude Code's leniency masks
+- [[yolo-mode-philosophy]] — Pi's no-permission-gates-by-default design as deliberate friction at the security layer
+- [[peter-steinberger]] — OpenClaw driver; Pi's most demanding user; the contributor whose scale (50–60 PRs/day at OpenClaw, $1.3M/month token burn) is orders of magnitude bigger than Pi itself
 
 ## Sources
 
 - `raw/yt-building-pi-in-a-world-of-slop.md`
 - `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Origin story, OpenClaw relationship, self-modification philosophy, MCP vs CLI, "slow the f down", quality approach
 - `raw/slowing-the-fuck-down.md` — Full articulation of the "slow the f down" argument, compounding booboos, merchants of learned complexity, good agent task criteria, agentic search recall problem
+- `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — [[yolo-mode-philosophy|YOLO mode]] rationale (don't ship incomplete security solutions), the July 2026 refactor goals (web/native UI, remote-ability, deploy on Cloudflare/Vercel, durability/observability), the planned server + UI-side component extension model, the Pi diff-review extension that feeds line annotations back to the agent, the 3,000-line robot-vibe-slop refactor (defining module boundaries by hand, asking the agent for options, judging interface feel by writing sample scripts), and the 50–60 PRs/day empirical anchoring of OpenClaw's contribution-flood scale relative to Pi's whitelist triage.

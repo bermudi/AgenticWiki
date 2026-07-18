@@ -1,9 +1,11 @@
 ---
 title: Harness Monoculture
 created: 2026-07-13
-updated: 2026-07-14
+updated: 2026-07-18
 sources:
   - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
+  - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
+  - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
 tags: [concept, harness-lock-in, ecosystem, rl-training, slop, vendor-lock-in, agent-tooling]
 unaudited_marginal: 0
 ---
@@ -104,3 +106,5 @@ A model that "succeeds no matter the cost" — force-pushing, deleting files, sp
 ## Sources
 
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[mario-zechner|Mario Zechner]]'s "stochastic terrorism attack on all other software products" framing (cold-open [0:00]), the YAML-skills spec-pollution example (~32:14), models "built for loops and token maxing" ([12:46]), MCP invocation share loss (~35:36), and the token-seller skepticism ([1:01:20]); [[armin-ronacher|Armin Ronacher]] on the incentive alignment ("Anthropic makes most money with Claude Code," [36:42]) and the off-path capability regression ("reinforced-learned to death," [43:57]); Ben (host) on non-deterministic vs. deterministic lock-in (~33:58) and the DirectX/old-Windows "code around it" archetype ([33:27]). The four-effect decomposition and the "stochastic, not deterministic, lock-in" synthesis are the wiki author's, inferred from the panel's separate points.
+- `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — Concrete empirical anchors: [[peter-steinberger|Peter Steinberger]]'s OpenClaw burns ~$1.3M/month in Claude Code tokens on a team of three ([`raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md`](raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md) corroborates the figure) — the empirical ceiling for token-maxing monoculture in mid-2026; Pi's own 50–60 clanker-PRs/day vs. OpenClaw's "orders of magnitude bigger" scale; Antirez's `ds4` inference engine (C, custom DeepSeek V4) running on a 128GB laptop and "could probably handle 60 to 70% of the issues" Pi handles with frontier models (the open-weight anti-monoculture direction). The token-pricing trajectory suspicion (subscription tokens are subsidized, [1:13:00]; frontier-model pricing has not decreased despite two years of promises, with tokenizer changes silently expanding per-prompt token counts, [1:14:41]–[1:14:54]) reinforces the "incentive-aligned with selling tokens, not user benefit" thesis.
+- `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Corroborates the ~$1.3M/month OpenClaw token-burn figure attributed to Steinberger in the source above.

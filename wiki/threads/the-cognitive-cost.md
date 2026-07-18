@@ -1,7 +1,7 @@
 ---
 title: The Cognitive Cost
 created: 2026-06-03
-updated: 2026-07-16
+updated: 2026-07-18
 sources:
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
@@ -14,6 +14,7 @@ sources:
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
 tags: [thread, ai-engineering, cognitive-debt, failure-modes, human-in-the-loop]
 unaudited_marginal: 0
 ---
@@ -106,6 +107,13 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 >
 > The factory does not resolve the [[supervision-paradox]]; it accelerates its inputs (more delegation, faster). Yegge's thriving is consistent with the thread — he has the foundation — but it is not transferable evidence that the factory preserves cognition for those who don't.
 
+> [!note] Departure: Senior Engineer AI Psychosis as the Worst-Case Data Anchor
+> [[mario-zechner|Mario Zechner]]'s first-person account of his own four-month "AI psychosis" after Claude Code's release ([`raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md`](../raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md), ~43:00; the source says only "the release of Claude Code" without dating it) is the wiki's most extreme and concrete case of the cognitive-cost mechanism firing in someone with full foundation. Reports: 3–4 hours of sleep per night; "millions of projects" started; inability to stop planning the next one; only snapped out when he noticed he was "producing things of no value neither for me nor for other people" and got bored with agents. What makes this a real data anchor rather than anecdote:
+> 1. **He had the foundation** — 30+ years shipping codebases (programming since the 90s, [27:29]), an Austrian-eng-circle peer set to ground him, access to the frontier tooling itself. The thread's population-problem thesis predicts this case is *safe*: experienced engineers with deep skills should be buffered.
+> 2. **Buffering was insufficient** — the cognitive offload was still large enough to override the sleep-off-ramp (3–4 hours/night for four months).
+> 3. **The off-ramp was principled, not structural** — he came out when he noticed "I'm producing no value," not when something forced him to. A less self-aware developer could stay in the cycle longer.
+> The data point is the upper bound on what [[skill-atrophy]]-buffered cognition can absorb without flipping into the worst-case state. The default trajectory this thread warns about isn't bounded by foundation *alone*; it's bounded by foundation *plus* a self-monitoring discipline that can detect when the activity has lost its learning payoff. See [[mario-zechner]] and [[skill-atrophy]] for the broader mechanism.
+
 ## Sources
 
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
@@ -119,3 +127,4 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]] as the shipped maximal-delegation frontier (Gas Town, Beads, bespoke factories); the 40-year-vet exception that confirms the population problem; the Flat Curve Society org-training thesis as an organizational-literacy departure from the thread's individual-focused erosion model.
 - `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — [[geoffrey-litt|Geoffrey Litt]]: understanding as the bottleneck (not review/correctness); understanding-to-participate vs. understanding-to-verify; Explain Diff, code microworlds, and understanding quizzes as the optimistic understanding hypothesis.
 - `raw/yt-context-engineering-with-dex-horthy.md` — [[dex-horthy|Dex Horthy]]'s dark-factory retrospective (3–6 months of unread code → a wall no prompting could crack → three weeks re-onboarding) as the wiki's most concrete first-person account of comprehension debt coming due; the token-smarter posture as the mitigation camp. Source for the "First-Person Evidence for Comprehension Debt" departure (45:42).
+- `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — [[mario-zechner|Mario Zechner]]'s four-month "AI psychosis" first-person account after Claude Code's release (source undated — says only "the release of Claude Code," [42:48]): 3–4 hours of sleep per night, millions of projects started, no learning payoff visible to him. Empirically upper-bounds what skill-erosion can absorb in someone with full foundation; the off-ramp was principled self-monitoring, not external correction. Snap-out mechanism ("producing things of no value, building for building's sake is something I do if I learn something new, but not otherwise") is also a positive discipline this thread doesn't otherwise surface. Source for the "Senior Engineer AI Psychosis as the Worst-Case Data Anchor" departure callout above.
