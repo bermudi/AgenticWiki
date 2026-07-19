@@ -1,7 +1,7 @@
 ---
 title: Doc Rot
 created: 2026-05-05
-updated: 2026-05-10
+updated: 2026-07-19
 sources:
   - "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md"
 tags: [documentation, agent-workflow, anti-pattern]
@@ -44,7 +44,7 @@ The real artifact that persists is the **code**. The tests encode the requiremen
 - [[plan-disposability]] — Plans as ephemeral coordination state; doc rot is why disposability matters
 - [[ai-design-loop]] — The PRD lives within the design loop; it should not outlive it
 - [[verification-loop]] — Tests replace stale docs as the living specification
-- [[matt-pocock]] — Primary advocate of deleting completed PRDs
+- [[agents-md]] — AGENTS.md is living documentation; neglect rots it the same way completed PRDs do
 
 ## Sources
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — The doc rot argument: stale PRDs mislead agents, the code IS the documentation, mark PRDs as closed/done.

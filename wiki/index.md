@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-18
+updated: 2026-07-19
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -111,6 +111,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework.
 
 ## 🧠 Concepts
+- [[agents-md]] — The AGENTS.md convention: a plain-markdown "README for agents" with nested-file discovery and cross-agent compatibility; the minimalist authoring craft.
+- [[skill-md]] — The Agent Skills file format: a `SKILL.md` (name + description frontmatter) with three-tier progressive disclosure; an open standard.
 - [[tracing-spectrum]] — Observability at three layers (design/code/execution) closing a feedback loop: design → code → execution → agent feedback → improved design. Extends the quality loop to include the design layer.
 - [[12-factor-agents]] — Dex Horthy's framework for reliable production agents; factor three ("own your context window") seeded context engineering.
 - [[aiming-problem]] — The hard part of a software factory isn't the machinery — it's tuning the system to land in the desirable output subset
@@ -285,6 +287,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[sourcegraph]] — Universal code search and intelligence platform.
 
 ## 🛠️ Projects & Tools
+- [[agentskills]] — The Agent Skills open standard: a folder-with-SKILL.md format, originally Anthropic, now cross-vendor; `skills-ref` validation and `.skill` packaging.
 - [[baml]] — Programming language for the AI era (Boundary ML); compiler-level auto-instrumentation, type-safe tracing, OTEL type-system critique.
 - [[treehouse]] — Git worktree manager for parallel agent sessions.
 - [[no-mistakes]] — Autonomous PR pipeline from first-pass code to merged PR with adversarial review and evidence.

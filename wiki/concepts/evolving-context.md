@@ -1,7 +1,7 @@
 ---
 title: Evolving Context
 created: 2026-05-02
-updated: 2026-07-14
+updated: 2026-07-19
 sources:
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
@@ -207,7 +207,7 @@ The boundary with [[memrefine]]: MemRefine targets *what stays* (compression und
 - [[episodic-memory-for-agents]] — Consolidation (episodic → parametric) is the Complementary-Learning-Systems mechanism underlying token-space continual learning; [[eric-davis|Davis]] & [[katrina-schleisman|Schleisman]]'s default-mode after-action framing recasts context evolution as a structurally distinct reflective mode
 - [[dreaming]] — The orthogonal *temporal* axis (in-band vs out-of-band memory consolidation); the out-of-band execution channel any evolution axis above can be driven by
 - [[lamis-mukta]] — Described dreaming and articulated the in-band/out-of-band distinction (Anthropic)
-- [[jundong-xu]] — Lead author of the EvoArena paper that introduces EvoMem
+- [[agents-md]] — The create-project-agentsmd authoring craft (file-it-don't-delete-it, incremental context filing) is a practitioner instance of evolving context
 
 ## Sources
 

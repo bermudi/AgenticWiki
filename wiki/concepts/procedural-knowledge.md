@@ -1,7 +1,7 @@
 ---
 title: Procedural Knowledge
 created: 2026-05-04
-updated: 2026-07-13
+updated: 2026-07-19
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/2502.06975.md
@@ -61,6 +61,8 @@ Procedural knowledge being file-based (not weight-based) has several important p
 - [[evolving-context]] — Skill learning as a mechanism for agents to capture procedural knowledge from experience
 - [[context-engineering]] — Progressive disclosure of procedural knowledge
 - [[hallucination]] — Lack of procedural knowledge is a key source of agent guesswork and hallucination
+- [[skill-md]] — The SKILL.md format is the canonical file format for packaging procedural knowledge for agents
+- [[agentskills]] — The Agent Skills open standard packages procedural knowledge into portable, version-controlled skill folders
 - [[episodic-memory-for-agents]] — The rigorous five-property version of this triad; refines the semantic=RAG / episodic=logs simplification
 
 ## Sources

@@ -1,7 +1,7 @@
 ---
 title: Skill Hell
 created: 2026-07-06
-updated: 2026-07-06
+updated: 2026-07-19
 sources:
   - raw/yt-building-great-agent-skills-the-missing-manual.md
 unaudited_marginal: 0
@@ -61,6 +61,7 @@ This positions skill hell as a [[discourse-slop]]-adjacent phenomenon: the disco
 - [[ai-boilerplate-paradox]] — Verbosity-as-context-engineering gone undisciplined produces the sediment and no-ops that populate skill hell
 - [[discourse-slop]] — Skill hell is the skills instance of the broader slop pattern
 - [[agent-evals]] — Eval-driven development for skills (Rodrigues) is the other proposed exit: run with/without the skill, diff, iterate
+- [[skill-md]] — The SKILL.md spec's `skill-creator` eval loop is the format-level instantiation of the exit from skill hell
 
 ## Sources
 

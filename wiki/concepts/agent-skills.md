@@ -1,7 +1,7 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-07-17
+updated: 2026-07-19
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
@@ -12,13 +12,15 @@ sources:
   - raw/yt-building-great-agent-skills-the-missing-manual.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
+  - raw/agentskills-specification.md
+  - raw/skill-creator-skill.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
 
 # Agent Skills
 
-> A skill is a `skill.md` file in a folder that teaches an AI agent procedural knowledge — how to execute specific workflows, tasks, or jobs. Skills use progressive disclosure (metadata → instructions → resources) to stay context-efficient, and the format is an open standard (Apache 2.0) adopted across [[claude-code|Claude Code]], OpenAI Codex, and other major platforms.
+> A skill is a `skill.md` file in a folder that teaches an AI agent procedural knowledge — how to execute specific workflows, tasks, or jobs. Skills use progressive disclosure (metadata → instructions → resources) to stay context-efficient, and the format is an open standard adopted across [[claude-code|Claude Code]], OpenAI Codex, and other major platforms.
 
 ## The Problem Skills Solve
 
@@ -44,7 +46,7 @@ description: When to use this skill, what it does, and the trigger condition
 
 - **name** — Identifies the skill (mandatory)
 - **description** — Tells the agent what the skill does and **when to apply it** — this is the trigger condition (mandatory)
-- Optional frontmatter: `author`, `version`
+- Optional frontmatter: the open spec defines `license`, `compatibility`, `metadata`, and experimental `allowed-tools`; clients and individual skills add others (e.g. `author`, `version`) — none are mandatory.
 
 Below the frontmatter, the body contains the step-by-step instructions, rules, examples, and output format — all in plain markdown. Whatever the agent needs to know to do the job.
 
@@ -93,13 +95,10 @@ Agent architectures are starting to mirror this cognitive taxonomy. Skills are p
 
 ## Open Standard
 
-The `skill.md` format is an open standard published at [agent-skills.io](https://agent-skills.io), licensed under Apache 2.0. It was adopted across major AI platforms including:
+The `skill.md` format is an open standard, originally developed by Anthropic and now stewarded by a cross-vendor ecosystem (canonical spec repo: `agentskills/agentskills`; see [[agentskills]]). It was adopted across major AI platforms including [[claude-code|Claude Code]] and OpenAI Codex, and a skill built for one platform works on any spec-compatible client. The concrete file format — frontmatter field constraints, the three-tier progressive-disclosure budget, `skills-ref` validation — is covered on [[skill-md]].
 
-- [[claude-code|Claude Code]]
-- OpenAI Codex
-- Many other agent tools
-
-A skill built for one platform works on any platform that supports the spec.
+> [!note] Departure: standard home and mandatory fields
+> This page previously cited `agent-skills.io` as the standard's home and Apache 2.0 as its license. The current canonical source is the `agentskills/agentskills` repository. The open spec mandates only two frontmatter fields — `name` and `description`; `allowed-tools` is experimental, and `disable-model-invocation` (used by user-invoked skills such as Pocock's set) is a client-specific extension not in the open spec.
 
 ## Skill Design Craft
 
@@ -356,6 +355,8 @@ The survey's key insight for skill design: code-based skills are not just instru
 ## Related
 
 - [[agent-evals]] — Eval-driven development for skills: run with/without the skill, diff results, iterate
+- [[skill-md]] — The concrete file format/spec this concept is built on: frontmatter constraints, progressive-disclosure budget, `skills-ref` validation
+- [[agentskills]] — The open standard entity: repo, client showcase, stewardship, `skills-ref` tooling
 - [[ai-design-loop]] — Skills are the tools that execute the implementation phase of the design loop
 - [[context-engineering]] — Progressive disclosure is a core context engineering technique, and skills are its canonical implementation
 - [[context-files]] — Skills (procedural knowledge for agents) and context files (repository context for agents) are complementary: skills say how to do things, context files say what to know about this project
@@ -376,6 +377,7 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[leading-words]] — Pocock's steering technique: dense phrases the agent echoes in reasoning traces, shaping behavior
 - [[skill-hell]] — The diagnosis Pocock's four-part checklist responds to: skills proliferate faster than evaluative capacity
 - [[mattpocock-skills]] — The 38-skill repo that demonstrates the user-invoked tradeoff scales to a full workflow at 660 tokens of context
+- [[agents-md]] — Complementary: context files provide *what to know about this project*; skills provide *how to do things*. AGENTS.md is the canonical context-file convention.
 
 ## Sources
 
@@ -388,3 +390,5 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's four-part skill design checklist (trigger, structure, steering, pruning); user-invoked vs model-invoked load tradeoff; steps + reference + branches; leading words; leg work via hidden future goals; no-ops, sediment, single source of truth
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skills as progressive disclosure for conditionally-used project memory, the Android Skills popularity vs efficacy example, and the warning against installing unbenchmarked skills.
 - `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's end-to-end walkthrough of the `mattpocock/skills` repo. Establishes the empirical 660-token context footprint across 38 user-invoked skills; the subagent code review rule ("agents are bad at editing code they've just written"); the spec = destination / tickets = path framing; the per-ticket context budget enforcement. Demonstrates that the user-invoked tradeoff scales to a full workflow.
+- `raw/agentskills-specification.md` — The `agentskills/agentskills` docs: directory structure, frontmatter field constraints (name/description mandatory, allowed-tools experimental), three-tier progressive-disclosure budget, `skills-ref` validation; Anthropic-origin open-standard overview.
+- `raw/skill-creator-skill.md` — Local `skill-creator` skill: the build/eval loop (with-skill vs baseline), description optimization, test-case design, `.skill` packaging, and the client-specific `disable-model-invocation` field.

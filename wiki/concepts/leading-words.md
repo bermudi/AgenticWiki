@@ -1,7 +1,7 @@
 ---
 title: Leading Words
 created: 2026-07-06
-updated: 2026-07-06
+updated: 2026-07-19
 sources:
   - raw/yt-building-great-agent-skills-the-missing-manual.md
 unaudited_marginal: 0
@@ -62,6 +62,7 @@ This makes leading words one of the few steering techniques with a built-in obse
 - [[matt-pocock]] — Originator of the technique as an explicit named practice
 - [[agent-observability]] — The reasoning trace is the verification signal for whether a leading word fired
 - [[procedural-knowledge]] — Leading words are the densest form of procedural knowledge encoding: a phrase that unpacks a procedure via the model's prior
+- [[skill-md]] — The SKILL.md `description` is the leading-words steering lever at the format level: optimize the description so the agent echoes the right phrases
 
 ## Sources
 

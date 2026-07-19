@@ -1,7 +1,7 @@
 ---
 title: Ralph Loop
 created: 2026-04-26
-updated: 2026-07-16
+updated: 2026-07-19
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -202,7 +202,7 @@ The evolution from Huntley's `while :; do cat PROMPT.md | claude ; done` to Sand
 - [[multi-tier-action-space]] — The Ralph loop structures execution across multiple action-space tiers
 - [[software-factory]] — The Ralph Loop's fresh-context-per-iteration is a minimalist persistence mechanism for the software factory architecture
 - [[babysitter-agent]] — The babysitter is a more sophisticated alternative to the Ralph Loop's crude fresh-context-per-iteration approach
-- [[agent-loop]] — The umbrella concept and five-stage lineage; the Ralph Loop is Stage 3
+- [[agents-md]] — The Ralph Loop operationalized AGENTS.md as build/test infrastructure (~60 lines, minimal by design) before the convention was formalized
 - [[orchestration-loop]] — Stage 5: loops that supervise ralph loops concurrently and on a schedule
 - [[gas-town]] — The shipped, open-source proof: 20–30 Claude Code instances supervised by a Mayor agent with git-backed durability
 

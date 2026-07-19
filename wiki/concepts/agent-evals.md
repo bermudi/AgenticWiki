@@ -1,7 +1,7 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-07-14
+updated: 2026-07-19
 sources:
   - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
@@ -131,7 +131,7 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - [[instruction-hierarchy]] — MANYIH-BENCH adds a third axis to the long-horizon eval landscape: conflict tier scaling ([[delegate-52]] measures domain breadth, [[agent-floor]] measures planning depth, ManyIH measures privilege complexity)
 - [[thorsten-ball]] — Vibes-based evaluation as a practical alternative to formal evals for general-purpose coding agents
 - [[mast]] — MAST-Data is a labeled eval dataset for MAS (1642 traces, 7 frameworks); the LLM-as-a-Judge annotator (κ=0.77 against human experts) is a data point for LLM-as-judge reliability in structured classification tasks
-- [[skill-efficacy]] — A skill's GitHub stars are not a quality signal; the only reliable eval is a controlled A/B test of the skill on real tasks
+- [[skill-md]] — The SKILL.md `skill-creator` workflow (with-skill vs baseline eval loop, `eval.json`) is the canonical skill-level eval pattern
 
 ## Sources
 

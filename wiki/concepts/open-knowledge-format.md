@@ -1,7 +1,7 @@
 ---
 title: Open Knowledge Format (OKF)
 created: 2026-06-17
-updated: 2026-06-17
+updated: 2026-07-19
 sources:
   - raw/how-the-open-knowledge-format-can-improve-data-sharing.md
   - raw/open-knowledge-format-spec-v0.1.md
@@ -125,7 +125,8 @@ The pattern this formalizes is the [[andrej-karpathy|Karpathy]] LLM-wiki recipe:
 - [[agent-skills]] — Parallel precedent: minimal open format spec + reference implementations, betting that speaker count beats ownership
 - [[procedural-knowledge]] — Cognitive-science framing that underpins both skills (procedural) and OKF concepts (semantic/declarative knowledge)
 - [[knowledge-triplet]] — OKF bundles push "what's in the codebase" into a structured, queryable form that narrows the fabrication gap
-- [[context-engineering]] — OKF is a context-engineering primitive at the organization scale: structured, queryable knowledge that agents load on demand instead of re-deriving from raw sources
+- [[agents-md]] — The AGENTS.md / CLAUDE.md family is a related bespoke instance of the knowledge-as-markdown pattern OKF standardizes
+- [[skill-md]] — The SKILL.md format is a parallel minimal open-format spec with reference implementations (the agentskills standard)
 
 ## Sources
 

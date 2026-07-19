@@ -1,7 +1,7 @@
 ---
 title: ContextCov
 created: 2026-05-10
-updated: 2026-05-10
+updated: 2026-07-19
 sources:
   - raw/2603.00822v2.md
 tags: [project, enforcement, agent-tooling, verification, backpressure]
@@ -139,7 +139,7 @@ Three trust boundaries are assumed: Agent Instructions are written by authorized
 - [[agent-friendly-tooling]] — PATH shims as a lightweight, portable enforcement mechanism
 - [[iterative-self-correction]] — ContextCov's deterministic error traces provide the feedback that self-correction mechanisms need; LLM reflection making things worse is consistent with the finding that verification quality, not feedback volume, drives convergence
 - [[agent-evals]] — The paper's evaluation methodology (compliance metrics, ablation, paired significance tests) is a template for evaluating agent enforcement systems
-- [[plan-vs-review]] — ContextCov shifts some review burden from humans to deterministic checks, changing the plan-vs-review tradeoff
+- [[agents-md]] — ContextCov makes AGENTS.md instructions executable; the convention is the canonical passive context-file target
 
 ## Sources
 

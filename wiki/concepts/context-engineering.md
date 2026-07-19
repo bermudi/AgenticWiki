@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-18
+updated: 2026-07-19
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
@@ -255,6 +255,7 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[claude-tag]] — Productized channel-scoped context (Anthropic, 2026); the default-scoping instance of the channel-as-boundary pattern
 - [[fresh-context-subagents]] — GSD Core's architectural pattern: fresh context per subagent as the default execution model for all heavy work
 - [[gsd-core]] — The framework that systematizes fresh-context subagents and ships a context monitor hook
+- [[skill-md]] — The SKILL.md format operationalizes progressive disclosure (the core context-engineering technique) as a concrete file spec
 
 ## Cramer on Training Data as Inference Cost
 

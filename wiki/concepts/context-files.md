@@ -1,20 +1,22 @@
 ---
 title: Context Files (AGENTS.md, CLAUDE.md)
 created: 2026-05-10
-updated: 2026-07-03
+updated: 2026-07-19
 sources:
   - raw/2602.11988v1.md
   - raw/2601.20404v1.md
   - raw/2603.00822v2.md
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
+  - raw/agents-md-standard.md
+  - raw/create-project-agentsmd-skill.md
 unaudited_marginal: 0
 tags: [concept, context-files, agents-md, agentic-engineering, configuration]
 ---
 
 # Context Files (AGENTS.md, CLAUDE.md)
 
-> A context file (AGENTS.md, CLAUDE.md, copilot-instructions.md) is a repository-level artifact that provides AI coding agents with project-specific instructions, conventions, and structural overview. Despite widespread adoption (>60,000 repositories), rigorous evidence shows their impact is ambiguous: they can improve efficiency on simple tasks but degrade performance and increase costs on complex ones.
+> A context file (AGENTS.md, CLAUDE.md, copilot-instructions.md) is a repository-level artifact that provides AI coding agents with project-specific instructions, conventions, and structural overview. Despite widespread adoption (>60,000 open-source repositories), rigorous evidence shows their impact is ambiguous: they can improve efficiency on simple tasks but degrade performance and increase costs on complex ones.
 
 ## Overview
 
@@ -107,6 +109,8 @@ The evidence supports a minimalist, human-written approach to context files:
 - **Avoid prescriptive instructions.** Context files that mandate specific tooling or workflows increase reasoning overhead and may lead agents astray.
 - **Remove them to debug.** If an agent is over-exploring or over-testing, try removing the context file and see if performance improves.
 
+The practitioner authoring craft converges with the evidence too: the [[agents-md]] convention's guidance — encode stable reference facts, cut volatile implementation detail, keep the file under 200 lines — is exactly the minimalism the studies recommend, arrived at from practice rather than measurement.
+
 > [!note] Cross-Source Convergence: Minimalism
 > Three independent paths have converged on the same conclusion about context file design: **keep them short, operational, and human-written.** The [[ralph-loop]] pattern (~60-line AGENTS.md with build/test commands only) arrived at this through practice. The Gloaguen et al. evaluation recommended "only minimal requirements" through empirical testing. The [[context-engineering]] framework advocates high signal density through theory. This triangulation — practice, evidence, and theory pointing in the same direction — is stronger than any single source and makes minimalism the most defensible design principle for context files as of 2026.
 
@@ -137,6 +141,7 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 
 - [[agent-experience]] — Context files are part of the AX surface area; their design directly affects how easily agents can navigate a codebase
 - [[ralph-loop]] — The Ralph Loop operationalized AGENTS.md as build/test infrastructure (~60 lines, minimal by design) before the empirical evidence caught up
+- [[agents-md]] — The dedicated page on the AGENTS.md convention: format, nested-file discovery, cross-agent compatibility, and the minimalist authoring craft
 - [[agent-skills]] — Skills and context files are complementary: skills provide procedural knowledge (how to do things), context files provide repository context (what to know about this project)
 - [[model-routing]] — Different models respond differently to context file instructions; instruction style (ALL CAPS) works on some models but de-tunes others
 - [[evolving-context]] — Context files that are maintained and updated reflect the evolving context principle; stale context files become [[doc-rot]]
@@ -154,3 +159,5 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026). Proposes executable guardrails for passive instruction files; introduces constraint taxonomy, Documentation as Code paradigm, and instruction quality feedback loop.
 - `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — Names the synonymy problem across SDD tools (constitution / CLAUDE.md / .cursorrules / steering).
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Steering docs as accumulated learnings; three demonstrated use cases (commit style, code style, operational learnings); available in system prompt at every turn.
+- `raw/agents-md-standard.md` — The agents.md/ site: the convention's rationale, no-required-fields format, nested-file discovery (nearest wins), cross-agent compatibility, and Agentic AI Foundation (Linux Foundation) stewardship.
+- `raw/create-project-agentsmd-skill.md` — Local `create-project-agentsmd` skill: the minimalist authoring craft (goals over mechanism, stable reference facts vs volatile implementation detail, file-it-don't-delete-it, <200-line discipline, anti-patterns).

@@ -1,7 +1,7 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-07-14
+updated: 2026-07-19
 sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md, raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md]
 tags: [tool, ai, agent, anthropic]
 unaudited_marginal: 0
@@ -91,6 +91,7 @@ This also applies in reverse: HTML files serve as high-context inputs for verifi
 - [[llm-ui-paradigms]] — Karpathy's three-paradigm framing; Claude Code is paradigm 2 (app), Claude Tag is paradigm 3 (persistent org-level entity)
 - [[grammar-constrained-sampling]] — Claude Code's lenient tool-call parsing masks a decoding-level failure (~20% edit failure) that only strict harnesses surface
 - [[harness-monoculture]] — Claude Code's leniency is hypothesized to propagate through RL training as a de-facto ecosystem spec
+- [[agentskills]] — Claude Code is a primary reference client for the Agent Skills open standard; supports `disable-model-invocation` user-invoked skills
 
 ## Sources
 
