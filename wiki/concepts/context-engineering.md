@@ -1,8 +1,9 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-16
+updated: 2026-07-18
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md
   - raw/yt-context-engineering-with-dex-horthy.md
@@ -255,8 +256,15 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[fresh-context-subagents]] — GSD Core's architectural pattern: fresh context per subagent as the default execution model for all heavy work
 - [[gsd-core]] — The framework that systematizes fresh-context subagents and ships a context monitor hook
 
+## Cramer on Training Data as Inference Cost
+
+[[david-cramer|David Cramer]] adds an economics dimension to context engineering: training data is part of inference cost, and it's not factored into current pricing. His argument: "if a model has not been heavily trained on a thing, like models will only give you the right answer if you give them the right answer first." The web crawler analogy: the wrong way is to have an LLM parse every page; the right way is to have an LLM generate a script when pages change, then run that script. Efficiency comes from deterministic reuse, not repeated inference.
+
+This connects to context engineering's information-per-token density: if the knowledge isn't in the training set, you must supply it in context — and that context engineering cost is the real price of inference. "I think training is part of the cost of inference and it's not factored in the cost of inference today. Thus, the cost of inference is dramatically higher than we are led to believe." When frontier model companies go public and have to pay the bills, context engineering becomes even more critical — every token of unnecessary context is real money.
+
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on training data as inference cost, the web crawler efficiency analogy, and context engineering as the real price of inference when training data is incomplete.
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Full interview defining context engineering origins, principles, and practices
 - `raw/yt-chroma-context-engineering-episode-3-lance-martin-langchain.md` — Operational techniques catalog, context layers model, context isolation patterns
 - `raw/yt-mergeable-by-default-building-the-context-engine-to-save-time-and-tokens-peter-werry-unblocked.md` — Context engine architecture, the three myths, satisfaction of search, organizational memory, and expert bottling

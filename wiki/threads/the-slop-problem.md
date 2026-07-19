@@ -3,6 +3,7 @@ title: The Slop Problem
 created: 2026-04-25
 updated: 2026-07-18
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
   - raw/yt-are-we-really-doing-this-again.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -271,8 +272,17 @@ The approach requires confident scoping. If the slop tooling creeps into critica
 > [!note] Departure: Overconfident Verification as a Slop Vector
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) identifies a slop pattern this thread doesn't cover: **overconfident verification**. When the harness has executable feedback (tests pass, linters clean), it can become overconfident because "the green test is not the full specification" (§5.2.2). This is [[compounding-booboos|compounding booboos]] at the *verification layer* — the tests themselves are slop, but the agent treats them as authoritative. The survey calls this the "oracle adequacy" problem: the verification signal is real and objective, but incomplete. It's a distinct failure mode from "agents don't feel pain" (the agent *does* get a signal, but the signal is misleading) and from "untrustworthy test suites" (the tests aren't wrong — they're just not testing the right thing). The distinction matters: fixing untrustworthy tests requires better test generation, but fixing overconfident verification requires semantic verification beyond the harness's executable signals.
 
+## Cramer on Junk Code and Security
+
+[[david-cramer|David Cramer]] strengthens this thread from the C-level production-software perspective. His core thesis: "LLMs produce junk. Sometimes that's okay. But it is certainly... there's no putting the thing back in the closet." He forced himself to stop writing code by hand almost a year before the interview — not because AI is better, but to build first-person experience — and his conclusion is blunt: "There's absolutely no way to produce good software which is prompting LLMs, no matter what. It's going to be bloated, overengineered, complex, Java everywhere, Java factory patterns non-stop."
+
+The security dimension is what makes Cramer's position load-bearing. He built a scanner inside Sentry that identified security vulnerabilities in their active codebase. "If I ship something that has massive vulnerabilities in Sentry, that could cause the company to disappear." This is the liability asymmetry that distinguishes production slop from hobby-project slop: Peter Steinberger's chatbot can accept all risk; Sentry cannot. The "junk code" that passes for vibe-coded demos is categorically different from the junk code that ships to millions of users.
+
+Cramer also identifies the verification problem as the bottleneck: "Software verification is the hardest problem. It's always been one of the hardest problems. We've not made it any better." Code review bots help a little, but "we're spending inference to fix all the other stuff that was from inference." This is the same generation-beats-review asymmetry this thread documents, viewed from the organizational level.
+
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on junk code at production scale: LLMs produce bloated, overengineered code; security vulnerabilities in Sentry's codebase; verification as the hardest problem; the liability asymmetry between hobby projects and production software.
 - `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — [[mario-zechner|Mario Zechner]]'s sharpest articulation of the thread: "code is never free — you've just delayed the punishment"; 500,000 lines of code shipped through agents in a week as the concrete slop-production number; the Kotlin/Ralph-loop experiment where a non-Kotlin-familiar human could not verify a non-mergeable PR ("utter trash... I had no chance to verify it"); the spec-driven-development "hyper-waterfall" sharpening (the most detailed spec you can write is the program itself; everything shorter leaves planks that the agent fills from the median of internet code); the Pi auto-close contribution-gate as the deliberate-friction instantiation; the four-month AI-psychosis that snapped out only when Zechner noticed he was producing no value. All empirical anchors for the thread.
 - `raw/deepswe-benchmark.md` — Datacurve (2026): benchmark contamination as evaluation slop; SWE-bench Pro verifier failure rates; prompt-induced behavior distortion; the need for reliable verification at the benchmark level
 - `raw/yt-context-engineering-with-dex-horthy.md` — Dex's first-person dark-factory build-and-shutdown (July→November 2025), the 3–6-month rewrite-vs-fix threshold, and "users didn't complain" as the weakest verification oracle (41:55–46:33).

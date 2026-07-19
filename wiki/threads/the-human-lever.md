@@ -1,9 +1,10 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-16
+updated: 2026-07-18
 unaudited_marginal: 0
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - "raw/yt-stop-reading-code-start-understanding-systems.md"
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -110,7 +111,7 @@ This has a direct implication for how you structure code. [[deep-vs-shallow-modu
 
 [[mario-zechner|Mario Zechner]] reinforces this from the tooling side: [[pi]] is designed around **observability** so the human can always see what the agent is doing and intervene before small errors compound. Minimalism in tooling isn't an aesthetic choice — it's a structural safeguard against the speed-review bottleneck.
 
-A deeper challenge for the verification contract: even when rules are explicitly given, models may not follow them. [[inferential-rule-following|RuleBench]] demonstrates that when rules contradict a model's parametric knowledge (e.g., counterfactual kinship rules), performance collapses — GPT-4o drops from 99.7% to 8.2%. The model isn't following the rule; it's pattern-matching it to training data. This means the human's verification responsibility extends beyond testing outputs to testing *whether the model actually used the rules you gave it* — a far harder problem.
+A deeper challenge for the verification contract: even when rules are explicitly given, models may not follow them. [[inferential-rule-following|RuleBench]] demonstrates that when rules contradict a model's parametric knowledge (e.g., counterfactual content moderation rules on the SALAD dataset), performance collapses — GPT-4o drops from 99.7% to 8.2%. The model isn't following the rule; it's pattern-matching it to training data. This means the human's verification responsibility extends beyond testing outputs to testing *whether the model actually used the rules you gave it* — a far harder problem.
 
 ## The Closed Loop: Design → Code → Execution → Feedback
 
@@ -415,8 +416,17 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - [[baml]] — BAML's compiler-level auto-instrumentation and BEEPs workflow: the human lever operationalized at organizational scale
 - [[vibv]] — Source of the expectation gap model and the closed-loop extension to the quality loop
 
+## Cramer on Accountability and Unchanged Fundamentals
+
+[[david-cramer|David Cramer]] reinforces the human lever from the accountability angle. His position: "Humans are going to stay in the loop if nothing else because there has to be accountability. There has to be liability." Good engineering practices — smaller changesets, code review, pre-design specs — "are exactly the same as they were before."
+
+Cramer's specific contribution to this thread is the observation that writing code was never the bottleneck. "In every company I've worked, writing the code is never the issue. I can write code all day if I didn't have meetings." The bottleneck is reading code — and reading code "prevents issues." This is the speed-review asymmetry stated from the organizational level: the human's role isn't diminished by AI, it's made more consequential because the volume of code requiring review has increased.
+
+His iterative refinement observation: developers used to build a first version, then iterate as ideas got refined. "That was everything. And that's actually quite hard to do with LLMs." The exploratory, messy, learning-rich phase of development — where design intuition is built — is exactly what AI tools disrupt. The human lever isn't just about owning interfaces; it's about preserving the cognitive process that builds the judgment to design those interfaces.
+
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on accountability (humans stay in the loop because of liability), unchanged engineering practices, writing code was never the bottleneck, and iterative refinement being harder with LLMs.
 - `raw/yt-ai-coding-for-real-engineers.md` — Grey box engineering, HITL/AFK, deep modules
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Verification loops, code intelligence
 - `raw/yt-context-engineering-with-dex-horthy.md` — The three operating postures (lights off / read every line / find leverage) with calibration, and the SRE scaling analogy for leverage via good architecture (59:56–1:01:00, 1:16:25–1:18:40).

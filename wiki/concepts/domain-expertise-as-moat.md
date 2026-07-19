@@ -1,8 +1,9 @@
 ---
 title: Domain Expertise as Moat
 created: 2026-05-31
-updated: 2026-06-03
+updated: 2026-07-18
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/domain-expertise-has-always-been-the-real-moat.md
 unaudited_marginal: 0
 tags: [concept, domain-expertise, verification, career, human-lever]
@@ -50,6 +51,14 @@ It instantiates [[verifiability]]: "can you tell whether it's right?" is Karpath
 
 It reinforces the [[knowledge-triplet]]: the irreducible human contribution is what you know and can express. Domain expertise is the highest-value form of that knowledge.
 
+## Cramer on Systems Design as Irreducible Knowledge
+
+[[david-cramer|David Cramer]] reinforces the moat thesis from the systems-design angle. His position: "software engineering, the way you design systems, the knowledge you need, all these things. It's not gotten any easier. The LLM is not magically going to give you decisions." Even with AI, getting one quality piece of code out of any sufficiently complicated software "is not any easier than it used to be."
+
+Cramer identifies a specific failure mode: developers are impatient, amplified by AI tools. When an LLM says "this is a bad design," the developer probably won't consume that feedback and guide it correctly next time. "You're probably going to go in and do the same thing where you're like, I want to build this thing. You're not going to give it the design of the system. You're going to let it do whatever it's going to do and it will often do it wrong anyways."
+
+His observation about learning: "I don't know how you learn if you don't actually if you're not doing the thing because you need at minimum even if the LLMs or whatever, even if technology can generate code and verify and some stuff like this, you still need systems design." This is the domain-expertise thesis applied specifically to software architecture — the knowledge of how to design systems is the moat that AI can't replace.
+
 ## Tensions
 
 > [!warning] Unresolved: Is Domain Expertise Really Uncapturable?
@@ -75,4 +84,5 @@ It reinforces the [[knowledge-triplet]]: the irreducible human contribution is w
 
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on systems design as irreducible knowledge: LLMs don't give you architectural decisions, learning requires doing the thing, developers are too impatient to consume design feedback.
 - `raw/domain-expertise-has-always-been-the-real-moat.md` — Primary source; the two-person thought experiment, asymmetric path collapse, dual-verifier, career bet

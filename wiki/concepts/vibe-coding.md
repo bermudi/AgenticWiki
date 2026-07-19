@@ -1,8 +1,9 @@
 ---
 title: Vibe Coding
 created: 2026-05-09
-updated: 2026-06-01
+updated: 2026-07-18
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-llms-are-killing-agent-harness.md
 unaudited_marginal: 0
@@ -77,7 +78,16 @@ This tension — vibe coding raises the floor (everyone can build) but the defau
 - [[peak-programmer]] — "Software as we know it is dead" as the strongest articulation of peak programmer; vibe coding as the capability shift that triggers it
 - [[thorsten-ball]] — Extends vibe coding to evaluation: vibes-based engineering as more signal than formal evals
 
+## Cramer on Vibe Coding for Production Software
+
+[[david-cramer|David Cramer]] provides the sharpest production-software critique of vibe coding. His comparison to [[peter-steinberger|Peter Steinberger]]'s approach: impressive output volume, but it's "a damn chatbot where they've decided to accept all risk." The key distinction is liability: "If I ship something that has massive vulnerabilities in Sentry, that could cause the company to disappear. If you ship something that [messes] up the chatbot, what happens? Nothing."
+
+Cramer's view on vibe coding's limitations: "There's absolutely no way to produce good software which is prompting LLMs, no matter what. It's going to be bloated, overengineered, complex, Java everywhere, Java factory patterns non-stop." He adds: "Sometimes that's okay." The nuance is that vibe coding is viable for personal tools and experiments — "if you're just doing something for yourself, you don't really care about the code quality" — but the moment you send customers, friends, or family on it, "they should maybe know a little bit what you're doing there."
+
+This is the liability-asymmetry boundary of vibe coding: the technique works when the cost of failure is zero (personal projects, demos) and fails when the cost is nonzero (production software, security-sensitive systems). Karpathy's December 2024 capability threshold made vibe coding *possible*; Cramer identifies the domain where it's *responsible*.
+
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on the liability asymmetry: vibe coding works for chatbots and personal tools but not for production software with security implications.
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: coinage of "vibe coding," the December 2024 capability threshold, and the distinction between vibe coding and agentic engineering.
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for coding agents; formal evals less useful than usage experience for arbitrary codebases.

@@ -1,8 +1,9 @@
 ---
 title: Discourse Slop
 created: 2026-07-02
-updated: 2026-07-02
+updated: 2026-07-18
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-are-we-really-doing-this-again.md
 unaudited_marginal: 0
 tags: [concept, slop, discourse, hype-cycle, epistemics]
@@ -66,6 +67,15 @@ All share the root mechanism: output is generated faster than it is verified, fl
 - [[boris-cherny]] / [[peter-steinberger]] — Practitioners whose communication this source critiques
 - [[neetcode]] — The source author; the hype-cycle critic voice
 
+## Cramer on the Echo Chamber
+
+[[david-cramer|David Cramer]] adds a practitioner-level critique of the discourse layer. His diagnostic: "somebody says that, I click their bio. And that gives you all the information you need. There is nobody that is credible that says that." He specifically calls out Dario Amodei's public communications as harmful: "He is just frankly bad at public comms. He should not do it." Telling journalists that developers won't write code in 6 months is "bad for everybody" — not because it's a lie, but because the message, filtered through journalism, reaches developers as a threat.
+
+Cramer identifies the same incentive structure NeetCode maps: Twitter incentivizes rage bait, people who aren't in the industry talk about things that aren't true for clicks, and the echo chamber drains energy from practitioners who have to ignore it. His framing adds a moral dimension: "If you have power, you have a responsibility. Full stop." He feels a duty to not feed people BS, even when the hype machine rewards it.
+
+The signal-vs-noise solution Cramer uses: reputational value. He trusts people he's interacted with, whose names he recognizes, who aren't "randoms on the internet producing slop." The mental load of maintaining this context — "figuring out who's who" — is itself a tax on practitioners.
+
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]]'s critique of the echo chamber: Dario Amodei's public comms failures, the moral duty of influential voices, reputational value as the signal-vs-noise filter, and the mental load of navigating discourse slop as a practitioner.
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s audit of the loops discourse: the 2M-view loop-engineering post read as AI slop, AI-detector results, the incentive structure (Anthropic/OpenAI/Cursor hype; Google measured), performative communication (IDE uninstall; "prompts are dead" with no follow-up), and "there are no experts, only people who pretend."

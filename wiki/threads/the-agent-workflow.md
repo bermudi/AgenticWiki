@@ -1,8 +1,9 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-17
+updated: 2026-07-18
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-building-pi-in-a-world-of-slop.md
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
@@ -89,6 +90,9 @@ Karpathy's hiring proposal — give candidates a big project ("build a Twitter c
 > The [[mast]] taxonomy (Cemri, Pan, Yang et al., NeurIPS 2025) provides the diagnostic vocabulary for *why* multi-agent coordination fails in practice: 14 failure modes in 3 categories across 1642 traces from 7 popular MAS frameworks. System Design Issues (44.2%) is the largest category — confirming that the binding constraint is design, not model capability. The MAST intervention studies (+9.4% from role-spec fix, +15.6% from high-level verification step) reinforce the "engineered not discovered" thesis at smaller scale.
 >
 > The [[scaling-agent-systems|Kim et al. scaling study]] (260 configurations, 6 benchmarks, 3 LLM families) provides the quantitative thresholds that specify *when* multi-agent coordination helps: [[capability-saturation|capability saturation]] (once single-agent baselines exceed ~45%, MAS yields negative returns) and the [[tool-coordination-trade-off|tool-coordination trade-off]] (tool-heavy tasks suffer disproportionately from MAS inefficiency). The framework predicts optimal architecture with 87% accuracy on held-out configurations using measurable properties (single-agent baseline, tool count, model capability, coordination metrics). This is the quantitative answer to "when does multi-agent coordination help?" that the workflow thread needs.
+
+> [!note] Departure: The Missing Intermediate — Tab-Complete to Full Delegation
+> [[david-cramer|David Cramer]] observes that the industry jumped from tab-complete to full delegation without preserving an intermediate state: "We went from tab complete to instantly we just don't write code anymore. And it's like maybe we should have stopped somewhere in between." This thread's HITL/AFK model assumes a gradual progression — plan with the human, execute away from keyboard — but Cramer's observation suggests the default trajectory was a binary jump, not a gradient. The expert workflow this thread documents (strategic human + tactical agent) may be an after-the-fact correction, not the path most developers actually took. This connects to [[the-cognitive-cost]]'s population problem: the intermediate stage — where humans remain strategically engaged while using AI for tactical acceleration — is exactly the stage that eroded fastest.
 
 ## Thesis
 
@@ -486,6 +490,7 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on the industry jumping from tab-complete to full delegation without an intermediate state: "maybe we should have stopped somewhere in between."
 - `raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md` — Karpathy's Sequoia interview: origin of "agentic engineering," the intern entity metaphor, 10x magnification, hiring paradigm for agentic proficiency
 - `raw/yt-ai-coding-for-real-engineers.md` — HITL/AFK, tracer bullets, Smart Zone
 - `raw/yt-context-engineering-with-dex-horthy.md` — Dex's RPI workflow (research/design/plan/implement with compaction at each handoff) and its anti-leverage retrospective; the slow-loop pattern; the lights-off factory cautionary tale (1:01:16–1:09:34, 36:56–38:01, 41:55–46:33).

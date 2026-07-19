@@ -31,6 +31,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[construction-time-memory]] — Memory as a quality-control substrate *during offline construction*, not just at query time: MemGraphRAG's Three-Layer Global Memory lets extraction/conflict agents enforce relevance, consistency, and cohesion before the graph is frozen. Same "memory-as-coordination" pattern as engineered MAS.
 
 ## ✍️ Authors
+- [[david-cramer]] — Co-founder/CTO of Sentry; grounded skeptic of 100x hype; built Sentry's MCP server; AI bubble thesis
 - [[kun-chen]] — Ex-L8 principal engineer (Meta, Microsoft, Atlassian); built frontier coding agents at Atlassian; author of the captain/first-mate/crew workflow and open-source tools [[no-mistakes]], [[lavish]], [[axi]], [[treehouse]], [[first-mate]], and [[good-night-have-fun]].
 - [[eero-alvar]] — YouTube creator; proposes software factories and the aiming problem as the next step in agentic engineering
 - [[lars-faye]] — Developer and writer; introduced "cognitive debt" and articulated the supervision paradox from Anthropic's research.
@@ -308,6 +309,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[plum-dev]] — CLI decision-tracking tool that keeps spec, tests, and code in sync via git hooks; extracts decisions from diffs and agent traces at commit time.
 - [[slop-watch]] — Self-hosted coding agent observability platform; sessions, tokens, traces, and quality metrics for agent-driven teams.
 - [[sandcastle]] — Matt Pocock's TypeScript library for parallelizing AFK agent loops in Docker sandboxes.
+- [[sentry]] — Error monitoring and observability platform; co-founded by [[david-cramer|Cramer]]; ~$3M/year AI budget, built MCP server, fair source model.
 - [[omarchy]] — A new Linux distribution project aimed at simplifying the desktop experience.
 - [[onewords]] — A no-code library (spec + 750 tests, no implementation); the original proof of concept for spec-driven development. 1000+ GitHub stars.
 - [[unblocked]] — Context engine for engineering organizations; pre-curates organizational context for AI coding agents.

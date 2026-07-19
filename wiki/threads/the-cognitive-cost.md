@@ -3,6 +3,7 @@ title: The Cognitive Cost
 created: 2026-06-03
 updated: 2026-07-18
 sources:
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/agentic-coding-is-a-trap.md
   - raw/yt-we-all-fell-for-it.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
@@ -33,7 +34,7 @@ The mechanism is a self-reinforcing loop: the [[supervision-paradox]]. Effective
 
 The defense — "programmers have always moved up the stack" — fails for a specific reason. Previous transitions were **normative risks**: fears about what *might* be lost were speculative. The C++ developer moving to Java didn't report brain fog. The sysadmin moving to AWS didn't lose networking understanding.
 
-AI's cognitive impact is **empirical**. Multiple Anthropic studies have documented the effect: one found a 47% drop-off in debugging skills among developers using AI aggressively; a separate RCT (52 engineers learning a Python library) found 17 percentage points lower comprehension in the AI-assisted group, saving only ~2 minutes. Simon Willison, a developer with nearly 30 years of experience, reported not having a firm mental model of his own applications. These aren't theoretical concerns — they're measured outcomes from the first few years of tool availability.
+AI's cognitive impact is **empirical**. An Anthropic RCT (52 engineers learning a Python library) found 17 percentage points lower comprehension in the AI-assisted group, saving only ~2 minutes. Lars Faye reports an additional Anthropic study showing a 47% drop-off in debugging skills among developers using AI aggressively (the specific study is not cited in his article). Simon Willison, a developer with nearly 30 years of experience, reported not having a firm mental model of his own applications. These aren't theoretical concerns — they're measured outcomes from the first few years of tool availability.
 
 The distinction Faye draws: "A higher level of ambiguity is not a higher level of abstraction." Natural language prompts aren't a cleaner interface to the same underlying exercise — they remove the exercise.
 
@@ -114,8 +115,17 @@ Theo adds his own experience: "I was kind of an early vibe coder... I've been sl
 > 3. **The off-ramp was principled, not structural** — he came out when he noticed "I'm producing no value," not when something forced him to. A less self-aware developer could stay in the cycle longer.
 > The data point is the upper bound on what [[skill-atrophy]]-buffered cognition can absorb without flipping into the worst-case state. The default trajectory this thread warns about isn't bounded by foundation *alone*; it's bounded by foundation *plus* a self-monitoring discipline that can detect when the activity has lost its learning payoff. See [[mario-zechner]] and [[skill-atrophy]] for the broader mechanism.
 
+## Cramer on the Learning Problem
+
+[[david-cramer|David Cramer]] identifies a genuine problem for junior engineers that he doesn't have an answer for: how do you learn when you can outsource your problems to LLMs? His position: "I don't know how you learn if you don't actually if you're not doing the thing because you need at minimum even if the LLMs or whatever, even if technology can generate code and verify and some stuff like this, you still need systems design."
+
+The mechanism Cramer describes is the same pain-avoidance loop Theo identifies: developers are impatient, amplified by AI tools. When an LLM provides feedback ("this is a bad design"), the developer probably won't consume it. "You're probably going to go in and do the same thing where you're like, I want to build this thing. You're not going to give it the design of the system. You're going to let it do whatever it's going to do and it will often do it wrong anyways."
+
+Cramer also observes that the iterative refinement process — building a first version, then iterating as the idea gets refined — is "quite hard to do with LLMs" because they're slow and because you can't refactor-as-you-go the way a human developer does. The exploratory, messy, learning-rich phase of development is exactly what AI tools make harder, not easier. This is a concrete instantiation of the cognitive-cost thesis: the learning loop that builds systems-design intuition is disrupted by AI delegation.
+
 ## Sources
 
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on the learning problem: how juniors learn when they can outsource problems, the impatience amplification, iterative refinement being harder with LLMs, and systems design as the irreducible learning requirement.
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: the primary argument; cognitive debt, the supervision paradox, the "not just another abstraction" argument, the inverted priority list, the "demote AI" workflow
 - `raw/yt-we-all-fell-for-it.md` — Theo (t3.gg): the skateboarding metaphor, the code-frequency distinction, vendor lock-in as competence failure, token cost correction, the debugging story, the population problem
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — The Gray Cat: the drift into comprehension debt, the recovery through teaching mode, the cultural signal of "let me ask Claude"
