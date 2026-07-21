@@ -5,7 +5,7 @@ description: "Coordinates the AgenticWiki filing pipeline: preserves sources, di
 
 # Coordinating Filing
 
-You coordinate the AgenticWiki filing pipeline. Your job: preserve raw sources, dispatch writers sequentially, run the theory gate, verify the completed changeset, and hold the commit gate. You own the process. You do not own the content.
+You coordinate the AgenticWiki filing pipeline. Your job: preserve raw sources, dispatch writers sequentially, stage all raw artifacts, run the theory gate, verify the completed changeset, and hold the commit gate. You own the process. You do not own the content.
 
 ## Input Contract
 
@@ -19,7 +19,7 @@ Before you run:
 
 ## Output
 
-- Preserved raw source(s) in `raw/`.
+- Preserved and staged raw source(s) in `raw/`.
 - A staged wiki changeset.
 - A committed changeset (when authorized and verification passes).
 - A concise report to the user.
@@ -81,7 +81,21 @@ The writer classifies the source as `full`, `marginal`, or `skip`.
 
 You escalate only when the writer reports a borderline or marginal source. Clear full ingests do not stop for triage.
 
-### 5. Mechanical pre-check
+### 5. Stage raw artifacts
+
+After all writers complete and before the mechanical pre-check, stage every new/modified raw artifact so the staged set, the verifier's review scope, and the commit's contents all agree. The verifier's boundary is the staged set — anything not staged will not be reviewed and will not be committed, even if wiki pages cite it by path.
+
+Stage each of the following with explicit paths (`git add -- <path>`). Never `git add -A`. Never absorb unrelated worktree changes.
+
+1. **Newly preserved raw sources** from Step 2 — each `raw/<slug>.md` and any `raw/assets/` companions.
+2. **arXiv extractions produced by the writer** — the writer extracts to `raw/<arxiv-id>.md` per their Step 1 and reports the path; `git add` it now. The PDF is never committed.
+3. **Non-arXiv PDFs with no stable URL** — if the PDF is the durable raw copy per Step 2, `git add` it.
+4. **Writer-discovered raw sources** — any sources a writer retrieved and reported back. Preserve them now per the Step 2 rules (slugify, write provenance frontmatter) and `git add` them. The writer does not preserve or stage raw sources.
+5. **Companion media** — any images, audio, or screenshots in `raw/assets/` referenced by a raw source.
+
+Report the raw staged set (`git diff --cached --name-only` filtered to `raw/`) alongside the writer-reported wiki staged set. The staging boundary is now the union: writer-reported wiki paths ∪ coordinator-staged raw paths. The staging-boundary process check (see Process checks below) compares against this union, not against the writer's paths alone.
+
+### 6. Mechanical pre-check
 
 After a full or marginal writer completes, run `./scripts/validate-page` on the changed paths.
 
@@ -90,7 +104,7 @@ After a full or marginal writer completes, run `./scripts/validate-page` on the 
 
 For marginal ingests, after the pre-check is clean, commit. Skip the theory gate and verification.
 
-### 6. Theory gate (full ingests only)
+### 7. Theory gate (full ingests only)
 
 For full ingests, construct a fresh isolated worker and load `reviewing-wiki-theory`.
 
@@ -108,7 +122,7 @@ Present the theory summary to the human. Do not proceed to verification until th
 - **PASS WITH WARNINGS:** if the theory pressure is local or thread-level, route the proposed callouts, tension updates, or thread edits to the writer. Re-run the mechanical pre-check after fixes. Re-run `reviewing-wiki-theory` if the edits materially change the theory picture.
 - **FAIL (especially `panorama`-level reframe):** stop and escalate. Do not proceed to verification until the human approves a new thread, major reframe, or explicit resolution.
 
-### 7. Verify the completed changeset
+### 8. Verify the completed changeset
 
 After the theory gate is clean and any writer edits are staged, invoke `verifying-wiki-changes`.
 
@@ -121,7 +135,7 @@ Give it:
 
 `verifying-wiki-changes` constructs read-only reviewers in parallel and returns a changeset verdict. You do not inspect content. You forward the verdict.
 
-### 8. Commit gate
+### 9. Commit gate
 
 You hold the commit gate. The writer does not commit. The verdict comes from `verifying-wiki-changes`, not from `validate-page`.
 
@@ -132,7 +146,7 @@ You hold the commit gate. The writer does not commit. The verdict comes from `ve
 
 Commit only when the request or standing project workflow authorizes it.
 
-### 9. Report
+### 10. Report
 
 Report to the user:
 
@@ -149,14 +163,15 @@ Report to the user:
 
 | Check | How |
 |---|---|
-| Staging boundary | `git diff --cached --name-only` matches writer's reported paths |
+| Staging boundary | `git diff --cached --name-only` = writer-reported wiki paths ∪ coordinator-staged raw paths |
+| Raw artifacts staged | All new/modified raw files (preserved sources, arXiv extractions, writer-discovered sources, companion assets) staged before theory gate and verification |
 | No `git add -A` | Inspect staging command or staged set |
 | `index.md` updated | In staged set if pages changed |
 | Mechanical pre-check | `validate-page` on changed paths before theory/verification; errors routed to writer |
 | Theory gate before verification | `reviewing-wiki-theory` invoked for full ingests; `panorama` reframe escalates |
-| Verification on stable changeset | `verifying-wiki-changes` invoked once after theory gate is clean |
+| Verification on stable changeset | `verifying-wiki-changes` invoked once after raw artifacts are staged and theory gate is clean |
 | No commit on FAIL | Commit gate logic above; verdict from verifier |
-| Raw preservation | Sources slugified; arXiv PDFs extracted, not committed |
+| Raw preservation | Sources slugified; arXiv PDFs extracted, not committed; raw artifacts staged per Step 5 |
 
 ## What you do not do
 
