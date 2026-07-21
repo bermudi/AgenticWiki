@@ -515,6 +515,59 @@ report_repo_info() {
   done
 }
 
+compute_debt_status() {
+  # Reads meta/tech-debt.md frontmatter (warning_budget, critical_blocks) and
+  # the "## Current Debt" table; sets globals describing registry debt.
+  # In changed-scope mode this is informational only — OVER_BUDGET is not
+  # evaluated there (see summary block).
+  DEBT_WARNINGS=0
+  DEBT_CRITICAL=0
+  DEBT_BUDGET=5
+  DEBT_CRITICAL_BLOCKS=1
+  DEBT_OVER_BUDGET=0
+
+  local td="meta/tech-debt.md"
+  [[ -f "$td" ]] || return
+
+  # Frontmatter: warning_budget, critical_blocks
+  local in_fm=0 line key val
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ "$line" == "---" && $in_fm -eq 0 ]]; then in_fm=1; continue; fi
+    if [[ "$line" == "---" && $in_fm -eq 1 ]]; then break; fi
+    if [[ $in_fm -eq 1 && "$line" == *:* ]]; then
+      key="$(trim "${line%%:*}")"
+      val="$(strip_quotes "$(trim "${line#*:}")")"
+      case "$key" in
+        warning_budget) [[ "$val" =~ ^[0-9]+$ ]] && DEBT_BUDGET="$val" ;;
+        critical_blocks) [[ "$val" == "false" ]] && DEBT_CRITICAL_BLOCKS=0 ;;
+      esac
+    fi
+  done < "$td"
+
+  # "## Current Debt" table: count rows by severity (last column).
+  # Table rows: | Date | Page | Issue | Severity |
+  local in_table=0 sev
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ "$line" == "## Current Debt" ]]; then in_table=1; continue; fi
+    if [[ $in_table -eq 1 && "$line" == "## " ]]; then break; fi
+    if [[ $in_table -eq 1 && "$line" == \|* ]]; then
+      [[ "$line" == *"--"* ]] && continue   # separator
+      [[ "$line" == *Severity* ]] && continue # header
+      sev="$(awk -F'|' '{ gsub(/^ +| +$/,"",$5); print $5 }' <<< "$line")"
+      case "$sev" in
+        critical) DEBT_CRITICAL=$((DEBT_CRITICAL + 1)) ;;
+        warning)  DEBT_WARNINGS=$((DEBT_WARNINGS + 1)) ;;
+      esac
+    fi
+  done < "$td"
+
+  if [[ $DEBT_CRITICAL_BLOCKS -eq 1 && $DEBT_CRITICAL -gt 0 ]]; then
+    DEBT_OVER_BUDGET=1
+  elif [[ $DEBT_WARNINGS -gt $DEBT_BUDGET ]]; then
+    DEBT_OVER_BUDGET=1
+  fi
+}
+
 main() {
   cd "$(git rev-parse --show-toplevel)" || {
     echo "validate-page: not inside a git repository" >&2
@@ -552,17 +605,42 @@ main() {
 
   echo ""
   echo "=== Summary ==="
+  compute_debt_status
+  local status exit_code
   if [[ $SCOPE_MODE -eq 1 ]]; then
+    # Changed-scope: status reflects only supplied paths. Repo-wide debt
+    # (including OVER_BUDGET) is informational here — do not block a scoped
+    # filing run on pre-existing registry debt.
+    if [[ $PATH_ERRORS -gt 0 ]]; then
+      status="ERRORS_FOUND"
+      exit_code=1
+    else
+      status="WITHIN_BUDGET"
+      exit_code=0
+    fi
     echo "Path errors: $PATH_ERRORS"
     echo "Path warnings: $PATH_WARNS"
     echo "Informational: $INFO"
-    [[ $PATH_ERRORS -gt 0 ]] && exit 1
+    echo "Registry debt (informational): critical=$DEBT_CRITICAL, warning=$DEBT_WARNINGS / budget $DEBT_BUDGET"
   else
+    # Full-repo: precedence ERRORS_FOUND > OVER_BUDGET > WITHIN_BUDGET.
+    if [[ $ERRORS -gt 0 ]]; then
+      status="ERRORS_FOUND"
+      exit_code=1
+    elif [[ $DEBT_OVER_BUDGET -eq 1 ]]; then
+      status="OVER_BUDGET"
+      exit_code=1
+    else
+      status="WITHIN_BUDGET"
+      exit_code=0
+    fi
     echo "Errors: $ERRORS"
     echo "Warnings: $WARNS"
-    [[ $ERRORS -gt 0 ]] && exit 1
+    echo "Debt (critical): $DEBT_CRITICAL"
+    echo "Debt (warning): $DEBT_WARNINGS / budget $DEBT_BUDGET"
   fi
-  exit 0
+  echo "STATUS: $status"
+  exit $exit_code
 }
 
 main "$@"
