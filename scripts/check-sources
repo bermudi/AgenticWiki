@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
-# check-sources — verify frontmatter sources: list matches body ## Sources section
+# check-sources — verify frontmatter sources list matches body ## Sources section
 # Usage: check-sources
 
-set -uo pipefail
+set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 echo "=== Frontmatter/body source desync ==="
-for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
-  # Extract raw/ filenames from YAML frontmatter (between first --- pair)
-  fm_sources=$(./scripts/extract-sources frontmatter "$f")
+for f in $(fd -e md . wiki/ | sort); do
+  [ "$f" = "wiki/index.md" ] && continue
 
-  # Extract raw/ filenames from ## Sources section (backtick-wrapped)
+  fm_sources=$(./scripts/extract-sources frontmatter "$f")
   body_sources=$(./scripts/extract-sources body "$f")
 
-  # Compare
   fm_only=$(comm -23 <(echo "$fm_sources") <(echo "$body_sources"))
   body_only=$(comm -13 <(echo "$fm_sources") <(echo "$body_sources"))
 
@@ -23,7 +21,8 @@ done
 
 echo ""
 echo "=== Pages with empty sources: in frontmatter ==="
-for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
+for f in $(fd -e md . wiki/ | sort); do
+  [ "$f" = "wiki/index.md" ] && continue
   count=$(./scripts/extract-sources frontmatter "$f" | wc -l)
   [ "$count" -eq 0 ] && echo "  $f (no raw/ sources in frontmatter)"
 done

@@ -5,23 +5,60 @@
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-echo "=== Orphan pages (no inbound [[links]] from other wiki pages) ==="
-for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
-  slug=$(basename "$f" .md)
-  # Count how many OTHER pages link to this one
-  hits=$(grep -rl "\[\[${slug}\]\]" wiki/ --include='*.md' 2>/dev/null | grep -v "$f" | wc -l)
-  if [ "$hits" -eq 0 ]; then
-    echo "  ORPHAN: $f (no inbound links)"
+read -r -d '' PROG <<'PERL' || true
+  my $f = $ARGV;
+  my $raw = $_;
+  $raw =~ s/```.*?```//gs;
+  $raw =~ s/`[^`]*`//g;
+  while ($raw =~ /\[\[([a-z0-9-]+)(?:\|[^]]*)?\]\]/g) {
+    print "LINK $f $1\n";
+  }
+PERL
+
+mapfile -t records < <(fd -e md . wiki/ | sort | xargs -r perl -0777 -ne "$PROG" | sort -u)
+
+declare -A inbound_count
+for line in "${records[@]}"; do
+  # format: LINK <file> <slug>
+  file="${line#LINK }"
+  slug="${file##* }"
+  file="${file% *}"
+  [[ "$file" == "wiki/${slug}.md" ]] && continue
+  inbound_count[$slug]=$((${inbound_count[$slug]:-0} + 1))
+done
+
+declare -A index_links
+for line in "${records[@]}"; do
+  [[ "$line" != LINK\ wiki/index.md\ * ]] && continue
+  slug="${line##* }"
+  index_links[$slug]=1
+done
+
+declare -a orphans=()
+declare -a not_indexed=()
+
+for f in $(fd -e md . wiki/ -E 'index.md' | sort); do
+  slug="${f%.md}"
+  slug="${slug##*/}"
+
+  if [[ ${inbound_count[$slug]:-0} -eq 0 ]]; then
+    orphans+=("$f")
   fi
+
+  if [[ ! -v index_links[$slug] ]]; then
+    not_indexed+=("$f")
+  fi
+done
+
+echo "=== Orphan pages (no inbound [[links]] from other wiki pages) ==="
+for f in "${orphans[@]}"; do
+  echo "  ORPHAN: $f (no inbound links)"
 done
 
 echo ""
 echo "=== index.md coverage check ==="
-for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
-  slug=$(basename "$f" .md)
-  if ! grep -q "\[\[${slug}\]\]" wiki/index.md; then
-    echo "  NOT IN INDEX: $f"
-  fi
+for f in "${not_indexed[@]}"; do
+  echo "  NOT IN INDEX: $f"
 done
 
 echo ""

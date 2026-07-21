@@ -15,33 +15,24 @@ file="$2"
 
 case "$mode" in
   frontmatter)
-    awk '
-      /^---$/{n++; next}
-      n==1{
-        line=$0
-        while (match(line, /"raw\/[^"]+"/)) {
-          print substr(line, RSTART + 1, RLENGTH - 2)
-          line=substr(line, 1, RSTART - 1) substr(line, RSTART + RLENGTH)
-        }
-        while (match(line, /raw\//)) {
-          line=substr(line, RSTART)
-          item=line
-          comma=index(item, ",")
-          if (comma > 0) item=substr(item, 1, comma - 1)
-          sub(/\].*$/, "", item)
-          sub(/[[:space:]]+$/, "", item)
-          print item
-          if (comma > 0) line=substr(line, comma + 1); else break
-        }
+    read -r -d '' PROG <<'PERL' || true
+      /^---\n(.*?)\n---/s or next;
+      my $fm = $1;
+      while ($fm =~ /"(raw\/[^"]+)"|'(raw\/[^']+)'|(raw\/[^\s,"'\]\}\)]+)/g) {
+        my $src = $1 || $2 || $3;
+        print "$src\n" if defined $src;
       }
-      n==2{exit}
-    ' "$file" | sort -u
+PERL
+    perl -0777 -ne "$PROG" "$file" | sort -u
     ;;
   body)
-    awk 'BEGIN{in_s=0} /^## Sources$/{in_s=1; next} in_s && /^## /{exit} in_s{print}' "$file" \
-      | { grep -oP '`raw/[^`]+`' || true; } \
-      | tr -d '`' \
-      | sort -u
+    read -r -d '' PROG <<'PERL' || true
+      if (/^## Sources\b\s*$(.*?)(?:^## |\Z)/ms) {
+        my $s = $1;
+        while ($s =~ /`(raw\/[^`]+)`/g) { print "$1\n"; }
+      }
+PERL
+    perl -0777 -ne "$PROG" "$file" | sort -u
     ;;
   *)
     echo "unknown mode: $mode" >&2

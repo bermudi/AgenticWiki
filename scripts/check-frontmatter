@@ -2,41 +2,60 @@
 # check-frontmatter — verify required frontmatter fields and page structure
 # Usage: check-frontmatter
 
-set -uo pipefail
+set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-echo "=== Missing required frontmatter fields ==="
-for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
-  missing=""
-  for field in title created updated sources tags; do
-    if ! awk "/^---\$/{n++; next} n==1 && /^${field}:/{found=1; exit} END{exit !found}" "$f"; then
-      missing="$missing $field"
-    fi
-  done
-  [ -n "$missing" ] && echo "  $f: missing$missing"
-done
+read -r -d '' PROG <<'PERL' || true
+BEGIN {
+  @missing_fields = ();
+  @missing_summary = ();
+  @missing_related = ();
+}
 
-echo ""
-echo "=== Missing summary blockquote after # title ==="
-for f in $(find wiki/ -name "*.md" ! -name "index.md" | sort); do
-  # Use a temp var — awk END block overrides exit code
-  result=$(awk '
-    /^---$/{fm++; next}
-    fm<2{next}
-    /^# /{found_title=1; next}
-    found_title && /^$/{next}
-    found_title && /^> /{print "ok"; exit}
-    found_title{exit}
-    END{if(!found_title) print "notitle"}
-  ' "$f")
-  [ "$result" != "ok" ] && echo "  $f"
-done
+my $f = $ARGV;
 
-echo ""
-echo "=== Pages without ## Related section ==="
-for f in $(find wiki/ -name "*.md" ! -name "index.md" ! -path "wiki/threads/*" | sort); do
-  grep -q '^## Related' "$f" || echo "  $f"
-done
+# Required frontmatter fields.
+if (/^---\r?\n(.*?)\r?\n---/s) {
+  my $fm = $1;
+  my $missing = '';
+  for my $field (qw(title created updated sources tags)) {
+    $missing .= " $field" unless $fm =~ /^$field:/m;
+  }
+  push @missing_fields, "$f: missing$missing" if $missing;
+} else {
+  push @missing_fields, "$f: missing title created updated sources tags";
+}
 
-echo ""
-echo "Done."
+# Summary blockquote immediately after # Title.
+if (/^---\r?\n.*?\r?\n---\r?\n(.*)/s) {
+  my $body = $1;
+  if ($body =~ /^# /m) {
+    my $tail = $body;
+    $tail =~ s/^# [^\n]*\n//m;
+    $tail =~ s/^\n+//;
+    push @missing_summary, $f unless $tail =~ /^> /;
+  } else {
+    push @missing_summary, $f;
+  }
+}
+
+# Related section (not for threads or index).
+unless ($f =~ /wiki\/threads/ || $f eq 'wiki/index.md') {
+  push @missing_related, $f unless /^## Related\b/m;
+}
+
+END {
+  print "=== Missing required frontmatter fields ===\n";
+  print "  $_\n" for @missing_fields;
+
+  print "\n=== Missing summary blockquote after # title ===\n";
+  print "  $_\n" for @missing_summary;
+
+  print "\n=== Pages without ## Related section ===\n";
+  print "  $_\n" for @missing_related;
+
+  print "\nDone.\n";
+}
+PERL
+
+fd -0 -e md . wiki/ -E 'index.md' | xargs -0 -r perl -0777 -ne "$PROG"

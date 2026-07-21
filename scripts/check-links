@@ -2,35 +2,64 @@
 # check-links — find broken [[wiki-links]] and dangling raw/ references
 # Usage: check-links
 
-set -uo pipefail
+set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
+read -r -d '' PROG <<'PERL' || true
+  my $raw = $_;
+  $raw =~ s/```.*?```//gs;
+  $raw =~ s/`[^`]*`//g;
+  while ($raw =~ /\[\[([a-z0-9-]+)(?:\|[^]]*)?\]\]/g) {
+    print "LINK $1\n";
+  }
+  while ($raw =~ /(raw\/[^\s"'\`\]\)}]+)/g) {
+    my $r = $1;
+    $r =~ s/[.,;:]$//;
+    next if $r =~ /^(raw\/?)$/;
+    print "RAW $r\n";
+  }
+PERL
+
+mapfile -t records < <(fd -e md . wiki/ | sort | xargs -r perl -0777 -ne "$PROG" | sort -u)
+
+declare -A existing_slugs
+for f in $(fd -e md . wiki/ | sort); do
+  slug="${f%.md}"
+  slug="${slug##*/}"
+  existing_slugs[$slug]=1
+done
+
+declare -A referenced_raw
+for line in "${records[@]}"; do
+  if [[ "$line" == RAW\ * ]]; then
+    ref="${line#RAW }"
+    referenced_raw[$ref]=1
+  fi
+done
+
 echo "=== Broken [[wiki-links]] ==="
-# Catch both [[slug]] and [[slug|Display]]; strip code spans first
-find wiki/ -name '*.md' -exec perl -0777 -pe 's/```.*?```//gs; s/`[^`]*`//g' {} + \
-  | grep -ohE '\[\[[a-z0-9-]+(\|[^]]*)?\]\]' 2>/dev/null | sort -u \
-  | while read -r link; do
-    clean="${link#\[\[}"; clean="${clean%%|*}"; clean="${clean%\]\]}"
-    found=$(find wiki/ -name "${clean}.md" 2>/dev/null)
-    [ -z "$found" ] && echo "  BROKEN: [[${clean}]] (no wiki/${clean}.md)"
-  done
+for line in "${records[@]}"; do
+  if [[ "$line" == LINK\ * ]]; then
+    slug="${line#LINK }"
+    if [[ ! -v existing_slugs[$slug] ]]; then
+      echo "  BROKEN: [[${slug}]] (no wiki/${slug}.md)"
+    fi
+  fi
+done
 
 echo ""
 echo "=== Dangling raw/ references ==="
-grep -roh 'raw/[^] ")'"'"'\`]*' wiki/ 2>/dev/null | sort -u | while read -r ref; do
-  ref="${ref%%[.,;:]}"
-  # Skip bare raw/ (prose mentions, not actual file references)
-  [ "$ref" = "raw/" ] || [ "$ref" = "raw" ] && continue
-  [ ! -f "$ref" ] && echo "  MISSING: $ref"
+for line in "${records[@]}"; do
+  if [[ "$line" == RAW\ * ]]; then
+    ref="${line#RAW }"
+    [ -f "$ref" ] || echo "  MISSING: $ref"
+  fi
 done
 
 echo ""
 echo "=== raw/ files not referenced from wiki ==="
-for f in raw/*; do
-  [ -d "$f" ] && continue
-  base=$(basename "$f")
-  hits=$(grep -rl "raw/$base" wiki/ 2>/dev/null | wc -l)
-  [ "$hits" -eq 0 ] && echo "  UNREFERENCED: raw/$base"
+for f in $(fd . raw/ --max-depth 1 --type f | sort); do
+  [[ -v referenced_raw[$f] ]] || echo "  UNREFERENCED: $f"
 done
 
 echo ""
