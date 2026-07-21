@@ -23,7 +23,7 @@ for line in "${records[@]}"; do
   file="${line#LINK }"
   slug="${file##* }"
   file="${file% *}"
-  [[ "$file" == "wiki/${slug}.md" ]] && continue
+  [[ "$(basename "$file" .md)" == "$slug" ]] && continue
   inbound_count[$slug]=$((${inbound_count[$slug]:-0} + 1))
 done
 

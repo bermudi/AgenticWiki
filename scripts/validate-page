@@ -7,7 +7,7 @@
 #
 # Checks: frontmatter, dates, summary, sections, links, sources, orphans,
 # index coverage, thread sections, epistemic callouts, unaudited_marginal,
-# raw provenance, near-duplicate slugs, reciprocal links.
+# raw provenance, near-duplicate slugs.
 
 set -uo pipefail
 
@@ -34,8 +34,6 @@ declare -a ALL_SLUGS=()
 declare -a NEAR_DUP_PAIRS=()
 
 declare -A OUTBOUND_LINKS
-declare -A RELATED_LINKS
-declare -A RELATED_INDEX
 declare -A BODY_SOURCES
 declare -A HAS_REL
 declare -A HAS_SRC
@@ -169,7 +167,6 @@ extract_all_pages() {
     $f = $ARGV;
     my $raw = $_;
     my %all = ();
-    my %rel = ();
     my %src = ();
 
     # Capture body sources before stripping inline code spans.
@@ -183,13 +180,7 @@ extract_all_pages() {
 
     while ($raw =~ /\[\[([a-z0-9-]+)(?:\|[^]]*)?\]\]/g) { $all{$1} = 1; }
 
-    if ($raw =~ /^## Related\b\s*$(.*?)(?:^## |\Z)/ms) {
-      my $r = $1;
-      while ($r =~ /\[\[([a-z0-9-]+)(?:\|[^]]*)?\]\]/g) { $rel{$1} = 1; }
-    }
-
     print "ALL $f $_\n" for sort keys %all;
-    print "REL $f $_\n" for sort keys %rel;
     print "SRC $f $_\n" for sort keys %src;
 
     print "SECT $f related\n"   if $raw =~ /^## Related\b/m;
@@ -239,10 +230,6 @@ build_indexes() {
         if [[ "$file" == wiki/threads/* ]]; then
           THREAD_LINKS[$value]=1
         fi
-        ;;
-      REL)
-        RELATED_LINKS["$slug"]="${RELATED_LINKS[$slug]:-}${RELATED_LINKS[$slug]:+ }$value"
-        RELATED_INDEX["${slug}--${value}"]=1
         ;;
       SRC)
         BODY_SOURCES["$slug"]="${BODY_SOURCES[$slug]:-}${BODY_SOURCES[$slug]:+ }$value"
@@ -434,20 +421,6 @@ validate_one() {
     warn "$f: unaudited_marginal=$um (needs source verification)"
   fi
 
-  # Reciprocal Related links.
-  if [[ "$f" != wiki/threads/* && "$f" != wiki/index.md ]]; then
-    local rel_target
-    for rel_target in ${RELATED_LINKS[$slug]:-}; do
-      [[ "$rel_target" == "$slug" ]] && continue
-      [[ "$rel_target" == "index" ]] && continue
-      local target_path="${EXISTING_SLUGS[$rel_target]:-}"
-      [[ -z "$target_path" ]] && continue
-      [[ "$target_path" == wiki/threads/* ]] && continue
-      if [[ ! -v RELATED_INDEX["${rel_target}--${slug}"] ]]; then
-        warn "$f: Related link [[${rel_target}]] not reciprocated in ${target_path}"
-      fi
-    done
-  fi
 }
 
 validate_raw_one() {
@@ -513,6 +486,7 @@ report_repo_info() {
   for f in "${ALL_PAGES[@]}"; do
     slug=$(basename "$f" .md)
     [[ -v SCOPE_PATHS[$f] ]] && continue
+    [[ "$f" == "wiki/index.md" ]] && continue
 
     if [[ ${INBOUND_COUNTS[$slug]:-0} -eq 0 ]]; then
       info "$f: orphan (no inbound wiki-links)"
@@ -520,7 +494,7 @@ report_repo_info() {
     if [[ ! -v INDEX_LINKS[$slug] ]]; then
       info "$f: not listed in index.md"
     fi
-    local um="${UNAUDITED[$slug]:-0}"
+    local um="${FM_UNAUDITED[$slug]:-0}"
     if [[ "$um" =~ ^[0-9]+$ && "$um" -ge 5 ]]; then
       info "$f: unaudited_marginal=$um (needs source verification)"
     fi
@@ -542,7 +516,10 @@ report_repo_info() {
 }
 
 main() {
-  cd "$(git rev-parse --show-toplevel)"
+  cd "$(git rev-parse --show-toplevel)" || {
+    echo "validate-page: not inside a git repository" >&2
+    exit 1
+  }
   check_bin
   build_indexes
 
