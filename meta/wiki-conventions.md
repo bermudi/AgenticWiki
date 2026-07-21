@@ -107,6 +107,15 @@ Rules:
 - When creating a new page, add links to it from at least 2-3 existing pages that relate to it
 - When updating a page, check if other pages need updating too (follow the body wiki-links and the `## Thread` section on concept pages)
 - Concepts that belong to a thread must have a `## Thread` section linking back to it
+- **Concept-to-Author links are intentionally one-way.** Concept pages should link to author pages to credit sources, but author pages should not reciprocate with backlinks to every concept that cites them. Only add an author→concept backlink when the author originated the concept (not merely got cited on it). If uncertain, leave the one-way link alone.
+
+## Explicit Debt
+
+When `verifying-wiki-changes` returns `PASS WITH EXPLICIT DEBT`, the remaining evidence gap must be recorded honestly:
+
+- Add a `> [!warning]` or `> [!note]` callout on the affected page explaining the gap.
+- Add a row to `meta/tech-debt.md` when the gap is structural, recurring, or likely to be forgotten.
+- Do not use `PASS WITH EXPLICIT DEBT` to commit unresolved CRITICAL findings.
 
 ## index.md Format
 
@@ -178,7 +187,7 @@ speakers:                         # REQUIRED for panels/debates; omit for solo
 ```
 
 > [!warning] Transcripts usually lack speaker labels
-> Transcript files from the media pipeline carry `[mm:ss]` timestamps but **no per-line speaker labels**. The written transcript therefore cannot establish *who said what*. For any multi-speaker source (panel, debate, podcast), populate `speakers:` and **verify attribution against the audio** via the media skill before citing a quote under a speaker's name. The `source-verifier` treats misattributed quotes in multi-speaker sources as a first-class CRITICAL (see verification-pass.md).
+> Transcript files from the media pipeline carry `[mm:ss]` timestamps but **no per-line speaker labels**. The written transcript therefore cannot establish *who said what*. For any multi-speaker source (panel, debate, podcast), populate `speakers:` and **verify attribution against the audio** via the media skill before citing a quote under a speaker's name. `verifying-source-fidelity` treats misattributed quotes in multi-speaker sources as a first-class CRITICAL.
 
 ### B. Inline stub (only when no file exists)
 

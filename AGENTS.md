@@ -20,36 +20,43 @@ wiki/authors/     Entity pages for people and organizations.
 wiki/concepts/    Concept pages for ideas, patterns, and technologies.
 wiki/projects/    Entity pages for specific tools, frameworks, and products.
 meta/             The schema — design philosophy and architecture, co-evolved with the human.
+archive/          Retired workflow artifacts (moved, not deleted, so history remains legible).
 ```
 
 Knowledge flows directly from `raw/` into concepts, threads, authors, and projects. There is no intermediate source-summary layer — the wiki pages themselves are the digest. The core idea: instead of RAG (retrieve-then-forget), the LLM incrementally builds and maintains a **persistent, compounding artifact**.
 
 ## Ownership Rules
 
-| Layer       | Owner | You can...                        | You cannot...             |
-|-------------|-------|-----------------------------------|---------------------------|
-| `raw/`      | Human | Read files, create new source files | Modify or delete existing files |
-| `wiki/`     | You   | Create, update, reorganize freely | —                         |
-| `meta/`     | Both  | Read, create, update freely       | —                         |
-| `AGENTS.md` | Both  | Read, create, update freely       | —                         |
+| Layer | Owner | You can... | You cannot... |
+|---|---|---|---|
+| `raw/` | Human | Read files, create new source files | Modify or delete existing files |
+| `wiki/` | You | Create, update, reorganize freely | — |
+| `meta/` | Both | Read, create, update freely | — |
+| `AGENTS.md` | Both | Read, create, update freely | — |
+| `meta/tech-debt.md` | You (rows) / Human (schema) | Add/remove debt rows during filing and audit | Change the schema or status semantics without approval |
 
 ## Skills
 
 Detailed operational procedures live in skill files. **Always load the relevant skill before executing an operation** — the skill contains step-by-step procedures, checklists, and verification gates.
 
+Skills are grouped by role:
+
 | Operation | Skill file |
 |---|---|
-| Ingest a new source | `.agents/skills/wiki-ops/SKILL.md` |
-| Answer a question from wiki knowledge | `.agents/skills/wiki-ops/SKILL.md` |
-| Lint / health-check the wiki | `.agents/skills/wiki-ops/SKILL.md` |
+| Ingest one or more sources | `.agents/skills/coordinating-filing/SKILL.md` |
+| Answer a question from wiki knowledge | `.agents/skills/querying-agentic-wiki/SKILL.md` |
+| Lint / health-check / audit the wiki | `.agents/skills/auditing-agentic-wiki/SKILL.md` |
+| Verify a completed changeset | `.agents/skills/verifying-wiki-changes/SKILL.md` |
+| Research an unresolved external claim | `.agents/skills/researching-wiki-claims/SKILL.md` |
 
-The wiki-ops skill references detailed sub-procedures in `references/`:
-- `references/ingest-flow.md` — Phase 1 filing procedure
-- `references/analytical-pass.md` — Phase 2 critical analysis
-- `references/verification-pass.md` — Phase 3 verification and commit
-- `references/editors.md` — Subagent editor descriptions and invocation patterns
+Reviewer skills are invoked by `coordinating-filing` and `verifying-wiki-changes` inside read-only isolated workers:
 
-**Editor subagents** are defined in `.pi/agents/*.md` — that directory is the source of truth (pi is the primary harness). `.devin/agents/`, `.opencode/agents/`, `.mimocode/agents/`, and `.commandcode/agents/` are harness-specific mirrors; their frontmatter differs per CLI (`tools` vs `allowed-tools` vs `permission`), so mirror a change there whenever a definition changes.
+- `.agents/skills/reviewing-wiki-theory/SKILL.md` — whole-wiki theory coherence gate
+- `.agents/skills/reviewing-wiki-diffs/SKILL.md` — transition integrity of a changeset diff
+- `.agents/skills/verifying-source-fidelity/SKILL.md` — one page against every raw source it lists
+- `.agents/skills/reviewing-wiki-quality/SKILL.md` — structure, clarity, context, navigation, thread quality
+
+The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`.
 
 ## Where to Find Detail
 
@@ -57,10 +64,13 @@ The wiki-ops skill references detailed sub-procedures in `references/`:
 |---|---|
 | **The theory — what the wiki currently believes** | `wiki/index.md` (catalog), then `wiki/threads/*.md` (synthetic essays) |
 | Page formats, frontmatter spec, web/YouTube/arXiv source templates | `meta/wiki-conventions.md` |
-| Ingest philosophy: theory pressure, thread emergence, contradictions | `.agents/skills/wiki-ops/references/ingest-philosophy.md` |
+| Ingest philosophy: theory pressure, thread emergence, contradictions | `.agents/skills/filing-agentic-sources/references/ingest-philosophy.md` |
 | Design philosophy and manifesto | `meta/llm-wiki-manifesto.md` |
-| Ingest pipeline, query procedure, lint checklist | `.agents/skills/wiki-ops/SKILL.md` |
-| Editor descriptions and invocation patterns | `.agents/skills/wiki-ops/references/editors.md` |
+| Filing pipeline, writer dispatch, theory gate, commit gate | `.agents/skills/coordinating-filing/SKILL.md` |
+| Writer role: one source, editorial judgment, staging | `.agents/skills/filing-agentic-sources/SKILL.md` |
+| Changeset verification and reviewer construction | `.agents/skills/verifying-wiki-changes/SKILL.md` |
+| Querying accumulated knowledge | `.agents/skills/querying-agentic-wiki/SKILL.md` |
+| Audit, debt resolution, deep-semantic audit | `.agents/skills/auditing-agentic-wiki/SKILL.md` |
 | Quick mechanical validation (frontmatter, links, sources) | `./scripts/validate-page` |
 
 ## Invariant Rules
@@ -73,3 +83,4 @@ The wiki-ops skill references detailed sub-procedures in `references/`:
 6. **Note contradictions explicitly.** If a new source contradicts an existing claim, flag it with a `> [!warning]` callout, not a silent overwrite. Surface contradictions in the ingest summary and in the relevant thread page.
 7. **Ask before deleting pages.** Suggest merges or reorganizations, don't execute unilaterally.
 8. **arXiv papers: extract, don't archive.** Store the extracted text as `raw/<arxiv-id>.md` with `type: arxiv` / `arxiv_id` / `url` frontmatter. Never commit the original PDF — it's permanently re-downloadable from the versioned arXiv URL. The `.md` is the source-of-truth. (Non-arXiv papers with no stable URL are the exception: commit the PDF.)
+9. **Record explicit debt.** When `verifying-wiki-changes` returns `PASS WITH EXPLICIT DEBT`, record the debt honestly in `meta/tech-debt.md` and/or on the affected page before committing. Do not use `PASS WITH EXPLICIT DEBT` to commit unresolved CRITICAL findings.

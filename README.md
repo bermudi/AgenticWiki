@@ -22,7 +22,8 @@ wiki/             LLM-generated wiki pages (the digest).
   projects/       Specific tools, frameworks, and products.
 meta/             The schema — design philosophy and conventions.
 scripts/          Local lint and validation helpers.
-.agents/skills/   Operational procedures the agent follows on ingest, query, lint.
+.agents/skills/   Operational procedures for ingest, query, audit, and verification.
+archive/          Retired workflow artifacts.
 ```
 
 The agent schema (how the wiki is organized, page formats, frontmatter
