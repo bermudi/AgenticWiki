@@ -1,77 +1,361 @@
 #!/usr/bin/env bash
 # validate-page — unified wiki page validator
-# Usage: validate-page [path/to/page.md]
-#   With no argument, validates all wiki pages.
-#   With a path, validates that single page.
+# Usage: validate-page [path/to/page.md ...]
+#   With no argument, validates all wiki pages and raw/ sources.
+#   With paths, validates only those paths; exit code reflects errors in the
+#   supplied paths. Repository-wide debt is reported as informational.
 #
-# This is the wiki equivalent of `skills-ref validate` — catch mechanical
-# issues fast before spawning editors. Checks frontmatter, links, sources,
-# structure, and orphan/index coverage.
+# Checks: frontmatter, dates, summary, sections, links, sources, orphans,
+# index coverage, thread sections, epistemic callouts, unaudited_marginal,
+# raw provenance, near-duplicate slugs, reciprocal links.
 
 set -uo pipefail
 
-cd "$(git rev-parse --show-toplevel)"
-
 ERRORS=0
 WARNS=0
+INFO=0
+PATH_ERRORS=0
+PATH_WARNS=0
+SCOPE_MODE=0
 
-check() {
-  local severity="$1"; shift
-  local msg="$*"
-  if [ "$severity" = "ERROR" ]; then
-    echo "  🚨 $msg"
-    ERRORS=$((ERRORS + 1))
-  else
-    echo "  ⚠️  $msg"
-    WARNS=$((WARNS + 1))
+declare -A SCOPE_PATHS
+
+declare -A EXISTING_SLUGS
+declare -A INDEX_LINKS
+declare -A THREAD_LINKS
+declare -A INBOUND_COUNTS
+declare -A UNAUDITED
+
+declare -A FM
+declare -a FM_SOURCES
+
+declare -a ALL_PAGES=()
+declare -a ALL_SLUGS=()
+declare -a NEAR_DUP_PAIRS=()
+
+declare -A OUTBOUND_LINKS
+declare -A RELATED_LINKS
+declare -A RELATED_INDEX
+declare -A BODY_SOURCES
+declare -A HAS_REL
+declare -A HAS_SRC
+declare -A HAS_THREAD
+declare -A HAS_CALLOUT
+
+declare -A FM_TITLE FM_CREATED FM_UPDATED FM_TAGS FM_UNAUDITED FM_SOURCES_STRING FM_HAS_SOURCES
+
+err() {
+  echo "  [ERROR] $*"
+  ERRORS=$((ERRORS + 1))
+  if [[ $SCOPE_MODE -eq 1 ]]; then
+    PATH_ERRORS=$((PATH_ERRORS + 1))
   fi
 }
 
-has_frontmatter_field() {
-  local file="$1" field="$2"
-  awk "/^---\$/{n++; next} n==1 && /^${field}:/{found=1; exit} END{exit !found}" "$file" 2>/dev/null || true
-  # awk exit 1 means not found, but we don't want that to kill the script
-  # We check the return status via the caller
-  awk "/^---\$/{n++; next} n==1 && /^${field}:/{found=1; exit} END{exit !found}" "$file" >/dev/null 2>/dev/null
+warn() {
+  echo "  [WARN] $*"
+  WARNS=$((WARNS + 1))
+  if [[ $SCOPE_MODE -eq 1 ]]; then
+    PATH_WARNS=$((PATH_WARNS + 1))
+  fi
+}
+
+info() {
+  echo "  [INFO] $*"
+  INFO=$((INFO + 1))
+}
+
+check_bin() {
+  local bin
+  for bin in fd rg; do
+    if ! command -v "$bin" >/dev/null 2>&1; then
+      echo "validate-page: required tool '$bin' not found" >&2
+      exit 2
+    fi
+  done
+}
+
+trim() {
+  local s="$1"
+  s="${s#"${s%%[![:space:]]*}"}"
+  s="${s%"${s##*[![:space:]]}"}"
+  printf '%s' "$s"
+}
+
+strip_quotes() {
+  local s="$1"
+  if [[ "$s" == \"*\" && "$s" == *\" ]]; then
+    s="${s#\"}"; s="${s%\"}"
+  elif [[ "$s" == \'*\' && "$s" == *\' ]]; then
+    s="${s#\'}"; s="${s%\'}"
+  fi
+  printf '%s' "$s"
+}
+
+parse_frontmatter() {
+  local file="$1"
+  FM=()
+  FM_SOURCES=()
+  local in_fm=0
+  local current=""
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ "$line" == "---" ]]; then
+      in_fm=$((in_fm + 1))
+      [[ $in_fm -eq 2 ]] && break
+      continue
+    fi
+
+    [[ $in_fm -ne 1 ]] && continue
+
+    if [[ "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*):[[:space:]]*(.*)$ ]]; then
+      current="${BASH_REMATCH[1]}"
+      local rest="${BASH_REMATCH[2]}"
+      FM[$current]="$rest"
+    elif [[ -n "$current" && "$line" =~ ^[[:space:]]*-[[:space:]]+(.*)$ ]]; then
+      local item="${BASH_REMATCH[1]}"
+      if [[ "$current" == "sources" || "$current" == "tags" ]]; then
+        if [[ -n "${FM[$current]:-}" ]]; then
+          if [[ "$current" == "sources" ]]; then
+            FM[$current]="${FM[$current]}"$'\n'"$item"
+          else
+            FM[$current]="${FM[$current]} $item"
+          fi
+        else
+          FM[$current]="$item"
+        fi
+      else
+        if [[ -n "${FM[$current]:-}" ]]; then
+          FM[$current]="${FM[$current]}"$'\n'"$item"
+        else
+          FM[$current]="$item"
+        fi
+      fi
+    fi
+  done < "$file"
+
+  # Always compute FM_SOURCES from the sources frontmatter string.
+  extract_fm_sources
+}
+
+extract_fm_sources() {
+  FM_SOURCES=()
+  local src_list="${FM[sources]:-}"
+  [[ -z "$src_list" ]] && return
+
+  # If sources were written as an inline YAML list, strip the brackets.
+  if [[ "$src_list" == \[* ]]; then
+    src_list="${src_list:1:-1}"
+  fi
+
+  local IFS=$' ,\n'
+  local -a items=($src_list)
+  local item
+  for item in "${items[@]}"; do
+    [[ -z "$item" ]] && continue
+    item="${item#"${item%%[![:space:]]*}"}"
+    item="${item%"${item##*[![:space:]]}"}"
+    if [[ "$item" == \"*\" && "$item" == *\" ]]; then
+      item="${item#\"}"; item="${item%\"}"
+    elif [[ "$item" == \'*\' && "$item" == *\' ]]; then
+      item="${item#\'}"; item="${item%\'}"
+    fi
+    [[ "$item" == raw/* ]] && FM_SOURCES+=("$item")
+  done
+}
+
+extract_all_pages() {
+  perl -0777 -ne '
+    $f = $ARGV;
+    my $raw = $_;
+    my %all = ();
+    my %rel = ();
+    my %src = ();
+
+    # Capture body sources before stripping inline code spans.
+    if (/^## Sources\b\s*$(.*?)(?:^## |\Z)/ms) {
+      my $s = $1;
+      while ($s =~ /`(raw\/[^`]+)`/g) { $src{$1} = 1; }
+    }
+
+    $raw =~ s/```.*?```//gs;
+    $raw =~ s/`[^`]*`//g;
+
+    while ($raw =~ /\[\[([a-z0-9-]+)(?:\|[^]]*)?\]\]/g) { $all{$1} = 1; }
+
+    if ($raw =~ /^## Related\b\s*$(.*?)(?:^## |\Z)/ms) {
+      my $r = $1;
+      while ($r =~ /\[\[([a-z0-9-]+)(?:\|[^]]*)?\]\]/g) { $rel{$1} = 1; }
+    }
+
+    print "ALL $f $_\n" for sort keys %all;
+    print "REL $f $_\n" for sort keys %rel;
+    print "SRC $f $_\n" for sort keys %src;
+
+    print "SECT $f related\n"   if $raw =~ /^## Related\b/m;
+    print "SECT $f sources\n"   if $raw =~ /^## Sources\b/m;
+    print "SECT $f thread\n"    if $raw =~ /^## Thread\b/m;
+    print "SECT $f callout\n"   if $f =~ /wiki\/threads\// && $raw =~ /^> \[!(?:note|warning)\]/m;
+  ' "${ALL_PAGES[@]}"
+}
+
+build_indexes() {
+  mapfile -t ALL_PAGES < <(fd -e md . wiki/ | sort)
+
+  local path slug
+  for path in "${ALL_PAGES[@]}"; do
+    slug=$(basename "$path" .md)
+    ALL_SLUGS+=("$slug")
+    EXISTING_SLUGS[$slug]="$path"
+    parse_frontmatter "$path"
+    FM_TITLE[$slug]="${FM[title]:-}"
+    FM_CREATED[$slug]="${FM[created]:-}"
+    FM_UPDATED[$slug]="${FM[updated]:-}"
+    FM_TAGS[$slug]="${FM[tags]:-}"
+    FM_UNAUDITED[$slug]="${FM[unaudited_marginal]:-0}"
+    FM_SOURCES_STRING[$slug]="${FM_SOURCES[*]}"
+    [[ -v FM[sources] ]] && FM_HAS_SOURCES[$slug]=1
+  done
+
+  local -a records
+  mapfile -t records < <(extract_all_pages)
+  local line
+  for line in "${records[@]}"; do
+    local kind="${line%% *}"
+    [[ -z "$kind" ]] && continue
+    local rest="${line#* }"
+    local file="${rest%% *}"
+    local value="${rest#* }"
+    slug="${file%.md}"
+    slug="${slug##*/}"
+
+    case "$kind" in
+      ALL)
+        OUTBOUND_LINKS["$slug"]="${OUTBOUND_LINKS[$slug]:-}${OUTBOUND_LINKS[$slug]:+ }$value"
+        [[ "$value" != "$slug" ]] && INBOUND_COUNTS[$value]=$((${INBOUND_COUNTS[$value]:-0} + 1))
+        if [[ "$file" == "wiki/index.md" ]]; then
+          INDEX_LINKS[$value]=1
+        fi
+        if [[ "$file" == wiki/threads/* ]]; then
+          THREAD_LINKS[$value]=1
+        fi
+        ;;
+      REL)
+        RELATED_LINKS["$slug"]="${RELATED_LINKS[$slug]:-}${RELATED_LINKS[$slug]:+ }$value"
+        RELATED_INDEX["${slug}--${value}"]=1
+        ;;
+      SRC)
+        BODY_SOURCES["$slug"]="${BODY_SOURCES[$slug]:-}${BODY_SOURCES[$slug]:+ }$value"
+        ;;
+      SECT)
+        case "$value" in
+          related) HAS_REL[$slug]=1 ;;
+          sources) HAS_SRC[$slug]=1 ;;
+          thread)  HAS_THREAD[$slug]=1 ;;
+          callout) HAS_CALLOUT[$slug]=1 ;;
+        esac
+        ;;
+    esac
+  done
+
+  build_near_dups
+}
+
+build_near_dups() {
+  local -a norms words_list
+  local i
+
+  for i in "${!ALL_SLUGS[@]}"; do
+    norms+=("${ALL_SLUGS[$i]//-/}")
+    words_list+=("$(echo "${ALL_SLUGS[$i]}" | tr '-' '\n' | sort | tr '\n' '-')")
+  done
+
+  local a b norm_a words_a
+  for ((i=0; i<${#ALL_SLUGS[@]}-1; i++)); do
+    a="${ALL_SLUGS[$i]}"
+    [[ "$a" == "index" ]] && continue
+    norm_a="${norms[$i]}"
+    words_a="${words_list[$i]}"
+
+    local j
+    for ((j=i+1; j<${#ALL_SLUGS[@]}; j++)); do
+      b="${ALL_SLUGS[$j]}"
+      [[ "$b" == "index" ]] && continue
+
+      [[ "$norm_a" == "${norms[$j]}" ]] && continue
+
+      local dup=0
+
+      if [[ "$words_a" == "${words_list[$j]}" ]]; then
+        dup=1
+      elif [[ "$b" == "${a}s" || "$b" == "${a}es" || "$a" == "${b}s" || "$a" == "${b}es" ]]; then
+        dup=1
+      else
+        local sfx
+        if [[ "$b" == "$a"-* ]]; then
+          sfx="${b#"$a"-}"
+          if [[ "$sfx" == "s" || "$sfx" == "es" || "$sfx" =~ ^[0-9]+$ || "$sfx" =~ ^v[0-9]+$ ]]; then
+            dup=1
+          fi
+        elif [[ "$a" == "$b"-* ]]; then
+          sfx="${a#"$b"-}"
+          if [[ "$sfx" == "s" || "$sfx" == "es" || "$sfx" =~ ^[0-9]+$ || "$sfx" =~ ^v[0-9]+$ ]]; then
+            dup=1
+          fi
+        fi
+      fi
+
+      [[ $dup -eq 1 ]] && NEAR_DUP_PAIRS+=("$a $b")
+    done
+  done
 }
 
 validate_one() {
   local f="$1"
   local slug=$(basename "$f" .md)
 
-  # index.md is a catalog, not a source-backed page
-  if [ "$slug" = "index" ]; then
-    if awk '/^---$/{n++; next} n==1 && /^sources:/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
-      check ERROR "$f: index.md must not have sources frontmatter"
-    fi
-    if grep -q '^## Sources' "$f"; then
-      check ERROR "$f: index.md must not have a ## Sources section"
+  local firstline
+  read -r firstline < "$f"
+  if [[ "$firstline" != "---" ]]; then
+    err "$f: missing YAML frontmatter"
+    return
+  fi
+
+  if [[ "$slug" == "index" ]]; then
+    [[ -v FM_HAS_SOURCES[$slug] ]] && err "$f: index.md must not have sources frontmatter"
+    if [[ -v HAS_SRC[$slug] ]]; then
+      err "$f: index.md must not have a ## Sources section"
     fi
     return
   fi
 
-  # --- Frontmatter presence ---
-  if ! head -1 "$f" | grep -q '^---$'; then
-    check ERROR "$f: missing YAML frontmatter"
-    return
+  if [[ ! -v FM_TITLE[$slug] ]]; then
+    err "$f: missing frontmatter field 'title'"
+  fi
+  if [[ ! -v FM_CREATED[$slug] ]]; then
+    err "$f: missing frontmatter field 'created'"
+  fi
+  if [[ ! -v FM_UPDATED[$slug] ]]; then
+    err "$f: missing frontmatter field 'updated'"
+  fi
+  if [[ ! -v FM_HAS_SOURCES[$slug] ]]; then
+    err "$f: missing frontmatter field 'sources'"
+  fi
+  if [[ ! -v FM_TAGS[$slug] ]]; then
+    err "$f: missing frontmatter field 'tags'"
   fi
 
-  # --- Required fields ---
-  for field in title created updated sources tags; do
-    if ! awk "/^---\$/{n++; next} n==1 && /^${field}:/{found=1; exit} END{exit !found}" "$f" >/dev/null 2>/dev/null; then
-      check ERROR "$f: missing frontmatter field '$field'"
-    fi
-  done
+  local val
+  val="${FM_CREATED[$slug]:-}"
+  if [[ -n "$val" && ! "$val" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+    err "$f: frontmatter 'created' is not YYYY-MM-DD: $val"
+  fi
+  val="${FM_UPDATED[$slug]:-}"
+  if [[ -n "$val" && ! "$val" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+    err "$f: frontmatter 'updated' is not YYYY-MM-DD: $val"
+  fi
 
-  # --- Date format (YYYY-MM-DD) ---
-  for date_field in created updated; do
-    val=$(awk "/^---\$/{n++; next} n==1 && /^${date_field}:/{print \$2; exit}" "$f" || true)
-    if [ -n "$val" ] && ! echo "$val" | grep -qP '^\d{4}-\d{2}-\d{2}$'; then
-      check ERROR "$f: frontmatter '$date_field' is not YYYY-MM-DD: $val"
-    fi
-  done
-
-  # --- Summary blockquote after # Title ---
+  local result
   result=$(awk '
     /^---$/{fm++; next}
     fm<2{next}
@@ -80,137 +364,228 @@ validate_one() {
     found_title && /^> /{print "ok"; exit}
     found_title{exit}
     END{if(!found_title) print "notitle"}
-  ' "$f" || true)
-  [ "$result" != "ok" ] && check ERROR "$f: missing summary blockquote (> ...) after # Title"
+  ' "$f")
+  [[ "$result" != "ok" ]] && err "$f: missing summary blockquote (> ...) after # Title"
 
-  # --- ## Related section (non-thread pages) ---
-  if [[ "$f" != */threads/* ]]; then
-    if ! grep -q '^## Related' "$f"; then
-      check ERROR "$f: missing ## Related section"
+  if [[ "$f" != wiki/threads/* ]]; then
+    if [[ ! -v HAS_REL[$slug] ]]; then
+      err "$f: missing ## Related section"
     fi
   fi
 
-  # --- ## Sources section ---
-  if ! grep -q '^## Sources' "$f"; then
-    check ERROR "$f: missing ## Sources section"
+  if [[ ! -v HAS_SRC[$slug] ]]; then
+    err "$f: missing ## Sources section"
   fi
 
-  # --- Frontmatter/body source desync ---
-  fm_sources=$(./scripts/extract-sources frontmatter "$f")
-  body_sources=$(./scripts/extract-sources body "$f")
+  # Frontmatter/body source desync.
+  declare -A fm_set body_set
+  for s in ${FM_SOURCES_STRING[$slug]:-}; do
+    [[ -n "$s" ]] && fm_set["$s"]=1
+  done
 
-  fm_only=$(comm -23 <(echo "$fm_sources") <(echo "$body_sources") 2>/dev/null || true)
-  body_only=$(comm -13 <(echo "$fm_sources") <(echo "$body_sources") 2>/dev/null || true)
-  [ -n "$fm_only" ] && check ERROR "$f: sources in frontmatter but not ## Sources: $(echo "$fm_only" | tr '\n' ' ')"
-  [ -n "$body_only" ] && check ERROR "$f: sources in ## Sources but not frontmatter: $(echo "$body_only" | tr '\n' ' ')"
+  local s
+  for s in ${BODY_SOURCES[$slug]:-}; do
+    [[ -n "$s" ]] && body_set["$s"]=1
+  done
 
-  # --- Broken outbound [[wiki-links]] ---
-  # Catch both [[slug]] and [[slug|Display]] forms
-  # Strip inline code spans and fenced code blocks first so literal [[...]] inside
-  # backticks (e.g. ManyIH privilege tags) are not treated as wiki-links.
-  links=$(perl -0777 -pe 's/```.*?```//gs; s/`[^`]*`//g' "$f" \
-    | grep -ohE '\[\[[a-z0-9-]+(\|[^]]*)?\]\]' 2>/dev/null | sort -u || true)
-  if [ -n "$links" ]; then
-    while IFS= read -r link; do
-      # Extract slug: [[slug]] or [[slug|Display]]
-      target="${link#\[\[}"
-      target="${target%%|*}"
-      target="${target%\]\]}"
-      [ "$target" = "$slug" ] && continue
-      if [ ! -f "wiki/${target}.md" ]; then
-        if ! find wiki/ -name "${target}.md" | grep -q .; then
-          check ERROR "$f: broken link [[${target}]]"
-        fi
-      fi
-    done <<< "$links"
+  for s in "${!fm_set[@]}"; do
+    if [[ ! -v body_set["$s"] ]]; then
+      err "$f: sources in frontmatter but not ## Sources: $s"
+    fi
+  done
+  for s in "${!body_set[@]}"; do
+    if [[ ! -v fm_set["$s"] ]]; then
+      err "$f: sources in ## Sources but not frontmatter: $s"
+    fi
+  done
+
+  # Broken outbound wiki-links.
+  local target
+  for target in ${OUTBOUND_LINKS[$slug]:-}; do
+    [[ "$target" == "$slug" ]] && continue
+    if [[ ! -v EXISTING_SLUGS[$target] ]]; then
+      err "$f: broken link [[${target}]]"
+    fi
+  done
+
+  # Orphan and index coverage.
+  if [[ ${INBOUND_COUNTS[$slug]:-0} -eq 0 ]]; then
+    warn "$f: orphan (no inbound wiki-links)"
+  fi
+  if [[ ! -v INDEX_LINKS[$slug] ]]; then
+    warn "$f: not listed in index.md"
   fi
 
-  # --- Orphan check ---
-  hits=$(grep -rlE "\[\[${slug}(\|[^]]*)?\]\]" wiki/ --include='*.md' 2>/dev/null | grep -v "$f" | wc -l || echo 0)
-  [ "$hits" -eq 0 ] && check WARN "$f: orphan (no inbound wiki-links)"
-
-  # --- Index coverage ---
-  if ! grep -qE "\[\[${slug}(\|[^]]*)?\]\]" wiki/index.md; then
-    check WARN "$f: not listed in index.md"
-  fi
-
-  # --- Thread section for concept pages linked from threads ---
+  # Thread section for concept pages linked from threads.
   if [[ "$f" == wiki/concepts/* ]]; then
-    if grep -rqE "\[\[${slug}(\|[^]]*)?\]\]" wiki/threads/ 2>/dev/null; then
-      if ! grep -q '^## Thread' "$f"; then
-        check ERROR "$f: linked from thread but missing ## Thread section"
+    if [[ -v THREAD_LINKS[$slug] && ! -v HAS_THREAD[$slug] ]]; then
+      err "$f: linked from thread but missing ## Thread section"
+    fi
+  fi
+
+  # Epistemic callouts on thread pages.
+  if [[ "$f" == wiki/threads/* && ! -v HAS_CALLOUT[$slug] ]]; then
+    warn "$f: thread page missing epistemic callout"
+  fi
+
+  # unaudited_marginal threshold.
+  local um="${FM_UNAUDITED[$slug]:-0}"
+  if [[ "$um" =~ ^[0-9]+$ && "$um" -ge 5 ]]; then
+    warn "$f: unaudited_marginal=$um (needs source verification)"
+  fi
+
+  # Reciprocal Related links.
+  if [[ "$f" != wiki/threads/* && "$f" != wiki/index.md ]]; then
+    local rel_target
+    for rel_target in ${RELATED_LINKS[$slug]:-}; do
+      [[ "$rel_target" == "$slug" ]] && continue
+      [[ "$rel_target" == "index" ]] && continue
+      local target_path="${EXISTING_SLUGS[$rel_target]:-}"
+      [[ -z "$target_path" ]] && continue
+      [[ "$target_path" == wiki/threads/* ]] && continue
+      if [[ ! -v RELATED_INDEX["${rel_target}--${slug}"] ]]; then
+        warn "$f: Related link [[${rel_target}]] not reciprocated in ${target_path}"
       fi
-    fi
+    done
   fi
-
-  # --- Epistemic callouts on thread pages ---
-  # Any > [!note] or > [!warning] callout counts as epistemic signaling.
-  # The four standard labels are Departure, Contradiction, Synthesis, Extension
-  # (see meta/wiki-conventions.md), but other callout labels are acceptable.
-  if [[ "$f" == wiki/threads/* ]]; then
-    if ! grep -qE '^> \[!note\]|^> \[!warning\]' "$f" 2>/dev/null; then
-      check WARN "$f: thread page missing epistemic callout (Departure/Contradiction/Synthesis/Extension or other note/warning)"
-    fi
-  fi
-
-  # --- unaudited_marginal >= 5 ---
-  count=$(grep -oP '^unaudited_marginal: \K\d+' "$f" 2>/dev/null || echo 0)
-  [ "$count" -ge 5 ] && check WARN "$f: unaudited_marginal=$count (needs source verification)"
 }
 
-# --- Raw source provenance (invariant #8) ---
-# raw/ files must carry provenance frontmatter so future sessions can
-# re-derive wiki pages. Lighter contract than wiki pages: a
-# type/url/arxiv_id is the minimum.
+validate_raw_one() {
+  local f="$1"
+  local slug=$(basename "$f" .md)
+
+  local firstline
+  read -r firstline < "$f"
+  if [[ "$firstline" != "---" ]]; then
+    err "raw/$slug.md: missing YAML frontmatter (no provenance)"
+    return 1
+  fi
+
+  parse_frontmatter "$f"
+
+  if [[ ! -v FM[type] && ! -v FM[url] && ! -v FM[arxiv_id] ]]; then
+    err "raw/$slug.md: missing provenance field (need type/url/arxiv_id)"
+    return 1
+  fi
+
+  if [[ "${FM[type]:-}" == "arxiv" ]]; then
+    if [[ ! "$slug" =~ ^[0-9]{4}\.[0-9]{4,5}(v[0-9]+)?$ ]]; then
+      warn "raw/$slug.md: arXiv source should be named <arxiv-id>.md"
+    fi
+    if [[ ! -v FM[arxiv_id] ]]; then
+      warn "raw/$slug.md: arXiv source missing arxiv_id frontmatter"
+    fi
+  fi
+
+  return 0
+}
+
 validate_raw() {
   echo "=== Raw Source Provenance ==="
-  local raw_total=0 raw_bad=0
-  shopt -s nullglob
-  for f in raw/*.md; do
+  local raw_total=0 raw_bad=0 f
+
+  for f in $(fd -e md . raw/ | sort); do
     raw_total=$((raw_total + 1))
-    local slug
-    slug=$(basename "$f" .md)
-    if ! head -1 "$f" | grep -q '^---$'; then
-      check ERROR "raw/$slug.md: missing YAML frontmatter (no provenance)"
+    if ! validate_raw_one "$f"; then
       raw_bad=$((raw_bad + 1))
-      continue
-    fi
-    if ! awk '/^---$/{n++; next} n==1 && /^(type|url|arxiv_id):/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
-      check ERROR "raw/$slug.md: missing provenance field (need type/url/arxiv_id)"
-      raw_bad=$((raw_bad + 1))
-      continue
-    fi
-    if awk '/^---$/{n++; next} n==1 && /^type: *arxiv/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
-      if ! echo "$slug" | grep -qP '^[0-9]{4}\.[0-9]{4,5}(v\d+)?$'; then
-        check WARN "raw/$slug.md: arXiv source should be named <arxiv-id>.md (e.g. 2603.01896.md)"
-      fi
-      if ! awk '/^---$/{n++; next} n==1 && /^arxiv_id:/{found=1; exit} END{exit !found}' "$f" >/dev/null 2>/dev/null; then
-        check WARN "raw/$slug.md: arXiv source missing arxiv_id frontmatter"
-      fi
     fi
   done
-  shopt -u nullglob
-  [ "$raw_bad" -eq 0 ] && echo "  All $raw_total raw sources carry provenance frontmatter."
+
+  if [[ $raw_bad -eq 0 ]]; then
+    echo "  All $raw_total raw sources carry provenance frontmatter."
+  fi
 }
 
-# --- Main ---
-
-echo "=== Wiki Page Validator ==="
-echo ""
-
-if [ $# -eq 1 ]; then
-  validate_one "$1"
-else
-  for f in $(find wiki/ -name "*.md" | sort); do
-    validate_one "$f"
+report_near_dups() {
+  if [[ ${#NEAR_DUP_PAIRS[@]} -eq 0 ]]; then
+    return
+  fi
+  local pair
+  for pair in "${NEAR_DUP_PAIRS[@]}"; do
+    warn "near-duplicate slugs: [[${pair%% *}]] and [[${pair##* }]]"
   done
-  validate_raw
-fi
+}
 
-echo ""
-echo "=== Summary ==="
-echo "Errors: $ERRORS"
-echo "Warnings: $WARNS"
+report_repo_info() {
+  echo "=== Repository-wide debt (informational) ==="
+  local f slug
 
-[ "$ERRORS" -gt 0 ] && exit 1
-exit 0
+  for f in "${ALL_PAGES[@]}"; do
+    slug=$(basename "$f" .md)
+    [[ -v SCOPE_PATHS[$f] ]] && continue
+
+    if [[ ${INBOUND_COUNTS[$slug]:-0} -eq 0 ]]; then
+      info "$f: orphan (no inbound wiki-links)"
+    fi
+    if [[ ! -v INDEX_LINKS[$slug] ]]; then
+      info "$f: not listed in index.md"
+    fi
+    local um="${UNAUDITED[$slug]:-0}"
+    if [[ "$um" =~ ^[0-9]+$ && "$um" -ge 5 ]]; then
+      info "$f: unaudited_marginal=$um (needs source verification)"
+    fi
+  done
+
+  for pair in "${NEAR_DUP_PAIRS[@]}"; do
+    info "near-duplicate slugs: [[${pair%% *}]] and [[${pair##* }]]"
+  done
+
+  local rf rbase hits
+  for rf in $(fd -e md . raw/ | sort); do
+    [[ -v SCOPE_PATHS[$rf] ]] && continue
+    rbase=$(basename "$rf")
+    hits=$(rg -lF "raw/$rbase" wiki/ 2>/dev/null | wc -l)
+    if [[ $hits -eq 0 ]]; then
+      info "$rf: not referenced from wiki"
+    fi
+  done
+}
+
+main() {
+  cd "$(git rev-parse --show-toplevel)"
+  check_bin
+  build_indexes
+
+  if [[ $# -eq 0 ]]; then
+    echo "=== Wiki Page Validator ==="
+    echo ""
+    local f
+    for f in "${ALL_PAGES[@]}"; do
+      validate_one "$f"
+    done
+    validate_raw
+    report_near_dups
+  else
+    echo "=== Wiki Page Validator (changed-scope) ==="
+    echo ""
+    SCOPE_MODE=1
+    local arg
+    for arg in "$@"; do
+      SCOPE_PATHS["$arg"]=1
+      if [[ "$arg" == raw/* && -f "$arg" ]]; then
+        validate_raw_one "$arg"
+      elif [[ -f "$arg" ]]; then
+        validate_one "$arg"
+      else
+        err "$arg: path not found"
+      fi
+    done
+    report_repo_info
+  fi
+
+  echo ""
+  echo "=== Summary ==="
+  if [[ $SCOPE_MODE -eq 1 ]]; then
+    echo "Path errors: $PATH_ERRORS"
+    echo "Path warnings: $PATH_WARNS"
+    echo "Informational: $INFO"
+    [[ $PATH_ERRORS -gt 0 ]] && exit 1
+  else
+    echo "Errors: $ERRORS"
+    echo "Warnings: $WARNS"
+    [[ $ERRORS -gt 0 ]] && exit 1
+  fi
+  exit 0
+}
+
+main "$@"
