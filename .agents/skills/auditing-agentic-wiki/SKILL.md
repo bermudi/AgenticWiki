@@ -33,7 +33,9 @@ Run the repository checks:
 ./scripts/orphans
 ```
 
-Group results rather than repeating the same defect from multiple scripts:
+`./scripts/validate-page` is the unified, authoritative mechanical check and subsumes the checks performed by `check-links`, `check-sources`, `check-frontmatter`, and `orphans`. Run the standalone scripts only when `validate-page` reports a specific defect and you want a focused diagnostic view (for example, `check-links` to see only broken `[[wiki-links]]`, or `check-sources` to see only frontmatter/body source desyncs). Do not run them as a separate gate.
+
+Group results from the unified run rather than repeating the same defect across multiple tools:
 
 - mechanical errors;
 - broken or ambiguous links;
