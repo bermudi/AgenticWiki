@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-19
+updated: 2026-07-22
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -16,7 +16,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 - [[the-cognitive-cost]] — Agentic coding trades cognitive capacity for output volume. The skills needed to supervise agents erode through sustained use. The population of humans capable of providing design authority may be shrinking.
 - [[dex-horthy-agentic-engineering]] — *(worldview thread)* Dex Horthy's position traced as one coherent system: context engineering as deabstracting to the token layer, the Smart Zone and trajectory, research/plan/implement and its anti-leverage retrospective, slow lights-on loops, and token-smarter-not-harder. The thesis the wiki's other sources argue with.
-- [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. SWE-bench Pro misgrades ~32% of trials and suppresses self-verification. DeepSWE exposes the gap.
+- [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. Seven axes of failure: contamination, verifier misgrading, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, and long-horizon maintainability — the last being the axis no benchmark can measure and the one that determines whether code survives.
 
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.

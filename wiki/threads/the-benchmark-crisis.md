@@ -1,7 +1,7 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-07-16
+updated: 2026-07-22
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -13,16 +13,17 @@ sources:
   - raw/2606.24775v1.md
   - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution, cost]
 unaudited_marginal: 0
 ---
 
 # The Benchmark Crisis
 
-> The benchmarks developers rely on to choose coding models are unreliable. [[swe-bench-pro|SWE-bench Pro]], the industry standard, misgrades ~32% of trials, is contaminated by leaked solutions, and suppresses the self-verification behavior that makes strong models reliable. The result: models that look similar on leaderboards deliver wildly different results in practice. [[deepswe|DeepSWE]] (Datacurve, 2026) exposes the gap and proposes a fix — but the crisis runs deeper than any single benchmark.
+> The benchmarks developers rely on to choose coding models are unreliable. [[swe-bench-pro|SWE-bench Pro]], the industry standard, misgrades ~32% of trials, is contaminated by leaked solutions, and suppresses the self-verification behavior that makes strong models reliable. The result: models that look similar on leaderboards deliver wildly different results in practice. [[deepswe|DeepSWE]] (Datacurve, 2026) exposes the gap and proposes a fix — but the crisis runs deeper than any single benchmark. Seven axes of failure have been identified: contamination, verifier failure, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, and long-horizon maintainability — the last being the axis no benchmark can measure and the one that determines whether code survives.
 
 > [!note] Marginal: The Maintainability Gap
-> [[dex-horthy|Dex Horthy]] names a dimension no benchmark in this thread measures: **does this model write code that makes the codebase more or less maintainable over 3–6 months?** SWE-bench-style tasks train on "here's a commit, here's an issue, reproduce the fix" — and the cost function of bad architecture can't be evaluated by a unit test; it surfaces months later as an unmaintainable ball of spaghetti. The newer FrontierCode/Marathon maintainability benchmarks (two-layer model review: functional-equivalence judge + code-quality judge) are better but, in Dex's view, still insufficient. This is a fifth crisis axis alongside contamination, verifier failure, prompt distortion, and environment evolution: **no benchmark captures long-horizon maintainability**, which is exactly the axis the [[dark-factory|dark factory]] fails on. See [[dex-horthy-agentic-engineering]].
+> [[dex-horthy|Dex Horthy]] names a dimension no benchmark in this thread measures: **does this model write code that makes the codebase more or less maintainable over 3–6 months?** SWE-bench-style tasks train on "here's a commit, here's an issue, reproduce the fix" — and the cost function of bad architecture can't be evaluated by a unit test; it surfaces months later as an unmaintainable ball of spaghetti. The newer FrontierCode/Marathon maintainability benchmarks (two-layer model review: functional-equivalence judge + code-quality judge) are better but, in Dex's view, still insufficient. This is the seventh crisis axis alongside contamination, verifier failure, prompt distortion, environment evolution, horizon mismatch, and cost-blind scoring: **no benchmark captures long-horizon maintainability**, which is exactly the axis the [[dark-factory|dark factory]] fails on. See [[dex-horthy-agentic-engineering]]. **This marginal is now developed into a full section** — "The Seventh Axis: Long-Horizon Maintainability" below — using a subsequent "AI that Works" episode that reinforces the same theme (benchmark generations, the RL training constraint, and the velocity framework). The specific 20-feature evolving-codebase benchmark proposal originates from Dex's earlier interview, not the Boundary video — see below. The full section attributes claims to the video/discussion, not to named speakers, because the multi-speaker transcript lacks per-line speaker labels.
 
 ## Thesis
 
@@ -128,6 +129,62 @@ This generalizes the cost-quality Pareto point already flagged for multi-agent s
 > [!note] Extension: cost-blindness may be compounded by [[harness-monoculture]]
 > Rising cost-to-solve is plausibly connected to effect #3 of harness monoculture: models RL-trained on loop-heavy, sub-agent-spawning workflows ("built for loops and token maxing," in Zechner's phrase) tend to solve problems in more turns and with more spawned sub-agents than a less-reinforced model would. If the RL reward optimized for task completion without penalizing token expenditure, the model converges on solution strategies that spend more to win — and a cost-blind benchmark rewards exactly that. This link between training distribution and per-solve cost is the wiki author's synthesis, not stated directly by either speaker; treat it as a hypothesis connecting [[harness-monoculture]] to the cost axis.
 
+## The Seventh Axis: Long-Horizon Maintainability
+
+The video "Why Passing Benchmarks Doesn't Mean Your AI Wrote Good Code" (Boundary, 2026) — a multi-speaker discussion on the "AI that Works" show — develops the maintainability gap (already flagged above as a marginal concern) into a full argument with three layers: the RL training constraint, the long-horizon penalty, and the velocity framework. The discussion features [[dex-horthy|Dex Horthy]] (HumanLayer) and [[vibv|Vibv]] (Boundary ML) as co-hosts; however, the transcript lacks per-line speaker labels, so attribution to individual speakers could not be verified against the audio. Claims below are attributed to the video or the discussion, not to named individuals.
+
+### The RL Training Constraint
+
+The discussion identifies a structural constraint that connects [[verifiability]] to the benchmark crisis at the *training* layer: **if you cannot build a judge that is good at judging code quality, then the knowledge of code quality will never end up in the weights.** RL training requires verifiable reward signals run millions of times. Models get really good at anything with good feedback — solving problems, performance engineering — because those have deterministic or model-based verifiers. But code quality, architectural intuition, and long-horizon maintainability don't have good feedback signals. The feedback cycle for detecting a bad architectural pattern is weeks to months — too long and too lossy to build a verifier that can run during RL training. The models are constrained to what can be taught during RL; everything else stagnates.
+
+> [!note] Extension: The Training-Time Verifiability Constraint
+> This is the training-time complement to [[andrej-karpathy|Karpathy]]'s inference-time verifiability thesis. Karpathy argues LLMs automate what you can verify (at deployment). The video argues models can only be RL-*trained* on what you can verify (at training). The implication: code quality is doubly trapped — you can't verify it at inference time (no benchmark catches it), and you can't train it into the weights at training time (no verifier for RL). See [[verifiability]].
+
+### The Long-Horizon Penalty
+
+The discussion names a specific failure mode no benchmark captures: the **long-horizon penalty**. A model writes code that passes tests today, but the architectural pattern it baked in — a double type cast, an unnecessary error wrapper, a pattern replicated from the existing codebase — causes problems six months later. The penalty is realized far from the decision that created it. By the time the problem surfaces (a traffic spike, a cascading incident), the original pattern has been replicated across multiple features, and the connection back to the originating decision is obscured.
+
+The discussion notes that even the best human engineers struggle to verbalize *why* something is wrong — they say "this feels funny" and can then explain how, but the initial detection is intuitive, not rule-based. This tacit knowledge is precisely what can't be encoded into a deterministic verifier or a judge-model prompt. Most humans wouldn't catch these patterns either; the people building verifiers are researchers, not the Linus-tier engineers who can say "you're going to hate yourself for that in six months."
+
+### What Modern Benchmarks Do Better
+
+The video walks through the evolution of coding benchmarks and identifies what the newer generation improves:
+
+- **Gen 0 — SWE-bench**: GitHub issues from Django; agent checks out the codebase before the fix, writes code, verifier checks if it solved the problem the way the human did. SWE-bench Verified added better human curation.
+- **Gen 1 — SWE-bench Multilingual**: Expanded beyond Django to Go, Ruby, TypeScript, and other repos. Still uses fail-to-pass (did it fix the bug?) and pass-to-pass (did it not break anything else?) verification.
+- **Terminal Bench**: Terminal-based challenges with GUIDs embedded in the data to prevent labs from training on the benchmark. Thousands of challenges, scored by pass rate.
+- **Program Bench**: Takes open-source repos, anonymizes them, tells the agent to "mimic this binary one to one." The discussion criticizes this as measuring the wrong thing — software is not about mimicking software, it's about continuously solving user problems and adapting over time.
+- **SWE Marathon**: Measures the model's ability to solve hard problems over extended time — challenges running up to 400 hours (e.g., "rewrite all of Kubernetes in Rust"), requiring the model to maintain its own codebase after writing thousands of lines of code.
+- **Frontier Code**: Introduces three verification innovations beyond pass/fail: (1) a **judge model** ("adjudicator") that reads the written code and compares it to the golden solution, producing a score; (2) a **quality judge** that evaluates code against a list of code quality rules (e.g., C++ memory management patterns); (3) **mutation testing** — the agent's test changes are zeroed out during verification (to prevent gaming), but its tests are run against the pre-patch code to check whether they actually fail. If they don't, the model is writing tests that test nothing — a proxy for how well it understands the problem.
+
+Despite these improvements, the discussion argues they remain insufficient for the maintainability gap: no verifier — deterministic or model-based — can evaluate whether code will be maintainable over 3–6 months. The fundamental issue is that benchmarks evaluate static snapshots with known end states, while real software involves discovering problems as you go, with no human in the loop evolving the requirements.
+
+### The Velocity Framework: Benchmarks Measure the Wrong Layer
+
+The discussion introduces a software-velocity framework that explains why benchmarks measure the wrong layer. Drawing on DORA's four key metrics (deployment frequency, lead time for changes, change failure rate, time to restore) and a feedback-time hierarchy:
+
+| Layer | What it measures | Feedback time |
+|---|---|---|
+| Lines of code | Input | Seconds |
+| Agent runs / PRs | Output (code produced) | Minutes |
+| Customer outcomes | Outcome (user can do X) | Days to weeks |
+| Business outcomes | Outcome (revenue, retention) | Quarters to years |
+
+Benchmarks measure at the "agent runs" layer — did the code pass the tests? — with a feedback time of minutes. But the quality signal that matters (customer and business outcomes) has a feedback time of days to years. The maintainability penalty lives at the outcome layer, not the output layer. The discussion's framing: "the goal is not position, the goal is velocity, and maybe acceleration" — how fast can you continuously release and merge code to production, and how safely can you change it without incidents. A benchmark that runs in minutes cannot capture a penalty that surfaces in months.
+
+> [!note] Synthesis: Velocity as the Missing Benchmark Dimension
+> The velocity framework connects the benchmark crisis to [[the-slop-problem]]: slop accumulates because the generation layer (minutes) is measured and the consequence layer (months) is not. The right benchmark would measure not whether the model solved a single ticket, but whether the codebase's change velocity is sustained or degrading over a sequence of tasks. This is the wiki author's synthesis connecting the velocity framework to the slop thesis, not stated directly by the video.
+
+### The Proposed Evolving-Codebase Benchmark
+
+[[dex-horthy|Dex Horthy]] originated this benchmark design in his earlier interview (`raw/yt-context-engineering-with-dex-horthy.md`, ~56:55): "can you build a benchmark where the model builds 20 features in a row and maintains the codebase the whole time and it doesn't know what features are coming. You treat it like a real product team where you don't know what you're going to build next week until you get there." The model receives a roadmap of 20 features delivered one ticket at a time, and must evolve the codebase over time, making decisions about extensibility and architectural flexibility without knowing future requirements. The Boundary video discussion later echoes the same proposal (43:23) and contributes the key instruction: "just think really fast if I need to model for other things that might be relevant in the future. Don't do the work. Just make it possible to extend it if we need to." But the specific 20-feature evolving-codebase proposal originates with Dex, not the Boundary video; the Boundary video's distinctive contributions are the RL training constraint and the velocity framework above, which reinforce the maintainability gap rather than introduce the benchmark design.
+
+This is distinct from [[evoarena|EvoArena]]'s persistent environment evolution (which evolves the *environment*) — this proposal evolves the *task sequence* while keeping the codebase persistent. The model must maintain architectural coherence across an unknown future, which is precisely what real software engineering demands and what no current benchmark tests. The proposal acknowledges the risk: a model told to "make it extensible" may over-engineer into Java-style abstraction layers — the same [[over-engineering|over-engineering]] failure mode DeepSWE's trajectory analysis quantified.
+
+### No Benchmark for Human Engineers Either
+
+The discussion argues the benchmark problem isn't unique to AI — there are no good benchmarks for human engineers either. HackerRank and LeetCode are bad proxies: they measure constrained algorithmic problem-solving, not the ability to build and maintain products. The only reliable signal for engineering quality is peer recommendation — "if someone I trust has recommended someone, that is pretty much an instant yes." The discussion suggests models have gotten good enough that the same approach may work for model selection: crowdsourced recommendations from trusted practitioners may be more reliable than benchmark scores. This echoes the call for community-built benchmarks from [[theo-t3gg|Theo]] above, but from a different angle — not "build your own benchmark from failures" but "trust the social signal over the metric."
+
 ## The Call for Community Benchmarks
 
 > [!note] Departure: Skill Popularity as a Benchmark-Crisis Analog
@@ -161,7 +218,7 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 ## Sources
 
 - `raw/deepswe-benchmark.md` — Datacurve's full benchmark description, methodology, audit results, and qualitative analysis
-- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's "maintainability gap": no benchmark measures whether a model writes code that improves or degrades codebase maintainability over 3–6 months; SWE-bench trains on reproduce-the-fix, and the cost function of bad architecture can't be caught by a unit test (43:18–43:56, 54:25–56:22).
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex's "maintainability gap": no benchmark measures whether a model writes code that improves or degrades codebase maintainability over 3–6 months; SWE-bench trains on reproduce-the-fix, and the cost function of bad architecture can't be caught by a unit test (43:18–43:56, 54:25–56:22). Also the origin of the proposed 20-feature evolving-codebase benchmark — "build a benchmark where the model builds 20 features in a row and maintains the codebase the whole time and it doesn't know what features are coming" (~56:55).
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective, SWE-bench Pro criticism, call for community benchmarks, cost/token analysis
 - `raw/2606.13681.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Exposes the fourth axis: persistent environment evolution. PE/IC/CE triplet. Chain accuracy metric. State collapse failure mode. EvoMem patch-based memory paradigm. Base agents drop 22.1pp from step to chain on Terminal-Bench-Evo; EvoMem recovers 6.1pp of that drop.
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the "trace-rich benchmarks required" extension. §4.2 (the [[operational-mirror|operational mirror]]'s [[reward-hacking|reward-hacking]] pathology is enabled by scalar-reward benchmarks), §4.5 ([[variant-isolation]] ensemble routing as environment-aware evolution on heterogeneous task sets), §6.3 (Global 49.5% vs. Ensemble 87.4% on GAIA GPT-5.4), §7.2 ("the richness of the feedback signal bounds the sophistication of evolution that can be safely performed"), §7.7 (no held-out evaluation; same measurement limitation as DeepSWE and EvoArena).
@@ -170,3 +227,4 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 - `raw/2512.08296.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). Source for the "Agentic vs Non-Agentic Benchmark Design" extension. §1 introduction (agentic task definition: sequential interdependence, partial observability, adaptive strategy formation); §4.2 main results (MAS deltas on agentic vs non-agentic benchmarks; 89% on HumanEval with 5 agents via ensemble effects; inverted dynamics on agentic benchmarks).
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the decomposition-thesis callout: argues existing memory benchmarks treat the system as a monolithic black box reporting only end-to-end task-success metrics, and decomposes evaluation into five independently-measured dimensions (task effectiveness, evidence-level retrieval fidelity, dynamic-update robustness, long-horizon stability, operational cost) with single-module ablations — the benchmark-crisis thesis applied to memory-system evaluation. Also independently corroborates [[state-collapse]] ("hallucinations of the past").
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[armin-ronacher|Ronacher]] on the sixth axis (cost-blind scoring): the cost-of-solving inversion (a model climbs benchmarks yet costs more per solve, observed around the Sonnet 5 release; "the cost of solving problems seems to be going up rather than down"), Terminal-Bench ignoring cost/runtime entirely, and the cheap-tier replacement inflation (price points earlier "cheap" flagships hit are gone; cheap flagships getting more expensive per solve). Source for the "Sixth Axis: Cost-Blind Scoring" section and its [[harness-monoculture]] synthesis callout.
+- `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026) with [[dex-horthy|Dex Horthy]] and [[vibv|Vibv]]: full benchmark-generations walkthrough (SWE-bench → Verified → Multilingual → Terminal Bench → Program Bench → SWE Marathon → Frontier Code), the RL training constraint (can't train what you can't verify), the long-horizon penalty, the velocity framework (DORA metrics, feedback-time hierarchy), and the "no benchmark for human engineers" argument. The discussion echoes Dex's earlier 20-feature evolving-codebase benchmark proposal (43:23) and contributes the "think fast … make it possible to extend it" instruction, but does not originate the proposal itself. Multi-speaker source; speaker attribution not verified against audio — claims attributed to the video/discussion, not named individuals.

@@ -1,7 +1,7 @@
 ---
 title: Verifiability
 created: 2026-05-09
-updated: 2026-07-04
+updated: 2026-07-22
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/2311.04235v3.md
@@ -10,6 +10,7 @@ sources:
   - raw/2603.25133v1.md
   - raw/2606.14249.md
   - raw/2606.16707v1.md
+  - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
 tags: [concept, ai-capability, reinforcement-learning, executable-memory]
 unaudited_marginal: 0
 ---
@@ -67,6 +68,9 @@ This creates a tension: jaggedness is a structural feature of today's models, bu
 
 > [!warning] Theory pressure
 > The Meeseeks benchmark ([[iterative-self-correction]]) demonstrates that even near-perfect verification (98.4% accuracy) does not guarantee convergence. After 20 rounds of precise feedback, no model exceeds ~91% utility rate. Karpathy acknowledged this boundary in his original framing: "If you're in the circuits that were part of the RL, you fly. And if you're in the circuits that are out of the data distribution, you're going to struggle." The Meeseeks result operationalizes this: you can build a near-perfect evaluator, but if the underlying capability (instruction-following with precise constraints) isn't in the model's RL-trained circuits, feedback alone cannot fully bridge the gap. Verifiability enables improvement; it does not guarantee it.
+
+> [!note] Extension: The Training-Time Verifiability Constraint
+> The "AI that Works" benchmark episode (Boundary, 2026) identifies the training-time complement to Karpathy's inference-time thesis: **models can only be RL-trained on what you can verify.** If you cannot build a judge good at judging code quality, the knowledge of code quality will never enter the weights. RL training requires verifiable reward signals run millions of times; code quality and architectural intuition have feedback cycles of weeks to months — too long and too lossy to serve as RL reward signals. The result: models keep getting better at anything with good feedback (solving problems, performance engineering) but stagnate on maintainability and architectural judgment. This is the same verifiability gap, but at the *training* layer rather than the *inference* layer — code quality is doubly trapped because you can't verify it at deployment (no benchmark catches it) and can't train it into weights (no RL verifier). See [[the-benchmark-crisis]] → "The Seventh Axis: Long-Horizon Maintainability." Multi-speaker source; speaker attribution not verified against audio.
 
 Threads like [[the-human-lever]] and [[agent-quality-engineering]] each take a different stance on how much of this ceiling is permanent vs. temporary — see their respective tension callouts.
 
@@ -156,4 +160,5 @@ The 99% vs 6% gap on analytical inference is the most concrete empirical evidenc
 - `raw/2504.21625v6.md` — Meeseeks (Wang et al.): code-guided evaluation demonstrates that near-perfect verification is achievable, but convergence remains elusive
 - `raw/2603.25133v1.md` — RUBRICEVAL (Pan et al., 2026): rubric-level meta-evaluation showing that even in structurally verifiable domains with structured rubrics, the LLM judge (verifier) may be unreliable at fine granularity (GPT-4o: 55.97% on hard cases) — adds a second-order constraint to the verifiability thesis: verifier capability bounds verifiability
 - `raw/2606.16707v1.md` — Bojie Li (Pine AI, 2026). *User as Code.* Concrete evidence that verifiability is a property of representation, not just domain. Same data, same model, same question: 99% on aggregate queries with typed Python + interpreter vs 6% with text + retrieval. 100% on Active Service with constraint pipeline. The LLM is the writer of the constraint; the interpreter is the runner. This is the verifiability thesis at the architectural level: clear separation between "the LLM proposes" and "the deterministic system verifies."
+- `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026): the training-time verifiability constraint — models can only be RL-trained on what you can verify, so code quality knowledge can't enter weights without a verifier. The training-time complement to Karpathy's inference-time thesis. Multi-speaker source; speaker attribution not verified against audio.
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* Source for the layered bootstrap problem and output-vs-proposal verifiability synthesis. §4.1 (operational mirror formalism), §4.3 (AEGIS design principle: "Language-model subagents explore, hypothesize, and propose; typed structure and deterministic gates determine what ships"), §6.6 (case studies of the three named pathologies), §7.2 (trace richness as the bound on detection), §7.3 (the mirror is a design heuristic, not a predictive theory).

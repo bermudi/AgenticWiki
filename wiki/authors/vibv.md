@@ -1,9 +1,10 @@
 ---
 title: Vibv
 created: 2026-07-15
-updated: 2026-07-15
+updated: 2026-07-22
 sources:
   - raw/yt-stop-reading-code-start-understanding-systems.md
+  - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
 tags: ["author", "observability", "tracing", "type-safety", "programming-languages"]
 unaudited_marginal: 0
 ---
@@ -30,3 +31,4 @@ unaudited_marginal: 0
 ## Sources
 
 - `raw/yt-stop-reading-code-start-understanding-systems.md` — "AI that Works" episode with Dex Horthy on observability, tracing, and understanding systems
+- `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026): co-hosted with [[dex-horthy|Dex Horthy]] on coding agent benchmarks — benchmark generations, the maintainability gap, the RL training constraint, the velocity framework, and a proposed evolving-codebase benchmark. **Note:** Multi-speaker source whose transcript lacks per-line speaker labels; attribution of specific claims to Vibv could not be verified against the audio. Claims are attributed to the video/discussion in [[the-benchmark-crisis]], not to Vibv individually.

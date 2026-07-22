@@ -1,11 +1,12 @@
 ---
 title: Dex Horthy
 created: 2026-04-25
-updated: 2026-07-16
+updated: 2026-07-22
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
 unaudited_marginal: 0
 tags: ["engineer", "agent-engineering", "context-engineering"]
 ---
@@ -79,3 +80,4 @@ Advocates for snapshot-based evals: run the workflow end-to-end, store the outpu
 - `raw/yt-no-vibes-allowed-dex-horthy.md` — Talk at the AI Engineer Code Summit on "No Vibes Allowed" engineering.
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Full interview covering context engineering origins, model switching strategy, markdown storage, evals, and agent memory.
 - `raw/yt-context-engineering-with-dex-horthy.md` — The Pragmatic Engineer interview: the deabstracting definition of context engineering, the two budgets, Smart/Dumb Zone physics, the RPI retrospective, slow loops, the lights-off factory build-and-shutdown, token-harder/smarter, Martin Fowler's inner/outer harness, and the HumanLayer product reveal.
+- `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026): co-hosted with [[vibv|Vibv]] on coding agent benchmarks. The episode covers benchmark generations, the maintainability gap, the RL training constraint, the velocity framework, and a proposed evolving-codebase benchmark. The discussion extends Dex's previously documented maintainability-gap argument (from the Pragmatic Engineer interview) into a full episode-length treatment. **Note:** This is a multi-speaker source whose transcript lacks per-line speaker labels; attribution of specific claims to Dex could not be verified against the audio. Claims are attributed to the video/discussion in [[the-benchmark-crisis]], not to Dex individually.
