@@ -21,9 +21,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
 - [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
-- [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. Three sources converge on the tool as the bottleneck.
+- [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. The tool layer — from single tools to harness architecture to ecosystem effects — is the bottleneck across seven layers of increasing scope.
 - [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
-- [[intent-to-code]] — What stands between human intent and shipped code? Four philosophies — specs-as-compiler, plan-as-contract, alignment-first, and pure vibes — disagree on the artifact's weight and where quality enforcement lives.
+- [[intent-to-code]] — What stands between human intent and shipped code? Five positions — specs-as-compiler, plan-as-contract, alignment-first, enforcement-as-code, and pure vibes — disagree on the artifact's weight and where quality enforcement lives.
 - [[the-verifiability-thesis]] — Karpathy's unified theory: verifiability drives RL training, which creates the jagged frontier, which makes vibe coding possible on the peaks and demands agentic engineering to manage the boundary.
 - [[the-multi-agent-theory]] — Six papers converge on a layered theory of LLM-based Multi-Agent Systems: *whether* automated MAS work (no), *why* they fail (system design), *when* coordination helps (conditional), *how* errors propagate (graph dynamics), and *how to make MAS reliable* (engineered decomposition + message-layer governance). The binding constraint is the coordination layer, not the model.
 - [[prompts-in-code-review]] — Prompt design for LLM code review is a bias control surface, not an accuracy booster. More detail increases overcorrection; structured reasoning templates are the most reliable fix.
@@ -124,7 +124,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[fresh-context-subagents]] — Architectural pattern for preventing context rot: thin orchestrators spawn specialist subagents with clean context windows, each writing output to disk. Systematized by GSD Core.
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
 - [[code-clarifies-spec]] — Implementing code improves the spec; the act of writing code generates new decisions that weren't anticipated in the spec, and these decisions should feed back into it.
-- [[code-microworlds]] — Ephemeral, interactive, agent-built simulations that let a human inhabit a codebase or algorithm to build intuition.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
 - [[skill-hell]] — The third developer hell (after tutorial hell and framework hell): skills proliferate faster than evaluative capacity, nobody can tell good from bad, and nothing delivers what it promises. Pocock's four-part checklist is the proposed exit.
 - [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.
@@ -133,7 +132,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[benchmark-contamination]] — Training data leakage, verifier misgrading, and prompt distortion that make benchmarks unreliable
 - [[swe-bench-pro]] — The industry-standard coding benchmark; DeepSWE's audit found 32% verifier disagreement rate
 - [[ai-boilerplate-paradox]] — Verbose frameworks become preferable with AI because explicitness constrains LLM output; the DX/AX divergence
-- [[aesthetics-is-truth]] — Using beauty and elegance as proxies for technical quality.
 - [[knowledge-triplet]] — Either you know what you want, it's in the codebase, or it's in the training data. If none of these, the model fabricates.
 - [[afk-agent]] — Agents that implement features in the background without human supervision.
 - [[agent-experience]] — Converging DX with AX to make codebases agent-friendly.
@@ -172,7 +170,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks; `/init`-style auto-generated dumps that duplicate existing docs hurt.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
 - [[context-trajectory]] — The fourth property of the context window: the autoregressive history that conditions the next message ("you're absolutely right" = time to reset).
-- [[skill-efficacy]] — A skill's popularity (GitHub stars) is not a reliable proxy for whether it makes an agent perform better; skills must be evaluated by measured task impact.
 - [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
@@ -225,7 +222,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[satisfaction-of-search]] — Cognitive bias where agents stop context retrieval at the first plausible answer; introduced from radiology by Peter Werry.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
-- [[shared-understanding]] — The collective mental model that lets a team communicate and generate ideas together; built through shared spaces where humans and agents co-discuss work.
 - [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
 - [[slop]] — Low-quality, AI-generated content that degrades system quality.
 - [[discourse-slop]] — AI-generated thought-leadership slop circulating through the meta-discourse about AI tools; the hype cycle and incentive-to-hype map.
@@ -258,7 +254,6 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[under-exploration]] — A predicted pathology in the [[operational-mirror|operational mirror]]: the optimizer converges on local prompt-level edits, missing structural changes. Detection signal: ship-prediction accuracy decay (e.g., 80% → 0%). Empirically confirmed in [[harnessx]] §6.6(g–i)
-- [[understanding-quizzes]] — Short, spaced-repetition-style checks appended to code explainer docs, used as a "speed regulator" to verify understanding before review.
 - [[verification-loop]] — Automated feedback loops for validating agent implementations.
 - [[rollback-posture]] — Rollbacks only work when you release slower than you can detect problems; agents shipping faster than detection jams the safety valve.
 - [[verifiability]] — Karpathy's framework: LLMs automate what you can verify; the driver of jagged AI capability.
@@ -274,16 +269,12 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tool-coordination-trade-off]] — Tool-heavy tasks suffer disproportionately from MAS inefficiency (β = -0.096, survives Holm-Bonferroni): multi-agent systems fragment the per-agent token budget, leaving insufficient capacity for complex tool orchestration.
 - [[graphrag-thematic-irrelevance]] — Core GraphRAG failure mode: isolated local extraction introduces off-topic triples; solved by global schema frequency filtering in MemGraphRAG.
 - [[graphrag-logical-inconsistency]] — Core GraphRAG failure mode: independent extraction creates contradictory facts (mutually exclusive, temporal, granularity); solved by evidence-driven conflict resolution agents.
-- [[graphrag-recall-relevance-tradeoff]] — GraphRAG expands recall but crashes relevance (GFM-RAG: 84.3% recall vs 38.5% relevance); MemGraphRAG breaks the trade-off via construction-time fixes.
 - [[graphrag-structural-fragmentation]] — Core GraphRAG failure mode: missing coreference resolution scatters entities across disconnected subgraphs; solved by memory-guided bridging (type + similarity).
 - [[memgraphrag]] — Memory-based multi-agent GraphRAG (KDD 2026): Three-Layer Global Memory + three-agent society + PPR retrieval; outperforms all baselines.
 - [[memory-based-multi-agent-system]] — Engineered three-agent society (extraction, detection, resolution) operating on shared global memory; separation of concerns makes MAS reliable.
-- [[memory-guided-bridging]] — Structural unification in MemGraphRAG: type-based (shared ontology) + similarity-based (embedding) edges connect fragmented graph islands.
 - [[personalized-pagerank-rag]] — PPR over heterogeneous graph for GraphRAG retrieval; hub suppression + info density initialization; 0.061s query time.
 - [[three-layer-global-memory]] — MemGraphRAG's memory substrate: Ontology (schemas+freq), Fact (grounded triples), Passage (evidence); bidirectional cross-layer enforcement.
-- [[hipporag]] — Associative-memory GraphRAG using Personalized PageRank; no multi-agent construction, no conflict resolution, no bridging; baseline outperformed by MemGraphRAG.
-- [[lightrag]] — Lightweight GraphRAG with two-level retrieval (entity + chunk); no global memory, no conflict resolution; 46.09% G-Medical vs MemGraphRAG 57.41%.
-- [[microsoft-graphrag]] — Early GraphRAG using community detection + recursive summarization; error propagation in summaries; 41.43% overall avg vs MemGraphRAG 59.25%.
+- [[graphrag-baselines]] — Three GraphRAG baselines (LightRAG, HippoRAG, Microsoft GraphRAG) characterized by MemGraphRAG: all lack global memory during construction, producing the three deficiencies. Merged from individual pages.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.

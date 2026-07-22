@@ -37,7 +37,12 @@ Peter Naur's paper, *"Programming as Theory Building,"* argues that programming 
 
 ## Shared Design Concept vs. Shared Understanding
 
-The shared design concept is the code-level "theory of the code" that a human and agent must share to produce coherent work (Naur, Pocock). [[geoffrey-litt|Geoffrey Litt]]'s [[shared-understanding|shared understanding]] is the team-level counterpart: not one person's theory of the code, but the collective model a whole team needs to communicate and generate ideas together, built through shared spaces. (Mapping Litt onto the shared-design-concept framework is this wiki's synthesis; Litt himself frames it as solo understanding vs. team understanding, not in code-theory terms.)
+The shared design concept is the code-level "theory of the code" that a human and agent must share to produce coherent work (Naur, Pocock). [[geoffrey-litt|Geoffrey Litt]]'s shared understanding is the team-level counterpart: not one person's theory of the code, but the collective model a whole team needs to communicate and generate ideas together, built through shared spaces.
+
+> [!note] Merged from the standalone `shared-understanding` page (2026-07-22)
+> Litt shifts the AI-coding conversation from solo understanding to team understanding. The real constraint is often that a whole team needs to understand the system before they can jam on it. The proposed mechanism is the **shared space** — a collaborative document or chat where humans and agents see each other's communications. The comparison is moving from one-on-one conversations to a Slack channel: more behavior is visible, so the team understands together. Examples: multiplayer chat threads with multiple humans and agents, collaborative documents (e.g., in Notion) where a plan can be commented on, and coding agents embedded in the shared workspace.
+
+(Mapping Litt onto the shared-design-concept framework is this wiki's synthesis; Litt himself frames it as solo understanding vs. team understanding, not in code-theory terms.)
 
 ## Related
 
@@ -54,7 +59,7 @@ The shared design concept is the code-level "theory of the code" that a human an
 - [[vibes-based-engineering]] — Specs-to-code bypasses building a shared design concept; the user never develops a theory of the code.
 - [[agent-evals]] — Evals operationalize the shared design concept: "design so quality is measurable" means the quality criteria are part of the shared concept
 - [[agent-quality-engineering]] — The quality engineering thread treats the shared design concept as infrastructure: quality must be designed in from day one
-- [[shared-understanding]] — The team-level model that the shared design concept supports
+- [[shared-understanding]] — Now merged above as the team-level counterpart
 - [[geoffrey-litt]] — Distinguishes code-level theory from team-level shared understanding
 
 ## Thread

@@ -29,8 +29,7 @@ tags: [author, youtube, graphrag, rag, ai-education]
 
 ## Related
 - [[memgraphrag]] — Video source
-- [[hipporag]] — Covered in RAG 3.0 playlist
-- [[lightrag]] — Covered in RAG 3.0 playlist
+- [[graphrag-baselines]] — Covered in RAG 3.0 playlist (HippoRAG, LightRAG)
 - [[graphrag-quality-problems]] — Video explains all three deficiencies visually
 
 ## Sources

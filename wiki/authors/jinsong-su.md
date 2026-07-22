@@ -25,7 +25,7 @@ tags: [author, graphrag, rag, nlp, multi-agent]
 
 ## Related
 - [[memgraphrag]] — Corresponding author
-- [[hipporag]] — Co-author
+- [[graphrag-baselines]] — HippoRAG co-author
 - [[qinggang-zhang]] — Frequent co-author
 - [[zhishang-xiang]] — PhD student / co-author
 

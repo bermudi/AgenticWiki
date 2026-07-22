@@ -51,6 +51,10 @@ The natural objection: "But this leaves Pi users with no safety net at all if th
 
 Empirically, the enterprise users who complained to Zechner about YOLO mode "eventually understand and like, yeah, this makes total sense because you don't fucking know our environment at Infra." The friction is preserved at the *awareness* layer (the label) rather than the *mechanism* layer (a prompt they can disable).
 
+## Thread
+
+- [[tool-design-for-agents]] — Pi's no-permission-gates design is the sharpest counter-position to monoculture-driven tool design
+
 ## Related Concepts
 
 - [[deliberate-friction]] — the general principle; YOLO mode is its sharpest security-domain articulation

@@ -79,6 +79,23 @@ Ontology Layer (M_onto)  ←schema-instance alignment→  Fact Layer (M_fact)
 | **Evidence traceability** | Every fact → passage via M_pass | Debugging, trust, citation |
 | **Incremental evolution** | Agents continuously read/write memory | Graph co-evolves with memory |
 
+## Structural Unification via Memory-Guided Bridging
+
+Memory-guided bridging is MemGraphRAG's mechanism for overcoming structural fragmentation in the constructed knowledge graph. It uses the Three-Layer Global Memory to identify and merge equivalent entities across disconnected subgraphs.
+
+### Problem: Structural Fragmentation
+
+Independent chunk-level extraction causes entity duplication (same real-world entity as different nodes, e.g., "Newton" vs "Isaac Newton"), disconnected subgraphs that block multi-hop traversal, and missing global coreference resolution.
+
+### Two Bridging Mechanisms
+
+1. **Type-based bridging** — Link distinct entities if they share a high-level category classification in the Ontology Layer (M_onto). Entities with the same stable schema type get connected, creating "semantic highways" for cross-document traversal.
+2. **Similarity-based bridging** — Link entities with high embedding similarity, even when type information is sparse. Cosine similarity on entity embeddings; edges added between entities exceeding a similarity threshold. Captures "weak connections" that type-based bridging misses.
+
+Bridging edges are added to the Fact Graph (G_fact) during the projection from Global Memory. Every bridging edge can be traced to its memory-layer justification (shared type or embedding similarity).
+
+> This section was merged from the standalone `memory-guided-bridging` page (2026-07-22). The original page described this mechanism as a separate concept; it is more properly a mechanism of the Three-Layer Global Memory itself.
+
 ## Comparison to Other Memory Architectures
 
 | System | Memory Structure | Cross-Layer Links | Conflict Resolution |
@@ -97,7 +114,6 @@ Ontology Layer (M_onto)  ←schema-instance alignment→  Fact Layer (M_fact)
 
 - [[memgraphrag]] — Parent framework
 - [[memory-based-multi-agent-system]] — Agents that operate on this memory
-- [[memory-guided-bridging]] — Uses M_onto schema types for bridging
 - [[graphrag-thematic-irrelevance]] — M_onto frequency filtering addresses this
 - [[graphrag-logical-inconsistency]] — M_fact + M_pass evidence grounding resolves this
 - [[graphrag-structural-fragmentation]] — M_onto schema types bridge this

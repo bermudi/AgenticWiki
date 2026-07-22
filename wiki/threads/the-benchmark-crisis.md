@@ -21,7 +21,7 @@ unaudited_marginal: 0
 
 # The Benchmark Crisis
 
-> The benchmarks developers rely on to choose coding models are unreliable. [[swe-bench-pro|SWE-bench Pro]], the industry standard, misgrades ~32% of trials, is contaminated by leaked solutions, and suppresses the self-verification behavior that makes strong models reliable. The result: models that look similar on leaderboards deliver wildly different results in practice. [[deepswe|DeepSWE]] (Datacurve, 2026) exposes the gap and proposes a fix — but the crisis runs deeper than any single benchmark. Seven axes of failure have been identified: contamination, verifier failure, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, and long-horizon maintainability — the last being the axis no benchmark can measure and the one that determines whether code survives.
+> The benchmarks developers rely on to choose coding models are unreliable. [[swe-bench-pro|SWE-bench Pro]], the industry standard, misgrades ~32% of trials, is contaminated by leaked solutions, and suppresses the self-verification behavior that makes strong models reliable. The result: models that look similar on leaderboards deliver wildly different results in practice. [[deepswe|DeepSWE]] (Datacurve, 2026) exposes the gap and proposes a fix — but the crisis runs deeper than any single benchmark. Eight axes of failure have been identified: contamination, verifier failure, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, long-horizon maintainability, and inference-layer accuracy degradation — the last being the axis no benchmark can measure and the one that determines whether code survives.
 
 > [!note] Marginal: The Maintainability Gap
 > [[dex-horthy|Dex Horthy]] names a dimension no benchmark in this thread measures: **does this model write code that makes the codebase more or less maintainable over 3–6 months?** SWE-bench-style tasks train on "here's a commit, here's an issue, reproduce the fix" — and the cost function of bad architecture can't be evaluated by a unit test; it surfaces months later as an unmaintainable ball of spaghetti. The newer FrontierCode/Marathon maintainability benchmarks (two-layer model review: functional-equivalence judge + code-quality judge) are better but, in Dex's view, still insufficient. This is the seventh crisis axis alongside contamination, verifier failure, prompt distortion, environment evolution, horizon mismatch, and cost-blind scoring: **no benchmark captures long-horizon maintainability**, which is exactly the axis the [[dark-factory|dark factory]] fails on. See [[dex-horthy-agentic-engineering]]. **This marginal is now developed into a full section** — "The Seventh Axis: Long-Horizon Maintainability" below — using a subsequent "AI that Works" episode that reinforces the same theme (benchmark generations, the RL training constraint, and the velocity framework). The specific 20-feature evolving-codebase benchmark proposal originates from Dex's earlier interview, not the Boundary video — see below. The full section attributes claims to the video/discussion, not to named speakers, because the multi-speaker transcript lacks per-line speaker labels.
@@ -30,11 +30,16 @@ unaudited_marginal: 0
 
 The AI coding ecosystem has a measurement problem. The benchmarks that inform model selection, research direction, and developer trust are systematically unreliable. This isn't a minor calibration issue — it's a structural failure that hides real capability differences and rewards the wrong things.
 
-The crisis has three dimensions:
+The crisis has eight dimensions:
 
 1. **Contamination**: Benchmark tasks leak into training data, or solutions are physically available to agents during evaluation. Models recall rather than reason.
 2. **Verifier failure**: Graders accept wrong answers and reject right ones at rates that make small score differences meaningless.
 3. **Prompt distortion**: Benchmark instructions suppress the behaviors (self-verification, exploration) that make strong models reliable in practice.
+4. **Environment evolution**: The same task in production looks different than the version the benchmark evaluated. Static snapshots miss the dynamic reality of deployment.
+5. **Horizon mismatch**: Benchmarks measure step accuracy, which systematically understates the quantity that determines economic value — horizon length. Two models that look identical at the step level can have very different horizon lengths.
+6. **Cost-blind scoring**: Benchmarks rank by correctness and ignore cost, hiding that per-solve cost is rising across model generations.
+7. **Long-horizon maintainability**: No benchmark captures whether code will be maintainable over 3–6 months — the axis that determines whether code survives.
+8. **Inference-layer accuracy degradation**: The same model produces different accuracy scores depending on which inference provider serves it, introducing a hidden variable into every benchmark score.
 
 The consequence: developer experience and benchmark rankings diverge. Models that cluster in a narrow score band on [[swe-bench-pro|SWE-bench Pro]] (30-point spread) separate into wide, ordered gaps on [[deepswe|DeepSWE]] (70-point spread) — gaps that match what developers see every day.
 

@@ -58,7 +58,7 @@ Unlike post-hoc entity resolution:
 
 - [[memgraphrag]] — Parent framework
 - [[three-layer-global-memory]] — Ontology Layer provides type taxonomy for bridging
-- [[memory-guided-bridging]] — Detailed bridging mechanisms
+- [[three-layer-global-memory]] — Detailed bridging mechanisms (merged)
 - [[memory-based-multi-agent-system]] — Conflict Resolution Agent uses bridging
 - [[personalized-pagerank-rag]] — Bridging edges improve PPR propagation
 - [[graphrag-thematic-irrelevance]] — Sister deficiency

@@ -88,8 +88,8 @@ HippoRAG [19] also uses PPR over a knowledge graph for retrieval. Key difference
 
 - [[memgraphrag]] — Parent framework
 - [[three-layer-global-memory]] — Provides the graph structure PPR operates on
-- [[memory-guided-bridging]] — Bridging edges improve PPR connectivity
-- [[hipporag]] — Related associative-memory GraphRAG using PPR
+- [[three-layer-global-memory]] — Memory-guided bridging improves PPR connectivity
+- [[graphrag-baselines]] — HippoRAG: related associative-memory GraphRAG using PPR
 - [[graphrag-structural-fragmentation]] — Bridging + PPR together solve this
 
 ## Sources

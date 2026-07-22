@@ -22,7 +22,7 @@ tags: [author, graphrag, rag, knowledge-graph, multi-agent]
 
 ## Related
 - [[memgraphrag]] — Corresponding author
-- [[hipporag]] — Co-author (HippoRAG line of work)
+- [[graphrag-baselines]] — HippoRAG co-author (line of work)
 - [[jinsong-su]] — Frequent co-author and corresponding author on MemGraphRAG
 - [[zhishang-xiang]] — Co-author on MemGraphRAG and HippoRAG
 

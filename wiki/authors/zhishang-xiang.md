@@ -23,7 +23,7 @@ tags: [author, graphrag, rag, multi-agent]
 
 ## Related
 - [[memgraphrag]] — Co-first author
-- [[hipporag]] — Co-author
+- [[graphrag-baselines]] — HippoRAG co-author
 - [[chuanjie-wu]] — Co-first author (equal contribution)
 - [[jinsong-su]] — Advisor / corresponding author
 - [[qinggang-zhang]] — Co-author

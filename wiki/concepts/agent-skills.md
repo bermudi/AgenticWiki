@@ -271,6 +271,17 @@ The simplest eval pipeline for a skill: run the agent with the skill loaded, run
 
 The [Agent Skills open standard](https://agent-skills.io) proposes an `eval.json` format that packages test cases (prompt + expected output + assertions) alongside the skill.
 
+### Skill Efficacy: The Popularity Trap
+
+> [!note] Merged from the standalone `skill-efficacy` page (2026-07-22)
+
+A skill's popularity (GitHub stars, viral adoption) is not a reliable proxy for whether it makes an agent perform better. [[kun-chen|Kun Chen]] argues the agent ecosystem is replicating a pattern where widely shared skills become perceived as good because they are widely shared, not because they have been rigorously tested. Two risks:
+
+1. **Security risk** — Skills can instruct agents to run arbitrary code on the user's machine. A popular skill that exfiltrates API keys is a mass-exploitation surface.
+2. **Performance risk** — A skill can degrade the agent's output while still costing more tokens.
+
+Kun cites the "Android Skills" repository (177,000 GitHub stars) as a caution: evaluating one skill with Program Bench found the agent used 5% more tokens and produced worse results. The star count measures popularity, not efficacy. His rule: do not install a skill that claims to "magically make your agent perform better" unless it has published rigorous evidence.
+
 ### Skill Rot
 
 Skills that are no longer relevant still consume space in the progressive disclosure index (their descriptions). Rodrigues recommends periodically checking whether skills are still being loaded by users. If a skill hasn't matched in a long time, retire it. In CI, treat skills like any other artifact: keep only the ones needed for the specific project.

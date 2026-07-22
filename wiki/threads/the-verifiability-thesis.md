@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-17
+updated: 2026-07-22
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -28,6 +28,10 @@ sources:
   - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
+  - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
+  - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -87,6 +91,8 @@ Karpathy's car wash example crystallizes this: Opus 4.7 can refactor 100,000 lin
 [[vibe-coding|Vibe coding]] became possible in December 2024 because models crossed a threshold in their RL-trained domains. When the model is operating in circuits it was trained on (code generation, bug fixing), outputs "just come out fine." You stop correcting. You trust the system.
 
 But this only works on the peaks. Vibe coding the car wash problem would produce a confident, wrong answer. Vibe coding a code refactor works because code is one of the most heavily RL-trained domains in existence.
+
+[[david-cramer|David Cramer]] sharpens the boundary: vibe coding produces *working* code, not necessarily *good* code, and the liability asymmetry determines where it's responsible. "If I ship something that has massive vulnerabilities in Sentry, that could cause the company to disappear. If you ship something that [messes] up the chatbot, what happens? Nothing." Vibe coding works when the cost of failure is zero (personal projects, demos, chatbots) and fails when the cost is nonzero (production software, security-sensitive systems). Karpathy's December 2024 capability threshold made vibe coding *possible*; Cramer identifies the domain where it's *responsible*. See [[vibe-coding]] → Cramer on Vibe Coding for Production Software.
 
 ### 5. Agentic Engineering Manages the Boundary
 
@@ -201,6 +207,11 @@ The results confirm the thesis's predictions about capability separation. On [[s
 
 DeepSWE also reveals a prompting dimension: [[swe-bench-pro|SWE-bench Pro]]'s prompt tells agents not to write tests, suppressing the self-verification behavior that strong models naturally exhibit. On DeepSWE (neutral prompt), Opus 4.7 and GPT-5.4 write tests on >80% of runs. On [[swe-bench-pro|SWE-bench Pro]], every model drops to 3-28%. The benchmark's prompt doesn't just fail to measure — it actively distorts the capability it claims to evaluate.
 
+[[daniel-han|Daniel Han]]'s AI Engineer talk corroborates and extends the audit. He expresses shock at SWE-bench Pro's verification methodology — calling a language model to verify whether another language model's answer is correct — and at the git history leakage problem ("obviously the model will cheat"). He also surfaces a harness-dependent accuracy confound: using Claude Code on SWE-bench Pro yields 40%, but a specialized harness yields 50%; Gemini CLI yields 20%, a controlled environment yields 40%. The benchmark score is not just a function of the model — it's a function of the harness.
+
+> [!warning] The Meta-Problem: Even Benchmarks Designed to Fix Benchmarks Disagree
+> Han also discusses the competing Frontier Code benchmark from Cognition, which claims DeepSWE's false positive rate is 44.9% (vs. DeepSWE's own claim of 0.3%). The meta-problem: even the benchmarks designed to fix benchmarks disagree with each other. The verifiability thesis predicts that unreliable verification produces meaningless scores; the benchmark-disagreement problem shows this operates recursively — the *meta-verifier* (the benchmark that checks the benchmark) is itself unreliable. This is the layered bootstrap problem instantiated at the evaluation layer.
+
 ### For [[code-as-agent-harness|Code as Agent Harness]]: The Thesis Applied to the Harness Itself
 
 The [[code-as-agent-harness]] survey (Ning et al., 2026), organized into the [[harness-interface|harness interface]] (code for reasoning, acting, environment modeling), [[harness-mechanisms|harness mechanisms]] (planning, memory, tool use, control), and [[harness-engineering|scaling the harness]] (multi-agent orchestration), extends the verifiability thesis from model capabilities to the harness infrastructure. The survey's open problems — harness-level evaluation, semantic verification, self-evolving harnesses — are consequences of the verifiability thesis operating recursively:
@@ -228,10 +239,13 @@ Karpathy speculates that the verifiability thesis may have an expiration date. I
 
 But "the labs haven't done it yet" has been true for years, and the domains where verification is inherently hard (aesthetics, common sense, judgment) may resist RL training indefinitely. The thesis may describe not just the current transition but a durable structural property of how these systems work.
 
+> [!note] Extension: The Training-Time Verifiability Constraint
+> The causal chain's long-arc uncertainty assumes the bottleneck is *lab choice* — labs could train on taste but haven't. The "AI that Works" benchmark episode (Boundary, 2026) identifies a harder bottleneck: **models can only be RL-trained on what you can verify.** If you cannot build a judge good at judging code quality, the knowledge of code quality will never enter the weights. RL training requires verifiable reward signals run millions of times; code quality and architectural intuition have feedback cycles of weeks to months — too long and too lossy to serve as RL reward signals. This is the same verifiability gap, but at the *training* layer rather than the *inference* layer: code quality is doubly trapped because you can't verify it at deployment (no benchmark catches it) and can't train it into weights (no RL verifier). The long-arc question is not just "will labs choose to train on taste?" but "can taste even *be* verified at RL-training scale?"
+
 ## Tensions
 
 > [!warning] Can Taste Become Verifiable?
-> Karpathy is uncertain whether taste and judgment will remain permanently human or whether they're simply the next RL frontier. "There's nothing fundamental that's preventing it. It's just the labs haven't done it yet, almost." If taste enters the RL training distribution, the human lever shrinks. The wiki's current position (from [[the-human-lever]]) is that taste is an enduring human domain. Karpathy keeps the door open to it being automated. This is a live tension: is the verifiability thesis a permanent map of the territory, or a snapshot of a moving frontier?
+> Karpathy is uncertain whether taste and judgment will remain permanently human or whether they're simply the next RL frontier. "There's nothing fundamental that's preventing it. It's just the labs haven't done it yet, almost." If taste enters the RL training distribution, the human lever shrinks. The wiki's current position (from [[the-human-lever]]) is that taste is an enduring human domain. Karpathy keeps the door open to it being automated. This is a live tension: is the verifiability thesis a permanent map of the territory, or a snapshot of a moving frontier? The training-time verifiability constraint (see Long Arc section) adds a harder dimension: even if labs *want* to train on taste, they may not be able to build verifiers good enough to generate RL reward signals at scale.
 
 > [!note] Departure: Deliberate Verifiability Design — From Passive Exploitation to Active Engineering
 > The thesis describes verifiability as a *given* property of domains: code is verifiable, aesthetics is not. [[ears-notation|EARS]] and [[property-based-testing-as-spec|PBT-as-spec]] (from [[al-harris|Al Harris]], [[kiro|Amazon Kiro]]) introduce a different move: **deliberately restructuring the artifact to make it verifiable.** EARS transforms requirements into structured natural language that downstream tools (PBT) can verify mechanically, with the LLM outside the verification loop. PBT translates EARS requirements into correctness properties that property-based tests can falsify. This isn't passive exploitation of existing verifiability — it's *engineering the artifact for verifiability*. The thesis's causal chain (verifiability → RL → capability) implies verifiability is a fixed property of the domain. The EARS+PBT pipeline implies it's a *designable property of the artifact*. If you can make your requirements machine-parseable, you extend the verifiable domain without waiting for the labs to train on it. This is potentially a significant extension of the thesis: verifiability isn't just inherited from the domain — it can be constructed.
@@ -244,6 +258,9 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 
 > [!note] Boundary Condition: Unverifiable Guidance Still Helps Simple Tasks
 > The [[context-files|Lulla et al. (2026)]] finding — that AGENTS.md files reduce median runtime by 28.64% and output tokens by 16.58% on small-scope PRs — introduces a boundary condition on the verifiability thesis. The thesis predicts that unverified domains stagnate. Yet unverified context files (their quality is not systematically verifiable) still improve task efficiency. The mechanism is **guidance efficiency**: simply telling the agent where things are and what conventions to follow reduces search time, even if the guidance itself isn't verifiably correct. This operates at the information-theoretic level (reduced entropy in the agent's state space), not the RL training level. The thesis describes model capability evolution; guidance efficiency describes task execution in a single session. They measure different things and both can be true simultaneously.
+
+> [!warning] Extension: Harness Monoculture as a Verifiability-Distribution Problem
+> [[harness-monoculture]] (Zechner, Ronacher, 2026) adds a structural threat to the causal chain that the thesis's "lab choices shape the distribution" section doesn't fully capture. When frontier models are RL-trained predominantly against a single dominant proprietary harness ([[claude-code|Claude Code]]), that harness's leniency — including its slop — becomes baked into model weights as a de-facto specification. Zechner's framing: Claude Code's sloppy acceptance is "a stochastic terrorism attack on all other software products." The verifiability thesis says capability clusters around what the labs choose to train on; harness monoculture adds that the *training harness itself* distorts which capabilities develop. Models trained against a lenient harness never learn strict tool-call formatting ([[grammar-constrained-sampling]]), regress on use cases that deviate from the dominant harness's workflows, and lose invocation share for custom MCP tools not in training. The empirical ceiling: OpenClaw burns ~$1.3M/month in Claude Code tokens on a team of three — the token-maxing RL direction that also happens to sell more tokens. This is the thesis's "lab choices shape the distribution" operating as an incentive-alignment problem: the vendor's revenue model and the RL training direction reinforce each other.
 
 > [!note] Extension: Functional Collapse as the Multi-Agent Instantiation of the Thesis
 > The [[multi-agent-illusion]] audit (Jwalapuram, Lin et al., 2026) is the strongest empirical anchor for the thesis in the multi-agent domain. Three connections generalize the thesis to coordination:
@@ -307,3 +324,7 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/2502.06975.md` — Pink et al. (MPI for Software Systems + EarthDynamics.ai + UT Austin, arXiv 2502.06975, Feb 2025). Source for the "Episodic Memory Is the Complement the Causal Chain Doesn't Track" departure: single-shot episodic memory is the property RL structurally cannot provide (RL needs many examples); consolidation (Complementary Learning Systems theory) is the bridge transferring episodic instances into parametric memory where RL can act. Completes the causal chain by adding the fast (single-shot) memory system alongside the slow (parametric, RL-trained) one.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Memory Mutation as a Verifiability Domain" extension: dreaming's production guardrails (versioning+provenance, hashing/concurrency, tiered permissions, portability) as verifiability engineering applied to the memory layer — the four harness properties (executable/inspectable/stateful/governed) instantiated at the memory-mutation layer; the "reinventing databases" tension as the verifiability frontier expanding into memory infrastructure.
 - `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's skills set: the `code-review` subagent verifies against the original spec and coding standards, a verification channel (conformance to intent) distinct from test-pass. Source for the spec/standard-conformance Extension callout.
+- `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026): the training-time verifiability constraint — models can only be RL-trained on what you can verify, so code quality knowledge can't enter weights without a verifier. The training-time complement to Karpathy's inference-time thesis. Multi-speaker source; speaker attribution not verified against audio.
+- `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's AI Engineer talk: DeepSWE's reduced FP/FN rates, the 70-point model spread, SWE-bench Pro's LLM-as-verifier problem, git history leakage, harness-dependent accuracy, and the competing Frontier Code benchmark's critique of DeepSWE.
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on the liability asymmetry: vibe coding works for chatbots and personal tools but not for production software with security implications.
+- `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — Zechner's empirical anchors for harness monoculture: OpenClaw ~$1.3M/month token burn, token-pricing trajectory suspicion, open-weight anti-monoculture direction (Antirez's ds4).

@@ -20,7 +20,7 @@ MemGraphRAG consists of two collaborative modules:
 - **Three-Layer Global Memory** — Ontology Layer (schemas with extraction frequencies), Fact Layer (concrete entity-relation triples), Passage Layer (original text segments for evidence grounding)
 - **Multi-Agent Group** — Extraction Agent, Conflict Detection Agent, Conflict Resolution Agent operating on shared memory
 - **Hierarchical Indexing Graph** — Three interconnected views: Semantic Ontology Graph, Fact Graph, Source Evidence Graph
-- **Memory-Guided Bridging** — Type-based and similarity-based edges connect fragmented subgraphs ([[memory-guided-bridging]])
+- **Memory-Guided Bridging** — Type-based and similarity-based edges connect fragmented subgraphs ([[three-layer-global-memory#Structural Unification via Memory-Guided Bridging]])
 
 ### 2. Memory-Guided Online Retrieval (Online)
 - **Multi-Layer Memory Filtering** — Parallel retrieval from all three memory layers
@@ -109,7 +109,7 @@ Three interconnected views derived from Global Memory:
 
 - [[three-layer-global-memory]] — Core memory architecture
 - [[memory-based-multi-agent-system]] — Agent architecture
-- [[memory-guided-bridging]] — Structural unification mechanism
+- [[three-layer-global-memory]] — Memory-guided bridging is now documented here
 - [[personalized-pagerank-rag]] — Retrieval algorithm
 - [[graphrag-thematic-irrelevance]] — Problem: thematic irrelevance
 - [[graphrag-logical-inconsistency]] — Problem: logical inconsistency

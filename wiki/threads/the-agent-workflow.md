@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-18
+updated: 2026-07-22
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-ai-coding-for-real-engineers.md
@@ -216,6 +216,9 @@ The key workflow implication: **don't treat rule-following as a model capability
 
 This shifts the workflow design burden from "how do we get the model to follow instructions?" to "which constraints can we convert to executable checks?" — a significantly more tractable engineering question.
 
+> [!note] Marginal: The Training-Time Verifiability Constraint
+> [[verifiability|Karpathy's verifiability framework]] has an inference-time half (you can only automate what you can verify at deployment) and a training-time half. The "AI that Works" benchmark episode (Boundary, 2026) articulates the training-time complement: **models can only be RL-trained on what you can verify.** RL training requires reward signals run millions of times; code quality and architectural intuition have feedback cycles of weeks to months — too long and too lossy to serve as RL reward signals. The result: models keep getting better at anything with good feedback (solving problems, performance engineering) but stagnate on maintainability and architectural judgment. Code quality is doubly trapped: you can't verify it at deployment (no benchmark catches it) and you can't train it into weights (no RL verifier). This is why the [[verification-loop]] can enforce pass/fail correctness but cannot enforce *quality* in the architectural sense — the model was never trained to optimize for it.
+
 > [!note] Marginal: Research/Plan/Implement — and Its Retrospective
 > [[dex-horthy|Dex Horthy]]'s [[research-plan-implement|RPI workflow]] is a concrete, widely-adopted instantiation of the HITL→AFK cycle with [[context-engineering|intentional compaction]] at each handoff: research (read the codebase into a compressed doc) → design (current/desired state, human-in-the-loop) → plan → implement, each phase in a fresh context window. The retrospective matters for this thread: after a year, Dex concluded the detailed plans were *anti-leverage* (they doubled review surface) and should be treated as [[plan-disposability|disposable tactical artifacts]]. The reconciliation with the plan-heavy advocacy below: planning is leverage when it produces a steerable, disposable artifact (design questions), and anti-leverage when it specifies every line in advance. See [[dex-horthy-agentic-engineering]].
 
@@ -243,11 +246,20 @@ Frontend feature development is the hardest case for plan-heavy because stateful
 
 Context management is the operational challenge nobody anticipated. The [[smart-zone-dumb-zone]] heuristic describes the problem: LLMs reason best in the first ~100k tokens of context. Beyond that, attention degrades quadratically. The model starts ignoring constraints, hallucinating APIs, and losing track of the design concept. The design of [[context-files|context files]] (AGENTS.md, CLAUDE.md) directly impacts this — empirical evidence shows well-designed, minimal context files reduce reasoning overhead while verbose, auto-generated ones increase it by 14–22%.
 
+> [!note] Marginal: Two Budgets, Not One
+> [[dex-horthy|Dex Horthy]] splits context engineering into two budgets most builders conflate: the **information budget** (the familiar one — RAG chunks vs. dumping the whole book into context) and the **instruction budget** (the overlooked one — models follow roughly 150–250 instructions before attention spreads too thin). Conflicting instructions are especially expensive because the model must compute that it should ignore the earlier path. When both the old and new instructions sit far enough back in the window to be only half-attended, the odds the model honors a 100,000-token-old instruction drop sharply. The workflow implication: manage instruction count and deconfliction with the same ruthlessness as information selection.
+
 The fix isn't bigger context windows — it's **ruthless context hygiene**:
 
 - **The Memento Strategy**: Instead of summarizing a long session (which preserves the "vibes" but loses precision), clear the context and start fresh with minimal, high-quality context: the current file, relevant interfaces, and the specific task.
 - **Persistent operational context**: Some learnings should survive across sessions. [[steering-docs|Steering docs]] (Kiro's branded equivalent of [[context-files]]) capture operational notes — commit style, coverage minimums, hard-won CDK flags — and surface them in the system prompt at every turn. This is [[evolving-context]] operationalized: the agent improves its own operating context over time rather than re-learning the same gotchas each session.
 - **Deep modules as context boundaries**: A well-designed deep module is naturally context-complete — the agent needs the interface, not the entire call graph.
+
+> [!note] Marginal: Progressive Disclosure at the Memory Layer
+> [[kun-chen|Kun Chen]] operationalizes progressive disclosure beyond tools and skills into the agent's memory itself: a **global memory file** shared across all agent harnesses via symlink, kept deliberately small because it is loaded into every session's system prompt; a **project-level memory file** that grows as the agent is corrected; and **skills** extracted from project memory when sections are only needed for certain tasks (e.g., end-to-end testing instructions). This is progressive disclosure at the memory layer: global context is always present, project context is nearby, and skill context is gated by task relevance. It is the same tiered-disclosure pattern [[agent-skills]] applies to procedural knowledge, applied to the agent's operational knowledge.
+
+> [!note] Marginal: Context Rot and the Monitor Hook
+> [[gsd-core|GSD Core]] names a failure mode most workflows don't explicitly track: **context rot** — the quality degradation that accumulates as an AI fills its context window with conversation history. The model's attention is finite; as the window fills, the signal-to-noise ratio drops, earlier content receives less attention, and output quality quietly degrades. The model does not warn you when this happens. Context rot is why an AI that produces excellent results on a fresh task produces mediocre results on the tenth task in the same session — the model has not changed, its context has degraded. GSD Core ships a **context monitor hook** that watches context usage in real time and injects warnings: >35% normal, ≤35% WARNING (wrap up), ≤25% CRITICAL (save state and start new session). This makes context degradation visible — the model won't warn you, but the hook will. The [[fresh-context-subagents|fresh-context subagent architecture]] (spawn specialist agents with clean context windows for each heavy task) is the structural defense against context rot.
 
 [[mario-zechner|Mario Zechner]] designed [[pi]] around this insight. Pi's minimal core (four tools: `read`, `write`, `edit`, `bash`) and session-based model make it easy to reset context and stay in the Smart Zone. The design philosophy — [[malleable-agents|malleability]] — means the agent itself can create new tools mid-session to reduce its own context load.
 
@@ -297,11 +309,21 @@ MCP (Model Context Protocol) made it easy to add tools, which created a tool-blo
 
 ## The Evolving Context Frontier
 
-[[evolving-context]] — continual learning in token space — is the major unsolved problem in agent workflows. Currently, all context management is hand-tuned heuristics: "offload after N turns," "spawn sub-agents for these task types." The emerging vision is agents that improve their own context over time:
+[[evolving-context]] — continual learning in token space — is the major unsolved problem in agent workflows. Currently, all context management is hand-tuned heuristics: "offload after N turns," "spawn sub-agents for these task types." The emerging vision is agents that improve their own context over time. Lance Martin's original three categories remain the core:
 
 - **Task-specific prompt evolution**: Reflect over agent trajectories, score outcomes, and iteratively refine prompts (a paper Lance references as "Jeepa" from DSPy/Omar).
 - **Memory and preference learning**: Accumulate preferences across sessions — coding style, PR conventions, durable vs. temporary preferences. [[lance-martin|Lance Martin]]'s Claude Diary is a crude prototype. The broader systems architecture of agent memory — representation, extraction, retrieval, maintenance — is surveyed as a first-class data-management problem in [[agent-memory-systems]]. The cognitive-science complement — what *types* of memory an agent should have, and which properties distinguish them — is [[episodic-memory-for-agents]], which argues that episodic memory (single-shot, instance-specific, contextualized) is the missing piece for long-horizon agents.
 - **Skill learning**: When an agent discovers a reusable SOP, capture it as a skill file for future tasks (Let paper).
+
+> [!note] Marginal: Five Extensions Beyond Martin's Three Categories
+> Recent research extends evolving context into substrates Lance Martin's original taxonomy doesn't cover:
+> 1. **Harness self-evolution** ([[self-harness]], Zhang et al. 2026): the agent's harness surface (system prompt, tools, runtime policies, verification rules) is the evolving object. Bounded edits are proposed from verifier-grounded failure signatures, regression-tested on held-out splits the proposer never sees, and only promoted if they improve without degrading. Gains of 14.2–21.4 pp on Terminal-Bench-2.0.
+> 2. **Harness recursive instantiation** ([[recursive-agent-harness]], Lumer et al. 2026): instead of evolving one harness, spawn fresh harness instances per sub-task and aggregate results. The parent writes executable code that instantiates subagent harnesses in parallel. Gains of 9.6 pp on Oolong-Synthetic (71.75% → 81.36%).
+> 3. **Schema evolution** ([[executable-memory]], Bojie Li 2026): the LLM writes its own dataclasses, domain partitioning, and constraints. The user model is a directory of human-readable Python files, regenerated from the full fact corpus. Same data, same model, same question — 99% accuracy with typed Python + interpreter vs. 6% with text + retrieval.
+> 4. **Store compression** ([[memrefine]], Kim et al. 2026): a pairwise LLM judge decides what stays in the memory store when it outgrows a fixed size budget. LLM judgment decisively outperforms rule-based heuristics at tight budgets where the hard cases are semantically related memories.
+> 5. **Memory evolution provenance** ([[evomem]], Xu et al. 2026): each non-additive memory update is recorded as a patch with pre-state, post-state, rationale, and triggering evidence — the database write-ahead log applied to LLM memory.
+>
+> All five share the **decoupling of storage and representation**: the append-only log is storage, the structured view is regenerated from it, and the regenerated view is auditable as a diff. This is evolving context operating at the architectural level, not just the prompt level.
 
 > [!note] Departure: A Third Mode Beyond HITL and AFK
 > [[eric-davis|Davis]] & [[katrina-schleisman|Schleisman]] (2024) argue the two-phase model (HITL design + AFK execution) inherits a blind spot from how AI is built: systems are "mission-focused" and "lay inert once the task is completed." They propose a structurally distinct **reflective after-action mode** — modeled on the brain's default-mode network — in which the agent uses downtime to recognize patterns in past episodes and simulate future ones, rather than executing any task. This reframes the reflection loops above (Claude Diary, skill capture) not as a task variant within AFK but as a *third mode*: HITL (human designs) → AFK (agent executes) → **reflective consolidation** (agent reviews and consolidates past episodes). It also offers a structural answer to [[the-slop-problem]]'s "agents don't feel pain" — a default-mode loop is the missing feedback mechanism by which an agent could recognize recurring failure patterns across episodes. See [[episodic-memory-for-agents]] for the full architecture and the consolidation operation, and [[afk-agent]] for how AFK/overnight agents are recast by this framing. This reflective-consolidation mode now has a named production instantiation: [[dreaming]] (Anthropic) — a batch, out-of-band process in which reviewing agents survey a fleet's transcripts and consolidate memory, the token-space realization of the CLS consolidation operation. See [[lamis-mukta]].
@@ -457,6 +479,13 @@ The Ralph Loop is a concrete instantiation of the HITL/AFK cycle: Phase 1 (Requi
 - **"Reversible without embarrassment"**: Safety heuristic that operationalizes [[deliberate-friction]] for autonomous operation boundaries.
 
 See [[chris-parsons]] for full details, and [[ralph-loop]] for the complete mechanism.
+
+> [!note] Marginal: Skill Design Craft and the Skill Hell Diagnosis
+> [[matt-pocock|Pocock]]'s "Building Great Agent Skills" talk (AI Engineer World's Fair 2026) introduces a four-part skill design checklist — trigger, structure, steering, pruning — that this thread's workflow depends on but doesn't itself describe. The checklist's steering component ([[leading-words]]) already appears in the "In-Skill Steering" note above. The broader contribution is the diagnosis: **[[skill-hell|skill hell]]** — the situation where skills proliferate faster than evaluative capacity, making it impossible to distinguish well-designed skills from poorly-designed ones. The structural parallel to [[the-slop-problem|slop]] is direct: skill hell is the skills-flavored instance of the same supply-outpacing-evaluative-capacity pattern.
+>
+> The organizational form is the more durable problem. Individual developers can escape skill hell by developing taste; organizations have to develop *process* — the capacity to author, evaluate, and curate skills as a team. [[kun-chen|Kun Chen]] sharpens the point: popularity is not a proxy for efficacy. The "Android Skills" repository has 177,000 GitHub stars, but a Program Bench evaluation found one skill made the agent use 5% more tokens and produce worse results. The stars measure viral spread, not measured benefit. His rule: do not install a skill that claims to "magically make your agent perform better" unless it has published rigorous eval evidence.
+>
+> This connects back to the workflow: the AFK phase depends on skills being good. When skills are bad — over-prescriptive, full of no-ops, accumulating sediment — the loop compounds slop instead of compounding capability. A loop with no reusable skills inside it is just a while-true around a stranger. A loop that calls a library of sharp, tested, named skills is a system that compounds.
 
 ## The Adoption Learning Curve
 

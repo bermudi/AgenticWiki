@@ -101,7 +101,7 @@ A model that "succeeds no matter the cost" — force-pushing, deleting files, sp
 - [[discourse-slop]] — Shared incentive root (token-selling); different layer (narrative vs. weights)
 - [[the-slop-problem]] — Code-quality symptom vs. propagation mechanism
 - [[model-routing]] / [[intelligence-tier-routing]] — Routing across models is complicated by monoculture: the "cheapest capable model" may regress precisely because it was RL'd off-distribution
-- [[context-files]] / [[agent-skills]] — Format specs (AGENTS.md, skills YAML) are the front line of effect #2 (spec pollution)
+- [[yolo-mode-philosophy]] — Pi's refusal to ship incomplete security half-measures; the sharpest counter-position to monoculture-driven security features
 
 ## Sources
 

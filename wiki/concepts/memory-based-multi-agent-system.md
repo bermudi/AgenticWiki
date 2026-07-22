@@ -61,7 +61,7 @@ The Multi-Agent Group and Global Memory co-evolve with the Knowledge Graph G:
 
 - [[memgraphrag]] — Overall framework
 - [[three-layer-global-memory]] — The shared memory substrate
-- [[memory-guided-bridging]] — Conflict Resolution Agent leverages memory for structural unification
+- [[three-layer-global-memory]] — Memory-guided bridging for structural unification
 - [[graphrag-logical-inconsistency]] — Multi-agent system directly addresses this deficiency
 - [[multi-agent-illusion]] — Contrast: MemGraphRAG is an *engineered* multi-agent system (like expert-mas), not an automated MAS
 

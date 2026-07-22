@@ -125,6 +125,7 @@ Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline
 - [[chris-parsons]] — "Reversible without embarrassment" as a practical safety backpressure heuristic
 - [[blind-panic]] — Blind panic's step budget exhaustion is a form of built-in backpressure: the environment stops the agent when it runs out of allowed moves
 - [[dynamic-trust]] — Dynamic trust scores as soft backpressure: low-trust outputs are mechanically deprioritized before they influence decisions
+- [[yolo-mode-philosophy]] — The counter-model: no permission gates at the prompt boundary, force real security thinking at the container boundary
 
 - [[agent-quality-loop]] — The quality loop uses backpressure as a flywheel mechanism
 - [[wide-events]] — Wide events serve as backpressure by making invisible degradation visible

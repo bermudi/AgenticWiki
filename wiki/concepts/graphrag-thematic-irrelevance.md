@@ -49,7 +49,7 @@ Removing 40% of low-frequency triples *improves* accuracy, demonstrating that a 
 - [[three-layer-global-memory]] — Ontology Layer frequency filtering is the mechanism
 - [[graphrag-logical-inconsistency]] — Sister deficiency
 - [[graphrag-structural-fragmentation]] — Sister deficiency
-- [[graphrag-recall-relevance-tradeoff]] — Thematic irrelevance drives the relevance drop
+- [[graphrag-quality-problems]] — Thematic irrelevance drives the recall-relevance trade-off
 
 ## Thread
 

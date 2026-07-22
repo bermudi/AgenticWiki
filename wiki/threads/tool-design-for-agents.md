@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-07-15
+updated: 2026-07-22
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -21,6 +21,11 @@ sources:
   - raw/2512.08296.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
+  - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
+  - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
+  - raw/2602.11988v1.md
+  - raw/agents-md-standard.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -52,6 +57,8 @@ unaudited_marginal: 0
 
 > [!note] Departure: The Training Harness Is Now a Tool-Reliability Factor
 > This thread argues that tool reliability is bounded by tool design (interface contracts, output formats, minimalism). [[mario-zechner|Mario Zechner]] identifies an independent variable the thread did not account for: **the harness the model was RL-trained on.** A perfectly-designed, strict tool — [[pi]]'s edit tool, which validates tool calls against their schema — exhibits a ~20% failure rate on newer Anthropic models, because those models were (hypothesized) trained against [[claude-code|Claude Code]]'s lenient harness and never received a negative signal for emitting malformed calls. The defect is invisible to Claude Code (lenient) and fatal to Pi (strict). See [[grammar-constrained-sampling]] for the decoding-level mechanism and [[harness-monoculture]] for the ecosystem thesis: training on one dominant lenient harness propagates as (a) tool-call corruption in stricter harnesses, (b) spec pollution (third parties must accept the dominant harness's slop), (c) capability regression off the trained path, and (d) custom-tool ([[mcp|MCP]]) invocation share loss. Tool design is still necessary — clean interfaces still bound the failure surface — but it is no longer sufficient: a tool's observed reliability now depends on whether its strictness matches the leniency the model was trained to expect.
+>
+> The cost data makes the monoculture concrete: Peter Steinberger's [[claude-code|Claude Code]]-based [[opencode|OpenClaw]] burns ~$1.3M/month in tokens on a team of three — the empirical ceiling for token-maxing monoculture in mid-2026. Meanwhile, Antirez's `ds4` inference engine (C, custom DeepSeek V4) runs on a 128GB laptop and "could probably handle 60 to 70% of the issues" Pi handles with frontier models. The open-weight direction is the anti-monoculture escape: local inference on cheap hardware sidesteps both the lenient-harness lock-in and the token-seller incentive structure. See [[yolo-mode-philosophy]] for Pi's refusal to ship incomplete security half-measures — the sharpest counter-position to monoculture-driven tool design.
 
 ## The Core Thesis
 
@@ -166,6 +173,8 @@ This is a departure from the assumptions behind both CLI tools (single process, 
 
 This is a concrete instantiation of [[context-engineering]] principles — maximizing information-per-token density by having a dedicated system pre-answer the context questions the agent would otherwise search for. The context engine is the productized form of context engineering at organizational scale.
 
+The tool-design relevance of context engineering goes deeper than density. [[dex-horthy|Dex Horthy]]'s root definition frames context engineering as **deabstracting** the abstractions layered on top of the model — RAG, memory, agentic history, structured output are "all different ways to pass tokens into a model." He splits the problem into two budgets most builders conflate: an **information budget** (which facts to include) and an **instruction budget** (how many directives the model can follow before attention spreads too thin — roughly 150–250). The instruction-budget limit is the mechanism behind [[instruction-severity-inflation]] and a direct constraint on tool design: every tool that injects instructions into the context window competes for the same finite attention budget. Minimalist tools don't just reduce failure surface — they preserve the instruction budget for the instructions that matter.
+
 This is distinct from the tool design layers above. Where Zanie focuses on individual tool output, Armin on language/infrastructure, Mario on minimalism, and Louis on parallel management, the context engine addresses a *pre-processing* concern: **what context should the agent even see before it starts calling tools?**
 
 ### Why It's a Tool Design Problem
@@ -241,6 +250,12 @@ The result that LLM reflection is *worse than nothing* is particularly striking 
 
 ContextCov's evaluation provides empirical weight the thread previously lacked. The tool-design thesis — that better agent-facing tools produce better outcomes — now has a controlled experiment showing 21.3 percentage point improvement from deterministic tool feedback over passive instructions, and 38 points over LLM-based feedback.
 
+### Context Files: From Passive to Executable
+
+The [[context-files]] concept adds empirical depth to ContextCov's framing. Two concurrent studies (Gloaguen et al. and Lulla et al., 2026) evaluated context file effectiveness and found a productive tension: developer-written context files improve performance by ~4% on simple tasks (Lulla), but LLM-generated `/init` dumps degrade it by ~2% and increase costs by >20% on complex tasks (Gloaguen). The key explanation is **redundancy**: when the codebase already has good documentation, context files add noise, not signal. When all other docs are removed, those same `/init` files *improve* performance by 2.7% — the degradation tracks with duplication, not generation as such.
+
+The tool-design implication for this thread: context files are tool interfaces for agents, and their quality follows the same principles as any other tool. Minimalism, operational focus, and human authoring outperform verbose auto-generated alternatives. The [[agents-md]] convention's guidance — encode stable reference facts, cut volatile implementation detail, keep the file under 200 lines — is exactly this, arrived at from practice. Three independent paths (Ralph Loop practice, Gloaguen empirical testing, context-engineering theory) converge on the same conclusion.
+
 ## Layer 7: Output Format as Tool Design
 
 [[andrej-karpathy|Karpathy]] and [[thariq|Thariq]] add a dimension the previous layers don't address: **the format in which agents communicate their output** is itself a tool design decision with quality implications.
@@ -259,7 +274,18 @@ See [[html-as-agent-output]] for the full treatment.
 
 The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in [[kiro|Amazon Kiro]]'s spec pipeline is a tool-design move in disguise. By constraining requirements to a machine-parseable pattern (`When <trigger>, the <system> shall <response>`), the requirements artifact becomes a deterministic interface between the LLM and downstream verification tools. The tool design lesson generalizes: **structured natural language inputs can shift verification from probabilistic (LLM-as-judge) to deterministic (parsers, automated reasoners)** without requiring the LLM to be in the loop. This is [[spec-driven-development|Spec-driven development]]'s tool-design contribution: replace the LLM-as-judge verification step with a deterministic pipeline.
 
+> [!note] Departure: Spec-Driven Development Doesn't Generalize
+> [[dex-horthy|Dex Horthy]] is markedly more skeptical of SDD than the EARS/Kiro position suggests. His verdict: outside maintenance and migration work, spec-driven development "didn't really work." The intractable problem is the two-sources-of-truth drift — edit the spec, edit the code, and they diverge; a Spec Kit GitHub issue complaining about exactly this has been open for a year. He has never known a team to find maintaining spec/code parity worth the effort. His alternative: treat planning docs as [[plan-disposability|disposable tactical artifacts]] and treat the code as the only durable source of truth. This tensions the Layer 7 framing of EARS as a tool design move — the structured format may be sound, but the spec-as-primary-artifact workflow it enables may not survive contact with real codebases.
+
 [//]: # ([[recursive-agent-harness]] links here from its ## Thread section)
+
+## The Economics: Tool Design as Cost Control
+
+[[david-cramer|David Cramer]] adds an economics dimension that strengthens the thread's thesis from a different direction. His argument: training data is part of inference cost, and it's not factored into current pricing. "If a model has not been heavily trained on a thing, models will only give you the right answer if you give them the right answer first." The web crawler analogy: the wrong way is to have an LLM parse every page; the right way is to have an LLM generate a script when pages change, then run that script. Efficiency comes from deterministic reuse, not repeated inference.
+
+This connects to tool design directly: if the knowledge isn't in the training set, you must supply it in context — and every tool that produces verbose output, every protocol that adds overhead, every harness that forces the agent to rediscover context it already found once is a direct cost multiplier. "I think training is part of the cost of inference and it's not factored in the cost of inference today. Thus, the cost of inference is dramatically higher than we are led to believe."
+
+The [[harness-monoculture]] cost data makes this concrete: OpenClaw's $1.3M/month Claude Code token burn is the empirical ceiling of the token-maxing direction. When frontier model companies go public and have to pay the bills, tool design becomes not just a quality concern but a survival concern — every token of unnecessary tool overhead is real money.
 
 ## Sources
 
@@ -281,3 +307,8 @@ The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's AXI tools and benchmark: GitHub MCP vs CLI (3× tokens, 2×+ latency), token-efficient non-JSON output (~40% savings), the ten principles for agent-ergonomic tools, and the [[lavish]] HTML artifact editor as another HTML-as-agent-output case.
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[mario-zechner|Zechner]] on the training-harness-as-tool-reliability-factor: [[pi]]'s strict edit tool showing ~20% failure on newer Anthropic models while [[claude-code|Claude Code]]'s lenient harness masks it. Source for the "Training Harness Is Now a Tool-Reliability Factor" departure; cross-refs [[grammar-constrained-sampling]] and [[harness-monoculture]].
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Memory Store as an Agent-Navigable Tool Surface" extension: memory-as-file-system (markdown + ordinary tools over bespoke memory APIs/vector DBs) as the CLI-over-MCP thesis applied to the memory layer; versioning+provenance as inspectable tool feedback.
+- `raw/yt-context-engineering-with-dex-horthy.md` — Dex Horthy's Pragmatic Engineer interview. Source for the two-budget framework (information vs instruction, 150–250 instruction limit), the cost-stage model (make-it-run/make-it-right/make-it-fast), and the deabstracting root definition.
+- `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — Cramer on training data as inference cost, the web crawler efficiency analogy, and tool design as cost control.
+- `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — Empirical anchors for harness monoculture: OpenClaw $1.3M/month token burn, Antirez's ds4 open-weight alternative, token-pricing trajectory suspicion.
+- `raw/2602.11988v1.md` — Gloaguen et al. (2026). Context file evaluation: LLM-generated files degrade performance via redundancy, developer-written files marginal improvement (~4%), context files as tool interfaces for agents.
+- `raw/agents-md-standard.md` — The agents.md/ site: the convention's rationale, minimal format, nested-file discovery, cross-agent compatibility, Linux Foundation stewardship.

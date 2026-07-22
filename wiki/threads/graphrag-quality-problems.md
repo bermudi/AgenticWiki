@@ -89,4 +89,4 @@ This is an instance of the broader principle: **engineered decomposition + messa
 - [[graphrag-logical-inconsistency]] — Deficiency 2
 - [[graphrag-structural-fragmentation]] — Deficiency 3
 - [[the-multi-agent-theory]] — Broader multi-agent theory thread
-- [[hipporag]] — Related associative-memory GraphRAG
+- [[graphrag-baselines]] — Related GraphRAG baselines (HippoRAG, LightRAG, Microsoft GraphRAG)
