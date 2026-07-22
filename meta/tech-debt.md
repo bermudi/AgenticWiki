@@ -27,6 +27,7 @@ Budget is read from this file's frontmatter (`warning_budget`, `critical_blocks`
 |------|------|-------|----------|
 | 2026-07-20 | `archive/ingest-notes/2026-06-18-memrefine-phase2.md` | Archived Phase 2 MemRefine theory summary. Verify its recommended updates (post-construction memory compression in `harness-mechanisms`, store-level compression axis in `evolving-context`, `executable-memory`/`memrefine` cross-link, `llm-guided-compression` judge-reliability ceiling, `storage-budgeted-memory` query-aware compression question) are reflected in the relevant thread/concept pages; integrate or resolve. | warning |
 | 2026-07-20 | `scripts/validate-page` / `meta/tech-debt.md` | Debt status contract drift: `validate-page` never emitted a `STATUS:` line, and the `OVER_BUDGET` axis (registry-driven budget) was unimplemented — the registry's machine-readable contract (status values + "exit code and status line always agree") was false. Fix: emit `STATUS:` line, read `warning_budget`/`critical_blocks` from this file's frontmatter, evaluate `OVER_BUDGET` in full-repo mode. | warning |
+| 2026-07-22 | `wiki/threads/the-benchmark-crisis.md` | Thesis section says "three dimensions" but the thread now covers eight axes of failure (contamination, verifier misgrading, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, inference-layer accuracy degradation, long-horizon maintainability). Update thesis to reflect the full eight axes. Pre-existing issue, exacerbated by the accuracy-minimizing ingest. | warning |
 
 ## Audit History
 

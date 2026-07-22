@@ -16,7 +16,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 - [[the-cognitive-cost]] — Agentic coding trades cognitive capacity for output volume. The skills needed to supervise agents erode through sustained use. The population of humans capable of providing design authority may be shrinking.
 - [[dex-horthy-agentic-engineering]] — *(worldview thread)* Dex Horthy's position traced as one coherent system: context engineering as deabstracting to the token layer, the Smart Zone and trajectory, research/plan/implement and its anti-leverage retrospective, slow lights-on loops, and token-smarter-not-harder. The thesis the wiki's other sources argue with.
-- [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. Seven axes of failure: contamination, verifier misgrading, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, and long-horizon maintainability — the last being the axis no benchmark can measure and the one that determines whether code survives.
+- [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. Eight axes of failure: contamination, verifier misgrading, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, inference-layer accuracy degradation, and long-horizon maintainability — the last being the axis no benchmark can measure and the one that determines whether code survives.
 
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
@@ -32,6 +32,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## ✍️ Authors
 - [[david-cramer]] — Co-founder/CTO of Sentry; grounded skeptic of 100x hype; built Sentry's MCP server; AI bubble thesis
+- [[daniel-han]] — Co-founder of [[unsloth]]; kernel optimization, dynamic quantization, reward hacking documentation; advocate for software over hardware scaling
 - [[kun-chen]] — Ex-L8 principal engineer (Meta, Microsoft, Atlassian); built frontier coding agents at Atlassian; author of the captain/first-mate/crew workflow and open-source tools [[no-mistakes]], [[lavish]], [[axi]], [[treehouse]], [[first-mate]], and [[good-night-have-fun]].
 - [[eero-alvar]] — YouTube creator; proposes software factories and the aiming problem as the next step in agentic engineering
 - [[lars-faye]] — Developer and writer; introduced "cognitive debt" and articulated the supervision paradox from Anthropic's research.
@@ -111,6 +112,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework.
 
 ## 🧠 Concepts
+- [[accuracy-minimizing]] — Inference providers sacrifice model accuracy for throughput; the hidden variable in open-source vs. closed-source comparisons
 - [[agents-md]] — The AGENTS.md convention: a plain-markdown "README for agents" with nested-file discovery and cross-agent compatibility; the minimalist authoring craft.
 - [[skill-md]] — The Agent Skills file format: a `SKILL.md` (name + description frontmatter) with three-tier progressive disclosure; an open standard.
 - [[tracing-spectrum]] — Observability at three layers (design/code/execution) closing a feedback loop: design → code → execution → agent feedback → improved design. Extends the quality loop to include the design layer.
@@ -285,6 +287,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.
+- [[unsloth]] — Open-source AI organization; model distribution, dynamic quantization, kernel optimization, bug fixes (300M+ Hugging Face downloads)
 
 ## 🛠️ Projects & Tools
 - [[agentskills]] — The Agent Skills open standard: a folder-with-SKILL.md format, originally Anthropic, now cross-vendor; `skills-ref` validation and `.skill` packaging.

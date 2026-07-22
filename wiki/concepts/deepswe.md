@@ -1,11 +1,12 @@
 ---
 title: DeepSWE
 created: 2026-05-31
-updated: 2026-07-14
+updated: 2026-07-22
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/deepswe-failure-analysis.md
+  - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
 tags: [concept, benchmark, coding-agents, evaluation, verification]
 unaudited_marginal: 0
 ---
@@ -94,6 +95,11 @@ All models run through `mini-swe-agent` — a model-agnostic harness exposing a 
 - Five languages only; C++ and Java absent
 - Prompts are shorter than SWE-bench Pro's but still longer than real developer messages
 
+## External Validation
+
+> [!note] Extension: Han's endorsement of DeepSWE's approach
+> Daniel Han's AI Engineer talk highlights DeepSWE as a correction to SWE-bench Pro's failures. He specifically notes that DeepSWE reduces the false positive rate and false negative rate to ~1%, contrasting with SWE-bench Pro's 8.5% FP and 24% FN rates. He also notes that by removing cheating (git history leakage) and fixing verification, DeepSWE reveals a 70-point spread between models — matching developer experience — vs. SWE-bench Pro's 30-point spread where models appear similarly capable. Han also discusses the competing Frontier Code benchmark from Cognition, which claims DeepSWE's false positive rate is 44.9% (vs. DeepSWE's own claim of 0.3%), highlighting the meta-problem: even the benchmarks designed to fix benchmarks disagree with each other.
+
 ## Behavioral Failure Analysis
 
 Beyond the leaderboard, DeepSWE's trajectories are mineable for *why* models fail. Comparing, per task, the trajectory + patch + verifier output of each failing open-weight model against GPT-5.5's passing reference surfaces a small set of recurring behavioral responses — all of which crystallize existing wiki concepts into concrete, failure-correlated exemplars:
@@ -129,3 +135,4 @@ The framing rule that keeps this useful: test-blindness is a *benchmark conditio
 - `raw/deepswe-benchmark.md` — Full benchmark description, methodology, results, and qualitative analysis from Datacurve
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo (t3.gg): developer perspective on DeepSWE results, SWE-bench Pro criticism, and the call for community-built benchmarks
 - `raw/deepswe-failure-analysis.md` — Original empirical failure analysis: the 98 GPT-passes/open-fails contrast tasks, the behavioral-response taxonomy (late testing, fix-flailing, infrastructure blindness, over-engineering, fragile shell editing), and per-task human-annotated commentary with the hidden-oracle framing.
+- `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's AI Engineer talk: DeepSWE's reduced false positive/negative rates, the 70-point model spread, and the competing Frontier Code benchmark's critique of DeepSWE

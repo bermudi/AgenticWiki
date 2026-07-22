@@ -14,6 +14,7 @@ sources:
   - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
   - raw/yt-context-engineering-with-dex-horthy.md
   - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
+  - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution, cost]
 unaudited_marginal: 0
 ---
@@ -185,6 +186,32 @@ This is distinct from [[evoarena|EvoArena]]'s persistent environment evolution (
 
 The discussion argues the benchmark problem isn't unique to AI — there are no good benchmarks for human engineers either. HackerRank and LeetCode are bad proxies: they measure constrained algorithmic problem-solving, not the ability to build and maintain products. The only reliable signal for engineering quality is peer recommendation — "if someone I trust has recommended someone, that is pretty much an instant yes." The discussion suggests models have gotten good enough that the same approach may work for model selection: crowdsourced recommendations from trusted practitioners may be more reliable than benchmark scores. This echoes the call for community-built benchmarks from [[theo-t3gg|Theo]] above, but from a different angle — not "build your own benchmark from failures" but "trust the social signal over the metric."
 
+## The Eighth Axis: Inference-Layer Accuracy Degradation
+
+[[daniel-han|Daniel Han]] ([[unsloth|Unsloth]]) identifies a dimension the prior seven axes do not measure: **the same model produces different accuracy scores depending on which inference provider serves it.** The benchmark crisis isn't just about the benchmark itself — it's about the entire pipeline from model weights to measured score.
+
+### The Evidence
+
+OpenRouter's daily benchmarks show accuracy gaps of 10%+ between providers serving the same model. For DeepSeek V4 Pro, the highest-scoring provider achieves 76.4% on Tower Bench while the lowest achieves 62.4% — a 14-point spread from the *same model weights*. For GLM 5.2, the spread is similarly large. Providers compete on tokens-per-second and cost, not accuracy.
+
+### The Mechanism
+
+Han identifies several mechanisms by which inference providers degrade accuracy:
+
+1. **Uniform quantization**: Providers apply 3-bit quantization uniformly across all layers instead of using dynamic quantization (selectively preserving important layers at higher precision). Unsloth's research shows that a smart 1-bit dynamic quantization can outperform a dumb 3-bit uniform quantization.
+2. **Hardware mismatch**: Different hardware (GPUs vs. TPUs) produces different sampling results from the same software stack. Anthropic's September 2025 accuracy degradation was traced to TPU vs. GPU sampling differences.
+3. **System prompt errors**: Before model releases, providers may route traffic through models with mismatched system prompts — using a verbose prompt designed for one model with a different model that expects a shorter prompt.
+4. **Throughput-first deployment**: Providers prioritize tokens-per-second over accuracy, and users rarely verify accuracy before deploying.
+
+### The Open-Source Reputation Problem
+
+> [!note] Synthesis: accuracy minimizing is the hidden variable in open-source vs. closed-source comparisons
+> Closed-source labs control their entire inference supply chain. Open-source models pass through dozens of providers, each potentially degrading accuracy. The "open source lags closed source" narrative is partly a measurement artifact caused by inference-layer degradation. Han argues the gap between open-source and closed-source models would narrow significantly if inference providers prioritized accuracy over throughput.
+
+### Implications for the Thread
+
+This axis compounds every prior axis: even a perfectly clean, well-designed benchmark produces unreliable scores when the inference layer varies. It also compounds [[accuracy-minimizing]]: providers optimizing for throughput create a race to the bottom on accuracy. The fix is partially architectural (standardized evaluation harnesses like DeepSWE's mini-swe-agent) and partially cultural (developers verifying accuracy before deploying, providers publishing accuracy metrics alongside throughput numbers).
+
 ## The Call for Community Benchmarks
 
 > [!note] Departure: Skill Popularity as a Benchmark-Crisis Analog
@@ -228,3 +255,4 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the decomposition-thesis callout: argues existing memory benchmarks treat the system as a monolithic black box reporting only end-to-end task-success metrics, and decomposes evaluation into five independently-measured dimensions (task effectiveness, evidence-level retrieval fidelity, dynamic-update robustness, long-horizon stability, operational cost) with single-module ablations — the benchmark-crisis thesis applied to memory-system evaluation. Also independently corroborates [[state-collapse]] ("hallucinations of the past").
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[armin-ronacher|Ronacher]] on the sixth axis (cost-blind scoring): the cost-of-solving inversion (a model climbs benchmarks yet costs more per solve, observed around the Sonnet 5 release; "the cost of solving problems seems to be going up rather than down"), Terminal-Bench ignoring cost/runtime entirely, and the cheap-tier replacement inflation (price points earlier "cheap" flagships hit are gone; cheap flagships getting more expensive per solve). Source for the "Sixth Axis: Cost-Blind Scoring" section and its [[harness-monoculture]] synthesis callout.
 - `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026) with [[dex-horthy|Dex Horthy]] and [[vibv|Vibv]]: full benchmark-generations walkthrough (SWE-bench → Verified → Multilingual → Terminal Bench → Program Bench → SWE Marathon → Frontier Code), the RL training constraint (can't train what you can't verify), the long-horizon penalty, the velocity framework (DORA metrics, feedback-time hierarchy), and the "no benchmark for human engineers" argument. The discussion echoes Dex's earlier 20-feature evolving-codebase benchmark proposal (43:23) and contributes the "think fast … make it possible to extend it" instruction, but does not originate the proposal itself. Multi-speaker source; speaker attribution not verified against audio — claims attributed to the video/discussion, not named individuals.
+- `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's AI Engineer talk: OpenRouter accuracy benchmarks for DeepSeek V4 Pro and GLM 5.2 across inference providers, dynamic quantization research, SWE-bench Pro LLM-as-verifier critique (8.5% FP, 24% FN), intelligence plateau hypothesis, hardware vs. software optimization thesis, reward hacking examples (timer deletion, GPU mode hack, calculator hacking, GLM 5.2 anti-hacking). Source for the "Eighth Axis: Inference-Layer Accuracy Degradation" section.

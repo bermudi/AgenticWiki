@@ -1,10 +1,11 @@
 ---
 title: Benchmark Contamination
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-07-22
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
+  - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
 tags: [concept, benchmark, evaluation, contamination, reliability]
 unaudited_marginal: 0
 ---
@@ -64,6 +65,17 @@ This has downstream effects:
 | Repository diversity | 11 repos | 91 repos, 5 languages |
 | Verifier disagreement | ~32% (8% FP + 24% FN) | ~1.4% |
 
+## Evaluation-Layer Contamination
+
+> [!note] Extension: Contamination at the verification and inference layers
+> Daniel Han's talk identifies two forms of contamination that go beyond training data leakage:
+>
+> **LLM-as-verifier contamination**: SWE-bench Pro uses a language model to verify whether another language model's answer is correct. The verifier itself has 8.5% false positive and 24% false negative rates — and the verifier's accuracy changes daily as the underlying model is updated. This means benchmark scores are a function of *when* you run them, not just *what* you're testing.
+>
+> **Inference-layer contamination**: [[accuracy-minimizing|Accuracy minimizing]] by inference providers means the same model weights produce different accuracy scores depending on which provider serves them. Open-source models are particularly vulnerable because they pass through many providers, each potentially degrading accuracy through bad quantization, hardware mismatch, or system prompt errors. The "contamination" here is not in the training data but in the evaluation pipeline.
+>
+> **Competing benchmark contamination**: Even benchmarks designed to fix contamination disagree with each other. Cognition's Frontier Code benchmark claims DeepSWE's false positive rate is 44.9%, while DeepSWE claims it's 0.3%. The meta-problem: who verifies the verifier?
+
 ## Thread
 - [[the-benchmark-crisis]] — Benchmark contamination is the primary driver of this thread: the evaluation ecosystem is broken
 - [[the-verifiability-thesis]] — Contamination is a failure of verifiability: if you can't verify that a benchmark score reflects real capability, the score is meaningless
@@ -73,7 +85,10 @@ This has downstream effects:
 - [[swe-bench-pro]] — The benchmark most affected by contamination
 - [[jagged-frontier]] — Contamination hides the jagged frontier by compressing score ranges
 - [[the-verifiability-thesis]] — Benchmark verification is itself subject to the verifiability thesis
+- [[daniel-han]] — Han's talk documents evaluation-layer and inference-layer contamination
+- [[accuracy-minimizing]] — Inference-layer contamination as a distinct failure mode
 
 ## Sources
 - `raw/deepswe-benchmark.md` — Datacurve's audit of SWE-bench Pro: git history leakage, verifier disagreement rates, false positive/negative analysis
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo's developer-perspective commentary on contamination and benchmark quality
+- `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's talk: LLM-as-verifier contamination, inference-layer accuracy degradation, competing benchmark disagreements
