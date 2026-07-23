@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-22
+updated: 2026-07-23
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -70,6 +70,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[christoph-treude]] — Professor at SMU; co-author of the first empirical study on AGENTS.md efficiency impact.
 - [[thariq]] — Engineer on the Claude Code team; authored the practical playbook for using HTML instead of Markdown as agent output.
 - [[xuying-ning]] — Lead author of the *Code as Agent Harness* survey (UIUC + Meta + Stanford).
+- [[ruhan-wang]] — Lead author of *Harness Handbook* (arXiv 2607.13285, 2026); behavior localization as the prerequisite to harness evolution
 - [[dax-raad]] — Engineer at Anomaly; led OpenCode's rewrite in Effect; articulated the AI boilerplate paradox
 - [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
 - [[cian-clarke]] — Engineer at Near Form; primary practitioner source on SDD at team scale; single-player-to-multiplayer framing; empirical fit/miss for SDD
@@ -141,6 +142,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[code-as-agent-harness]] — Code as the executable, inspectable, and stateful medium through which AI agents reason, act, and coordinate.
 - [[harness-interface]] — The harness interface where code connects agents to reasoning, action, and environment modeling.
 - [[harness-mechanisms]] — Planning, memory, tool use, control, and optimization that sustain code-centric agents.
+- [[harness-handbook]] — A behavior-centric harness map (L1–L3 + state registers) + Behavior-Guided Progressive Disclosure; solves behavior localization before harness evolution
 - [[harness-engineering]] — Self-evolving harnesses, harness-level evaluation, and the open problems of building reliable agent systems.
 - [[harnessx]] — A foundry for composable, adaptive, and evolvable agent harnesses; the harness as a first-class typed object, evolved via AEGIS (a four-stage trace-driven engine grounded in the operational mirror), and coupled with the model via cross-harness GRPO. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families
 - [[operational-mirror]] — The formal correspondence between symbolic harness evolution and reinforcement learning; predicts three concrete failure modes (reward hacking, catastrophic forgetting, under-exploration) with corresponding architectural defenses

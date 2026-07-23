@@ -1,7 +1,7 @@
 ---
 title: Code as Agent Harness
 created: 2026-05-21
-updated: 2026-07-04
+updated: 2026-07-23
 sources:
   - raw/2605.18747.md
   - raw/yt-llms-are-killing-agent-harness.md
@@ -9,6 +9,7 @@ sources:
   - raw/2606.16707v1.md
   - raw/2606.13681.md
   - raw/2606.14249.md
+  - raw/2607.13285v1.md
 tags: [concept, agent-harness, architecture, code-centric, harness-recursion, executable-memory, typed-composition]
 unaudited_marginal: 0
 ---
@@ -104,6 +105,8 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - [[variant-isolation]] — The ensemble routing strategy that requires typed composition; resolves the catastrophic-forgetting failure on heterogeneous task sets
 - [[harness-model-co-evolution]] — The cross-harness GRPO loop that closes the harness–model optimization cycle
 - [[darwin-agent-team]] — The author team behind HarnessX
+- [[ruhan-wang]] — Lead author of the Harness Handbook paper (arXiv 2607.13285) that operationalizes the framework for harness *evolution* via a behavior-centric map
+- [[harness-handbook]] — A behavior-centric instantiation of the harness's inspectable property, applied to evolution: maps what the harness does to the source sites a change must touch
 
 ## Sources
 
@@ -113,3 +116,4 @@ The framework provides a unifying taxonomy for several existing wiki concepts:
 - `raw/2606.16707v1.md` — Bojie Li (Pine AI, 2026). *User as Code: Executable Memory for Personalized Agents.* Operationalizes the code-as-harness framework for the user model. The two-phase pipeline (append-only memorize + periodic structure) is a harness mechanism; the typed Python state is the harness interface (code for environment modeling); the constraint pipeline is harness control (deterministic verification). The LLM writes its own schemas, domain partitioning, and constraints. 78.8% on LOCOMO (within 1.0pp of full-context upper bound), 99% on Analytical Inference (vs 6–43% for retrieval baselines), 100% on Active Service.
 - `raw/2606.13681.md` — Xu et al. (NUS + collaborators, June 2026). *EvoArena.* Operationalizes the code-as-harness framework for memory evolution. The patch record (typed fields: timestamp, before-state, after-state, rationale, summary, evidence) is a structured code artifact that the agent inspects, indexes, and retrieves at query time — code for environment modeling applied to memory change provenance. The patch layer is harness infrastructure (non-invasive annotation that monitors non-additive updates); patch-augmented retrieval is harness control (selective retrieval when version-specific reasoning is required). Composes with [[executable-memory]]: an executable-memory agent could use EvoMem to track how its typed Python state evolved across structuring regenerations. Improves chain accuracy +6.1pp on Terminal-Bench-Evo.
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX.* The most concrete **foundry** instantiating the code-as-harness framework: harness is a code-shaped first-class object `H = (M, C)`, substitution algebra is a code operation, trace substrate is the optimization signal. Extends the framework with **typed composition** (processor abstraction, eight hook points, nine-dimension taxonomy), the **[[operational-mirror]]** (RL ↔ symbolic-space correspondence with three named pathologies), the **AEGIS** four-stage pipeline (Digester → Planner → Evolver → Critic), [[variant-isolation]] ensemble routing, and [[harness-model-co-evolution]] cross-harness GRPO. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.
+- `raw/2607.13285v1.md` — Wang, Shi, Li, Li, Yu, Yang, Panaganti, Mi, Zhou, Leoweiliang (2026). *Harness Handbook: Making Evolving Agent Harnesses Readable, Navigable, and Editable.* arXiv 2607.13285v1 (14 Jul 2026). Source for the new `[[ruhan-wang]]` and `[[harness-handbook]]` Related entries: the paper operationalizes the framework for harness *evolution* via a behavior-centric map (L1–L3 + cross-stage state registers) and Behavior-Guided Progressive Disclosure.

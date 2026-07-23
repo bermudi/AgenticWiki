@@ -1,7 +1,7 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-07-16
+updated: 2026-07-23
 sources:
   - raw/2605.18747.md
   - raw/2606.09498.md
@@ -9,6 +9,7 @@ sources:
   - raw/2606.14249.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/2607.13285v1.md
 tags: [concept, agent-harness, evaluation, verification, safety, open-problems, self-evolution, harness-recursion, harness-co-evolution, operational-mirror, practitioner]
 unaudited_marginal: 0
 ---
@@ -76,6 +77,10 @@ The solution the survey proposes: treat every harness mutation like a code chang
 > The combination is the most complete instantiation of §5.2.3 to date: typed composition enables safe programmatic mutation, the operational mirror formalizes what can go wrong, AEGIS is the four-stage defense architecture, the seesaw constraint enforces non-regression, and cross-harness GRPO breaks the scaffolding/training-signal ceilings. Across 5 benchmarks and 3 model families, 14 of 15 model-benchmark configurations improve (average +14.5%, peak +44.0%). The [[variant-isolation]] ablation resolves the catastrophic-forgetting failure on heterogeneous task sets (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4) — but it requires the typed composition that makes scope explicit.
 >
 > The remaining open question — exactly the survey's oracle-adequacy concern (§5.2.1) — is now sharper. The three operational-mirror pathologies only matter if verifiers are trustworthy. From HarnessX §7.3: "The RL–symbolic-space mirror is a design heuristic, not a formal framework." The mirror identifies what to defend against, not what will happen or when. The bootstrapping problem persists.
+
+> [!note] Update: Harness Handbook as the Localization Prerequisite
+> The [[harness-handbook]] paper (Wang et al., Tencent + Indiana University, 2026, arXiv 2607.13285) reframes this open problem from the *other* end. The survey assumes the hard part is *evolving* a harness once you can mutate it; Harness Handbook argues the upstream blocker is **behavior localization** — finding every distributed code site a behavioral change must touch before any edit can be planned. Its automated construction pipeline (static analysis + LLM-assisted structuring) builds a behavior-centric L1–L3 map with a cross-stage state-register view, and Behavior-Guided Progressive Disclosure (BGPD) guides a planner from behavior to verified source sites. On Terminus-2 and Codex, Handbook-Assisted planning raises edit-plan win rate (e.g., Terminus-2 26.7%→45.6%) while *cutting* planner tokens (−8.6% to −12.7%) and reducing complete-miss rate by up to 25.9 points.
+> The relationship to §5.2.3 is strictly complementary: Harness Handbook does not mutate the harness, it supplies the map that Self-Harness, HarnessX, and the survey's change-contract loop all assume exists. It is the localization layer beneath in-place and co-evolution approaches — and the authors' stated next step is to close the loop into autonomous harness self-evolution using the Handbook as shared behavioral memory.
 
 ### 4. Transactional Shared Program State (§5.2.4)
 
@@ -208,6 +213,8 @@ This pattern is the operational version of the survey's [[self-harness|§5.2.3 s
 - [[factory-maintenance]] — The ongoing-hygiene problem; sweeps are the operational version of §5.2.3 self-evolution
 - [[beads-work-ledger]] — The work substrate the factory's harness operates on
 - [[intelligence-tier-routing]] — The factory as a routing layer across model tiers; harness-engineering's concern at the model-selection axis
+- [[ruhan-wang]] — Lead author of the Harness Handbook paper (arXiv 2607.13285) that reframes §5.2.3 around a localization prerequisite
+- [[harness-handbook]] — Behavior-centric harness map supplying the localization layer beneath in-place and co-evolution approaches
 
 ## Sources
 
@@ -217,3 +224,4 @@ This pattern is the operational version of the survey's [[self-harness|§5.2.3 s
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). The most complete instantiation of §5.2.3 to date: typed composition (processor abstraction, eight hook points, nine-dim taxonomy) + [[operational-mirror]] (RL ↔ symbolic-space correspondence; three predicted pathologies) + AEGIS (Digester → Planner → Evolver → Critic with deterministic gating) + [[variant-isolation]] (ensemble routing, +13.6pp on GAIA GPT-5.4) + [[harness-model-co-evolution]] (cross-harness GRPO, +4.7pp over harness-only). +14.5% average / +44.0% peak across 5 benchmarks and 3 model families; 14/15 configurations improve.
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Practitioner patterns from the panel: determinism-at-the-boundary (Tessl/Dru Knox: the six-orchestrator lesson, the git push / stop session hooks), swarming-as-anti-bitter-lesson (Yegge: multiple passes, adversarial reviews, consensus, quality as a token-spend dial), the factory as a living system needing sweeps (Yegge)
 - `raw/yt-context-engineering-with-dex-horthy.md` — Martin Fowler's inner/outer harness definition (26:56–27:32); the semantic-diffusion warning (53:05–53:16); credit to Vib for the tokens-in/tokens-out intuition (17:26).
+- `raw/2607.13285v1.md` — Wang, Shi, Li, Li, Yu, Yang, Panaganti, Mi, Zhou, Leoweiliang (2026). *Harness Handbook: Making Evolving Agent Harnesses Readable, Navigable, and Editable.* arXiv 2607.13285v1 (14 Jul 2026). Source for the new `> [!note] Update: Harness Handbook as the Localization Prerequisite` callout under §5.2.3: behavior localization as the upstream bottleneck, the L1–L3 + state-register representation, BGPD + resync, and the Terminus-2 / Codex evaluation numbers.

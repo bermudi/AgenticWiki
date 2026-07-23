@@ -128,6 +128,7 @@ In domains where higher-stakes harness changes matter, the rule is the floor, no
 - [[babysitter-agent]] — The babysitter manages the agent's context; Self-Harness manages the agent's harness — the same invisible-maintenance pattern at different layers
 - [[software-factory]] — Software factories automate spec-to-software; Self-Harness automates harness-engineering — both self-optimization at different layers of the stack
 - [[harnessx]] — Extends Self-Harness with typed composition, [[operational-mirror]] pathology taxonomy, [[variant-isolation]] ensemble routing, and [[harness-model-co-evolution]]; the more powerful but more architecturally demanding alternative
+- [[harness-handbook]] — The behavior-centric map that supplies the localization layer Self-Harness assumes exists; a coding agent needs the Handbook's behavior→source map before it can apply Self-Harness's bounded edits
 
 ## Self-Harness vs. HarnessX: A Comparison
 

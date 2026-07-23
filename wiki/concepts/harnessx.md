@@ -199,6 +199,7 @@ HarnessX is the most concrete "foundry" to instantiate the code-as-harness visio
 - [[variant-isolation]] — The ensemble routing strategy that resolves catastrophic forgetting on heterogeneous task sets
 - [[harness-model-co-evolution]] — The cross-harness GRPO loop that closes the harness–model optimization cycle
 - [[self-harness]] — The simpler propose-evaluate-accept loop; HarnessX extends with typed composition, pathology taxonomy, and co-evolution
+- [[harness-handbook]] — The behavior-centric map that supplies the localization layer HarnessX assumes exists; typed composition and AEGIS still require finding the code sites a behavioral change must touch
 - [[recursive-agent-harness]] — The complementary pattern: spawn fresh harnesses per task
 - [[backpressure]] — The seesaw constraint is the strongest empirical backpressure mechanism in the harness literature
 - [[failure-modes]] — The three predicted pathologies are the most empirically validated failure modes in the self-evolution context
