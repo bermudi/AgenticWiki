@@ -1,11 +1,12 @@
 ---
 title: "Theo (t3.gg)"
 created: 2026-06-03
-updated: 2026-07-09
+updated: 2026-07-22
 sources:
   - raw/yt-we-all-fell-for-it.md
   - raw/yt-i-guess-were-writing-loops-now.md
   - raw/yt-the-next-paradigm-shift-according-to-karpathy.md
+  - raw/yt-you-need-to-read-less-code.md
 tags: [author, ai-engineering, cognitive-debt, tool-design, agent-loops]
 unaudited_marginal: 0
 ---
@@ -25,6 +26,8 @@ unaudited_marginal: 0
 **Token cost correction**: Costs per intelligence unit are dropping rapidly. GPT-5.5 low is 8x cheaper per IQ point than Sonnet 4.6 from months ago. The bill looks bigger because we're using more tokens, not because each token costs more.
 
 **The debugging story**: He can debug a codebase he hasn't touched in 4 years because he understands the *layers* (T3 stack), not the specific code. AI amplified that understanding rather than replacing it.
+
+**Read less code**: The read:generate ratio has flipped — AI makes code cheap, so the constraint is no longer production code volume but verification capacity. If your code is important, write more slop to verify it (custom debuggers, test harnesses, runtimes), not read every line.
 
 ## Position on the Spectrum
 
@@ -52,6 +55,21 @@ His next move after the loops conversion: the agent as a **persistent, channel-s
 
 **Model lock-in as the cost of productization.** His sharpest critique of Claude Tag: it binds the paradigm to one lab. His Hermes setup lets him **switch models freely** (GLM, GPT-5.5, Claude, Fable) per channel, and he routinely instructs one model to call another — Codex/GPT-5.5 calling Claude for API design and UI work, where GPT-5.5 is weak. Claude Tag offers none of that control. He frames it as a fork — full custom isolation with model freedom, versus Claude Tag where most of it works by default but you're locked to Anthropic — and explicitly wants competitors to clone the pattern so teams aren't "reliant on just one lab." (This extends his standing thesis that vendor lock-in is a competence failure.)
 
+## Read Less Code (Hear Me Out)
+
+Theo's argument that most engineers should read *less* code, not more — because AI makes code cheap, and the real leverage is in generating verification code rather than reading production code line-by-line.
+
+**The code importance spectrum.** Code falls on a spectrum from "slop" (a pet store website with one viewer) to "death" (pacemaker firmware that keeps hearts beating). All software fits somewhere on this spectrum, and the conversation around AI code is "plagued by this spectrum" — people assume the person talking is at their level or better, or below them, when in reality the spectrum matters more than individual egos. The vast majority of code is somewhere in the middle: important enough that bad business things happen if it breaks, but not life-critical.
+
+**The read:generate ratio has flipped.** In the pre-AI era, Theo would write ~200 lines and read ~1,000 lines in a day. Now he generates ~2,000 lines but still reads ~1,000. The ratio of generated-to-read code has gone from ~4:1 to ~20:1. This used to make sense when writing code was expensive and every merged line was important. Now code is "goddamn cheap" — the constraint is no longer production code, it's verification.
+
+**Fighting slop with slop for verification.** If your code is so important that every line must be verified (bankruptcies, deaths, stopped hearts), you should be writing an "unbelievable amount of slop" — not for production, but to verify the production code. Every line of production code should have 100 lines of slop verifying it, 10,000 lines of slop testing it. Build custom debuggers, custom runtimes, custom logging systems, custom lint rules. The argument: "you cannot convince me that your code is so important that AI can't touch it, but it's not important enough to build verification systems."
+
+**The funnel of importance.** Code should be thought of as a funnel: the vast majority at the top (slop), a tiny percentage at the bottom (death-critical). This gap is widening rapidly. Engineers should be writing code across all tiers — not just the critical tier — because the cheap code at the top is what verifies and tests the critical code at the bottom. "If you're not finding these opportunities, you're not curious enough. You're not creative enough."
+
+> [!note] Departure: Read Less, Generate More
+> This directly challenges the wiki's existing framing that the human's job is to "own design boundaries and verify outcomes" by reading code. Theo's position: the human should own the *verification strategy* (designing test harnesses, debuggers, runtimes) and let AI generate the verification code. The human doesn't read every line of production code — they design systems that verify it. This is an extension of the [[fighting-slop-with-slop|fighting slop with slop]] principle applied to the verification layer, not just the tooling layer.
+
 ## Related
 
 - [[lars-faye]] — Author of the article Theo responds to
@@ -73,3 +91,4 @@ His next move after the loops conversion: the agent as a **persistent, channel-s
 - `raw/yt-we-all-fell-for-it.md` — "We all fell for it…" (June 2026); video response to Lars Faye's article; extensive commentary on cognitive debt, skill atrophy, token costs, vendor lock-in, and the code-frequency distinction
 - `raw/yt-i-guess-were-writing-loops-now.md` — "I guess we're writing loops now?" (2026); firsthand loops-conversion arc, dynamic loop generation, the "prompt yourself out of involvement" heuristic, cost-as-challenge framing (~$10K inference for $600 of plans), and the case against predefined agent personas.
 - `raw/yt-the-next-paradigm-shift-according-to-karpathy.md` — "The next paradigm shift (according to Karpathy)" (2026); reaction to Karpathy's Claude Tag post. Source for the channel-as-context-boundary insight, the per-channel Docker-isolate "Hermes agent" setup (Discord threads over single-thread agents), and the model-lock-in / agent-to-agent-delegation critique (switching GLM / GPT-5.5 / Claude / Fable per channel).
+- `raw/yt-you-need-to-read-less-code.md` — "You need to read less code (hear me out)" (2026); the code importance spectrum (slop → death), the flipped read:generate ratio, and the argument that if your code is important you should write more slop to verify it — extending fighting slop with slop to the verification layer.

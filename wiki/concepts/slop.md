@@ -1,7 +1,7 @@
 ---
 title: Slop
 created: 2026-04-25
-updated: 2026-07-02
+updated: 2026-07-22
 sources:
   - raw/yt-building-pi-in-a-world-of-slop.md
   - raw/agentic-coding-recommendations.md
@@ -9,6 +9,7 @@ sources:
   - raw/slowing-the-fuck-down.md
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
+  - raw/yt-you-need-to-read-less-code.md
 unaudited_marginal: 0
 tags: [concept, ai, ethics, code-quality]
 ---
@@ -75,6 +76,17 @@ The [[fighting-slop-with-slop|fighting slop with slop]] approach accepts heavy s
 
 This aligns with [[mario-zechner|Mario Zechner]]'s practice of accepting slop in Pi's HTML export but guarding the core agent loop. The principle: know which parts of your system are disposable and which are sacred.
 
+## Slop as Verification Tool
+
+[[theo-t3gg|Theo (t3.gg)]] extends the slop spectrum with a **code importance spectrum** — code falls on a funnel from "slop" (a pet store website with one viewer) at the top to "death" (pacemaker firmware) at the bottom, with tiers of increasing criticality in between. The vast majority of code sits in the middle: important enough that bad business things happen if it breaks, but not life-critical. This spectrum is the missing dimension on the internal/external slop table above: it's not just about *where* slop lives, but *what tier* of code it's verifying.
+
+The key insight: **if your code is so important that every line must be verified, you should be writing an unbelievable amount of slop to verify it.** Not for production, but as verification infrastructure — custom debuggers, test harnesses, runtimes, logging systems, and lint rules. Every line of production code should have 100 lines of slop verifying it, 10,000 lines testing it. The argument: "you cannot convince me that your code is so important that AI can't touch it, but it's not important enough to build verification systems."
+
+This reframes slop from a threat to a **verification resource**. The read:generate ratio has flipped — where a pre-AI engineer might write 200 lines and read 1,000, now they generate 2,000 but still read 1,000. The constraint is no longer production code volume, it's verification capacity. The solution isn't to read more code, it's to generate more verification code. As Theo puts it: "If you put a little time into realizing that code is useful for things other than merging, it's useful for things other than updating your product, code can do so much... you should write code that isn't [important] to verify the code that is."
+
+> [!note] Departure: Read Less, Generate More
+> This directly challenges the wiki's existing framing that the human's job is to "own design boundaries and verify outcomes" by reading code. Theo's position: the human should own the *verification strategy* (designing test harnesses, debuggers, runtimes) and let AI generate the verification code. The human doesn't read every line of production code — they design systems that verify it. This is an extension of the [[fighting-slop-with-slop|fighting slop with slop]] principle applied to the verification layer, not just the tooling layer. See [[the-human-lever]] for the broader human-lever implications.
+
 ## Slop Trajectory Improvement
 
 Ronacher observes that agent-generated code quality is improving: "Already today the code looks nothing like the terrible slop from a few months ago." This doesn't mean slop is solved — it means the baseline is rising as models, tools, and practices mature. The goal remains producing "better, more maintainable, and resilient code," not just faster code.
@@ -110,6 +122,7 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - [[failure-modes]] — Master playbook: slop as one of 17 mapped failure modes with detection signals and countermeasures
 
 - [[verification-loop]] — The verification loop is the primary mechanical defense against slop production
+- [[theo-t3gg]] — The code importance spectrum and the argument that important code should be verified by generating more slop
 
 ## Sources
 
@@ -119,3 +132,4 @@ Ronacher observes that agent-generated code quality is improving: "Already today
 - `raw/slowing-the-fuck-down.md` — Merchants of learned complexity; untrustworthy tests; agentic search low recall
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Software entropy as the named mechanism; "code is not cheap" — bad code blocks AI's ability to help.
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Internal vs. external slop distinction; fighting slop with slop as a deliberate strategy
+- `raw/yt-you-need-to-read-less-code.md` — Theo's code importance spectrum (slop → death); the argument that important code should be verified by generating more slop (custom debuggers, test harnesses, runtimes); the flipped read:generate ratio

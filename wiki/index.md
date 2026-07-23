@@ -36,7 +36,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[kun-chen]] — Ex-L8 principal engineer (Meta, Microsoft, Atlassian); built frontier coding agents at Atlassian; author of the captain/first-mate/crew workflow and open-source tools [[no-mistakes]], [[lavish]], [[axi]], [[treehouse]], [[first-mate]], and [[good-night-have-fun]].
 - [[eero-alvar]] — YouTube creator; proposes software factories and the aiming problem as the next step in agentic engineering
 - [[lars-faye]] — Developer and writer; introduced "cognitive debt" and articulated the supervision paradox from Anthropic's research.
-- [[theo-t3gg]] — YouTube creator (t3.gg); commentary on cognitive debt, skill atrophy, and the code-frequency distinction; creator of T3 Stack.
+- [[theo-t3gg]] — YouTube creator (t3.gg); commentary on cognitive debt, skill atrophy, the code-frequency distinction, and the "read less code" argument; creator of T3 Stack.
 - [[aaron-brethorst]] — Software engineer; argues domain expertise is the real professional moat because agentic AI commoditized implementation but not verification.
 - [[addy-osmani]] — Engineer at Google; coined "comprehension debt" — the gap between code existence and human understanding.
 - [[andrej-karpathy]] — AI researcher and educator; co-founder of OpenAI, led Autopilot at Tesla; coined "vibe coding" and "agentic engineering."
@@ -188,7 +188,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[explain-diff]] — A skill that generates a personalized, literate explainer doc for a code change, with background, intuition, interactive figures, and an embedded quiz.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
 - [[factory-maintenance]] — A software factory bit-rots faster than it gets used: skills drift, systems change, failure modes emerge. Yegge's pattern is to leave every interaction with the factory slightly better than you found it, and to schedule sweep agents (architecture, test-quality, documentation) on a cadence.
-- [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling to produce higher quality where it matters.
+- [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling and verification infrastructure to produce higher quality where it matters.
 - [[functional-collapse]] — The runtime failure mode of automated MAS: complex architecture reduces to single-agent execution. Five documented manifestations: DyLAN consensus collapse, MAS-Zero positional bias, MaAS signal saturation, MAS-Orchestra static policy, role redundancy.
 - [[smfr]] — Synthetic Multi-Hop Financial Reasoning: a procedurally generated diagnostic benchmark designed to expose the [[multi-agent-illusion]] under conditions where MAS *should* help. Immune to contamination; the [[expert-mas]] control demonstrates the multi-agent paradigm can work.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
@@ -254,7 +254,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tracer-bullets]] — Vertical slices of functionality for early end-to-end feedback.
 - [[ubiquitous-language]] — Shared terminology to align human and agent mental models.
 - [[under-exploration]] — A predicted pathology in the [[operational-mirror|operational mirror]]: the optimizer converges on local prompt-level edits, missing structural changes. Detection signal: ship-prediction accuracy decay (e.g., 80% → 0%). Empirically confirmed in [[harnessx]] §6.6(g–i)
-- [[verification-loop]] — Automated feedback loops for validating agent implementations.
+- [[verification-loop]] — Automated feedback loops for validating agent implementations; Theo's argument that the loop should include a generation step where AI produces verification slop.
 - [[rollback-posture]] — Rollbacks only work when you release slower than you can detect problems; agents shipping faster than detection jams the safety valve.
 - [[verifiability]] — Karpathy's framework: LLMs automate what you can verify; the driver of jagged AI capability.
 - [[vibe-coding]] — The term Karpathy coined: coding where you fully trust the LLM's output. Raises the floor for everyone.

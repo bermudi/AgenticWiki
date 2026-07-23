@@ -43,6 +43,7 @@ sources:
   - raw/2602.11988v1.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/yt-you-need-to-read-less-code.md
 tags: [thread, ai-engineering, code-quality, failure-modes, tool-design]
 unaudited_marginal: 0
 ---
@@ -270,6 +271,9 @@ This echoes [[mario-zechner|Mario Zechner]]'s own practice: he accepts slop in [
 > [!note] The Friction Layers Distinction
 > The BEEPs approach removes all friction at the tooling layer (never review the code, tag agents to add features) while preserving it at the design layer (4 days of careful design, 50%+ time on documentation). This is consistent with [[armin-ronacher|Armin Ronacher]]'s finding that removing [[deliberate-friction]] accelerates slop — because the friction is removed where output doesn't matter (disposable tooling) and preserved where it does (design decisions). The insight isn't that slop prevention doesn't need friction; it's that friction is a limited resource best allocated where quality matters most.
 
+> [!note] Departure: Slop as Verification Shield
+> [[theo-t3gg|Theo]] extends the fighting-slop-with-slop principle beyond disposable tooling to the **verification layer** of critical code. His argument: if your code is so important that every line must be verified (bankruptcies, deaths, stopped hearts), you should be writing an "unbelievable amount of slop" — not for production, but to verify the production code. Every line of production code should have 100 lines of slop verifying it, 10,000 lines testing it. Build custom debuggers, test harnesses, runtimes, logging systems, and lint rules. This reframes the speed-review asymmetry: instead of "AI generates faster than humans verify," the answer is "generate more code to verify." The human's job shifts from reading every line to designing verification systems that AI populates with slop. The containment is now at the tier boundary: slop lives in the verification layer (tier C), production code lives in the critical layer (tier D). See [[fighting-slop-with-slop]] and [[the-human-lever]].
+
 The approach requires confident scoping. If the slop tooling creeps into critical paths, or if the disposable tooling needs human attention later (security, scaling), the cost of hindsight is high.
 
 > [!note] Departure: Overconfident Verification as a Slop Vector
@@ -325,3 +329,4 @@ Cramer also identifies the verification problem as the bottleneck: "Software ver
 - `raw/2602.11988v1.md` — Gloaguen et al. (2026): AGENTBENCH evaluation of context files; `/init`-style auto-generated files add 14–22% reasoning token overhead without improving outcomes, an effect driven by redundancy with existing docs. Source for the context-pollution bullet's empirical claim.
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — [[theo-t3gg|Theo]] (t3.gg): the "SWB Pro tests how good are models at contaminated Python repos" quote in the Benchmark Slop section.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: shipping 40 to 50 well-tested production changes per day through an autonomous pipeline. Source for the "High-Throughput Autonomous Pipelines as Slop Containment" departure callout.
+- `raw/yt-you-need-to-read-less-code.md` — [[theo-t3gg|Theo]]: the code importance spectrum (slop → death), the flipped read:generate ratio, and the argument that important code should be verified by generating more slop (custom debuggers, test harnesses, runtimes) — extending fighting slop with slop to the verification layer.

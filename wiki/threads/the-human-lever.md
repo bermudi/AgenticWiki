@@ -1,11 +1,12 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-18
+updated: 2026-07-22
 unaudited_marginal: 0
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - "raw/yt-stop-reading-code-start-understanding-systems.md"
+  - raw/yt-you-need-to-read-less-code.md
   - raw/yt-ai-coding-for-real-engineers.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/yt-no-vibes-allowed-dex-horthy.md
@@ -246,6 +247,9 @@ See [[synthetic-truth]] and [[temporal-smoothing]] for full treatment of the phe
 
 He also reviews **module interfaces** during the PRD phase — evaluating whether a new method should exist on a service, or whether an existing method should gain a parameter. This is pure interface design, agnostic to implementation details. The discipline: care about *what* the modules do and *how they connect*, not *how they're built inside*.
 
+> [!note] Departure: Generate Verification, Don't Read Production
+> [[theo-t3gg|Theo]] pushes the "reviewing outputs, not code" principle further: if your code is so important that every line must be verified, you should be writing an "unbelievable amount of slop" to verify it — custom debuggers, test harnesses, runtimes, logging systems, and lint rules. The human's job shifts from reading every line of production code to **designing verification systems** that AI populates with slop. "Every line of code that goes in should have 100 lines of slop verifying it." This reframes the speed-review asymmetry: instead of "AI generates faster than humans verify," the answer is "generate more code to verify." The human owns the verification strategy; the AI generates the verification code. This is the [[fighting-slop-with-slop|fighting slop with slop]] principle applied to the verification layer — slop lives in the verification tier, production code lives in the critical tier. See [[slop]] for the code importance spectrum this argument rests on.
+
 ## Investing in Design Every Day
 
 [[matt-pocock|Matt Pocock]] quotes [[kent-beck|Kent Beck]]: **"Invest in the design of the system every day.**" This is the discipline that separates strategic engineering from the specs-to-code divestment pattern. Specs-to-code asks you to stop thinking about code and let the compiler handle it; investing in design means the opposite — you think about the code constantly, but at the level of modules, interfaces, and boundaries rather than line-by-line implementation. The human's cognitive load is shifted from reading every line to owning every boundary.
@@ -415,6 +419,7 @@ If the [[software-factory]] works, the human lever at the execution layer disapp
 - [[tracing-spectrum]] — The tool that makes the closed loop (design → code → execution → feedback) visible at all three layers
 - [[baml]] — BAML's compiler-level auto-instrumentation and BEEPs workflow: the human lever operationalized at organizational scale
 - [[vibv]] — Source of the expectation gap model and the closed-loop extension to the quality loop
+- [[theo-t3gg]] — The code importance spectrum and the argument that the human should design verification systems (custom debuggers, test harnesses, runtimes) that AI populates with slop, rather than reading every line of production code
 
 ## Cramer on Accountability and Unchanged Fundamentals
 
@@ -462,4 +467,5 @@ His iterative refinement observation: developers used to build a first version, 
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "Fleet-Level Memory Governance" extension: the human accepts/rejects proposed memory changes across all sessions; tiered permissions (org-wide read-only, agent scratchpad read-write) make the memory store a governed surface.
 - `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: understanding-to-participate vs. understanding-to-verify; the human as the one who must hold the system's conceptual model; Explain Diff, microworlds, and quizzes as tools for keeping the human in the creative loop.
 - `raw/yt-stop-reading-code-start-understanding-systems.md` — Vibv (Boundary ML) and Dex Horthy (Human Layer): the expectation gap model (user expectations grow faster than capability); design-level alignment via Technical Design Docs; the closed loop (design → code → execution → feedback); tracing as the tool that makes the human lever visible at all three layers.
+- `raw/yt-you-need-to-read-less-code.md` — [[theo-t3gg|Theo]]: the code importance spectrum (slop → death), the flipped read:generate ratio, and the argument that the human should design verification systems (custom debuggers, test harnesses, runtimes) that AI populates with slop — reframing the human lever from "read every line" to "design verification infrastructure."
 

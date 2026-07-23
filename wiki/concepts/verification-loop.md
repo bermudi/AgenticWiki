@@ -1,8 +1,8 @@
 ---
 title: Verification Loop
 created: 2026-04-25
-updated: 2026-07-14
-sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.md", "raw/2605.18747.md", "raw/deepswe-failure-analysis.md"]
+updated: 2026-07-22
+sources: ["raw/yt-no-vibes-allowed-dex-horthy.md", "raw/yt-how-agents-use-dev-tools.md", "raw/2604.15597v1.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md", "raw/2603.00822v2.md", "raw/2605.18747.md", "raw/deepswe-failure-analysis.md", "raw/yt-you-need-to-read-less-code.md"]
 tags: ["ai-workflow", "testing", "rigor", "tool-design"]
 unaudited_marginal: 0
 ---
@@ -71,6 +71,17 @@ The LLM's default behavior is to do too much at once: produce a huge code change
 
 [[zanie-blue|Zanie Blue]] (Astral) emphasizes that the verification loop depends on tools providing deterministic, specialized feedback. Agents are stochastic — they need static analysis, test runners, and linters to mechanically prove correctness. Research shows agents can't perform complex static analysis even with fine-tuning; they *need* tools for this. The design of [[tool-design-for-agents|tool output]] directly affects how efficiently the loop operates — verbose output floods context, while context-optimized output keeps the agent in the [[smart-zone-dumb-zone|Smart Zone]].
 
+## The Verification Budget: Generate More Code to Verify
+
+[[theo-t3gg|Theo (t3.gg)]] reframes the verification loop's core constraint: the bottleneck isn't review speed, it's **verification capacity**. The read:generate ratio has flipped — where a pre-AI engineer might write 200 lines and read 1,000, now they generate 2,000 but still read 1,000. The solution isn't to read more code, it's to **generate more verification code**.
+
+> "If your code is so goddamn important that every single line needs to be verified because it could bankrupt businesses, it could get people killed, it could stop people's hearts, it could drive cars into walls, if your code is that important, you should be writing an unbelievable amount of slop. Not to put in your product, but to verify your product."
+
+This extends the verification loop beyond its four steps (propose → execute → verify → refine) to include a **generation step**: the human designs the verification strategy (custom debuggers, test harnesses, runtimes, logging systems, lint rules), and AI generates the verification code that probes the production code. Every line of production code should have 100 lines of slop verifying it, 10,000 lines testing it. The verification loop becomes: design → generate → execute → verify → refine, where "generate" is the new step that AI populates with disposable verification code.
+
+> [!note] Departure: Verification as a Tier-Boundary Problem
+> This reframes the speed-review asymmetry this concept documents. Instead of "AI generates faster than humans verify" (the threat), Theo's position is "generate more code to verify" (the strategy). The containment is at the tier boundary: verification slop lives in the disposable tier, production code lives in the critical tier. The verification code doesn't need to be read or maintained — it only needs to be *observationally correct*. See [[slop]] for the code importance spectrum and [[fighting-slop-with-slop]] for the containment principle.
+
 ## Thread
 
 - [[the-verifiability-thesis]] — Verification loops are the mechanical instantiation of the verifiability thesis
@@ -133,7 +144,8 @@ The practical implication for verification loop design: the loop is not a single
 - [[matt-pocock]] — "Outrunning your headlights" metaphor; TDD as the discipline for keeping agent speed proportional to verification ability.
 - [[agent-observability]] — Traces as the input to the verification loop: you can only verify what you can see.
 - [[tracing-spectrum]] — Design-time tracing makes the design layer verifiable; the loop extends to back-to-design
-- [[fighting-slop-with-slop]] — The BEEPs workflow uses the verification loop differently: the design doc is the verification target, the tooling is the throwaway means.
+- [[fighting-slop-with-slop]] — The BEEPs workflow uses the verification loop differently: the design doc is the verification target, the tooling is the throwaway means. Theo's verification-as-slop argument extends the loop with a generation step.
+- [[theo-t3gg]] — The flipped read:generate ratio as the verification bottleneck; the argument that important code should be verified by generating more slop
 - [[plan-vs-review]] — The verification loop is the review side of the plan-vs-review tradeoff.
 - [[chris-parsons]] — Sub-agent validation with fresh contexts as a concrete verification technique
 - [[doc-rot]] — Verification loops make stale documentation visible; tests are the living specification that replaces rotted docs
@@ -159,3 +171,4 @@ The practical implication for verification loop design: the loop is not a single
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026): executable verification against LLM reflection baseline; LLM reflection degrades compliance; deterministic error traces enable faster convergence; three-layer enforcement architecture
 - `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). Code as Agent Harness survey. Identifies oracle adequacy and semantic verification (§5.2.1–5.2.2) as second-order constraints on verification loop effectiveness; proposes verification stacks with explicit scope
 - `raw/deepswe-failure-analysis.md` — First-test-step telemetry: GPT-5.5 tests at ~step 30–40 vs failing open-weight models at step 80–220; the unverified gap is where bugs bake in (`effect-sse-httpapi-streaming` case)
+- `raw/yt-you-need-to-read-less-code.md` — [[theo-t3gg|Theo]]: the flipped read:generate ratio as the verification bottleneck; the argument that important code should be verified by generating more slop (custom debuggers, test harnesses, runtimes); the verification loop extended with a generation step

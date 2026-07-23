@@ -1,9 +1,10 @@
 ---
 title: Fighting Slop With Slop
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-07-22
 sources:
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
+  - "raw/yt-you-need-to-read-less-code.md"
 unaudited_marginal: 0
 tags: [concept, tool-design, workflow, ai-engineering]
 ---
@@ -56,6 +57,19 @@ The approach is not without failure modes:
 - **Team friction**: If a human eventually *does* need to understand or fix the tooling (unexpected scaling, security issue), the lack of any intentional design makes the fix expensive. The bet is that this never happens — a bet that may not hold at scale.
 - **Sunk cost**: The easier it is to add features via agent tags, the more features accumulate. The tooling grows in scope while staying sloppy, until replacing it becomes as painful as maintaining it.
 
+## Slop as Verification Infrastructure
+
+[[theo-t3gg|Theo (t3.gg)]] extends the fighting-slop-with-slop principle beyond disposable tooling to the **verification layer** of critical code. His argument: if your code is so important that every line must be verified (bankruptcies, deaths, stopped hearts), you should be writing an "unbelievable amount of slop" — not for production, but to verify the production code.
+
+This is fighting slop with slop applied to the most important tier of code, not the least. Where the BEEPs workflow channels slop into disposable tooling that generates high-quality design docs, Theo's approach channels slop into verification infrastructure (custom debuggers, test harnesses, runtimes, logging systems, lint rules) that guards the critical production code. The principle is the same: accept disposability where it doesn't matter (the verification code) to produce reliability where it does (the production code).
+
+> "Every line of code that goes in should have 100 lines of slop verifying it. Every line that goes in should have 10,000 lines of code of slop that you can use to verify the system."
+
+The containment is now at the **tier boundary**: slop lives in the verification layer (tier C), production code lives in the critical layer (tier D). The verification slop is disposable — it doesn't ship, it doesn't merge, it exists only to test and probe the production code. But it must be *observationally correct* — if the verification code is wrong, the production code's safety is illusory.
+
+> [!note] Departure: Slop as the Verification Budget
+> This reframes the slop problem's speed-review asymmetry. The wiki's existing framing says: "AI generates faster than humans verify." Theo's position: "don't verify by reading — verify by generating more code." The human's job shifts from reading every line to designing verification systems that AI populates with slop. This is the [[fighting-slop-with-slop]] principle inverted: instead of channeling slop *away* from important code, you channel it *toward* important code as a verification shield. See [[the-human-lever]] for the broader implications on where the human lever applies.
+
 ## Thread
 
 - [[the-slop-problem]] — Fighting slop with slop introduces a productive tension into the thread's claim that slop is uniformly harmful
@@ -69,7 +83,10 @@ The approach is not without failure modes:
 - [[verification-loop]] — The BEEPs workflow complements the verification loop: the design doc is the verification target, the tooling is the throwaway means
 - [[plan-vs-review]] — The 50%+ design time allocation in the BEEPs workflow empirically validates the plan-heavy approach
 - [[ai-design-loop]] — The BEEPs workflow is a structured ai-design-loop applied at organizational scale
+- [[the-human-lever]] — Theo's verification-as-slop argument reframes where the human lever applies: design verification systems, not read every line
+- [[theo-t3gg]] — Author of the verification-as-slop extension
 
 ## Sources
 
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Full discussion of the "fighting slop with slop" concept, the BEEPs design doc workflow, and the threading design process
+- `raw/yt-you-need-to-read-less-code.md` — Theo's extension of the principle to the verification layer: if your code is important, write more slop to verify it (custom debuggers, test harnesses, runtimes); the flipped read:generate ratio as the motivation
