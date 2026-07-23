@@ -55,4 +55,4 @@ Competent. The final artifact is good; the path to it was bumpier and more expen
 
 ### Post-Evaluation State
 
-- The stale `updated` dates noted above were left unfixed so this entry reflects the model's raw output.
+- The stale `updated` dates were fixed by the evaluator after the log was committed, then this note was updated to match the live wiki.
