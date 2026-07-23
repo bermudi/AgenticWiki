@@ -63,6 +63,9 @@ The approach is not without failure modes:
 
 This is fighting slop with slop applied to the most important tier of code, not the least. Where the BEEPs workflow channels slop into disposable tooling that generates high-quality design docs, Theo's approach channels slop into verification infrastructure (custom debuggers, test harnesses, runtimes, logging systems, lint rules) that guards the critical production code. The principle is the same: accept disposability where it doesn't matter (the verification code) to produce reliability where it does (the production code).
 
+> [!note] Synthesis: Source-bridging framing
+> Theo does not reference "fighting slop with slop" or the BEEPs workflow. The connection between his verification-slop argument and the fighting-slop-with-slop principle is the wiki's analytical synthesis — both argue for channeling slop into non-production contexts to improve critical output, but neither source states the bridge. The tier C / tier D mapping, by contrast, is Theo's own vocabulary ([21:25-21:38] in the transcript).
+
 > "Every line of code that goes in should have 100 lines of slop verifying it. Every line that goes in should have 10,000 lines of code of slop that you can use to verify the system."
 
 The containment is now at the **tier boundary**: slop lives in the verification layer (tier C), production code lives in the critical layer (tier D). The verification slop is disposable — it doesn't ship, it doesn't merge, it exists only to test and probe the production code. But it must be *observationally correct* — if the verification code is wrong, the production code's safety is illusory.
@@ -80,7 +83,7 @@ The containment is now at the **tier boundary**: slop lives in the verification 
 - [[slop]] — The general concept, now with an internal-vs-external dimension
 - [[slop-watch]] — The observability approach to measuring slop; fighting slop with slop is a complementary production-side strategy
 - [[the-slop-problem]] — The thread that documents the threat; this concept documents the controlled-use case
-- [[verification-loop]] — The BEEPs workflow complements the verification loop: the design doc is the verification target, the tooling is the throwaway means
+- [[verification-loop]] — The BEEPs workflow complements the verification loop: the design doc is the verification target, the tooling is the throwaway means. Theo's verification-as-slop argument extends the loop with a generation step.
 - [[plan-vs-review]] — The 50%+ design time allocation in the BEEPs workflow empirically validates the plan-heavy approach
 - [[ai-design-loop]] — The BEEPs workflow is a structured ai-design-loop applied at organizational scale
 - [[the-human-lever]] — Theo's verification-as-slop argument reframes where the human lever applies: design verification systems, not read every line
