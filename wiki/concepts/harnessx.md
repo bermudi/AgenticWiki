@@ -1,7 +1,7 @@
 ---
 title: HarnessX
 created: 2026-06-17
-updated: 2026-07-04
+updated: 2026-07-23
 sources:
   - raw/2606.14249.md
 tags: [concept, agent-harness, harness-engineering, self-evolution, composition, harness-co-evolution, reinforcement-learning, aegis]

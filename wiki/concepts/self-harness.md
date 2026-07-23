@@ -1,7 +1,7 @@
 ---
 title: Self-Harness
 created: 2026-06-16
-updated: 2026-07-04
+updated: 2026-07-23
 sources:
   - raw/2606.09498.md
   - raw/2606.14249.md
