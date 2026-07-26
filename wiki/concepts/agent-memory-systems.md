@@ -1,10 +1,11 @@
 ---
 title: Agent Memory Systems
 created: 2026-07-11
-updated: 2026-07-14
+updated: 2026-07-25
 sources:
   - raw/2606.24775v1.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
+  - raw/boundary-context-shards-shared-memory.md
 tags: [concept, agent-memory, data-management, memory-architecture, retrieval, benchmark, memory-maintenance]
 unaudited_marginal: 0
 ---
@@ -77,6 +78,8 @@ The component ablations converge on one principle: **each layer of abstraction �
 
 > [!note] Out-of-band consolidation ([[dreaming]]): Module U (maintenance) is described above as a property of the memory system. [[lamis-mukta|Lamis Mukta]] (Anthropic, AI Native DevCon June 2026) makes explicit that maintenance has a *temporal-mode* question: it can run **in-band** (the task agent maintains memory during its own session, competing for context/tokens) or **out-of-band** (a separate batch process with dedicated compute and fleet-wide transcript visibility). Dreaming is the out-of-band instance of U — an orchestrator + subject-agent fleet reviews session transcripts against the store, proposes evidence-backed consolidations/forgetting/additions, and a human accepts or rejects. The production guardrails Mukta enumerates (versioning with transcript provenance, optimistic-locking concurrency via hashing, tiered permissions, portability) are module U hardened for multi-agent concurrency and prompt-injection abuse — and echo the audience's observation that this is "reinventing databases," which Mukta frames as the harness absorbing module-U concerns into deterministic infrastructure.
 
+> [!note] Extension: Volume-gated extraction + HITL maintenance ([[context-shards]]): The Boundary/HumanLayer "context shards" design (livestream, July 2026) is a shipped-shaped, product-level instance of this framework with two twists. On **module S (extraction)**, candidates are *volume-gated* — a supervisor agent mines session transcripts and only surfaces a memory once it recurs across sessions *and* across users (team-volume prevalence), so low-value memories are filtered at write time rather than schema-freely appended. On **module U (maintenance)**, it adds explicit human-in-the-loop stages — triage, 30-day snooze/dismiss, decay of unused shards, and bake-in as a repo file — keeping the stored set small and high-signal. It is the ingestion-time complement to dreaming's maintenance-time consolidation: both are out-of-band, fleet-visible, HITL memory processes; context shards raises the entry bar, dreaming lowers the exit bar.
+
 ## Evaluation Methodology
 
 The paper's methodological contribution is itself notable against [[the-benchmark-crisis]]: it argues existing memory benchmarks treat the system as a monolithic black box and report only end-to-end task-success metrics (F1, BLEU). Instead it decomposes evaluation into five dimensions measured independently — task effectiveness, evidence-level retrieval fidelity, dynamic-update robustness, long-horizon stability, and operational cost — and runs fine-grained ablations that modify one module at a time.
@@ -95,6 +98,7 @@ The paper's methodological contribution is itself notable against [[the-benchmar
 - [[llm-guided-compression]] — The LLM-as-judge compression pattern at the memory layer
 - [[evolving-context]] — This page surveys the maintenance/lifecycle dimension (U) that evolving-context's memory-evolution axes operate within
 - [[dreaming]] — The out-of-band, fleet-wide instance of module U; an asynchronous reviewer that consolidates memory off the task agent's critical path
+- [[context-shards]] — A volume-gated (module S) + HITL-maintained (module U) product instance of this framework; the ingestion-time complement to dreaming
 - [[lamis-mukta]] — Described dreaming and the production guardrails that harden module U (Anthropic)
 - [[context-engineering]] — The paper draws an explicit three-way distinction: RAG (stateless retrieval) vs context engineering (per-turn window curation) vs agent memory (persistent, updatable, full lifecycle)
 - [[self-conditioning]] — Finding 4's long-horizon degradation: flat memory suffers as evidence distance grows, mirroring error-accumulation in context
@@ -107,3 +111,4 @@ The paper's methodological contribution is itself notable against [[the-benchmar
 
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* The full paper: the four-module framework M = ⟨R, S, Q, U⟩; the taxonomy of 12 systems across three paradigms; end-to-end evaluation across 5 workloads / 11 datasets (RQ1–RQ5); fine-grained component ablations (M1–M4); nine named findings (workload alignment, evidence-centric retrieval, temporal update fidelity / "hallucinations of the past", horizon-structured memory, operational scaling rule, representation granularity, late filtering, retrieval guidance, conservative maintenance). Code at github.com/OpenDataBox/MemoryData.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the out-of-band consolidation note: dreaming as the out-of-band instance of module U (temporal-mode question: in-band vs out-of-band maintenance), and the production guardrails (versioning, optimistic-locking concurrency, permissions, portability) as module U hardened for fleet-scale concurrency and abuse.
+- `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026). Source for the volume-gated extraction + HITL maintenance note: context shards as a product-level instance of modules S and U, with team-volume prevalence gating and staged human-in-the-loop adoption. Multi-speaker; quotes attributed to the discussion, not verified per speaker.

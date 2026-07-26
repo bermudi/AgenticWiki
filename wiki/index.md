@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-23
+updated: 2026-07-25
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -183,6 +183,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
 - [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
 - [[dreaming]] — Anthropic's name for out-of-band memory consolidation: a batch, asynchronous process where reviewing agents survey a fleet's session transcripts and propose evidence-backed memory changes. The engineering instantiation of the biological sleep/consolidation analogy — the temporal complement to in-band evolving context.
+- [[context-shards]] — Boundary/HumanLayer's volume-based, team-aggregated, HITL memory-sourcing pipeline: a supervisor agent mines recurring instructions across the team's agent sessions and gates them by prevalence before human triage — the ingestion-time twin of dreaming against additive-only "memory becomes slop".
 - [[episodic-memory-for-agents]] — Episodic memory — specific, contextualized, single-shot experiences — is the missing piece for long-term LLM agents. Pink et al.'s five-property framework + Davis & Schleisman's SOM-and-meta-episode architecture.
 - [[agent-memory-systems]] — Agent memory as a data-management system (M = ⟨R,S,Q,U⟩); benchmarking 12 systems finds no single architecture dominates — effectiveness depends on workload alignment, and append-only stores return stale facts ("hallucinations of the past").
 - [[executable-memory]] — The paradigm in which an agent's model of a user is a living software project: typed Python objects hold state, ordinary Python functions encode rules, and an interpreter runs the whole thing (User as Code, Bojie Li, Pine AI 2026)

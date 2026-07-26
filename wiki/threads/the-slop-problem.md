@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-07-22
+updated: 2026-07-25
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
@@ -20,6 +20,7 @@ sources:
   - raw/2604.15597v1.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/yt-slop-watch-ideation.md
+  - raw/boundary-context-shards-shared-memory.md
   - "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - raw/synthetic-truths-gemini-has-a-secret-code.md
@@ -172,6 +173,9 @@ Combined with **automation bias** — you see one brilliant agent output, lower 
 > [!note] Extension: Dreaming as the Out-of-Band Pain Signal for Memory Slop
 > This "no pain" failure is sharpest at the *memory layer*: an agent cannot feel the pain of its own stale memory, nor detect a failure pattern that repeats across sessions it never sees — so stale and missing knowledge accumulates as memory slop with no internal feedback signal. [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) externalizes exactly that pain detection: a dedicated, out-of-band process with fleet-wide transcript visibility (including tool-call metadata) surveys for recurring failures and proposes memory fixes for a human to accept or reject. It is the [[doc-rot]] defense and the [[factory-maintenance]] sweep applied to the memory store — the missing feedback loop that lets memory "feel pain" the task agent structurally cannot.
 
+> [!note] Extension: Context Shards as the Ingestion-Time Memory Filter
+> [[context-shards]] (Boundary/HumanLayer livestream, July 2026) attacks the *same* additive-only memory failure at the *entry* point rather than after the fact. The design's thesis: Claude/CodeRabbit-style memory systems become slop because they are additive-only — every captured instruction is an unreviewed line, and after ~2 months the list converges into 300+ items nobody audits. Context shards counters this with a **volume gate**: a supervisor agent mines session transcripts and only surfaces a memory once it recurs across sessions *and users* (team-volume prevalence), so low-value memories are filtered before they are ever stored. Candidates then pass through human triage, a 30-day snooze/dismiss, decay of unused shards, and optional bake-in as a repo file. It is the ingestion-time twin of dreaming: dreaming lowers the exit bar (consolidate what is stored), context shards raises the entry bar (filter what gets stored). Both are the containment principle this thread documents, applied to the memory layer.
+
 ## The Training Data Ceiling
 
 [[mario-zechner|Mario Zechner]] adds a structural argument: the quality ceiling for agent output is bounded by training data. The median code on the internet is garbage — cargo-culting, trend-of-the-day patterns, abandonware. The handful of excellently engineered projects (Linux, etc.) are minuscule by comparison. ML models converge toward the mean, and the mean is mediocre. When you let agents fill in the blanks in your spec (and every spec has blanks unless it's the software itself), they fill them from the median of internet code.
@@ -307,6 +311,7 @@ Cramer also identifies the verification problem as the bottleneck: "Software ver
 - `raw/2604.15597v1.md` — DELEGATE-52 benchmark: quantitative evidence of compounding errors, sparse critical failures driving document degradation.
 - `raw/yt-slop-watch-ideation.md` — Slop Watch: the concrete observability platform built to measure and combat slop.
 - `raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md` — Software entropy as the named mechanism from The Pragmatic Programmer; specs-to-code as a named movement that accelerates entropy; "code is not cheap" thesis.
+- `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026). Source for the context-shards ingestion-time memory filter note: volume-gated extraction + human triage + decay as the anti-slop mechanism against additive-only memory systems. Multi-speaker; quotes attributed to the discussion, not verified per speaker.
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Fighting slop with slop concept, BEEPs design doc workflow, threading design process
 - `raw/synthetic-truths-gemini-has-a-secret-code.md` — Synthetic truth and temporal smoothing as high-grade information slop; Gemini's self-analysis of narrative coherence vs. temporal reality
 - `raw/2311.04235v3.md` — RuLES (Mu et al.): rule-following failures as a distinct slop vector; alignment-tuned models are worse at obeying developer-defined constraints, making every generation a potential slop event

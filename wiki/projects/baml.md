@@ -1,9 +1,10 @@
 ---
 title: BAML
 created: 2026-07-15
-updated: 2026-07-15
+updated: 2026-07-25
 sources:
   - raw/yt-stop-reading-code-start-understanding-systems.md
+  - raw/boundary-context-shards-shared-memory.md
 tags: ["project", "observability", "tracing", "type-safety", "llm"]
 unaudited_marginal: 0
 ---
@@ -45,6 +46,10 @@ Vibv critiques OpenTelemetry's type system as insufficient for rich tracing. OTE
 
 BAML's approach avoids this by embedding type information in the trace data itself. The compiler knows the shape of every value, so traces carry structured, queryable data without JSON serialization.
 
+## The "AI that Works" Podcast
+
+BAML's co-founder [[vibv|Vibv]] appears as a recurring guest on Boundary's "AI that Works" podcast. A July 2026 episode — "Building a Shared Memory System for AI Coding Agents" — featured [[dex-horthy|Dex Horthy]] (HumanLayer) designing the **[[context-shards]]** memory-sourcing feature live: a volume-based, team-aggregated, human-in-the-loop pipeline that mines recurring instructions from agent sessions. The episode is a primary source for the context-shards concept and for the slop critique of additive-only memory systems (Claude memory, CodeRabbit). See [[the-slop-problem]] and [[agent-memory-systems]] for how the design maps onto the wiki's memory theory.
+
 ## Thread
 
 - [[the-human-lever]] — BAML's compiler-level auto-instrumentation operationalizes the human lever: tracing is automatic, not dependent on the agent remembering to instrument
@@ -58,7 +63,9 @@ BAML's approach avoids this by embedding type information in the trace data itse
 - [[tool-design-for-agents]] — BAML is designed from the ground up for AI-era tooling
 - [[fighting-slop-with-slop]] — Boundary ML's "fighting slop with slop" philosophy: channel AI-generated slop into disposable tooling while keeping design docs rigorous
 - [[vibv]] — Co-founder and CEO of Boundary ML
+- [[context-shards]] — The memory-sourcing feature designed live on the "AI that Works" podcast (guest-hosted by Vibv)
 
 ## Sources
 
 - `raw/yt-stop-reading-code-start-understanding-systems.md` — Vibv's description of BAML's compiler-level auto-instrumentation, type-safe tracing, and the OTEL critique
+- `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026): context-shards feature designed live with Dex Horthy; the memory-slop critique of additive-only systems. Multi-speaker; quotes attributed to the discussion, not verified per speaker.

@@ -1,9 +1,10 @@
 ---
 title: Dreaming
 created: 2026-07-14
-updated: 2026-07-15
+updated: 2026-07-25
 sources:
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
+  - raw/boundary-context-shards-shared-memory.md
 unaudited_marginal: 0
 tags: [concept, memory, memory-consolidation, continual-learning, out-of-band, agent-memory, context-engineering, evolving-context]
 ---
@@ -81,7 +82,7 @@ On the cost of dreaming itself ("why throw extra resources at out-of-band review
 
 > [!note] Synthesis: The missing temporal axis. [[evolving-context]] organizes continual learning by *what evolves* (prompts, skills, harness surfaces, schemas, stores, patch history). Dreaming introduces the orthogonal question of *when* and *by whom*: memory maintained in-band by the task-performing agent vs. out-of-band by a dedicated reviewing process with fleet visibility. Every evolution axis on the evolving-context page could in principle be driven in-band or out-of-band; the talk argues the out-of-band mode is structurally necessary once you scale beyond a single session.
 
-> [!note] Synthesis: Realizes two abstract ideas already in the wiki. Dreaming is the concrete engineering instantiation of the **Complementary Learning Systems consolidation** of [[episodic-memory-for-agents]] — the offline transfer/reorganization of experience — performed in *token space* by agents rather than in weight space. And it realizes Davis & Schleisman's **default-mode after-action** framing: a structurally distinct reflective mode that "learns during downtime" using idle compute — which is exactly what a batch, asynchronous, out-of-band reviewer is. The biological sleep metaphor is not decoration; it names a real architectural separation between task-execution and memory-consolidation processes.
+> [!note] Extension: Context shards as the ingestion-time twin. [[context-shards]] (Boundary/HumanLayer, July 2026 livestream) is the same out-of-band, fleet-visible, HITL shape applied at the *entry* side: a supervisor agent mines session transcripts, gates candidates by cross-session/cross-user prevalence (the volume/lagging-indicator philosophy), and pushes only high-prevalence candidates into the triage loop. Dreaming consolidates what is already stored; context shards filters what gets stored. The two compose — context shards raises the entry bar, dreaming lowers the exit bar — and together they bracket the memory lifecycle at the two points where slop accumulates (write time and maintenance time). For the CLS consolidation / default-mode after-action realization of dreaming, see [[episodic-memory-for-agents]].
 
 > [!note] Extension: Construction-time consolidation generalizes. The [[construction-time-memory]] thread asks whether offline memory-as-quality-substrate generalizes beyond GraphRAG construction. Dreaming is affirmative evidence: the same "invest offline, with dedicated reviewers and fleet visibility, to produce a better-maintained artifact" pattern applies to *agent session memories*, not just knowledge-graph triples. The reviewer fleet + evidence-backed proposals is the construction-time-memory pattern at the memory-maintenance layer.
 
@@ -100,6 +101,7 @@ On the cost of dreaming itself ("why throw extra resources at out-of-band review
 
 - [[evolving-context]] — The "what evolves" taxonomy; dreaming adds the orthogonal "when/whom" (in-band vs out-of-band) temporal axis
 - [[agent-memory-systems]] — Dreaming is a concrete out-of-band instance of module U (maintenance: consolidation, forgetting, capacity); the production guardrails harden module U for concurrency and abuse
+- [[context-shards]] — The ingestion-time twin of dreaming: same out-of-band/fleet-visible/HITL shape, applied to volume-gated memory *entry* rather than maintenance-time consolidation
 - [[episodic-memory-for-agents]] — Dreaming realizes the CLS consolidation operation and the default-mode after-action framing as a token-space, agent-driven process
 - [[context-engineering]] — Memory stores are the persistent-context layer; dreaming is how that layer is maintained over time without competing for the in-band context budget
 - [[construction-time-memory]] — The generalization of offline memory-as-quality-substrate beyond GraphRAG
@@ -114,3 +116,4 @@ On the cost of dreaming itself ("why throw extra resources at out-of-band review
 ## Sources
 
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), "Learning while you sleep: Beyond memory to dreaming," AI Native DevCon, June 2026. Source for the in-band vs out-of-band distinction, the dreaming architecture (orchestrator + subjects, transcript + tool-call metadata review, evidence-backed proposals, human accept/reject), the school analogy, the production guardrails (versioning, hashing/concurrency, permissions, portability), reported effects (accuracy, speed/cost, freed capacity), and the "reinventing databases" Q&A. Also the memory-primitives timeline (CLAUDE.md → memory tools → skills → file-system-as-memory) and the productization via Claude Managed Agents' memory and dreaming API.
+- `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026). Source for the ingestion-time-twin note: context shards as the volume-gated, HITL, fleet-visible counterpart to dreaming, applied at memory *entry* rather than maintenance. Multi-speaker; quotes attributed to the discussion, not verified per speaker.

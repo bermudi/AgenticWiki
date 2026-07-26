@@ -1,10 +1,11 @@
 ---
 title: Vibv
 created: 2026-07-15
-updated: 2026-07-22
+updated: 2026-07-25
 sources:
   - raw/yt-stop-reading-code-start-understanding-systems.md
   - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
+  - raw/boundary-context-shards-shared-memory.md
 tags: ["author", "observability", "tracing", "type-safety", "programming-languages"]
 unaudited_marginal: 0
 ---
@@ -27,8 +28,11 @@ unaudited_marginal: 0
 - [[tracing-spectrum]] — The three-layer tracing model Vibv advocates
 - [[agent-observability]] — The broader observability context
 - [[dex-horthy]] — Co-speaker on the "AI that Works" episode
+- [[context-shards]] — Guest on the livestream where Dex Horthy designed the context-shards feature
+- [[the-slop-problem]] — The "AI that Works" episode sharpens the additive-only memory failure as a slop source
 
 ## Sources
 
 - `raw/yt-stop-reading-code-start-understanding-systems.md` — "AI that Works" episode with Dex Horthy on observability, tracing, and understanding systems
 - `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026): co-hosted with [[dex-horthy|Dex Horthy]] on coding agent benchmarks — benchmark generations, the maintainability gap, the RL training constraint, the velocity framework, and a proposed evolving-codebase benchmark. **Note:** Multi-speaker source whose transcript lacks per-line speaker labels; attribution of specific claims to Vibv could not be verified against the audio. Claims are attributed to the video/discussion in [[the-benchmark-crisis]], not to Vibv individually.
+- `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026): guest on the episode where Dex Horthy designed the context-shards feature live; the memory-slop critique of additive-only systems. **Note:** Multi-speaker livestream; transcript lacks per-line speaker labels, so quotes are attributed to the discussion, not to Vibv individually.

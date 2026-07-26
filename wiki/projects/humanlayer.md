@@ -1,10 +1,11 @@
 ---
 title: HumanLayer
 created: 2026-07-16
-updated: 2026-07-16
+updated: 2026-07-25
 sources:
   - raw/yt-context-engineering-with-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
+  - raw/boundary-context-shards-shared-memory.md
 unaudited_marginal: 0
 tags: [project, ide, collaboration, software-factory, agent-harness]
 ---
@@ -29,6 +30,17 @@ The PR is a discrete, high-latency review unit inherited from GitHub (itself a l
 
 The architectural pieces that enable this: a sync engine, durable streams (Dex cites the Electric SQL team's work), agentic traces, documents, tasks/projects grouping them, and actual git diffs streaming everywhere. The data model question the company is working through: what does engineering work look like when everybody's agent sessions, traces, and diffs live in a shared environment anyone can interact with — the way Slack gave ambient visibility that email couldn't, and GitHub gave cross-team visibility that pre-GitHub trackers couldn't.
 
+## Context Shards (memory-sourcing feature)
+
+On a July 2026 "AI that Works" livestream (guest-hosted by [[vibv|Vibv]] of Boundary), Dex built the design for **context shards** live: a volume-based, team-aggregated, human-in-the-loop memory-sourcing pipeline that pulls recurring instructions out of agent sessions and exposes them to the team. The detailed design is tracked on its own page, [[context-shards]], but the product-relevant points are:
+
+- **The trigger is the failure of auto-memory.** Claude's memory feature and CodeRabbit's equivalent both become slop because they are additive-only — they capture everything and converge into an unaudited 300+ item list. HumanLayer runs with agent memory *off* by default.
+- **The mechanism is a supervisor agent + structured output** over session transcripts (user/assistant messages only), producing *session statements* with citations (who said it, verbatim quote, conversation context) and a prevalence count.
+- **Team-volume aggregation** is the core signal: "one version of truth for my whole team," sourced from what *everyone* tells the agent, not one person.
+- **Staged HITL adoption**: nightly cron extraction → human triage → 30-day snooze/dismiss → decay of unused shards → optional bake-in as a repo file (JSON/markdown, not SaaS-owned). Approved shards inject into the agent's system prompt or a config file; triggers include cron, Slack messages, and memory feedback.
+
+This is a memory-layer instantiation of HumanLayer's broader thesis (continuous HITL collaboration, kill-the-PR, agent-first surface) — the memory store becomes a shared, governed, real-time-collaborated artifact like the rest of the IDE.
+
 ## What It Is Not
 
 HumanLayer is explicitly *not* a [[dark-factory|dark factory]] — Dex built and shut down one of those. The product is built around [[token-harder-vs-token-smarter|token-smarter]] principles: keep humans in the loop at the leverage points (planning, design review), use AI for the SDLC's middle phases (spec → plan → implement), and make the human-agent checkpoints continuous rather than discrete.
@@ -49,8 +61,10 @@ HumanLayer is explicitly *not* a [[dark-factory|dark factory]] — Dex built and
 - [[token-harder-vs-token-smarter]] — The posture the product encodes
 - [[single-player-to-multiplayer]] — The shared-environment collaboration model is the multiplayer-engineering vision
 - [[claude-code]] / [[opencode]] / [[pi]] — The harness layer HumanLayer sits alongside/replaces
+- [[context-shards]] — The volume-based, team-aggregated memory-sourcing feature designed live on the "AI that Works" stream
 
 ## Sources
 
 - `raw/yt-context-engineering-with-dex-horthy.md` — The product reveal: agent-first IDE, "kill the pull request," Google-Doc-style collaboration, sync engine and durable streams, the Slack/GitHub visibility analogies (1:21:16–1:26:37); the Metalytics origin (13:50).
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — The earlier human-approval-as-tool API platform that preceded the IDE.
+- `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026): the context-shards feature designed live (volume-based, team-aggregated, HITL memory sourcing). Multi-speaker; quotes attributed to the discussion, not verified per speaker.
