@@ -4,6 +4,7 @@ created: 2026-07-13
 updated: 2026-07-13
 sources:
   - raw/2606.00610v1.md
+unaudited_marginal: 0
 tags: [author, graphrag, rag, nlp, multi-agent]
 ---
 

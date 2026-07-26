@@ -5,6 +5,7 @@ updated: 2026-07-13
 sources:
   - raw/2606.00610v1.md
   - raw/yt-memorygraphrag-outperforms-every-rag.md
+unaudited_marginal: 0
 tags: [pagerank, rag, retrieval, graphrag, ranking]
 ---
 
