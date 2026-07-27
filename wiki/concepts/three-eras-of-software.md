@@ -17,7 +17,7 @@ tags: [concept, history, paradigm, software-engineering]
 | Era | Period | Bottleneck | Skill that mattered | Software structure |
 |---|---|---|---|---|
 | **Machine-limited** | Assembly era | Hardware cycles and memory | Precision, speed, every ounce of performance | Tight, hand-optimized code |
-| **Human-brain-limited** | Cloud/modular era | Human context window (~7–9 tokens) | Modular design, libraries, decomposition | Functions, classes, systems |
+| **Human-brain-limited** | Cloud/modular era | Human context (~7–9 tokens) | Modular design, libraries, decomposition | Functions, classes, systems |
 | **AI frontier** | Now | Specification and verification | Architecture, design authority, taste | Whatever the AI generates |
 
 ### The Machine-Limited Era
@@ -41,10 +41,10 @@ In this era, individual code generation has crossed the superhuman threshold. Th
 - **Architecture**: How do you design systems that remain manageable at scale?
 - **Inductive thinking**: How do you detect patterns and take decisions from a wider context?
 
-Schillings argues humans will occupy the role of architect and inductive thinker for the foreseeable future — looking at systems in wide context, detecting patterns, and making design decisions that have implications from hardware optimization to security to long-term maintainability.
+Schillings argues humans will occupy the role of architect and inductive thinker at least in the near future — looking at systems in wide context, detecting patterns, and making design decisions that have implications from hardware optimization to security to long-term maintainability.
 
 > [!warning] Contradiction: Is Inductive Thinking Permanently Human?
-> Schillings asserts humans have a "very clear edge" in inductive thinking for the foreseeable future. Karpathy's [[verifiability|verifiability thesis]] leaves open whether taste, judgment, and pattern recognition are automatable once labs build RL environments that reward them. The "AI frontier era" bottleneck (specification, verification, architecture) may itself yield to training, just as the machine-limited bottleneck yielded to compilers. The thesis's "Can Taste Become Verifiable?" tension applies equally to inductive thinking — the two are not cleanly separable. If inductive thinking enters the RL distribution, the three-era model needs a fourth era.
+> Schillings asserts humans have a "very clear edge" in inductive thinking at least in the near future. Karpathy's [[verifiability|verifiability thesis]] leaves open whether taste, judgment, and pattern recognition are automatable once labs build RL environments that reward them. The "AI frontier era" bottleneck (specification, verification, architecture) may itself yield to training, just as the machine-limited bottleneck yielded to compilers. The thesis's "Can Taste Become Verifiable?" tension applies equally to inductive thinking — the two are not cleanly separable. If inductive thinking enters the RL distribution, the three-era model needs a fourth era.
 
 ## Relationship to Karpathy's Three Paradigms
 
