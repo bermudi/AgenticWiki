@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-07-22
+updated: 2026-07-26
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -23,6 +23,7 @@ sources:
   - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
   - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
+  - raw/all-agentic-architectures-deterministic-picker.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 0
 ---
@@ -79,6 +80,10 @@ Between LLM-call steps, Galarza inserts deterministic validation steps that chec
 This operationalizes [[dex-horthy|Horthy]]'s "never send an AI to do a linter's job" principle: the deterministic checks are narrow, mechanical validations that don't consume model tokens or reasoning budget. They act as output gates between LLM steps, catching misclassifications and inconsistencies before they cascade.
 
 > [!note] Marginal: The walkthrough uses the Mastra framework for scoring and guardrails. The patterns (per-step scoring, deterministic reconciliation) are framework-agnostic, but the implementation details are Mastra-specific.
+
+### The Deterministic-Picker: A More Aggressive Hybrid on the Same Axis
+
+Horthy's "never send an AI to do a linter's job" *replaces* the LLM with a deterministic check. Galarza's deterministic guardrails are already a hybrid (LLM classifies + deterministic cross-checks; "neither trusted alone — only their agreement produces the routing decision"). The [[deterministic-picker]] pattern (Fareed Khan, [[all-agentic-architectures]], 2026) is a more aggressive hybrid on the same axis: the LLM no longer emits the deciding number at all — Python composes it from categorical commitments. The LLM is demoted from "emit the deciding number" to "commit to booleans/enums" — a third position relative to the two poles (full LLM-as-judge, full deterministic check), but on the same hybrid axis as Galarza, just further along it. The pattern is the repo author's named escape from what he calls the *LLM-as-Scorer flat-band pathology* — instruction-tuned LLMs collapse numeric scores to a narrow band regardless of input quality, which is a specific manifestation of the LLM-as-judge unreliability this thread documents (RUBRICEVAL's 55.97%, Bias in the Loop's 40+ point swings). The picker becomes arbitrary when an architecture depends on a non-discriminative score to rank or accept/reject; constraining the LLM to categorical features restores real spread without removing the LLM from the judgment step.
 
 ## Layer 2: Observability — The Decision Narrative
 
@@ -346,3 +351,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Daniel Han (Unsloth, 2026): real-world reward hacking instances (timer deletion, GPU Mode competition hack, calculator hacking in GPT 5.1); SWE-bench Pro LLM-as-verifier error rates (8.5% false positive, 24% false negative); Goodhart's law as the fundamental principle; benchmark contamination and verification surface pollution.
 - `raw/yt-context-engineering-with-dex-horthy.md` — Martin Fowler's inner/outer harness definition; harness engineering as the quality infrastructure's architectural foundation.
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve.
+- `raw/all-agentic-architectures-deterministic-picker.md` — Fareed Khan (2026). The [[deterministic-picker]] pattern as a hybrid LLM-as-judge technique: the LLM commits to categorical features (booleans/enums) and Python composes the deciding score — a third position between full LLM-as-judge and full deterministic check. The "LLM-as-Scorer flat-band pathology" as a specific manifestation of LLM-as-judge unreliability.

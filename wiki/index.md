@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-25
+updated: 2026-07-26
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -179,6 +179,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
 - [[decision-extraction]] — Mining decisions from code diffs and agent traces at commit time; presenting them for human approval; logging as structured artifacts for intent traceability.
 - [[deliberate-friction]] — Intentional engineering slowdowns at high-stakes decision points. Not all friction is bad DX.
+- [[deterministic-picker]] — Constrain the LLM-as-scorer to categorical features (booleans/enums) and let Python compose the deciding signal; the named escape from the LLM-as-Scorer flat-band pathology.
 - [[doc-rot]] — Stale documentation and completed PRDs that mislead future agent sessions into following outdated assumptions.
 - [[document-degradation]] — Silent corruption of documents by LLMs during long delegated workflows.
 - [[evolving-context]] — Continual learning in token space; agents improving their own prompts, skills, and memories over time without retraining weights.
@@ -327,4 +328,5 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[gas-town]] — Steve Yegge's open-source orchestration loop: 20–30 Claude Code instances coordinated by a Mayor agent, with patrol agents and git-backed state.
 - [[maker]] — The first implementation of the [[massively-decomposed-agentic-processes|MDAP]] framework (Meyerson et al., Cognizant AI Lab + UT Austin, 2025): maximal decomposition + first-to-ahead-by-k voting + red-flagging. Solved Towers of Hanoi with 20 disks (1,048,575 steps) with zero errors using gpt-4.1-mini. The first demonstration that LLM-based systems can scale to million-step reliability.
 - [[memgraphrag-project]] — Open-source implementation of MemGraphRAG (KDD 2026): Three-Layer Global Memory, three-agent construction, PPR retrieval; GitHub: XMUDeepLIT/MemGraphRAG.
+- [[all-agentic-architectures]] — Open-source Python library + "living textbook" (Fareed Khan, 2026) presenting itself as packaging 35 production-grade agentic patterns as runnable `Architecture` classes on LangGraph; codifies the [[deterministic-picker]] discipline and ships a 17-task benchmark leaderboard.
 

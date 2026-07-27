@@ -1,7 +1,7 @@
 ---
 title: The Multi-Agent Theory
 created: 2026-07-04
-updated: 2026-07-15
+updated: 2026-07-26
 sources:
   - raw/2606.13003.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -10,6 +10,8 @@ sources:
   - raw/2603.04474.md
   - raw/2511.09030.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/all-agentic-architectures-benchmarks.md
+  - raw/all-agentic-architectures-readme.md
 tags: [thread, multi-agent, mas-audit, scaling, error-propagation, decomposition, theory]
 unaudited_marginal: 0
 ---
@@ -151,6 +153,9 @@ The practical implication: the path to reliable MAS is not "wait for bigger mode
 
 Both poles share a design principle: **remove the LLM from the coordination loop wherever possible.** MDAPs replace coordination with deterministic decomposition + voting. The governance layer replaces trust-by-role with trust-by-verification. Expert-MAS replaces coordination with a deterministic Python executor. In every case that works, the LLM's job is execution or judgment on isolated inputs — not orchestration of other LLMs.
 
+> [!note] Departure: A Practitioner Benchmark Echoing the Through-Line
+> The [[all-agentic-architectures]] library (Fareed Khan, 2026) independently observes the through-line's central claim at practitioner scale. Its 17-task benchmark reports *named pattern-fit failures* — architectures that ran but failed scoring for identifiable shape-mismatch reasons: LATS fails on arithmetic (tree-search shape doesn't fit a straightforward problem), Debate + Ensemble fail on the Sally trick (group-think amplifies the wrong answer), and Reflexion + Agent Workflow Memory fail on raw-fact recall (verbal-reflection / workflow-recipe memory shapes don't store raw facts). The Debate/Ensemble failure is a small-scale, single-model practitioner instance that echoes the false-consensus dynamic Layer 4 ([[error-cascades]]) addresses — aggregation amplifying a wrong answer rather than correcting it. Caveat: this is a single-author, single-model (Llama-3.3-70B), 17-task practitioner benchmark (~$1.50 run), not a rigorous audit like the six papers above, and the failures span single- and multi-agent architectures — so they corroborate the broader "system design is the binding constraint" principle rather than the MAS-specific claim. They are the repo author's observations, not independently verified. See [[all-agentic-architectures]].
+
 ## Implications for Other Threads
 
 ### For [[the-verifiability-thesis]]
@@ -220,6 +225,7 @@ The governance layer is the MAS-specific quality infrastructure: observability (
 - [[elliot-meyerson]] — lead author of the engineered escape (Layer 5)
 - [[dreaming]] — a production-scale, hand-engineered MAS (orchestrator + subject fleet over shared memory); corroboration that the "engineered, not searched" principle holds outside benchmarks
 - [[lamis-mukta]] — described dreaming's production architecture (Anthropic)
+- [[all-agentic-architectures]] — a practitioner benchmark whose named pattern-fit failures (Debate/Ensemble group-think, LATS/Reflexion shape mismatch) corroborate the "system design is the binding constraint" through-line at practitioner scale
 
 ## Sources
 
@@ -230,3 +236,5 @@ The governance layer is the MAS-specific quality infrastructure: observability (
 - `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3 MDAP framework (maximal decomposition, first-to-ahead-by-k voting, red-flagging); §3.2 log-linear cost scaling (Θ(s ln s), k_min = Θ(ln s)); §4.4 the million-step zero-error result; §5 discussion (insight vs. execution, microservices parallel, safety). Source for Layer 5 (the engineered escape).
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — [[steve-yegge|Yegge]]'s swarming pattern (adversarial multi-pass review, consensus) as a quality-focused variant of engineered decomposition the theory's execution-focused poles (MDAPs, governance) don't cover; intelligence-tier routing as coordination's complement (the sibling question the theory does not yet pose).
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the "A Production-Scale Positive Case — Dreaming" departure: dreaming as a production, fleet-scale hand-engineered MAS (orchestrator + subject fleet reviewing transcripts against shared memory, evidence-backed proposals, human accept/reject) — corroboration that the "engineered, not searched" principle holds outside benchmarks.
+- `raw/all-agentic-architectures-benchmarks.md` — Fareed Khan (2026). Source for the "A Practitioner Benchmark Echoing the Through-Line" departure: the 17-task benchmark's named pattern-fit failures (LATS on arithmetic, Debate + Ensemble on the Sally trick, Reflexion + Agent Workflow Memory on raw-fact recall) as a single-author, single-model practitioner observation that architecture-task shape fit — not model quality — determines success. Not a rigorous audit; corroborates the broader "system design is the binding constraint" principle.
+- `raw/all-agentic-architectures-readme.md` — Fareed Khan (2026). README context for the practitioner benchmark above: the 35-architecture taxonomy, the benchmark summary (33/42, 78%), and the "0 MOCKED RUNS" freshness signal.

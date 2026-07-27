@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-22
+updated: 2026-07-26
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -32,6 +32,7 @@ sources:
   - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
+  - raw/all-agentic-architectures-deterministic-picker.md
 tags: [thread, verifiability, ai-capability, rl, jagged-frontier]
 unaudited_marginal: 0
 ---
@@ -250,6 +251,9 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 > [!note] Departure: Deliberate Verifiability Design — From Passive Exploitation to Active Engineering
 > The thesis describes verifiability as a *given* property of domains: code is verifiable, aesthetics is not. [[ears-notation|EARS]] and [[property-based-testing-as-spec|PBT-as-spec]] (from [[al-harris|Al Harris]], [[kiro|Amazon Kiro]]) introduce a different move: **deliberately restructuring the artifact to make it verifiable.** EARS transforms requirements into structured natural language that downstream tools (PBT) can verify mechanically, with the LLM outside the verification loop. PBT translates EARS requirements into correctness properties that property-based tests can falsify. This isn't passive exploitation of existing verifiability — it's *engineering the artifact for verifiability*. The thesis's causal chain (verifiability → RL → capability) implies verifiability is a fixed property of the domain. The EARS+PBT pipeline implies it's a *designable property of the artifact*. If you can make your requirements machine-parseable, you extend the verifiable domain without waiting for the labs to train on it. This is potentially a significant extension of the thesis: verifiability isn't just inherited from the domain — it can be constructed.
 
+> [!note] Extension: Constructible Verifiability at the Scorer Step
+> The [[deterministic-picker]] pattern (Fareed Khan, [[all-agentic-architectures]], 2026) extends "verifiability is a designable property of the artifact" to a new artifact type: the *scorer's output contract*. Where EARS+PBT restructures requirements and [[contextcov|ContextCov]] restructures instructions for verifiability, the deterministic-picker restructures the LLM-as-scorer's output from "emit a number" to "emit categorical features" so Python composes the deciding signal. The named failure it addresses — the *flat-band pathology* (instruction-tuned LLMs collapse numeric scores to a narrow band regardless of input quality) — is a specific manifestation of the verifier-reliability constraint this thread already tracks (the "verifier's own reliability is a second-order constraint" finding; RUBRICEVAL's 55.97%). The fix is constructible verifiability: the deciding signal becomes Python-composed and auditable rather than LLM-emitted, extending the verifiable domain into the architecture-internal picker step. This is a practitioner's design discipline, not independently verified; see [[deterministic-picker]].
+
 > [!warning] Instruction Failure as Feature
 > [[deepswe|DeepSWE]] reveals a paradox in instruction-following: Claude partially ignores benchmark instructions (writes tests when told not to, 28% on [[swe-bench-pro]]) while GPT follows them literally. The [[rule-following]] thread frames instruction failure as a reliability bug. But DeepSWE shows that Claude's *ignoring* of harmful instructions ("don't write tests") actually makes it more reliable in practice — it self-verifies at 80%+ when the prompt doesn't suppress testing. The verifiability thesis predicts models improve where verification exists; DeepSWE adds that models which *create their own verification* despite instructions not to may outperform obedient models in the long run. This is a live tension: is instruction-following a capability to optimize, or a liability when the instructions themselves are wrong?
 
@@ -328,3 +332,4 @@ But "the labs haven't done it yet" has been true for years, and the domains wher
 - `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's AI Engineer talk: DeepSWE's reduced FP/FN rates, the 70-point model spread, SWE-bench Pro's LLM-as-verifier problem, git history leakage, harness-dependent accuracy, and the competing Frontier Code benchmark's critique of DeepSWE.
 - `raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md` — [[david-cramer|Cramer]] on the liability asymmetry: vibe coding works for chatbots and personal tools but not for production software with security implications.
 - `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — Zechner's empirical anchors for harness monoculture: OpenClaw ~$1.3M/month token burn, token-pricing trajectory suspicion, open-weight anti-monoculture direction (Antirez's ds4).
+- `raw/all-agentic-architectures-deterministic-picker.md` — Fareed Khan (2026). Source for the "Constructible Verifiability at the Scorer Step" extension: the [[deterministic-picker]] as constructible verifiability applied to the LLM-as-scorer's output contract (emit categorical features → Python composes the deciding signal); the *flat-band pathology* as a specific manifestation of the verifier-reliability constraint. A practitioner's design discipline, not independently verified.
