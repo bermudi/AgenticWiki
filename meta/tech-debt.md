@@ -1,7 +1,7 @@
 ---
 title: Technical Debt Registry
 created: 2026-07-20
-updated: 2026-07-22
+updated: 2026-07-27
 last_audit: 2026-07-22
 warning_budget: 5
 critical_blocks: true
@@ -23,7 +23,9 @@ Budget is read from this file's frontmatter (`warning_budget`, `critical_blocks`
 
 ## Current Debt
 
-_(No open items.)_
+| Page | Debt | Resolution | Date |
+|------|------|------------|------|
+| the-verifiability-thesis.md | Extension callout ("widens over time") extrapolates beyond Schillings' source material | Verify against future sources or soften to "may widen" | 2026-07-27 |
 
 ## Audit History
 

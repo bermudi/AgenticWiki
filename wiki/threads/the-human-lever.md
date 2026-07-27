@@ -1,7 +1,7 @@
 ---
 title: The Human Lever
 created: 2026-04-25
-updated: 2026-07-22
+updated: 2026-07-27
 unaudited_marginal: 0
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
@@ -41,6 +41,7 @@ sources:
   - raw/gstack-garry-tan-software-factory.md
   - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/software-engineering-not-writing-code-schillings.md
 tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ---
 
@@ -57,6 +58,9 @@ tags: [thread, ai-engineering, software-design, human-in-the-loop, tool-design]
 ## Thesis
 
 The core argument: the human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces. This is the core discipline that makes AI-assisted engineering work without degenerating into [[the-slop-problem|slop]].
+
+> [!note] Marginal: The Three Eras Framework
+> [[benoit-schillings|Benoit Schillings]] (VP of Research, Google DeepMind) provides a historical framing that contextualizes this thread's core claim. He divides software into three eras, each with a different bottleneck: the **machine** (assembly era — every cycle mattered), the **human brain** (cloud era — context window of 7–9 tokens determined how software was structured through modular design), and the **AI frontier** (now — writing code is no longer the challenge; the bottleneck is specification, verification, and architecture). In the AI frontier era, the human's role shifts to architecture and inductive thinking: "looking at a system in a much wider context and to be able to detect patterns and from those pattern take some decision." This is the human lever framed as a historical inevitability, not just a workflow preference. See [[three-eras-of-software]].
 
 ### The Shift
 
@@ -468,4 +472,5 @@ His iterative refinement observation: developers used to build a first version, 
 - `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: understanding-to-participate vs. understanding-to-verify; the human as the one who must hold the system's conceptual model; Explain Diff, microworlds, and quizzes as tools for keeping the human in the creative loop.
 - `raw/yt-stop-reading-code-start-understanding-systems.md` — Vibv (Boundary ML) and Dex Horthy (Human Layer): the expectation gap model (user expectations grow faster than capability); design-level alignment via Technical Design Docs; the closed loop (design → code → execution → feedback); tracing as the tool that makes the human lever visible at all three layers.
 - `raw/yt-you-need-to-read-less-code.md` — [[theo-t3gg|Theo]]: the code importance spectrum (slop → death), the flipped read:generate ratio, and the argument that the human should design verification systems (custom debuggers, test harnesses, runtimes) that AI populates with slop — reframing the human lever from "read every line" to "design verification infrastructure."
+- `raw/software-engineering-not-writing-code-schillings.md` — [[benoit-schillings|Benoit Schillings]]: three eras of software (machine → brain → AI frontier), superhuman syntax generation, architecture and inductive thinking as the enduring human role, the economic inversion from code-as-expensive to code-as-free. Source for the "Three Eras Framework" marginal note.
 

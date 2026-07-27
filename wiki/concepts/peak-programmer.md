@@ -1,12 +1,13 @@
 ---
 title: Peak Programmer
 created: 2026-04-25
-updated: 2026-05-31
+updated: 2026-07-27
 sources:
   - raw/yt-dhh-ai-pilled.md
   - "raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md"
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/domain-expertise-has-always-been-the-real-moat.md
+  - raw/software-engineering-not-writing-code-schillings.md
 unaudited_marginal: 0
 tags: [future-of-work, economics, ai]
 ---
@@ -26,6 +27,7 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 3. **Small Team Renaissance**: Small, high-talent teams can produce outcomes previously reserved for large corporations.
 4. **Code as Cattle**: [[thorsten-ball|Thorsten Ball]] argues the assumption that human-produced code is precious is outdated. GitHub's contribution graph, PR emoji reactions, and linear ticket assignment all rest on this assumption. "Who gives a shit about the contribution graph in 2026?" The tools built for a world of scarce, precious code are misfits for a world of cheap, abundant code.
 5. **The Fashion Designer Metaphor**: The software engineer of the future is like a fashion designer in Paris — knows textiles, colors, manufacturing — but doesn't cut the cloth. Value is in conceptualization and system understanding, not implementation.
+6. **Code Economics as the Supply Side**: [[benoit-schillings|Benoit Schillings]] argues the economic inversion from the supply side: "We developed a whole software engineering culture and infrastructure and set of companies based on the assumption that writing code was the hard part. This was the expensive part. We're now in a world where writing code is free or nearly free." When 80% of new code on GitHub is machine-generated, the entire cost structure inverts — implementation collapses to near-zero cost, architecture and design become the scarce resources. See [[code-economics]].
 
 ## The Aesthetic Lever
 
@@ -60,3 +62,4 @@ As argued by [[dhh]], the "Peak Programmer" era signifies a shift where the abil
 - `raw/yt-the-comprehension-debt-trap-every-ai-dev-falls-into.md` — The senior engineer who fails the coding interview as the personal face of peak programmer
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: "Software as we know it is dead," code as cattle, the fashion designer metaphor, the shift from programming language skill to system conceptualization
 - `raw/domain-expertise-has-always-been-the-real-moat.md` — Brethorst: implementation commoditized, domain expertise is what remains scarce; the asymmetric path collapse
+- `raw/software-engineering-not-writing-code-schillings.md` — Schillings: the economic inversion (code is "free or nearly free"), 80% machine-generated GitHub content, code economics as the supply-side driver of peak programmer.

@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-26
+updated: 2026-07-27
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -70,6 +70,16 @@ This means capability clusters around verifiability. Code and math are highly ve
 
 > [!note] Departure: Episodic Memory Is the Complement the Causal Chain Doesn't Track
 > The causal chain implicitly assumes **parametric memory** (weights) is the only memory, so an agent's capability is whatever RL has trained into the weights. [[episodic-memory-for-agents|Pink et al. (2025)]] (who frame parametric memory via pretraining and fine-tuning, not RL) argue, via Complementary Learning Systems theory, that a second memory system is required alongside the parametric one: **episodic memory**, defined by **single-shot** learning. Single-shot is precisely the property the thesis's own lever — the many-shot reward shaping of RL — cannot reach: RL needs many examples to build a circuit, so single-shot, instance-specific, contextually-bound experience falls outside what the causal chain captures (consistent with [[iterative-self-correction|Meeseeks]]'s ceiling even under near-perfect 98.4% verification). The escape valve the chain doesn't name is **consolidation** — the CLS-theory mechanism that gradually transfers episodic instances into parametric memory, where the many-shot learning the thesis describes can eventually act on them. This completes rather than contradicts the chain: verifiability → RL governs the *slow* (parametric) system; episodic memory governs the *fast* (single-shot) system; consolidation is the bridge. Caveat: real weight-space consolidation is not something today's LLMs do at inference — the token-space "consolidation" the wiki tracks elsewhere ([[evolving-context]]) is an approximation, not the transfer CLS theory describes.
+
+### 1b. Code as the First Verifiable Domain
+
+[[benoit-schillings|Benoit Schillings]] explains *why* code was the first domain to cross superhuman: code has two properties that made it uniquely tractable for ML training.
+
+First, code has **abundant training data** — GitHub provided a massive corpus. Second, code has **natural verification** — you can compile it, run unit tests, and check whether it produces the right output. "The ability to figure out is the model generating something correct was something that was pretty reasonable to do. That brought us where we are today."
+
+But Schillings argues this data source is now exhausted: "80% of the new code added to GitHub today is machine-generated. So the notion of human bringing some knowledge that can be used for mining and to train model is reaching an end." The escape is **self-play** — the same mechanism that made AlphaZero superhuman at Go and chess without any human data. Frontier code models can now create their own challenges, judge answer validity, and evaluate architecture. "That ability to do those hundreds of millions of hours of selfplay writing code is the thing that will bring us to the next layer."
+
+This extends the thesis: the verifiability that made code automatable (compilation, tests) is also what enables self-play — because self-play requires a reliable reward signal, and verifiable domains provide one. The implication for the Long Arc: self-play may push code capability beyond what human-generated training data alone could achieve, even as the human data source dries up.
 
 ### 2. Lab Choices Shape the Distribution
 
@@ -239,6 +249,9 @@ The survey's four desired properties for future harness systems — **executable
 Karpathy speculates that the verifiability thesis may have an expiration date. If labs eventually train on aesthetics, taste, and simplification — if those enter the RL distribution — the jagged frontier smooths. His uncertainty about whether taste will remain permanently human ("nothing fundamental preventing it, just the labs haven't done it yet") suggests the thesis describes the *current* landscape, not a permanent one.
 
 But "the labs haven't done it yet" has been true for years, and the domains where verification is inherently hard (aesthetics, common sense, judgment) may resist RL training indefinitely. The thesis may describe not just the current transition but a durable structural property of how these systems work.
+
+> [!note] Extension: Self-Play as the Verifiability Escape from Data Exhaustion
+> [[benoit-schillings|Schillings]] identifies a structural limit the thesis doesn't address: human-generated training data is running out ("80% of new code on GitHub is machine-generated"). Self-play — models generating their own challenges and verifying their own answers — is the escape. The mechanism is exactly the thesis's own: self-play works because code is verifiable, so the model can generate training data and evaluate it without human involvement. This is the thesis operating as a *data-generation strategy*, not just a *capability explanation*. The implication: in verifiable domains, the data supply can be self-generated indefinitely; in unverifiable domains (aesthetics, taste), the data supply is capped by what humans produce. The gap between verifiable and unverifiable domains *widens* over time as self-play extends the verifiable frontier while the unverifiable frontier remains fixed. See [[benoit-schillings]] for the full framing.
 
 > [!note] Extension: The Training-Time Verifiability Constraint
 > The causal chain's long-arc uncertainty assumes the bottleneck is *lab choice* — labs could train on taste but haven't. The "AI that Works" benchmark episode (Boundary, 2026) identifies a harder bottleneck: **models can only be RL-trained on what you can verify.** If you cannot build a judge good at judging code quality, the knowledge of code quality will never enter the weights. RL training requires verifiable reward signals run millions of times; code quality and architectural intuition have feedback cycles of weeks to months — too long and too lossy to serve as RL reward signals. This is the same verifiability gap, but at the *training* layer rather than the *inference* layer: code quality is doubly trapped because you can't verify it at deployment (no benchmark catches it) and can't train it into weights (no RL verifier). The long-arc question is not just "will labs choose to train on taste?" but "can taste even *be* verified at RL-training scale?"

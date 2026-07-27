@@ -31,6 +31,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[construction-time-memory]] — Memory as a quality-control substrate *during offline construction*, not just at query time: MemGraphRAG's Three-Layer Global Memory lets extraction/conflict agents enforce relevance, consistency, and cohesion before the graph is frozen. Same "memory-as-coordination" pattern as engineered MAS.
 
 ## ✍️ Authors
+- [[benoit-schillings]] — VP of Research at Google DeepMind; Pitchfork origin story (2018); three eras of software; superhuman syntax generation; code economics; self-play for code
 - [[david-cramer]] — Co-founder/CTO of Sentry; grounded skeptic of 100x hype; built Sentry's MCP server; AI bubble thesis
 - [[daniel-han]] — Co-founder of [[unsloth]]; kernel optimization, dynamic quantization, reward hacking documentation; advocate for software over hardware scaling
 - [[kun-chen]] — Ex-L8 principal engineer (Meta, Microsoft, Atlassian); built frontier coding agents at Atlassian; author of the captain/first-mate/crew workflow and open-source tools [[no-mistakes]], [[lavish]], [[axi]], [[treehouse]], [[first-mate]], and [[good-night-have-fun]].
@@ -142,6 +143,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-evals]] — CI for probabilistic systems: the 4-layer eval stack for AI agents.
 - [[domain-expertise-as-moat]] — Agentic AI commoditized implementation but not domain knowledge. The binding constraint is "can you tell whether it's right?" — and that requires deep domain expertise.
 - [[code-as-agent-harness]] — Code as the executable, inspectable, and stateful medium through which AI agents reason, act, and coordinate.
+- [[code-economics]] — When writing code is free, the entire software industry's cost structure inverts: implementation collapses to near-zero, architecture and design become the scarce resources.
 - [[harness-interface]] — The harness interface where code connects agents to reasoning, action, and environment modeling.
 - [[harness-mechanisms]] — Planning, memory, tool use, control, and optimization that sustain code-centric agents.
 - [[harness-handbook]] — A behavior-centric harness map (L1–L3 + state registers) + Behavior-Guided Progressive Disclosure; solves behavior localization before harness evolution
@@ -279,6 +281,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[memgraphrag]] — Memory-based multi-agent GraphRAG (KDD 2026): Three-Layer Global Memory + three-agent society + PPR retrieval; outperforms all baselines.
 - [[memory-based-multi-agent-system]] — Engineered three-agent society (extraction, detection, resolution) operating on shared global memory; separation of concerns makes MAS reliable.
 - [[personalized-pagerank-rag]] — PPR over heterogeneous graph for GraphRAG retrieval; hub suppression + info density initialization; 0.061s query time.
+- [[three-eras-of-software]] — Schillings' three-phase history of software engineering: machine-limited, human-brain-limited, and AI frontier — each shaped by a different bottleneck.
 - [[three-layer-global-memory]] — MemGraphRAG's memory substrate: Ontology (schemas+freq), Fact (grounded triples), Passage (evidence); bidirectional cross-layer enforcement.
 - [[graphrag-baselines]] — Three GraphRAG baselines (LightRAG, HippoRAG, Microsoft GraphRAG) characterized by MemGraphRAG: all lack global memory during construction, producing the three deficiencies. Merged from individual pages.
 - [[neuro-symbolic-ai]] — The convergence of probabilistic LLMs with formal symbolic representations (ontologies, knowledge graphs) to create semantic guardrails around agent behavior. Coyle's argument for RDFS/OWL as the missing validation layer.
