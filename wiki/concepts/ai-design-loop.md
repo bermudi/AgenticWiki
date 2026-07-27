@@ -1,8 +1,8 @@
 ---
 title: AI Design Loop
 created: 2026-04-24
-updated: 2026-07-17
-sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", "raw/yt-building-great-agent-skills-the-missing-manual.md", "raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md"]
+updated: 2026-07-27
+sources: ["raw/yt-ai-coding-for-real-engineers.md", "raw/yt-claude-code-feature-build.md", "raw/yt-software-fundamentals-matter-more-than-ever-matt-pocock.md", "raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md", "raw/yt-building-great-agent-skills-the-missing-manual.md", "raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md", "raw/yt-dont-waste-time-on-specs-prototype-instead.md"]
 unaudited_marginal: 0
 tags: ["ai-workflow", "software-design"]
 ---
@@ -52,7 +52,7 @@ The conceptual destination/journey split is grounded in concrete skills in the [
 | Pre-flight | `setup-mattpocock-skills` | Configures issue tracker, triage labels, and single vs multi domain context for the repo. Writes pointers into `CLAUDE.md` so future sessions discover the configuration. |
 | Orientation | `ask-matt` | Meta-skill: knows the whole flow and answers "how do I get started?" style questions. The recommended entrypoint for new users. |
 | Grilling | `grill-with-docs` | Asks clarifying questions until shared understanding is reached; writes to `context.md` and `ADRs`. |
-| Handoff | `prototype` | Bridges in and out for questions that need a runnable answer (e.g. "can this API support feature X?") — try it, answer, then resume grilling. |
+| Handoff | `prototype` | Bridges in and out for questions that need a runnable answer (e.g. "can this API support feature X?") — try it, answer, then resume grilling. Pocock's later `/prototype` skill (see [[prototyping]]) generalizes this: instead of a one-off research-and-back, it builds a throwaway, high-fidelity artifact (UI or logic) to resolve look/behavior questions that discussion can't. |
 | Fork (1-session) | `implement` | When the work fits one [[smart-zone-dumb-zone\|smart-zone]] session. Runs the work, then auto-dispatches `code-review` in a subagent. |
 | Fork (multi-session) | `to-spec` → `to-tickets` | Compresses the grilling discussion into a destination document (spec), then slices the spec into per-session tickets. The user runs `implement <ticket>` for each one, clearing context between tickets. |
 
@@ -98,7 +98,7 @@ Keeping completed PRDs in the repo creates [[doc-rot|doc rot]]: future agent ses
 - [[malleable-agents]] — Agents can be adapted during the design loop.
 - [[improve-codebase-architecture]] — The skill that applies the design loop to architecture: explore, grill, propose.
 - [[matt-pocock]] — Originated the Grill Me skill and the Destination/Journey framework.
-- [[mattpocock-skills]] — The shipped skill set that operationalizes the design loop: `setup` configures, `ask-matt` orients, `grill-with-docs` aligns, `prototype` handoff, then fork to `implement` (one session) or `to-spec` → `to-tickets` → `implement` (multi-session).
+- [[mattpocock-skills]] — The shipped skill set that operationalizes the design loop: `setup` configures, `ask-matt` orients, `grill-with-docs` aligns, `prototype` handoff (see [[prototyping]] for the high-fidelity version), then fork to `implement` (one session) or `to-spec` → `to-tickets` → `implement` (multi-session).
 - [[fighting-slop-with-slop]] — The BEEPs workflow extends the design loop to organizational scale: AI handles the tooling infrastructure around the design process.
 - [[doc-rot]] — The risk of keeping completed PRDs in the repo; why the design loop produces ephemeral artifacts.
 - [[sandcastle]] — The parallel AFK implementation pipeline that consumes the Kanban board produced by the design loop.
@@ -113,3 +113,4 @@ Keeping completed PRDs in the repo creates [[doc-rot|doc rot]]: future agent ses
 - `raw/yt-full-walkthrough-workflow-for-ai-coding-matt-pocock.md` — Full workshop demonstrating Grill Me → PRD → Kanban; "don't review the PRD" philosophy; push vs pull instruction strategy; doc rot in the design loop.
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — The split-skill technique: plan-mode split into `grill-with-docs` (clarifying questions) and `2prd` (planning) so the agent cannot see the future goal and under-invest in the current step; the design loop's grilling phase as an instance of hiding future goals to increase leg work.
 - `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — The explicit skill names behind the destination/journey loop: `setup-mattpocock-skills` (pre-flight config), `ask-matt` (meta-skill entrypoint), `grill-with-docs` (clarifying questions), `prototype` (runnable-answer handoff), and the `to-spec` → `to-tickets` → `implement` multi-session fork.
+- `raw/yt-dont-waste-time-on-specs-prototype-instead.md` — Pocock's `/prototype` skill and the fidelity framework: high-fidelity throwaway prototypes resolve look/behavior questions discussion cannot; Wayfinder as the planning container; UI vs logic prototypes; the throwaway-branch → AFK re-implement handoff.

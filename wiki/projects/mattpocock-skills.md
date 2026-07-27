@@ -1,9 +1,10 @@
 ---
 title: Matt Pocock Skills
 created: 2026-07-17
-updated: 2026-07-17
+updated: 2026-07-27
 sources:
   - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
+  - raw/yt-dont-waste-time-on-specs-prototype-instead.md
 tags: [project, skill-set, ai-engineering, agent-workflow, matt-pocock]
 unaudited_marginal: 0
 ---
@@ -21,7 +22,7 @@ The end-to-end pipeline, in order:
 1. **Install**: `npx skills add mattpocock/skills` — Vercel's `skills.sh` CLI fetches the repo and copies/symlinks the skills into the agent's directory.
 2. **Setup**: `/setup-matt-pocock-skills` — configures the repo for the flow. Three decisions: which issue tracker to use (GitHub Issues, Linear, Jira, or local markdown), which triage labels to apply, and whether the repo has a single domain context or multiple bounded contexts. The setup also writes pointers into the project's `CLAUDE.md` so future sessions discover the configuration.
 3. **Ask Matt**: `/ask-matt` — a meta-skill that knows the whole flow and answers "how do I get started?" style questions. The recommended entrypoint for new users.
-4. **Grill With Docs**: `/grill-with-docs` — the [[ai-design-loop|grilling phase]]. Asks the user clarifying questions until shared understanding is reached, writing the destination into `context.md` and `ADRs`. The `prototype` skill bridges in and out by handoff for questions that need a runnable answer.
+4. **Grill With Docs**: `/grill-with-docs` — the [[ai-design-loop|grilling phase]]. Asks the user clarifying questions until shared understanding is reached, writing the destination into `context.md` and `ADRs`. The `prototype` skill bridges in and out by handoff for questions that need a runnable answer — Pocock's newer `/prototype` (see [[prototyping]]) raises the discussion's fidelity with a throwaway, runnable artifact rather than a research subagent.
 5. **Fork**:
    - **If the work fits one Smart Zone session (~140k tokens)**: `/implement` directly. The implement skill runs the work, then auto-runs `code-review` in subagents.
    - **If the work spans multiple sessions**: `/to-spec` first, then `/to-tickets`.
@@ -31,6 +32,9 @@ The end-to-end pipeline, in order:
 9. **Code Review** (subagent): runs in a fresh context window. Compares the work against the original spec (every acceptance criterion cross-checked) and against coding standards ([[martin-fowler]]'s defaults, or the repo's own standards if they exist). The reviewer is a subagent because the main agent "is often really bad at editing code or improving code they've just written" — it sees its own work as already correct.
 
 Each ticket is implemented one at a time, with context cleared between tickets. The implementer does not run all tickets in one go — the per-session context budget is the unit of execution.
+
+> [!note] Synthesis: Wayfinder as the planning container
+> Pocock's newer `Wayfinder` skill sits above the `grill-with-docs` / `to-spec` flow as the planning system that decides *which* ticket type a chunk of work needs. Wayfinder splits a large piece of work into planning sessions, each producing either a **grilling** ticket (chat to resolve basic scope) or a **prototype** ticket (raise the discussion's fidelity with a throwaway, runnable artifact — see [[prototyping]]). This is the upstream scheduler that feeds the idea-to-ship pipeline: Wayfinder plans the planning, then `grill-with-docs` / `to-spec` / `to-tickets` / `implement` execute it.
 
 ## Design Properties
 
@@ -104,3 +108,4 @@ The repo deliberately does not address a few areas that other workflow tooling h
 ## Sources
 
 - `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's own end-to-end tutorial of the skills set. Walks through install, setup, the full idea-to-ship flow, and the code-review-in-subagent pattern. Provides the 660-token footprint figure, the ~140k smart-zone threshold for ticket sizing, and the explicit spec = destination / tickets = path framing.
+- `raw/yt-dont-waste-time-on-specs-prototype-instead.md` — Pocock's `/prototype` skill (and the Wayfinder planning container). The prototype is a throwaway high-fidelity artifact (UI or logic) that resolves look/behavior questions grilling can't; it runs on a throwaway branch and is re-implemented by an AFK agent against the spec. Complements `grill-with-docs` as the high-fidelity handoff in the flow.

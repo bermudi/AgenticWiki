@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-26
+updated: 2026-07-27
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -125,6 +125,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[fresh-context-subagents]] — Architectural pattern for preventing context rot: thin orchestrators spawn specialist subagents with clean context windows, each writing output to disk. Systematized by GSD Core.
 - [[cognitive-debt]] — The erosion of a developer's critical thinking and architectural skills through sustained AI reliance; distinct from comprehension debt.
 - [[code-clarifies-spec]] — Implementing code improves the spec; the act of writing code generates new decisions that weren't anticipated in the spec, and these decisions should feed back into it.
+- [[prototyping]] — High-fidelity throwaway code (UI or logic) to resolve look/behavior questions discussion can't; Matt Pocock's `/prototype` skill; the alignment-first position at higher fidelity.
 - [[skill-atrophy]] — The process by which coding, debugging, and architectural skills degrade through delegation to AI tools.
 - [[skill-hell]] — The third developer hell (after tutorial hell and framework hell): skills proliferate faster than evaluative capacity, nobody can tell good from bad, and nothing delivers what it promises. Pocock's four-part checklist is the proposed exit.
 - [[supervision-paradox]] — Effective agent use requires the skills that agent use erodes; a self-reinforcing loop with no clean exit.

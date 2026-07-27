@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-07-17
+updated: 2026-07-27
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -20,6 +20,7 @@ sources:
   - raw/yt-al-harris-amazon-kiro-faang-spec-driven.md
   - raw/2509.09677.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/yt-dont-waste-time-on-specs-prototype-instead.md
 tags: [thread, ai-engineering, workflow, design, quality]
 unaudited_marginal: 0
 ---
@@ -130,6 +131,9 @@ See [[plan-vs-review]] for the complete framework.
 > [!note] Extension: Pocock's evolved flow reconciles positions 2 and 3
 > [[matt-pocock|Pocock]]'s current `mattpocock/skills` set refines the alignment-first position (3) documented above. The `grill-with-docs` step is pure position 3 — shared understanding, no document review. But the multi-session fork is `to-spec` → `to-tickets` → `implement`, and the `implement` skill auto-dispatches a `code-review` subagent that checks the code **against the spec** (every acceptance criterion) — which is position 2's verification mechanism (verify against the spec), not position 3's (QA against reality). The evolved flow is thus a hybrid: alignment-first to *get* to the spec, plan-as-contract to *verify* against it. The `to-tickets` step is the strongest instantiation of "the spec decouples intent from implementation" in the wiki: it decomposes the spec (intent) into tickets (the handoff artifact) without ever producing code, each ticket sized to one context window. The durable spec is the intent; the disposable tickets are the path; the code is produced only inside `implement` against the ticket. See [[mattpocock-skills]] and [[ai-design-loop]].
 
+> [!note] Extension: Prototyping raises alignment-first to higher fidelity
+> Pocock's `/prototype` skill (see [[prototyping]]) extends position 3 past the discussion phase: when the open question is "how should it look / behave?", he builds a **throwaway high-fidelity artifact** (UI or logic) to react to, rather than trying to resolve it in the grilling session or in a more precise spec. The prototype is saved on a throwaway branch and re-implemented by an AFK agent against the spec. This is alignment-first operating at the fidelity level discussion alone cannot reach — and it is the direct counter to the spec-precision positions (1 & 2) for look/behavior questions, where a running artifact answers faster and more reliably than text. The technique generalizes the position-3 thesis that quality lives in reacting to reality, not in document precision. See [[mattpocock-skills]] and [[the-agent-workflow]].
+
 ## Why This Matters
 
 The intent-to-code axis isn't academic. It determines:
@@ -205,3 +209,4 @@ Enforcement-as-Code can only operationalize constraints that are *deterministica
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the "tier E is partly an execution ceiling" departure: isolating execution from planning shows execution horizon improves with scale + thinking (§3.1, §3.2), contesting the framing of tier E as purely a planning horizon.
 - `raw/yt-context-engineering-with-dex-horthy.md` — [[dex-horthy|Dex Horthy]]'s [[research-plan-implement|RPI]] retrospective (detailed plans = anti-leverage: doubled review surface, plans skimmed not read) pressuring the plan-as-contract position from the implementation side. Source for the "Detailed Plans Can Be Anti-Leverage" theory-pressure callout (1:02:53).
 - `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's evolved skills flow: `grill-with-docs` (alignment) → `to-spec` → `to-tickets` → `implement` + `code-review`-against-spec. Source for the "Pocock's evolved flow reconciles positions 2 and 3" extension callout.
+- `raw/yt-dont-waste-time-on-specs-prototype-instead.md` — Pocock's `/prototype` skill and the fidelity framework. Source for the "Prototyping raises alignment-first to higher fidelity" extension callout: high-fidelity throwaway prototypes resolve look/behavior questions discussion cannot; the throwaway-branch → AFK re-implement handoff.

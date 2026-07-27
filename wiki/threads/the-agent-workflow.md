@@ -1,7 +1,7 @@
 ---
 title: The Agent Workflow
 created: 2026-04-25
-updated: 2026-07-22
+updated: 2026-07-27
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-ai-coding-for-real-engineers.md
@@ -50,6 +50,7 @@ sources:
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/yt-dont-waste-time-on-specs-prototype-instead.md
 tags: [thread, ai-engineering, workflow, agent-design, context-management, tool-design, autonomous-loops]
 unaudited_marginal: 0
 ---
@@ -260,6 +261,9 @@ The fix isn't bigger context windows — it's **ruthless context hygiene**:
 
 > [!note] Marginal: Context Rot and the Monitor Hook
 > [[gsd-core|GSD Core]] names a failure mode most workflows don't explicitly track: **context rot** — the quality degradation that accumulates as an AI fills its context window with conversation history. The model's attention is finite; as the window fills, the signal-to-noise ratio drops, earlier content receives less attention, and output quality quietly degrades. The model does not warn you when this happens. Context rot is why an AI that produces excellent results on a fresh task produces mediocre results on the tenth task in the same session — the model has not changed, its context has degraded. GSD Core ships a **context monitor hook** that watches context usage in real time and injects warnings: >35% normal, ≤35% WARNING (wrap up), ≤25% CRITICAL (save state and start new session). This makes context degradation visible — the model won't warn you, but the hook will. The [[fresh-context-subagents|fresh-context subagent architecture]] (spawn specialist agents with clean context windows for each heavy task) is the structural defense against context rot.
+
+> [!note] Marginal: Prototyping as a High-Fidelity Design Loop
+> [[matt-pocock|Matt Pocock]]'s `/prototype` skill (see [[prototyping]]) adds a design-loop phase the thread's HITL→AFK model doesn't name: **a throwaway high-fidelity artifact** built to resolve look/behavior questions before the spec is finalized. The cycle is: grilling (low-fidelity alignment) → prototype on a throwaway branch (high-fidelity reaction) → AFK re-implement against the spec. The prototype compresses the feedback loop — you react to a running artifact, not a description of one — and because code production is now cheap, the higher-fidelity discussion costs only the tokens of a ~100k-token session. This is the alignment-first position ([[intent-to-code]] position 3) operating at a fidelity discussion alone cannot reach; it pressures the spec-precision positions (1 & 2) for UI/behavior questions. The throwaway branch keeps the prototype out of the shipped codebase until the design is settled, then an [[afk-agent]] copies the real logic out and deletes the scaffolding.
 
 [[mario-zechner|Mario Zechner]] designed [[pi]] around this insight. Pi's minimal core (four tools: `read`, `write`, `edit`, `bash`) and session-based model make it easy to reset context and stay in the Smart Zone. The design philosophy — [[malleable-agents|malleability]] — means the agent itself can create new tools mid-session to reduce its own context load.
 
@@ -565,5 +569,6 @@ The team-scale extension of focus maxing is the [[single-player-to-multiplayer]]
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* Source for the Evolving Context Frontier's memory bullet and its calibration callout: the four-module memory framework (representation/extraction/retrieval/maintenance) surveyed as a data-management problem; and the sobering finding that no single memory architecture dominates and long-context retrieval still beats most memory systems for time-dependent queries.
 - `raw/episodic-semantic-memory-machine-teammates.md` — Davis & Schleisman (Galois, AHFE 2024). Source for the "A Third Mode Beyond HITL and AFK" departure: AI systems are mission-focused and "lay inert once the task is completed"; the default-mode-network framing proposes a reflective after-action mode in which the agent recognizes patterns in past episodes and simulates future ones — a third mode distinct from HITL design and AFK execution.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the dreaming reference appended to the "Third Mode Beyond HITL and AFK" departure: the default-mode reflective-consolidation mode realized as a production out-of-band process — an orchestrator + subject-agent fleet reviewing session transcripts and proposing evidence-backed memory changes.
-- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: the review bottleneck is really an understanding bottleneck; the HITL phase should include learning artifacts (Explain Diff, microworlds, quizzes) not just verification; shared spaces for team understanding.
+- `raw/yt-understanding-is-the-new-bottleneck-geoffrey-litt-notion.md` — Geoffrey Litt: the review bottleneck is really an understanding bottleneck; the HITL phase should include learning artifacts (Explain Diff, microworlds, quizzes) not just verification; shared spaces for team understanding
+- `raw/yt-dont-waste-time-on-specs-prototype-instead.md` — Matt Pocock: the `/prototype` skill and the fidelity framework. Source for the "Prototyping as a High-Fidelity Design Loop" marginal note: throwaway high-fidelity artifacts resolve look/behavior questions before spec finalization; the grilling → prototype → AFK re-implement cycle..
 
