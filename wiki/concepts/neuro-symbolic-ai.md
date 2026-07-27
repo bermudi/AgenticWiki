@@ -80,6 +80,7 @@ Coyle emphasizes that many ontologies already exist and should be leveraged rath
 - [[the-agent-workflow]] — Neuro-symbolic guardrails as a quality layer in the agent workflow
 - [[the-human-lever]] — The human designs the ontology; the agent operates within it
 - [[tool-design-for-agents]] — Ontologies as tool-output validation contracts
+- [[the-verifiability-thesis]] — Ontological constraints as constructible verifiability for domain logic: restructuring the artifact so previously-unverifiable domain rules become mechanically checkable, the same move as EARS+PBT applied to domain constraints rather than requirements
 
 ## Related
 
