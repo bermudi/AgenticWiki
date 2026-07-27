@@ -4,6 +4,7 @@ created: 2026-07-27
 updated: 2026-07-27
 sources:
   - raw/software-engineering-not-writing-code-schillings.md
+  - raw/yt-land-of-ai-agents-verifiers-are-king-shaukat.md
 unaudited_marginal: 0
 tags: [concept, economics, ai-engineering, code-generation]
 ---
@@ -42,6 +43,14 @@ The code-economics thesis is the economic driver behind [[peak-programmer]]. Whe
 
 The economic inversion also explains why [[thorsten-ball|Thorsten Ball]]'s "code as cattle" framing resonates: when code is cheap, treating it as precious (careful PR reviews, contribution graphs, line-by-line ownership) is economically irrational. The artifacts that matter shift from code to specifications, from implementations to architectures.
 
+## The Productivity Dissipation Effect
+
+[[tariq-shaukat|Tariq Shaukat]] (Sonar, 2026) cites a Carnegie Mellon University study showing the economic consequence of cheap code without verification discipline: AI coding agents deliver an initial 3–5× productivity boost that **dissipates within three months**, returning to pre-agent baseline. The cause is not a slowdown in generation — it's that technical debt accumulates as fast as (or faster than) code is generated. Security issues, maintainability issues, reliability issues, and complexity all increase. The velocity gain is real but temporary; without baked-in verification, it collapses under its own weight.
+
+Sonar's benchmarking (4,000+ problems) corroborates: state-of-the-art models score well on functional correctness but still generate variable complexity, bugs, and security issues. The METR data adds a horizon dimension — the latest models can complete 16–18 hour tasks but at 50% success rate; at 80% accuracy, the horizon drops to ~3.5 hours. One of Shaukat's CTO customers responded: "I would still put someone who gave me 80% accurate information on a performance review."
+
+This is the [[the-slop-problem|slop problem]] expressed as an economic lifecycle: initial value → debt accumulation → value dissipation. Shaukat argues the antidote is verification at every loop, not just at the end — the [[agent-centric-development-cycle]].
+
 ## Security as an Economic externality
 
 The most dangerous consequence of cheap code is that security becomes an externality. When writing code was expensive, every line was implicitly reviewed by the person who wrote it. When code is free, the volume exceeds any human's ability to audit it. Schillings' "never-ending" vulnerability discovery cycle — models find flaws, patches are applied, models find deeper flaws — is the security externality playing out in real time.
@@ -54,6 +63,7 @@ The most dangerous consequence of cheap code is that security becomes an externa
 - [[the-human-lever]] — The economic inversion explains why the human lever matters more: when implementation is free, design authority and verification become the scarce resources
 - [[the-verifiability-thesis]] — Code economics is driven by verifiability: code became cheap because it's verifiable (tests, compilation), and the economic consequences follow from that verifiability
 - [[the-slop-problem]] — Cheap code produces volume that exceeds review capacity, creating the conditions for slop accumulation
+- [[agent-centric-development-cycle]] — Shaukat's framework for preventing the productivity dissipation effect through baked-in verification
 
 ## Related
 
@@ -62,6 +72,7 @@ The most dangerous consequence of cheap code is that security becomes an externa
 - [[verifiability]] — The mechanism that makes code cheap: verifiable domains get automated first
 - [[the-slop-problem]] — Cheap code without verification discipline produces slop
 - [[agent-quality-engineering]] — The quality infrastructure needed when code volume exceeds human review capacity
+- [[agent-centric-development-cycle]] — The framework that addresses productivity dissipation through three verification loops
 - [[vibe-coding]] — The consumer experience of cheap code: trust the model, don't read every line
 - [[software-factory]] — The industrial-scale response to cheap code: automated pipelines that produce and verify code at machine speed
 - [[thorsten-ball]] — "Code as cattle" as the practical posture when code becomes cheap
@@ -70,3 +81,4 @@ The most dangerous consequence of cheap code is that security becomes an externa
 ## Sources
 
 - `raw/software-engineering-not-writing-code-schillings.md` — AI Engineer talk: code is "free or nearly free," 80% of GitHub is machine-generated, security vulnerability arms race, the economic inversion from implementation-value to architecture-value.
+- `raw/yt-land-of-ai-agents-verifiers-are-king-shaukat.md` — CMU study: 3–5× productivity boost dissipates within 3 months; Sonar benchmarking: functional correctness ≠ code quality; the productivity dissipation lifecycle

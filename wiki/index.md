@@ -113,6 +113,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[mathis-pink]] — Researcher at Max Planck Institute for Software Systems; lead author of the position paper arguing episodic memory is the missing piece for long-term LLM agents (the five-property framework).
 - [[lamis-mukta]] — Member of technical staff on Anthropic's applied AI team; described dreaming — Anthropic's out-of-band memory consolidation paradigm — and its production architecture.
 - [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework.
+- [[tariq-shaukat]] — CEO of Sonar; proposed the [[agent-centric-development-cycle|AC/DC framework]] for embedding verification into agentic development through three reinforcing loops; enterprise advocate for zero-trust multi-layered verification
 
 ## 🧠 Concepts
 - [[accuracy-minimizing]] — Inference providers sacrifice model accuracy for throughput; the hidden variable in open-source vs. closed-source comparisons
@@ -285,6 +286,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[three-layer-global-memory]] — MemGraphRAG's memory substrate: Ontology (schemas+freq), Fact (grounded triples), Passage (evidence); bidirectional cross-layer enforcement.
 - [[graphrag-baselines]] — Three GraphRAG baselines (LightRAG, HippoRAG, Microsoft GraphRAG) characterized by MemGraphRAG: all lack global memory during construction, producing the three deficiencies. Merged from individual pages.
 - [[neuro-symbolic-ai]] — The convergence of probabilistic LLMs with formal symbolic representations (ontologies, knowledge graphs) to create semantic guardrails around agent behavior. Coyle's argument for RDFS/OWL as the missing validation layer.
+- [[agent-centric-development-cycle]] — Shaukat's framework for embedding verification into AI-assisted development through three loops (agentic, CI, code maintenance) with zero-trust multi-layered verification
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.
