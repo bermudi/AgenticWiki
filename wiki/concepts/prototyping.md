@@ -14,7 +14,7 @@ unaudited_marginal: 0
 
 ## Body
 
-[[matt-pocock|Matt Pocock]] argues that a common failure mode in AI-assisted development is over-investing in a detailed spec or plan up front, on the assumption that precise text will make the agent's output match the intent. His counter: **you can write code while working toward a spec**, and because the cost of *producing* code has dropped sharply, building a quick throwaway prototype is now the cheapest and most effective way to resolve design questions. He partially dislikes the "code is cheap" slogan but accepts its kernel — the marginal cost of generating code has collapsed, so the cost of a prototype is negligible compared to the cost of a wrong spec.
+[[matt-pocock|Matt Pocock]] argues that a common failure mode in AI-assisted development is over-investing in a detailed spec or plan up front, on the assumption that precise text will make the agent's output match the intent. His counter: **you can write code while working toward a spec**, and because the cost of *producing* code has dropped sharply, building a quick throwaway prototype is now the cheapest and most effective way to resolve design questions. He partially dislikes the "code is cheap" slogan but accepts its kernel — the marginal cost of generating code has collapsed, so producing a throwaway spike "has never been cheaper and never been a more effective tool."
 
 ### The Fidelity Framework
 
@@ -29,7 +29,7 @@ The leap from discussion-plus-spec to production code is large; the leap from a 
 
 The technique ships as `/prototype` in [[mattpocock-skills|Pocock's skills repo]]. A prototype is **throwaway code that answers a question** — not production code, not a spec. Mechanics from Pocock's walkthrough:
 
-- The agent generates 2–3 candidate implementations (options A/B/C), each encoding different design decisions the human can react to and iterate on.
+- The agent generates three candidate implementations (options A/B/C in Pocock's walkthrough), each encoding different design decisions the human can react to and iterate on.
 - The session runs against the **live route** when possible (not a throwaway route) — "a more honest representation of how the code is actually going to work."
 - It is saved on a **throwaway branch**. When complete, an [[afk-agent]] deletes the prototype code and re-implements the design against the original spec, copying the real front-end logic out of the prototype.
 - Cost is explicit: Pocock's search-bar prototype took ~100k tokens. Higher fidelity = more tokens, but more useful answers than a lower-fidelity discussion.
@@ -38,7 +38,7 @@ The technique ships as `/prototype` in [[mattpocock-skills|Pocock's skills repo]
 
 The technique is not only for front-end work:
 
-- **UI prototypes** answer "how should it look / behave?" — the dominant case, because visual/interactive questions are hardest to resolve in discussion.
+- **UI prototypes** answer "how should it look / behave?" — the case Pocock emphasizes most, because visual/interactive questions are "really hard to answer during the discussion phase."
 - **Logic prototypes** answer "does this state model / logic feel right?" Pocock builds a tiny interactive terminal app that pushes a state machine through cases hard to reason about on paper — a pure-logic prototype.
 
 Both produce a reference artifact the implementer can read.
@@ -55,7 +55,7 @@ Prototyping is the high-fidelity cousin of two wiki concepts:
 - [[code-clarifies-spec]] — implementation generates decisions the spec didn't anticipate. Prototyping is the deliberate, upfront application of that insight: rather than discovering spec gaps late, build a rough version early to surface them.
 - [[ai-design-loop]] — the grilling/alignment phase. `/prototype` is the handoff skill that raises the discussion's fidelity when "how should it look/behave?" is the open question.
 
-It also pressures the [[spec-driven-development|spec-first]] position: for questions about look-and-feel or behavior-under-load, a prototype answers faster and more reliably than a more precise spec. See [[intent-to-code]] — prototyping is the alignment-first position (position 3) operating at higher fidelity than discussion alone.
+It also pressures the [[spec-driven-development|spec-first]] position: for questions about look-and-feel or behavior under specific conditions, a prototype answers faster and more reliably than a more precise spec. See [[intent-to-code]] — prototyping is the alignment-first position (position 3) operating at higher fidelity than discussion alone.
 
 ## Thread
 - [[intent-to-code]] — Prototyping is alignment-first (position 3) at higher fidelity; pressures the spec-precision positions (1 & 2).
