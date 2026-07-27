@@ -63,6 +63,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[martin-fowler]] — Pioneer of Agile and Refactoring.
 - [[mario-zechner]] — Creator of Pi.
 - [[lance-martin]] — Engineer at LangChain who built the Deep Agents harness and skill system; catalogued context engineering techniques and evolving context
+- [[frank-coyle]] — Educator at UC Berkeley; 30+ years in CS; advocates for neuro-symbolic AI — combining LLMs with formal ontologies to guardrail agent loops
 - [[the-gray-cat]] — YouTube creator; personal essay on living inside comprehension debt and recovering via teaching mode.
 - [[matt-pocock]] — Educator and advocate for strategic programming.
 - [[thibaud-gloaguen]] — Lead author of the first rigorous evaluation of AGENTS.md files on coding agent performance; found that `/init`-style auto-generated context files degrade agent performance — an effect driven by redundancy with existing docs, not by LLM generation as such.
@@ -280,6 +281,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[personalized-pagerank-rag]] — PPR over heterogeneous graph for GraphRAG retrieval; hub suppression + info density initialization; 0.061s query time.
 - [[three-layer-global-memory]] — MemGraphRAG's memory substrate: Ontology (schemas+freq), Fact (grounded triples), Passage (evidence); bidirectional cross-layer enforcement.
 - [[graphrag-baselines]] — Three GraphRAG baselines (LightRAG, HippoRAG, Microsoft GraphRAG) characterized by MemGraphRAG: all lack global memory during construction, producing the three deficiencies. Merged from individual pages.
+- [[neuro-symbolic-ai]] — The convergence of probabilistic LLMs with formal symbolic representations (ontologies, knowledge graphs) to create semantic guardrails around agent behavior. Coyle's argument for RDFS/OWL as the missing validation layer.
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.

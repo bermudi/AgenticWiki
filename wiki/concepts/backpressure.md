@@ -1,7 +1,7 @@
 ---
 title: Backpressure
 created: 2026-04-26
-updated: 2026-07-16
+updated: 2026-07-27
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
@@ -14,6 +14,7 @@ sources:
   - raw/2511.09030.md
   - raw/2603.04474.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/why-agentic-systems-need-ontologies-frank-coyle-uc-berkeley-youtube.md
 tags: [concept, autonomous-agents, agent-loops, verification, convergence]
 unaudited_marginal: 0
 ---
@@ -87,6 +88,28 @@ This is the multi-agent extension of the backpressure principle: engineering the
 
 The empirical validation (MAKER §4.5): red-flagging's main benefit is not raising the average per-step success rate but reducing *correlated* errors — the collisions where both of the first two votes are incorrect. Moving from a "helpful" repairing parser to a red-flagging parser cut collision counts substantially. Detection + rejection at the response level is what keeps the voting mechanism from being overwhelmed by correlated errors in many-step tasks.
 
+## Ontology-Based Semantic Guardrails: RDFS/OWL at the Ledger
+
+[[frank-coyle|Frank Coyle]] proposes a distinct layer of backpressure that operates at the semantic level, not the syntactic or process level: **ontological constraints** via RDFS and OWL. Where Pydantic validates input types at the door (syntactic backpressure), ontologies validate domain logic at the ledger (semantic backpressure).
+
+The architecture is two-layer:
+
+1. **Pydantic at the door**: Input type validation — ensuring the LLM's structured output matches expected parameter types. This is syntactic backpressure.
+2. **Ontology at the ledger**: After the tool executes, ontological constraints validate semantic correctness — not just "is this the right type?" but "does this make sense in our domain?"
+
+Coyle gives concrete examples of domain errors that ontological constraints catch but neither text processing nor type systems can:
+
+| Error | OWL mechanism | Why it slips past other defenses |
+|---|---|---|
+| Second refund on the same order | Functional property on `has_refund` | "Tricky to do that in English" — the LLM can't enforce cardinality |
+| Payout sent to support desk instead of buyer | Disjoint properties (`customer` and `support rep` are separate entities) | LLMs don't enforce entity separation |
+| Fabricated status value ("probably shipped") | Enumerated value constraint (`status ∈ {paid, shipped, refunded}`) | Probabilistic models return unconstrained values |
+
+The key insight is that ontological constraints are **declarative domain rules** that sit alongside the graph, not inside it. RDFS provides domain/range inference (if `teaches` has domain `teacher`, then `Bob teaches Scooter` implies `Bob is a teacher`). OWL adds transitive properties (ancestor chains), functional properties (one-father constraint), and disjointness (customer ≠ support rep). These are the formal guardrails that keep probabilistic LLM output within logically possible bounds.
+
+> [!note] Synthesis: The Three-Layer Backpressure Stack
+> Combining Coyle's ontological guardrails with the existing backpressure layers produces a three-stack: (1) **syntactic** — Pydantic type validation at input; (2) **semantic** — RDFS/OWL domain logic at output; (3) **process** — the existing downstream gates (tests, builds, lints) and upstream steering. Coyle's contribution is layer (2), which the existing backpressure literature had not formalized. The relationship to [[contextcov]] is direct: ContextCov implements process-level backpressure (PATH shims, tree-sitter linting, dependency graph analysis); Coyle proposes the semantic layer that ContextCov's static analysis cannot reach.
+
 ## Atomic-Claim Backpressure: The Genealogy Governance Layer
 
 [[genealogy-governance|Xie, Zhu, Zhang et al. (2026)]] scale backpressure to the multi-agent message layer. The governance layer intercepts every inter-agent message, decomposes it into atomic claims, tri-state labels each (Green/Red/Yellow) against a Lineage Graph of confirmed provenance, and enforces **blocking with rollback** for Red atoms. Unverified claims are mechanically prevented from entering shared context — backpressure at the claim level, not the output level.
@@ -140,6 +163,7 @@ Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline
 - [[maker]] — the implementation; §4.5 shows red-flagging's main benefit is reducing correlated errors, not raising average accuracy
 - [[error-cascades]] — the propagation model the governance layer's backpressure is designed to break; βρ(A) > δ is the condition backpressure (raising δ) is meant to invert
 - [[genealogy-governance]] — atomic-claim backpressure at the multi-agent message layer; the ablation (no blocking → 3.1% BICR) is the empirical validation that detection without enforcement is insufficient
+- [[neuro-symbolic-ai]] — ontology-based semantic guardrails as the formal constraint layer Coyle proposes for agent loops
 
 ## Sources
 
@@ -154,3 +178,4 @@ Removing blocking/rollback drops BICR to 3.1% — barely above the None baseline
 - `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.3 red-flagging (discard malformed/overlong responses without repair); §4.5 empirical impact (red-flagging reduces correlated errors — the collisions where both first two votes are incorrect). Source for the "Response-Level Backpressure" section.
 - `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §VI the genealogy governance layer (atomic-claim decomposition, tri-state screening, blocking with rollback); §VII.D ablation (Table VI: w/o blocking → 3.1% BICR, the empirical validation that detection without enforcement is insufficient). Source for the "Atomic-Claim Backpressure" section.
 - `raw/yt-context-engineering-with-dex-horthy.md` — Dex's "if you can make a problem very verifiable, you can treat it like a black box and loop" framing, with programming languages and auto-research as canonical verifiable problems (34:43–36:04).
+- `raw/why-agentic-systems-need-ontologies-frank-coyle-uc-berkeley-youtube.md` — [[frank-coyle|Coyle]]'s ontology-based semantic guardrails: RDFS domain/range inference, OWL transitive/functional/disjoint properties as the semantic backpressure layer that catches domain-logic errors type systems and text processing miss. The "Pydantic at the door, ontology at the ledger" two-layer pattern.

@@ -1,7 +1,7 @@
 ---
 title: Agent Loop
 created: 2026-07-01
-updated: 2026-07-14
+updated: 2026-07-27
 sources:
   - raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md
   - raw/yt-only-the-best-are-using-them.md
@@ -11,6 +11,7 @@ sources:
   - raw/2511.09030.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md
+  - raw/why-agentic-systems-need-ontologies-frank-coyle-uc-berkeley-youtube.md
 unaudited_marginal: 0
 tags: [concept, agent-loops, autonomous-agents, claude-code, cron, orchestration]
 ---
@@ -42,6 +43,15 @@ What cron never had is the part in the middle. A cron job runs a fixed script. A
 An automation executes a fixed sequence of prompts or code. A loop *decides* whether it is done. That decision — and the goal-verification behind it — is the entire substance. Strip the decision out and you have an automation, however sophisticated.
 
 A loop needs exactly two things, and only two: a **trigger** and a **goal**. The triggers come in three and only three flavors (Berman's taxonomy): an **action** (a PR opens), a **schedule** (cron — every 30 min, daily), or a **human** (a manual kickoff, still a valid trigger). The goal is either **verifiable** (deterministic: tests pass, 100% coverage, page load under 50 ms) or **LLM-as-judge** (non-deterministic: "refactor until satisfied"). That trigger + goal grammar is the minimum viable loop.
+
+## The Formal Foundation: Bohm-Jacopini and Turing Completeness
+
+Before the lineage, the theory. [[frank-coyle|Frank Coyle]] grounds the entire loops discussion in a 1966 result from theoretical computer science: the **Bohm-Jacopini theorem**. In the 1960s, programmers debated which programming language was superior — Fortran vs. COBOL. Bohm and Jacopini proved that the debate was moot: any language that supports exactly three constructs — **sequence**, **conditionals** (if-then), and **loops** (iteration) — is Turing complete. It can compute anything that any computational device can compute, per Alan Turing's foundational work.
+
+Coyle's observation is that this is precisely the moment agentic AI has arrived at. Agent loops provide the iteration construct; LLMs provide the decision-making within the loop; tools provide the actions. The three pieces are in place, and the result is a technology that is, formally, as capable as any computational device. This is why loops are not merely a useful pattern — they are the *theoretically necessary* construct that crosses agents from "useful autocomplete" into "general computation."
+
+> [!warning] The Formal Power Is Also the Danger
+> The Bohm-Jacopini theorem explains both the ceiling and the floor. Turing completeness means agents *can* do anything computable — but it also means loops can break (infinite loops), drift (agents talking to each other going off the rails), and cost money (token counts crank up as loops continue). The formal power is inseparable from the formal risk. See [[backpressure]] for the engineering response.
 
 ## The Lineage (Five Stages)
 
@@ -149,3 +159,4 @@ The loops people actually run sort cleanly by goal type. Verifiable goals: sub-5
 - `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.1 maximal agentic decomposition (single-step microagents); §3.2 first-to-ahead-by-k voting as the convergence mechanism; §4.4 the million-step zero-error result. Source for the "sixth paradigm" Extension callout.
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: Good Night, Have Fun as a bounded agent loop with explicit token/iteration caps and stop conditions; comparison to `/goal` commands; overnight verifiable objectives.
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[armin-ronacher|Ronacher]] on the review-until-satisfied loop converging on "the most complex and ungodly code" (unstable equilibrium, reviewer always finds more) and the lower-reasoning-budget mitigation he relays having heard. Source for the "Review-Until-Satisfied Loop Inflates Complexity" warning.
+- `raw/why-agentic-systems-need-ontologies-frank-coyle-uc-berkeley-youtube.md` — [[frank-coyle|Coyle]]'s Bohm-Jacopini grounding: sequence + conditionals + iteration = Turing completeness; agent loops as the theoretical culmination; the formal power-danger duality.
