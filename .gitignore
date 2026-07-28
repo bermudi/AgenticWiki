@@ -15,3 +15,4 @@ raw/assets/*.zip
 # Obsidian workspace state
 wiki/.obsidian/
 .wiki/sessions/
+.freebuff/
