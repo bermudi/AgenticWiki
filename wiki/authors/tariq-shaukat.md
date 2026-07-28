@@ -16,7 +16,7 @@ tags: [author, verification, enterprise, sonar]
 
 Shaukat's central argument is that AI-generated code passes functional correctness checks but still produces buggy, complex, and insecure output. The initial 3–5× productivity boost from AI coding agents dissipates within three months because technical debt accumulates as fast as (or faster than) code is generated. His framework for addressing this is the [[agent-centric-development-cycle]].
 
-He distinguishes **context** (architectural awareness, semantic navigation, codebase maps) from **constraints** (coding standards, dependency allowlists, intended architecture) as the two pillars of agent guidance. His testing showed over 30% reduction in token consumption when agents are given both, and cleaner codebases compound — agents need fewer tokens to operate on well-maintained code.
+He distinguishes **context** (architectural awareness, semantic navigation, codebase maps) from **constraints** (coding standards, dependency allowlists, intended architecture) as the two pillars of agent guidance. His testing showed over 30% reduction in token consumption when agents are given both. Separately, cleaner codebases also compound — agents need fewer tokens to operate on well-maintained code (a second empirical claim, not part of the same dataset as the 30% figure).
 
 ## Sonar
 
