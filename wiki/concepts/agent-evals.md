@@ -15,6 +15,7 @@ sources:
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/how-to-test-new-ai-models-before-they-break-production.md
+  - raw/dont-ship-skills-without-evals-philipp-schmid.md
 unaudited_marginal: 0
 tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
@@ -117,6 +118,47 @@ The harness measures three dimensions — accuracy, cost, latency — against co
 
 This pattern extends the eval framework's "confidence for model upgrades" claim: you get confidence, but only after running the eval set against the new model. See [[model-swap-evals]] for the full treatment, including the saturated-vs-unsaturated benchmark distinction and the API migration analogy.
 
+## Skill-Specific Evals: The Regression-Gated Practice
+
+[[philipp-schmid|Philipp Schmid]] (Google DeepMind, AI Engineer 2026) describes a skill-specific eval practice that is the most regimented instantiation of the skill-eval pattern in the wiki. The key elements:
+
+### The Gemini Interactions API Eval Harness
+
+Schmid's worked example: a skill for the Gemini Interactions API (released after Gemini's last training cut, so the model had no knowledge of it). The harness:
+
+- **117 test cases** in a JSON file, each with: a `prompt` (what the user would say), a `language` (TypeScript or Python), a `should_trigger` flag (whether the agent should read the skill), and `expected_checks` (assertions to run against the output).
+- A **Python script** that runs a coding agent (Gemini CLI) with the prompt, captures the output, and runs the assertions.
+- **Regex assertions** for deterministic checks: correct SDK used, correct model ID, correct methods called, no old patterns. These are cheap to run and easy to update when model IDs change.
+- **[[llm-as-code-judge|LLM-as-judge]]** for complex cases where the checks require looking at the whole trace or reasoning steps — a rubric defines what to look for, the output goes through the judge, and failures drive skill improvement.
+
+The result: valid Interactions API code generation improved to ~90%.
+
+### Google DeepMind's Internal Practice
+
+Schmid describes Google DeepMind's internal skill-evaluation discipline:
+
+- **Evals alongside every skill** — no skill ships without an eval suite.
+- **Run on every skill diff** — any change to a skill file triggers the eval.
+- **Regression-gated** — a change is not merged unless it improves the eval or adds new ones. This is the skill-level instantiation of the [[agent-quality-loop|quality loop]]'s regression-prevention principle: the eval is the gate, not the skill author's judgment.
+
+### Ten Best Practices for Skill Evals
+
+Schmid's ten best practices, several of which extend the existing eval framework:
+
+1. **The skill description is critical** — ~50% of failures come from mis-triggering (the description was not strong enough for the model to recognize it should load the skill). This is the model-invoked path's quantified failure cost.
+2. **Directives over passive information** — tell the agent what to do or not do, not "if you feel happy today, please use the skill."
+3. **Include negative tests** — test both when the skill *should* fire and when it *should not*. (Overlaps with Rodrigues's EDD.)
+4. **Start small** — 10–20 eval samples are better than nothing; you will be surprised how much you find from 5–10.
+5. **Test outcomes, not paths** — don't test whether the skill loads on turn 1; test whether the task is achieved. If the skill loads after 5 turns, that's fine.
+6. **Isolated runs** — agents cheat by reading prior context. Run in a clean workspace so the agent can't find the skill's information from previous chats or executions without using the skill.
+7. **Run >1 trial** — models are non-deterministic. Run 2–6 trials per case to measure reliability, not just single-shot success.
+8. **Test across harnesses** — Cursor, Claude, Gemini, Codex behave differently. A skill that works well with Gemini may fail with Codex, and your customers may use either.
+9. **Keep evals after retiring skills** — when you retire a skill because the model no longer needs it, keep the eval suite. If the model later degrades, the eval catches it and the skill can be reintroduced. (See [[agent-skills#Skill Rot and Retirement]].)
+10. **Ablation tests** — run evals with and without the skill. Only this tells you whether the skill is actually helping and when you can retire it.
+
+> [!note] Synthesis: deterministic-first for skills
+> Schmid's regex-first approach ("most tests for skills can be regex") aligns with the thread's existing [[agent-quality-engineering#A Counterpoint: Dex Horthy's Skepticism|deterministic-first]] principle (Horthy: "never send an AI to do a linter's job"; Colvin: deterministic evals over LLM-as-judge). Schmid reserves LLM-as-judge for complex cases the regex can't cover — the same hybrid axis as Galarza's deterministic guardrails and the [[deterministic-picker]] pattern. The skill-specific contribution is the observation that skill outputs (correct SDK, correct model, correct methods, no old patterns) are often structurally verifiable, making regex the natural first layer.
+
 ## Thread
 
 - [[agent-quality-engineering]] — Evals as the measurement layer of the quality framework
@@ -146,6 +188,8 @@ This pattern extends the eval framework's "confidence for model upgrades" claim:
 - [[model-swap-evals]] — A specialized eval harness for model-replacement decisions; the diff shortcut avoids full labeling
 - [[kevin-gregory]] — Demonstrated the model-swap eval harness with the diff shortcut
 - [[skill-md]] — The SKILL.md `skill-creator` workflow (with-skill vs baseline eval loop, `eval.json`) is the canonical skill-level eval pattern
+- [[philipp-schmid]] — The regression-gated skill-eval practice and the ten best practices for skill evals
+- [[skillbench]] — The benchmark providing the empirical baseline for skill efficacy (~15% improvement)
 
 ## Sources
 
@@ -161,3 +205,4 @@ This pattern extends the eval framework's "confidence for model upgrades" claim:
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for general-purpose coding agents; formal evals less useful than direct usage experience for arbitrary codebases
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skill efficacy heuristic (popularity is not a proxy for measured benefit); the Android Skills benchmark (177k stars, 5% more tokens, worse results).
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the model-swap eval harness — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. Multi-speaker; attribution based on contextual cues, not verified against audio.
+- `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): the Gemini Interactions API eval harness (117 test cases, JSON + Python, regex asserts + LLM-as-judge, ~90% valid code); Google DeepMind's regression-gated skill-eval practice (evals alongside every skill, run on every diff, merge-gated); ten best practices for skill evals (description critical ~50% mis-triggering, directives, negative tests, start small, outcomes not paths, isolated runs, >1 trial, cross-harness, keep evals after retirement, ablation).

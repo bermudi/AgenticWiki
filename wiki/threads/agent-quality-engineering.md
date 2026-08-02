@@ -25,6 +25,7 @@ sources:
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/all-agentic-architectures-deterministic-picker.md
   - raw/how-to-test-new-ai-models-before-they-break-production.md
+  - raw/dont-ship-skills-without-evals-philipp-schmid.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 0
 ---
@@ -129,6 +130,23 @@ The conversation (Boundary "AI that Works," 2026) adds two points relevant to th
 
 > [!note] Attribution
 > The model-swap harness is [[kevin-gregory|Kevin Gregory]]'s. The API migration analogy (Sprout, c. 2015) is [[dex-horthy|Dex Horthy]]'s. The "disagreement cases are the most interesting" insight is ambiguous in the transcript: the primary statement appears to come from the speaker explaining the harness (likely Kevin), while the agreement and elaboration ("Exactly. Cuz my instinct is that those are the interesting cases") may be either speaker. The transcript lacks per-line speaker labels, so the boundary between Kevin and Dex is uncertain; the insight is best attributed to the conversation rather than to Dex specifically.
+
+### Skill-Level Quality Engineering: Regression-Gated Skill Diffs
+
+[[philipp-schmid|Philipp Schmid]] (Google DeepMind, AI Engineer 2026) describes the most regimented skill-level quality loop in the wiki. The practice applies the thread's regression-prevention principle at the granularity of a single skill file:
+
+- **Evals alongside every skill** — no skill ships without an eval suite. This is the skill-level analog of "quality must be designed in from day one."
+- **Run on every skill diff** — any change to a skill file triggers the eval, the same way a code change triggers CI.
+- **Regression-gated merges** — a change to a skill is not merged unless it improves the eval or adds new ones. The eval is the gate, not the skill author's judgment.
+
+Schmid's worked example is a skill for the Gemini Interactions API (released after Gemini's training cut, so the model had no knowledge of it). The harness: 117 test cases in a JSON file (prompt, language, `should_trigger`, expected checks), run through a Python script invoking Gemini CLI, with **regex assertions** for deterministic checks (correct SDK, model, methods; no old patterns) and [[llm-as-code-judge|LLM-as-judge]] for complex cases. The result: valid code generation improved to ~90%.
+
+This is the deterministic-first principle (Horthy: "never send an AI to do a linter's job") applied to skills: Schmid reports that "most tests for skills can be regex" because skill outputs (correct SDK, correct model, correct methods, no old patterns) are often structurally verifiable. LLM-as-judge is reserved for cases the regex cannot cover — the same hybrid axis as Galarza's deterministic guardrails and the [[deterministic-picker]] pattern, but at the skill-eval layer.
+
+Schmid's ten best practices for skill evals extend the thread's existing guidance with skill-specific refinements: the skill description is the critical failure surface (~50% of failures from mis-triggering); test outcomes not paths (don't test whether the skill loads on turn 1); isolated runs (agents cheat by reading prior context — run in a clean workspace); run >1 trial (2–6, non-determinism); test across harnesses (Cursor vs Claude vs Gemini vs Codex — a skill that works with one may fail with another); keep evals after retiring skills (to detect degradation and reintroduce); ablation tests (with/without skill — the only way to know if the skill helps and when to retire it). See [[agent-evals]] for the full treatment.
+
+> [!note] Extension: retirement as a quality-loop output
+> Schmid's "keep evals after retiring skills" practice adds a new output to the quality loop: the eval suite outlives the skill. When a capability skill is retired because the model no longer needs it, the eval remains as a regression detector — if the model later degrades on that task, the eval catches it and the skill can be reintroduced. This makes retirement reversible: the eval is the persistent artifact, not the skill. The quality loop's flywheel (production failures → eval cases) gains a second direction: retired-skill evals → degradation detection → skill reintroduction.
 
 > [!note] Extension: The Quality Loop Lifted to the Memory Layer (Dreaming)
 > [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) is the quality flywheel applied to the agent's own *memory store*, run out-of-band with fleet-wide visibility. The loop becomes: fleet session transcripts → recurring-failure patterns → proposed memory change (add missing knowledge, fix stale entry, cut irrelevance) → human accept/reject. "Every production failure becomes an eval case" becomes "every fleet-wide failure becomes a proposed memory edit." Two details sharpen the connection to this thread's layers: (1) the highest-signal failures live in **tool-call metadata**, not conversational text — the "radians vs degrees" misconfiguration is detectable only by scrutinizing repeated tool errors, extending the observability thesis (Layer 2) into the tool-call trace; (2) the process is asynchronous with dedicated compute, so memory curation no longer competes for the in-band token budget. The thread's thesis — quality infrastructure makes agents shippable — generalizes: the infrastructure must cover not just the code the agent writes but the memory it reads.
@@ -367,3 +385,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve.
 - `raw/all-agentic-architectures-deterministic-picker.md` — Fareed Khan (2026). The [[deterministic-picker]] pattern as a hybrid LLM-as-judge technique: the LLM commits to categorical features (booleans/enums) and Python composes the deciding score — a third position between full LLM-as-judge and full deterministic check. The "LLM-as-Scorer flat-band pathology" as a specific manifestation of LLM-as-judge unreliability.
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the [[model-swap-evals|model-swap eval harness]] — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. [[dex-horthy|Dex Horthy]] contributes the Sprout API migration analogy and the "disagreement cases are the most interesting" insight. Source for the "Model-Swap Evals" section. Multi-speaker; attribution based on contextual cues, not verified against audio.
+- `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): skill-level quality engineering — Google DeepMind's regression-gated skill diffs (evals alongside every skill, run on every diff, merge-gated); the Gemini Interactions API eval harness (117 test cases, regex + LLM-as-judge, ~90% valid code); ten best practices for skill evals (description critical, outcomes not paths, isolated runs, >1 trial, cross-harness, keep evals after retirement, ablation); the "keep evals after retiring skills" retirement-reversibility practice. Source for the "Skill-Level Quality Engineering" section.

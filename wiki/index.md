@@ -115,6 +115,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework.
 - [[tariq-shaukat]] — CEO of Sonar; proposed the [[agent-centric-development-cycle|AC/DC framework]] for embedding verification into agentic development through three reinforcing loops; enterprise advocate for zero-trust multi-layered verification
 - [[kevin-gregory]] — AI engineer at EvolutionIQ ($730M acquisition); runs AI automations for Boundary's "AI that Works" podcast; designer of the [[model-swap-evals|model-swap eval harness]] and co-articulator of [[fighting-slop-with-slop]]
+- [[philipp-schmid]] — Engineer at Google DeepMind (Gemini API and agents); introduced the capability-vs-preference skill taxonomy, the agents-we-use-vs-build distinction, and Google DeepMind's regression-gated skill-eval practice
 
 ## 🧠 Concepts
 - [[accuracy-minimizing]] — Inference providers sacrifice model accuracy for throughput; the hidden variable in open-source vs. closed-source comparisons
@@ -159,6 +160,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-observability]] — Logs, traces, and metrics for agent decision chains.
 - [[agent-quality-loop]] — The flywheel: traces → evals → scorers → code.
 - [[agent-skills]] — Procedural knowledge for AI agents via skill.md files, progressive disclosure, and the open standard adopted across major platforms.
+- [[skillbench]] — A benchmark for agent skills: ~15% average improvement across ~100 tasks; human-written skills outperform AI-generated ones (which can hurt); < 500-line guidance for skill.md files.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[backpressure]] — Engineering the environment so wrong agent outputs are mechanically rejected.
 - [[blind-panic]] — Failure mode where an LLM executes persistently but degenerates into looping and tool hallucination when pushed beyond its planning horizon.

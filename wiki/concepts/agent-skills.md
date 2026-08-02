@@ -1,7 +1,7 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-07-19
+updated: 2026-08-02
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
@@ -14,6 +14,7 @@ sources:
   - raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md
   - raw/agentskills-specification.md
   - raw/skill-creator-skill.md
+  - raw/dont-ship-skills-without-evals-philipp-schmid.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
@@ -100,6 +101,27 @@ The `skill.md` format is an open standard, originally developed by Anthropic and
 > [!note] Departure: standard home and mandatory fields
 > This page previously cited `agent-skills.io` as the standard's home and Apache 2.0 as its license. The current canonical source is the `agentskills/agentskills` repository. The open spec mandates only two frontmatter fields — `name` and `description`; `allowed-tools` is experimental, and `disable-model-invocation` (used by user-invoked skills such as Pocock's set) is a client-specific extension not in the open spec.
 
+## Two Kinds of Skills: Capability vs Preference
+
+[[philipp-schmid|Philipp Schmid]] (Google DeepMind, AI Engineer 2026) introduces a taxonomy that distinguishes skills by their expected lifespan:
+
+- **Capability skills** teach models something they cannot yet do consistently (e.g., tracing logs, creating a React app). These are *temporary* — as models improve, the skills become retirable. Evals tell you when.
+- **Preference skills** encode team- or company-specific knowledge (workflows, style, domain conventions). These are *durable* — foundation models are unlikely to integrate knowledge specific to your use case, so the skills persist and must be protected with evals against agent degradation.
+
+The distinction maps onto the retirement question (see [[#Skill Rot and Retirement]] below): capability skills have a natural end-of-life; preference skills do not. It also reframes the [[skill-efficacy|efficacy debate]]: a capability skill that no longer improves performance is not a bad skill — it is a retired one. The ablation test (run with and without the skill) is the diagnostic.
+
+## Agents We Use vs Agents We Build
+
+Schmid draws a sharp line between two deployment contexts that determine which invocation mode matters:
+
+- **Agents we use** (Cursor, Claude Code, etc.): the engineer has skill context. If the agent fails to invoke a skill, the engineer notices, stops, and reprompts or uses slash commands. User-invoked skills are viable here — the engineer is the safety net.
+- **Agents we build** (customer-facing agents): customers have no skill awareness. They do not start prompts with "use the refund skill." Only model-invoked skills matter, and the skill description is the sole trigger mechanism — making description quality the critical failure surface.
+
+> [!note] Departure: user-invoked is not universal
+> Pocock's preference for user-invoked skills (see [[#Pocock's Skill Design Checklist]] below) is valid for "agents we use." For "agents we build," the model-invoked path is the only option, and its unreliability must be managed through evals, not avoided through user invocation. The trigger choice is not just a load-shift between context and cognition — it is constrained by whether the end user knows skills exist at all.
+
+Schmid reports that ~50% of skill failures come from mis-triggering — the description was not strong enough for the model to recognize it should load the skill. This is the quantified cost of the model-invoked path's unpredictability, and the reason description quality dominates the writing tips (see [[#Schmid's Eight Writing Tips]] below).
+
 ## Skill Design Craft
 
 Nick Nisi and Zack Proser (WorkOS) articulate the craft of writing effective skills — the difference between a skill that helps and one that gets in the way.
@@ -143,6 +165,8 @@ Nisi discovered through evals that his Next.js installer skill was making Claude
 ## Skill Efficacy vs. Popularity
 
 The same progressive-disclosure pattern that makes skills efficient also makes them dangerous: because the description is always loaded, a bad skill pollutes every session. [[kun-chen|Kun Chen]] makes the stronger claim that popularity is not a proxy for efficacy. The "Android Skills" repository has 177,000 GitHub stars, but a Program Bench evaluation of one skill found it made the agent use **5% more tokens and produce worse results**. The stars measure viral spread, not measured benefit. Kun's rule: do not install a skill that claims to "magically make your agent perform better" unless it has published rigorous eval evidence. See [[skill-efficacy]] for the full treatment.
+
+[[skillbench|SkillBench]] 1.1 provides the empirical baseline: skills improve performance by ~15% on average across ~100 tasks. But the same benchmark finds that **AI-generated skills can hurt performance** — they are not merely weaker than human-written ones, they can actively degrade agent outcomes. Human-written skills are the best performers. SkillBench also indexed over 50,000 skills and found almost none had evals, and most were AI-written — the empirical picture of [[skill-hell|skill hell]].
 
 This is why the "constraints over prescription" principle matters: skills should fill gaps in the model's knowledge, not replace its competence.
 
@@ -220,6 +244,19 @@ The checklist applied to a skill in order:
 3. **Steering** — leading words chosen and repeated? Visible in reasoning traces? Leg work adequate, or should the skill be split to hide future goals?
 4. **Pruning** — no-ops deleted via deletion test? Sediment removed? Single source of truth enforced?
 
+## Schmid's Eight Writing Tips
+
+[[philipp-schmid|Philipp Schmid]] (Google DeepMind, AI Engineer 2026) offers eight writing tips that overlap with Pocock's checklist and Rodrigues's EDD but add specific practitioner guidance, particularly for model-invoked skills:
+
+1. **Strong description (why + how + when)** — the description is the trigger surface; include why the skill should be used, how to use it, and when. Schmid reports ~50% of skill failures come from mis-triggering. (Overlaps with Pocock's trigger step and Rodrigues's "use" verb trick.)
+2. **Directives, not essays** — tell the agent what to do, not "if you feel happy today, please use the skill." (Overlaps with [[#Constraints Over Prescription]].)
+3. **Keep lean and layered** — the description is the cost you pay on every model invocation (100–200 tokens every call); keep it short. Push deep context to reference files. (Overlaps with Pocock's structure step and the [[skill-md]] < 500-line guidance.)
+4. **Set the right level of freedom** — if the workflow is always the same (step 1, step 2, step 3), write a script, not a skill. Skills should define goals and constraints, not prescribe every step. (Overlaps with [[#Constraints Over Prescription]]; adds the script-vs-skill boundary.)
+5. **Don't skip negative cases** — specify when *not* to use the skill. A description saying "use for web development" over-triggers; "use only for React components or Tailwind CSS" is specific enough. (Overlaps with Pocock's trigger step; adds the negative-description technique.)
+6. **Test early** — create 10–20 prompts when you create a new skill: 5 for the happy path (when to use it), 5 for the negative path (when not to use it), and include production traces if available. (Overlaps with Rodrigues's EDD; adds the 5+5 split and production-trace inclusion.)
+7. **Remove no-ops** — Schmid credits "Matt" (identified as [[matt-pocock|Matt Pocock]], already attributed for no-ops in Pocock's pruning step) for the no-ops skill and tweet. AI-generated skills tend to include many no-ops — instructions that do nothing to change agent behavior (e.g., "make the implementation easy to read" — the model does this anyway).
+8. **Know when to retire** — run evals with and without the skill. If the model achieves the performance without triggering the skill, retire it to save tokens and maintenance. (See [[#Skill Rot and Retirement]] below.)
+
 ## Skills as a Flow: The `mattpocock/skills` Set
 
 The checklist above treats a skill in isolation. The [[mattpocock-skills]] repo (`mattpocock/skills`) is the empirical demonstration that the user-invoked tradeoff scales to a *full workflow* — 38 skills chained across an idea-to-ship pipeline, with a combined context footprint of ~660 tokens. The mechanics that make this work are flow-level, not skill-level:
@@ -282,9 +319,13 @@ A skill's popularity (GitHub stars, viral adoption) is not a reliable proxy for 
 
 Kun cites the "Android Skills" repository (177,000 GitHub stars) as a caution: evaluating one skill with Program Bench found the agent used 5% more tokens and produced worse results. The star count measures popularity, not efficacy. His rule: do not install a skill that claims to "magically make your agent perform better" unless it has published rigorous evidence.
 
-### Skill Rot
+### Skill Rot and Retirement
 
 Skills that are no longer relevant still consume space in the progressive disclosure index (their descriptions). Rodrigues recommends periodically checking whether skills are still being loaded by users. If a skill hasn't matched in a long time, retire it. In CI, treat skills like any other artifact: keep only the ones needed for the specific project.
+
+[[philipp-schmid|Schmid]] adds the ablation test as the retirement diagnostic: run evals with and without the skill; if the model achieves the same performance without triggering the skill, retire it. This applies primarily to **capability skills** (see [[#Two Kinds of Skills: Capability vs Preference]] above) — as models improve, a capability skill that was necessary six months ago may be redundant today. **Preference skills** (company-specific knowledge) are durable and should not be retired just because the model improves; their evals detect *degradation*, not redundancy.
+
+Schmid also recommends keeping the eval suite after retiring a skill — so that if the model later degrades on the retired skill's task, the eval catches it and the skill can be reintroduced. This makes retirement reversible: the eval is the persistent artifact, not the skill.
 
 ## Skills at Team Scale
 
@@ -389,6 +430,8 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[skill-hell]] — The diagnosis Pocock's four-part checklist responds to: skills proliferate faster than evaluative capacity
 - [[mattpocock-skills]] — The 38-skill repo that demonstrates the user-invoked tradeoff scales to a full workflow at 660 tokens of context
 - [[agents-md]] — Complementary: context files provide *what to know about this project*; skills provide *how to do things*. AGENTS.md is the canonical context-file convention.
+- [[philipp-schmid]] — Introduced the capability-vs-preference skill taxonomy, the agents-we-use-vs-build distinction, and the eight writing tips
+- [[skillbench]] — The benchmark providing the ~15% improvement figure and the human-vs-AI-generated skill comparison
 
 ## Sources
 
@@ -403,3 +446,4 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/yt-mattpocockskills-learn-the-whole-flow-end-to-end.md` — Pocock's end-to-end walkthrough of the `mattpocock/skills` repo. Establishes the empirical 660-token context footprint across 38 user-invoked skills; the subagent code review rule ("agents are bad at editing code they've just written"); the spec = destination / tickets = path framing; the per-ticket context budget enforcement. Demonstrates that the user-invoked tradeoff scales to a full workflow.
 - `raw/agentskills-specification.md` — The `agentskills/agentskills` docs: directory structure, frontmatter field constraints (name/description mandatory, allowed-tools experimental), three-tier progressive-disclosure budget, `skills-ref` validation; Anthropic-origin open-standard overview.
 - `raw/skill-creator-skill.md` — Local `skill-creator` skill: the build/eval loop (with-skill vs baseline), description optimization, test-case design, `.skill` packaging, and the client-specific `disable-model-invocation` field.
+- `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): capability-vs-preference skill taxonomy; agents-we-use-vs-agents-we-build distinction; [[skillbench|SkillBench]] 1.1 results (~15% improvement, human-written > AI-generated, < 500 lines); eight writing tips (strong description, directives, lean+layered, right freedom level, negative cases, test early, remove no-ops, know when to retire); skill rot and retirement via ablation; keeping evals after retiring skills.

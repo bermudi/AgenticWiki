@@ -1,9 +1,10 @@
 ---
 title: Skill Hell
 created: 2026-07-06
-updated: 2026-07-19
+updated: 2026-08-02
 sources:
   - raw/yt-building-great-agent-skills-the-missing-manual.md
+  - raw/dont-ship-skills-without-evals-philipp-schmid.md
 unaudited_marginal: 0
 tags: [concept, skills, anti-pattern, discourse-slop]
 ---
@@ -47,6 +48,12 @@ This positions skill hell as a [[discourse-slop]]-adjacent phenomenon: the disco
 - **vs. [[ai-boilerplate-paradox]]**: The boilerplate paradox is about frameworks becoming verbose *because* AI benefits from explicitness. Skill hell is the downstream consequence when that verbosity is applied to skills without discipline: sediment accumulates, no-ops proliferate, and the skill looks comprehensive but does nothing.
 - **vs. [[discourse-slop]]**: Skill hell is the skills-flavored instance of the broader discourse-slop pattern. The hype cycle produces skills faster than evaluation can filter them.
 
+## The Eval-First Corollary: Schmid's "Don't Ship Skills Without Evals"
+
+[[philipp-schmid|Philipp Schmid]] (Google DeepMind, AI Engineer 2026) arrives at the same diagnosis from the opposite direction. Where Pocock's response to skill hell is a *design rubric* (the four-part checklist), Schmid's is an *eval mandate*: skills without evals are unshippable because you cannot tell good from bad. His opening anecdote — every hand goes up for "do you use skills," almost no hands for "do you have evals for those skills" — is the skill-hell symptom described from the practitioner's seat.
+
+[[skillbench|SkillBench]] quantifies the problem Schmid names: over 50,000 indexed skills, almost none with evals, most AI-written and untested. The benchmark's finding that AI-generated skills can *hurt* performance is the empirical confirmation that the skill-hell diagnosis is not pessimism — it is the measured outcome of shipping without evaluation. Schmid's prescription (evals alongside every skill, regression-gated on every diff) is the institutional complement to Pocock's individual checklist: the checklist helps you write a good skill; the eval gate ensures you don't ship a bad one.
+
 ## Thread
 
 - [[the-slop-problem]] — Skill hell is a slop variant: the supply of skills outpaces evaluative capacity, and the discourse around skills is slop-shaped
@@ -62,7 +69,10 @@ This positions skill hell as a [[discourse-slop]]-adjacent phenomenon: the disco
 - [[discourse-slop]] — Skill hell is the skills instance of the broader slop pattern
 - [[agent-evals]] — Eval-driven development for skills (Rodrigues) is the other proposed exit: run with/without the skill, diff, iterate
 - [[skill-md]] — The SKILL.md spec's `skill-creator` eval loop is the format-level instantiation of the exit from skill hell
+- [[philipp-schmid]] — The eval-first corollary: "don't ship skills without evals" as the institutional complement to Pocock's design rubric
+- [[skillbench]] — Quantifies skill hell: 50,000+ skills, almost none evaled, AI-generated skills can hurt performance
 
 ## Sources
 
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — Pocock's "Building Great Agent Skills: The Missing Manual" talk (AI Engineer World's Fair 2026). Names skill hell as the third developer hell after tutorial hell and framework hell; frames it as an evaluative-capacity deficit at individual and organizational scales; the four-part checklist is the proposed cure.
+- `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): the eval-first corollary to skill hell. Opening anecdote (everyone uses skills, no one has evals); [[skillbench|SkillBench]] quantification (50,000+ skills, almost no evals, AI-generated skills can hurt); the eval mandate as the institutional complement to Pocock's design rubric.

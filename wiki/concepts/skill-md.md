@@ -1,10 +1,11 @@
 ---
 title: SKILL.md (Agent Skills format)
 created: 2026-07-19
-updated: 2026-07-19
+updated: 2026-08-02
 sources:
   - raw/agentskills-specification.md
   - raw/skill-creator-skill.md
+  - raw/dont-ship-skills-without-evals-philipp-schmid.md
 unaudited_marginal: 0
 tags: [concept, skill-md, agent-skills, procedural-knowledge, progressive-disclosure, open-format]
 ---
@@ -42,7 +43,7 @@ The body is unrestricted Markdown: step-by-step instructions, input/output examp
 ### Progressive disclosure (three tiers)
 
 1. **Metadata (~100 tokens):** `name` + `description` load at startup for *every* skill — the table of contents.
-2. **Instructions (<5000 tokens recommended; keep `SKILL.md` under 500 lines):** the full body loads only when the task matches the description.
+2. **Instructions (<5000 tokens recommended; keep `SKILL.md` under 500 lines):** the full body loads only when the task matches the description. The < 500-line guidance is a [[skillbench|SkillBench]] finding — [[philipp-schmid|Schmid]] recommends keeping `skill.md` files under 500 lines, and reports that AI-generated skills can actively hurt agent outcomes (they tend to include no-ops, per Matt's work) while human-written skills are the best performers.
 3. **Resources (on demand):** `scripts/`, `references/`, `assets/` load only when a specific step needs them. Keep reference files small and one level deep from `SKILL.md`.
 
 This is why a good `description` is the whole triggering burden — the agent decides activation from the description alone.
@@ -91,8 +92,11 @@ This page is the **format**. [[agent-skills]] is the **mechanism and why** — s
 - [[skill-hell]] — Why skill-creator's eval loop exists: skills proliferate faster than evaluative capacity.
 - [[agent-evals]] — Eval-driven development for skills: run with/without, diff results, iterate.
 - [[open-knowledge-format]] — Parallel precedent: minimal open-format specs with reference implementations.
+- [[skillbench]] — The benchmark source for the < 500-line guidance and the finding that AI-generated skills can hurt performance
+- [[philipp-schmid]] — Cited SkillBench findings on skill length and human-vs-AI-generated skill quality
 
 ## Sources
 
 - `raw/agentskills-specification.md` — The `agentskills/agentskills` docs: directory structure, frontmatter field constraints, progressive-disclosure token budget, file-reference rules, `skills-ref` validation, and the Anthropic-origin open-standard overview.
 - `raw/skill-creator-skill.md` — Local `skill-creator` skill: the build/eval loop, description optimization, test-case design, packaging, and the `disable-model-invocation` client-specific field.
+- `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): [[skillbench|SkillBench]] 1.1 findings — < 500-line guidance for `skill.md` files, human-written skills outperform AI-generated ones (which can hurt performance), and the description-cost framing (100–200 tokens paid on every model invocation).
