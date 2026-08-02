@@ -1,12 +1,13 @@
 ---
 title: Dex Horthy
 created: 2026-04-25
-updated: 2026-07-22
+updated: 2026-08-02
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-context-engineering-with-dex-horthy.md
   - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
+  - raw/how-to-test-new-ai-models-before-they-break-production.md
 unaudited_marginal: 0
 tags: ["engineer", "agent-engineering", "context-engineering"]
 ---
@@ -30,6 +31,7 @@ Dex Horthy is a software engineer, founder of HumanLayer, and a leading voice in
 - **Research/Plan/Implement Workflow**: His [[research-plan-implement|Claude Code workflow]] (research the codebase, plan the approach, implement) was adopted by thousands of engineers. A year on, his mature verdict is that the detailed plans were *anti-leverage* and should be treated as disposable tactical artifacts.
 - **Slow Loops Over Dark Factories**: On autonomous loops, his line is "everything except stop reading the code is good advice" — favoring [[slow-loops|incremental, human-reviewed nightly loops]] over lights-off factories.
 - **Protect Vocabulary**: Warns, via Martin Fowler, about *semantic diffusion* — useful words ("agents," "software factory") becoming meaningless through overuse. Adopted Fowler's [[harness-engineering|inner/outer harness]] distinction as the best available definition.
+- **Everything Is Structured Outputs**: His closing maxim from the model-swap evals episode: "Everything in AI engineering is structured outputs. Everything else is just more abstractions that you might not need." Even when the product-facing output is free text, the eval and verification layers should turn it into structured data (booleans, enums, counts) for programmatic processing. See [[model-swap-evals]].
 
 ## Contributions
 
@@ -47,6 +49,9 @@ His work on prompting strategies — the research/plan/implement workflow, struc
 
 ### Snapshot-Based Evals
 Advocates for snapshot-based evals: run the workflow end-to-end, store the output, diff against previous runs. Like snapshot testing for agents. Skeptical of [[agent-evals|LLM-as-judge]] approaches — "never send an AI to do a linter's job."
+
+### API Migration Analogy
+Drew a direct analogy between model-swap evals and a pre-AI API migration project at Sprout (c. 2015): replaying real production HTTP traffic against old (Python/Django) and new (Java) endpoints, diffing status/body/latency, stripping noise, and cutting over when the diff table was all green. The AI version is structurally identical — replay test cases against two models, diff the outputs, review the table. He also observes that the cases where two models **disagree** are the most interesting — those are the hard problems to label and add to the golden set. See [[model-swap-evals]].
 
 > [!note] Role Clarification
 > The current sources describe Dex Horthy in the context of HumanLayer (his own company) and his independent engineering practice. Previous wiki entries may have referenced a Sourcegraph affiliation that is not supported by the primary sources in this ingest.
@@ -75,6 +80,7 @@ Advocates for snapshot-based evals: run the workflow end-to-end, store the outpu
 - [[multi-tier-action-space]] — The fast orchestrator + smart oracle pattern is a specific instantiation of the thin-tool-layer architecture
 - [[evolving-context]] — Dex's snapshot-based eval approach and model intuition philosophy provide the measurement framework for evolving context experiments
 - [[context-shards]] — Originated the context-shards memory-sourcing design (live on the "AI that Works" stream, July 2026)
+- [[model-swap-evals]] — Contributed the API migration analogy, the disagreement-case insight, and the "structured outputs" maxim to the model-swap eval harness pattern
 
 ## Sources
 
@@ -82,3 +88,4 @@ Advocates for snapshot-based evals: run the workflow end-to-end, store the outpu
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — Full interview covering context engineering origins, model switching strategy, markdown storage, evals, and agent memory.
 - `raw/yt-context-engineering-with-dex-horthy.md` — The Pragmatic Engineer interview: the deabstracting definition of context engineering, the two budgets, Smart/Dumb Zone physics, the RPI retrospective, slow loops, the lights-off factory build-and-shutdown, token-harder/smarter, Martin Fowler's inner/outer harness, and the HumanLayer product reveal.
 - `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026): co-hosted with [[vibv|Vibv]] on coding agent benchmarks. The episode covers benchmark generations, the maintainability gap, the RL training constraint, the velocity framework, and a proposed evolving-codebase benchmark. The discussion extends Dex's previously documented maintainability-gap argument (from the Pragmatic Engineer interview) into a full episode-length treatment. **Note:** This is a multi-speaker source whose transcript lacks per-line speaker labels; attribution of specific claims to Dex could not be verified against the audio. Claims are attributed to the video/discussion in [[the-benchmark-crisis]], not to Dex individually.
+- `raw/how-to-test-new-ai-models-before-they-break-production.md` — "AI that Works" episode (Boundary, 2026): Dex hosts [[kevin-gregory|Kevin Gregory]] on model-swap evals. Dex contributes the Sprout API migration analogy (replay-diff-cutover), the observation that disagreement cases are the most interesting, and the closing maxim "everything in AI engineering is structured outputs." **Note:** Multi-speaker transcript without per-line speaker labels; attribution based on contextual cues (Dex mentions Sprout and HumanLayer, addresses Kevin by name), not verified against audio.

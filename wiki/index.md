@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-07-27
+updated: 2026-08-02
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -114,6 +114,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[lamis-mukta]] — Member of technical staff on Anthropic's applied AI team; described dreaming — Anthropic's out-of-band memory consolidation paradigm — and its production architecture.
 - [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework.
 - [[tariq-shaukat]] — CEO of Sonar; proposed the [[agent-centric-development-cycle|AC/DC framework]] for embedding verification into agentic development through three reinforcing loops; enterprise advocate for zero-trust multi-layered verification
+- [[kevin-gregory]] — AI engineer at EvolutionIQ ($730M acquisition); runs AI automations for Boundary's "AI that Works" podcast; designer of the [[model-swap-evals|model-swap eval harness]] and co-articulator of [[fighting-slop-with-slop]]
 
 ## 🧠 Concepts
 - [[accuracy-minimizing]] — Inference providers sacrifice model accuracy for throughput; the hidden variable in open-source vs. closed-source comparisons
@@ -216,6 +217,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[leading-words]] — A steering technique for agent skills: pack a desired behavior into a short dense phrase ("vertical slice") and repeat it throughout the skill so the agent echoes it in reasoning traces, shaping behavior. The reasoning trace is the verification signal.
 - [[malleable-agents]] — Agents that can be modified on the fly by users or themselves.
 - [[model-routing]] — Decomposing tasks by complexity and routing each subtask to the cheapest model capable of handling it; up to 15× cost savings.
+- [[model-swap-evals]] — An eval harness for answering "can I swap in a new model?" across accuracy, cost, and latency — the diff shortcut, budget gates, and the saturated-vs-unsaturated benchmark distinction.
 - [[multi-agent-code-orchestration]] — Scaling the code-as-harness from single agents to multi-agent systems with specialized roles, interaction modes, and workflow topologies.
 - [[multi-tier-action-space]] — The thin tool layer + computer architecture converged on by Claude Code, Manis, AMP, and Deep Agents.
 - [[peak-programmer]] — The hypothesis that demand for manual implementation has peaked.

@@ -1,7 +1,7 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-07-19
+updated: 2026-08-02
 sources:
   - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
@@ -14,6 +14,7 @@ sources:
   - raw/2503.13657.md
   - raw/yt-llms-are-killing-agent-harness.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
+  - raw/how-to-test-new-ai-models-before-they-break-production.md
 unaudited_marginal: 0
 tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
@@ -105,6 +106,17 @@ Watching for quality degrading in production at scale — not individual failure
 
 You can only measure what you can see. If your agent doesn't emit structured traces, you can't evaluate trajectory. If it doesn't log tool calls with parameters, you can't measure efficiency. Quality requires visibility designed in from day one.
 
+## Model-Swap Evals: The Diff Shortcut
+
+A specialized application of evals is the [[model-swap-evals|model-swap eval harness]] — answering "can I replace my current model with a new one?" [[kevin-gregory|Kevin Gregory]] (EvolutionIQ) demonstrates a pattern that sidesteps the labeling cost: run the incumbent and candidate models on the same test cases and **diff the outputs**. If they agree, no labeling is needed — the candidate matches a model already in production. Only the **disagreement cases** need human labeling, and those become the most valuable additions to the golden set.
+
+The harness measures three dimensions — accuracy, cost, latency — against configurable threshold gates (the "budget"). The hardest part is defining what "good enough" looks like; the thresholds should be the easiest thing to change. For unstructured outputs (summaries), the conversation recommends either LLM-as-judge or a second extraction layer that pulls structured facts from the free text and checks those deterministically — consistent with the page's existing emphasis on deterministic verification.
+
+> [!note] Attribution
+> The LLM-as-judge and extract-then-check approaches for unstructured outputs are attributed to [[kevin-gregory|Kevin Gregory]] on the dedicated [[model-swap-evals]] page. This is a multi-speaker source (Boundary "AI that Works") whose transcript lacks per-line speaker labels; attribution is based on contextual cues (Kevin demonstrates the harness and works at EvolutionIQ), not verified against audio.
+
+This pattern extends the eval framework's "confidence for model upgrades" claim: you get confidence, but only after running the eval set against the new model. See [[model-swap-evals]] for the full treatment, including the saturated-vs-unsaturated benchmark distinction and the API migration analogy.
+
 ## Thread
 
 - [[agent-quality-engineering]] — Evals as the measurement layer of the quality framework
@@ -131,6 +143,8 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - [[instruction-hierarchy]] — MANYIH-BENCH adds a third axis to the long-horizon eval landscape: conflict tier scaling ([[delegate-52]] measures domain breadth, [[agent-floor]] measures planning depth, ManyIH measures privilege complexity)
 - [[thorsten-ball]] — Vibes-based evaluation as a practical alternative to formal evals for general-purpose coding agents
 - [[mast]] — MAST-Data is a labeled eval dataset for MAS (1642 traces, 7 frameworks); the LLM-as-a-Judge annotator (κ=0.77 against human experts) is a data point for LLM-as-judge reliability in structured classification tasks
+- [[model-swap-evals]] — A specialized eval harness for model-replacement decisions; the diff shortcut avoids full labeling
+- [[kevin-gregory]] — Demonstrated the model-swap eval harness with the diff shortcut
 - [[skill-md]] — The SKILL.md `skill-creator` workflow (with-skill vs baseline eval loop, `eval.json`) is the canonical skill-level eval pattern
 
 ## Sources
@@ -146,3 +160,4 @@ You can only measure what you can see. If your agent doesn't emit structured tra
 - `raw/2503.13657.md` — Cemri, Pan, Yang et al. (NeurIPS 2025). Source for the [[mast]] addition to Related. MAST-Data is a labeled eval dataset for MAS (1642 traces, 7 frameworks). The LLM-as-a-Judge annotator achieves κ=0.77 against human experts on structured failure classification — a data point for LLM-as-judge reliability in structured tasks vs. open-ended rubric evaluation.
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for general-purpose coding agents; formal evals less useful than direct usage experience for arbitrary codebases
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skill efficacy heuristic (popularity is not a proxy for measured benefit); the Android Skills benchmark (177k stars, 5% more tokens, worse results).
+- `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the model-swap eval harness — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. Multi-speaker; attribution based on contextual cues, not verified against audio.

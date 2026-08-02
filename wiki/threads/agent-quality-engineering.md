@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-07-26
+updated: 2026-08-02
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -24,6 +24,7 @@ sources:
   - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
   - raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md
   - raw/all-agentic-architectures-deterministic-picker.md
+  - raw/how-to-test-new-ai-models-before-they-break-production.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 0
 ---
@@ -115,6 +116,19 @@ This flywheel makes agents shippable because it provides:
 - **Safety for tool changes**: Validate against historical failures
 - **Compounding regression prevention**: Every fixed failure becomes a permanent test case
 - **Aggregate quality signals**: Sampling (25% in production) catches drift without full-cost evals on every run
+
+### Model-Swap Evals: Operationalizing "Confidence for Model Upgrades"
+
+The "confidence for model upgrades" bullet above is operationalized by [[kevin-gregory|Kevin Gregory]] (EvolutionIQ) as a [[model-swap-evals|model-swap eval harness]] — a specialized eval pattern for answering "can I swap in a new model?" when a deprecation is announced, a new model drops, or a cheaper/faster tier might suffice. The harness measures three dimensions (accuracy, cost, latency) against configurable threshold gates and uses a **diff shortcut**: run the incumbent and candidate on the same test cases, diff the outputs, and only label the disagreements. The disagreement cases become the most valuable additions to the golden set — the same flywheel as the quality loop, but triggered by model replacement rather than production failure.
+
+The conversation (Boundary "AI that Works," 2026) adds two points relevant to this thread:
+
+1. **Evals as proprietary IP.** General benchmarks are out of distribution for your workflow — you care about performance on *your* data, not SWE-bench. This makes the eval set a proprietary asset, not a commodity. The quality loop's flywheel (production failures → eval cases) is the mechanism that builds this IP.
+
+2. **Saturated vs unsaturated benchmarks.** For model builders, unsaturated benchmarks (10–20% scores, room to improve) are valuable. For your own evals, you want *saturated* benchmarks — your goal is 99–99.9% accuracy, and a saturated private eval tells you whether you're there. This extends [[the-benchmark-crisis|the benchmark crisis]] argument: public benchmarks have limited purchase not just because of contamination and verifier failure, but because the saturation level that makes them useful for model builders is the opposite of what you need for production evals.
+
+> [!note] Attribution
+> The model-swap harness is [[kevin-gregory|Kevin Gregory]]'s. The API migration analogy (Sprout, c. 2015) is [[dex-horthy|Dex Horthy]]'s. The "disagreement cases are the most interesting" insight is ambiguous in the transcript: the primary statement appears to come from the speaker explaining the harness (likely Kevin), while the agreement and elaboration ("Exactly. Cuz my instinct is that those are the interesting cases") may be either speaker. The transcript lacks per-line speaker labels, so the boundary between Kevin and Dex is uncertain; the insight is best attributed to the conversation rather than to Dex specifically.
 
 > [!note] Extension: The Quality Loop Lifted to the Memory Layer (Dreaming)
 > [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) is the quality flywheel applied to the agent's own *memory store*, run out-of-band with fleet-wide visibility. The loop becomes: fleet session transcripts → recurring-failure patterns → proposed memory change (add missing knowledge, fix stale entry, cut irrelevance) → human accept/reject. "Every production failure becomes an eval case" becomes "every fleet-wide failure becomes a proposed memory edit." Two details sharpen the connection to this thread's layers: (1) the highest-signal failures live in **tool-call metadata**, not conversational text — the "radians vs degrees" misconfiguration is detectable only by scrutinizing repeated tool errors, extending the observability thesis (Layer 2) into the tool-call trace; (2) the process is asynchronous with dedicated compute, so memory curation no longer competes for the in-band token budget. The thread's thesis — quality infrastructure makes agents shippable — generalizes: the infrastructure must cover not just the code the agent writes but the memory it reads.
@@ -352,3 +366,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/yt-context-engineering-with-dex-horthy.md` — Martin Fowler's inner/outer harness definition; harness engineering as the quality infrastructure's architectural foundation.
 - `raw/gpt-55-vs-claude-vs-gemini-nate-b-jones.md` — Private bench design philosophy: design tests that make models fail, test orthogonal capabilities, use messy real-world task shapes, evolve the tests as models improve.
 - `raw/all-agentic-architectures-deterministic-picker.md` — Fareed Khan (2026). The [[deterministic-picker]] pattern as a hybrid LLM-as-judge technique: the LLM commits to categorical features (booleans/enums) and Python composes the deciding score — a third position between full LLM-as-judge and full deterministic check. The "LLM-as-Scorer flat-band pathology" as a specific manifestation of LLM-as-judge unreliability.
+- `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the [[model-swap-evals|model-swap eval harness]] — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. [[dex-horthy|Dex Horthy]] contributes the Sprout API migration analogy and the "disagreement cases are the most interesting" insight. Source for the "Model-Swap Evals" section. Multi-speaker; attribution based on contextual cues, not verified against audio.

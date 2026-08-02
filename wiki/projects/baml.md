@@ -1,10 +1,11 @@
 ---
 title: BAML
 created: 2026-07-15
-updated: 2026-07-25
+updated: 2026-08-02
 sources:
   - raw/yt-stop-reading-code-start-understanding-systems.md
   - raw/boundary-context-shards-shared-memory.md
+  - raw/how-to-test-new-ai-models-before-they-break-production.md
 tags: ["project", "observability", "tracing", "type-safety", "llm"]
 unaudited_marginal: 0
 ---
@@ -50,6 +51,10 @@ BAML's approach avoids this by embedding type information in the trace data itse
 
 BAML's co-founder [[vibv|Vibv]] appears as a recurring guest on Boundary's "AI that Works" podcast. A July 2026 episode — "Building a Shared Memory System for AI Coding Agents" — featured [[dex-horthy|Dex Horthy]] (HumanLayer) designing the **[[context-shards]]** memory-sourcing feature live: a volume-based, team-aggregated, human-in-the-loop pipeline that mines recurring instructions from agent sessions. The episode is a primary source for the context-shards concept and for the slop critique of additive-only memory systems (Claude memory, CodeRabbit). See [[the-slop-problem]] and [[agent-memory-systems]] for how the design maps onto the wiki's memory theory.
 
+## Prompt Optimizer and the Pareto Frontier
+
+BAML includes a built-in **prompt optimizer** that can tune prompts against input/output token pairs. In the [[model-swap-evals|model-swap eval]] context ([[kevin-gregory|Kevin Gregory]], Boundary "AI that Works," 2026), this addresses the case where no candidate model strictly wins on all three dimensions (accuracy, cost, latency) — the candidates sit on a Pareto frontier (one is cheapest, one is fastest, one is most accurate). The optimizer can take the different pieces of the frontier and produce an optimized prompt that is the best compromise across all three, useful when a model deprecation forces a switch and no single replacement dominates.
+
 ## Thread
 
 - [[the-human-lever]] — BAML's compiler-level auto-instrumentation operationalizes the human lever: tracing is automatic, not dependent on the agent remembering to instrument
@@ -64,8 +69,11 @@ BAML's co-founder [[vibv|Vibv]] appears as a recurring guest on Boundary's "AI t
 - [[fighting-slop-with-slop]] — Boundary ML's "fighting slop with slop" philosophy: channel AI-generated slop into disposable tooling while keeping design docs rigorous
 - [[vibv]] — Co-founder and CEO of Boundary ML
 - [[context-shards]] — The memory-sourcing feature designed live on the "AI that Works" podcast (guest-hosted by Vibv)
+- [[model-swap-evals]] — BAML's prompt optimizer handles the Pareto frontier case when no model strictly dominates
+- [[kevin-gregory]] — Demonstrated BAML's prompt optimizer in the model-swap eval context
 
 ## Sources
 
 - `raw/yt-stop-reading-code-start-understanding-systems.md` — Vibv's description of BAML's compiler-level auto-instrumentation, type-safe tracing, and the OTEL critique
 - `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026): context-shards feature designed live with Dex Horthy; the memory-slop critique of additive-only systems. Multi-speaker; quotes attributed to the discussion, not verified per speaker.
+- `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates BAML's prompt optimizer for the Pareto frontier case in model-swap evals. Multi-speaker; attribution based on contextual cues, not verified against audio.

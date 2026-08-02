@@ -1,7 +1,7 @@
 ---
 title: Fighting Slop With Slop
 created: 2026-05-04
-updated: 2026-07-22
+updated: 2026-08-02
 sources:
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
   - "raw/yt-you-need-to-read-less-code.md"
@@ -88,6 +88,7 @@ The containment is now at the **tier boundary**: slop lives in the verification 
 - [[ai-design-loop]] — The BEEPs workflow is a structured ai-design-loop applied at organizational scale
 - [[the-human-lever]] — Theo's verification-as-slop argument reframes where the human lever applies: design verification systems, not read every line
 - [[theo-t3gg]] — Author of the verification-as-slop extension
+- [[kevin-gregory]] — Co-articulator of the concept (Boundary livestream); AI engineer at EvolutionIQ
 
 ## Sources
 

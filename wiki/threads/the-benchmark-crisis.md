@@ -1,7 +1,7 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-07-22
+updated: 2026-08-02
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -15,6 +15,7 @@ sources:
   - raw/yt-context-engineering-with-dex-horthy.md
   - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
   - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
+  - raw/how-to-test-new-ai-models-before-they-break-production.md
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution, cost]
 unaudited_marginal: 0
 ---
@@ -228,6 +229,18 @@ Theo's video makes a case that developers should build their own benchmarks from
 
 This is the [[verifiability]] thesis applied to model selection: if you can verify model performance on your actual tasks, you don't need to trust public benchmarks. The benchmarks that matter most are the ones you build from your own failure corpus.
 
+### Saturated vs Unsaturated: Who Is the Benchmark For?
+
+A conversation on Boundary's "AI that Works" (2026) draws a distinction that sharpens the benchmark crisis argument. [[kevin-gregory|Kevin Gregory]] (EvolutionIQ) and [[dex-horthy|Dex Horthy]] observe that the value of a benchmark depends on *who* is reading it:
+
+- **For model builders**: unsaturated benchmarks (e.g., Slop Codebench, where models score 10–20%) are valuable — they show where the frontier is and how much room remains for improvement.
+- **For production teams**: *saturated* benchmarks are what you want for your own private evals — your goal is 99–99.9% accuracy on your workflow, and a saturated eval tells you whether you're there. A benchmark where every model scores 99% is useless for model selection but exactly right for regression detection.
+
+This extends the crisis argument: public benchmarks have limited purchase not just because of [[benchmark-contamination|contamination]] and verifier failure, but because the saturation level that makes them useful for model builders is the opposite of what a production team needs. General benchmarks are out of distribution for your workflow, which makes your eval set **proprietary IP** — necessarily specific to your company's data. See [[model-swap-evals]] for the harness pattern that operationalizes this.
+
+> [!note] Attribution
+> The saturated/unsaturated distinction is a joint discussion between [[kevin-gregory|Kevin Gregory]] and [[dex-horthy|Dex Horthy]]. The transcript lacks per-line speaker labels; attribution is based on contextual cues, not verified against audio.
+
 ## Tensions
 
 > [!warning] Benchmark Shelf Life
@@ -261,3 +274,4 @@ This is the [[verifiability]] thesis applied to model selection: if you can veri
 - `raw/yt-state-of-agentic-coding-8-with-mario-armin-and-ben.md` — [[armin-ronacher|Ronacher]] on the sixth axis (cost-blind scoring): the cost-of-solving inversion (a model climbs benchmarks yet costs more per solve, observed around the Sonnet 5 release; "the cost of solving problems seems to be going up rather than down"), Terminal-Bench ignoring cost/runtime entirely, and the cheap-tier replacement inflation (price points earlier "cheap" flagships hit are gone; cheap flagships getting more expensive per solve). Source for the "Sixth Axis: Cost-Blind Scoring" section and its [[harness-monoculture]] synthesis callout.
 - `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026) with [[dex-horthy|Dex Horthy]] and [[vibv|Vibv]]: full benchmark-generations walkthrough (SWE-bench → Verified → Multilingual → Terminal Bench → Program Bench → SWE Marathon → Frontier Code), the RL training constraint (can't train what you can't verify), the long-horizon penalty, the velocity framework (DORA metrics, feedback-time hierarchy), and the "no benchmark for human engineers" argument. The discussion echoes Dex's earlier 20-feature evolving-codebase benchmark proposal (43:23) and contributes the "think fast … make it possible to extend it" instruction, but does not originate the proposal itself. Multi-speaker source; speaker attribution not verified against audio — claims attributed to the video/discussion, not named individuals.
 - `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's AI Engineer talk: OpenRouter accuracy benchmarks for DeepSeek V4 Pro and GLM 5.2 across inference providers, dynamic quantization research, SWE-bench Pro LLM-as-verifier critique (8.5% FP, 24% FN), intelligence plateau hypothesis, hardware vs. software optimization thesis, reward hacking examples (timer deletion, GPU mode hack, calculator hacking, GLM 5.2 anti-hacking). Source for the "Eighth Axis: Inference-Layer Accuracy Degradation" section.
+- `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] and [[dex-horthy|Dex Horthy]] on the saturated-vs-unsaturated benchmark distinction and evals as proprietary IP. Source for the "Saturated vs Unsaturated: Who Is the Benchmark For?" section. Multi-speaker; attribution based on contextual cues, not verified against audio.
