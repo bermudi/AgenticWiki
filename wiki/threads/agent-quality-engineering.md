@@ -26,6 +26,7 @@ sources:
   - raw/all-agentic-architectures-deterministic-picker.md
   - raw/how-to-test-new-ai-models-before-they-break-production.md
   - raw/dont-ship-skills-without-evals-philipp-schmid.md
+  - raw/yt-agent-development-lifecycle-101.md
 tags: [thread, agent-quality, evals, observability, feedback-loop]
 unaudited_marginal: 0
 ---
@@ -150,6 +151,21 @@ Schmid's ten best practices for skill evals extend the thread's existing guidanc
 
 > [!note] Extension: The Quality Loop Lifted to the Memory Layer (Dreaming)
 > [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) is the quality flywheel applied to the agent's own *memory store*, run out-of-band with fleet-wide visibility. The loop becomes: fleet session transcripts → recurring-failure patterns → proposed memory change (add missing knowledge, fix stale entry, cut irrelevance) → human accept/reject. "Every production failure becomes an eval case" becomes "every fleet-wide failure becomes a proposed memory edit." Two details sharpen the connection to this thread's layers: (1) the highest-signal failures live in **tool-call metadata**, not conversational text — the "radians vs degrees" misconfiguration is detectable only by scrutinizing repeated tool errors, extending the observability thesis (Layer 2) into the tool-call trace; (2) the process is asynchronous with dedicated compute, so memory curation no longer competes for the in-band token budget. The thread's thesis — quality infrastructure makes agents shippable — generalizes: the infrastructure must cover not just the code the agent writes but the memory it reads.
+
+## The Vendor Articulation: Lifecycle, Online Evals, and the Auto-Improving Loop
+
+[[harrison-chase|Harrison Chase]] (LangChain CEO, 2026) provides the most complete vendor articulation of this thread's thesis, organized as the [[agent-development-lifecycle]]: build → test → deploy → monitor, with governance wrapping the whole cycle. Three contributions matter to this thread:
+
+1. **Traces at the center.** Chase's operational claim: "the hard part about building agents is getting them to behave. In order to get them to behave, you basically need to observe what they're doing and then tweak them and then measure it. And traces are really that core." This is the thread's Layer 2 (observability) promoted to the organizing principle of the entire lifecycle — and it motivated LangChain to build Smith DB, a purpose-built trace database, because "storing one trace is easy. Storing billions of traces is hard."
+
+2. **[[online-evals]]: the production-side eval layer.** Chase's monitor stage adds a layer the thread's Galarza framework touches only lightly: scoring production traces without ground truth. His concrete pattern is **perceived error** — a small purpose-trained LM detecting transcript signals that the user believes the agent failed ("you messed up," pasting back a code snippet with an error). The economics mirror this thread's small-model findings: online evals run at full production volume, so the evaluator model's per-call cost dominates. His guardrails-vs-online timing distinction (guardrails slow the agent, online evals don't) is a clean addition to the eval taxonomy.
+
+3. **LangSmith Engine: the feedback flywheel automated.** Engine runs over traces every 6 hours, clusters them into issues, proposes code/prompt changes, adds dataset examples, and creates new online evals — with a human accepting on an issue board. This is the thread's quality loop (traces → evals → scorers → back to code) productized as an always-on agent, and the same "first draft + human approval" design stance this thread documents in [[no-mistakes|Kun Chen's]] pipeline.
+
+4. **Long-running stateful eval infrastructure.** Chase's Harbor (the open-source framework Terminal Bench 2 runs on, sandboxing each task) and his eval-environments idea (synthetic, resettable versions of stateful systems like Linear/Jira) corroborate this thread's long-horizon eval emphasis ([[delegate-52|DELEGATE-52]], [[agent-floor|AgentFloor]]): agents that run 15–30 minutes, produce artifacts, and mutate state cannot be evaluated like single LLM calls.
+
+> [!note] Departure: The skeptic vs. the builder
+> The thread's strongest practitioner voices ([[dex-horthy|Horthy]], Samuel Colvin) are skeptical of LLM-as-judge and prefer deterministic checks. Chase is a builder who ships LLM-judged online evals as product. The positions are not strictly contradictory — perceived-error detection is a purpose-trained *classifier* (structured classification, closer to MAST's task shape than to open-ended rubric judgment, though still LLM-judged) — but the contrast is real: the wiki's skeptics doubt the judge, while LangChain ships it at scale. Worth holding both positions in view.
 
 ## The [[tracing-spectrum|Tracing Spectrum]]: Three Layers, One Loop
 
@@ -356,6 +372,10 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - [[agentic-engineering]] — The professional discipline whose quality bar agent quality engineering is designed to preserve
 - [[property-based-testing-as-spec]] — A deterministic-verification analog to the probabilistic quality loop: EARS requirements are translated to correctness properties and verified by property-based tests rather than LLM judges. Where evals score generated text, PBT-as-spec scores generated code against machine-parseable invariants — a complementary verification mechanism, not a replacement.
 - [[verifiability]] — The economic theory that explains why evals work: LLMs automate what you can verify
+- [[agent-development-lifecycle]] — The vendor articulation of this thread: build/test/deploy/monitor with governance wrapping the cycle; traces at the center
+- [[online-evals]] — The production-side eval layer: scoring live traces without ground truth; perceived-error detection; guardrails-vs-online timing
+- [[harrison-chase]] — The CEO voice behind the vendor articulation
+- [[langchain]] — LangSmith Engine as the productized feedback flywheel; Smith DB as trace infrastructure
 - [[contextcov]] — ContextCov's empirical framework (compliance metrics, feedback cost, functional correctness) is a quality engineering methodology for deterministic enforcement; its finding that LLM reflection degrades compliance is a cautionary result for eval design
 - [[self-harness]] — The held-in/held-out split and conservative acceptance rule are quality infrastructure for the self-evolution loop
 - [[harnessx]] — AEGIS is the most concrete instance of the feedback flywheel applied to the harness itself: traces → per-task summaries → adaptation landscape → candidate edits → critic assessment → deterministic gate. The [[operational-mirror]]'s three named pathologies (reward hacking, catastrophic forgetting, under-exploration) are what the flywheel is *for* — they make the failure modes explicit and the defenses auditable. The trace store T is the observability substrate that makes the flywheel operational.
@@ -386,3 +406,4 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 - `raw/all-agentic-architectures-deterministic-picker.md` — Fareed Khan (2026). The [[deterministic-picker]] pattern as a hybrid LLM-as-judge technique: the LLM commits to categorical features (booleans/enums) and Python composes the deciding score — a third position between full LLM-as-judge and full deterministic check. The "LLM-as-Scorer flat-band pathology" as a specific manifestation of LLM-as-judge unreliability.
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the [[model-swap-evals|model-swap eval harness]] — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. [[dex-horthy|Dex Horthy]] contributes the Sprout API migration analogy and the "disagreement cases are the most interesting" insight. Source for the "Model-Swap Evals" section. Multi-speaker; attribution based on contextual cues, not verified against audio.
 - `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): skill-level quality engineering — Google DeepMind's regression-gated skill diffs (evals alongside every skill, run on every diff, merge-gated); the Gemini Interactions API eval harness (117 test cases, regex + LLM-as-judge, ~90% valid code); ten best practices for skill evals (description critical, outcomes not paths, isolated runs, >1 trial, cross-harness, keep evals after retirement, ablation); the "keep evals after retiring skills" retirement-reversibility practice. Source for the "Skill-Level Quality Engineering" section.
+- `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): source for the "Vendor Articulation" section — traces at the center, online evals and perceived error, guardrails-vs-online timing, LangSmith Engine as the automated flywheel, and the at-scale organizational patterns (shared eval frameworks, central platform team).

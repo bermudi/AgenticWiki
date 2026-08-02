@@ -16,6 +16,7 @@ sources:
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/how-to-test-new-ai-models-before-they-break-production.md
   - raw/dont-ship-skills-without-evals-philipp-schmid.md
+  - raw/yt-agent-development-lifecycle-101.md
 unaudited_marginal: 0
 tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
@@ -118,6 +119,10 @@ The harness measures three dimensions — accuracy, cost, latency — against co
 
 This pattern extends the eval framework's "confidence for model upgrades" claim: you get confidence, but only after running the eval set against the new model. See [[model-swap-evals]] for the full treatment, including the saturated-vs-unsaturated benchmark distinction and the API migration analogy.
 
+## Online Evals: The Production-Side Complement
+
+All of the above are **offline** evals: curated inputs, known or judgeable reference outputs, run on demand. [[harrison-chase|Harrison Chase]] (LangChain, 2026) names the production-side complement: [[online-evals]] — running evaluators over production traces and scoring them without ground truth, because real user interactions have no reference answer. His concrete pattern is **perceived error**: a small purpose-trained model scanning transcripts for signals that the user believes the agent failed ("you messed up," pasting back a code snippet with an error). The contrast is structural: offline evals measure the agent you think it is; online evals measure the agent as users actually encounter it. See [[online-evals]] for the full treatment, including the guardrails-vs-online timing distinction.
+
 ## Skill-Specific Evals: The Regression-Gated Practice
 
 [[philipp-schmid|Philipp Schmid]] (Google DeepMind, AI Engineer 2026) describes a skill-specific eval practice that is the most regimented instantiation of the skill-eval pattern in the wiki. The key elements:
@@ -190,6 +195,9 @@ Schmid's ten best practices, several of which extend the existing eval framework
 - [[skill-md]] — The SKILL.md `skill-creator` workflow (with-skill vs baseline eval loop, `eval.json`) is the canonical skill-level eval pattern
 - [[philipp-schmid]] — The regression-gated skill-eval practice and the ten best practices for skill evals
 - [[skillbench]] — The benchmark providing the empirical baseline for skill efficacy (~15% improvement)
+- [[online-evals]] — The production-side complement: evaluating live traces without ground truth, perceived-error detection, and the guardrails timing distinction
+- [[harrison-chase]] — Introduced online evals and the perceived-error pattern
+- [[langchain]] — The vendor platform that ships online evals and the perceived-error detector
 
 ## Sources
 
@@ -206,3 +214,4 @@ Schmid's ten best practices, several of which extend the existing eval framework
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skill efficacy heuristic (popularity is not a proxy for measured benefit); the Android Skills benchmark (177k stars, 5% more tokens, worse results).
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the model-swap eval harness — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. Multi-speaker; attribution based on contextual cues, not verified against audio.
 - `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): the Gemini Interactions API eval harness (117 test cases, JSON + Python, regex asserts + LLM-as-judge, ~90% valid code); Google DeepMind's regression-gated skill-eval practice (evals alongside every skill, run on every diff, merge-gated); ten best practices for skill evals (description critical ~50% mis-triggering, directives, negative tests, start small, outcomes not paths, isolated runs, >1 trial, cross-harness, keep evals after retirement, ablation).
+- `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): online evals as the production-side complement to offline evals (no ground truth, scored over live traces), the perceived-error pattern and trained small LM, and the guardrails-vs-online timing distinction.

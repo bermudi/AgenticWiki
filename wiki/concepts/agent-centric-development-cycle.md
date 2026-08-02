@@ -1,9 +1,10 @@
 ---
 title: Agent-Centric Development Cycle
 created: 2026-07-27
-updated: 2026-07-27
+updated: 2026-08-02
 sources:
   - raw/yt-land-of-ai-agents-verifiers-are-king-shaukat.md
+  - raw/yt-agent-development-lifecycle-101.md
 unaudited_marginal: 0
 tags: [concept, verification, loops, enterprise, agent-workflow]
 ---
@@ -62,6 +63,9 @@ Shaukat cites several data points:
 > [!note] Synthesis: Enterprise operationalization of the verifiability thesis
 > The AC/DC framework is the enterprise operationalization of [[verifiability]]. Where [[andrej-karpathy|Karpathy]] argues that LLMs automate what you can verify, Shaukat argues that verification must be explicitly externalized into the SDLC because models can't perfectly self-verify. The three loops are the mechanical instantiation of this — verification at every cadence, not just at the end.
 
+> [!note] Departure: Verification-centric vs. lifecycle-centric framing
+> [[harrison-chase|Harrison Chase]]'s [[agent-development-lifecycle]] (build → test → deploy → monitor → govern) is a parallel CEO-proposed development cycle with a different center of gravity: where AC/DC is organized around *verification loops*, Chase's is organized around *agent behavior* (observe → tweak → measure) with governance wrapping the whole cycle. The two are complementary rather than contradictory — AC/DC's agentic loop is Chase's "build with iteration," its CI loop is Chase's "test," and its maintenance loop is Chase's "monitor + govern" — but they make different claims about where the binding constraint is (verification infrastructure vs. behavioral observability). See [[agent-development-lifecycle]] for the contrast.
+
 ## Thread
 
 - [[the-verifiability-thesis]] — AC/DC operationalizes verifiability as an explicit SDLC discipline
@@ -77,7 +81,11 @@ Shaukat cites several data points:
 - [[agent-experience]] — Context and constraints as the AX layer for agents
 - [[backpressure]] — Multi-layered verification as backpressure on agent output
 - [[rollback-posture]] — The code maintenance loop as system-level detection cadence
+- [[agent-development-lifecycle]] — Chase's parallel lifecycle framework; verification-centric where Chase's is behavior-centric
+- [[harrison-chase]] — Introduced the parallel lifecycle framework
+- [[online-evals]] — The monitoring-stage complement to AC/DC's verification loops: scoring production traces without ground truth
 
 ## Sources
 
 - `raw/yt-land-of-ai-agents-verifiers-are-king-shaukat.md` — Primary source: AC/DC framework, three loops, zero-trust verification, guide as context+constraints, CMU study, Sonar benchmarking data, compounding effects
+- `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): the parallel lifecycle framework; source for the Departure callout contrasting verification-centric (AC/DC) with behavior-centric (lifecycle) framing.

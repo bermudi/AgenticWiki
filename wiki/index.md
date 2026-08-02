@@ -116,6 +116,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[tariq-shaukat]] — CEO of Sonar; proposed the [[agent-centric-development-cycle|AC/DC framework]] for embedding verification into agentic development through three reinforcing loops; enterprise advocate for zero-trust multi-layered verification
 - [[kevin-gregory]] — AI engineer at EvolutionIQ ($730M acquisition); runs AI automations for Boundary's "AI that Works" podcast; designer of the [[model-swap-evals|model-swap eval harness]] and co-articulator of [[fighting-slop-with-slop]]
 - [[philipp-schmid]] — Engineer at Google DeepMind (Gemini API and agents); introduced the capability-vs-preference skill taxonomy, the agents-we-use-vs-build distinction, and Google DeepMind's regression-gated skill-eval practice
+- [[harrison-chase]] — Co-founder and CEO of LangChain; introduced the agent development lifecycle (build/test/deploy/monitor/govern) with traces at the center, online evals and perceived error, and auto-improving agents (LangSmith Engine)
 
 ## 🧠 Concepts
 - [[accuracy-minimizing]] — Inference providers sacrifice model accuracy for throughput; the hidden variable in open-source vs. closed-source comparisons
@@ -291,6 +292,9 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[graphrag-baselines]] — Three GraphRAG baselines (LightRAG, HippoRAG, Microsoft GraphRAG) characterized by MemGraphRAG: all lack global memory during construction, producing the three deficiencies. Merged from individual pages.
 - [[neuro-symbolic-ai]] — The convergence of probabilistic LLMs with formal symbolic representations (ontologies, knowledge graphs) to create semantic guardrails around agent behavior. Coyle's argument for RDFS/OWL as the missing validation layer.
 - [[agent-centric-development-cycle]] — Shaukat's framework for embedding verification into AI-assisted development through three loops (agentic, CI, code maintenance) with zero-trust multi-layered verification
+- [[agent-development-lifecycle]] — Chase's build → test → deploy → monitor framework with governance wrapping the whole cycle; the hardest part of agents is getting them to behave reliably, so ship early and iterate systematically
+- [[online-evals]] — Running evaluators over production traces without ground truth; perceived-error detection via a purpose-trained small LM; the guardrails-vs-online timing distinction
+- [[virtual-file-system]] — Exposing agent context to the agent as a file system regardless of the backing store (database, S3, Box, Notion); the six-method backend interface (read/write/edit/glob/grep/ls)
 
 ## Organizations
 - [[sourcegraph]] — Universal code search and intelligence platform.
@@ -341,4 +345,5 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[maker]] — The first implementation of the [[massively-decomposed-agentic-processes|MDAP]] framework (Meyerson et al., Cognizant AI Lab + UT Austin, 2025): maximal decomposition + first-to-ahead-by-k voting + red-flagging. Solved Towers of Hanoi with 20 disks (1,048,575 steps) with zero errors using gpt-4.1-mini. The first demonstration that LLM-based systems can scale to million-step reliability.
 - [[memgraphrag-project]] — Open-source implementation of MemGraphRAG (KDD 2026): Three-Layer Global Memory, three-agent construction, PPR retrieval; GitHub: XMUDeepLIT/MemGraphRAG.
 - [[all-agentic-architectures]] — Open-source Python library + "living textbook" (Fareed Khan, 2026) presenting itself as packaging 35 production-grade agentic patterns as runnable `Architecture` classes on LangGraph; codifies the [[deterministic-picker]] discipline and ships a 17-task benchmark leaderboard.
+- [[langchain]] — The agent tooling company and open-source ecosystem: Deep Agents (harness), LangChain (framework), LangGraph (runtime), LangSmith Fleet (no-code), and the LangSmith platform (datasets/evals, deployments, sandboxes, Context Hub, tracing, online evals, dashboards, LLM Gateway); LangSmith Engine as the auto-improving agent
 

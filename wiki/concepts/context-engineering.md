@@ -1,7 +1,7 @@
 ---
 title: Context Engineering
 created: 2026-05-02
-updated: 2026-07-19
+updated: 2026-08-02
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
@@ -20,6 +20,7 @@ sources:
   - raw/gsd-core-opengsd-spec-driven-framework.md
   - raw/2606.24775v1.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
+  - raw/yt-agent-development-lifecycle-101.md
 unaudited_marginal: 0
 tags: ["concept", "context-engineering", "llm", "agents", "prompt-engineering"]
 ---
@@ -144,6 +145,16 @@ GSD Core also ships a **context monitor hook** that watches context usage in rea
 ### KV Caching
 Cache the invariant portion of chat history (system prompt, previous turns). Each incremental turn only processes the new bit. Cache hit rate is one of the most important metrics for production agents — directly affects speed and cost.
 
+### Prompt-Caching-Aware Token Control (Deep Agents)
+
+[[harrison-chase|Harrison Chase]] (LangChain, 2026) describes Deep Agents' production token-control techniques, all constrained by one rule: **don't break prompt caching**. Three techniques:
+
+1. **Large tool responses → file + tail**: if a tool returns ~60,000 tokens, put the full output in a file, show the agent only the last ~1,000 tokens, and tell it to read the file if it needs more.
+2. **Summarization at threshold**: compact context when it crosses a configured threshold.
+3. **Input removal for file-backed writes**: when the agent writes a very long input to a file, the input itself can be removed from context later — it's already saved in the file, and the agent can re-read it if it wants to remember.
+
+Chase's constraint on all three: "you want to do them cleverly so that you don't necessarily break prompt caching if you don't have to or you don't want to." Prompt caching makes repeated identical prefixes cheaper and faster, so context engineering that shuffles the prefix sacrifices that cache. The techniques are designed to keep the cached prefix intact while still trimming the tail. This is the productized complement to the techniques above: the same offloading instincts, tuned for the cache-economics constraint.
+
 ### Context Layers
 A mental model articulated by the host (Dex Horthy) and engaged with by Lance Martin for thinking about where context comes from: **session context** (what's happening in the current agent session), **agent context** (multi-session — skills, memories, past sessions), **organizational context** (Slack, email, calendars, knowledge bases), **global context** (web search, external information). The goal: materialize a just-in-time view across these layers that enables the agent's best next action.
 
@@ -256,6 +267,9 @@ The deeper insight: ideally, the agent shouldn't have to think about context man
 - [[fresh-context-subagents]] — GSD Core's architectural pattern: fresh context per subagent as the default execution model for all heavy work
 - [[gsd-core]] — The framework that systematizes fresh-context subagents and ships a context monitor hook
 - [[skill-md]] — The SKILL.md format operationalizes progressive disclosure (the core context-engineering technique) as a concrete file spec
+- [[virtual-file-system]] — Exposing context to agents through a filesystem interface regardless of the backing store; the deploy-stage expression of context offloading
+- [[langchain]] — Deep Agents ships prompt-caching-aware token control and the VFS backend interface
+- [[harrison-chase]] — Described the Deep Agents token-control techniques and their prompt-caching constraint
 
 ## Cramer on Training Data as Inference Cost
 
@@ -282,3 +296,4 @@ This connects to context engineering's information-per-token density: if the kno
 - `raw/2606.24775v1.md` — Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). Source for the explicit three-way distinction (RAG vs context engineering vs agent memory) and the argument that treating memory as "RAG over a memory bank" produces state collapse.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the memory-primitives timeline (CLAUDE.md → memory tools → skills → file-system-as-memory), the in-band vs out-of-band distinction, and the [[dreaming]] paradigm. Production memory guardrails (versioning, concurrency/locking, permissions, portability).
 - `raw/yt-context-engineering-with-dex-horthy.md` — The Pragmatic Engineer interview. Source for the root "deabstracting" definition, the two-budgets (information vs. instruction) distinction with the 150–250 instruction-following limit, and the make-it-run/make-it-right/make-it-fast cost-stage model.
+- `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): the Deep Agents prompt-caching-aware token control techniques (file + tail for large tool responses, summarization at threshold, input removal for file-backed writes), the constraint that context edits must not break prompt caching, and the VFS/Context Hub framing.

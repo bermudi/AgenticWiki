@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-07-22
+updated: 2026-08-02
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -26,6 +26,7 @@ sources:
   - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
   - raw/2602.11988v1.md
   - raw/agents-md-standard.md
+  - raw/yt-agent-development-lifecycle-101.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -135,6 +136,9 @@ Both agree: for developer-facing agent tools, CLI composability (pipes, scripts)
 
 > [!note] Extension: The Memory Store as an Agent-Navigable Tool Surface (Dreaming)
 > [[dreaming]] ([[lamis-mukta|Mukta]], Anthropic, AI Native DevCon June 2026) extends this thread's CLI-over-MCP / minimalism thesis to the memory layer. Anthropic's perceived state of the art for agent memory is **memory as a file system** — markdown files read/written/searched with ordinary tools (bash, grep) rather than bespoke memory-tool APIs or opaque vector databases. The memory store is itself an agent- and human-navigable tool surface, and Mukta's year-long path to it (CLAUDE.md → memory tools → skills → file-system-as-memory) is the same "shed unnecessary opinion about the tool surface" arc this thread tracks for dev tools. Dreaming's versioning + transcript provenance is, correspondingly, inspectable tool feedback — the [[contextcov|ContextCov]] pattern (deterministic, reviewable checks) applied to memory mutation rather than code.
+
+> [!note] Extension: The Virtual File System — Keep the Interface, Swap the Store
+> [[harrison-chase|Harrison Chase]] (LangChain, 2026) gives the interface-first thesis a deployment-layer form: the [[virtual-file-system|virtual file system]] keeps the file-system *interface* (read, write, edit, glob, grep, ls) while freeing the *store* — context lives in a database, S3, Box, or Notion, exposed to the agent as a filesystem it already knows how to use. Deep Agents' backend interface is six methods: `read`, `write`, `edit`, `glob`, `grep`, `ls`. The design decision is pure tool-design-for-agents: the agent's fluency with filesystem tools is the scarce capability, so the tool surface adapts to the agent rather than the agent adapting to a new API. This is the same "shed unnecessary opinion about the tool surface" arc as Mukta's file-system-as-memory, but applied to the store rather than the interface.
 
 ## Layer 3: Minimalism as Performance
 
@@ -312,3 +316,4 @@ The [[harness-monoculture]] cost data makes this concrete: OpenClaw's $1.3M/mont
 - `raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md` — Empirical anchors for harness monoculture: OpenClaw $1.3M/month token burn, Antirez's ds4 open-weight alternative, token-pricing trajectory suspicion.
 - `raw/2602.11988v1.md` — Gloaguen et al. (2026). Context file evaluation: LLM-generated files degrade performance via redundancy, developer-written files marginal improvement (~4%), context files as tool interfaces for agents.
 - `raw/agents-md-standard.md` — The agents.md/ site: the convention's rationale, minimal format, nested-file discovery, cross-agent compatibility, Linux Foundation stewardship.
+- `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): the build-stage abstraction taxonomy (frameworks vs. runtimes vs. harnesses), no-code agents as markdown files, and the virtual file system pattern with its six-method backend interface. Source for the "Virtual File System" extension.
