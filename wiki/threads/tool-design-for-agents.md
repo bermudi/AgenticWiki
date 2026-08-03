@@ -1,7 +1,7 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-08-02
+updated: 2026-08-03
 sources:
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -27,6 +27,7 @@ sources:
   - raw/2602.11988v1.md
   - raw/agents-md-standard.md
   - raw/yt-agent-development-lifecycle-101.md
+  - raw/2602.17622.md
 tags: [thread, tool-design, agent-tooling, dx, developer-tools, language-choice]
 unaudited_marginal: 0
 ---
@@ -60,6 +61,9 @@ unaudited_marginal: 0
 > This thread argues that tool reliability is bounded by tool design (interface contracts, output formats, minimalism). [[mario-zechner|Mario Zechner]] identifies an independent variable the thread did not account for: **the harness the model was RL-trained on.** A perfectly-designed, strict tool — [[pi]]'s edit tool, which validates tool calls against their schema — exhibits a ~20% failure rate on newer Anthropic models, because those models were (hypothesized) trained against [[claude-code|Claude Code]]'s lenient harness and never received a negative signal for emitting malformed calls. The defect is invisible to Claude Code (lenient) and fatal to Pi (strict). See [[grammar-constrained-sampling]] for the decoding-level mechanism and [[harness-monoculture]] for the ecosystem thesis: training on one dominant lenient harness propagates as (a) tool-call corruption in stricter harnesses, (b) spec pollution (third parties must accept the dominant harness's slop), (c) capability regression off the trained path, and (d) custom-tool ([[mcp|MCP]]) invocation share loss. Tool design is still necessary — clean interfaces still bound the failure surface — but it is no longer sufficient: a tool's observed reliability now depends on whether its strictness matches the leniency the model was trained to expect.
 >
 > The cost data makes the monoculture concrete: Peter Steinberger's [[claude-code|Claude Code]]-based [[opencode|OpenClaw]] burns ~$1.3M/month in tokens on a team of three — the empirical ceiling for token-maxing monoculture in mid-2026. Meanwhile, Antirez's `ds4` inference engine (C, custom DeepSeek V4) runs on a 128GB laptop and "could probably handle 60 to 70% of the issues" Pi handles with frontier models. The open-weight direction is the anti-monoculture escape: local inference on cheap hardware sidesteps both the lenient-harness lock-in and the token-seller incentive structure. See [[yolo-mode-philosophy]] for Pi's refusal to ship incomplete security half-measures — the sharpest counter-position to monoculture-driven tool design.
+
+> [!note] Departure: tooling fixes the floor; difficulty-aware control addresses the chain
+> Deng et al. (2026) make the boundary concrete in penetration testing. Their typed Tool and Skill Layer improves short-horizon capability-limited tasks, but the larger gains on multi-step machines come from Task Difficulty Assessment, external attack-tree search, branch pruning, and explicit state. This qualifies the thread's “tool is the bottleneck” thesis: the tool layer is a necessary floor, while a controller that estimates tractability becomes the binding layer as the task's attack graph grows. See [[difficulty-aware-agent-planning]] and [[pentestgpt-v2]].
 
 ## The Core Thesis
 
@@ -317,3 +321,4 @@ The [[harness-monoculture]] cost data makes this concrete: OpenClaw's $1.3M/mont
 - `raw/2602.11988v1.md` — Gloaguen et al. (2026). Context file evaluation: LLM-generated files degrade performance via redundancy, developer-written files marginal improvement (~4%), context files as tool interfaces for agents.
 - `raw/agents-md-standard.md` — The agents.md/ site: the convention's rationale, minimal format, nested-file discovery, cross-agent compatibility, Linux Foundation stewardship.
 - `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): the build-stage abstraction taxonomy (frameworks vs. runtimes vs. harnesses), no-code agents as markdown files, and the virtual file system pattern with its six-method backend interface. Source for the "Virtual File System" extension.
+- `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). Type A capability gaps versus Type B complexity barriers (§3.2); Tool and Skill Layer, TDA-EGATS, and Memory Subsystem (§4); component ablations (§5.3). Source for the departure that tool quality fixes the capability floor while difficulty-aware control handles long attack chains.

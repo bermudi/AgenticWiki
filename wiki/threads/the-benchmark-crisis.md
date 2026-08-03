@@ -1,7 +1,7 @@
 ---
 title: The Benchmark Crisis
 created: 2026-05-31
-updated: 2026-08-02
+updated: 2026-08-03
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
@@ -16,6 +16,7 @@ sources:
   - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
   - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
   - raw/how-to-test-new-ai-models-before-they-break-production.md
+  - raw/2602.17622.md
 tags: [thread, benchmark, evaluation, contamination, model-selection, environment-evolution, cost]
 unaudited_marginal: 0
 ---
@@ -122,6 +123,15 @@ This is a different failure mode from contamination or verifier error: the bench
 
 > [!note] Synthesis: the five axes are not independent
 > Horizon mismatch is *why* contamination, verifier failure, and prompt distortion are so corrosive: they all perturb step accuracy, and because the horizon-length curve is steep at the frontier, a small step-level perturbation hides a large horizon-level difference. DeepSWE's 70-point spread and this paper's 2176-vs-432 gap are the same phenomenon viewed at different granularities — the real capability differences that short, clean benchmarks compress away.
+
+## The Penetration-Testing Case: Complexity and Realism
+
+Deng et al. (2026) provide a domain-specific case study for the benchmark crisis. They evaluate the same family of agents across a short-horizon web benchmark (XBOW), end-to-end HTB/VulnHub machines, and a multi-host Active Directory environment (GOAD). The resulting pattern is not merely a leaderboard ranking: the failure class changes with task depth. Tooling dominates the short tasks; search strategy, state preservation, and attack-chain navigation dominate the longer ones.
+
+The paper also draws a boundary around what its numbers mean. CTFs are designed around solvable paths; retired machines can have public walkthroughs; GOAD is closer to enterprise work but abstracts social engineering and time pressure. A live HTB Season 8 deployment (10/13 machines) reduces the contamination concern, but it is a single-system deployment report rather than a controlled evaluation. This is the benchmark-crisis lesson in miniature: adding realism and task depth improves the signal, but no single completion rate establishes “real-world” autonomy.
+
+> [!note] Synthesis: report the failure regime, not only the score
+> The paper's Type A/Type B distinction suggests a reporting requirement for agent benchmarks: pair success with task depth, environment realism, trace-level failure category, resource cost, and the intervention that changed the result. Otherwise a tool-layer gain on short tasks can be mistaken for progress on long-horizon planning.
 
 ## The Sixth Axis: Cost-Blind Scoring
 
@@ -275,3 +285,4 @@ This extends the crisis argument: public benchmarks have limited purchase not ju
 - `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026) with [[dex-horthy|Dex Horthy]] and [[vibv|Vibv]]: full benchmark-generations walkthrough (SWE-bench → Verified → Multilingual → Terminal Bench → Program Bench → SWE Marathon → Frontier Code), the RL training constraint (can't train what you can't verify), the long-horizon penalty, the velocity framework (DORA metrics, feedback-time hierarchy), and the "no benchmark for human engineers" argument. The discussion echoes Dex's earlier 20-feature evolving-codebase benchmark proposal (43:23) and contributes the "think fast … make it possible to extend it" instruction, but does not originate the proposal itself. Multi-speaker source; speaker attribution not verified against audio — claims attributed to the video/discussion, not named individuals.
 - `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's AI Engineer talk: OpenRouter accuracy benchmarks for DeepSeek V4 Pro and GLM 5.2 across inference providers, dynamic quantization research, SWE-bench Pro LLM-as-verifier critique (8.5% FP, 24% FN), intelligence plateau hypothesis, hardware vs. software optimization thesis, reward hacking examples (timer deletion, GPU mode hack, calculator hacking, GLM 5.2 anti-hacking). Source for the "Eighth Axis: Inference-Layer Accuracy Degradation" section.
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] and [[dex-horthy|Dex Horthy]] on the saturated-vs-unsaturated benchmark distinction and evals as proprietary IP. Source for the "Saturated vs Unsaturated: Who Is the Benchmark For?" section. Multi-speaker; attribution based on contextual cues, not verified against audio.
+- `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). Three-level penetration-testing benchmark design, realism caveats, live HTB deployment, and Type A/Type B failure distribution by task depth (§2.2, §3.2, §5.1, §5.5, §6.1). Source for the complexity-and-realism case study and the failure-regime reporting synthesis.

@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-08-02
+updated: 2026-08-03
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -184,6 +184,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
 - [[critical-failure]] — Sparse catastrophic errors that explain the majority of document degradation in long LLM workflows.
 - [[deep-vs-shallow-modules]] — Module design critical for managing agent navigation.
+- [[difficulty-aware-agent-planning]] — Real-time task-tractability estimates guide exploration, exploitation, backtracking, and pruning; Type A tooling gaps and Type B planning/state barriers need different interventions.
 - [[dark-factory]] — A fully-automated software factory where no human reads the code; Dex built one (Jul→Nov 2025) and shut it down — the wiki's strongest first-person failure source.
 - [[delegate-52]] — Benchmark of 52 professional domains measuring LLM readiness for delegated document editing.
 - [[decision-extraction]] — Mining decisions from code diffs and agent traces at commit time; presenting them for human approval; logging as structured artifacts for intent traceability.
@@ -312,6 +313,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[first-mate]] — Meta-agent that manages a crew of task agents from conversational direction.
 - [[effect]] — TypeScript framework bundling schema, services, streams, and tracing; its verbosity acts as AI guardrails
 - [[opencode]] — Open-source coding agent (~8M MAU) rewritten in Effect by Anomaly
+- [[pentestgpt-v2]] — Single-agent penetration-testing system combining typed security tools, TDA-EGATS difficulty-aware search, and external state; reports its largest gains on multi-step attack chains.
 - [[astral]] — High-performance Python tooling (Ruff, ty, uv), adapting for agentic use.
 - [[axiom]] — Observability platform for high-cardinality, high-dimensionality log data at scale.
 - [[claude-code]] — Agentic CLI tool for code exploration and editing.
@@ -346,4 +348,3 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[memgraphrag-project]] — Open-source implementation of MemGraphRAG (KDD 2026): Three-Layer Global Memory, three-agent construction, PPR retrieval; GitHub: XMUDeepLIT/MemGraphRAG.
 - [[all-agentic-architectures]] — Open-source Python library + "living textbook" (Fareed Khan, 2026) presenting itself as packaging 35 production-grade agentic patterns as runnable `Architecture` classes on LangGraph; codifies the [[deterministic-picker]] discipline and ships a 17-task benchmark leaderboard.
 - [[langchain]] — The agent tooling company and open-source ecosystem: Deep Agents (harness), LangChain (framework), LangGraph (runtime), LangSmith Fleet (no-code), and the LangSmith platform (datasets/evals, deployments, sandboxes, Context Hub, tracing, online evals, dashboards, LLM Gateway); LangSmith Engine as the auto-improving agent
-

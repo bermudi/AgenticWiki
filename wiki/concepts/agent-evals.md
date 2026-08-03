@@ -1,7 +1,7 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-08-02
+updated: 2026-08-03
 sources:
   - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
@@ -17,6 +17,7 @@ sources:
   - raw/how-to-test-new-ai-models-before-they-break-production.md
   - raw/dont-ship-skills-without-evals-philipp-schmid.md
   - raw/yt-agent-development-lifecycle-101.md
+  - raw/2602.17622.md
 unaudited_marginal: 0
 tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
@@ -54,6 +55,15 @@ Most agent evals measure single-session or short-horizon performance. [[philippe
 - A "ready" threshold of **98% reconstruction after 20 interactions** — only Python passes for most models
 
 The paper argues the community needs **more long-horizon benchmarks** that simulate extended interactions, because degradation compounds over time and short simulations systematically underestimate severity.
+
+## Complexity-Stratified Failure Diagnosis
+
+The penetration-testing study by Deng et al. adds a complementary evaluation pattern: do not report one aggregate success rate when the system is expected to solve tasks with different horizons and control demands. They survey 28 systems, evaluate five representative implementations across XBOW web tasks, 13 HTB/VulnHub machines, and the five-host GOAD environment, and code 200 unsuccessful traces. The benchmark ladder isolates different bottlenecks: short XBOW tasks expose tool and knowledge gaps; end-to-end machines expose search, state, and chain-completion failures; GOAD adds cross-host credential and lateral-movement dependencies.
+
+Their Type A/Type B coding is useful because it pairs failure traces with interventions. Adding tool documentation improves Type A outcomes but leaves Type B failures; adding difficulty-aware search and external state improves the longer-horizon cases. This is an evaluation hypothesis rather than a universal taxonomy, but it gives agent builders a more informative question than “what is the completion rate?” — **which class of failure did the architecture change, at what task depth, and at what cost?**
+
+> [!warning] Evidence gap: benchmark realism remains bounded
+> The paper explicitly treats CTFs and GOAD as technical probes, not as complete proxies for real engagements. Its live HTB Season 8 deployment is a useful realism check, but it is not a controlled comparison. Complexity-stratified evals improve diagnosis without making benchmark scores equivalent to production readiness.
 
 ## The Framework
 
@@ -195,6 +205,8 @@ Schmid's ten best practices, several of which extend the existing eval framework
 - [[skill-md]] — The SKILL.md `skill-creator` workflow (with-skill vs baseline eval loop, `eval.json`) is the canonical skill-level eval pattern
 - [[philipp-schmid]] — The regression-gated skill-eval practice and the ten best practices for skill evals
 - [[skillbench]] — The benchmark providing the empirical baseline for skill efficacy (~15% improvement)
+- [[difficulty-aware-agent-planning]] — task difficulty as a live evaluation and control signal; Type A/Type B trace diagnosis
+- [[pentestgpt-v2]] — the implementation and ablation study that instantiates the complexity-stratified evaluation pattern
 - [[online-evals]] — The production-side complement: evaluating live traces without ground truth, perceived-error detection, and the guardrails timing distinction
 - [[harrison-chase]] — Introduced online evals and the perceived-error pattern
 - [[langchain]] — The vendor platform that ships online evals and the perceived-error detector
@@ -215,3 +227,4 @@ Schmid's ten best practices, several of which extend the existing eval framework
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the model-swap eval harness — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. Multi-speaker; attribution based on contextual cues, not verified against audio.
 - `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): the Gemini Interactions API eval harness (117 test cases, JSON + Python, regex asserts + LLM-as-judge, ~90% valid code); Google DeepMind's regression-gated skill-eval practice (evals alongside every skill, run on every diff, merge-gated); ten best practices for skill evals (description critical ~50% mis-triggering, directives, negative tests, start small, outcomes not paths, isolated runs, >1 trial, cross-harness, keep evals after retirement, ablation).
 - `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): online evals as the production-side complement to offline evals (no ground truth, scored over live traces), the perceived-error pattern and trained small LM, and the guardrails-vs-online timing distinction.
+- `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). Survey of 28 penetration-testing systems; three-level benchmark design; 200-trace Type A/Type B failure coding; component ablations separating tooling, search, and memory contributions (§3, §5). Source for the complexity-stratified failure-diagnosis section.

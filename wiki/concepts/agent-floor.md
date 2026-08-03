@@ -1,11 +1,12 @@
 ---
 title: AgentFloor
 created: 2026-05-06
-updated: 2026-07-14
+updated: 2026-08-03
 sources:
   - raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md
   - raw/2509.09677.md
   - raw/2511.09030.md
+  - raw/2602.17622.md
 tags: [benchmark, agent-evals, tool-use, model-evaluation]
 unaudited_marginal: 0
 ---
@@ -50,6 +51,9 @@ The authors demonstrated that this collapse occurs **even in a perfectly clean, 
 
 > [!note] Departure: is tier E a planning ceiling or an execution ceiling?
 > Sinha, Arun, Goel et al. (ICLR 2026) would contest the framing that tier E is purely a planning/architectural ceiling that "scale alone cannot fix." Their work isolates *execution* (carrying out a given plan) from planning, and finds execution [[horizon-length|horizon]] improves non-diminishingly with model size — and dramatically with RL-trained thinking. Their thesis is that long-task failures are routinely *misattributed* to reasoning/planning when they are execution failures. The resolution may be that AgentFloor's tier E (8–12 contingent steps maintaining system constraints) blends planning and execution; the Illusion paper predicts the execution component should yield to scale + thinking even if the planning component resists. This is a live tension, not a settled contradiction.
+
+> [!note] Extension: difficulty-aware search can move an end-to-end boundary
+> Deng et al. (2026) provide a third position. In penetration-testing tasks, a Tool Layer improves short-horizon capability, while Task Difficulty Assessment plus external attack-tree search and memory improve multi-step completion. Their result does not overturn AgentFloor's clean 8–12-step ceiling: the benchmarks, environments, and task demands differ. It does show that “long-horizon failure” can include a controller problem — estimating tractability, switching between exploration and exploitation, and maintaining state — that is not tested by simply giving a model clean tools and asking it to plan.
 
 ### Small Models Can Match Frontier Performance
 
@@ -105,3 +109,4 @@ The authors tried structured prompting — telling models to plan first and then
 - `raw/yt-when-to-use-small-lm-for-ai-agents-new-insights.md` — Discover AI's summary of the Harvard AgentFloor study, including the tier framework, comparative results, failure mode analysis, and cost implications
 - `raw/2509.09677.md` — Sinha, Arun, Goel et al. (ICLR 2026). Source for the tier-E execution-vs-planning departure: isolating execution shows it improves with scale + thinking (§3.1), contesting the "scale alone cannot fix" reading of long-horizon collapse.
 - `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §4.4 the million-step zero-result via maximal decomposition + voting. Source for the "Extension: maximal decomposition as an architectural answer" callout.
+- `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). Type B failure analysis and the PENTESTGPT V2 TDA-EGATS + Memory response (§3.2, §4.3–§4.5, §5). Source for the controller-level extension to the tier-E planning/execution debate.

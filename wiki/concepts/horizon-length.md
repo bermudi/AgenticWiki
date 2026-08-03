@@ -1,10 +1,11 @@
 ---
 title: Horizon Length
 created: 2026-07-03
-updated: 2026-07-14
+updated: 2026-08-03
 sources:
   - raw/2509.09677.md
   - raw/2511.09030.md
+  - raw/2602.17622.md
 tags: [concept, evaluation, scaling, long-horizon, execution, compounding]
 unaudited_marginal: 0
 ---
@@ -35,6 +36,9 @@ This removes planning (the keys are given) and parametric knowledge (the diction
 
 > [!note] Departure: execution, not reasoning, is the long-horizon bottleneck
 > The paper takes a clear side in a live debate. Shojaee et al. (2025) ("the illusion of thinking") and Kambhampati et al. (2024) ("LLMs can't plan") read long-task failures as reasoning/planning failures. Sinha et al. argue these failures are *execution* failures misattributed to reasoning: in the Shojaee setup the models follow the correct plan for many steps before failing — the failure is in carrying it out, not knowing it. Execution is the under-studied capability.
+
+> [!note] Departure: a separate search/control horizon
+> Deng et al. (2026) add a different failure boundary from a penetration-testing study. Their Type B failures arise when an agent has adequate tools but cannot estimate remaining work, balance reconnaissance against exploitation, preserve state, or abandon a bad branch. PENTESTGPT V2 reports gains from Task Difficulty Assessment, evidence-guided search, and external memory. This does not refute the controlled execution result above: it suggests that end-to-end agent tasks contain at least two horizons — carrying out a chosen plan and deciding which plan deserves continued investment. The separation is a source-backed synthesis, not a settled taxonomy.
 
 ## Findings
 
@@ -81,3 +85,4 @@ Two reframes:
 
 - `raw/2509.09677.md` — Sinha, Arun, Goel, Staab, Geiping (ICLR 2026). *The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs.* arXiv 2509.09677v3. Horizon-length metric and Proposition 1 (§2.1); execution-isolation methodology (§2.2, §3); scaling and frontier-execution results (§3.1, §3.3); METR reconciliation (§2.1).
 - `raw/2511.09030.md` — Meyerson et al. (Cognizant AI Lab + UT Austin, arXiv 2511.09030v1, 12 Nov 2025). §3.2 first-to-ahead-by-k voting and the log-linear cost scaling (Eqs. 9–18, `k_min = Θ(ln s)`); §4.4 the million-step Towers of Hanoi result. Source for the "Pushing Horizon Length Without Raising Model Capability" section.
+- `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). Type B complexity barriers (§3.2); TDA-EGATS as a search/control response (§4.3–§4.4); external state and the distinction between long-horizon planning and long-context processing (§4.5, §6.2). Source for the separate search/control horizon departure.

@@ -1,11 +1,12 @@
 ---
 title: Agent Memory Systems
 created: 2026-07-11
-updated: 2026-07-25
+updated: 2026-08-03
 sources:
   - raw/2606.24775v1.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/boundary-context-shards-shared-memory.md
+  - raw/2602.17622.md
 tags: [concept, agent-memory, data-management, memory-architecture, retrieval, benchmark, memory-maintenance]
 unaudited_marginal: 0
 ---
@@ -63,6 +64,9 @@ Graph- and relation-organized memory handles fact revisions most reliably (Zep l
 ### Finding 4 — Long-horizon stability requires structure; long-context beats memory for time-dependent queries
 Many append-only stores suffer catastrophic degradation as evidence becomes more distant. Strikingly, for time-dependent queries **raw long-context retrieval still outperforms most memory-backed approaches** — because standard semantic consolidation destroys chronological cues. Graph/consolidated memory (Cognee, MemOS, MemoryOS) stays substantially higher across widening evidence gaps; flat Embedding RAG falls from 37.1 → 7.4 Answer F1 as the gap widens.
 
+> [!note] Extension: execution state as a first-class memory workload
+> PENTESTGPT V2 (Deng et al., 2026) supplies a concrete runtime pattern outside the page's dialogue benchmarks. Its state store keeps hosts, services, credentials, sessions, and vulnerabilities separate from the conversation, then injects only path-, target-, and branch-relevant state. The point is not that an attack tree is a universal memory architecture; it is that long-horizon agents need provenance-bearing operational state and a policy for what to rehydrate, not only a better semantic retriever.
+
 ### Finding 5 — Operational cost is governed by maintenance scope, not structure
 Highly structured systems (Cognee, Zep, MemoryOS) incur **orders-of-magnitude** higher index construction and query latency than lightweight stores (LightMem, MemTree), yet do not consistently deliver proportional accuracy. The cost driver is how widely each write propagates through the structure: graph-wide consolidation and multi-store synchronization are the heaviest. **Localized, bounded maintenance** is the cost-efficient regime.
 
@@ -103,6 +107,8 @@ The paper's methodological contribution is itself notable against [[the-benchmar
 - [[context-engineering]] — The paper draws an explicit three-way distinction: RAG (stateless retrieval) vs context engineering (per-turn window curation) vs agent memory (persistent, updatable, full lifecycle)
 - [[self-conditioning]] — Finding 4's long-horizon degradation: flat memory suffers as evidence distance grows, mirroring error-accumulation in context
 - [[horizon-length]] — Long-horizon stability recast as a memory-architecture problem, not just a model-capability problem
+- [[difficulty-aware-agent-planning]] — TDA uses context load and explicit state as planning signals
+- [[pentestgpt-v2]] — a concrete external-state implementation for multi-step attack campaigns
 - [[episodic-memory-for-agents]] — The cognitive-science type-system complement to this data-management module view: the five memory *types/properties* an agent should have, versus the four modules that store and maintain them
 - [[harness-mechanisms]] — Memory as a harness mechanism; the four-module framework refines the memory portion of that taxonomy
 - [[the-benchmark-crisis]] — The decomposition-based evaluation methodology as an instance of the benchmark-crisis thesis
@@ -112,3 +118,4 @@ The paper's methodological contribution is itself notable against [[the-benchmar
 - `raw/2606.24775v1.md` — Zhou, Zhou et al. (SJTU + Tsinghua + MemTensor, arXiv 2606.24775, June 2026). *Are We Ready For An Agent-Native Memory System?* The full paper: the four-module framework M = ⟨R, S, Q, U⟩; the taxonomy of 12 systems across three paradigms; end-to-end evaluation across 5 workloads / 11 datasets (RQ1–RQ5); fine-grained component ablations (M1–M4); nine named findings (workload alignment, evidence-centric retrieval, temporal update fidelity / "hallucinations of the past", horizon-structured memory, operational scaling rule, representation granularity, late filtering, retrieval guidance, conservative maintenance). Code at github.com/OpenDataBox/MemoryData.
 - `raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md` — Lamis Mukta (Anthropic), AI Native DevCon June 2026. Source for the out-of-band consolidation note: dreaming as the out-of-band instance of module U (temporal-mode question: in-band vs out-of-band maintenance), and the production guardrails (versioning, optimistic-locking concurrency, permissions, portability) as module U hardened for fleet-scale concurrency and abuse.
 - `raw/boundary-context-shards-shared-memory.md` — Boundary "AI that Works" livestream (July 2026). Source for the volume-gated extraction + HITL maintenance note: context shards as a product-level instance of modules S and U, with team-volume prevalence gating and staged human-in-the-loop adoption. Multi-speaker; quotes attributed to the discussion, not verified per speaker.
+- `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). PENTESTGPT V2's structured State Store, provenance links, selective context injection, branch summaries, and context-load-aware pruning (§4.5, Appendix D.6). Source for the runtime execution-state extension.
