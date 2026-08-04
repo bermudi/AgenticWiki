@@ -4,6 +4,8 @@
 > AI-assisted development with discipline. Maintained by bermudi, written
 > by the LLM, source-of-truth in git, browsable in Obsidian.
 
+**If you want to operate the wiki, start with the plain-language [`USER-MANUAL.md`](USER-MANUAL.md).** It explains what to ask for, what the agents do, what requires approval, when commits happen, and what never runs automatically.
+
 The whole project is a [Karpathy-style LLM wiki](meta/llm-wiki-manifesto.md):
 the LLM incrementally builds and maintains a persistent, interlinked
 collection of markdown pages that compounds over time. Sources go in
@@ -13,7 +15,8 @@ keeps the cross-references, contradictions, and synthesis current.
 ## Structure
 
 ```
-raw/              Source documents. Read-only — never modified by the LLM.
+USER-MANUAL.md    Plain-language operating guide for the human owner.
+raw/              Append-only source collection — agents may add artifacts; existing files are immutable.
 wiki/             LLM-generated wiki pages (the digest).
   index.md        Content catalog — threads, authors, concepts, projects.
   threads/        Synthetic essays tracing themes across sources.
@@ -26,23 +29,23 @@ scripts/          Local lint and validation helpers.
 archive/          Retired workflow artifacts.
 ```
 
-The agent schema (how the wiki is organized, page formats, frontmatter
-spec, ingest/lint workflow) lives in [`AGENTS.md`](AGENTS.md). The
-design philosophy — *why* this layout, *what* it is good for — is in
-[`meta/llm-wiki-manifesto.md`](meta/llm-wiki-manifesto.md). The
-mechanical conventions — page naming, frontmatter fields, callouts,
-templates — are in [`meta/wiki-conventions.md`](meta/wiki-conventions.md).
+The architecture, ownership rules, and invariant map live in
+[`AGENTS.md`](AGENTS.md). The design philosophy — *why* this layout,
+*what* it is good for — is in
+[`meta/llm-wiki-manifesto.md`](meta/llm-wiki-manifesto.md). Mechanical
+page/source conventions live in
+[`meta/wiki-conventions.md`](meta/wiki-conventions.md), while active
+filing, query, audit, and verification procedures live under
+[`.agents/skills/`](.agents/skills/).
 
 ## Reading order
 
 If you are new to the project, read in this order:
 
-1. **[`meta/llm-wiki-manifesto.md`](meta/llm-wiki-manifesto.md)** — what
-   this is and why it works.
-2. **[`AGENTS.md`](AGENTS.md)** — the schema: ownership, layers,
-   invariant rules.
-3. **[`wiki/index.md`](wiki/index.md)** — the catalog. Pick a thread
-   that interests you and follow links from there.
+1. **[`USER-MANUAL.md`](USER-MANUAL.md)** — how to operate the wiki and understand agent activity.
+2. **[`wiki/index.md`](wiki/index.md)** — the catalog. Pick a thread that interests you and follow links from there.
+3. **[`meta/llm-wiki-manifesto.md`](meta/llm-wiki-manifesto.md)** — what this is and why it works.
+4. **[`AGENTS.md`](AGENTS.md)** — technical schema, ownership, and invariant rules for agents.
 
 ## License
 
@@ -50,10 +53,10 @@ This repository is licensed under the
 [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 See [`LICENSE`](LICENSE) for the full legal text.
 
-In short: you can share and adapt the material for any purpose,
-including commercially, as long as you give appropriate credit. Any
-adapted material you produce must also be licensed under CC BY 4.0 or
-a compatible license.
+In short: you can share and adapt the licensed wiki material for any
+purpose, including commercially, as long as you satisfy the attribution
+and notice requirements in the license. CC BY 4.0 is not a share-alike
+license; consult the license text for the actual terms.
 
 ## Caveats
 
@@ -65,8 +68,9 @@ this README is a static entry point.
 
 The wiki content is licensed CC BY 4.0. The **source materials in
 `raw/` are not covered by this license** — they retain their original
-copyrights and are included here under fair-use research/quotation
-norms with provenance. See each `raw/*.md` file's frontmatter for the
+copyrights. They are preserved for the maintainer's research and
+quotation workflow with provenance; whether a particular use is fair
+use depends on context. See each `raw/*.md` file's frontmatter for the
 original URL, author, and date.
 
 ## Contributing
@@ -82,8 +86,10 @@ is the starting point.
   (gist, 2025-04-02). The three-layer architecture (raw / wiki / meta)
   and the "persistent compounding artifact" framing come from this
   document.
-- **Sources:** every claim traces back to a file in `raw/`. Per-page
-  `## Sources` sections list which source contributed what; the
-  provenance frontmatter on each `raw/*.md` points to the original.
+- **Sources:** material sourced claims should trace to files in `raw/`.
+  Per-page `## Sources` sections list which source contributed what;
+  cross-source synthesis and unresolved evidence gaps are labeled rather
+  than presented as direct source claims. Provenance frontmatter on each
+  `raw/*.md` points to the original.
 - **Maintainer:** [bermudi](https://github.com/bermudi) (human
   curator). LLM does the bookkeeping; the human does the curating.

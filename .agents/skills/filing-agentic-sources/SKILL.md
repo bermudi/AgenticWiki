@@ -118,7 +118,8 @@ You stage but do not verify and do not commit. Verification is dispatched by the
 Return a structured report:
 
 - **classification:** `full`, `marginal`, or `skip`;
-- **staged paths:** the output of `git diff --cached --name-only` (must match the paths you staged);
+- **paths staged by this writer:** the exact intended paths passed to `git add --`; also include the cumulative `git diff --cached --name-only` output, clearly labeled as cumulative because sequential writers inherit earlier staged paths;
+- **staging commands:** every exact staging invocation you ran, or `command telemetry unavailable` if the harness cannot expose it; this is self-reported evidence, distinct from any independent harness telemetry;
 - **pages created or updated:** list with one-line purpose per page;
 - **material claims and attributed frames added:** what this source contributed;
 - **contradictions flagged:** with the callout location;
@@ -143,7 +144,7 @@ If the source is marginal (or the coordinator dispatches you with `scope: margin
 7. Update `wiki/index.md` if needed.
 8. Stage and report.
 
-No new pages. No theory gate. No verification.
+No new pages. No theory gate. After staging and reporting, return control to the coordinator for mechanical validation, risk-classified verification, and the normal commit gate; marginal scope never skips verification.
 
 ## What you do not do
 

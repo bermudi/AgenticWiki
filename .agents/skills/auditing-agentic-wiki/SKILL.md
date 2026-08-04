@@ -61,6 +61,10 @@ Report exact paths, totals, and the validator's debt status. Do not claim the wi
 5. Remove only debt rows actually resolved. Update debt summary/history metadata as required by project conventions.
 6. Rerun the checks that detected the issue, then run `./scripts/validate-page` for final repository status.
 
+## Pipeline recommendation ledger
+
+Read `meta/pipeline-recommendations.md` at the start of an audit. Process recommendations are a separate queue from page/source debt: add recurring workflow findings there, and update a row only when the implementation and its closure evidence are both real. A skill edit alone is not closure. Include tested recommendation IDs and their evidence in the audit report; do not silently treat a clean artifact as proof that an unobserved process control worked.
+
 ## Link judgment
 
 Do not create empty stubs merely to make a link checker green.
@@ -80,7 +84,11 @@ Manual counters are not evidence. Judge the page itself:
 - Does a primary source exist for the load-bearing claim?
 - Has `unaudited_marginal` accumulated on pages that need a verification pass?
 
-Use `verifying-wiki-changes` to answer those questions. Keep unresolved issues as specific callouts or debt rows rather than resetting a counter and declaring success.
+Use `verifying-wiki-changes` to answer those questions. Apply AGENTS.md Rule 9 to every accepted unresolved issue: reader-facing gaps require page callouts; structural, recurring, artifact-level, or out-of-scope content debt requires `meta/tech-debt.md`; workflow/process recommendations require `meta/pipeline-recommendations.md`; use both page and ledger when both conditions apply, and do not invent a page callout when no affected page exists.
+
+## Audit commit gate
+
+A health report is read-only: do not edit, stage, or commit. A debt-resolution request authorizes the selected fixes and commits the bounded audit changeset after exact-path staging, deterministic checks, all required reviews/fix-loop reruns, and a final `PASS` or `PASS WITH EXPLICIT DEBT`; an explicit “stop before commit” instruction overrides this default. A deep audit may make only the safe local fixes permitted below unless the user explicitly requests a read-only deep audit, in which case it makes no edits. When a deep audit makes authorized local fixes, apply the same commit gate. Do not ask the human to repeat routine quality evaluation. Escalate structural decisions, unresolved CRITICAL findings, and contradictory evidence. Before `PASS WITH EXPLICIT DEBT`, enforce the Rule 9 representation matrix—page callout, `meta/tech-debt.md`, `meta/pipeline-recommendations.md`, or both as required by the issue type. On FAIL, interruption, or a human-decision blocker, keep the commit gate closed and report whether partial or unverified paths remain staged.
 
 ## Deep audit
 
@@ -173,6 +181,8 @@ Detect:
 - Source-fidelity verification: pages and verdicts
 - Repository debt status: ...
 - Files changed: ...
+- Final staged paths before commit (or remaining staged paths on stop): ...
+- Commit: `<hash>` / not created with exact blocker
 
 ### Thread Coherence
 - `[[thread-name]]` — [healthy / stale / contradicted / unfalsifiable / needs rewrite]. Evidence: [brief basis]. Recommendation: [action].

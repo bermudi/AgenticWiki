@@ -11,6 +11,7 @@ This wiki is bermudi's effort to compile the best ideas about how to do AI-assis
 Three layers following [the LLM Wiki Manifesto](meta/llm-wiki-manifesto.md):
 
 ```
+USER-MANUAL.md    Plain-language operating guide for the human owner; keep it synchronized with user-visible workflow behavior.
 raw/              Source documents. Immutable — the LLM reads but never modifies them. arXiv papers are kept as extracted markdown + provenance frontmatter, not the original PDF.
 raw/assets/       Downloaded images referenced by source documents.
 wiki/             LLM-generated wiki pages. You own this layer entirely.
@@ -31,6 +32,7 @@ Knowledge flows directly from `raw/` into concepts, threads, authors, and projec
 |---|---|---|---|
 | `raw/` | Human | Read files, create new source files | Modify or delete existing files |
 | `wiki/` | You | Create, update, reorganize freely | — |
+| `USER-MANUAL.md` | Both | Keep descriptions synchronized with approved workflow behavior | Invent or change operator policy merely by documenting it |
 | `meta/` | Both | Read, create, update freely | — |
 | `AGENTS.md` | Both | Read, create, update freely | — |
 | `meta/tech-debt.md` | You (rows) / Human (schema) | Add/remove debt rows during filing and audit | Change the schema or status semantics without approval |
@@ -49,7 +51,7 @@ Skills are grouped by role:
 | Verify a completed changeset | `.agents/skills/verifying-wiki-changes/SKILL.md` |
 | Research an unresolved external claim | `.agents/skills/researching-wiki-claims/SKILL.md` |
 
-Reviewer skills are invoked by `coordinating-filing` and `verifying-wiki-changes` inside read-only isolated workers:
+Filing writers are write-capable workers sharing the coordinator's authoritative checkout, with a disclosed inline fallback when unavailable. The coordinator runs `verifying-wiki-changes` inline for risk classification and reviewer orchestration; it does not create a nested verifier worker. Reviewer skills run in fresh read-only isolated workers:
 
 - `.agents/skills/reviewing-wiki-theory/SKILL.md` — whole-wiki theory coherence gate
 - `.agents/skills/reviewing-wiki-diffs/SKILL.md` — transition integrity of a changeset diff
@@ -62,6 +64,7 @@ The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`.
 
 | What you need | Where it lives |
 |---|---|
+| **How to operate the wiki and understand agent activity** | `USER-MANUAL.md` |
 | **The theory — what the wiki currently believes** | `wiki/index.md` (catalog), then `wiki/threads/*.md` (synthetic essays) |
 | Page formats, frontmatter spec, web/YouTube/arXiv source templates | `meta/wiki-conventions.md` |
 | Ingest philosophy: theory pressure, thread emergence, contradictions | `.agents/skills/filing-agentic-sources/references/ingest-philosophy.md` |
@@ -71,6 +74,7 @@ The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`.
 | Changeset verification and reviewer construction | `.agents/skills/verifying-wiki-changes/SKILL.md` |
 | Querying accumulated knowledge | `.agents/skills/querying-agentic-wiki/SKILL.md` |
 | Audit, debt resolution, deep-semantic audit | `.agents/skills/auditing-agentic-wiki/SKILL.md` |
+| Open process recommendations | `meta/pipeline-recommendations.md` |
 | Quick mechanical validation (frontmatter, links, sources) | `./scripts/validate-page` |
 
 ## Invariant Rules
@@ -83,4 +87,5 @@ The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`.
 6. **Note contradictions explicitly.** If a new source contradicts an existing claim, flag it with a `> [!warning]` callout, not a silent overwrite. Surface contradictions in the ingest summary and in the relevant thread page.
 7. **Ask before deleting pages.** Suggest merges or reorganizations, don't execute unilaterally.
 8. **arXiv papers: extract, don't archive.** Store the extracted text as `raw/<arxiv-id>.md` with `type: arxiv` / `arxiv_id` / `url` frontmatter. Never commit the original PDF — it's permanently re-downloadable from the versioned arXiv URL. The `.md` is the source-of-truth. (Non-arXiv papers with no stable URL are the exception: commit the PDF.)
-9. **Record explicit debt.** When `verifying-wiki-changes` returns `PASS WITH EXPLICIT DEBT`, record the debt honestly in `meta/tech-debt.md` and/or on the affected page before committing. Do not use `PASS WITH EXPLICIT DEBT` to commit unresolved CRITICAL findings.
+9. **Record explicit debt durably.** `PASS WITH EXPLICIT DEBT` requires no unresolved CRITICAL finding and at least one honest representation inside the verified staged boundary. A reader-facing claim/evidence gap that changes how a page should be interpreted requires a visible `> [!warning]` or `> [!note]` callout on that page. Structural, recurring, artifact-level, or out-of-scope content debt requires `meta/tech-debt.md`; workflow/process recommendations belong in `meta/pipeline-recommendations.md`. Use both page and ledger when both conditions apply. Do not invent a page callout when no affected page exists.
+10. **Keep the user manual true.** Any change to user-visible operations, approval points, commit behavior, role boundaries, audit scheduling, or final-report expectations must update `USER-MANUAL.md` in the same changeset. Agent-internal details that do not alter operator behavior do not require a manual edit.

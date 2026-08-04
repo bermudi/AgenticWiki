@@ -1,6 +1,6 @@
 ---
 name: verifying-source-fidelity
-description: "Verifies one AgenticWiki page against every raw source it lists, checking factual support, attribution, quotations, misattribution, summary accuracy, and multi-speaker source handling. Use in an isolated read-only worker after substantive page changes or during source-debt audits."
+description: "Verifies one AgenticWiki page against every raw source it lists, checking factual support, attribution, quotations, paraphrase framing, misattribution, summary accuracy, and multi-speaker source handling. Use in an isolated read-only worker after substantive page changes or during source-debt audits."
 ---
 
 # Verifying Source Fidelity
@@ -48,6 +48,18 @@ For each material claim, identify its supporting source and assess whether the p
 - A claim must not be attributed to a source that does not make it.
 - Quotes and close paraphrases must preserve meaning and speaker/source identity.
 
+### Paraphrase fidelity and wiki voice
+
+For **every material paraphrased claim**, ask whether the source supports the specific framing, not merely the topic. A sentence can be topically correct and still be source-unfaithful. Compare the source and wiki wording for:
+
+- the actor, subject, and object — do not add or swap agency;
+- the action and relationship — do not turn “backed off” into “vetoed,” or a reaction into a formal decision;
+- modality, quantity, time, and scope — do not turn a hedge into certainty or join separate claims into one;
+- intensity and evaluative force — do not escalate “near future” into “foreseeable future,” or “context” into “context window”; and
+- source-specific concepts and vocabulary — do not replace “ideology” with “policy,” or otherwise import a wiki term that changes the speaker's frame.
+
+Flag verb/noun drift, merged claims, sharpened causality, added jargon, and meaning-changing substitutions even when every surrounding fact is about the right subject. Preserve the source's distinctions or attribute the stronger interpretation as wiki synthesis rather than presenting it as the source's wording.
+
 ### Multi-speaker sources
 
 Transcripts from panels, debates, and podcasts usually lack per-line speaker labels. Before citing any quote under a speaker's name, confirm attribution:
@@ -87,6 +99,13 @@ Check titles, roles, affiliations, project/tool labels, benchmark names, and tec
 
 ### Sources Checked
 - `raw/file.md` — type and contribution
+
+### Claim coverage
+For substantive pages, enumerate the material claims actually checked (group only genuinely repeated claims). Include the summary/lede, every load-bearing paraphrase, and numeric slash notation where present:
+
+| Section / claim | Raw source and location | Attribution / framing check | Result |
+|---|---|---|---|
+| ... | ... | actor, action, modality, source-specific vocabulary | supported / drift / unresolved |
 
 ### CRITICAL
 - section/claim; source evidence; smallest accurate correction

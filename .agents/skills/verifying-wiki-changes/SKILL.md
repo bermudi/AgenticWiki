@@ -5,15 +5,15 @@ description: "Verifies bounded AgenticWiki changes for mechanical integrity, sem
 
 # Verifying Wiki Changes
 
-> **Coordinator skill.** This is the changeset-level coordinator that runs the whole verification flow and returns the changeset verdict. It is distinct from `verifying-source-fidelity`, which is a worker method for reviewing one page against its sources. It is also distinct from `reviewing-wiki-theory`, which runs before verification as a separate human-gated theory pass.
+> **Inline coordinator skill.** This changeset-level process is loaded and run by the active orchestrator; in the filing pipeline that is `coordinating-filing`. Do not delegate this skill to a verifier worker. It classifies risk and dispatches the actual reviews to fresh isolated read-only workers, then returns the changeset verdict. It is distinct from `verifying-source-fidelity`, a reviewer skill, and `reviewing-wiki-theory`, the earlier theory-coherence pass.
 
-Verify one completed changeset through a small interface: changed pages, changed raw sources, and the diff that connects them.
+Verify one completed changeset through a small interface: changed pages, changed raw sources, and the staged diff that connects them.
 
-This skill is read-mostly. Reviewers report; the orchestrating agent applies any fixes and reruns affected checks.
+This skill is read-mostly. It may inspect staged diffs only for mechanical checks, risk classification, reviewer construction, and verdict translation. It must not perform diff-integrity, source-fidelity, or quality judgment inline. Reviewers report; the orchestrator routes fixes to the owner and reruns affected checks.
 
-> **Terminology note.** "The orchestrator" in this skill means the agent that dispatched verification and will apply fixes — in the filing pipeline that is `coordinating-filing`, not the writer. The writer stages and reports; the coordinator dispatches verification, routes fix requests back to the writer, and holds the commit gate. When this skill says "the orchestrator stages exactly the intended changeset paths," that staging was done by the writer and checked by the coordinator before verification was dispatched.
+> **Terminology note.** "The orchestrator" means the agent running this skill inline. In the filing pipeline, the writer stages and reports while `coordinating-filing` checks the boundary, runs this process, routes fix requests back to the writer, and holds the commit gate.
 
-> **Deterministic checks are load-bearing; LLM verdicts flag where to look.** The `PASS`/`FAIL` verdicts below are LLM judgments, not ground truth. A clean `validate-page` run plus a `PASS` verdict is a contradiction for the human to resolve, not a signal to auto-trust either way. Treat mechanical validator output as the hard floor and reviewer verdicts as directed attention — when they agree, confidence rises; when they disagree, investigate before committing.
+> **Deterministic checks are load-bearing; LLM verdicts flag where to look.** The `PASS`/`FAIL` verdicts below are LLM judgments, not ground truth. A failing `validate-page` run plus a reviewer `PASS` is a contradiction to resolve, not a signal to ignore the validator. Treat mechanical output as the hard floor and reviewer verdicts as directed attention — when they agree, confidence rises; when they disagree, investigate before committing.
 
 ## Input Contract
 
@@ -22,9 +22,12 @@ Establish before verification:
 - `wiki_pages`: every changed wiki page, including `wiki/index.md` when relevant;
 - `raw_sources`: every source created or modified for the changeset;
 - `external_lookup`: whether web research is permitted;
-- `scope`: the filing, audit item, or edit the changeset is meant to accomplish.
+- `scope`: the filing, audit item, or edit the changeset is meant to accomplish;
+- `process_artifacts`: any coordinator-owned ledger paths included in the staged changeset, or `none`.
 
-The changeset boundary is the **staged set**, not a judgment call. Before verification, the orchestrator stages exactly the intended changeset paths (`git add -- <paths>`). Reviewers audit `git diff --cached -- <paths>` and the pre-change version through version control. Do not pre-filter what reviewers see — if unrelated changes are sitting in the worktree, leave them unstaged rather than hiding them from reviewers. Verification must not bless, repair, stage, or summarize someone else's edits as part of this changeset.
+A filing label such as `marginal` or `full` does not select reviews. Classify the actual staged changes under the rules below; even a marginal ingest must receive this skill's verdict before commit.
+
+The changeset boundary is the **staged set**, not a judgment call. Before verification, the orchestrator stages exactly the intended changeset paths (`git add -- <paths>`). Record exact staging commands when the harness exposes them; staged-state parity cannot prove that `git add -A` was never run. Immediately before reviewer dispatch and again before commit, require full-boundary cached/worktree parity with `test -z "$(git diff --name-only -- <all-changed-paths>)"`; reviewers read worktree files and must see the same bytes that are staged. Reviewers audit `git diff --cached -- <paths>` and the pre-change version through version control. Do not pre-filter what reviewers see — if unrelated changes are sitting in the worktree, leave them unstaged rather than hiding them from reviewers. Verification must not bless, repair, stage, or summarize someone else's edits as part of this changeset.
 
 ## Risk Classification
 
@@ -42,11 +45,12 @@ Run quality review for a new page, a substantial rewrite or reorganization, or m
 
 ## 1. Mechanical validation
 
-For each changed page, run:
+For each changed wiki content page, run the content validator. Run cached whitespace and parity checks on the full staged union, including coordinator-owned process artifacts; do not pass `meta/` ledgers to the content validator:
 
 ```bash
-./scripts/validate-page <page-path>
-git diff --check -- <page-path>
+./scripts/validate-page <changed-wiki-content-paths>
+git diff --cached --check -- <all-changed-paths>
+test -z "$(git diff --name-only -- <all-changed-paths>)"
 ```
 
 Inspect the page-specific findings. The current validator may also emit repository-wide debt status even when given one page; report that global status separately and do not treat unrelated historical debt as a changeset failure.
@@ -63,6 +67,7 @@ For new or changed raw sources, inspect frontmatter against `meta/wiki-conventio
 - referenced files exist;
 - a transcript stub does not claim complete text;
 - transcript bodies were not rewritten;
+- existing raw files were not modified; corrected/new artifacts are new files with the expected provenance;
 - the PDF is not staged for an arXiv paper.
 
 Mechanical errors introduced by the changeset block completion.
@@ -75,6 +80,12 @@ Reviewer expertise lives in common skills, not harness-specific agent definition
 - Give the worker paths and scope, not a prose summary in place of evidence.
 - Require read-only operation and the skill's structured report.
 - Do not depend on a harness-specific prompt tree (e.g., `.pi/agents/`, `.commandcode/agents/`, `.mimocode/agents/`, `.devin/agents/`). Reviewer expertise lives in the common reviewer skills under `.agents/skills/`.
+
+### Mandatory reviewer dispatch
+
+“Construct a worker” is a hard process requirement, not a suggestion to perform the same review in this context. For every initially required diff, source-fidelity, and quality review, the inline verifier dispatches a fresh isolated read-only worker through the harness. The only reuse is an OID-identical same-run aggregation rerun caused solely by staging coordinator-owned ledger evidence, as defined in Verdict; any content edit requires the affected fresh review again. In Pi, this is the `delegate` adapter with one task object per reviewer; other harnesses use native equivalents. The verifier may classify risk, assemble inputs, route findings, and translate verdicts; it must not perform reviewer file-reading and judgment inline or by a manual substitute.
+
+Do not dispatch a separate verifier worker and then ask it to nest reviewer workers. The active orchestrator runs this skill directly and owns reviewer dispatch. Each reviewer must have repository read/search access and return the named skill's structured report. If reviewer dispatch is unavailable, the worker cannot read the repository, or dispatch returns an empty/no-op result after the documented retry, stop and warn the user. Verification is incomplete; do **not** issue a PASS or fall back to inline/manual review. Record the unavailable review as a process failure and hold the commit gate.
 
 **Reviewers** return a verdict that maps to the changeset state and gates the commit:
 
@@ -90,7 +101,7 @@ Reviewer expertise lives in common skills, not harness-specific agent definition
 |---|---|---|
 | `researching-wiki-claims` | Read supplied local context (the focused claim, its wiki page, and the reason filed sources cannot settle it — see the skill's Input Contract); web search and page retrieval | Local writes, staging, commit, deletion |
 
-Workers may run in parallel only when their inputs do not require writes. One writer per changeset: the active operation skill (filing or audit) is the writer; delegated reviewers are always read-only.
+Workers may run in parallel only when their inputs do not require writes. There is one authoritative writer **at a time**: a multi-source filing may invoke fresh per-source writers sequentially against one cumulative staged changeset, while audit remediation uses its active operation writer. Delegated reviewers are always read-only.
 
 ## 2. Transition integrity
 
@@ -141,7 +152,7 @@ Require URLs, relevant excerpts, source classification, confidence, and one reco
 - `FLAG` an unresolved claim explicitly;
 - `REMOVE` a fabricated or unjustifiable claim.
 
-The worker returns evidence to the orchestrator. It does not edit wiki pages or create a parallel summary layer. The orchestrator then either cites the evidence inline on the relevant wiki page or, when the source is durable and materially supports the wiki, hands it back to the coordinator for raw preservation (raw preservation is `coordinating-filing` step 2; `filing-agentic-sources` is the writer and does not preserve raw sources). Research evidence lives in chat, then on the wiki page or in `raw/` — not in a parallel summary layer.
+The worker returns evidence to the orchestrator. It does not edit wiki pages or create a parallel summary layer. During filing, every wiki citation/edit is routed to the authoritative shared-checkout writer; the filing coordinator may preserve a durable supporting source but never edits wiki prose. Outside the filing pipeline (for example, an authorized audit remediation), the active operation writer may cite the evidence inline. When the source is durable and materially supports the wiki, it is handed back to the filing coordinator for raw preservation (raw preservation is `coordinating-filing` step 2; `filing-agentic-sources` is the writer and does not preserve raw sources). Research evidence lives in chat, then on the wiki page or in `raw/` — not in a parallel summary layer.
 
 ## 6. Remediation and rerun
 
@@ -162,22 +173,24 @@ The orchestrating agent reads the cited evidence before applying a reviewer reco
 
 ### Translating reviewer verdicts
 
-Reviewer workers use the verdict vocabulary `PASS` / `PASS WITH WARNINGS` / `FAIL`. The orchestrator collapses them into exactly three changeset states:
+Reviewer workers use the verdict vocabulary `PASS` / `PASS WITH WARNINGS` / `FAIL`. Before final aggregation, record the staged blob OID set for every content path supplied to each reviewer. The orchestrator collapses them into exactly three **final** changeset states:
 
 | Reviewer verdict | Coordinator mapping |
 |---|---|
 | `PASS` | No contribution to changeset failure. |
-| `PASS WITH WARNINGS` | `PASS WITH EXPLICIT DEBT` if any WARNING surfaces an honest evidence gap that remains unresolved and is represented in page metadata/callouts/debt rows. Otherwise `PASS` (WARNING was addressed or was a non-blocking observation). |
+| `PASS WITH WARNINGS` | `PASS WITH EXPLICIT DEBT` if a WARNING leaves an honest unresolved gap and the staged boundary contains the representation required by AGENTS.md Rule 9: reader-facing page callout, content/artifact debt row, process-recommendation row, or both as applicable. Otherwise `PASS` (the WARNING was addressed or was a non-blocking observation). |
 | `FAIL` (diff review, source fidelity, quality) | `FAIL` unless the orchestrator fixes every CRITICAL finding and reruns the affected review, after which the rerun's verdict controls. |
 
 A reviewer `FAIL` is never silently downgraded to `PASS`. It either becomes `PASS` after a verified fix and rerun, or it stays `FAIL`.
+
+If honest unresolved debt lacks the representation required by AGENTS.md Rule 9 inside the staged boundary, return **DEBT REGISTRATION REQUIRED** as an internal hold, not a final verdict. Route a required page callout/metadata edit to the writer and rerun every affected content reviewer; ledger-only OID reuse is not valid after that content edit. Add `meta/tech-debt.md` for structural, recurring, artifact-level, or out-of-scope content debt, and use `meta/pipeline-recommendations.md` for workflow/process recommendations. If same-run process evidence must be added after review, return **PROCESS EVIDENCE STAGING REQUIRED**. The coordinator stages the exact ledger change, rebuilds parity/deterministic checks, proves every reviewed content OID unchanged, and reruns aggregation. Exact same-run reviewer reports may be reused only for this ledger-only rerun; no content edit or cross-run reuse is allowed. Only the rerun emits one of the three final verdicts.
 
 ### Changeset verdict
 
 Return exactly one changeset verdict:
 
 - **PASS** — no unresolved critical findings; changed claims are source-faithful; mechanical checks pass.
-- **PASS WITH EXPLICIT DEBT** — no unresolved critical findings, but clearly marked evidence gaps remain and are represented honestly in page metadata/callouts and, when appropriate, `meta/tech-debt.md`.
+- **PASS WITH EXPLICIT DEBT** — no unresolved critical findings, but honest unresolved gaps remain and each has the Rule 9 representation required for its type inside the verified staged boundary: page callout, content/artifact debt row, process-recommendation row, or both as applicable.
 - **FAIL** — a critical fidelity or mechanical problem remains, a necessary source is unavailable, or verification could not be completed.
 
 Report:
@@ -186,6 +199,8 @@ Report:
 ## Verification: PASS | PASS WITH EXPLICIT DEBT | FAIL
 
 - Scope: ...
+- Reviewer dispatch: one isolated read-only worker per required review; an OID-identical same-run ledger-only aggregation rerun may reuse those exact reports; unavailable dispatch = verification incomplete
+- Process telemetry: worker/task, granted read-only capability, dispatch result, retries/empty returns, fallback/intervention, and exact staging commands when exposed; unavailable command telemetry is stated, never inferred from final staged state
 - Pages mechanically checked: ...
 - Pages source-verified: ...
 - Diff reasoning: run | not required
@@ -198,7 +213,7 @@ Report:
 
 For each reviewer invocation, disclose the verbatim verdict returned, the coordinator mapping applied, and any fix→rerun pair. This is the one place a reviewer's judgment can be quietly downgraded — do not summarize it away.
 
-| Reviewer | Page/scope | Verbatim verdict | Coordinator mapping | Fix applied | Rerun verdict |
+| Reviewer | Page/scope + reviewed staged OIDs | Verbatim verdict | Coordinator mapping | Fix applied | Rerun verdict |
 |---|---|---|---|---|---|
 | `reviewing-wiki-diffs` | ... | `PASS` / `PASS WITH WARNINGS` / `FAIL` | `PASS` / `PASS WITH EXPLICIT DEBT` / `FAIL` | ... | ... |
 | `verifying-source-fidelity` | ... | ... | ... | ... | ... |
