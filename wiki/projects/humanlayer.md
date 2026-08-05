@@ -1,7 +1,7 @@
 ---
 title: HumanLayer
 created: 2026-07-16
-updated: 2026-07-25
+updated: 2026-08-05
 sources:
   - raw/yt-context-engineering-with-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
@@ -32,7 +32,7 @@ The architectural pieces that enable this: a sync engine, durable streams (Dex c
 
 ## Context Shards (memory-sourcing feature)
 
-On a July 2026 "AI that Works" livestream (guest-hosted by [[vibv|Vibv]] of Boundary), Dex built the design for **context shards** live: a volume-based, team-aggregated, human-in-the-loop memory-sourcing pipeline that pulls recurring instructions out of agent sessions and exposes them to the team. The detailed design is tracked on its own page, [[context-shards]], but the product-relevant points are:
+On a July 2026 "AI that Works" livestream (featuring [[vibv|Vibv]] of Boundary as a guest), Dex built the design for **context shards** live: a volume-based, team-aggregated, human-in-the-loop memory-sourcing pipeline that pulls recurring instructions out of agent sessions and exposes them to the team. The detailed design is tracked on its own page, [[context-shards]], but the product-relevant points are:
 
 - **The trigger is the failure of auto-memory.** Claude's memory feature and CodeRabbit's equivalent both become slop because they are additive-only — they capture everything and converge into an unaudited 300+ item list. HumanLayer runs with agent memory *off* by default.
 - **The mechanism is a supervisor agent + structured output** over session transcripts (user/assistant messages only), producing *session statements* with citations (who said it, verbatim quote, conversation context) and a prevalence count.

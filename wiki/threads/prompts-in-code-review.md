@@ -1,7 +1,7 @@
 ---
 title: Prompts in Code Review
 created: 2026-05-15
-updated: 2026-07-14
+updated: 2026-08-05
 sources:
   - raw/2410.14826.md
   - raw/2602.15228.md
@@ -10,6 +10,7 @@ sources:
   - raw/2603.00539.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md
 unaudited_marginal: 0
 tags: [thread, code-review, prompting, llm-as-judge, overcorrection, bias]
 ---
@@ -33,7 +34,7 @@ Prompt engineering for code review is not about "improving accuracy" in a monoto
 
 ## The System Prompt as a Control Surface
 
-[[system-prompt-effects|System prompt effects]] are a first-class concern. SPRIG ([[lechen-zhang|Zhang et al.]], ICLR 2026) demonstrates that a single optimized system prompt performs on par with per-task prompt optimization across 47 tasks. The optimized prompts converge on CoT and behavioral components ("decompose first", "rephrase before answering") while notably de-prioritizing role components ("you are an AI assistant"). System prompt optimization searches for high-performance regions in the global activation space, while task prompt optimization performs fine-tuning in local space — they are complementary.
+[[system-prompt-effects|System prompt effects]] are a first-class concern. SPRIG ([[lechen-zhang|Zhang et al.]], ICLR 2026) demonstrates that a single optimized system prompt performs on par with per-task prompt optimization across 47 tasks. The optimized prompts converge on CoT and behavioral components ("decompose first", "rephrase before answering") while notably de-prioritizing role components ("you are an AI assistant"). The paper's hypothesis is that system prompt optimization searches for high-performance regions in the global activation space, while task prompt optimization performs fine-tuning in local space — complementary levers.
 
 However, the empirical study on code generation by [[zaiyu-cheng|Cheng et al.]] (360 configurations across 4 models, 5 prompts, 3 strategies, 2 languages) reveals that system prompt specificity is **not monotonically beneficial**. More constrained prompts help Java but are neutral or harmful for Python. Few-shot examples severely destabilize larger code-specialized models (Qwen-32B collapses from 37% to 7% on Java with fixed examples under baseline prompt), requiring compensating system prompt constraints to recover. The interaction between system prompt, model scale, and example strategy is complex and configuration-dependent.
 
@@ -47,7 +48,7 @@ However, the empirical study on code generation by [[zaiyu-cheng|Cheng et al.]] 
 
 Four dominant rejection patterns account for 87.2% of false negatives: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Spec (11.7%). These are not superficial style critiques — they represent semantic failure modes where the model constructs plausible but unsupported failure narratives.
 
-The rationales themselves are unreliable. Models produce internally inconsistent explanations (verdict contradicts rationale direction), and while symptom-level diagnosis is strong (≥96% match), cause-level diagnosis is substantially weaker (44–71% match depending on model). A reviewer can be "right for the wrong reason" — correctly rejecting buggy code but misattributing the cause.
+The rationales themselves are unreliable. Models produce internally inconsistent explanations (verdict contradicts rationale direction), and while symptom-level diagnosis is strong (near-ceiling, ~91–100% match), cause-level diagnosis is substantially weaker (~38–75% depending on model and benchmark). A reviewer can be "right for the wrong reason" — correctly rejecting buggy code but misattributing the cause.
 
 ## Judge Bias as Positional Prior
 
@@ -57,7 +58,7 @@ The [[llm-as-code-judge|Bias in the Loop]] study demonstrates that prompt biases
 - Models: Qwen3-4B, Qwen2.5-Coder-3B, GPT
 - Difficulty levels: amplified on hard instances
 
-Test-retest reliability varies dramatically by model. Qwen2.5-Coder-3B's baseline consistency rate on TestGen is 50.36% — essentially random — but jumps to 80%+ under sentiment or refined cues. This creates a dangerous illusion: the model becomes highly consistent under bias, but systematically wrong. GPT shows the strongest baseline reliability (85–92% CR on CodeGen/CodeRepair) but is still susceptible to distraction and verbosity cues on TestGen.
+Test-retest reliability varies dramatically by model. Qwen2.5-Coder-3B's baseline consistency rate on TestGen is 50.36% — essentially random — but jumps to ~78–81% under sentiment or refined cues (80.6% under sentiment, 78.4% under refined). This creates a dangerous illusion: the model becomes highly consistent under bias, but systematically wrong. GPT shows the strongest baseline reliability (85–92% CR on CodeGen/CodeRepair) but is still susceptible to distraction and verbosity cues on TestGen.
 
 ## Structural Solutions: Semi-Formal Reasoning
 
@@ -72,7 +73,7 @@ This approach improves accuracy across three tasks:
 - Code QA (RubberDuckBench): 78.3%→87.0% (Opus-4.5)
 - Fault localization (Defects4J): +5–12pp over standard agentic reasoning
 
-The certificate structure directly counters the failure modes identified by the other papers: it prevents hallucinated requirements (the premise must state what the spec says), blocks unsupported logic error claims (the execution trace must show the failure), and eliminates positional bias (the agent traces both patches against the same test suite).
+The certificate structure directly counters the failure modes identified by the other papers: it prevents hallucinated requirements (the premise must state what the spec says), blocks unsupported logic error claims (the execution trace must show the failure), and — in the wiki's reading — structurally counteracts positional bias (the agent traces both patches against the same test suite), though no source states this connection directly.
 
 ## Tensions
 
@@ -85,6 +86,9 @@ The certificate structure directly counters the failure modes identified by the 
 > [!note] Departure: Multi-Pass Swarming vs. Single-Pass Bias
 > This thread treats LLM-as-judge as a *single-pass* bias-control problem: one judge, one prompt, one verdict, and the framing systematically distorts it. [[steve-yegge|Yegge]]'s "swarming as anti-bitter-lesson" reframes review as a *stochastic multi-pass* activity — adversarial reviewers, consensus, quality as a token-spend dial ("swarm, swarm, swarm, adversarial, consensus — like painting walls, multiple coats"). The departure is the unit of analysis: this thread optimizes the single review pass; Yegge dials the *number* of passes. If single-pass judges carry directional bias ([[llm-as-code-judge|Bias in the Loop]]: 40+ point swings from framing), the open question is whether multi-pass adversarial swarming averages out the bias — or amplifies it via [[error-cascades|consensus inertia]]. No source tests this. The thread's structural fix ([[semi-formal-reasoning|semi-formal reasoning]] — evidence certificates per pass) and Yegge's statistical fix (more passes) are complementary but distinct levers; the wiki should not conflate them. See [[the-verifiability-thesis]]'s "Stochastic Multi-Pass Verification" departure for the thesis-level framing.
 
+> [!note] Departure: Review Elimination as the Boundary Claim
+> [[vibv|Vaibhav Gupta]] (Boundary) ships a programming language for 3+ years with **no code reviews** ([`raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md`](../raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md)), substituting machine-enforced invariants plus agent-transcript inspection with human triage. The thread's premise — bias control *when review is used* — is untouched, but this is the strongest claim in the wiki that the review layer can be **removed rather than fixed**. Notably, transcript triage is itself human-mediated LLM judgment: agents classify what was good/bad in transcripts and humans adjudicate which findings are real, hallucinated, or lack taste. The thread's judge-bias findings partially support this — they show LLM judgments need exactly the human adjudication Vaibhav's triage provides — but no source tests whether transcript classification carries the same positional or overcorrection biases as verdicts on diffs.
+
 ## Sources
 
 - `raw/2410.14826.md` — System prompt optimization via genetic algorithm; system and task prompts are complementary
@@ -94,3 +98,4 @@ The certificate structure directly counters the failure modes identified by the 
 - `raw/2603.00539.md` — Overcorrection bias in LLM code review; more detailed prompts increase false rejection; Fix-guided Verification Filter as mitigation
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's use of voice input for agent prompts; prompt-style differences introduced by transcription.
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's "swarming as anti-bitter-lesson": adversarial multi-pass review, consensus, quality as a token-spend dial; reframes LLM code review from a single-pass bias problem to a stochastic multi-pass problem.
+- `raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md` — [[vibv|Vaibhav Gupta]] (Boundary): 3+ years shipping a language with no code reviews; invariants + agent-transcript inspection with human triage as review elimination. Solo talk; attribution direct.

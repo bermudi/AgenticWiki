@@ -1,7 +1,7 @@
 ---
 title: Technical Debt Registry
 created: 2026-07-20
-updated: 2026-07-27
+updated: 2026-08-05
 last_audit: 2026-07-22
 warning_budget: 5
 critical_blocks: true
@@ -26,6 +26,7 @@ Budget is read from this file's frontmatter (`warning_budget`, `critical_blocks`
 | Page | Debt | Resolution | Date |
 |------|------|------------|------|
 | the-verifiability-thesis.md | Extension callout ("widens over time") extrapolates beyond Schillings' source material | Verify against future sources or soften to "may widen" | 2026-07-27 |
+| discourse-slop.md | Slop Family table lists 5 categories (code, information, benchmark, spec, discourse); the-slop-problem now enumerates 7 (adds skill slop + foundation-layer) — cross-page ordinal mismatch: "sixth category" in the thread reads as "fifth" against the table | Align the table with the thread's 7-category enumeration (add skill slop and foundation-layer rows) | 2026-08-05 |
 
 ## Audit History
 

@@ -1,8 +1,9 @@
 ---
 title: Agent Evals
 created: 2026-04-27
-updated: 2026-08-03
+updated: 2026-08-05
 sources:
+  - raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md
   - raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md
   - raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md
   - raw/2604.15597v1.md
@@ -18,6 +19,8 @@ sources:
   - raw/dont-ship-skills-without-evals-philipp-schmid.md
   - raw/yt-agent-development-lifecycle-101.md
   - raw/2602.17622.md
+  - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
+  - raw/yt-context-engineering-with-dex-horthy.md
 unaudited_marginal: 0
 tags: [agents, evals, testing, quality, probabilistic-systems]
 ---
@@ -96,13 +99,13 @@ This is where **LLM-as-Judge** comes in: a second language model evaluates the a
 >
 > 1. **DELEGATE-52** ([[philippe-laban|Laban]] et al., 2026): Even GPT 5.4 as judge captures **at most 25% of the variance** of domain-specific parsing metrics. Generic rubric and LLM judges failed to detect nuanced semantic corruption — only structured, domain-aware scoring caught real degradation.
 >
-> 2. **[[dex-horthy|Dex Horthy]]** (practitioner): Models are "optimized to tell you what you want to hear." Ask a model to review code as "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. His maxim: **"Never send an AI to do a linter's job."** Anything deterministic should be checked deterministically.
+> 2. **[[dex-horthy|Dex Horthy]]** (practitioner): Models are optimized (transcript: "optimize, optimize, optimize") to tell us what we want to hear. Ask a model to review code as "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. The conversation's maxim (quoting a post by "Kyle"): **"Never send an AI to do a linter's job."** Anything deterministic should be checked deterministically.
 >
 > 3. **Samuel Colvin** (Pydantic creator, practitioner): Calls LLM-as-judge "the lunatics running the asylum" — a model judging another model's output introduces circular unreliability. His preference: deterministic evals comparing structured output against a golden dataset. He also notes that most teams **don't run evals at all** — they write a prompt, eyeball it, and ship. Optimization and evals are the exception, not the norm.
 >
-> 4. **RUBRICEVAL** (Pan et al., 2026): The first rubric-level meta-evaluation benchmark finds that even GPT-4o achieves only **55.97% balanced accuracy** on hard rubric-level judgments (Claude-Sonnet-4.5: 55.65%) — quantified evidence at the granularity agent evals operate at. The paradigm choice (rubric-level + reasoning vs. checklist-level direct) changes results by 7–12 points, and judge selection alone shifts scores by up to 25 points. See [[rubric-evaluation]] for the full analysis.
+> 4. **RUBRICEVAL** (Pan et al., 2026): The first rubric-level meta-evaluation benchmark finds that even GPT-4o achieves only **55.97% balanced accuracy** on hard rubric-level judgments (Claude-Sonnet-4.5: 55.65%) — quantified evidence at the granularity agent evals operate at. The paradigm choice (rubric-level + reasoning vs. checklist-level) changes results by 7–12 points, and judge selection alone shifts scores by up to 25 points. See [[rubric-evaluation]] for the full analysis.
 >
-> Together, these suggest the outcome eval layer is significantly weaker than the framework assumes. Horthy's alternative: snapshot-based evals (run, store, diff) and vibes-first exploration before defining eval criteria. The RUBRICEVAL findings add that even when LLM-as-judge is necessary, the evaluation paradigm (granularity, reasoning) must be carefully designed.
+> Together, these suggest the outcome eval layer is significantly weaker than the framework assumes. Horthy's alternative: snapshot-based evals (run, store, diff) ([`raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md`](../raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md), [47:59]–[49:13]); the conversation also suggests vibes-first exploration before defining eval criteria — attributed to the discussion, not verifiably to Horthy (multi-speaker episode without per-line speaker labels). The RUBRICEVAL findings add that even when LLM-as-judge is necessary, the evaluation paradigm (granularity, reasoning) must be carefully designed.
 
 ### 4. System Monitoring
 Watching for quality degrading in production at scale — not individual failures, but patterns across real usage over time. This is where evals and [[agent-observability|observability]] overlap.
@@ -128,6 +131,23 @@ The harness measures three dimensions — accuracy, cost, latency — against co
 > The LLM-as-judge and extract-then-check approaches for unstructured outputs are attributed to [[kevin-gregory|Kevin Gregory]] on the dedicated [[model-swap-evals]] page. This is a multi-speaker source (Boundary "AI that Works") whose transcript lacks per-line speaker labels; attribution is based on contextual cues (Kevin demonstrates the harness and works at EvolutionIQ), not verified against audio.
 
 This pattern extends the eval framework's "confidence for model upgrades" claim: you get confidence, but only after running the eval set against the new model. See [[model-swap-evals]] for the full treatment, including the saturated-vs-unsaturated benchmark distinction and the API migration analogy.
+
+## Language-Feature Evals: AB-Testing What Agents Use
+
+[[vibv|Vaibhav Gupta]] (Boundary) describes a specialized eval application aimed at the language itself — deciding which language features are worth shipping by measuring how agents use them ([`raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md`](../raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md), [5:05]–[6:20]). The pipeline:
+
+1. **Generation**: agents constantly run and create BAML programs "from scratch" (spinning something up end-to-end).
+2. **Trace inspection**: the full Claude transcript is examined — what tools were used, what happened. Agents classify what was good and bad, including trajectory inefficiency: "not just what was bad in terms of what was incorrect in the language, but what took three tool calls when it should have only taken one."
+3. **Human triage**: humans collaborate to sort issues into real / hallucination / "don't have taste."
+4. **Agent fixes**: agents create and apply fixes to the real issues.
+5. **AB-testing features**: instead of guessing whether a language feature helps, measure it — "which ones took less tool calls, which one made less errors, which one produced the correct outcome and deterministically know what's going on."
+
+The claim: "you can start building data-driven systems without ever writing a single line of code" — the human writes no test harness; agents populate the eval set and the traces.
+
+This is the **trajectory layer** of the four-layer framework applied to a language-design surface: the efficiency dimension (tool calls) is measured directly, not inferred. Two caveats:
+
+- The human triage step is the anti-[[llm-as-code-judge]] move: issues are filtered by humans, not by a judge model — consistent with the page's LLM-as-Judge inadequacy callout above.
+- Single-source practitioner report: the loop is described in a conference talk, not published with numbers.
 
 ## Online Evals: The Production-Side Complement
 
@@ -156,6 +176,10 @@ Schmid describes Google DeepMind's internal skill-evaluation discipline:
 - **Run on every skill diff** — any change to a skill file triggers the eval.
 - **Regression-gated** — a change is not merged unless it improves the eval or adds new ones. This is the skill-level instantiation of the [[agent-quality-loop|quality loop]]'s regression-prevention principle: the eval is the gate, not the skill author's judgment.
 
+### Kun Chen: Popularity Is Not a Proxy for Skill Efficacy
+
+[[kun-chen|Kun Chen]] (L8 Principal, AI Engineer) adds a skill-efficacy heuristic: popularity is not a proxy for measured benefit. He evaluated a skill from the Android Skills repo (177k GitHub stars) with Program Bench (which tests the agent's ability to build programs end-to-end) and found it used 5% more tokens while making results worse ([19:13]–[19:38] in `raw/yt-l8-principal-s-agentic-engineering-workflow.md`).
+
 ### Ten Best Practices for Skill Evals
 
 Schmid's ten best practices, several of which extend the existing eval framework:
@@ -172,7 +196,7 @@ Schmid's ten best practices, several of which extend the existing eval framework
 10. **Ablation tests** — run evals with and without the skill. Only this tells you whether the skill is actually helping and when you can retire it.
 
 > [!note] Synthesis: deterministic-first for skills
-> Schmid's regex-first approach ("most tests for skills can be regex") aligns with the thread's existing [[agent-quality-engineering#A Counterpoint: Dex Horthy's Skepticism|deterministic-first]] principle (Horthy: "never send an AI to do a linter's job"; Colvin: deterministic evals over LLM-as-judge). Schmid reserves LLM-as-judge for complex cases the regex can't cover — the same hybrid axis as Galarza's deterministic guardrails and the [[deterministic-picker]] pattern. The skill-specific contribution is the observation that skill outputs (correct SDK, correct model, correct methods, no old patterns) are often structurally verifiable, making regex the natural first layer.
+> Schmid's regex-first approach ("most tests for skills can be regex") aligns with the thread's existing [[agent-quality-engineering#A Counterpoint: Dex Horthy's Skepticism|deterministic-first]] principle (the conversation, citing Kyle's post: "never send an AI to do a linter's job"; Colvin: deterministic evals over LLM-as-judge). Schmid reserves LLM-as-judge for complex cases the regex can't cover — the same hybrid axis as Galarza's deterministic guardrails and the [[deterministic-picker]] pattern. The skill-specific contribution is the observation that skill outputs (correct SDK, correct model, correct methods, no old patterns) are often structurally verifiable, making regex the natural first layer.
 
 ## Thread
 
@@ -183,7 +207,6 @@ Schmid's ten best practices, several of which extend the existing eval framework
 
 - [[agent-observability]] — Evals depend on observability; you can only score what you can see
 - [[verifiability]] — Karpathy's thesis explains why evals work: LLMs automate what you can verify; evals make agent quality verifiable
-- [[the-verifiability-thesis]] — The causal chain from verifiability through RL training to capability peaks; evals are the attempt to make agent behavior verifiable
 - [[agent-quality-loop]] — Evals feed the flywheel: production failures → eval cases → improvement
 - [[mastra]] — Mastra provides eval infrastructure with LLM-as-judge scoring, groundedness checks, and prompt iteration from eval feedback
 - [[verification-loop]] — Evals are the probabilistic equivalent of the verification loop
@@ -208,12 +231,15 @@ Schmid's ten best practices, several of which extend the existing eval framework
 - [[difficulty-aware-agent-planning]] — task difficulty as a live evaluation and control signal; Type A/Type B trace diagnosis
 - [[pentestgpt-v2]] — the implementation and ablation study that instantiates the complexity-stratified evaluation pattern
 - [[online-evals]] — The production-side complement: evaluating live traces without ground truth, perceived-error detection, and the guardrails timing distinction
+- [[baml]] — The language whose features are AB-tested by agent tool-call counts, error rate, and outcome correctness
+- [[vibv]] — Reported the language-feature eval loop (Boundary conference talk)
 - [[harrison-chase]] — Introduced online evals and the perceived-error pattern
 - [[langchain]] — The vendor platform that ships online evals and the perceived-error detector
 
 ## Sources
 
 - `raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md` — The framework: four layers, four dimensions, CI for probabilistic systems
+- `raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md` — Vaibhav Gupta (Boundary): the language-feature eval loop — agents generate programs, transcripts are inspected for tool-call efficiency, humans triage real/hallucinated/no-taste issues, features are AB-tested by tool calls / errors / correctness. Solo talk; attribution direct.
 - `raw/yt-the-quality-loop-your-ai-agent-is-missing-evals-tracing.md` — LLM-as-judge in practice: groundedness scoring, prompt iteration from eval feedback
 - `raw/2604.15597v1.md` — DELEGATE-52 benchmark: long-horizon evals, short-term performance not predictive of long-horizon
 - `raw/many-tier-instruction-hierarchy.md` — MANYIH-BENCH: 853-sample benchmark for instruction conflict resolution across up to 12 privilege tiers
@@ -225,6 +251,8 @@ Schmid's ten best practices, several of which extend the existing eval framework
 - `raw/yt-llms-are-killing-agent-harness.md` — Thorsten Ball: vibes-based evaluation for general-purpose coding agents; formal evals less useful than direct usage experience for arbitrary codebases
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen: skill efficacy heuristic (popularity is not a proxy for measured benefit); the Android Skills benchmark (177k stars, 5% more tokens, worse results).
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" (2026): [[kevin-gregory|Kevin Gregory]] demonstrates the model-swap eval harness — the diff shortcut, three-dimension budget/gates, and the saturated/unsaturated benchmark distinction. Multi-speaker; attribution based on contextual cues, not verified against audio.
+- `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — [[dex-horthy|Dex Horthy]] (Chroma, 2025): source for the LLM-as-judge contradiction callout — "Never send an AI to do a linter's job" and models optimized to tell us what we want to hear ([46:19]–[46:43]); snapshot-based evals (run, store, diff) as the deterministic alternative ([47:59]–[49:13]). Multi-speaker episode; attribution based on contextual cues (Horthy (guest) discusses the harness), not verified against audio.
+- `raw/yt-context-engineering-with-dex-horthy.md` — [[dex-horthy|Dex Horthy]] (Pragmatic Engineer, 2026): corroborates the judge critique that models will tell you what you want to hear ([56:45]). Multi-speaker source; the [56:23]–[56:52] riff carries no `>>` guest markers (unmarked lines = host speech per the file's convention block), so attribution to Horthy is based on contextual cues, not verified against audio.
 - `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): the Gemini Interactions API eval harness (117 test cases, JSON + Python, regex asserts + LLM-as-judge, ~90% valid code); Google DeepMind's regression-gated skill-eval practice (evals alongside every skill, run on every diff, merge-gated); ten best practices for skill evals (description critical ~50% mis-triggering, directives, negative tests, start small, outcomes not paths, isolated runs, >1 trial, cross-harness, keep evals after retirement, ablation).
 - `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): online evals as the production-side complement to offline evals (no ground truth, scored over live traces), the perceived-error pattern and trained small LM, and the guardrails-vs-online timing distinction.
 - `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). Survey of 28 penetration-testing systems; three-level benchmark design; 200-trace Type A/Type B failure coding; component ablations separating tooling, search, and memory contributions (§3, §5). Source for the complexity-stratified failure-diagnosis section.

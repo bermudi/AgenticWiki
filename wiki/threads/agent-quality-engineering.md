@@ -1,7 +1,7 @@
 ---
 title: Agent Quality Engineering
 created: 2026-04-27
-updated: 2026-08-02
+updated: 2026-08-05
 sources:
   - "raw/yt-ai-agent-evals-the-4-layers-most-teams-skip.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -200,7 +200,7 @@ This connects to the [[the-human-lever|human lever]]: the human owns the design 
 
 ### LLM-as-Judge Doesn't Work Well
 
-The Chroma podcast conversation (host Jeff Huber and guest [[dex-horthy|Dex Horthy]]) converges on a shared skepticism. The speakers argue that "these models are optimized, optimized, optimized to tell us what we want to hear" — ask a model to review code and say "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. A speaker adds that the only reliable way to get honest critique is to frame it as helping a friend ("my friend sent me this, what should I tell them?"). Both agree: LLM-as-judge is unreliable for substantive evaluation.
+The Chroma podcast conversation (host Jeff Huber — the wiki's identification from contextual cues; the transcript's only 'Jeff' token is an ambiguous aside — and guest [[dex-horthy|Dex Horthy]]) converges on a shared skepticism. The speakers argue that "these models are optimized (transcript: "optimize, optimize, optimize") to tell us what we want to hear" — ask a model to review code and say "is this good?" — it says yes. Ask "is this bad?" — it says yes. The framing determines the answer, not the code quality. A speaker adds that the only reliable way to get honest critique is to frame it as helping a friend ("my friend sent me this, what should I tell them?"). Both agree: LLM-as-judge is unreliable for substantive evaluation.
 
 ### Never Send an AI to Do a Linter's Job
 
@@ -237,7 +237,7 @@ Key findings directly relevant to agent quality engineering:
 - **Reasoning (CoT) improves accuracy** by 6–9 points across settings, but adds token cost.
 - **Inter-judge variance is dramatic**: judge selection alone shifts scores by 25 points under the vanilla paradigm. Rubric-level evaluation with reasoning reduces this to 12 points, but non-trivial gaps remain from inherent capability differences.
 
-These results strengthen the thread's existing skepticism with concrete numbers. The principle "never send an AI to do a linter's job" extends to: even when you must use an LLM judge, the paradigm choice (rubric-level + reasoning vs. checklist-level direct) and judge selection can change results by 12–25 points. Evals need to specify not just what to measure but how to measure it — and acknowledge the measurement error.
+These results strengthen the thread's existing skepticism with concrete numbers. The principle "never send an AI to do a linter's job" extends to: even when you must use an LLM judge, the paradigm choice (rubric-level + reasoning vs. checklist-level) and judge selection can change results by 12–25 points. Evals need to specify not just what to measure but how to measure it — and acknowledge the measurement error.
 
 See [[rubric-evaluation]] for the full analysis.
 
@@ -359,7 +359,11 @@ This suggests trust resolution should join effectiveness, efficiency, robustness
 > [!warning] Contradiction: The RL Distribution Ceiling
 > [[andrej-karpathy|Karpathy]]'s [[verifiability|verifiability thesis]] introduces a structural ceiling on the quality loop. If a capability is outside the model's RL training distribution — not rewarded during training — no amount of eval infrastructure, observability, or feedback flywheels can create it. The quality loop can measure and improve behavior *within* the model's trained circuits, but it can't extend beyond them. Karpathy: "If you're not in the circuits, then you have to really look at fine-tuning." This doesn't invalidate the quality infrastructure — it remains necessary — but it establishes that quality engineering is bounded by the model's training distribution. See [[the-verifiability-thesis]] for the full argument.
 >
-> The Meeseeks benchmark ([[iterative-self-correction]]) provides direct empirical evidence for this ceiling. Its code-guided evaluation achieves 98.4% accuracy — near-perfect verification. Yet even after 20 rounds of precise feedback, no model exceeds ~91% utility rate. The [[overcorrection-bias|catastrophic overcorrection]] phenomenon (models oscillating wildly on word counts despite precise feedback) shows that even when the quality infrastructure is effectively perfect, the model's underlying capability gap cannot be fully closed within a single session. The quality loop is necessary but not sufficient. — The 4-layer eval stack: CI for probabilistic systems
+> The Meeseeks benchmark ([[iterative-self-correction]]) provides direct empirical evidence for this ceiling. Its code-guided evaluation achieves 98.4% accuracy — near-perfect verification. Yet even after 20 rounds of precise feedback, no model exceeds ~91% utility rate. The [[overcorrection-bias|catastrophic overcorrection]] phenomenon (models oscillating wildly on word counts despite precise feedback) shows that even when the quality infrastructure is effectively perfect, the model's underlying capability gap cannot be fully closed within a single session. The quality loop is necessary but not sufficient.
+
+## Related
+
+- [[agent-evals]] — The 4-layer eval stack: CI for probabilistic systems
 - [[agent-observability]] — Logs/traces/metrics for agent decision chains
 - [[agent-quality-loop]] — The flywheel: production failures → eval cases → continuous improvement
 - [[delegate-52]] — Long-horizon benchmark quantifying agent reliability across 52 domains

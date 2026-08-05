@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-08-03
+updated: 2026-08-05
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -18,7 +18,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[dex-horthy-agentic-engineering]] — *(worldview thread)* Dex Horthy's position traced as one coherent system: context engineering as deabstracting to the token layer, the Smart Zone and trajectory, research/plan/implement and its anti-leverage retrospective, slow lights-on loops, and token-smarter-not-harder. The thesis the wiki's other sources argue with.
 - [[the-benchmark-crisis]] — The benchmarks developers rely on to choose coding models are unreliable. Eight axes of failure: contamination, verifier misgrading, prompt distortion, environment evolution, horizon mismatch, cost-blind scoring, inference-layer accuracy degradation, and long-horizon maintainability — the last being the axis no benchmark can measure and the one that determines whether code survives.
 
-- [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly.
+- [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly. The taxonomy now extends from code and benchmark slop to spec, skill, information, discourse, and foundation-layer slop — slop baked into the languages themselves.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
 - [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
 - [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. The tool layer — from single tools to harness architecture to ecosystem effects — is the bottleneck across seven layers of increasing scope.
@@ -112,7 +112,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[jinsong-su]] — Professor, Xiamen University; corresponding author of MemGraphRAG (KDD 2026) and HippoRAG; NLP, machine translation, GraphRAG.
 - [[mathis-pink]] — Researcher at Max Planck Institute for Software Systems; lead author of the position paper arguing episodic memory is the missing piece for long-term LLM agents (the five-property framework).
 - [[lamis-mukta]] — Member of technical staff on Anthropic's applied AI team; described dreaming — Anthropic's out-of-band memory consolidation paradigm — and its production architecture.
-- [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework.
+- [[vibv]] — CEO and co-founder of [[baml|Boundary ML]]; advocate for compiler-level auto-instrumentation, type-safe tracing, and agents as trace consumers; introduced the expectation gap model and the tracing spectrum framework; originator of [[fighting-slop-with-slop]] (Vaibhav Gupta's AI Engineer talk — the talk↔AIN-conference identification is the wiki's inference).
 - [[tariq-shaukat]] — CEO of Sonar; proposed the [[agent-centric-development-cycle|AC/DC framework]] for embedding verification into agentic development through three reinforcing loops; enterprise advocate for zero-trust multi-layered verification
 - [[kevin-gregory]] — AI engineer at EvolutionIQ ($730M acquisition); runs AI automations for Boundary's "AI that Works" podcast; designer of the [[model-swap-evals|model-swap eval harness]] and co-articulator of [[fighting-slop-with-slop]]
 - [[philipp-schmid]] — Engineer at Google DeepMind (Gemini API and agents); introduced the capability-vs-preference skill taxonomy, the agents-we-use-vs-build distinction, and Google DeepMind's regression-gated skill-eval practice
@@ -202,7 +202,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[explain-diff]] — A skill that generates a personalized, literate explainer doc for a code change, with background, intuition, interactive figures, and an embedded quiz.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
 - [[factory-maintenance]] — A software factory bit-rots faster than it gets used: skills drift, systems change, failure modes emerge. Yegge's pattern is to leave every interaction with the factory slightly better than you found it, and to schedule sweep agents (architecture, test-quality, documentation) on a cadence.
-- [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling and verification infrastructure to produce higher quality where it matters.
+- [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling and verification infrastructure to produce higher quality where it matters. Origin: Vaibhav Gupta's (Boundary) conference talk — no code reviews, invariant toolchain, and the reading-relative definition "any code you don't read."
 - [[functional-collapse]] — The runtime failure mode of automated MAS: complex architecture reduces to single-agent execution. Five documented manifestations: DyLAN consensus collapse, MAS-Zero positional bias, MaAS signal saturation, MAS-Orchestra static policy, role redundancy.
 - [[smfr]] — Synthetic Multi-Hop Financial Reasoning: a procedurally generated diagnostic benchmark designed to expose the [[multi-agent-illusion]] under conditions where MAS *should* help. Immune to contamination; the [[expert-mas]] control demonstrates the multi-agent paradigm can work.
 - [[grey-box-engineering]] — Balancing human design authority with agentic implementation speed.
@@ -238,7 +238,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[seams-and-adapters]] — Where module interfaces live and what satisfies them — the foundation of testable, AI-friendly architectures.
 - [[shared-design-concept]] — The "theory" of the code that must be shared between human and agent.
 - [[software-1-2-3]] — Karpathy's three-stage model: explicit code (1.0) → trained neural networks (2.0) → prompting as programming (3.0).
-- [[slop]] — Low-quality, AI-generated content that degrades system quality.
+- [[slop]] — Low-quality, AI-generated content that degrades system quality; also, in Vaibhav Gupta's reading-relative frame, any code you don't read — a monotonic, language-level phenomenon.
 - [[discourse-slop]] — AI-generated thought-leadership slop circulating through the meta-discourse about AI tools; the hype cycle and incentive-to-hype map.
 - [[software-factory]] — A system that maps spec-like inputs to finished software; the next logical step in agentic engineering
 - [[token-harder-vs-token-smarter]] — Dex's dichotomy: maximize token throughput (the dark-factory/token-harder bet) vs. seek leverage (token-smarter, 2–3× faster at ~99% quality).
@@ -303,7 +303,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 
 ## 🛠️ Projects & Tools
 - [[agentskills]] — The Agent Skills open standard: a folder-with-SKILL.md format, originally Anthropic, now cross-vendor; `skills-ref` validation and `.skill` packaging.
-- [[baml]] — Programming language for the AI era (Boundary ML); compiler-level auto-instrumentation, type-safe tracing, OTEL type-system critique.
+- [[baml]] — Programming language for the AI era (Boundary ML); compiler-level auto-instrumentation, type-safe tracing, OTEL type-system critique; compiler-proven error inference, agent-first tooling (describe-over-search, functions-as-CLI), and ML-from-any-language.
 - [[treehouse]] — Git worktree manager for parallel agent sessions.
 - [[no-mistakes]] — Autonomous PR pipeline from first-pass code to merged PR with adversarial review and evidence.
 - [[notion]] — Workspace platform; shared documents, HTML blocks, and embedded coding agents as infrastructure for shared understanding.

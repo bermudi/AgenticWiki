@@ -1,8 +1,9 @@
 ---
 title: Context Files (AGENTS.md, CLAUDE.md)
 created: 2026-05-10
-updated: 2026-07-19
+updated: 2026-08-05
 sources:
+  - raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md
   - raw/2602.11988v1.md
   - raw/2601.20404v1.md
   - raw/2603.00822v2.md
@@ -81,7 +82,7 @@ The two papers disagree on cost impact in a way that is informative rather than 
 | Dimension | Gloaguen | Lulla |
 |---|---|---|
 | Cost impact | **+20% increase** | **−20% decrease** |
-| Task complexity | Full SWE-bench (large, multi-file changes) | Small PRs (≤100 LoC, ≤5 files) |
+| Task complexity | SWE-bench Lite (larger, multi-file changes) | Small PRs (≤100 LoC, ≤5 files) |
 | Agents tested | Claude Code, Codex, Qwen Code | Codex only |
 | Success metric | Test pass rate (correctness) | Raw efficiency (no correctness check) |
 | Dataset | 138 AGENTBENCH + 300 SWE-bench Lite | 124 PRs across 10 repos |
@@ -91,13 +92,13 @@ The two papers disagree on cost impact in a way that is informative rather than 
 
 ### Points of Convergence
 
-Despite the tension, several findings are consistent across both studies:
+Despite the tension, several findings stand out — items 1–3 and 6 come from Gloaguen et al. alone (item 1's headline is consistent with Lulla's reported behavior change; its parenthetical examples are Gloaguen's trace evidence); item 4 is Gloaguen's recommendation, independently echoed by the ralph-loop practice; item 5 is Lulla's caveat:
 
-1. **Context files are not neutral** — they measurably change agent behavior (more testing, more exploration, instruction following)
+1. **Context files are not neutral** — they measurably change agent behavior (Gloaguen's trace evidence: more testing, more exploration, instruction following)
 2. **Quality varies dramatically** — LLM-generated files consistently underperform developer-written ones
 3. **Redundancy is a problem** — when the codebase already has good documentation, context files add noise, not signal
 4. **Minimalism is underrated** — Gloaguen et al. explicitly recommend "only minimal requirements"; the [[ralph-loop]] pattern independently converged on an AGENTS.md of ~60 lines focused on operational commands
-5. **Efficiency ≠ quality** — reducing wall-clock time or tokens doesn't guarantee correct output
+5. **Efficiency ≠ quality** — Lulla's caveat, in substance: reducing wall-clock time or tokens doesn't guarantee correct output
 6. **Agents follow instructions** — agents faithfully execute context file directives, so what you put in them directly shapes agent behavior
 
 ## Implications for Practice
@@ -106,13 +107,27 @@ The evidence supports a minimalist, human-written approach to context files:
 
 - **Avoid `/init` dumps on documented repos.** Each agent's `/init` command produced verbose, overview-heavy files that performed worse than none — but this tracks with **redundancy**, not with generation itself (stripping all docs flipped the result to +2.7%). What the evidence condemns is regurgitating existing documentation into a context file. Curated generation — human-guided, non-redundant, or incrementally built per [[evolving-context]] — is a different artifact and was not what the study tested.
 - **Keep them short.** Include build commands, test commands, and critical constraints. Skip the repository overview — it is redundant with the code itself and does not help agents find relevant files faster.
-- **Avoid prescriptive instructions.** Context files that mandate specific tooling or workflows increase reasoning overhead and may lead agents astray.
+- **Avoid unnecessary or redundant prescriptive requirements.** Context files that mandate redundant tooling or workflows add reasoning overhead — but minimal tooling commands are exactly what the evidence recommends including.
 - **Remove them to debug.** If an agent is over-exploring or over-testing, try removing the context file and see if performance improves.
 
 The practitioner authoring craft converges with the evidence too: the [[agents-md]] convention's guidance — encode stable reference facts, cut volatile implementation detail, keep the file under 200 lines — is exactly the minimalism the studies recommend, arrived at from practice rather than measurement.
 
 > [!note] Cross-Source Convergence: Minimalism
-> Three independent paths have converged on the same conclusion about context file design: **keep them short, operational, and human-written.** The [[ralph-loop]] pattern (~60-line AGENTS.md with build/test commands only) arrived at this through practice. The Gloaguen et al. evaluation recommended "only minimal requirements" through empirical testing. The [[context-engineering]] framework advocates high signal density through theory. This triangulation — practice, evidence, and theory pointing in the same direction — is stronger than any single source and makes minimalism the most defensible design principle for context files as of 2026.
+> Three independent paths have converged on the same conclusion about context file design: **keep them short, operational, and human-written.** The [[ralph-loop]] pattern (~60-line AGENTS.md with build/test commands only) arrived at this through practice. The Gloaguen et al. evaluation recommended "only minimal requirements" through empirical testing. The [[context-engineering]] framework advocates high signal density through theory. This triangulation — practice, evidence, and theory pointing in the same direction — is stronger than any single source and makes minimalism the most defensible design principle for context files as of 2026. The spec-driven tooling family independently names the same artifact: [[cian-clarke|Clarke]] calls out the synonymy across constitution / CLAUDE.md / .cursorrules ([14:21]–[14:27]), and [[al-harris|Al Harris]]'s steering docs are the same pattern expressed as accumulated learnings ([37:01]–[37:07]).
+
+### The architecture.md Counterproposal (Boundary)
+
+[[vibv|Vaibhav Gupta]] (Boundary) describes a deliberate alternative to `CLAUDE.md` that pushes minimalism further: an **`architecture.md`** file, chosen specifically because it is model-agnostic — "instead of using Claude.md, just pick something that every model can just understand" ([2:12]–[2:14] in `raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md`). Two design constraints:
+
+1. **Tiny and near-immutable**: it "can only have things that will not change for months or for years" — in Boundary's case, the layers of the compiler. Volatile operational detail is deliberately excluded.
+2. **Model-agnostic by construction**: because no single model's conventions are privileged, every engineer's tool of choice (Claude, Codex, whatever they found on Hacker News) reads the same file.
+
+Boundary pairs the file with a social rule that is not a context mechanism at all: "tell the agent to just talk to at least one other person" before acting ([2:28]–[2:31]) — a cheap cross-check that deliberately slows the agent down.
+
+This is a fourth, practitioner-first convergence on the minimalism consensus, and it goes further than the empirical recommendation: where Gloaguen et al. recommend "only minimal requirements," the `architecture.md` pattern restricts the file to *invariants only* — facts stable enough that they will never be stale, sidestepping the [[doc-rot]] failure mode entirely. It also matches the empirical finding that repository-overview sections don't help agents find files: the file encodes the architecture's stable skeleton, not a prose overview.
+
+> [!note] Evidence gap: single-team practitioner report
+> The `architecture.md` pattern is reported by one founding team building one codebase (a compiler) under a no-code-review regime; it has not been measured like the Gloaguen/Lulla studies. Treat as a craft data point consistent with the empirical minimalism consensus, not as evidence about context-file impact at scale.
 
 ## ContextCov: From Passive to Executable
 
@@ -155,9 +170,10 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 ## Sources
 
 - `raw/2602.11988v1.md` — Gloaguen et al. (2026). Introduces AGENTBENCH and evaluates context file impact on task completion, finding LLM-generated files reduce performance and increase costs.
+- `raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md` — Vaibhav Gupta (Boundary): the `architecture.md` counterproposal — model-agnostic, tiny, invariants-only context file deliberately chosen over `CLAUDE.md`; the "talk to at least one other person" social rule. Solo talk; attribution direct.
 - `raw/2601.20404v1.md` — Lulla et al. (2026). Evaluates AGENTS.md impact on agent efficiency, finding reduced wall-clock time and token consumption on small-scope PRs.
 - `raw/2603.00822v2.md` — ContextCov (Sharma, 2026). Proposes executable guardrails for passive instruction files; introduces constraint taxonomy, Documentation as Code paradigm, and instruction quality feedback loop.
-- `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — Names the synonymy problem across SDD tools (constitution / CLAUDE.md / .cursorrules / steering).
-- `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Steering docs as accumulated learnings; three demonstrated use cases (commit style, code style, operational learnings); available in system prompt at every turn.
+- `raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md` — Names the synonymy problem across SDD tools (constitution / CLAUDE.md / .cursorrules).
+- `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Steering docs as accumulated learnings; three demonstrated use cases (commit style, code style, operational learnings).
 - `raw/agents-md-standard.md` — The agents.md/ site: the convention's rationale, no-required-fields format, nested-file discovery (nearest wins), cross-agent compatibility, and Agentic AI Foundation (Linux Foundation) stewardship.
 - `raw/create-project-agentsmd-skill.md` — Local `create-project-agentsmd` skill: the minimalist authoring craft (goals over mechanism, stable reference facts vs volatile implementation detail, file-it-don't-delete-it, <200-line discipline, anti-patterns).

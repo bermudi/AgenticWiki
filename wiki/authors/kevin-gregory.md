@@ -1,8 +1,9 @@
 ---
 title: Kevin Gregory
 created: 2026-08-02
-updated: 2026-08-02
+updated: 2026-08-05
 sources:
+  - raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md
   - raw/how-to-test-new-ai-models-before-they-break-production.md
   - raw/yt-can-an-ai-out-plan-a-senior-engineer.md
 unaudited_marginal: 0
@@ -27,7 +28,7 @@ Kevin designed and demonstrated a Python eval harness for answering "can I swap 
 
 ### Fighting Slop With Slop
 
-Kevin is a co-articulator of [[fighting-slop-with-slop]] — the practice of channeling AI-generated slop into disposable internal tooling to produce higher-quality output where it matters. The term originated in a Boundary AI livestream about BAML's design doc process (BEEPs), where Kevin was a guest alongside Fib (BAML language engineer at Boundary ML).
+Kevin is a co-articulator of [[fighting-slop-with-slop]] — the practice of channeling AI-generated slop into disposable internal tooling to produce higher-quality output where it matters. The term is the title of [[vibv|Vaibhav Gupta]]'s (Vibv) talk on the AI Engineer channel; the livestream referenced a talk on the concept ([5:24]–[5:32]: "we've done a talk on this at the AIN conference… soon on YouTube") — identifying the AIN conference with the AI Engineer channel is the wiki's inference. Kevin co-articulated the concept in the livestream discussion, where he was a guest alongside "Fib" (likely the transcript's garbling of Vibv himself, who introduces himself as working on BAML at [2:36]).
 
 ### Data-Labeling Discipline
 
@@ -44,4 +45,5 @@ Kevin's recurring message on the podcast: look at your data, label your data, te
 ## Sources
 
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — Boundary "AI that Works" episode (2026): Kevin demonstrates the model-swap eval harness, the diff shortcut, the three-dimension budget/gate pattern, and the saturated/unsaturated benchmark distinction. **Note:** Multi-speaker transcript without per-line speaker labels; attribution based on contextual cues (Kevin works at EvolutionIQ, demonstrates the harness, addresses Dex by name), not verified against audio.
+- `raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md` — the origin of the phrase as the talk's literal title; the livestream's reference to the talk at [5:24]–[5:32] ("we've done a talk on this at the AIN conference… soon on YouTube").
 - `raw/yt-can-an-ai-out-plan-a-senior-engineer.md` — Boundary livestream where Kevin co-articulates [[fighting-slop-with-slop]] and discusses the BEEPs design doc workflow.

@@ -1,8 +1,9 @@
 ---
 title: Agent-Friendly Tooling
 created: 2026-04-26
-updated: 2026-07-09
+updated: 2026-08-05
 sources:
+  - raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md
   - raw/agentic-coding-recommendations.md
   - raw/yt-l8-principal-s-agentic-engineering-workflow.md
 unaudited_marginal: 0
@@ -48,6 +49,17 @@ Ronacher optimizes tool usage to minimize context consumption: avoids screenshot
 ### Emergent Tools
 Agents write temporary scripts to evaluate code. These scripts must compile and run fast to be useful in the loop. For slow codebases, Ronacher's daemon pattern — a watcher that imports and executes modules from a filesystem location and writes output to a log — gives the agent a fast evaluation path within the application context.
 
+## BAML's Description-Over-Search Tooling
+
+[[vibv|Vaibhav Gupta]] (Boundary) demonstrates the design rules applied inside a language built for agents ([`raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md`](../raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md)):
+
+- **Description over search**: "Can you describe `calculate` for me?" returns docstrings, the actual source, and every usage site in a single tool call — "something that used to be multiple tool calls a single tool call all of a sudden" ([12:07]–[12:46]). External libraries answer the same way, no web search needed. This is the token-efficiency rule made structural: the agent asks for exactly the semantics it needs instead of flood-grep and re-read.
+- **Functions as CLI commands**: every function becomes a runnable command ("if I run `add`, `add` becomes a CLI command that has A and B parameters attached to it"), and tools bundle into standalone CLI binaries that run without executing the program — "type safe, deterministic, and actually guessable," cross-platform including WASM ([13:36]–[14:44]). Agents stop grepping for what's happening.
+- **Code visualization with opt-in reading**: an interactive map that expands to exact lines, letting the human navigate the codebase "more interestingly" and decide which regions to read: "Nope, that's too much slop. Let's let that be slop" ([9:38]–[10:33]).
+- **Execution traces as a first-class tool**: since tracing is designed in from first principles, "you can make this effectively zero performance cost," and every file carries a tracing system "Claude can navigate through" to find bugs, errors, and inefficiencies without the human ([10:34]–[11:24]).
+
+The unifying principle is stated by the same source: "the code is always the source of truth... The docs may lie... but the code cannot lie" ([13:01]–[13:19]) — tooling should return the code and its grounded uses, not derived documentation.
+
 ## Speed Optimization Strategies
 
 1. **Choose fast languages**: Go's fast compilation and test caching beat Python's interpreter boot time for the agent loop. Rust's `cargo test` invocation syntax also trips up agents — not a speed issue, but a tool-usability one.
@@ -57,7 +69,10 @@ Agents write temporary scripts to evaluate code. These scripts must compile and 
 
 ## Code Generation Over Dependencies
 
-Ronacher strongly prefers generating code over pulling in libraries. The agent can maintain generated code; dependency sprawl is harder to control. Each new dependency is a contract the agent may misunderstand, an upgrade surface that may silently break, and a chunk of unfamiliar code the agent can't reason about. Generated code, by contrast, is code the agent wrote — it understands it.
+Ronacher strongly prefers generating code over pulling in libraries — the agent can maintain generated code, and dependency sprawl is harder to control.
+
+> [!note] Synthesis: The wiki's reading of the rationale
+> Each new dependency is a contract the agent may misunderstand, an upgrade surface that may silently break, and a chunk of unfamiliar code the agent can't reason about; generated code, by contrast, is code the agent wrote — it understands it. Ronacher states the preference; the mechanism is the wiki's inference from his tooling practice.
 
 ## MCP as Last Resort
 
@@ -82,8 +97,11 @@ Ronacher uses MCP only when the alternative is unreliable. MCP servers themselve
 - [[slop]] — Slow, noisy tools produce more slop by limiting verification cycles
 - [[system-prompt-effects]] — System prompts shape how agents interact with tooling; non-monotonic effects mean more constrained tool instructions aren't always better
 - [[axi]] — Kun Chen's agent-ergonomic tool standard and benchmark
+- [[baml]] — The language whose agent-first tooling instantiates description-over-search, functions-as-CLI, and opt-in reading
+- [[vibv]] — Source of the BAML tooling patterns
 
 ## Sources
 
+- `raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md` — Vaibhav Gupta (Boundary): description-over-search (docstrings + source + usages in one call), functions-as-CLI with standalone binaries, code visualization with opt-in reading, near-zero-cost execution traces navigable by agents. Solo talk; attribution direct.
 - `raw/agentic-coding-recommendations.md` — Makefile patterns, daemon pattern, speed optimization
 - `raw/yt-l8-principal-s-agentic-engineering-workflow.md` — Kun Chen's AXI benchmark: GitHub MCP vs CLI (3× tokens, 2×+ latency), token-efficient non-JSON output (~40% savings), and the ten principles for agent-ergonomic tools.

@@ -1,11 +1,12 @@
 ---
 title: Dex Horthy's Agentic Engineering
 created: 2026-07-16
-updated: 2026-07-16
+updated: 2026-08-05
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md
 tags: [thread, agentic-engineering, context-engineering, harness-engineering, software-factory, loops]
 unaudited_marginal: 0
 ---
@@ -67,7 +68,7 @@ His summary of the whole loops space: *"everything except stop reading the code 
 
 Dex is the wiki's strongest *first-person* source on the failure mode of fully-automated software factories, because he built one and shut it down.
 
-> HumanLayer built a lights-off [[software-factory]] in July 2025 and shut it down by November 2025. Dex's estimate: it takes **3–6 months** of shipping with nobody reading the code before the codebase becomes easier to rewrite from scratch than to fix. ([`raw/yt-context-engineering-with-dex-horthy.md`](../raw/yt-context-engineering-with-dex-horthy.md), 41:55)
+> [[humanlayer|HumanLayer]] built a lights-off [[software-factory]] in July 2025 and shut it down by November 2025. Dex's estimate: it takes **3–6 months** of shipping with nobody reading the code before the codebase becomes easier to rewrite from scratch than to fix. ([`raw/yt-context-engineering-with-dex-horthy.md`](../raw/yt-context-engineering-with-dex-horthy.md), 41:55)
 
 The mechanism: once you stop reading code, the PR-review bottleneck forces you into agentic code review and agentic testing — but none of those have intuition for software architecture, because the models are trained on [[the-benchmark-crisis|SWE-bench-style]] tasks ("here's a commit, here's an issue, reproduce the fix"), and the cost function of bad architecture can't be caught by a unit test — it hits you 3–6 months later as an unmaintainable ball of spaghetti. When his team finally hit a wall, no amount of expert prompting could get the model to find the root cause (a primary key being routed through the system as the wrong object type); they spent three weeks re-onboarding into a codebase they'd stopped reading three months earlier.
 
@@ -97,7 +98,7 @@ Engineering time is the binding constraint early on; per-request cost only matte
 Dex's worldview is load-bearing for this wiki, but it is not the consensus. The disagreements are themselves evidence and must stay visible.
 
 > [!warning] Attribution correction: who coined "context engineering"
-> Earlier wiki pages credited "Jeff Huber (Chroma CEO)" as context engineering's co-creator. **No `raw/` source mentions Jeff Huber.** Dex himself names the three people associated with the term as **himself, Toby Lütke (Shopify), and Andrej Karpathy** — Lütke and Karpathy popularized it in the weeks after Dex's *12 Factor Agents* factor on owning your context window ([`raw/yt-context-engineering-with-dex-horthy.md`](../raw/yt-context-engineering-with-dex-horthy.md), 19:43). The "Jeff Huber" attribution has been removed as unsourced.
+> Earlier wiki pages credited "Jeff Huber (Chroma CEO)" as context engineering's co-creator. **No `raw/` source clearly identifies Jeff Huber** (the only 'Jeff' token in the corpus is an ambiguous aside in the Chroma transcript at [0:46]). Dex himself names the three people associated with the term as **himself, Toby Lütke (Shopify), and Andrej Karpathy** — Lütke and Karpathy popularized it in the weeks after Dex's *12 Factor Agents* factor on owning your context window ([`raw/yt-context-engineering-with-dex-horthy.md`](../raw/yt-context-engineering-with-dex-horthy.md), 19:43). The "Jeff Huber" attribution has been removed as unsourced.
 
 > [!note] Departure: Spec-driven development
 > Dex is markedly more skeptical of [[spec-driven-development|SDD]] than the wiki's SDD pages (some of which are bullish). His verdict: outside maintenance/migration work, SDD "didn't really work"; the intractable problem is that specs and code become two sources of truth and drift, and nobody has found maintaining parity worth the effort — better to treat the code as the only source of truth and regenerate specs live each time. This tensions [[intent-to-code]]'s plan-as-contract position and the [[spec-code-triangle]]'s bidirectional-sync hope.
@@ -108,8 +109,12 @@ Dex's worldview is load-bearing for this wiki, but it is not the consensus. The 
 > [!note] Departure: "Stop reading code"
 > A wiki source literally titled *Stop Reading Code, Start Understanding Systems* argues for shifting from line-reading to systems-level understanding. Dex is the counter-voice with primary evidence: he tried the lights-off version and it collapsed in ~4 months. The two aren't fully contradictory — "stop reading every line" ≠ "stop reading code entirely" — but Dex's failure account is the empirical floor that any "stop reading code" claim has to clear.
 
+> [!note] Departure: No-Code-Review vs. the Lights-Off Failure
+> [[vibv|Vaibhav Gupta]] (Boundary) reports shipping a programming language for 3+ years under a **no-code-review regime** ([`raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md`](../raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md)) — the surface-level twin of the [[dark-factory]] Dex built and shut down. The wiki's resolution: the human lever is a **reading policy, not a reading volume** — Vaibhav's team reads design docs (shipped design docs must actually be read), inspects agent transcripts with human triage (real vs. hallucinated vs. no-taste issues), and enforces dependency-graph invariants via CI, so reading occurs at the design and architecture layers even though no code-review pass exists. The dark factory failed where *no reading occurred at any layer*. The counterexample is bounded: a single founding team in a compiler domain whose invariants are unusually machine-checkable. See [[the-human-lever]] → Review-Less Design Authority.
+
 ## Sources
 
-- `raw/yt-no-vibes-allowed-dex-horthy.md` — The "No Vibes Allowed" talk (AI Engineer Code): agentic engineering over vibe coding, snapshot-based evals, model intuition.
+- `raw/yt-no-vibes-allowed-dex-horthy.md` — The "No Vibes Allowed" talk (AI Engineer Code): vibes-vs-engineering, the context gap for complex codebases, correctness-over-completion verification, Cody's high-fidelity context approach, and the Research → Propose → Verify → Refine loop. (Filed as a key-points stub, not a full transcript.)
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — The originating context-engineering interview: information-per-token density, model intuition, markdown-as-storage, evals.
 - `raw/yt-context-engineering-with-dex-horthy.md` — The Pragmatic Engineer interview: the deabstracting definition, two budgets, Smart/Dumb Zone physics, RPI retrospective, slow loops, the lights-off factory failure, token-harder/smarter, Martin Fowler's inner/outer harness, the HumanLayer product, the NATO-1968 software-factory history.
+- `raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md` — [[vibv|Vaibhav Gupta]] (Boundary): the no-code-review regime as the surface-level twin of the dark factory; the wiki's reading-policy-not-reading-volume resolution and its single-team/compiler-domain bounds. Solo talk; attribution direct.
