@@ -1,7 +1,7 @@
 ---
 title: Appshot
 created: 2026-08-06
-updated: 2026-08-06
+updated: 2026-08-07
 sources:
   - raw/full-workshop-setting-yourself-up-for-success-jason-liu-openai-codex.md
 unaudited_marginal: 0
@@ -10,7 +10,7 @@ tags: [concept, openai-codex, tool-design, computer-use, context-acquisition, ac
 
 # Appshot
 
-> The fastest way to bring context into OpenAI Codex: a screen capture that ships the image *plus* the entire **accessibility tree**, so the model already knows channel IDs, user IDs, and form fields and can act in one function call instead of three.
+> The fastest way to bring context into OpenAI Codex: a screen capture that ships the image *plus* the entire **accessibility tree**, so the model already knows channel IDs, user IDs, and form fields and can act in one function call instead of a multi-hop OCR-and-lookup chain.
 
 ## Summary
 
@@ -18,7 +18,7 @@ tags: [concept, openai-codex, tool-design, computer-use, context-acquisition, ac
 
 ## How It Works
 
-When you press the Codex appshot shortcut (mod-C on recent builds, gated behind a "install computer use" modal if needed), Codex captures:
+When you trigger appshot (Liu's demo instruction: "just press the command button side by side" — gated behind an "install computer use" modal if needed), Codex captures:
 
 1. **The bitmap** — what the display shows.
 2. **The accessibility tree** — the OS-level semantic view: every button, input, tab, and text node with its semantic role, value, and (critically) **internal IDs**.

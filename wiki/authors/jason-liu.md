@@ -1,7 +1,7 @@
 ---
 title: Jason Liu
 created: 2026-08-06
-updated: 2026-08-06
+updated: 2026-08-07
 sources:
   - raw/full-workshop-setting-yourself-up-for-success-jason-liu-openai-codex.md
 unaudited_marginal: 0
@@ -27,7 +27,7 @@ Liu frames the model in three acts — **bring context in → work on it → tak
 - **Voice first.** He uses a foot pedal (transcribe + enter) and talks with hands behind his back: "fix this, make this change, message this guy on Slack." The rationale is simple: you speak about three times faster than you type, and a messy 15-minute voice memo is cheap for the model to untangle (it will read 35 meeting notes to find the right one) but expensive to impose on a coworker. In his words: don't send a coworker a 15-minute voice memo — send it to the AI.
 - **Plugins/connectors.** Installed from the Codex sidebar (Slack, Gmail/Teams, Notion, Linear, Obsidian, etc.). Day one you tag every plugin; over time, as pinned threads and memories accumulate, you can just ask "what has changed about the launch" without tagging. He also distinguishes **Chrome extension** (controls Chrome without screen takeover — three tabs open and close while you work) from **computer use** (controls any Mac app behind the scenes — first "feel the AGI" moment for him, watching the cursor place sound effects in iMovie).
 - **Appshot.** His favorite feature. An appshot captures not just the image but the entire **accessibility tree**: channel IDs, user IDs, form fields. A screenshot of a Slack thread requires OCR + `list Slack channels` + `list persons` hops; an appshot knows `channel = U12725` and `Charlie = U425` and can reply in one function call. He hasn't filled out a form in two weeks — "just tell Codex to fill out this form; it figures out Chrome vs Safari and uses the right tool."
-- **Skills vs plugins.** A **skill** is a few files + scripts; a **plugin** is a library of skills. Install via `skill installer` (curated OpenAI skills) and community sources like `skillset.sh`. His highest-leverage internal skills: `finalize the codex app` (triggered before every PR review, used by most of OpenAI), `review docs like Charlie` (copied from a year's worth of Charlie's PR feedback), and a DX triage skill that knows every Slack channel to watch and which engineer owns what.
+- **Skills vs plugins.** A **skill** is a few files + scripts; a **plugin** is a library of skills. Install via `skill installer` (curated OpenAI skills) and community sources like `skillset.sh`. His highest-leverage internal skills: `finalize the codex app` (triggered before every PR review, used by most of OpenAI), `review my code like Charlie` / `like Dominic` (built from the past year of Charlie's PR feedback), and a DX triage skill that knows every Slack channel to watch and which engineer owns what.
 
 ### 2. Work On It: compaction, pinned threads as teammates
 
@@ -48,7 +48,7 @@ Once the first two layers are in place, Liu extends them with **wake-ups**:
 - **Heartbeats / thread automations.** "Keep an eye on this every 30 minutes" schedules a message back *into the same thread*, not a new thread. The morning version gave way to same-thread heartbeats as compaction improved. Examples:
   - `loop`: "keep an eye on this PR — anytime there's feedback fix it, keep it mergeable, rebased on master, CI passing. Thursday afternoon all the feedback has been integrated and CI is green."
   - `support triage`: appshot → DX triage skill figures out the owner (James, `browser-feedback` channel), posts in the channel, DMs James, opens Twitter via computer use to tell the reporter it has been escalated, then checks every hour until James responds and loops the reporter.
-  - `chief of staff`: pinned daily at 8 a.m., checks all connectors, drafts summaries with links/email/Slack deep-links, and can openuchs browser tabs for every email needing a reply.
+  - `chief of staff`: pinned daily at 8 a.m., checks all connectors, drafts summaries with links/email/Slack deep-links, and can open a browser tab for every email needing a reply.
   - `flight check-in`: a Spark agent watches for check-in emails, checks in, downloads the boarding pass, and sends it via iMessage.
 - **Goals.** `/goal` runs until a verifier says done; **ultra-goal** (`goal.md` + `plan.md` + optional `state.md`/work log file) lets you edit scope while the loop runs — crucial for projects where the plan changes as the model learns.
 - **Monitor threads spawning subthreads.** The newest pattern: one long-lived **monitor thread** watches all signals (Twitter, Slack, connectors). When it spots an issue it creates a dedicated thread per issue; that thread does triage, waits on humans/PRs, and posts back. If the same issue recurs, the monitor sends a message to the existing downstream thread so it knows the issue is recurring, and surfaces to the main thread ("third day this issue has been live — should we do something?"). Unlike shapeless sub-agents, these threads are **pinned in the sidebar**, so new work is visible.
