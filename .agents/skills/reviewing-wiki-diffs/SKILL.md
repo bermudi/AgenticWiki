@@ -1,17 +1,17 @@
 ---
 name: reviewing-wiki-diffs
-description: "Reviews AgenticWiki diffs for semantic regressions, unrelated edits, deleted caveats, commentary laundering, and unjustified changes. Use in an isolated read-only worker when existing substantive wiki prose has been changed."
+description: "Reviews AgenticWiki diffs for semantic regressions, unrelated edits, deleted caveats, commentary laundering, and unjustified changes. Full topology uses an isolated read-only worker; Freebuff uses a fresh baton review pass."
 ---
 
 # Reviewing Wiki Diffs
 
 Judge transition integrity: whether a completed wiki changeset is justified by its stated sources and whether it damaged material that was already correct.
 
-This is a report-only skill. Never edit, stage, commit, or delete files.
+This is report-only while making the judgment. Full-topology workers never edit, stage, commit, or delete. A Freebuff baton pass may switch to fixer only after recording the judgment; then it forfeits approval.
 
 ## Worker Capabilities
 
-Require repository read/search access and read-only access to version-control diffs and prior versions. Network access is unnecessary. The harness should deny local writes, staging, commits, and deletion.
+Require repository read/search access and read-only access to version-control diffs and prior versions. Network access is unnecessary. Full topology denies local writes, staging, commits, and deletion; baton mode enforces the same restriction behaviorally during review.
 
 ## Input Contract
 

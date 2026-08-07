@@ -51,14 +51,14 @@ Skills are grouped by role:
 | Verify a completed changeset | `.agents/skills/verifying-wiki-changes/SKILL.md` |
 | Research an unresolved external claim | `.agents/skills/researching-wiki-claims/SKILL.md` |
 
-Filing writers are write-capable workers sharing the coordinator's authoritative checkout, with a disclosed inline fallback when unavailable. The coordinator runs `verifying-wiki-changes` inline for risk classification and reviewer orchestration; it does not create a nested verifier worker. Reviewer skills run in fresh read-only isolated workers:
+The filing pipeline has two adapters. **Full topology** uses dispatched write-capable shared-checkout writers plus fresh isolated read-only reviewers; unavailable required workers stop the run. **Freebuff baton topology** separates roles across fresh top-level sessions: one writes/stages but cannot approve, each mutating review/fix pass forces another fresh review, and only a complete zero-delta pass may commit through `scripts/filing-baton`. A capable harness may not choose baton mode merely to avoid dispatch. The coordinator runs `verifying-wiki-changes` inline in full topology; Freebuff loads it in the fresh review/fix pass.
 
 - `.agents/skills/reviewing-wiki-theory/SKILL.md` — whole-wiki theory coherence gate
 - `.agents/skills/reviewing-wiki-diffs/SKILL.md` — transition integrity of a changeset diff
 - `.agents/skills/verifying-source-fidelity/SKILL.md` — one page against every raw source it lists
 - `.agents/skills/reviewing-wiki-quality/SKILL.md` — structure, clarity, context, navigation, thread quality
 
-The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`.
+The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`. In Freebuff, the same named reviewer skills run report-only before the pass may switch to fixer role; any staged mutation forfeits approval.
 
 ## Where to Find Detail
 

@@ -1,0 +1,1048 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""Mechanical state machine for AgenticWiki's fresh-session Freebuff filing fallback."""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import fcntl
+import json
+import re
+import subprocess
+import sys
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Iterator, NoReturn
+
+REVIEW_NAMES = ("theory", "diff", "source-fidelity", "quality")
+SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+class BatonError(RuntimeError):
+    """A user-actionable baton state or repository error."""
+
+
+def fail(message: str) -> NoReturn:
+    print(f"filing-baton: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def run_git(*args: str, check: bool = True) -> subprocess.CompletedProcess[bytes]:
+    result = subprocess.run(
+        ["git", *args], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False
+    )
+    if check and result.returncode != 0:
+        detail = result.stderr.decode("utf-8", "replace").strip()
+        raise BatonError(f"git {' '.join(args)} failed: {detail}")
+    return result
+
+
+def repository_root() -> Path:
+    result = run_git("rev-parse", "--show-toplevel")
+    return Path(result.stdout.decode().strip())
+
+
+def now() -> str:
+    return dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+
+
+def validate_filing_date(value: str) -> None:
+    try:
+        parsed = dt.date.fromisoformat(value)
+    except ValueError as exc:
+        raise BatonError("filing date must be ISO YYYY-MM-DD") from exc
+    if parsed.isoformat() != value:
+        raise BatonError("filing date must be ISO YYYY-MM-DD")
+
+
+def validate_session(root: Path, session: str, *, require_latest: bool) -> tuple[str, str]:
+    if not session.strip():
+        raise BatonError("session identifier must be non-empty")
+    candidate = (root / session).resolve() if not Path(session).is_absolute() else Path(session).resolve()
+    session_root = (root / ".freebuff").resolve()
+    try:
+        relative = candidate.relative_to(session_root)
+    except ValueError as exc:
+        raise BatonError("session must be an existing log under .freebuff/") from exc
+    if not candidate.is_file() or not candidate.name.startswith("session-"):
+        raise BatonError("session must be an existing .freebuff/session-* log")
+    stat = candidate.stat()
+    if stat.st_size == 0:
+        raise BatonError("Freebuff session log is empty; it cannot establish session identity")
+    if require_latest:
+        logs = [path for path in session_root.glob("session-*") if path.is_file() and path.stat().st_size]
+        if not logs:
+            raise BatonError("no non-empty Freebuff session logs exist")
+        latest = max(logs, key=lambda path: (path.stat().st_mtime_ns, path.name))
+        if candidate != latest.resolve():
+            raise BatonError("session log is not the newest non-empty .freebuff/session-* log")
+    normalized = str(Path(".freebuff") / relative)
+    identity = f"{stat.st_dev}:{stat.st_ino}"
+    return normalized, identity
+
+
+def state_path(root: Path, slug: str) -> Path:
+    if not SLUG_RE.fullmatch(slug):
+        raise BatonError("source slug must contain only lowercase letters, digits, and hyphens")
+    return root / ".filing-handoff" / f"{slug}.json"
+
+
+def load_state(path: Path) -> dict[str, object]:
+    if not path.exists():
+        raise BatonError(f"handoff does not exist: {path}")
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise BatonError(f"cannot read handoff {path}: {exc}") from exc
+    if not isinstance(value, dict) or value.get("schema_version") != 1:
+        raise BatonError(f"unsupported or malformed handoff: {path}")
+    return value
+
+
+def save_state(path: Path, state: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+@contextmanager
+def baton_lock(root: Path) -> Iterator[None]:
+    lock_dir = root / ".filing-handoff"
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_path = lock_dir / ".lock"
+    with lock_path.open("a+", encoding="utf-8") as handle:
+        try:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+def staged_paths() -> list[str]:
+    output = run_git("diff", "--cached", "--name-only", "-z").stdout
+    return [part.decode("utf-8") for part in output.split(b"\0") if part]
+
+
+def staged_boundary() -> dict[str, str]:
+    paths = staged_paths()
+    boundary: dict[str, str] = {}
+    for path in paths:
+        result = run_git("ls-files", "-s", "-z", "--", path)
+        entries = [entry for entry in result.stdout.split(b"\0") if entry]
+        if len(entries) != 1:
+            raise BatonError(f"expected one stage-0 index entry for {path}, got {len(entries)}")
+        metadata, indexed_path = entries[0].split(b"\t", 1)
+        mode, oid, stage = metadata.decode().split()
+        if stage != "0" or indexed_path.decode() != path:
+            raise BatonError(f"unsupported non-stage-0 index entry for {path}")
+        boundary[path] = f"{mode}:{oid}:{stage}"
+    return boundary
+
+
+def index_tree() -> str:
+    return run_git("write-tree").stdout.decode().strip()
+
+
+def repository_position() -> tuple[str, str]:
+    head = run_git("rev-parse", "HEAD").stdout.decode().strip()
+    branch_result = run_git("symbolic-ref", "-q", "HEAD", check=False)
+    if branch_result.returncode != 0:
+        raise BatonError("baton mode requires a non-detached branch")
+    return head, branch_result.stdout.decode().strip()
+
+
+def require_repository_position(state: dict[str, object]) -> None:
+    head, branch = repository_position()
+    if head != state.get("base_head") or branch != state.get("branch_ref"):
+        raise BatonError(
+            "repository HEAD/branch moved since baton start; "
+            f"expected {state.get('branch_ref')}@{state.get('base_head')}, got {branch}@{head}"
+        )
+
+
+def require_empty_index() -> None:
+    paths = staged_paths()
+    if paths:
+        raise BatonError("write pass requires an empty staged index; staged: " + ", ".join(paths))
+
+
+def require_clean_content_worktree() -> None:
+    unstaged = [
+        part.decode("utf-8")
+        for part in run_git("diff", "--name-only", "-z", "--", "wiki", "raw").stdout.split(b"\0")
+        if part
+    ]
+    untracked = [
+        part.decode("utf-8")
+        for part in run_git(
+            "ls-files", "--others", "--exclude-standard", "-z", "--", "wiki", "raw"
+        ).stdout.split(b"\0")
+        if part
+    ]
+    ignored = [
+        part.decode("utf-8")
+        for part in run_git(
+            "ls-files", "--others", "--ignored", "--exclude-standard", "-z", "--", "wiki", "raw"
+        ).stdout.split(b"\0")
+        if part
+    ]
+    dirty = sorted(set(unstaged + untracked + ignored))
+    if dirty:
+        raise BatonError(
+            "baton validation/review requires a clean wiki/raw worktree outside the staged tree; "
+            "stage intended paths or separate these files first: " + ", ".join(dirty)
+        )
+
+
+def require_no_active_handoff(root: Path) -> None:
+    handoff_dir = root / ".filing-handoff"
+    if not handoff_dir.exists():
+        return
+    active: list[str] = []
+    for candidate in sorted(handoff_dir.glob("*.json")):
+        state = load_state(candidate)
+        if state.get("state") not in {"committed", "aborted", "no_change"}:
+            active.append(f"{candidate.stem} ({state.get('state', 'unknown')})")
+    if active:
+        raise BatonError(
+            "another baton transaction owns the repository index; resume or archive it first: "
+            + ", ".join(active)
+        )
+
+
+def require_nonempty_boundary(boundary: dict[str, str]) -> None:
+    if not boundary:
+        raise BatonError("staged filing boundary is empty")
+
+
+def path_exists_at_revision(revision: str, path: str) -> bool:
+    return run_git("cat-file", "-e", f"{revision}:{path}", check=False).returncode == 0
+
+
+def require_content_invariants(boundary: dict[str, str], base_head: object) -> None:
+    if not isinstance(base_head, str):
+        raise BatonError("handoff base HEAD is malformed")
+    modified_raw = [
+        path for path in boundary if path.startswith("raw/") and path_exists_at_revision(base_head, path)
+    ]
+    if modified_raw:
+        raise BatonError("existing raw artifacts are immutable; staged modifications: " + ", ".join(modified_raw))
+    new_pages = [
+        path
+        for path in boundary
+        if path.startswith("wiki/")
+        and path.endswith(".md")
+        and path != "wiki/index.md"
+        and not path_exists_at_revision(base_head, path)
+    ]
+    changed_pages = [
+        path for path in boundary if path.startswith("wiki/") and path.endswith(".md") and path != "wiki/index.md"
+    ]
+    if changed_pages and "wiki/index.md" not in boundary:
+        raise BatonError("wiki page changes require staged wiki/index.md: " + ", ".join(changed_pages))
+    if new_pages:
+        index_text = run_git("show", ":wiki/index.md").stdout.decode("utf-8", "replace")
+        missing = [path for path in new_pages if f"[[{Path(path).stem}]]" not in index_text]
+        if missing:
+            raise BatonError("new wiki pages are missing from staged wiki/index.md: " + ", ".join(missing))
+
+
+def require_required_raw_paths(state: dict[str, object], boundary: dict[str, str]) -> None:
+    required = state.get("required_raw_paths", [])
+    if not isinstance(required, list) or not all(isinstance(path, str) for path in required):
+        raise BatonError("handoff required raw path list is malformed")
+    missing = [path for path in required if path not in boundary]
+    if missing:
+        raise BatonError("required raw artifacts were removed from the staged boundary: " + ", ".join(missing))
+
+
+def require_boundary(expected: object) -> dict[str, str]:
+    if not isinstance(expected, dict) or not all(
+        isinstance(path, str) and isinstance(oid, str) for path, oid in expected.items()
+    ):
+        raise BatonError("handoff boundary is malformed")
+    current = staged_boundary()
+    if current != expected:
+        raise BatonError(
+            "staged boundary does not match handoff; expected "
+            f"{json.dumps(expected, sort_keys=True)}, got {json.dumps(current, sort_keys=True)}"
+        )
+    return current
+
+
+def require_parity_and_whitespace(boundary: dict[str, str]) -> None:
+    require_nonempty_boundary(boundary)
+    paths = list(boundary)
+    whitespace = run_git("diff", "--cached", "--check", "--", *paths, check=False)
+    if whitespace.returncode != 0:
+        detail = whitespace.stdout.decode("utf-8", "replace") + whitespace.stderr.decode(
+            "utf-8", "replace"
+        )
+        raise BatonError("cached whitespace check failed:\n" + detail.strip())
+    parity = run_git("diff", "--quiet", "--", *paths, check=False)
+    if parity.returncode != 0:
+        changed = run_git("diff", "--name-only", "--", *paths).stdout.decode().strip()
+        raise BatonError("staged/worktree parity failed for: " + changed.replace("\n", ", "))
+
+
+def validation_paths(boundary: dict[str, str]) -> list[str]:
+    return [
+        path
+        for path in boundary
+        if path.endswith(".md") and (path.startswith("wiki/") or path.startswith("raw/"))
+    ]
+
+
+def run_validator(root: Path, filing_date: str, boundary: dict[str, str]) -> str:
+    paths = validation_paths(boundary)
+    if not paths:
+        return "not applicable — no supported wiki/raw markdown paths"
+    validator = root / "scripts" / "validate-page"
+    result = subprocess.run(
+        [str(validator), *paths],
+        cwd=root,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise BatonError("validate-page failed:\n" + result.stdout.strip())
+    summary = result.stdout.strip().splitlines()
+    return summary[-1] if summary else "passed"
+
+
+def used_sessions(state: dict[str, object]) -> tuple[set[str], set[str]]:
+    history = state.get("history")
+    if not isinstance(history, list):
+        raise BatonError("handoff history is malformed")
+    paths: set[str] = set()
+    identities: set[str] = set()
+    for item in history:
+        if isinstance(item, dict):
+            if isinstance(item.get("session"), str):
+                paths.add(item["session"])
+            if isinstance(item.get("session_identity"), str):
+                identities.add(item["session_identity"])
+    active = state.get("active_pass")
+    if isinstance(active, dict):
+        if isinstance(active.get("session"), str):
+            paths.add(active["session"])
+        if isinstance(active.get("session_identity"), str):
+            identities.add(active["session_identity"])
+    return paths, identities
+
+
+def require_new_session(state: dict[str, object], session: str, identity: str) -> None:
+    paths, identities = used_sessions(state)
+    if session in paths or identity in identities:
+        raise BatonError(
+            f"session {session!r} was already used by this filing; start a genuinely fresh session"
+        )
+
+
+def append_history(state: dict[str, object], event: dict[str, object]) -> None:
+    history = state.get("history")
+    if not isinstance(history, list):
+        raise BatonError("handoff history is malformed")
+    history.append(event)
+
+
+def parse_reviews(values: list[str]) -> dict[str, str]:
+    reviews: dict[str, str] = {}
+    for value in values:
+        if "=" not in value:
+            raise BatonError(f"review must use name=status: {value!r}")
+        name, status = value.split("=", 1)
+        name, status = name.strip(), status.strip()
+        if name not in REVIEW_NAMES:
+            raise BatonError(f"unknown review {name!r}; expected one of {', '.join(REVIEW_NAMES)}")
+        if name in reviews:
+            raise BatonError(f"duplicate review row: {name}")
+        valid = status == "PASS"
+        valid = valid or bool(re.fullmatch(r"PASS WITH EXPLICIT DEBT: .+", status))
+        valid = valid or bool(re.fullmatch(r"SKIPPED: .+", status))
+        if not valid:
+            raise BatonError(
+                f"review {name} must be exactly PASS, PASS WITH EXPLICIT DEBT: <representation>, "
+                f"or SKIPPED: <reason>; got {status!r}"
+            )
+        reviews[name] = status
+    missing = [name for name in REVIEW_NAMES if name not in reviews]
+    if missing:
+        raise BatonError("clean review is missing rows: " + ", ".join(missing))
+    return reviews
+
+
+def cmd_start_write(args: argparse.Namespace) -> None:
+    root = repository_root()
+    validate_filing_date(args.filing_date)
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    if path.exists():
+        raise BatonError(f"handoff already exists: {path}; resume or archive it instead of overwriting")
+    require_no_active_handoff(root)
+    require_empty_index()
+    require_clean_content_worktree()
+    base_head, branch_ref = repository_position()
+    state: dict[str, object] = {
+        "schema_version": 1,
+        "mode": "freebuff-baton",
+        "source_slug": args.source,
+        "source_locator": args.locator,
+        "filing_date": args.filing_date,
+        "state": "writing",
+        "iteration": 1,
+        "created_at": now(),
+        "boundary": {},
+        "base_head": base_head,
+        "branch_ref": branch_ref,
+        "history": [],
+        "active_pass": {
+            "role": "write",
+            "session": args.session,
+            "session_identity": session_identity,
+            "started_at": now(),
+        },
+    }
+    save_state(path, state)
+    print(f"WRITE PASS STARTED: {path}")
+    print("This pass may write and stage, but it may not semantically approve or commit.")
+
+
+def cmd_finish_write(args: argparse.Namespace) -> None:
+    root = repository_root()
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    state = load_state(path)
+    require_repository_position(state)
+    if state.get("state") != "writing":
+        raise BatonError(f"expected state writing, got {state.get('state')!r}")
+    active = state.get("active_pass")
+    if (
+        not isinstance(active, dict)
+        or active.get("role") != "write"
+        or active.get("session") != args.session
+        or active.get("session_identity") != session_identity
+    ):
+        raise BatonError("session does not own the active write pass")
+    boundary = staged_boundary()
+    if args.no_change:
+        if args.path or boundary:
+            raise BatonError("--no-change requires no --path values and an empty staged index")
+        locator = Path(str(state.get("source_locator", "")))
+        candidate = locator.resolve() if locator.is_absolute() else (root / locator).resolve()
+        try:
+            relative = candidate.relative_to(root).as_posix()
+        except ValueError as exc:
+            raise BatonError("--no-change requires an existing source inside raw/") from exc
+        if not relative.startswith("raw/") or not candidate.is_file():
+            raise BatonError("--no-change requires an existing source file inside raw/")
+        base_head = state.get("base_head")
+        if not isinstance(base_head, str) or not path_exists_at_revision(base_head, relative):
+            raise BatonError("--no-change is only valid for a raw artifact already present at baton start")
+        if run_git("diff", "--quiet", "--", relative, check=False).returncode != 0:
+            raise BatonError("--no-change source has worktree modifications")
+        require_clean_content_worktree()
+        append_history(
+            state,
+            {
+                "role": "write",
+                "session": args.session,
+                "session_identity": session_identity,
+                "started_at": active.get("started_at"),
+                "finished_at": now(),
+                "result": "no_change",
+                "source": relative,
+                "note": args.note,
+            },
+        )
+        state["state"] = "no_change"
+        state["boundary"] = {}
+        state["index_tree"] = index_tree()
+        state["active_pass"] = None
+        save_state(path, state)
+        print("NO-CHANGE FILING COMPLETE — EXISTING RAW SOURCE UNCHANGED; NO REVIEW OR COMMIT")
+        return
+    intended = set(args.path)
+    if len(intended) != len(args.path):
+        raise BatonError("finish-write contains duplicate --path values")
+    if intended != set(boundary):
+        raise BatonError(
+            "staged boundary must exactly match explicit --path values; expected "
+            f"{sorted(intended)}, got {sorted(boundary)}"
+        )
+    require_content_invariants(boundary, state.get("base_head"))
+    require_parity_and_whitespace(boundary)
+    require_clean_content_worktree()
+    validation = run_validator(root, str(state["filing_date"]), boundary)
+    append_history(
+        state,
+        {
+            "role": "write",
+            "session": args.session,
+            "session_identity": session_identity,
+            "started_at": active.get("started_at"),
+            "finished_at": now(),
+            "result": "changed",
+            "boundary": boundary,
+            "validation": validation,
+            "note": args.note,
+        },
+    )
+    state["state"] = "needs_review"
+    state["boundary"] = boundary
+    state["required_raw_paths"] = sorted(path for path in boundary if path.startswith("raw/"))
+    state["index_tree"] = index_tree()
+    state["last_content_session"] = args.session
+    state["active_pass"] = None
+    save_state(path, state)
+    print("WRITE PASS COMPLETE — FRESH REVIEW REQUIRED")
+    print(json.dumps(boundary, indent=2, sort_keys=True))
+
+
+def cmd_restart_write(args: argparse.Namespace) -> None:
+    root = repository_root()
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    state = load_state(path)
+    require_repository_position(state)
+    if state.get("state") != "writing":
+        raise BatonError(f"restart-write requires state writing, got {state.get('state')!r}")
+    require_new_session(state, args.session, session_identity)
+    previous = state.get("active_pass")
+    if isinstance(previous, dict):
+        append_history(
+            state,
+            {
+                "role": previous.get("role", "write"),
+                "session": previous.get("session"),
+                "session_identity": previous.get("session_identity"),
+                "started_at": previous.get("started_at"),
+                "finished_at": now(),
+                "result": "abandoned",
+                "note": args.reason,
+            },
+        )
+    state["active_pass"] = {
+        "role": "write",
+        "session": args.session,
+        "session_identity": session_identity,
+        "started_at": now(),
+        "restart_reason": args.reason,
+    }
+    save_state(path, state)
+    print("WRITE PASS RESTARTED IN A FRESH SESSION")
+
+
+def cmd_start_review(args: argparse.Namespace) -> None:
+    root = repository_root()
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    state = load_state(path)
+    require_repository_position(state)
+    if state.get("state") != "needs_review":
+        raise BatonError(f"expected state needs_review, got {state.get('state')!r}")
+    require_new_session(state, args.session, session_identity)
+    boundary = require_boundary(state.get("boundary"))
+    require_required_raw_paths(state, boundary)
+    require_content_invariants(boundary, state.get("base_head"))
+    require_parity_and_whitespace(boundary)
+    require_clean_content_worktree()
+    if index_tree() != state.get("index_tree"):
+        raise BatonError("complete staged index tree does not match the handoff")
+    state["state"] = "reviewing"
+    state["active_pass"] = {
+        "role": "review-fix",
+        "session": args.session,
+        "session_identity": session_identity,
+        "started_at": now(),
+        "start_boundary": boundary,
+        "start_index_tree": state.get("index_tree"),
+    }
+    save_state(path, state)
+    print("REVIEW/FIX PASS STARTED")
+    print("Review the complete boundary. If this pass changes any staged content, another fresh pass is mandatory.")
+
+
+def cmd_restart_review(args: argparse.Namespace) -> None:
+    root = repository_root()
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    state = load_state(path)
+    require_repository_position(state)
+    if state.get("state") not in {"reviewing", "blocked", "approved", "needs_review"}:
+        raise BatonError(f"restart-review cannot recover state {state.get('state')!r}")
+    require_new_session(state, args.session, session_identity)
+    previous = state.get("active_pass")
+    if isinstance(previous, dict):
+        append_history(
+            state,
+            {
+                "role": previous.get("role", "review-fix"),
+                "session": previous.get("session"),
+                "session_identity": previous.get("session_identity"),
+                "started_at": previous.get("started_at"),
+                "finished_at": now(),
+                "result": "abandoned",
+                "note": args.reason,
+            },
+        )
+    boundary = require_boundary(state.get("boundary"))
+    current_tree = index_tree()
+    if current_tree != state.get("index_tree"):
+        raise BatonError(
+            "staged index changed before restart-review; restore the recorded boundary or "
+            "finish the prior pass before starting a fresh reviewer"
+        )
+    require_clean_content_worktree()
+    state["state"] = "reviewing"
+    state["active_pass"] = {
+        "role": "review-fix",
+        "session": args.session,
+        "session_identity": session_identity,
+        "started_at": now(),
+        "start_boundary": boundary,
+        "start_index_tree": current_tree,
+        "restart_reason": args.reason,
+    }
+    state["boundary"] = boundary
+    state["index_tree"] = current_tree
+    state.pop("approved_by_session", None)
+    state.pop("approved_by_identity", None)
+    state.pop("approved_tree", None)
+    save_state(path, state)
+    print("REVIEW PASS RESTARTED — PRIOR APPROVAL, IF ANY, IS VOID")
+
+
+def cmd_finish_review(args: argparse.Namespace) -> None:
+    root = repository_root()
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    state = load_state(path)
+    require_repository_position(state)
+    if state.get("state") != "reviewing":
+        raise BatonError(f"expected state reviewing, got {state.get('state')!r}")
+    active = state.get("active_pass")
+    if (
+        not isinstance(active, dict)
+        or active.get("session") != args.session
+        or active.get("session_identity") != session_identity
+    ):
+        raise BatonError("session does not own the active review pass")
+    start_boundary = active.get("start_boundary")
+    start_tree = active.get("start_index_tree")
+    if not isinstance(start_boundary, dict) or not isinstance(start_tree, str):
+        raise BatonError("review start snapshot is malformed")
+    current = staged_boundary()
+    current_tree = index_tree()
+    changed = current != start_boundary or current_tree != start_tree
+
+    if args.result == "blocked":
+        check_result = "not run"
+        try:
+            require_parity_and_whitespace(current)
+            check_result = run_validator(root, str(state["filing_date"]), current)
+        except BatonError as exc:
+            check_result = f"blocked check: {exc}"
+        append_history(
+            state,
+            {
+                "role": "review-fix",
+                "session": args.session,
+                "session_identity": session_identity,
+                "started_at": active.get("started_at"),
+                "finished_at": now(),
+                "result": "blocked",
+                "boundary": current,
+                "index_tree": current_tree,
+                "validation": check_result,
+                "note": args.note,
+            },
+        )
+        state["state"] = "blocked"
+        state["boundary"] = current
+        state["index_tree"] = current_tree
+        if changed:
+            state["last_content_session"] = args.session
+        state["active_pass"] = None
+        save_state(path, state)
+        print("REVIEW BLOCKED — COMMIT GATE CLOSED")
+        return
+
+    require_required_raw_paths(state, current)
+    require_content_invariants(current, state.get("base_head"))
+    require_parity_and_whitespace(current)
+    require_clean_content_worktree()
+    validation = run_validator(root, str(state["filing_date"]), current)
+
+    if args.result == "clean":
+        if changed:
+            raise BatonError("clean review changed the staged index; finish as --result changed")
+        if not args.note.strip():
+            raise BatonError("clean review requires --note with reviewer verdicts and material findings")
+        reviews = parse_reviews(args.review)
+        append_history(
+            state,
+            {
+                "role": "review-approve",
+                "session": args.session,
+                "session_identity": session_identity,
+                "started_at": active.get("started_at"),
+                "finished_at": now(),
+                "result": "clean",
+                "boundary": current,
+                "index_tree": current_tree,
+                "validation": validation,
+                "reviews": reviews,
+                "note": args.note,
+            },
+        )
+        state["state"] = "approved"
+        state["boundary"] = current
+        state["index_tree"] = current_tree
+        state["approved_tree"] = current_tree
+        state["approved_by_session"] = args.session
+        state["approved_by_identity"] = session_identity
+        state["review_ledger"] = reviews
+        state["active_pass"] = None
+        save_state(path, state)
+        print("CLEAN ZERO-DELTA REVIEW COMPLETE — COMMIT UNLOCKED")
+        return
+
+    if not changed:
+        raise BatonError("changed review did not change the staged index; use --result clean or blocked")
+    append_history(
+        state,
+        {
+            "role": "review-fix",
+            "session": args.session,
+            "session_identity": session_identity,
+            "started_at": active.get("started_at"),
+            "finished_at": now(),
+            "result": "changed",
+            "boundary": current,
+            "index_tree": current_tree,
+            "validation": validation,
+            "note": args.note,
+        },
+    )
+    state["state"] = "needs_review"
+    state["iteration"] = int(state.get("iteration", 1)) + 1
+    state["boundary"] = current
+    required_raw = state.get("required_raw_paths", [])
+    if not isinstance(required_raw, list):
+        raise BatonError("handoff required raw path list is malformed")
+    state["required_raw_paths"] = sorted(
+        set(required_raw) | {path for path in current if path.startswith("raw/")}
+    )
+    state["index_tree"] = current_tree
+    state["last_content_session"] = args.session
+    state["active_pass"] = None
+    save_state(path, state)
+    print("FIXES STAGED — ANOTHER FRESH REVIEW IS REQUIRED")
+
+
+def cmd_commit(args: argparse.Namespace) -> None:
+    root = repository_root()
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    state = load_state(path)
+    require_repository_position(state)
+    if state.get("state") != "approved":
+        raise BatonError(f"commit requires state approved, got {state.get('state')!r}")
+    if (
+        state.get("approved_by_session") != args.session
+        or state.get("approved_by_identity") != session_identity
+    ):
+        raise BatonError("only the zero-delta approving session may commit")
+    boundary = require_boundary(state.get("boundary"))
+    require_required_raw_paths(state, boundary)
+    require_content_invariants(boundary, state.get("base_head"))
+    require_parity_and_whitespace(boundary)
+    require_clean_content_worktree()
+    approved_tree = state.get("approved_tree")
+    if not isinstance(approved_tree, str) or index_tree() != approved_tree:
+        raise BatonError("complete index tree no longer matches the approved tree")
+    base_head = state.get("base_head")
+    branch_ref = state.get("branch_ref")
+    if not isinstance(base_head, str) or not isinstance(branch_ref, str):
+        raise BatonError("handoff repository position is malformed")
+
+    commit = run_git("commit-tree", approved_tree, "-p", base_head, "-m", args.message).stdout.decode().strip()
+    run_git("update-ref", branch_ref, commit, base_head)
+    committed_tree = run_git("rev-parse", f"{commit}^{{tree}}").stdout.decode().strip()
+    if committed_tree != approved_tree:
+        raise BatonError("created commit tree does not match approved tree")
+    post_commit_index_tree = index_tree()
+    residual_index_change = post_commit_index_tree != approved_tree
+    append_history(
+        state,
+        {
+            "role": "commit",
+            "session": args.session,
+            "session_identity": session_identity,
+            "finished_at": now(),
+            "result": "committed",
+            "commit": commit,
+            "tree": committed_tree,
+            "boundary": boundary,
+            "residual_index_change": residual_index_change,
+        },
+    )
+    state["state"] = "committed"
+    state["commit"] = commit
+    state["commit_tree"] = committed_tree
+    state["active_pass"] = None
+    save_state(path, state)
+    print(f"BATON FILING COMMITTED EXACT APPROVED TREE: {commit}")
+    if residual_index_change:
+        print("WARNING: index changed concurrently after approval; extra staged state was not committed", file=sys.stderr)
+
+
+def cmd_reconcile_commit(args: argparse.Namespace) -> None:
+    root = repository_root()
+    path = state_path(root, args.source)
+    state = load_state(path)
+    if state.get("state") != "approved":
+        raise BatonError("reconcile-commit requires an approved handoff")
+    head, branch = repository_position()
+    if branch != state.get("branch_ref"):
+        raise BatonError("current branch does not match the baton branch")
+    approved_tree = state.get("approved_tree")
+    base_head = state.get("base_head")
+    if not isinstance(approved_tree, str) or not isinstance(base_head, str):
+        raise BatonError("approved commit metadata is malformed")
+    tree = run_git("rev-parse", f"{head}^{{tree}}").stdout.decode().strip()
+    commit_record = run_git("cat-file", "-p", head).stdout.decode("utf-8", "replace")
+    parents = [line.removeprefix("parent ") for line in commit_record.splitlines() if line.startswith("parent ")]
+    if tree != approved_tree or parents != [base_head]:
+        raise BatonError(
+            "HEAD is not the exact approved-tree single-parent commit directly above the baton base"
+        )
+    append_history(
+        state,
+        {
+            "role": "commit-reconciliation",
+            "finished_at": now(),
+            "result": "committed",
+            "commit": head,
+            "tree": tree,
+        },
+    )
+    state["state"] = "committed"
+    state["commit"] = head
+    state["commit_tree"] = tree
+    state["active_pass"] = None
+    save_state(path, state)
+    print(f"RECONCILED EXACT APPROVED COMMIT: {head}")
+
+
+def cmd_abort(args: argparse.Namespace) -> None:
+    root = repository_root()
+    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    path = state_path(root, args.source)
+    state = load_state(path)
+    if state.get("state") in {"committed", "aborted", "no_change"}:
+        raise BatonError(f"cannot abort terminal state {state.get('state')!r}")
+    require_new_session(state, args.session, session_identity)
+    paths = staged_paths()
+    current_tree = index_tree()
+    if state.get("state") != "writing" and current_tree != state.get("index_tree"):
+        raise BatonError(
+            "abort refuses unrecorded index-tree drift outside a write pass; restore the recorded "
+            "tree or finish the active fixer first"
+        )
+    current_head = run_git("rev-parse", "HEAD").stdout.decode().strip()
+    branch_result = run_git("symbolic-ref", "-q", "HEAD", check=False)
+    current_branch = (
+        branch_result.stdout.decode().strip() if branch_result.returncode == 0 else "DETACHED"
+    )
+    if paths or current_tree != run_git("rev-parse", "HEAD^{tree}").stdout.decode().strip():
+        run_git("read-tree", "HEAD")
+    if staged_paths():
+        raise BatonError("abort could not reset the repository index to current HEAD")
+    append_history(
+        state,
+        {
+            "role": "abort",
+            "session": args.session,
+            "session_identity": session_identity,
+            "finished_at": now(),
+            "result": "aborted",
+            "unstaged_paths": paths,
+            "head_at_abort": current_head,
+            "branch_at_abort": current_branch,
+            "repository_drift": current_head != state.get("base_head") or current_branch != state.get("branch_ref"),
+            "note": args.reason,
+        },
+    )
+    state["state"] = "aborted"
+    state["boundary"] = {}
+    state["index_tree"] = index_tree()
+    state["active_pass"] = None
+    save_state(path, state)
+    print("BATON TRANSACTION ABORTED — STAGED PATHS UNSTAGED, WORKTREE PRESERVED")
+
+
+def continuation_action(state: dict[str, object]) -> str:
+    status = state.get("state")
+    slug = state.get("source_slug")
+    if status == "needs_review":
+        return (
+            f"Discover this new session's newest non-empty .freebuff/session-* log, then run "
+            f"./scripts/filing-baton start-review --source {slug} --session <current-log>. "
+            "Run theory first, then every applicable named reviewer method. If you stage fixes, "
+            "finish as changed and emit a new handoff; if zero-delta, finish clean and commit."
+        )
+    if status == "writing":
+        return (
+            f"Discover this new session's newest non-empty .freebuff/session-* log, then run "
+            f"./scripts/filing-baton restart-write --source {slug} --session <current-log> "
+            "--reason 'continued from pasted handoff'. Complete the write pass and emit a new handoff."
+        )
+    if status in {"reviewing", "blocked", "approved"}:
+        return (
+            f"Discover this new session's newest non-empty .freebuff/session-* log, then run "
+            f"./scripts/filing-baton restart-review --source {slug} --session <current-log> "
+            "--reason 'continued from pasted handoff'. This voids prior approval; review the complete "
+            "recorded tree again, then finish through the baton gate."
+        )
+    if status in {"committed", "no_change", "aborted"}:
+        return "This baton transaction is terminal. Report the recorded result; do not restart it."
+    return "Unknown baton state: inspect the handoff and stop rather than guessing."
+
+
+def cmd_handoff(args: argparse.Namespace) -> None:
+    root = repository_root()
+    path = state_path(root, args.source)
+    state = load_state(path)
+    action = continuation_action(state)
+    print("# FREEBUFF FILING HANDOFF — PASTE THIS ENTIRE BLOCK VERBATIM")
+    print()
+    print("Continue this Freebuff filing from machine-recorded baton state. Do not treat prose claims")
+    print("from the previous session as proof, and do not ask the user to reconstruct commands or paths.")
+    print(f"Repository: {root}")
+    print(f"Source slug: {state.get('source_slug')}")
+    print(f"Source locator: {state.get('source_locator')}")
+    print(f"Handoff file: {path.relative_to(root)}")
+    print(f"Recorded state: {state.get('state')}")
+    print(f"Required next action: {action}")
+    print()
+    print("Load .agents/skills/coordinating-filing/SKILL.md and obey its Freebuff baton adapter.")
+    print("Read the handoff file and verify Git state before acting. The JSON snapshot below is context,")
+    print("not authority; the on-disk handoff and Git index are authoritative.")
+    print()
+    print("```json")
+    print(json.dumps(state, indent=2, sort_keys=True))
+    print("```")
+    print()
+    print("At the end of this session, run the baton handoff command again and end your final summary")
+    print("with its complete output. The user will paste the entire previous response verbatim into")
+    print("the next Freebuff session; require no added slug, path, command, or explanation.")
+
+
+def cmd_show(args: argparse.Namespace) -> None:
+    root = repository_root()
+    path = state_path(root, args.source)
+    state = load_state(path)
+    print(json.dumps(state, indent=2, sort_keys=True))
+
+
+def parser() -> argparse.ArgumentParser:
+    result = argparse.ArgumentParser(description=__doc__)
+    sub = result.add_subparsers(dest="command", required=True)
+
+    start_write = sub.add_parser("start-write")
+    start_write.add_argument("--source", required=True, help="canonical lowercase source slug")
+    start_write.add_argument("--locator", required=True, help="URL or local source path")
+    start_write.add_argument("--filing-date", required=True)
+    start_write.add_argument("--session", required=True, help="existing session log path under .freebuff/")
+    start_write.set_defaults(func=cmd_start_write)
+
+    finish_write = sub.add_parser("finish-write")
+    finish_write.add_argument("--source", required=True)
+    finish_write.add_argument("--session", required=True)
+    finish_write.add_argument(
+        "--path", action="append", default=[], help="one exact intended staged path; repeat per path"
+    )
+    finish_write.add_argument(
+        "--no-change",
+        action="store_true",
+        help="finish an existing-raw skip with an empty index and no commit",
+    )
+    finish_write.add_argument("--note", default="")
+    finish_write.set_defaults(func=cmd_finish_write)
+
+    restart_write = sub.add_parser("restart-write")
+    restart_write.add_argument("--source", required=True)
+    restart_write.add_argument("--session", required=True)
+    restart_write.add_argument("--reason", required=True)
+    restart_write.set_defaults(func=cmd_restart_write)
+
+    start_review = sub.add_parser("start-review")
+    start_review.add_argument("--source", required=True)
+    start_review.add_argument("--session", required=True, help="new existing log path under .freebuff/")
+    start_review.set_defaults(func=cmd_start_review)
+
+    restart_review = sub.add_parser("restart-review")
+    restart_review.add_argument("--source", required=True)
+    restart_review.add_argument("--session", required=True)
+    restart_review.add_argument("--reason", required=True)
+    restart_review.set_defaults(func=cmd_restart_review)
+
+    finish_review = sub.add_parser("finish-review")
+    finish_review.add_argument("--source", required=True)
+    finish_review.add_argument("--session", required=True)
+    finish_review.add_argument("--result", required=True, choices=("clean", "changed", "blocked"))
+    finish_review.add_argument(
+        "--review",
+        action="append",
+        default=[],
+        help="clean-only reviewer row, e.g. source-fidelity=PASS or quality=SKIPPED: narrow update",
+    )
+    finish_review.add_argument("--note", default="")
+    finish_review.set_defaults(func=cmd_finish_review)
+
+    commit = sub.add_parser("commit")
+    commit.add_argument("--source", required=True)
+    commit.add_argument("--session", required=True)
+    commit.add_argument("--message", required=True)
+    commit.set_defaults(func=cmd_commit)
+
+    reconcile = sub.add_parser("reconcile-commit")
+    reconcile.add_argument("--source", required=True)
+    reconcile.set_defaults(func=cmd_reconcile_commit)
+
+    abort = sub.add_parser("abort")
+    abort.add_argument("--source", required=True)
+    abort.add_argument("--session", required=True)
+    abort.add_argument("--reason", required=True)
+    abort.set_defaults(func=cmd_abort)
+
+    handoff = sub.add_parser("handoff")
+    handoff.add_argument("--source", required=True)
+    handoff.set_defaults(func=cmd_handoff)
+
+    show = sub.add_parser("show")
+    show.add_argument("--source", required=True)
+    show.set_defaults(func=cmd_show)
+    return result
+
+
+def main() -> None:
+    args = parser().parse_args()
+    try:
+        root = repository_root()
+        with baton_lock(root):
+            args.func(args)
+    except BatonError as exc:
+        fail(str(exc))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,40 +1,44 @@
 ---
 name: filing-agentic-sources
-description: "Writer skill: files one source into AgenticWiki by reading the source, deciding the page set, writing wiki prose, and staging the changeset. Invoked by coordinating-filing. Does not preserve raw, verify, or commit."
+description: "Writer skill: preserves and files one source into AgenticWiki by creating or verifying its raw artifact, deciding the page set, writing wiki prose, and staging wiki changes. Invoked by coordinating-filing. Does not verify or commit."
 ---
 
 # Filing Agentic Sources (Writer)
 
-You file one source into AgenticWiki. Your job: read the source, decide the smallest useful page set, write the wiki changes, and stage the changeset. Then return a structured report to the coordinator. You do not preserve raw sources, do not invoke verification, and do not commit — those are the coordinator's responsibilities.
+You preserve and file one source into AgenticWiki. Your job: create or verify its raw artifact, read the source, decide the smallest useful page set, write the wiki changes, and stage the intended changes. Then return a structured report. In full topology you stage only wiki paths and the coordinator stages raw/process artifacts. In a Freebuff baton write pass you stage the complete exact boundary, including new raw/process artifacts, before `filing-baton finish-write`. You never invoke semantic verification or commit.
 
 ## Input Contract
 
 Before you run:
 
-- One source path (a `raw/` markdown artifact, or a PDF/paper that you must extract/read).
+- One source locator: a URL, local file path, or existing `raw/` artifact.
 - The conventions path `meta/wiki-conventions.md` is available.
 - The reference file `references/ingest-philosophy.md` is available.
+- `FILING_DATE` captured by the coordinator or baton start, used for every changed page's `updated` value and new-source saved/ingested metadata.
 - Optional scope from the coordinator: `triage-and-file` (default), `full`, or `marginal`.
 
 ## Output
 
-- A staged wiki changeset (or no changes for `skip`/`marginal` reports).
-- A structured report to the coordinator.
+- A new convention-compliant raw artifact, or verification that the supplied existing raw artifact is usable and unchanged.
+- A staged wiki changeset in full topology, or the complete exact staged boundary in Freebuff baton mode (or no wiki changes for `skip`/`marginal` reports).
+- A structured report to the coordinator, including every raw path it must check and stage.
 
 ## You own editorial judgment for one source
 
-You decide: page-set selection, prose, attribution, callout placement, contradiction handling, and scope. You do not own process: raw preservation, staging boundary checks, verification dispatch, theory gate, commit gate.
+You decide: raw artifact construction, page-set selection, prose, attribution, callout placement, contradiction handling, and scope. You do not own process: raw staging/boundary checks, verification dispatch, theory gate, or commit gate.
 
 ## Workflow
 
-### 1. Read the source
+### 1. Preserve and read the source
 
-Read the supplied source in full.
+Create or verify the durable source artifact, then read the supplied source in full. Never modify or delete an existing file under `raw/`.
 
-- If the source is a `raw/<slug>.md` artifact, read it directly.
-- If the source is an arXiv PDF or an arXiv URL, extract the text to `raw/<arxiv-id>.md` per `meta/wiki-conventions.md` → "arXiv / Paper Source Format". Do not commit the PDF. Verify the `arxiv_id` against the paper's page-1 submission stamp. Report the new raw path to the coordinator.
-- If the source is a non-arXiv PDF with no stable URL, the PDF may be the durable raw copy. Extract text for reading using `lit parse` or the `hybrid-parse` skill, but do not create a competing `raw/` markdown copy.
-- If the source is a YouTube transcript or inline stub, be aware that transcripts usually lack per-line speaker labels. For multi-speaker sources, verify attribution against the recording via the media skill before citing a quote under a speaker's name. See `meta/wiki-conventions.md` → "YouTube Source Format".
+- If the source is a web or YouTube URL, fetch it and create a slugified `raw/<slug>.md` artifact with the required provenance frontmatter and body format from `meta/wiki-conventions.md`. Create companion media under `raw/assets/` when required. Full topology reports raw paths unstaged to the coordinator; a Freebuff write pass stages them in its complete boundary.
+- If the source is an existing `raw/<slug>.md` artifact, verify its provenance frontmatter and read it directly. If it is malformed, report the blocker; do not repair the existing raw file.
+- If the source is a local file outside `raw/`, slugify its filename and move it into `raw/` before reading. Report the move and destination. For non-arXiv papers with no stable URL, the PDF may be the durable raw copy.
+- If the source is an arXiv PDF, URL, or identifier, extract the text to `raw/<arxiv-id>.md` per `meta/wiki-conventions.md` → "arXiv / Paper Source Format". Do not preserve or stage the PDF. Verify the `arxiv_id` against the paper's page-1 submission stamp and report the new raw path.
+- If a non-arXiv PDF is the durable raw copy, extract text for reading using `lit parse` or the `hybrid-parse` skill, but do not create a competing `raw/` markdown copy.
+- For YouTube transcripts, be aware that transcripts usually lack per-line speaker labels. For multi-speaker sources, verify attribution against the recording via the media skill before citing a quote under a speaker's name. See `meta/wiki-conventions.md` → "YouTube Source Format".
 
 ### 2. Triage
 
@@ -87,7 +91,7 @@ Follow `meta/wiki-conventions.md` for page shape and frontmatter.
 
 For every changed page:
 
-- update `updated`;
+- set `updated: $FILING_DATE` exactly; do not substitute a publication, event, or UTC date;
 - keep factual claims traceable to listed `raw/` sources;
 - distinguish facts, interpretations, predictions, and normative claims;
 - attribute arguments and frames rather than adopting them as wiki voice;
@@ -109,9 +113,12 @@ Update `wiki/index.md` once after the page set is stable. Do not create links me
 
 ### 6. Stage the changeset
 
-Stage exactly the intended changeset paths (`git add -- <paths>`). The staged set is the changeset boundary. Never use `git add -A`. Never absorb unrelated worktree changes into the staged set.
+Stage exactly the intended changeset paths (`git add -- <paths>`). Never use `git add -A` and never absorb unrelated worktree changes.
 
-You stage but do not verify and do not commit. Verification is dispatched by the coordinator after all writers complete; the commit gate is held by the coordinator.
+- **Full topology:** stage only intended wiki paths. Report raw/process paths for coordinator checks and staging.
+- **Freebuff baton write pass:** stage the complete intended transaction, including new raw artifacts and process/debt representations, then pass every exact path to `filing-baton finish-write`.
+
+You do not semantically verify or commit. Full topology returns to coordinator dispatch; baton mode stops for a fresh review/fix session.
 
 ### 7. Report to the coordinator
 
@@ -126,7 +133,7 @@ Return a structured report:
 - **threads considered:** which were updated, which were left untouched and why;
 - **theory pressure:** local / thread / panorama, with proposed edits;
 - **evidence gaps:** claims that rely on a single source or inference, with callouts or `evidence_status` notes;
-- **new raw sources to preserve:** any sources extracted during step 1 that need to be staged (you do not stage or commit raw sources — hand these back to the coordinator);
+- **raw artifacts created or verified:** every source and companion path from step 1, whether newly created/moved or pre-existing; explicitly mark which new paths the coordinator must stage;
 - **blockers:** gated sources, schema questions, merge or delete decisions — anything requiring a human decision the coordinator should escalate.
 
 If the source justified no wiki change (archive-only outcome), report that with the classification and raw-source frontmatter checklist result.
@@ -148,8 +155,8 @@ No new pages. No theory gate. After staging and reporting, return control to the
 
 ## What you do not do
 
-- Do not preserve raw sources (coordinator's responsibility, except that you may extract an arXiv/non-arXiv paper to `raw/` for reading and report the new path).
-- Do not correct sources (AgenticWiki has no corrector role).
+- Do not modify or delete existing raw sources (AgenticWiki has no corrector role).
+- In full topology, do not stage raw sources; report each new raw path to the coordinator. In a Freebuff baton write pass, stage new raw sources as part of the complete explicit boundary.
 - Do not dispatch `reviewing-wiki-theory` or `verifying-wiki-changes`.
 - Do not hold the commit gate.
 - Do not commit.
@@ -165,4 +172,4 @@ Report to the coordinator for escalation when:
 - project schema or `meta/` policy must change;
 - evidence supports multiple materially different editorial treatments;
 - a `panorama`-level reframe is brewing and needs human approval before proceeding;
-- a source extraction produces a new raw source that needs preservation.
+- source preservation cannot produce a reliable convention-compliant new artifact.

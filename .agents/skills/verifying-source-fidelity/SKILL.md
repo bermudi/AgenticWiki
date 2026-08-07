@@ -1,19 +1,19 @@
 ---
 name: verifying-source-fidelity
-description: "Verifies one AgenticWiki page against every raw source it lists, checking factual support, attribution, quotations, paraphrase framing, misattribution, summary accuracy, and multi-speaker source handling. Use in an isolated read-only worker after substantive page changes or during source-debt audits."
+description: "Verifies one AgenticWiki page against every raw source it lists. Full topology uses an isolated read-only worker; Freebuff uses a fresh baton review pass."
 ---
 
 # Verifying Source Fidelity
 
-> **Worker method skill.** This is a per-page review method loaded by an isolated read-only worker. It is distinct from `verifying-wiki-changes`, which is the changeset-level coordinator that invokes this method for each substantive page.
+> **Reviewer method skill.** Full topology loads this per-page method in an isolated read-only worker. Freebuff loads it during a fresh baton review pass. It is distinct from changeset-level `verifying-wiki-changes`.
 
 Judge final-state fidelity: whether one wiki page accurately represents its filed sources and advertises the strength and limits of that evidence.
 
-This is a report-only skill. Never edit, stage, commit, or delete files.
+This is report-only while making the judgment. Full-topology workers never edit, stage, commit, or delete. A Freebuff baton pass may switch to fixer only after recording all judgments; then it forfeits approval.
 
 ## Worker Capabilities
 
-Require repository read/search access. Media-skill access is required for multi-speaker audio/video sources when textual cues are insufficient to settle who said what. General web search is unnecessary: when filed sources cannot settle an external fact, report a precise question for `researching-wiki-claims`. The harness should deny local writes, staging, commits, and deletion.
+Require repository read/search access. Media-skill access is required for multi-speaker audio/video sources when textual cues are insufficient to settle who said what. General web search is unnecessary: when filed sources cannot settle an external fact, report a precise question for `researching-wiki-claims`. Full topology denies local writes, staging, commits, and deletion; baton mode enforces the same restriction behaviorally during review.
 
 ## Input Contract
 

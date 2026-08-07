@@ -5,13 +5,13 @@ description: "Verifies bounded AgenticWiki changes for mechanical integrity, sem
 
 # Verifying Wiki Changes
 
-> **Inline coordinator skill.** This changeset-level process is loaded and run by the active orchestrator; in the filing pipeline that is `coordinating-filing`. Do not delegate this skill to a verifier worker. It classifies risk and dispatches the actual reviews to fresh isolated read-only workers, then returns the changeset verdict. It is distinct from `verifying-source-fidelity`, a reviewer skill, and `reviewing-wiki-theory`, the earlier theory-coherence pass.
+> **Verification orchestration skill.** Full topology loads this inline in `coordinating-filing` to classify risk and dispatch fresh isolated read-only reviewers. In Freebuff baton topology, a fresh top-level review/fix pass loads it and runs the named reviewer skills directly; only a complete zero-delta pass may approve. Do not create a nested verifier worker.
 
 Verify one completed changeset through a small interface: changed pages, changed raw sources, and the staged diff that connects them.
 
 This skill is read-mostly. It may inspect staged diffs only for mechanical checks, risk classification, reviewer construction, and verdict translation. It must not perform diff-integrity, source-fidelity, or quality judgment inline. Reviewers report; the orchestrator routes fixes to the owner and reruns affected checks.
 
-> **Terminology note.** "The orchestrator" means the agent running this skill inline. In the filing pipeline, the writer stages and reports while `coordinating-filing` checks the boundary, runs this process, routes fix requests back to the writer, and holds the commit gate.
+> **Terminology note.** In full-topology filing, “the orchestrator” is `coordinating-filing`, which routes fixes to the writer and holds the gate. In Freebuff it is the active fresh review/fix pass, whose mutation status is enforced by `scripts/filing-baton`.
 
 > **Deterministic checks are load-bearing; LLM verdicts flag where to look.** The `PASS`/`FAIL` verdicts below are LLM judgments, not ground truth. A failing `validate-page` run plus a reviewer `PASS` is a contradiction to resolve, not a signal to ignore the validator. Treat mechanical output as the hard floor and reviewer verdicts as directed attention — when they agree, confidence rises; when they disagree, investigate before committing.
 
@@ -81,9 +81,15 @@ Reviewer expertise lives in common skills, not harness-specific agent definition
 - Require read-only operation and the skill's structured report.
 - Do not depend on a harness-specific prompt tree (e.g., `.pi/agents/`, `.commandcode/agents/`, `.mimocode/agents/`, `.devin/agents/`). Reviewer expertise lives in the common reviewer skills under `.agents/skills/`.
 
+### Freebuff baton adapter
+
+Freebuff is the explicit exception to worker dispatch, not to independent review. A fresh top-level pass that did not write the current staged OIDs runs theory, diff, source-fidelity, and quality judgments against the complete boundary. In the sections below, “construct a worker” maps to “load and execute this named reviewer skill in the active fresh baton pass and record the session identifier.”
+
+Reviewer skills remain report-only while making their judgments. Because the top-level pass has write tools, enforcement is temporal: finish and record the judgments before switching to fixer role. A fixer pass cannot approve; any final index/tree delta must finish as `changed`, and a never-before-used session reviews again. A clean pass requires all four mapped rows, a non-empty evidence note, and zero delta. Exact row values are `PASS`, `PASS WITH EXPLICIT DEBT: <where represented>`, or `SKIPPED: <risk-rule reason>`. `CARRIED` is unavailable in baton mode. A capable harness must not use this adapter merely to avoid worker dispatch.
+
 ### Mandatory reviewer dispatch
 
-“Construct a worker” is a hard process requirement, not a suggestion to perform the same review in this context. For every initially required diff, source-fidelity, and quality review, the inline verifier dispatches a fresh isolated read-only worker through the harness. The only reuse is an OID-identical same-run aggregation rerun caused solely by staging coordinator-owned ledger evidence, as defined in Verdict; any content edit requires the affected fresh review again. In Pi, this is the `delegate` adapter with one task object per reviewer; other harnesses use native equivalents. The verifier may classify risk, assemble inputs, route findings, and translate verdicts; it must not perform reviewer file-reading and judgment inline or by a manual substitute.
+The following worker requirement applies literally in full topology and maps to the baton adapter above in Freebuff. “Construct a worker” is a hard process requirement, not a suggestion to perform the same review in the full-topology coordinator context. For every initially required diff, source-fidelity, and quality review, the inline verifier dispatches a fresh isolated read-only worker through the harness. The only reuse is an OID-identical same-run aggregation rerun caused solely by staging coordinator-owned ledger evidence, as defined in Verdict; any content edit requires the affected fresh review again. In Pi, this is the `delegate` adapter with one task object per reviewer; other harnesses use native equivalents. The verifier may classify risk, assemble inputs, route findings, and translate verdicts; it must not perform reviewer file-reading and judgment inline or by a manual substitute.
 
 Do not dispatch a separate verifier worker and then ask it to nest reviewer workers. The active orchestrator runs this skill directly and owns reviewer dispatch. Each reviewer must have repository read/search access and return the named skill's structured report. If reviewer dispatch is unavailable, the worker cannot read the repository, or dispatch returns an empty/no-op result after the documented retry, stop and warn the user. Verification is incomplete; do **not** issue a PASS or fall back to inline/manual review. Record the unavailable review as a process failure and hold the commit gate.
 
@@ -94,6 +100,8 @@ Do not dispatch a separate verifier worker and then ask it to nest reviewer work
 | `reviewing-wiki-diffs` | Read/search files; inspect version-control diffs and prior versions | Local writes, network, staging, commit, deletion |
 | `verifying-source-fidelity` | Read/search files; media-skill access for multi-speaker audio/video sources | Local writes, staging, commit, deletion |
 | `reviewing-wiki-quality` | Read/search files | Local writes, network, staging, commit, deletion |
+
+These capability-denial rows apply literally to dispatched full-topology workers. In baton mode they describe the review phase's behavioral contract; the top-level pass must not use its write tools until it has finished the judgments and forfeited approval.
 
 **Research tools** return information the orchestrator uses; they do not return a verdict and do not gate the commit. Invoked on demand when a reviewer surfaces an unresolved external question:
 
@@ -152,7 +160,7 @@ Require URLs, relevant excerpts, source classification, confidence, and one reco
 - `FLAG` an unresolved claim explicitly;
 - `REMOVE` a fabricated or unjustifiable claim.
 
-The worker returns evidence to the orchestrator. It does not edit wiki pages or create a parallel summary layer. During filing, every wiki citation/edit is routed to the authoritative shared-checkout writer; the filing coordinator may preserve a durable supporting source but never edits wiki prose. Outside the filing pipeline (for example, an authorized audit remediation), the active operation writer may cite the evidence inline. When the source is durable and materially supports the wiki, it is handed back to the filing coordinator for raw preservation (raw preservation is `coordinating-filing` step 2; `filing-agentic-sources` is the writer and does not preserve raw sources). Research evidence lives in chat, then on the wiki page or in `raw/` — not in a parallel summary layer.
+The worker returns evidence to the orchestrator. It does not edit wiki pages or create a parallel summary layer. During full-topology filing, every citation/edit and durable-source preservation request is routed to the authoritative shared-checkout writer; the coordinator checks and stages the reported raw path. In Freebuff, the active pass may preserve/cite only after switching to fixer role, which forces another fresh review. Outside filing (for example, authorized audit remediation), the active operation writer may absorb the evidence. Research evidence lives in chat, then on the wiki page or in `raw/` — not in a parallel summary layer.
 
 ## 6. Remediation and rerun
 
@@ -167,7 +175,7 @@ The orchestrating agent reads the cited evidence before applying a reviewer reco
 - Rerun quality review when remediation materially reorganizes a page or changes thread chronology.
 - Rerun mechanical validation for every edited page.
 
-> **Filing pipeline routing.** In the filing pipeline, the orchestrator is `coordinating-filing` and fixes are applied by the writer (`filing-agentic-sources`), not the coordinator directly. The coordinator routes reviewer findings back to the writer with the specific fixes needed; the writer applies them, re-stages, and re-reports; the coordinator reruns only the affected checks. This routing does not apply when `verifying-wiki-changes` is invoked outside the filing pipeline (e.g., from `auditing-agentic-wiki`), in which case the invoking orchestrator applies fixes directly.
+> **Filing pipeline routing.** Full topology routes fixes through the authoritative writer (`filing-agentic-sources`), not the coordinator. In Freebuff baton mode, the active review pass may explicitly switch to fixer role, apply and stage fixes, then must finish as `changed` and stop for another fresh review. Outside filing (for example, an authorized audit remediation), the invoking orchestrator applies fixes directly and reruns affected checks.
 
 ## Verdict
 
@@ -199,8 +207,8 @@ Report:
 ## Verification: PASS | PASS WITH EXPLICIT DEBT | FAIL
 
 - Scope: ...
-- Reviewer dispatch: one isolated read-only worker per required review; an OID-identical same-run ledger-only aggregation rerun may reuse those exact reports; unavailable dispatch = verification incomplete
-- Process telemetry: worker/task, granted read-only capability, dispatch result, retries/empty returns, fallback/intervention, and exact staging commands when exposed; unavailable command telemetry is stated, never inferred from final staged state
+- Review topology: full = one isolated read-only worker per required review; Freebuff = one fresh zero-delta pass running all four named methods; unavailable applicable topology = incomplete
+- Process telemetry: full topology records worker/task, read-only capability, dispatch result, and retries; baton records session/path/inode plus every state/OID transition; exact staging commands are included when exposed and never inferred from final state
 - Pages mechanically checked: ...
 - Pages source-verified: ...
 - Diff reasoning: run | not required
@@ -215,6 +223,7 @@ For each reviewer invocation, disclose the verbatim verdict returned, the coordi
 
 | Reviewer | Page/scope + reviewed staged OIDs | Verbatim verdict | Coordinator mapping | Fix applied | Rerun verdict |
 |---|---|---|---|---|---|
+| `reviewing-wiki-theory` (baton, or reference the earlier full-topology gate) | ... | `PASS` / `PASS WITH WARNINGS` / `FAIL` | `PASS` / `PASS WITH EXPLICIT DEBT` / `FAIL` | ... | ... |
 | `reviewing-wiki-diffs` | ... | `PASS` / `PASS WITH WARNINGS` / `FAIL` | `PASS` / `PASS WITH EXPLICIT DEBT` / `FAIL` | ... | ... |
 | `verifying-source-fidelity` | ... | ... | ... | ... | ... |
 | `reviewing-wiki-quality` | ... | ... | ... | ... | ... |

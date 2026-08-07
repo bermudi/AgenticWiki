@@ -1,17 +1,17 @@
 ---
 name: reviewing-wiki-quality
-description: "Reviews new or substantially rewritten AgenticWiki pages for structure, clarity, context, chronology, navigation, and thread quality. Use in an isolated read-only worker after major page work; skip for narrow additive or mechanical edits."
+description: "Reviews new or substantially rewritten AgenticWiki pages for structure, clarity, context, chronology, navigation, and thread quality. Full topology uses an isolated worker; Freebuff uses a fresh baton review pass."
 ---
 
 # Reviewing Wiki Quality
 
 Judge whether new or substantially rewritten pages work as durable wiki artifacts for a future reader. Consolidate the useful judgment previously split across structural, link, content, context, and temporal editors.
 
-This is a report-only skill. Never edit, stage, commit, or delete files.
+This is report-only while making the judgment. Full-topology workers never edit, stage, commit, or delete. A Freebuff baton pass may switch to fixer only after recording the judgment; then it forfeits approval.
 
 ## Worker Capabilities
 
-Require read/search access to the changed wiki pages, related pages, `wiki/index.md`, and `meta/wiki-conventions.md`. Network access is unnecessary. The harness should deny local writes, staging, commits, and deletion.
+Require read/search access to the changed wiki pages, related pages, `wiki/index.md`, and `meta/wiki-conventions.md`. Network access is unnecessary. Full topology denies local writes, staging, commits, and deletion; baton mode enforces the same restriction behaviorally during review.
 
 ## When to Run
 

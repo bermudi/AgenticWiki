@@ -44,6 +44,12 @@ Add “search the web” only when you want information beyond the filed collect
 
 > Verify the currently staged AgenticWiki changes. Do not fix, restage, or commit anything. Report mechanical results, required independent reviews, verdict, and blockers in plain English.
 
+### Continue a Freebuff baton filing
+
+After a Freebuff write or fix pass stops, its final response ends with a generated `FREEBUFF FILING HANDOFF` block. Open a genuinely new Freebuff session and paste the **entire previous response verbatim**—nothing else. The block tells the new agent which handoff to read, how to discover its own session log, and which baton transition to run. You should never have to type a slug, path, review row, or Git command yourself.
+
+The first pass writes but cannot approve. Each pass that stages fixes forces another fresh session. A clean pass must record theory, diff, source-fidelity, and quality using exact mapped statuses: `PASS`, `PASS WITH EXPLICIT DEBT: <where represented>`, or `SKIPPED: <risk-rule reason>`. If an already-tracked raw source is classified `skip` and nothing changed, the write pass records terminal `no_change`; no review or commit is needed.
+
 ### Check repository health
 
 > Run a read-only AgenticWiki health audit. Report mechanical problems, broken links, source-metadata mismatches, and registered source-fidelity debt in plain English. Do not edit, stage, or commit anything.
@@ -68,17 +74,19 @@ Use this whenever an agent report becomes procedural or obscure.
 
 ## What happens when a source is filed
 
+A capable harness uses shared-checkout writers and isolated reviewers. Freebuff preserves role separation across fresh top-level sessions through `scripts/filing-baton`.
+
 | Stage | What happens | Who does it | Can it stop? |
 |---|---|---|---|
 | 1. State check | The coordinator checks existing staged and uncommitted work so unrelated files are not absorbed. | Coordinator | Yes—pre-existing staged work needs a decision. |
-| 2. Preserve source | The URL or local file is saved under `raw/` with source-identifying metadata. A supplied local file is moved into `raw/`, not copied. Papers may be extracted to Markdown. | Coordinator | Yes—failed extraction or missing source details block filing. |
-| 3. Write pages | Relevant concepts, authors, projects, and threads are created or updated. `wiki/index.md` is updated. | Writer | Yes—marginal sources require your triage approval. |
+| 2. Register source locator | The coordinator records only the supplied URL/path and scope; it does not fetch or inspect source content. | Coordinator | Yes—an unusable locator blocks filing. |
+| 3. Preserve source and write pages | Full topology dispatches a writer into the authoritative repository. Freebuff's bounded write pass performs the same writer skill and stages the complete transaction, but cannot review or commit. | Writer / baton write pass | Yes—unavailable full-topology dispatch, failed preservation, or marginal triage can stop the run. |
 | 4. Mechanical validation | Scripts check frontmatter, links, source lists, and page structure. | Coordinator | Yes—errors return to the writer. |
-| 5. Theory review | A read-only reviewer compares the source and changes against the whole theory map. Routine local findings are handled inside the pipeline. | Theory reviewer | Only a genuine structural decision or unresolved critical conflict requires you. |
-| 6. Independent verification | Read-only reviewers check diff integrity, source fidelity, and page quality when applicable. | Reviewers | Yes—a required reviewer being unavailable is a hard stop. |
-| 7. Fix loop | The writer fixes specific findings; validation and affected reviews run again. | Writer | Repeats until pass or a real blocker remains. |
-| 8. Commit gate | The coordinator proves the staged changeset is complete and commits after PASS or properly recorded explicit debt. | Coordinator | Yes—FAIL, incomplete review, open fix loops, or unresolved critical issues prevent commit. |
-| 9. Report | You receive sources, pages, theory pressure, unresolved issues, reviews, retries, fallback use, and commit status. | Coordinator | — |
+| 5. Theory review | Full topology uses an isolated theory reviewer. Freebuff runs the same report-only judgment in a fresh review pass. | Theory reviewer / baton pass | Only a structural decision or unresolved critical conflict requires you. |
+| 6. Independent verification | Full topology uses isolated reviewers. Freebuff's fresh pass runs the named diff, source-fidelity, and quality methods against the complete staged tree. | Reviewers / baton pass | Yes—missing required review keeps the gate closed. |
+| 7. Fix loop | Full topology routes fixes to the writer. A Freebuff reviewer may switch to fixer, but then another fresh session must review its staged result. | Writer / baton fixer | Repeats until pass or a real blocker remains. |
+| 8. Commit gate | Full topology commits through the coordinator. Freebuff commits exactly the approved tree through `scripts/filing-baton`. | Coordinator / baton approver | Yes—FAIL, incomplete review, open loops, or critical issues prevent commit. |
+| 9. Report | You receive sources, pages, theory pressure, unresolved issues, worker dispatches, retries, and commit status. | Coordinator | — |
 
 The agent should not claim completion halfway through a fix loop.
 
@@ -111,8 +119,10 @@ The reviewer reports; it does not edit.
 
 ## Who is who
 
-- **Coordinator:** owns source preservation, process, validation, reviewer dispatch, and the commit gate.
-- **Writer:** reads one source, decides which pages it affects, and writes the wiki prose.
+- **Coordinator:** in full topology, owns source-locator handling, raw boundary checks/staging, validation, reviewer dispatch, and commit; in Freebuff, the baton state machine separates those phases across sessions.
+- **Writer:** creates or verifies one raw source artifact, reads it, decides which pages it affects, and writes the wiki prose.
+- **Freebuff write pass:** performs the writer role in one bounded session but cannot review or commit.
+- **Freebuff review/fix pass:** a fresh session makes all applicable reviewer judgments; if it then fixes anything, it cannot approve those bytes.
 - **Theory reviewer:** compares a filing with the complete thread/concept map and reports theory pressure.
 - **Diff reviewer:** checks that existing meaning, caveats, and unrelated prose were not damaged.
 - **Source-fidelity reviewer:** checks claims, quotations, attribution, modality, scope, and vocabulary against every listed raw source.
@@ -121,9 +131,9 @@ The reviewer reports; it does not edit.
 - **Audit agent:** checks repository health, resolves selected debt, or performs a deep semantic audit.
 - **Research worker:** answers one focused external question. Its evidence is not automatically filed.
 
-Verification orchestration is performed by the coordinator; there is no separate verifier that edits or approves its own work. The actual judgments come from isolated read-only reviewers.
+Full-topology verification orchestration is performed by the coordinator and judgments come from isolated read-only reviewers. Freebuff instead runs the same named methods in a fresh top-level pass; it may fix or approve, never both for the same staged tree.
 
-If no writer can edit the same repository the coordinator will verify, the coordinator may perform the writer role inline only after disclosing the fallback. Required reviewers never have an inline fallback.
+Outside Freebuff, the writer must be a dispatched, write-capable worker editing the authoritative repository. If it cannot be constructed, filing stops. Freebuff uses its explicit baton adapter rather than pretending the coordinator and writer remained separate in one session.
 
 ## What the verdicts mean
 
@@ -131,7 +141,11 @@ If no writer can edit the same repository the coordinator will verify, the coord
 - **PASS WITH EXPLICIT DEBT:** the bounded change is acceptable, but a real limitation remains. A reader-facing gap is warned about on the affected page; structural, recurring, source-artifact, or out-of-scope content debt goes in `meta/tech-debt.md`; process debt goes in `meta/pipeline-recommendations.md`. Both page and ledger are used when both apply. The coordinator then commits unless you said “stop before commit.”
 - **FAIL:** something must be fixed and re-reviewed. No commit.
 
-An **operational stop** occurs when the agent needs your decision, a required reviewer cannot run, or a critical issue cannot be resolved safely. The commit gate remains closed; verification is incomplete or failed rather than a fourth verdict.
+An **operational stop** occurs when the applicable topology cannot complete, the agent needs your decision, or a critical issue cannot be resolved safely. The commit gate remains closed; verification is incomplete or failed rather than a fourth verdict.
+
+**Freebuff baton mode** handles one source locator per transaction and allows only one unfinished transaction to own the Git index. Because reviewers read ordinary files, it also requires no unrelated unstaged, untracked, or ignored files under `wiki/` or `raw/`; this prevents review from relying on bytes absent from the approved commit. The write pass records exact staged modes/blob IDs, full index tree, branch, and base commit. Every staged fix requires another never-before-used review session. Only a zero-delta pass with all four review rows and a non-empty evidence note can unlock commit. Filesystem log checks are a practical freshness signal, not a security boundary against deliberate handoff or log tampering.
+
+The baton commit uses low-level Git tree/ref operations, so ordinary commit hooks do **not** run. This prevents hooks from adding unreviewed paths; all required checks must pass before approval.
 
 A clean `validate-page` result is not a semantic PASS. The validator catches mechanical problems; reviewers check whether the prose is faithful and theoretically coherent. If deterministic command output and a reviewer disagree about a mechanical defect, the coordinator reruns the exact command and re-dispatches the reviewer with that evidence. It stops and shows you both only if the contradiction persists and cannot be resolved safely.
 
@@ -141,7 +155,7 @@ Before committing, the coordinator must know—not ask you to guess—that:
 
 - the staged files are exactly the intended filing and match the bytes reviewers saw;
 - mechanical checks pass for the changed files;
-- every required independent theory, diff, source-fidelity, and quality review completed or has a rule-based reason to be skipped;
+- every required theory, diff, source-fidelity, and quality review completed through isolated workers or a fresh zero-delta Freebuff pass, or has a rule-based reason to be skipped;
 - every resolvable finding was fixed and the affected checks/reviews reran;
 - no fix loop, reviewer task, or external research question remains open;
 - no unresolved critical issue remains;
@@ -153,7 +167,7 @@ This does **not** mean the entire historical wiki must be perfect. It means the 
 
 | Path | Meaning | Who normally changes it? |
 |---|---|---|
-| `raw/` | Preserved source material and provenance. Existing files are immutable. | Coordinator creates new artifacts. |
+| `raw/` | Preserved source material and provenance. Existing files are immutable. | Writer creates new artifacts; full-topology coordinator checks/stages them, while the Freebuff write pass stages them in its complete boundary. |
 | `wiki/` | The readable knowledge base. | Writer. |
 | `wiki/index.md` | Catalog of threads, concepts, authors, and projects. | Writer whenever pages change. |
 | `wiki/threads/` | Cross-source theory essays. | Writer after theory pressure is reviewed. |
@@ -229,7 +243,9 @@ Staging happens **before** final semantic approval because staged files define t
 - a successful “stop before commit” run should leave the verified files staged for inspection;
 - unrelated unstaged work is normally left alone;
 - pre-existing staged work blocks a new filing until you decide how to separate it;
-- a marginal triage pause may leave only a newly preserved, unstaged source.
+- a marginal triage pause may leave only the writer's newly preserved, unstaged source.
+
+For an interrupted Freebuff filing, inspect state with `./scripts/filing-baton show --source <source-slug>` and open a new session. Use `restart-write --source <slug> --session <new-log> --reason '<reason>'` for `writing`; use `restart-review` for `reviewing`, `blocked`, `needs_review`, or `approved`. Run `restart-review` before editing; it can reopen a recorded mechanically bad boundary for repair, but refuses unrecorded staged drift and voids prior approval. To abandon safely, run `abort --source <slug> --session <new-log> --reason '<reason>'`; it unstages the transaction while preserving worktree files. Move, stash, or otherwise separate those preserved `wiki/`/`raw/` drafts before starting another baton transaction. If an exact approved commit reached Git but state persistence failed, `reconcile-commit --source <slug>` accepts only the approved single-parent commit directly above the recorded base.
 
 After an interruption, ask for an operator status report and inspect `git status --short` plus `git diff --cached --stat`. Do not rely on closing a terminal or chat as cancellation: explicitly interrupt the active session, check whether delegated tasks are still running, and then inspect Git state.
 
@@ -268,7 +284,8 @@ The agent should stop for your decision when:
 - a critical claim cannot be resolved safely;
 - existing staged work would contaminate a new filing;
 - you explicitly requested “stop before commit” and must decide what to do with the verified staged changes;
-- a required reviewer cannot run.
+- full topology cannot dispatch its required shared-checkout writer or isolated reviewer;
+- Freebuff baton state cannot be safely restarted, fixed, approved, or aborted.
 
 Routine page selection, linking, attribution, validation, and reviewer dispatch should not require repeated permission.
 
@@ -294,7 +311,7 @@ A filing or audit report should answer:
 4. What theory pressure did the source create?
 5. What remains uncertain?
 6. Which independent reviews ran, and what did they conclude?
-7. Did any worker fail, retry, time out, or fall back inline?
+7. Did any worker dispatch fail, retry, time out, or return no result?
 8. Is anything staged?
 9. Was a commit created? If so, what is its hash?
 10. What, if anything, is waiting for you?

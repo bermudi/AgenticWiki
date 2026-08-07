@@ -9,8 +9,9 @@ raw/assets/*.zip
 *.swo
 *~
 
-# Pi session artifacts
+# Pi session artifacts and local filing handoffs
 .pi/sessions/
+.filing-handoff/
 
 # Obsidian workspace state
 wiki/.obsidian/
