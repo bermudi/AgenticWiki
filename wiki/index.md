@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-08-05
+updated: 2026-08-06
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -117,6 +117,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[kevin-gregory]] — AI engineer at EvolutionIQ ($730M acquisition); runs AI automations for Boundary's "AI that Works" podcast; designer of the [[model-swap-evals|model-swap eval harness]] and co-articulator of [[fighting-slop-with-slop]]
 - [[philipp-schmid]] — Engineer at Google DeepMind (Gemini API and agents); introduced the capability-vs-preference skill taxonomy, the agents-we-use-vs-build distinction, and Google DeepMind's regression-gated skill-eval practice
 - [[harrison-chase]] — Co-founder and CEO of LangChain; introduced the agent development lifecycle (build/test/deploy/monitor/govern) with traces at the center, online evals and perceived error, and auto-improving agents (LangSmith Engine)
+- [[jason-liu]] — Works at OpenAI on the Codex app; his 2026 workshop argues compaction works (5 weeks / 400 sub-agents), and defines appshot, pinned threads, and the voice→skills→heartbeat operating model
 
 ## 🧠 Concepts
 - [[accuracy-minimizing]] — Inference providers sacrifice model accuracy for throughput; the hidden variable in open-source vs. closed-source comparisons
@@ -161,6 +162,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[agent-observability]] — Logs, traces, and metrics for agent decision chains.
 - [[agent-quality-loop]] — The flywheel: traces → evals → scorers → code.
 - [[agent-skills]] — Procedural knowledge for AI agents via skill.md files, progressive disclosure, and the open standard adopted across major platforms.
+- [[appshot]] — Codex's accessibility-tree screen capture: image plus semantic IDs so the model can act in one tool call instead of OCR and chain lookups.
+- [[pinned-threads]] — Pinned threads as durable workstream owners: pin + rename to project ID, delegate to sub-agents, heartbeat wake-ups, and monitor → subthread orchestration. The Codex answer to context rot.
 - [[skillbench]] — A benchmark for agent skills: ~15% average improvement across ~100 tasks; human-written skills outperform AI-generated ones (which can hurt); < 500-line guidance for skill.md files.
 - [[ai-design-loop]] — Iterating to reach a shared understanding before delegating implementation.
 - [[backpressure]] — Engineering the environment so wrong agent outputs are mechanically rejected.
@@ -304,6 +307,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 ## 🛠️ Projects & Tools
 - [[agentskills]] — The Agent Skills open standard: a folder-with-SKILL.md format, originally Anthropic, now cross-vendor; `skills-ref` validation and `.skill` packaging.
 - [[baml]] — Programming language for the AI era (Boundary ML); compiler-level auto-instrumentation, type-safe tracing, OTEL type-system critique; compiler-proven error inference, agent-first tooling (describe-over-search, functions-as-CLI), and ML-from-any-language.
+- [[openai-codex]] — OpenAI's agentic coding application (desktop app + CLI + iOS remote + in-app browser + Chrome extension + computer use); pinned threads, heartbeats, skills/plugins, appshot, and the personal-monorepo vault — the harness Jason Liu lives in.
 - [[treehouse]] — Git worktree manager for parallel agent sessions.
 - [[no-mistakes]] — Autonomous PR pipeline from first-pass code to merged PR with adversarial review and evidence.
 - [[notion]] — Workspace platform; shared documents, HTML blocks, and embedded coding agents as infrastructure for shared understanding.

@@ -1,7 +1,7 @@
 ---
 title: Agent Skills
 created: 2026-05-04
-updated: 2026-08-02
+updated: 2026-08-06
 sources:
   - raw/yt-what-ai-agent-skills-are-and-how-they-work.md
   - raw/skill-issue-supabase-pedro-rodrigues.md
@@ -15,6 +15,7 @@ sources:
   - raw/agentskills-specification.md
   - raw/skill-creator-skill.md
   - raw/dont-ship-skills-without-evals-philipp-schmid.md
+  - raw/full-workshop-setting-yourself-up-for-success-jason-liu-openai-codex.md
 tags: [concept, agents, skills, procedural-knowledge, progressive-disclosure]
 unaudited_marginal: 0
 ---
@@ -375,6 +376,20 @@ The full development loop: **build → use for a week → mine transcripts → r
 
 The implication is economic as well as architectural. Loops that re-derive everything from scratch just burn money (see [[agent-loop#The Cost Shift: Loop Management Is Now the Expensive Part]]). Loops that call a library of sharp, named, tested skills compound — each captured SOP makes the next loop cheaper. This is the procedural-knowledge flywheel inside the execution harness: the [[ralph-loop|ralph loop]] or [[orchestration-loop|orchestration loop]] provides the tick, the skill provides the judgment.
 
+## The Codex View: Skills vs Plugins, Self-Improvement, and the Team Hero Pattern
+
+[[jason-liu|Jason Liu]] (OpenAI Codex, 2026) adds three practitioner primitives that sharpen the wiki's skill vocabulary:
+
+**Skills vs plugins.** In Liu's Codex framing a **skill is a few files + scripts** and a **plugin is a library of skills**. You install a plugin from the Codex sidebar (Slack, Gmail, Notion, Linear, Obsidian, etc.); internally it is a bundle of related skills. Community discovery runs through `skillset.sh` and Vercel's skills index alongside OpenAI's curated `skill installer` list. This maps onto the wiki's [[agentskills]] / [[skill-md]] standard as: one `skill.md` format, two packaging grains — file and bundle.
+
+**Self-improving skills.** Liu's skills carry an explicit mutation line: "every time you run this skill, you are allowed to edit yourself — if you learn something new, edit the skill file." His personal loop: build a skill as fast as possible, correct it every time it makes a mistake, and after ~2 months of use it is safe to share with the team. The mechanism is the same as [[evolving-context]] (skill learning from trajectories), but the trigger is inline and unfenced — the skill is both artifact and evolving object.
+
+**The plugin-hero pattern.** Liu's highest-leverage internal skills are team-wide: `finalize the codex app` (fires before every PR review, catching style-guide violations; "everyone at the company uses it"), `review my code like Charlie` / `like Dominic` (replays a year's worth of a specific reviewer's PR feedback to draft reviews in their style), and a **DX triage skill** (knows every Slack channel to watch, which engineer owns what, how to route a `feedback ID`, how to open Twitter via computer use and close the loop). The economic reframing: you are not rewarded by how many tokens *you* burn, but by how often *teammates* use a plugin you built — becoming the "hero that augments the rest of your company." See [[openai-codex]] and [[pinned-threads]] for how these skills are dispatched through pinned-thread heartbeats.
+
+**Other Codex-native skills Liu names:** `assistant` (onboarding interview → installs plugins → creates pinned threads + automations), `loop` (the "keep an eye on this PR" skill), `simple HTML artifact` (preference: white backgrounds, certain style guides), `ultra-goal` (file-backed goal/plan/state for editable long runs), `new person / new project` (CRM bootstrap: new people who DM him on Slack/iMessage/email get a `people/` page; new workstreams get a `projects/` page), and `write like me` (see below).
+
+**Write-like-me as durable preference synthesis.** "Read all the emails I wrote in the past six months, all the Slack messages I wrote the past six months, and write a style guide for how to message just like me." Liu reports it "hasn't failed me yet" — the agent then drafts in the right register (stern for customer-support forms, casual internally) without further prompting. In Schmid's terms this is a **preference skill** with a synthesis step: the skill's artifact is a generated style guide, not hand-authored rules, and its durability comes from the style corpus, not the model.
+
 ## Security
 
 Skills can include executable scripts with access to file systems, environment variables, and API keys — this is what makes them powerful but also introduces trust concerns. Audits of publicly available skills have found:
@@ -432,6 +447,9 @@ The survey's key insight for skill design: code-based skills are not just instru
 - [[agents-md]] — Complementary: context files provide *what to know about this project*; skills provide *how to do things*. AGENTS.md is the canonical context-file convention.
 - [[philipp-schmid]] — Introduced the capability-vs-preference skill taxonomy, the agents-we-use-vs-build distinction, and the eight writing tips
 - [[skillbench]] — The benchmark providing the ~15% improvement figure and the human-vs-AI-generated skill comparison
+- [[jason-liu]] — Added the Codex-native skills-vs-plugins grain, self-editing skills, the plugin-hero incentive, DX triage / write-like-me / new-person patterns, and team-scale distribution via the personal-monorepo template
+- [[openai-codex]] — The product that ships Liu's skills, plugins, and the template (`jxml/personal-monorepo-template`)
+- [[pinned-threads]] — The execution context heartbeats dispatch Liu's skills in (chief-of-staff, PR babysitter, triage monitor)
 
 ## Sources
 
@@ -447,3 +465,4 @@ The survey's key insight for skill design: code-based skills are not just instru
 - `raw/agentskills-specification.md` — The `agentskills/agentskills` docs: directory structure, frontmatter field constraints (name/description mandatory, allowed-tools experimental), three-tier progressive-disclosure budget, `skills-ref` validation; Anthropic-origin open-standard overview.
 - `raw/skill-creator-skill.md` — Local `skill-creator` skill: the build/eval loop (with-skill vs baseline), description optimization, test-case design, `.skill` packaging, and the client-specific `disable-model-invocation` field.
 - `raw/dont-ship-skills-without-evals-philipp-schmid.md` — [[philipp-schmid|Schmid]] (AI Engineer, 2026): capability-vs-preference skill taxonomy; agents-we-use-vs-agents-we-build distinction; [[skillbench|SkillBench]] 1.1 results (~15% improvement, human-written > AI-generated, < 500 lines); eight writing tips (strong description, directives, lean+layered, right freedom level, negative cases, test early, remove no-ops, know when to retire); skill rot and retirement via ablation; keeping evals after retiring skills.
+- `raw/full-workshop-setting-yourself-up-for-success-jason-liu-openai-codex.md` — [[jason-liu|Liu]] (AI Engineer, 2026): skills-vs-plugins grain, self-improving skills (edit yourself on each run), plugin-hero team incentive, DX triage / write-like-me / new-person / simple-HTML-artifact / ultra-goal skills, and the `jxml/personal-monorepo-template` distribution point.
