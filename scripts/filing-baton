@@ -10,6 +10,7 @@ import argparse
 import datetime as dt
 import fcntl
 import json
+import os
 import re
 import subprocess
 import sys
@@ -58,30 +59,70 @@ def validate_filing_date(value: str) -> None:
         raise BatonError("filing date must be ISO YYYY-MM-DD")
 
 
-def validate_session(root: Path, session: str, *, require_latest: bool) -> tuple[str, str]:
-    if not session.strip():
-        raise BatonError("session identifier must be non-empty")
-    candidate = (root / session).resolve() if not Path(session).is_absolute() else Path(session).resolve()
-    session_root = (root / ".freebuff").resolve()
-    try:
-        relative = candidate.relative_to(session_root)
-    except ValueError as exc:
-        raise BatonError("session must be an existing log under .freebuff/") from exc
-    if not candidate.is_file() or not candidate.name.startswith("session-"):
-        raise BatonError("session must be an existing .freebuff/session-* log")
-    stat = candidate.stat()
-    if stat.st_size == 0:
-        raise BatonError("Freebuff session log is empty; it cannot establish session identity")
-    if require_latest:
-        logs = [path for path in session_root.glob("session-*") if path.is_file() and path.stat().st_size]
-        if not logs:
-            raise BatonError("no non-empty Freebuff session logs exist")
-        latest = max(logs, key=lambda path: (path.stat().st_mtime_ns, path.name))
-        if candidate != latest.resolve():
-            raise BatonError("session log is not the newest non-empty .freebuff/session-* log")
-    normalized = str(Path(".freebuff") / relative)
-    identity = f"{stat.st_dev}:{stat.st_ino}"
-    return normalized, identity
+EPHEMERAL_COMMS = frozenset(
+    {
+        "python",
+        "python3",
+        "uv",
+        "bash",
+        "sh",
+        "dash",
+        "ash",
+        "env",
+        "script",
+        "timeout",
+        "setsid",
+        "sudo",
+        "doas",
+        "nice",
+        "xargs",
+        "nohup",
+    }
+)
+
+
+def process_chain() -> list[tuple[int, str, int]]:
+    """Return (pid, comm, starttime) for this process and its ancestors, self first."""
+    chain: list[tuple[int, str, int]] = []
+    pid = os.getpid()
+    seen: set[int] = set()
+    while pid > 1 and pid not in seen:
+        seen.add(pid)
+        try:
+            stat = Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
+        except (FileNotFoundError, PermissionError):
+            break
+        try:
+            comm = stat.split("(", 1)[1].rsplit(")", 1)[0]
+            fields = stat.rsplit(")", 1)[1].split()
+            ppid, starttime = int(fields[1]), int(fields[19])
+        except (IndexError, ValueError) as exc:
+            raise BatonError(f"cannot parse /proc/{pid}/stat") from exc
+        chain.append((pid, comm, starttime))
+        pid = ppid
+    return chain
+
+
+def session_anchor() -> str:
+    """Identify the harness session this command runs under.
+
+    The anchor is the first non-ephemeral ancestor process: per-command wrappers
+    (shells, interpreters) are skipped, so the anchor lands on the long-lived
+    harness process that spawned them. A genuinely fresh session is a different
+    harness process and therefore a different anchor; the writing session cannot
+    mint another anchor because a process cannot change its own ancestry. PID
+    reuse across harness restarts is defeated by including the kernel start time.
+    """
+    chain = process_chain()
+    for pid, comm, starttime in chain:
+        if comm in EPHEMERAL_COMMS:
+            continue
+        return f"{comm}:{pid}:{starttime}"
+    detail = " -> ".join(f"{comm}({pid})" for pid, comm, _ in chain) or "none"
+    raise BatonError(
+        "cannot determine a session anchor from process ancestry "
+        f"(chain: {detail}); run './scripts/filing-baton whoami' and report the output"
+    )
 
 
 def state_path(root: Path, slug: str) -> Path:
@@ -97,7 +138,7 @@ def load_state(path: Path) -> dict[str, object]:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise BatonError(f"cannot read handoff {path}: {exc}") from exc
-    if not isinstance(value, dict) or value.get("schema_version") != 1:
+    if not isinstance(value, dict) or value.get("schema_version") not in (1, 2):
         raise BatonError(f"unsupported or malformed handoff: {path}")
     return value
 
@@ -316,32 +357,25 @@ def run_validator(root: Path, filing_date: str, boundary: dict[str, str]) -> str
     return summary[-1] if summary else "passed"
 
 
-def used_sessions(state: dict[str, object]) -> tuple[set[str], set[str]]:
+def used_anchors(state: dict[str, object]) -> set[str]:
     history = state.get("history")
     if not isinstance(history, list):
         raise BatonError("handoff history is malformed")
-    paths: set[str] = set()
-    identities: set[str] = set()
+    anchors: set[str] = set()
     for item in history:
-        if isinstance(item, dict):
-            if isinstance(item.get("session"), str):
-                paths.add(item["session"])
-            if isinstance(item.get("session_identity"), str):
-                identities.add(item["session_identity"])
+        if isinstance(item, dict) and isinstance(item.get("anchor"), str):
+            anchors.add(item["anchor"])
     active = state.get("active_pass")
-    if isinstance(active, dict):
-        if isinstance(active.get("session"), str):
-            paths.add(active["session"])
-        if isinstance(active.get("session_identity"), str):
-            identities.add(active["session_identity"])
-    return paths, identities
+    if isinstance(active, dict) and isinstance(active.get("anchor"), str):
+        anchors.add(active["anchor"])
+    return anchors
 
 
-def require_new_session(state: dict[str, object], session: str, identity: str) -> None:
-    paths, identities = used_sessions(state)
-    if session in paths or identity in identities:
+def require_fresh_anchor(state: dict[str, object], anchor: str) -> None:
+    if anchor in used_anchors(state):
         raise BatonError(
-            f"session {session!r} was already used by this filing; start a genuinely fresh session"
+            "this session has already participated in this filing, so it cannot be a clean "
+            "review context; open a genuinely new Freebuff session and paste the handoff there"
         )
 
 
@@ -381,7 +415,7 @@ def parse_reviews(values: list[str]) -> dict[str, str]:
 def cmd_start_write(args: argparse.Namespace) -> None:
     root = repository_root()
     validate_filing_date(args.filing_date)
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     if path.exists():
         raise BatonError(f"handoff already exists: {path}; resume or archive it instead of overwriting")
@@ -390,7 +424,7 @@ def cmd_start_write(args: argparse.Namespace) -> None:
     require_clean_content_worktree()
     base_head, branch_ref = repository_position()
     state: dict[str, object] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "mode": "freebuff-baton",
         "source_slug": args.source,
         "source_locator": args.locator,
@@ -404,19 +438,19 @@ def cmd_start_write(args: argparse.Namespace) -> None:
         "history": [],
         "active_pass": {
             "role": "write",
-            "session": args.session,
-            "session_identity": session_identity,
+            "anchor": anchor,
             "started_at": now(),
         },
     }
     save_state(path, state)
     print(f"WRITE PASS STARTED: {path}")
+    print(f"Session anchor: {anchor}")
     print("This pass may write and stage, but it may not semantically approve or commit.")
 
 
 def cmd_finish_write(args: argparse.Namespace) -> None:
     root = repository_root()
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
@@ -426,10 +460,9 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
     if (
         not isinstance(active, dict)
         or active.get("role") != "write"
-        or active.get("session") != args.session
-        or active.get("session_identity") != session_identity
+        or active.get("anchor") != anchor
     ):
-        raise BatonError("session does not own the active write pass")
+        raise BatonError("this session does not own the active write pass")
     boundary = staged_boundary()
     if args.no_change:
         if args.path or boundary:
@@ -452,8 +485,7 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
             state,
             {
                 "role": "write",
-                "session": args.session,
-                "session_identity": session_identity,
+                "anchor": anchor,
                 "started_at": active.get("started_at"),
                 "finished_at": now(),
                 "result": "no_change",
@@ -484,8 +516,7 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
         state,
         {
             "role": "write",
-            "session": args.session,
-            "session_identity": session_identity,
+            "anchor": anchor,
             "started_at": active.get("started_at"),
             "finished_at": now(),
             "result": "changed",
@@ -498,7 +529,7 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
     state["boundary"] = boundary
     state["required_raw_paths"] = sorted(path for path in boundary if path.startswith("raw/"))
     state["index_tree"] = index_tree()
-    state["last_content_session"] = args.session
+    state["last_content_anchor"] = anchor
     state["active_pass"] = None
     save_state(path, state)
     print("WRITE PASS COMPLETE — FRESH REVIEW REQUIRED")
@@ -507,21 +538,20 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
 
 def cmd_restart_write(args: argparse.Namespace) -> None:
     root = repository_root()
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "writing":
         raise BatonError(f"restart-write requires state writing, got {state.get('state')!r}")
-    require_new_session(state, args.session, session_identity)
+    require_fresh_anchor(state, anchor)
     previous = state.get("active_pass")
     if isinstance(previous, dict):
         append_history(
             state,
             {
                 "role": previous.get("role", "write"),
-                "session": previous.get("session"),
-                "session_identity": previous.get("session_identity"),
+                "anchor": previous.get("anchor"),
                 "started_at": previous.get("started_at"),
                 "finished_at": now(),
                 "result": "abandoned",
@@ -530,8 +560,7 @@ def cmd_restart_write(args: argparse.Namespace) -> None:
         )
     state["active_pass"] = {
         "role": "write",
-        "session": args.session,
-        "session_identity": session_identity,
+        "anchor": anchor,
         "started_at": now(),
         "restart_reason": args.reason,
     }
@@ -541,13 +570,13 @@ def cmd_restart_write(args: argparse.Namespace) -> None:
 
 def cmd_start_review(args: argparse.Namespace) -> None:
     root = repository_root()
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "needs_review":
         raise BatonError(f"expected state needs_review, got {state.get('state')!r}")
-    require_new_session(state, args.session, session_identity)
+    require_fresh_anchor(state, anchor)
     boundary = require_boundary(state.get("boundary"))
     require_required_raw_paths(state, boundary)
     require_content_invariants(boundary, state.get("base_head"))
@@ -558,34 +587,33 @@ def cmd_start_review(args: argparse.Namespace) -> None:
     state["state"] = "reviewing"
     state["active_pass"] = {
         "role": "review-fix",
-        "session": args.session,
-        "session_identity": session_identity,
+        "anchor": anchor,
         "started_at": now(),
         "start_boundary": boundary,
         "start_index_tree": state.get("index_tree"),
     }
     save_state(path, state)
     print("REVIEW/FIX PASS STARTED")
+    print(f"Session anchor: {anchor}")
     print("Review the complete boundary. If this pass changes any staged content, another fresh pass is mandatory.")
 
 
 def cmd_restart_review(args: argparse.Namespace) -> None:
     root = repository_root()
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") not in {"reviewing", "blocked", "approved", "needs_review"}:
         raise BatonError(f"restart-review cannot recover state {state.get('state')!r}")
-    require_new_session(state, args.session, session_identity)
+    require_fresh_anchor(state, anchor)
     previous = state.get("active_pass")
     if isinstance(previous, dict):
         append_history(
             state,
             {
                 "role": previous.get("role", "review-fix"),
-                "session": previous.get("session"),
-                "session_identity": previous.get("session_identity"),
+                "anchor": previous.get("anchor"),
                 "started_at": previous.get("started_at"),
                 "finished_at": now(),
                 "result": "abandoned",
@@ -603,8 +631,7 @@ def cmd_restart_review(args: argparse.Namespace) -> None:
     state["state"] = "reviewing"
     state["active_pass"] = {
         "role": "review-fix",
-        "session": args.session,
-        "session_identity": session_identity,
+        "anchor": anchor,
         "started_at": now(),
         "start_boundary": boundary,
         "start_index_tree": current_tree,
@@ -612,8 +639,7 @@ def cmd_restart_review(args: argparse.Namespace) -> None:
     }
     state["boundary"] = boundary
     state["index_tree"] = current_tree
-    state.pop("approved_by_session", None)
-    state.pop("approved_by_identity", None)
+    state.pop("approved_by_anchor", None)
     state.pop("approved_tree", None)
     save_state(path, state)
     print("REVIEW PASS RESTARTED — PRIOR APPROVAL, IF ANY, IS VOID")
@@ -621,19 +647,15 @@ def cmd_restart_review(args: argparse.Namespace) -> None:
 
 def cmd_finish_review(args: argparse.Namespace) -> None:
     root = repository_root()
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "reviewing":
         raise BatonError(f"expected state reviewing, got {state.get('state')!r}")
     active = state.get("active_pass")
-    if (
-        not isinstance(active, dict)
-        or active.get("session") != args.session
-        or active.get("session_identity") != session_identity
-    ):
-        raise BatonError("session does not own the active review pass")
+    if not isinstance(active, dict) or active.get("anchor") != anchor:
+        raise BatonError("this session does not own the active review pass")
     start_boundary = active.get("start_boundary")
     start_tree = active.get("start_index_tree")
     if not isinstance(start_boundary, dict) or not isinstance(start_tree, str):
@@ -653,8 +675,7 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
             state,
             {
                 "role": "review-fix",
-                "session": args.session,
-                "session_identity": session_identity,
+                "anchor": anchor,
                 "started_at": active.get("started_at"),
                 "finished_at": now(),
                 "result": "blocked",
@@ -668,7 +689,7 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         state["boundary"] = current
         state["index_tree"] = current_tree
         if changed:
-            state["last_content_session"] = args.session
+            state["last_content_anchor"] = anchor
         state["active_pass"] = None
         save_state(path, state)
         print("REVIEW BLOCKED — COMMIT GATE CLOSED")
@@ -690,8 +711,7 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
             state,
             {
                 "role": "review-approve",
-                "session": args.session,
-                "session_identity": session_identity,
+                "anchor": anchor,
                 "started_at": active.get("started_at"),
                 "finished_at": now(),
                 "result": "clean",
@@ -706,8 +726,7 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         state["boundary"] = current
         state["index_tree"] = current_tree
         state["approved_tree"] = current_tree
-        state["approved_by_session"] = args.session
-        state["approved_by_identity"] = session_identity
+        state["approved_by_anchor"] = anchor
         state["review_ledger"] = reviews
         state["active_pass"] = None
         save_state(path, state)
@@ -720,8 +739,7 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         state,
         {
             "role": "review-fix",
-            "session": args.session,
-            "session_identity": session_identity,
+            "anchor": anchor,
             "started_at": active.get("started_at"),
             "finished_at": now(),
             "result": "changed",
@@ -741,7 +759,7 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         set(required_raw) | {path for path in current if path.startswith("raw/")}
     )
     state["index_tree"] = current_tree
-    state["last_content_session"] = args.session
+    state["last_content_anchor"] = anchor
     state["active_pass"] = None
     save_state(path, state)
     print("FIXES STAGED — ANOTHER FRESH REVIEW IS REQUIRED")
@@ -749,16 +767,13 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
 
 def cmd_commit(args: argparse.Namespace) -> None:
     root = repository_root()
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "approved":
         raise BatonError(f"commit requires state approved, got {state.get('state')!r}")
-    if (
-        state.get("approved_by_session") != args.session
-        or state.get("approved_by_identity") != session_identity
-    ):
+    if state.get("approved_by_anchor") != anchor:
         raise BatonError("only the zero-delta approving session may commit")
     boundary = require_boundary(state.get("boundary"))
     require_required_raw_paths(state, boundary)
@@ -784,8 +799,7 @@ def cmd_commit(args: argparse.Namespace) -> None:
         state,
         {
             "role": "commit",
-            "session": args.session,
-            "session_identity": session_identity,
+            "anchor": anchor,
             "finished_at": now(),
             "result": "committed",
             "commit": commit,
@@ -800,6 +814,7 @@ def cmd_commit(args: argparse.Namespace) -> None:
     state["active_pass"] = None
     save_state(path, state)
     print(f"BATON FILING COMMITTED EXACT APPROVED TREE: {commit}")
+    print("This filing is complete. Report the result to the user; no further session is needed.")
     if residual_index_change:
         print("WARNING: index changed concurrently after approval; extra staged state was not committed", file=sys.stderr)
 
@@ -844,12 +859,12 @@ def cmd_reconcile_commit(args: argparse.Namespace) -> None:
 
 def cmd_abort(args: argparse.Namespace) -> None:
     root = repository_root()
-    args.session, session_identity = validate_session(root, args.session, require_latest=True)
+    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     if state.get("state") in {"committed", "aborted", "no_change"}:
         raise BatonError(f"cannot abort terminal state {state.get('state')!r}")
-    require_new_session(state, args.session, session_identity)
+    require_fresh_anchor(state, anchor)
     paths = staged_paths()
     current_tree = index_tree()
     if state.get("state") != "writing" and current_tree != state.get("index_tree"):
@@ -870,8 +885,7 @@ def cmd_abort(args: argparse.Namespace) -> None:
         state,
         {
             "role": "abort",
-            "session": args.session,
-            "session_identity": session_identity,
+            "anchor": anchor,
             "finished_at": now(),
             "result": "aborted",
             "unstaged_paths": paths,
@@ -889,30 +903,31 @@ def cmd_abort(args: argparse.Namespace) -> None:
     print("BATON TRANSACTION ABORTED — STAGED PATHS UNSTAGED, WORKTREE PRESERVED")
 
 
+TERMINAL_STATES = {"committed", "no_change", "aborted"}
+
+
 def continuation_action(state: dict[str, object]) -> str:
     status = state.get("state")
     slug = state.get("source_slug")
     if status == "needs_review":
         return (
-            f"Discover this new session's newest non-empty .freebuff/session-* log, then run "
-            f"./scripts/filing-baton start-review --source {slug} --session <current-log>. "
-            "Run theory first, then every applicable named reviewer method. If you stage fixes, "
+            f"Run ./scripts/filing-baton start-review --source {slug}. The baton identifies this "
+            "session itself from process ancestry — there is no session argument to supply or "
+            "invent. Run theory first, then every applicable named reviewer method. If you stage fixes, "
             "finish as changed and emit a new handoff; if zero-delta, finish clean and commit."
         )
     if status == "writing":
         return (
-            f"Discover this new session's newest non-empty .freebuff/session-* log, then run "
-            f"./scripts/filing-baton restart-write --source {slug} --session <current-log> "
+            f"Run ./scripts/filing-baton restart-write --source {slug} "
             "--reason 'continued from pasted handoff'. Complete the write pass and emit a new handoff."
         )
     if status in {"reviewing", "blocked", "approved"}:
         return (
-            f"Discover this new session's newest non-empty .freebuff/session-* log, then run "
-            f"./scripts/filing-baton restart-review --source {slug} --session <current-log> "
+            f"Run ./scripts/filing-baton restart-review --source {slug} "
             "--reason 'continued from pasted handoff'. This voids prior approval; review the complete "
             "recorded tree again, then finish through the baton gate."
         )
-    if status in {"committed", "no_change", "aborted"}:
+    if status in TERMINAL_STATES:
         return "This baton transaction is terminal. Report the recorded result; do not restart it."
     return "Unknown baton state: inspect the handoff and stop rather than guessing."
 
@@ -922,10 +937,18 @@ def cmd_handoff(args: argparse.Namespace) -> None:
     path = state_path(root, args.source)
     state = load_state(path)
     action = continuation_action(state)
-    print("# FREEBUFF FILING HANDOFF — PASTE THIS ENTIRE BLOCK VERBATIM")
-    print()
-    print("Continue this Freebuff filing from machine-recorded baton state. Do not treat prose claims")
-    print("from the previous session as proof, and do not ask the user to reconstruct commands or paths.")
+    terminal = state.get("state") in TERMINAL_STATES
+    if terminal:
+        print("# FREEBUFF FILING — TERMINAL RECEIPT (DO NOT PASTE INTO ANOTHER SESSION)")
+        print()
+        print("This filing is complete. Report the recorded result to the user and stop.")
+    else:
+        print("# FREEBUFF FILING HANDOFF — PASTE THIS ENTIRE BLOCK VERBATIM")
+        print()
+        print("Continue this Freebuff filing from machine-recorded baton state. Do not treat prose claims")
+        print("from the previous session as proof, and do not ask the user to reconstruct commands or paths.")
+        print("Session identity is established by the baton itself from process ancestry; never create")
+        print("session marker files and never supply a session argument.")
     print(f"Repository: {root}")
     print(f"Source slug: {state.get('source_slug')}")
     print(f"Source locator: {state.get('source_locator')}")
@@ -941,9 +964,19 @@ def cmd_handoff(args: argparse.Namespace) -> None:
     print(json.dumps(state, indent=2, sort_keys=True))
     print("```")
     print()
-    print("At the end of this session, run the baton handoff command again and end your final summary")
-    print("with its complete output. The user will paste the entire previous response verbatim into")
-    print("the next Freebuff session; require no added slug, path, command, or explanation.")
+    if not terminal:
+        print("At the end of this session, run the baton handoff command again and end your final summary")
+        print("with its complete output. The user will paste the entire previous response verbatim into")
+        print("the next Freebuff session; require no added slug, path, command, or explanation.")
+
+
+def cmd_whoami(args: argparse.Namespace) -> None:
+    chain = process_chain()
+    print("Process ancestry (this command first):")
+    for pid, comm, starttime in chain:
+        marker = " (ephemeral wrapper, skipped)" if comm in EPHEMERAL_COMMS else ""
+        print(f"  pid={pid} comm={comm} start={starttime}{marker}")
+    print(f"Session anchor: {session_anchor()}")
 
 
 def cmd_show(args: argparse.Namespace) -> None:
@@ -961,12 +994,10 @@ def parser() -> argparse.ArgumentParser:
     start_write.add_argument("--source", required=True, help="canonical lowercase source slug")
     start_write.add_argument("--locator", required=True, help="URL or local source path")
     start_write.add_argument("--filing-date", required=True)
-    start_write.add_argument("--session", required=True, help="existing session log path under .freebuff/")
     start_write.set_defaults(func=cmd_start_write)
 
     finish_write = sub.add_parser("finish-write")
     finish_write.add_argument("--source", required=True)
-    finish_write.add_argument("--session", required=True)
     finish_write.add_argument(
         "--path", action="append", default=[], help="one exact intended staged path; repeat per path"
     )
@@ -980,24 +1011,20 @@ def parser() -> argparse.ArgumentParser:
 
     restart_write = sub.add_parser("restart-write")
     restart_write.add_argument("--source", required=True)
-    restart_write.add_argument("--session", required=True)
     restart_write.add_argument("--reason", required=True)
     restart_write.set_defaults(func=cmd_restart_write)
 
     start_review = sub.add_parser("start-review")
     start_review.add_argument("--source", required=True)
-    start_review.add_argument("--session", required=True, help="new existing log path under .freebuff/")
     start_review.set_defaults(func=cmd_start_review)
 
     restart_review = sub.add_parser("restart-review")
     restart_review.add_argument("--source", required=True)
-    restart_review.add_argument("--session", required=True)
     restart_review.add_argument("--reason", required=True)
     restart_review.set_defaults(func=cmd_restart_review)
 
     finish_review = sub.add_parser("finish-review")
     finish_review.add_argument("--source", required=True)
-    finish_review.add_argument("--session", required=True)
     finish_review.add_argument("--result", required=True, choices=("clean", "changed", "blocked"))
     finish_review.add_argument(
         "--review",
@@ -1010,7 +1037,6 @@ def parser() -> argparse.ArgumentParser:
 
     commit = sub.add_parser("commit")
     commit.add_argument("--source", required=True)
-    commit.add_argument("--session", required=True)
     commit.add_argument("--message", required=True)
     commit.set_defaults(func=cmd_commit)
 
@@ -1020,9 +1046,11 @@ def parser() -> argparse.ArgumentParser:
 
     abort = sub.add_parser("abort")
     abort.add_argument("--source", required=True)
-    abort.add_argument("--session", required=True)
     abort.add_argument("--reason", required=True)
     abort.set_defaults(func=cmd_abort)
+
+    whoami = sub.add_parser("whoami", help="print process ancestry and the derived session anchor")
+    whoami.set_defaults(func=cmd_whoami)
 
     handoff = sub.add_parser("handoff")
     handoff.add_argument("--source", required=True)

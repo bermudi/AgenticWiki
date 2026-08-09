@@ -37,7 +37,7 @@ Read `meta/pipeline-recommendations.md` before starting. The coordinator owns up
 The pipeline has exactly two adapters:
 
 - **Full worker topology:** a writer is a write-capable worker attached to the coordinator's authoritative checkout. Reviewers are fresh isolated read-only workers. `verifying-wiki-changes` runs inline as orchestration and dispatches those reviewers. If a required worker cannot be constructed, stop; do not collapse roles inline.
-- **Freebuff baton topology:** one bounded top-level session preserves, writes, and stages but cannot review or commit. A never-before-used session reviews the complete staged tree. If that pass stages any fix, another fresh session must review again. Only a zero-delta pass with complete theory, diff, source-fidelity, and quality rows may commit through `scripts/filing-baton`.
+- **Freebuff baton topology:** one bounded top-level session preserves, writes, and stages but cannot review or commit. A never-before-used session reviews the complete staged tree. Session identity is the baton's own process-ancestry anchor, recorded per pass; there is no `--session` argument and no `.freebuff/` marker file — a pass whose anchor already appeared in the filing is rejected mechanically, so the writing session cannot become a reviewer. If that pass stages any fix, another fresh session must review again. Only a zero-delta pass with complete theory, diff, source-fidelity, and quality rows may commit through `scripts/filing-baton`.
 
 Reviewer edits or “fixed” self-reports are never authoritative. Full topology routes accepted edits to the active writer; baton mode permits a review pass to switch explicitly into fixer role, but that forfeits approval and forces another fresh pass.
 
@@ -114,14 +114,15 @@ Do not pass `edits` as a JSON string, do not use a single edit object where an a
 
 Freebuff uses fresh top-level sessions as the role-separation seam. `.filing-handoff/<source-slug>.json` binds each pass to exact staged modes/blob OIDs, the complete index tree, base HEAD, and branch. It handles one source locator per transaction, and only one unfinished transaction may own the repository index. Multi-source requests become ordered, separate transactions. Because reviewer skills read ordinary files, baton mode requires `wiki/` and `raw/` to contain no unstaged, untracked, or ignored files outside the staged transaction; otherwise validation could depend on bytes absent from the approved tree, so the script stops before writing/approval.
 
+Session identity is **not** an argument and never a file: every baton command derives the current session's anchor itself from process ancestry (the first non-ephemeral ancestor process — the long-lived harness process — identified by comm, PID, and kernel start time). A process cannot change its own ancestry, so the writing session cannot mint a review identity; `start-review` from the same session fails mechanically. Never create `.freebuff/` marker files or any other self-declared identity, and never pass `--session` (it no longer exists). If `start-review` rejects the session as already used, the handoff was pasted into the wrong (old) session — stop and tell the user to paste it into a genuinely new Freebuff session. `./scripts/filing-baton whoami` prints the ancestry chain and derived anchor for diagnosis.
+
 **Write pass (session A):** before fetching or reading the source, require an empty staged index and run:
 
 ```bash
 ./scripts/filing-baton start-write \
   --source <source-slug> \
   --locator <URL-or-path> \
-  --filing-date "$FILING_DATE" \
-  --session .freebuff/<actual-session-log>
+  --filing-date "$FILING_DATE"
 ```
 
 Load `filing-agentic-sources` and perform its preservation, triage, and writing work in this bounded session. In baton mode the pass stages the complete intended boundary itself, including new raw artifacts and any process/debt files; it still must use exact `git add -- <paths>`, never `git add -A`. It may run deterministic checks but must not run semantic reviewer skills, issue a verdict, or commit. Finish with every exact staged path:
@@ -129,20 +130,18 @@ Load `filing-agentic-sources` and perform its preservation, triage, and writing 
 ```bash
 ./scripts/filing-baton finish-write \
   --source <source-slug> \
-  --session <same-write-session> \
   --path <exact-staged-path-1> \
   --path <exact-staged-path-2> \
   --note '<classification and write summary>'
 ```
 
-For a `skip` whose locator is an unchanged raw artifact already tracked at baton start, finish with `finish-write --no-change --note '<skip reason>'`; the script records terminal `no_change` with no review or commit. A newly preserved archive-only source is not no-change: stage and review it as a raw-only transaction. Otherwise stop and tell the human to open a genuinely new Freebuff session using the prompt in `USER-MANUAL.md`.
+For a `skip` whose locator is an unchanged raw artifact already tracked at baton start, finish with `finish-write --no-change --note '<skip reason>'`; the script records terminal `no_change` with no review or commit. A newly preserved archive-only source is not no-change: stage and review it as a raw-only transaction. Otherwise run `./scripts/filing-baton handoff --source <source-slug>`, end your final summary with its complete output, and stop. The user pastes that response verbatim into a clean Freebuff session; never ask the user for a slug, path, command, or session identifier.
 
 **Review/fix pass (fresh session B, C, ...):** start before making edits:
 
 ```bash
 ./scripts/filing-baton start-review \
-  --source <source-slug> \
-  --session .freebuff/<new-session-log>
+  --source <source-slug>
 ```
 
 Start with deterministic checks, then run `reviewing-wiki-theory` first. If theory requires an edit, record its verdict, switch to fixer role, stage the repair, finish as `changed`, and defer the other judgments to the next fresh pass rather than reviewing an obsolete tree. If theory passes or is validly skipped, continue with `reviewing-wiki-diffs`, `verifying-source-fidelity`, and `reviewing-wiki-quality` under their normal risk/skip rules. Reviewer skills remain report-only while making judgments. Baton cannot deny the top-level session's write tools, so separation is temporal: complete judgments before explicitly switching to fixer role. Any final staged index/tree delta forfeits approval. A theory `PASS WITH WARNINGS` maps to `PASS` only when every warning was resolved or is purely advisory; an accepted unresolved limitation maps to `PASS WITH EXPLICIT DEBT: <representation>`, while a required edit maps to `changed` and an unresolved structural decision maps to `blocked`.
@@ -154,7 +153,6 @@ Start with deterministic checks, then run `reviewing-wiki-theory` first. If theo
 ```bash
 ./scripts/filing-baton finish-review \
   --source <source-slug> \
-  --session <current-fresh-session> \
   --result clean \
   --review 'theory=PASS' \
   --review 'diff=PASS' \
@@ -164,13 +162,12 @@ Start with deterministic checks, then run `reviewing-wiki-theory` first. If theo
 
 ./scripts/filing-baton commit \
   --source <source-slug> \
-  --session <same-zero-delta-review-session> \
   --message '<commit message>'
 ```
 
-The commit command rechecks the complete approved tree and atomically advances the recorded branch with `commit-tree`/`update-ref`. It deliberately bypasses normal commit hooks so hooks cannot add unreviewed paths; all required checks must run before approval. The approving log must still be the newest non-empty Freebuff log.
+The commit command rechecks the complete approved tree and atomically advances the recorded branch with `commit-tree`/`update-ref`. It deliberately bypasses normal commit hooks so hooks cannot add unreviewed paths; all required checks must run before approval. Only the session whose anchor matches the approving pass may commit. After commit, the handoff command prints a terminal receipt with no continuation instruction; report the result to the user and stop.
 
-Interrupted write passes recover with `restart-write`; interrupted, blocked, or approved review states recover with `restart-review`, which voids prior approval. It preserves the recorded boundary even when that boundary has mechanical failures so the fresh pass can fix them, but refuses unrecorded staged drift. Run restart before editing. If recovery should be abandoned, a fresh session runs `abort --source <slug> --session <new-log> --reason '<reason>'`; it resets the baton-owned index to current HEAD while preserving worktree files and marks the handoff terminal; separate the preserved `wiki/`/`raw/` drafts before starting another transaction. `reconcile-commit` handles only an exact approved single-parent commit whose handoff save failed. Every command holds a repository-local transition lock. The session path/inode/mtime checks are a practical freshness signal, not a security boundary against deliberate log or handoff tampering.
+Interrupted write passes recover with `restart-write`; interrupted, blocked, or approved review states recover with `restart-review`, which voids prior approval. It preserves the recorded boundary even when that boundary has mechanical failures so the fresh pass can fix them, but refuses unrecorded staged drift. Run restart before editing. If recovery should be abandoned, a fresh session runs `abort --source <slug> --reason '<reason>'`; it resets the baton-owned index to current HEAD while preserving worktree files and marks the handoff terminal; separate the preserved `wiki/`/`raw/` drafts before starting another transaction. `reconcile-commit` handles only an exact approved single-parent commit whose handoff save failed. Every command holds a repository-local transition lock. The ancestry-anchor check is a practical freshness signal: it prevents same-session self-review, but cannot distinguish the user opening a new session from a program launching a new harness process.
 
 Freebuff follows this section through commit and does not execute the full-topology dispatch steps below.
 
@@ -328,7 +325,7 @@ Report to the user:
 - any debt-registration checks performed before adding `meta/tech-debt.md` rows;
 - whether changes were committed.
 
-**Freebuff final-summary contract:** every Freebuff turn must end by running `./scripts/filing-baton handoff --source <source-slug>` and appending its complete output **verbatim as the final block of the response**. Before that block, summarize source/classification, pages and raw artifacts, findings and fixes, mechanical results, every reviewer verdict/status, staged-path count, unrelated files left untouched, baton state, and commit status. The generated block carries the authoritative handoff path, state, boundary/OIDs/tree, history, review ledger, and exact next action. The human can paste the whole response into a new Freebuff session with nothing added; the next agent must follow the block rather than asking the human to reconstruct the slug, session path, commands, or prior work.
+**Freebuff final-summary contract:** every Freebuff turn must end by running `./scripts/filing-baton handoff --source <source-slug>` and appending its complete output **verbatim as the final block of the response**. Before that block, summarize source/classification, pages and raw artifacts, findings and fixes, mechanical results, every reviewer verdict/status, staged-path count, unrelated files left untouched, baton state, and commit status. The generated block carries the authoritative handoff path, state, boundary/OIDs/tree, history, review ledger, and exact next action. The human can paste the whole response into a new Freebuff session with nothing added; the next agent must follow the block rather than asking the human to reconstruct the slug, commands, or prior work.
 
 A missing baton review ledger is verification **incomplete**, not `PASS WITH EXPLICIT PROCESS DEBT`. Process noncompliance cannot be rounded into any PASS vocabulary. If the state is nonterminal, emit the handoff block and stop; if it is `committed`, `no_change`, or `aborted`, emit the terminal handoff block for a complete final record.
 
