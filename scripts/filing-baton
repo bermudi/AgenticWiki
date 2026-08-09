@@ -77,6 +77,10 @@ EPHEMERAL_COMMS = frozenset(
         "nice",
         "xargs",
         "nohup",
+        # Harness CLI wrappers — spawned per command, not stable session identity.
+        # Freebuff launches a fresh `freebuff` subprocess for each terminal command;
+        # the stable session process is the Node.js parent (e.g. node-MainThread).
+        "freebuff",
     }
 )
 
@@ -107,11 +111,12 @@ def session_anchor() -> str:
     """Identify the harness session this command runs under.
 
     The anchor is the first non-ephemeral ancestor process: per-command wrappers
-    (shells, interpreters) are skipped, so the anchor lands on the long-lived
-    harness process that spawned them. A genuinely fresh session is a different
-    harness process and therefore a different anchor; the writing session cannot
-    mint another anchor because a process cannot change its own ancestry. PID
-    reuse across harness restarts is defeated by including the kernel start time.
+    (shells, interpreters, harness CLI launchers like ``freebuff``) are skipped,
+    so the anchor lands on the long-lived harness process that spawned them (e.g.
+    the Node.js session process). A genuinely fresh session is a different harness
+    process and therefore a different anchor; the writing session cannot mint
+    another anchor because a process cannot change its own ancestry. PID reuse
+    across harness restarts is defeated by including the kernel start time.
     """
     chain = process_chain()
     for pid, comm, starttime in chain:
