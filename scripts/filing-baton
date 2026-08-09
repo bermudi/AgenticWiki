@@ -10,7 +10,6 @@ import argparse
 import datetime as dt
 import fcntl
 import json
-import os
 import re
 import subprocess
 import sys
@@ -57,77 +56,6 @@ def validate_filing_date(value: str) -> None:
         raise BatonError("filing date must be ISO YYYY-MM-DD") from exc
     if parsed.isoformat() != value:
         raise BatonError("filing date must be ISO YYYY-MM-DD")
-
-
-EPHEMERAL_COMMS = frozenset(
-    {
-        "python",
-        "python3",
-        "uv",
-        "bash",
-        "sh",
-        "dash",
-        "ash",
-        "env",
-        "script",
-        "timeout",
-        "setsid",
-        "sudo",
-        "doas",
-        "nice",
-        "xargs",
-        "nohup",
-        # Harness CLI wrappers — spawned per command, not stable session identity.
-        # Freebuff launches a fresh `freebuff` subprocess for each terminal command;
-        # the stable session process is the Node.js parent (e.g. node-MainThread).
-        "freebuff",
-    }
-)
-
-
-def process_chain() -> list[tuple[int, str, int]]:
-    """Return (pid, comm, starttime) for this process and its ancestors, self first."""
-    chain: list[tuple[int, str, int]] = []
-    pid = os.getpid()
-    seen: set[int] = set()
-    while pid > 1 and pid not in seen:
-        seen.add(pid)
-        try:
-            stat = Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
-        except (FileNotFoundError, PermissionError):
-            break
-        try:
-            comm = stat.split("(", 1)[1].rsplit(")", 1)[0]
-            fields = stat.rsplit(")", 1)[1].split()
-            ppid, starttime = int(fields[1]), int(fields[19])
-        except (IndexError, ValueError) as exc:
-            raise BatonError(f"cannot parse /proc/{pid}/stat") from exc
-        chain.append((pid, comm, starttime))
-        pid = ppid
-    return chain
-
-
-def session_anchor() -> str:
-    """Identify the harness session this command runs under.
-
-    The anchor is the first non-ephemeral ancestor process: per-command wrappers
-    (shells, interpreters, harness CLI launchers like ``freebuff``) are skipped,
-    so the anchor lands on the long-lived harness process that spawned them (e.g.
-    the Node.js session process). A genuinely fresh session is a different harness
-    process and therefore a different anchor; the writing session cannot mint
-    another anchor because a process cannot change its own ancestry. PID reuse
-    across harness restarts is defeated by including the kernel start time.
-    """
-    chain = process_chain()
-    for pid, comm, starttime in chain:
-        if comm in EPHEMERAL_COMMS:
-            continue
-        return f"{comm}:{pid}:{starttime}"
-    detail = " -> ".join(f"{comm}({pid})" for pid, comm, _ in chain) or "none"
-    raise BatonError(
-        "cannot determine a session anchor from process ancestry "
-        f"(chain: {detail}); run './scripts/filing-baton whoami' and report the output"
-    )
 
 
 def state_path(root: Path, slug: str) -> Path:
@@ -362,28 +290,6 @@ def run_validator(root: Path, filing_date: str, boundary: dict[str, str]) -> str
     return summary[-1] if summary else "passed"
 
 
-def used_anchors(state: dict[str, object]) -> set[str]:
-    history = state.get("history")
-    if not isinstance(history, list):
-        raise BatonError("handoff history is malformed")
-    anchors: set[str] = set()
-    for item in history:
-        if isinstance(item, dict) and isinstance(item.get("anchor"), str):
-            anchors.add(item["anchor"])
-    active = state.get("active_pass")
-    if isinstance(active, dict) and isinstance(active.get("anchor"), str):
-        anchors.add(active["anchor"])
-    return anchors
-
-
-def require_fresh_anchor(state: dict[str, object], anchor: str) -> None:
-    if anchor in used_anchors(state):
-        raise BatonError(
-            "this session has already participated in this filing, so it cannot be a clean "
-            "review context; open a genuinely new Freebuff session and paste the handoff there"
-        )
-
-
 def append_history(state: dict[str, object], event: dict[str, object]) -> None:
     history = state.get("history")
     if not isinstance(history, list):
@@ -420,7 +326,6 @@ def parse_reviews(values: list[str]) -> dict[str, str]:
 def cmd_start_write(args: argparse.Namespace) -> None:
     root = repository_root()
     validate_filing_date(args.filing_date)
-    anchor = session_anchor()
     path = state_path(root, args.source)
     if path.exists():
         raise BatonError(f"handoff already exists: {path}; resume or archive it instead of overwriting")
@@ -443,31 +348,22 @@ def cmd_start_write(args: argparse.Namespace) -> None:
         "history": [],
         "active_pass": {
             "role": "write",
-            "anchor": anchor,
             "started_at": now(),
         },
     }
     save_state(path, state)
     print(f"WRITE PASS STARTED: {path}")
-    print(f"Session anchor: {anchor}")
     print("This pass may write and stage, but it may not semantically approve or commit.")
 
 
 def cmd_finish_write(args: argparse.Namespace) -> None:
     root = repository_root()
-    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "writing":
         raise BatonError(f"expected state writing, got {state.get('state')!r}")
     active = state.get("active_pass")
-    if (
-        not isinstance(active, dict)
-        or active.get("role") != "write"
-        or active.get("anchor") != anchor
-    ):
-        raise BatonError("this session does not own the active write pass")
     boundary = staged_boundary()
     if args.no_change:
         if args.path or boundary:
@@ -490,7 +386,6 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
             state,
             {
                 "role": "write",
-                "anchor": anchor,
                 "started_at": active.get("started_at"),
                 "finished_at": now(),
                 "result": "no_change",
@@ -521,7 +416,6 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
         state,
         {
             "role": "write",
-            "anchor": anchor,
             "started_at": active.get("started_at"),
             "finished_at": now(),
             "result": "changed",
@@ -534,7 +428,6 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
     state["boundary"] = boundary
     state["required_raw_paths"] = sorted(path for path in boundary if path.startswith("raw/"))
     state["index_tree"] = index_tree()
-    state["last_content_anchor"] = anchor
     state["active_pass"] = None
     save_state(path, state)
     print("WRITE PASS COMPLETE — FRESH REVIEW REQUIRED")
@@ -543,20 +436,17 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
 
 def cmd_restart_write(args: argparse.Namespace) -> None:
     root = repository_root()
-    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "writing":
         raise BatonError(f"restart-write requires state writing, got {state.get('state')!r}")
-    require_fresh_anchor(state, anchor)
     previous = state.get("active_pass")
     if isinstance(previous, dict):
         append_history(
             state,
             {
                 "role": previous.get("role", "write"),
-                "anchor": previous.get("anchor"),
                 "started_at": previous.get("started_at"),
                 "finished_at": now(),
                 "result": "abandoned",
@@ -565,7 +455,6 @@ def cmd_restart_write(args: argparse.Namespace) -> None:
         )
     state["active_pass"] = {
         "role": "write",
-        "anchor": anchor,
         "started_at": now(),
         "restart_reason": args.reason,
     }
@@ -575,13 +464,11 @@ def cmd_restart_write(args: argparse.Namespace) -> None:
 
 def cmd_start_review(args: argparse.Namespace) -> None:
     root = repository_root()
-    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "needs_review":
         raise BatonError(f"expected state needs_review, got {state.get('state')!r}")
-    require_fresh_anchor(state, anchor)
     boundary = require_boundary(state.get("boundary"))
     require_required_raw_paths(state, boundary)
     require_content_invariants(boundary, state.get("base_head"))
@@ -592,33 +479,28 @@ def cmd_start_review(args: argparse.Namespace) -> None:
     state["state"] = "reviewing"
     state["active_pass"] = {
         "role": "review-fix",
-        "anchor": anchor,
         "started_at": now(),
         "start_boundary": boundary,
         "start_index_tree": state.get("index_tree"),
     }
     save_state(path, state)
     print("REVIEW/FIX PASS STARTED")
-    print(f"Session anchor: {anchor}")
     print("Review the complete boundary. If this pass changes any staged content, another fresh pass is mandatory.")
 
 
 def cmd_restart_review(args: argparse.Namespace) -> None:
     root = repository_root()
-    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") not in {"reviewing", "blocked", "approved", "needs_review"}:
         raise BatonError(f"restart-review cannot recover state {state.get('state')!r}")
-    require_fresh_anchor(state, anchor)
     previous = state.get("active_pass")
     if isinstance(previous, dict):
         append_history(
             state,
             {
                 "role": previous.get("role", "review-fix"),
-                "anchor": previous.get("anchor"),
                 "started_at": previous.get("started_at"),
                 "finished_at": now(),
                 "result": "abandoned",
@@ -636,7 +518,6 @@ def cmd_restart_review(args: argparse.Namespace) -> None:
     state["state"] = "reviewing"
     state["active_pass"] = {
         "role": "review-fix",
-        "anchor": anchor,
         "started_at": now(),
         "start_boundary": boundary,
         "start_index_tree": current_tree,
@@ -644,7 +525,6 @@ def cmd_restart_review(args: argparse.Namespace) -> None:
     }
     state["boundary"] = boundary
     state["index_tree"] = current_tree
-    state.pop("approved_by_anchor", None)
     state.pop("approved_tree", None)
     save_state(path, state)
     print("REVIEW PASS RESTARTED — PRIOR APPROVAL, IF ANY, IS VOID")
@@ -652,15 +532,12 @@ def cmd_restart_review(args: argparse.Namespace) -> None:
 
 def cmd_finish_review(args: argparse.Namespace) -> None:
     root = repository_root()
-    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "reviewing":
         raise BatonError(f"expected state reviewing, got {state.get('state')!r}")
     active = state.get("active_pass")
-    if not isinstance(active, dict) or active.get("anchor") != anchor:
-        raise BatonError("this session does not own the active review pass")
     start_boundary = active.get("start_boundary")
     start_tree = active.get("start_index_tree")
     if not isinstance(start_boundary, dict) or not isinstance(start_tree, str):
@@ -680,7 +557,6 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
             state,
             {
                 "role": "review-fix",
-                "anchor": anchor,
                 "started_at": active.get("started_at"),
                 "finished_at": now(),
                 "result": "blocked",
@@ -693,8 +569,6 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         state["state"] = "blocked"
         state["boundary"] = current
         state["index_tree"] = current_tree
-        if changed:
-            state["last_content_anchor"] = anchor
         state["active_pass"] = None
         save_state(path, state)
         print("REVIEW BLOCKED — COMMIT GATE CLOSED")
@@ -716,7 +590,6 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
             state,
             {
                 "role": "review-approve",
-                "anchor": anchor,
                 "started_at": active.get("started_at"),
                 "finished_at": now(),
                 "result": "clean",
@@ -731,7 +604,6 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         state["boundary"] = current
         state["index_tree"] = current_tree
         state["approved_tree"] = current_tree
-        state["approved_by_anchor"] = anchor
         state["review_ledger"] = reviews
         state["active_pass"] = None
         save_state(path, state)
@@ -744,7 +616,6 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         state,
         {
             "role": "review-fix",
-            "anchor": anchor,
             "started_at": active.get("started_at"),
             "finished_at": now(),
             "result": "changed",
@@ -764,7 +635,6 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
         set(required_raw) | {path for path in current if path.startswith("raw/")}
     )
     state["index_tree"] = current_tree
-    state["last_content_anchor"] = anchor
     state["active_pass"] = None
     save_state(path, state)
     print("FIXES STAGED — ANOTHER FRESH REVIEW IS REQUIRED")
@@ -772,14 +642,11 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
 
 def cmd_commit(args: argparse.Namespace) -> None:
     root = repository_root()
-    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     require_repository_position(state)
     if state.get("state") != "approved":
         raise BatonError(f"commit requires state approved, got {state.get('state')!r}")
-    if state.get("approved_by_anchor") != anchor:
-        raise BatonError("only the zero-delta approving session may commit")
     boundary = require_boundary(state.get("boundary"))
     require_required_raw_paths(state, boundary)
     require_content_invariants(boundary, state.get("base_head"))
@@ -804,7 +671,6 @@ def cmd_commit(args: argparse.Namespace) -> None:
         state,
         {
             "role": "commit",
-            "anchor": anchor,
             "finished_at": now(),
             "result": "committed",
             "commit": commit,
@@ -864,12 +730,10 @@ def cmd_reconcile_commit(args: argparse.Namespace) -> None:
 
 def cmd_abort(args: argparse.Namespace) -> None:
     root = repository_root()
-    anchor = session_anchor()
     path = state_path(root, args.source)
     state = load_state(path)
     if state.get("state") in {"committed", "aborted", "no_change"}:
         raise BatonError(f"cannot abort terminal state {state.get('state')!r}")
-    require_fresh_anchor(state, anchor)
     paths = staged_paths()
     current_tree = index_tree()
     if state.get("state") != "writing" and current_tree != state.get("index_tree"):
@@ -890,7 +754,6 @@ def cmd_abort(args: argparse.Namespace) -> None:
         state,
         {
             "role": "abort",
-            "anchor": anchor,
             "finished_at": now(),
             "result": "aborted",
             "unstaged_paths": paths,
@@ -916,9 +779,8 @@ def continuation_action(state: dict[str, object]) -> str:
     slug = state.get("source_slug")
     if status == "needs_review":
         return (
-            f"Run ./scripts/filing-baton start-review --source {slug}. The baton identifies this "
-            "session itself from process ancestry — there is no session argument to supply or "
-            "invent. Run theory first, then every applicable named reviewer method. If you stage fixes, "
+            f"Run ./scripts/filing-baton start-review --source {slug}. "
+            "Run theory first, then every applicable named reviewer method. If you stage fixes, "
             "finish as changed and emit a new handoff; if zero-delta, finish clean and commit."
         )
     if status == "writing":
@@ -952,8 +814,6 @@ def cmd_handoff(args: argparse.Namespace) -> None:
         print()
         print("Continue this Freebuff filing from machine-recorded baton state. Do not treat prose claims")
         print("from the previous session as proof, and do not ask the user to reconstruct commands or paths.")
-        print("Session identity is established by the baton itself from process ancestry; never create")
-        print("session marker files and never supply a session argument.")
     print(f"Repository: {root}")
     print(f"Source slug: {state.get('source_slug')}")
     print(f"Source locator: {state.get('source_locator')}")
@@ -973,15 +833,6 @@ def cmd_handoff(args: argparse.Namespace) -> None:
         print("At the end of this session, run the baton handoff command again and end your final summary")
         print("with its complete output. The user will paste the entire previous response verbatim into")
         print("the next Freebuff session; require no added slug, path, command, or explanation.")
-
-
-def cmd_whoami(args: argparse.Namespace) -> None:
-    chain = process_chain()
-    print("Process ancestry (this command first):")
-    for pid, comm, starttime in chain:
-        marker = " (ephemeral wrapper, skipped)" if comm in EPHEMERAL_COMMS else ""
-        print(f"  pid={pid} comm={comm} start={starttime}{marker}")
-    print(f"Session anchor: {session_anchor()}")
 
 
 def cmd_show(args: argparse.Namespace) -> None:
@@ -1053,9 +904,6 @@ def parser() -> argparse.ArgumentParser:
     abort.add_argument("--source", required=True)
     abort.add_argument("--reason", required=True)
     abort.set_defaults(func=cmd_abort)
-
-    whoami = sub.add_parser("whoami", help="print process ancestry and the derived session anchor")
-    whoami.set_defaults(func=cmd_whoami)
 
     handoff = sub.add_parser("handoff")
     handoff.add_argument("--source", required=True)

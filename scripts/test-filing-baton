@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 # Regression tests for scripts/filing-baton using isolated temporary repositories.
 #
-# Session model: the baton derives session identity from process ancestry (the
-# first non-ephemeral ancestor process). Each simulated "Freebuff session" here
-# is a long-lived coprocess running a copy of /bin/bash renamed to fb-<name>,
-# so every simulated session is a genuinely distinct anchor and reusing one
-# coprocess models same-session reuse. No marker files exist anywhere in this
-# mechanism; that is the point.
+# The baton enforces only the write -> review -> commit state machine. Commands
+# are run directly (no session identity machinery), and parallel tests use
+# background shell processes.
 
 set -euo pipefail
 
@@ -50,46 +47,6 @@ expect_failure() {
   fi
 }
 
-# --- simulated harness sessions ------------------------------------------
-
-sess_start() {
-  local name=$1
-  cp /bin/bash "$TMP_ROOT/fb-$name"
-  coproc "FB_$name" { exec "$TMP_ROOT/fb-$name" -s 2>&1; }
-}
-
-sess_send() {
-  local name=$1 cmd=$2
-  local -n _send_fds="FB_$name"
-  printf '%s\n' "$cmd" >&"${_send_fds[1]}"
-  printf 'echo __BATON_DONE__$?\n' >&"${_send_fds[1]}"
-}
-
-sess_recv() {
-  local name=$1
-  local -n _recv_fds="FB_$name"
-  local line code=1
-  : >"$TMP_ROOT/sess-output"
-  while IFS= read -r line <&"${_recv_fds[0]}"; do
-    case $line in
-      __BATON_DONE__*)
-        code=${line#__BATON_DONE__}
-        break
-        ;;
-      *) printf '%s\n' "$line" >>"$TMP_ROOT/sess-output" ;;
-    esac
-  done
-  return "$code"
-}
-
-sess_run() {
-  sess_send "$1" "$2"
-  local code=0
-  sess_recv "$1" || code=$?
-  cat "$TMP_ROOT/sess-output"
-  return "$code"
-}
-
 new_repo() {
   REPO="$TMP_ROOT/$1"
   mkdir -p "$REPO/scripts" "$REPO/wiki"
@@ -120,9 +77,6 @@ IGNORE
 
 new_repo happy
 
-expect_success "whoami reports a process-ancestry session anchor" \
-  bash -c "scripts/filing-baton whoami | grep -q '^Session anchor: .*:.*:.*'"
-
 expect_failure "baton rejects the removed agent-supplied --session identity argument" \
   scripts/filing-baton start-write --source bad-session --locator https://example.com \
   --filing-date 2026-08-06 --session .freebuff/session-write-A.log
@@ -131,12 +85,11 @@ expect_failure "write pass rejects a non-ISO filing date" \
   scripts/filing-baton start-write --source bad-date --locator https://example.com \
   --filing-date 08-06-2026
 
-sess_start A
 expect_success "write pass starts with an empty index" \
-  sess_run A 'scripts/filing-baton start-write --source example-source --locator https://example.com --filing-date 2026-08-06'
+  bash -c 'scripts/filing-baton start-write --source example-source --locator https://example.com --filing-date 2026-08-06'
 
 expect_failure "a second slug cannot start while another baton transaction owns the index" \
-  sess_run A 'scripts/filing-baton start-write --source overlapping-source --locator https://example.org --filing-date 2026-08-06'
+  bash -c 'scripts/filing-baton start-write --source overlapping-source --locator https://example.org --filing-date 2026-08-06'
 
 mkdir -p raw wiki/topics
 cat >raw/example-source.md <<'EOF_RAW'
@@ -156,22 +109,20 @@ printf '\n- [[example]]\n' >>wiki/index.md
 git add -- raw/example-source.md wiki/topics/example.md wiki/index.md
 
 expect_failure "write pass rejects a staged path omitted from its explicit boundary" \
-  sess_run A 'scripts/filing-baton finish-write --source example-source --path raw/example-source.md'
+  bash -c 'scripts/filing-baton finish-write --source example-source --path raw/example-source.md'
 
 expect_success "write pass snapshots staged index entries and requires review" \
-  sess_run A 'scripts/filing-baton finish-write --source example-source --path raw/example-source.md --path wiki/topics/example.md --path wiki/index.md'
+  bash -c 'scripts/filing-baton finish-write --source example-source --path raw/example-source.md --path wiki/topics/example.md --path wiki/index.md'
 
 if scripts/filing-baton handoff --source example-source >"$TMP_ROOT/handoff-summary" && \
   grep -q 'FREEBUFF FILING HANDOFF' "$TMP_ROOT/handoff-summary" && \
   grep -q 'Recorded state: needs_review' "$TMP_ROOT/handoff-summary" && \
   grep -q 'Repository:' "$TMP_ROOT/handoff-summary" && \
   grep -q 'Handoff file: .filing-handoff/example-source.json' "$TMP_ROOT/handoff-summary" && \
-  grep -q 'process ancestry' "$TMP_ROOT/handoff-summary" && \
   grep -q 'start-review --source example-source' "$TMP_ROOT/handoff-summary" && \
   grep -q 'Load .agents/skills/coordinating-filing/SKILL.md' "$TMP_ROOT/handoff-summary" && \
   grep -q 'on-disk handoff and Git index are authoritative' "$TMP_ROOT/handoff-summary" && \
   grep -q 'paste the entire previous response verbatim' "$TMP_ROOT/handoff-summary" && \
-  grep -q '"anchor"' "$TMP_ROOT/handoff-summary" && \
   grep -q '"boundary"' "$TMP_ROOT/handoff-summary" && \
   ! grep -q '.freebuff/session' "$TMP_ROOT/handoff-summary"; then
   ok "generated handoff is a self-contained verbatim continuation summary with no marker-file instructions"
@@ -179,59 +130,45 @@ else
   not_ok "generated handoff is missing continuation context"
 fi
 
-expect_failure "writer session cannot review its own work" \
-  sess_run A 'scripts/filing-baton start-review --source example-source'
-
-expect_failure "writer session still cannot review after the rejection" \
-  sess_run A 'scripts/filing-baton start-review --source example-source'
-
-sess_start B
 expect_success "fresh review session starts" \
-  sess_run B 'scripts/filing-baton start-review --source example-source'
+  bash -c 'scripts/filing-baton start-review --source example-source'
 
 expect_failure "clean result requires all four reviewer rows" \
-  sess_run B "scripts/filing-baton finish-review --source example-source --result clean --review theory=PASS --note 'review evidence fixture'"
+  bash -c "scripts/filing-baton finish-review --source example-source --result clean --review theory=PASS --note 'review evidence fixture'"
 
 expect_failure "clean result rejects pass-prefixed and illegal carried statuses" \
-  sess_run B "scripts/filing-baton finish-review --source example-source --result clean \
+  bash -c "scripts/filing-baton finish-review --source example-source --result clean \
   --review 'theory=CARRIED: FAIL' --review 'diff=PASS WITH EXPLICIT PROCESS DEBT' \
   --review 'source-fidelity=PASSING' --review 'quality=SKIPPED-' --note 'review evidence fixture'"
 
 chmod +x wiki/topics/example.md
 git add -- wiki/topics/example.md
 expect_failure "a mode-only staged-index change cannot be called clean" \
-  sess_run B "scripts/filing-baton finish-review --source example-source --result clean \
+  bash -c "scripts/filing-baton finish-review --source example-source --result clean \
   --review theory=PASS --review diff=PASS --review source-fidelity=PASS --review quality=PASS \
   --note 'review evidence fixture'"
 
 git restore --staged -- raw/example-source.md
 expect_failure "a fixer cannot remove a required raw artifact from the transaction" \
-  sess_run B "scripts/filing-baton finish-review --source example-source --result changed \
+  bash -c "scripts/filing-baton finish-review --source example-source --result changed \
   --note 'attempted raw removal'"
 git add -- raw/example-source.md
 
 expect_success "review fixes force another fresh review" \
-  sess_run B "scripts/filing-baton finish-review --source example-source --result changed --note 'fixed example'"
+  bash -c "scripts/filing-baton finish-review --source example-source --result changed --note 'fixed example'"
 
-expect_failure "a fixing session cannot be reused as a reviewer" \
-  sess_run B 'scripts/filing-baton start-review --source example-source'
-
-sess_start C
 expect_success "second fresh review starts" \
-  sess_run C 'scripts/filing-baton start-review --source example-source'
+  bash -c 'scripts/filing-baton start-review --source example-source'
 
 expect_failure "clean review refuses an empty evidence note" \
-  sess_run C "scripts/filing-baton finish-review --source example-source --result clean \
+  bash -c "scripts/filing-baton finish-review --source example-source --result clean \
   --review 'theory=PASS' --review diff=PASS \
   --review source-fidelity=PASS --review quality=PASS"
 
 expect_success "zero-delta complete review unlocks commit" \
-  sess_run C "scripts/filing-baton finish-review --source example-source --result clean \
+  bash -c "scripts/filing-baton finish-review --source example-source --result clean \
   --review 'theory=PASS' --review diff=PASS \
   --review source-fidelity=PASS --review quality=PASS --note 'all four reviewer reports clean'"
-
-expect_failure "a non-approving session cannot commit" \
-  sess_run B "scripts/filing-baton commit --source example-source --message bad"
 
 approved_tree=$(git write-tree)
 cp .filing-handoff/example-source.json "$TMP_ROOT/example-approved-state.json"
@@ -244,7 +181,7 @@ HOOK
 chmod +x .git/hooks/pre-commit
 
 expect_success "approving zero-delta session commits exact staged boundary without hooks" \
-  sess_run C "scripts/filing-baton commit --source example-source --message 'file: example source'"
+  bash -c "scripts/filing-baton commit --source example-source --message 'file: example source'"
 
 if [ ! -e hook-added.txt ] && [ -z "$(git diff --cached --name-only)" ] && \
   [ "$(git log -1 --pretty=%s)" = "file: example source" ] && \
@@ -272,17 +209,13 @@ mkdir -p raw
 printf 'original\n' >raw/existing.md
 git add -- raw/existing.md
 git commit -qm 'add immutable raw fixture'
-sess_start IW
-sess_run IW 'scripts/filing-baton start-write --source immutable-source --locator raw/existing.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source immutable-source --locator raw/existing.md --filing-date 2026-08-06' >/dev/null
 printf 'modified\n' >raw/existing.md
 git add -- raw/existing.md
 expect_failure "write pass rejects modification of an existing raw artifact" \
-  sess_run IW "scripts/filing-baton finish-write --source immutable-source --path raw/existing.md"
-expect_failure "abort requires a session not previously used by the transaction" \
-  sess_run IW "scripts/filing-baton abort --source immutable-source --reason 'reused writer session'"
-sess_start IX
+  bash -c "scripts/filing-baton finish-write --source immutable-source --path raw/existing.md"
 expect_success "abort unstages an unrecoverable transaction while preserving worktree files" \
-  sess_run IX "scripts/filing-baton abort --source immutable-source --reason 'immutable raw violation'"
+  bash -c "scripts/filing-baton abort --source immutable-source --reason 'immutable raw violation'"
 if [ -z "$(git diff --cached --name-only)" ] && [ "$(cat raw/existing.md)" = modified ]; then
   ok "abort clears index ownership without discarding worktree content"
 else
@@ -290,42 +223,38 @@ else
 fi
 
 new_repo missing-index
-sess_start MW
-sess_run MW 'scripts/filing-baton start-write --source index-source --locator raw/index.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source index-source --locator raw/index.md --filing-date 2026-08-06' >/dev/null
 mkdir -p wiki/concepts
 printf 'new page\n' >wiki/concepts/new-page.md
 git add -- wiki/concepts/new-page.md
 expect_failure "new wiki pages require wiki/index.md in the staged boundary" \
-  sess_run MW "scripts/filing-baton finish-write --source index-source --path wiki/concepts/new-page.md"
+  bash -c "scripts/filing-baton finish-write --source index-source --path wiki/concepts/new-page.md"
 printf '\nUnrelated index edit\n' >>wiki/index.md
 git add -- wiki/index.md
 expect_failure "staging wiki/index.md is insufficient when the new page is not cataloged" \
-  sess_run MW "scripts/filing-baton finish-write --source index-source --path wiki/concepts/new-page.md --path wiki/index.md"
+  bash -c "scripts/filing-baton finish-write --source index-source --path wiki/concepts/new-page.md --path wiki/index.md"
 
 new_repo existing-page-index
 printf 'existing page\n' >wiki/existing.md
 git add -- wiki/existing.md
 git commit -qm 'add existing wiki page fixture'
-sess_start EW
-sess_run EW 'scripts/filing-baton start-write --source existing-page-source --locator raw/source.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source existing-page-source --locator raw/source.md --filing-date 2026-08-06' >/dev/null
 printf 'changed page\n' >wiki/existing.md
 git add -- wiki/existing.md
 expect_failure "existing wiki page changes also require staged wiki/index.md" \
-  sess_run EW "scripts/filing-baton finish-write --source existing-page-source --path wiki/existing.md"
+  bash -c "scripts/filing-baton finish-write --source existing-page-source --path wiki/existing.md"
 
 new_repo no-change
 mkdir -p raw
 printf 'existing source\n' >raw/existing-source.md
 git add -- raw/existing-source.md
 git commit -qm 'add existing source fixture'
-sess_start NW
-sess_run NW 'scripts/filing-baton start-write --source no-change-source --locator raw/existing-source.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source no-change-source --locator raw/existing-source.md --filing-date 2026-08-06' >/dev/null
 expect_success "existing raw skip can terminate as no-change without review or commit" \
-  sess_run NW "scripts/filing-baton finish-write --source no-change-source --no-change --note 'archive already tracked'"
+  bash -c "scripts/filing-baton finish-write --source no-change-source --no-change --note 'archive already tracked'"
 
 new_repo dirty-untracked
-sess_start UW
-sess_run UW 'scripts/filing-baton start-write --source dirty-source --locator raw/dirty.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source dirty-source --locator raw/dirty.md --filing-date 2026-08-06' >/dev/null
 mkdir -p raw wiki/concepts
 printf 'source\n' >raw/dirty.md
 printf 'page with [[unstaged-helper]]\n' >wiki/concepts/dirty.md
@@ -333,54 +262,49 @@ printf '\n- [[dirty]]\n' >>wiki/index.md
 printf 'unstaged helper\n' >wiki/concepts/unstaged-helper.md
 git add -- raw/dirty.md wiki/concepts/dirty.md wiki/index.md
 expect_failure "write completion rejects untracked wiki files outside the staged tree" \
-  sess_run UW "scripts/filing-baton finish-write --source dirty-source --path raw/dirty.md --path wiki/concepts/dirty.md --path wiki/index.md"
+  bash -c "scripts/filing-baton finish-write --source dirty-source --path raw/dirty.md --path wiki/concepts/dirty.md --path wiki/index.md"
 
 new_repo dirty-ignored
 printf 'raw/assets/*.pdf\n' >>.gitignore
 git add -- .gitignore
 git commit -qm 'ignore PDF fixture'
-sess_start VW
-sess_run VW 'scripts/filing-baton start-write --source dirty-ignored-source --locator raw/source.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source dirty-ignored-source --locator raw/source.md --filing-date 2026-08-06' >/dev/null
 mkdir -p raw/assets
 printf 'source\n' >raw/source.md
 printf 'ignored companion\n' >raw/assets/unapproved.pdf
 git add -- raw/source.md
 expect_failure "write completion rejects ignored raw assets outside the staged tree" \
-  sess_run VW "scripts/filing-baton finish-write --source dirty-ignored-source --path raw/source.md"
+  bash -c "scripts/filing-baton finish-write --source dirty-ignored-source --path raw/source.md"
 
 new_repo dirty-raw
 mkdir -p raw
 printf 'preserved\n' >raw/preserved.md
 git add -- raw/preserved.md
 git commit -qm 'add preserved raw fixture'
-sess_start RW
-sess_run RW 'scripts/filing-baton start-write --source dirty-raw-source --locator raw/new.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source dirty-raw-source --locator raw/new.md --filing-date 2026-08-06' >/dev/null
 printf 'new\n' >raw/new.md
 printf 'unstaged mutation\n' >raw/preserved.md
 git add -- raw/new.md
 expect_failure "write completion rejects unstaged existing-raw changes outside the staged tree" \
-  sess_run RW "scripts/filing-baton finish-write --source dirty-raw-source --path raw/new.md"
+  bash -c "scripts/filing-baton finish-write --source dirty-raw-source --path raw/new.md"
 
 new_repo stale
-sess_start SW
-sess_run SW 'scripts/filing-baton start-write --source stale-source --locator raw/stale.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source stale-source --locator raw/stale.md --filing-date 2026-08-06' >/dev/null
 mkdir -p raw
 printf 'one\n' >raw/stale.md
 git add -- raw/stale.md
-sess_run SW 'scripts/filing-baton finish-write --source stale-source --path raw/stale.md' >/dev/null
+bash -c 'scripts/filing-baton finish-write --source stale-source --path raw/stale.md' >/dev/null
 printf 'two\n' >raw/stale.md
 git add -- raw/stale.md
-sess_start SR
 expect_failure "review refuses a staged boundary that no longer matches the handoff" \
-  sess_run SR 'scripts/filing-baton start-review --source stale-source'
+  bash -c 'scripts/filing-baton start-review --source stale-source'
 
 new_repo head-drift
-sess_start HW
-sess_run HW 'scripts/filing-baton start-write --source head-source --locator raw/head.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source head-source --locator raw/head.md --filing-date 2026-08-06' >/dev/null
 mkdir -p raw
 printf 'head\n' >raw/head.md
 git add -- raw/head.md
-sess_run HW 'scripts/filing-baton finish-write --source head-source --path raw/head.md' >/dev/null
+bash -c 'scripts/filing-baton finish-write --source head-source --path raw/head.md' >/dev/null
 old_head=$(git rev-parse HEAD)
 head_index="$TMP_ROOT/head-drift-index"
 GIT_INDEX_FILE="$head_index" git read-tree "$old_head"
@@ -389,79 +313,72 @@ GIT_INDEX_FILE="$head_index" git update-index --add --cacheinfo "100644,$head_bl
 new_tree=$(GIT_INDEX_FILE="$head_index" git write-tree)
 new_head=$(printf 'concurrent move\n' | git commit-tree "$new_tree" -p "$old_head")
 git update-ref "$(git symbolic-ref HEAD)" "$new_head" "$old_head"
-sess_start HR
 expect_failure "review refuses branch HEAD drift after the write handoff" \
-  sess_run HR 'scripts/filing-baton start-review --source head-source'
-sess_start HA
+  bash -c 'scripts/filing-baton start-review --source head-source'
 expect_success "abort can terminalize an exact owned boundary after HEAD drift" \
-  sess_run HA "scripts/filing-baton abort --source head-source --reason 'concurrent HEAD movement'"
+  bash -c "scripts/filing-baton abort --source head-source --reason 'concurrent HEAD movement'"
 mv raw/head.md "$TMP_ROOT/aborted-head-worktree.md"
-sess_start HN
 expect_success "a new transaction can start after drift-safe abort once preserved work is separated" \
-  sess_run HN 'scripts/filing-baton start-write --source after-drift-source --locator raw/after.md --filing-date 2026-08-06'
+  bash -c 'scripts/filing-baton start-write --source after-drift-source --locator raw/after.md --filing-date 2026-08-06'
 
 new_repo blocked
-sess_start BW
-sess_run BW 'scripts/filing-baton start-write --source blocked-source --locator raw/blocked.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source blocked-source --locator raw/blocked.md --filing-date 2026-08-06' >/dev/null
 mkdir -p raw
 printf 'blocked\n' >raw/blocked.md
 git add -- raw/blocked.md
-sess_run BW 'scripts/filing-baton finish-write --source blocked-source --path raw/blocked.md' >/dev/null
-sess_start BR
-sess_run BR 'scripts/filing-baton start-review --source blocked-source' >/dev/null
+bash -c 'scripts/filing-baton finish-write --source blocked-source --path raw/blocked.md' >/dev/null
+bash -c 'scripts/filing-baton start-review --source blocked-source' >/dev/null
 touch validator-fail
 expect_success "blocked result persists even when deterministic validation fails" \
-  sess_run BR "scripts/filing-baton finish-review --source blocked-source --result blocked --note 'validator failure'"
+  bash -c "scripts/filing-baton finish-review --source blocked-source --result blocked --note 'validator failure'"
 mv validator-fail "$TMP_ROOT/blocked-validator-fail"
 printf 'untracked review contaminant\n' >wiki/untracked-review.md
-sess_start BX
 expect_failure "restart-review rejects untracked wiki/raw bytes before judgment" \
-  sess_run BX "scripts/filing-baton restart-review --source blocked-source --reason 'blocker resolved'"
+  bash -c "scripts/filing-baton restart-review --source blocked-source --reason 'blocker resolved'"
 mv wiki/untracked-review.md "$TMP_ROOT/untracked-review.md"
 expect_success "fresh session can restart a blocked review" \
-  sess_run BX "scripts/filing-baton restart-review --source blocked-source --reason 'blocker resolved'"
+  bash -c "scripts/filing-baton restart-review --source blocked-source --reason 'blocker resolved'"
 printf 'mutation before restart\n' >>raw/blocked.md
 git add -- raw/blocked.md
-sess_start BY
 expect_failure "restart-review cannot adopt changes made before the fresh pass is bounded" \
-  sess_run BY "scripts/filing-baton restart-review --source blocked-source --reason 'must not adopt own bytes'"
+  bash -c "scripts/filing-baton restart-review --source blocked-source --reason 'must not adopt own bytes'"
 
 new_repo blocked-whitespace
-sess_start WW
-sess_run WW 'scripts/filing-baton start-write --source whitespace-source --locator raw/whitespace.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source whitespace-source --locator raw/whitespace.md --filing-date 2026-08-06' >/dev/null
 mkdir -p raw
 printf 'clean\n' >raw/whitespace.md
 git add -- raw/whitespace.md
-sess_run WW 'scripts/filing-baton finish-write --source whitespace-source --path raw/whitespace.md' >/dev/null
-sess_start WR
-sess_run WR 'scripts/filing-baton start-review --source whitespace-source' >/dev/null
+bash -c 'scripts/filing-baton finish-write --source whitespace-source --path raw/whitespace.md' >/dev/null
+bash -c 'scripts/filing-baton start-review --source whitespace-source' >/dev/null
 printf 'bad trailing space \n' >raw/whitespace.md
 git add -- raw/whitespace.md
 expect_success "blocked result records a staged whitespace failure" \
-  sess_run WR "scripts/filing-baton finish-review --source whitespace-source --result blocked --note 'whitespace failure'"
-sess_start WX
+  bash -c "scripts/filing-baton finish-review --source whitespace-source --result blocked --note 'whitespace failure'"
 expect_success "fresh review can restart from a blocked invalid boundary and fix it" \
-  sess_run WX "scripts/filing-baton restart-review --source whitespace-source --reason 'repair blocked boundary'"
+  bash -c "scripts/filing-baton restart-review --source whitespace-source --reason 'repair blocked boundary'"
 printf 'fixed\n' >raw/whitespace.md
 git add -- raw/whitespace.md
 expect_success "recovery fixer records repaired boundary for another fresh review" \
-  sess_run WX "scripts/filing-baton finish-review --source whitespace-source --result changed --note 'fixed whitespace'"
+  bash -c "scripts/filing-baton finish-review --source whitespace-source --result changed --note 'fixed whitespace'"
 
 new_repo concurrent
-sess_start CW
-sess_run CW 'scripts/filing-baton start-write --source concurrent-source --locator raw/concurrent.md --filing-date 2026-08-06' >/dev/null
+bash -c 'scripts/filing-baton start-write --source concurrent-source --locator raw/concurrent.md --filing-date 2026-08-06' >/dev/null
 mkdir -p raw
 printf 'concurrent\n' >raw/concurrent.md
 git add -- raw/concurrent.md
-sess_run CW 'scripts/filing-baton finish-write --source concurrent-source --path raw/concurrent.md' >/dev/null
-sess_start CX
-sess_start CY
-sess_send CX 'scripts/filing-baton start-review --source concurrent-source'
-sess_send CY 'scripts/filing-baton start-review --source concurrent-source'
-result_one=0; sess_recv CX || result_one=$?
-result_two=0; sess_recv CY || result_two=$?
-if [ "$((result_one + result_two))" -ne 0 ] && [ $((result_one * result_two)) -eq 0 ]; then
-  ok "repository-local lock serializes concurrent fresh-session transitions"
+bash -c 'scripts/filing-baton finish-write --source concurrent-source --path raw/concurrent.md' >/dev/null
+(
+  bash -c 'scripts/filing-baton start-review --source concurrent-source' >"$TMP_ROOT/concurrent-a" 2>&1
+) &
+pid_a=$!
+(
+  bash -c 'scripts/filing-baton start-review --source concurrent-source' >"$TMP_ROOT/concurrent-b" 2>&1
+) &
+pid_b=$!
+code_a=0; wait $pid_a || code_a=$?
+code_b=0; wait $pid_b || code_b=$?
+if [ "$((code_a + code_b))" -ne 0 ] && [ $((code_a * code_b)) -eq 0 ]; then
+  ok "repository-local lock serializes concurrent start-review transitions"
 else
   not_ok "concurrent transitions should produce exactly one success"
 fi
