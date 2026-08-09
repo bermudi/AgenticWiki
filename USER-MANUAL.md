@@ -81,7 +81,7 @@ A capable harness uses shared-checkout writers and isolated reviewers. Freebuff 
 | 1. State check | The coordinator checks existing staged and uncommitted work so unrelated files are not absorbed. | Coordinator | Yes—pre-existing staged work needs a decision. |
 | 2. Register source locator | The coordinator records only the supplied URL/path and scope; it does not fetch or inspect source content. | Coordinator | Yes—an unusable locator blocks filing. |
 | 3. Preserve source and write pages | Full topology dispatches a writer into the authoritative repository. Freebuff's bounded write pass performs the same writer skill and stages the complete transaction, but cannot review or commit. | Writer / baton write pass | Yes—unavailable full-topology dispatch, failed preservation, or marginal triage can stop the run. |
-| 4. Mechanical validation | Scripts check frontmatter, links, source lists, and page structure. | Coordinator | Yes—errors return to the writer. |
+| 4. Mechanical validation | Scripts check frontmatter, links, source lists, and page structure. In Freebuff, the harness's built-in code reviewer runs as a pre-flight after staging; its findings are fixed before the boundary is recorded. | Coordinator | Yes—errors return to the writer. |
 | 5. Theory review | Full topology uses an isolated theory reviewer. Freebuff runs the same report-only judgment in a fresh review pass. | Theory reviewer / baton pass | Only a structural decision or unresolved critical conflict requires you. |
 | 6. Independent verification | Full topology uses isolated reviewers. Freebuff's fresh pass runs the named diff, source-fidelity, and quality methods against the complete staged tree. | Reviewers / baton pass | Yes—missing required review keeps the gate closed. |
 | 7. Fix loop | Full topology routes fixes to the writer. A Freebuff reviewer may switch to fixer, but then another fresh session must review its staged result. | Writer / baton fixer | Repeats until pass or a real blocker remains. |
@@ -121,7 +121,7 @@ The reviewer reports; it does not edit.
 
 - **Coordinator:** in full topology, owns source-locator handling, raw boundary checks/staging, validation, reviewer dispatch, and commit; in Freebuff, the baton state machine separates those phases across sessions.
 - **Writer:** creates or verifies one raw source artifact, reads it, decides which pages it affects, and writes the wiki prose.
-- **Freebuff write pass:** performs the writer role in one bounded session but cannot review or commit.
+- **Freebuff write pass:** performs the writer role in one bounded session, runs the harness's built-in code reviewer as a pre-flight sanity check, then records the staged boundary through the baton and stops. It cannot approve or commit.
 - **Freebuff review/fix pass:** a fresh session makes all applicable reviewer judgments; if it then fixes anything, it cannot approve those bytes.
 - **Theory reviewer:** compares a filing with the complete thread/concept map and reports theory pressure.
 - **Diff reviewer:** checks that existing meaning, caveats, and unrelated prose were not damaged.
