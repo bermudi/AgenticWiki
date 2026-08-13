@@ -111,12 +111,20 @@ When a source stresses the existing theory, classify the pressure before editing
 
 Update `wiki/index.md` once after the page set is stable. Do not create links merely to satisfy a target count; every connection should help a reader navigate the subject.
 
-### 6. Stage the changeset
+### 6. Stage the changeset and run the deterministic floor
 
 Stage exactly the intended changeset paths (`git add -- <paths>`). Never use `git add -A` and never absorb unrelated worktree changes.
 
 - **Full topology:** stage only intended wiki paths. Report raw/process paths for coordinator checks and staging.
 - **Freebuff baton write pass:** stage the complete intended transaction, including new raw artifacts and process/debt representations, then pass every exact path to `filing-baton finish-write`.
+
+Before reporting, run the deterministic floor on your staged paths:
+
+```bash
+./scripts/filing-check paths --filing-date "$FILING_DATE" --path <path1> --path <path2>
+```
+
+Include every staged wiki path as a repeated `--path` argument. Fix any flagged provenance, frontmatter, link, or whitespace issue before returning. The coordinator will also run `filing-check staged --filing-date "$FILING_DATE"` on the complete union; your `filing-check paths` result is the writer-side mechanical self-check and does not replace semantic review.
 
 You do not semantically verify or commit. Full topology returns to coordinator dispatch; baton mode stops for a fresh review/fix session.
 
@@ -127,6 +135,7 @@ Return a structured report:
 - **classification:** `full`, `marginal`, or `skip`;
 - **paths staged by this writer:** the exact intended paths passed to `git add --`; also include the cumulative `git diff --cached --name-only` output, clearly labeled as cumulative because sequential writers inherit earlier staged paths;
 - **staging commands:** every exact staging invocation you ran, or `command telemetry unavailable` if the harness cannot expose it; this is self-reported evidence, distinct from any independent harness telemetry;
+- **mechanical self-check:** `filing-check paths --filing-date "$FILING_DATE" --path ...` result for your staged paths (pass/fail summary);
 - **pages created or updated:** list with one-line purpose per page;
 - **material claims and attributed frames added:** what this source contributed;
 - **contradictions flagged:** with the callout location;

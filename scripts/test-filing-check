@@ -1,0 +1,349 @@
+#!/usr/bin/env bash
+# Integration tests for scripts/filing-check using isolated temporary repositories.
+
+set -uo pipefail
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+CHECK="$SCRIPT_DIR/filing-check"
+TMP_ROOT=$(mktemp -d)
+ORIGINAL_PWD=$PWD
+trap 'cd "$ORIGINAL_PWD"; rm -rf "$TMP_ROOT"' EXIT
+
+PASS=0
+FAIL=0
+LAST_OUTPUT="$TMP_ROOT/output"
+LAST_STATUS=0
+
+ok() {
+  PASS=$((PASS + 1))
+  printf 'ok %d - %s\n' "$PASS" "$1"
+}
+
+not_ok() {
+  FAIL=$((FAIL + 1))
+  printf 'not ok - %s\n' "$1" >&2
+  if [ -f "$LAST_OUTPUT" ]; then
+    sed 's/^/  /' "$LAST_OUTPUT" >&2
+  fi
+}
+
+run_check() {
+  set +e
+  "$@" >"$LAST_OUTPUT" 2>&1
+  LAST_STATUS=$?
+  set -e
+}
+
+expect_status() {
+  local description="$1" expected="$2"
+  shift 2
+  run_check "$@"
+  if [ "$LAST_STATUS" -eq "$expected" ]; then
+    ok "$description"
+  else
+    not_ok "$description (expected exit $expected, got $LAST_STATUS)"
+  fi
+}
+
+new_repo() {
+  REPO="$TMP_ROOT/$1"
+  VALIDATOR_LOG="$TMP_ROOT/$1-validator-args"
+  rm -f "$VALIDATOR_LOG"
+  mkdir -p "$REPO/scripts"
+  git -C "$REPO" init -q
+  git -C "$REPO" config user.name filing-check-test
+  git -C "$REPO" config user.email filing-check@example.invalid
+  cp "$CHECK" "$REPO/scripts/filing-check"
+  chmod +x "$REPO/scripts/filing-check"
+  cat >"$REPO/scripts/validate-page" <<'VALIDATOR'
+#!/usr/bin/env bash
+set -uo pipefail
+if [ -n "${VALIDATOR_LOG:-}" ]; then
+  printf '%s\0' "$@" >"$VALIDATOR_LOG"
+fi
+printf 'validator stdout marker\n'
+printf 'validator stderr marker\n' >&2
+if [ -n "${VALIDATOR_MUTATE:-}" ]; then
+  printf 'validator mutation\n' >>"$VALIDATOR_MUTATE"
+fi
+if [ -n "${VALIDATOR_STAGE_MUTATE:-}" ]; then
+  printf 'validator staged mutation\n' >>"$VALIDATOR_STAGE_MUTATE"
+  git add -- "$VALIDATOR_STAGE_MUTATE"
+fi
+if [ -n "${VALIDATOR_STAGE_ADD:-}" ]; then
+  printf 'validator staged addition\n' >"$VALIDATOR_STAGE_ADD"
+  git add -- "$VALIDATOR_STAGE_ADD"
+fi
+case "${VALIDATOR_RESULT:-0}" in
+  signal) kill -TERM $$ ;;
+  *) exit "${VALIDATOR_RESULT:-0}" ;;
+esac
+VALIDATOR
+  chmod +x "$REPO/scripts/validate-page"
+  printf '# fixture\n' >"$REPO/README.md"
+  git -C "$REPO" add README.md scripts/filing-check scripts/validate-page
+  git -C "$REPO" commit -qm fixture
+  cd "$REPO" || exit 1
+}
+
+new_repo empty
+expect_status "staged scope rejects an empty cached path set" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo complete
+mkdir -p wiki/topics raw meta
+printf '# Wiki\n' >wiki/topics/example.md
+printf '# Raw\n' >raw/example.md
+printf '# Ledger\n' >meta/ledger.md
+git add -- wiki/topics/example.md raw/example.md meta/ledger.md
+expect_status "complete scope accepts staged wiki, raw, and meta paths" 0 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+if [ -f "$VALIDATOR_LOG" ] && \
+  grep -Fq -- '--filing-date' "$VALIDATOR_LOG" && \
+  grep -Fq -- 'wiki/topics/example.md' "$VALIDATOR_LOG" && \
+  grep -Fq -- 'raw/example.md' "$VALIDATOR_LOG" && \
+  ! grep -Fq -- 'meta/ledger.md' "$VALIDATOR_LOG"; then
+  ok "complete scope sends only wiki/raw Markdown paths to validate-page"
+else
+  not_ok "complete scope validator boundary is incorrect"
+fi
+
+new_repo subset
+mkdir -p wiki/topics meta
+printf '# Selected\n' >wiki/topics/selected.md
+printf 'other\n' >meta/other.txt
+git add -- wiki/topics/selected.md meta/other.txt
+expect_status "named scope accepts an exact staged subset while other paths remain staged" 0 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check paths --filing-date 2026-08-12 \
+    --path wiki/topics/selected.md
+if grep -q 'scope=paths staged_paths=2 selected_paths=1' "$LAST_OUTPUT"; then
+  ok "named-scope summary distinguishes complete and selected counts"
+else
+  not_ok "named-scope summary has incorrect counts"
+fi
+
+new_repo odd-path
+mkdir -p wiki/topics
+odd_path=$'wiki/topics/odd\nname.md'
+printf '# Odd path\n' >"$odd_path"
+git add -- "$odd_path"
+expect_status "staged paths containing control characters are rejected" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo magic-path
+mkdir -p wiki/topics
+magic_path='wiki/topics/:(glob)literal*.md'
+printf '# Literal pathspec magic\n' >"$magic_path"
+git add -- "$magic_path"
+expect_status "pathspec-magic filenames are treated literally" 0 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check paths --filing-date 2026-08-12 \
+    --path "$magic_path"
+
+new_repo not-staged
+mkdir -p wiki/topics
+printf '# Unstaged\n' >wiki/topics/unstaged.md
+expect_status "named scope rejects a path that is not staged" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check paths --filing-date 2026-08-12 \
+    --path wiki/topics/unstaged.md
+
+new_repo duplicate
+mkdir -p wiki/topics
+printf '# Duplicate\n' >wiki/topics/duplicate.md
+git add -- wiki/topics/duplicate.md
+expect_status "named scope rejects duplicate --path values as malformed invocation" 2 \
+  scripts/filing-check paths --filing-date 2026-08-12 \
+    --path wiki/topics/duplicate.md --path wiki/topics/duplicate.md
+
+new_repo bad-date
+mkdir -p meta
+printf 'date\n' >meta/date.txt
+git add -- meta/date.txt
+expect_status "strict date parsing rejects a non-calendar ISO-shaped date" 2 \
+  scripts/filing-check staged --filing-date 2026-02-30
+
+new_repo mismatch
+mkdir -p wiki/topics
+printf '# Indexed\n' >wiki/topics/mismatch.md
+git add -- wiki/topics/mismatch.md
+printf '# Worktree differs\n' >wiki/topics/mismatch.md
+expect_status "selected staged/worktree mismatch is a mechanical failure" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo executable
+mkdir -p meta
+printf '#!/bin/sh\nexit 0\n' >meta/tool
+chmod +x meta/tool
+git add -- meta/tool
+expect_status "ordinary executable file mode 100755 is accepted" 0 \
+  scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo symlink
+mkdir -p meta
+printf 'target\n' >target.txt
+ln -s ../target.txt meta/link
+git add -- meta/link
+expect_status "staged symlink mode is rejected" 1 \
+  scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo gitlink
+mkdir -p meta/submodule
+git update-index --add --cacheinfo 160000,"$(git rev-parse HEAD)",meta/submodule
+expect_status "staged gitlink mode is rejected even when submodules are ignored by config" 1 \
+  git -c diff.ignoreSubmodules=all -c status.submoduleSummary=true \
+    scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo rename-config
+printf 'old\n' >old.txt
+git add -- old.txt
+git commit -qm rename-base
+git mv -- old.txt new.txt
+git config diff.renames true
+git config diff.renameLimit 999999
+expect_status "staged discovery remains complete with rename detection forced by config" 1 \
+  scripts/filing-check staged --filing-date 2026-08-12
+if grep -q "old.txt" "$LAST_OUTPUT"; then
+  ok "rename/config discovery exposes the deleted side instead of collapsing to a rename"
+else
+  not_ok "rename/config discovery did not expose the complete no-renames boundary"
+fi
+
+new_repo whitespace
+mkdir -p meta
+printf 'trailing space \n' >meta/bad.txt
+git add -- meta/bad.txt
+expect_status "cached whitespace errors fail the mechanical floor" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+if grep -q 'trailing whitespace' "$LAST_OUTPUT"; then
+  ok "cached whitespace failure preserves Git diagnostics"
+else
+  not_ok "cached whitespace failure omitted Git diagnostics"
+fi
+
+new_repo validator-fail
+mkdir -p wiki/topics
+printf '# Validator failure\n' >wiki/topics/fail.md
+git add -- wiki/topics/fail.md
+expect_status "validator failure propagates as a mechanical failure" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" VALIDATOR_RESULT=1 \
+    scripts/filing-check staged --filing-date 2026-08-12
+if grep -q 'validator stdout marker' "$LAST_OUTPUT" && \
+  grep -q 'validator stderr marker' "$LAST_OUTPUT"; then
+  ok "validator stdout and stderr are preserved"
+else
+  not_ok "validator output was not preserved"
+fi
+
+new_repo validator-setup
+mkdir -p wiki/topics
+printf '# Validator setup\n' >wiki/topics/setup.md
+git add -- wiki/topics/setup.md
+expect_status "validator exit 2 maps to filing-check setup failure" 2 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" VALIDATOR_RESULT=2 \
+    scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo validator-unexpected
+mkdir -p wiki/topics
+printf '# Validator unexpected\n' >wiki/topics/unexpected.md
+git add -- wiki/topics/unexpected.md
+expect_status "unexpected validator exit 3 maps to filing-check setup failure" 2 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" VALIDATOR_RESULT=3 \
+    scripts/filing-check staged --filing-date 2026-08-12
+if grep -q 'unexpected status 3' "$LAST_OUTPUT"; then
+  ok "unexpected validator status is retained in the diagnostic"
+else
+  not_ok "unexpected validator status was not retained"
+fi
+
+new_repo validator-signal
+mkdir -p wiki/topics
+printf '# Validator signal\n' >wiki/topics/signal.md
+git add -- wiki/topics/signal.md
+expect_status "validator signal maps to filing-check execution failure" 2 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" VALIDATOR_RESULT=signal \
+    scripts/filing-check staged --filing-date 2026-08-12
+if grep -q 'signal 15' "$LAST_OUTPUT"; then
+  ok "validator signal is retained in the diagnostic"
+else
+  not_ok "validator signal was not retained"
+fi
+
+new_repo meta-only
+mkdir -p meta
+printf '# Meta only\n' >meta/only.md
+git add -- meta/only.md
+expect_status "meta-only scope passes without content validation" 0 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+if grep -q 'validate_page=SKIPPED' "$LAST_OUTPUT" && [ ! -e "$VALIDATOR_LOG" ]; then
+  ok "meta-only summary reports validate_page=SKIPPED"
+else
+  not_ok "meta-only scope invoked validator or omitted SKIPPED status"
+fi
+
+new_repo deletion
+mkdir -p wiki/topics
+printf '# Delete me\n' >wiki/topics/deleted.md
+git add -- wiki/topics/deleted.md
+git commit -qm add-deletion-fixture
+git rm -q -- wiki/topics/deleted.md
+expect_status "staged deletion is rejected without a normal stage-0 entry" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+if grep -q 'stage-0 index entry' "$LAST_OUTPUT"; then
+  ok "staged deletion diagnostic identifies the index-entry problem"
+else
+  not_ok "staged deletion diagnostic lacks index-entry context"
+fi
+
+new_repo stable
+mkdir -p wiki/topics
+printf '# Stable\n' >wiki/topics/stable.md
+git add -- wiki/topics/stable.md
+expect_status "validator-side worktree mutation is caught by the final stability check" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" VALIDATOR_MUTATE=wiki/topics/stable.md \
+    scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo staged-mutation
+mkdir -p wiki/topics
+printf '# Indexed stable\n' >wiki/topics/index-mutated.md
+git add -- wiki/topics/index-mutated.md
+expect_status "validator-side staged blob mutation is caught" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" VALIDATOR_STAGE_MUTATE=wiki/topics/index-mutated.md \
+    scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo staged-set-mutation
+mkdir -p wiki/topics meta
+printf '# Boundary stable\n' >wiki/topics/boundary.md
+git add -- wiki/topics/boundary.md
+expect_status "validator-side staged-set addition is caught" 1 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" VALIDATOR_STAGE_ADD=meta/validator-added.txt \
+    scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo unmerged
+mkdir -p meta
+base_oid=$(printf 'base\n' | git hash-object -w --stdin)
+ours_oid=$(printf 'ours\n' | git hash-object -w --stdin)
+theirs_oid=$(printf 'theirs\n' | git hash-object -w --stdin)
+printf 'ours\n' >meta/conflict.txt
+printf '100644 %s 1\tmeta/conflict.txt\n100644 %s 2\tmeta/conflict.txt\n100644 %s 3\tmeta/conflict.txt\n' \
+  "$base_oid" "$ours_oid" "$theirs_oid" | git update-index --index-info
+expect_status "unmerged index entries are rejected" 1 \
+  scripts/filing-check staged --filing-date 2026-08-12
+
+new_repo success-output
+mkdir -p raw
+printf '# Output\n' >raw/output.md
+git add -- raw/output.md
+expect_status "successful mechanical check exits zero" 0 \
+  env VALIDATOR_LOG="$VALIDATOR_LOG" scripts/filing-check staged --filing-date 2026-08-12
+if grep -q '^MECHANICAL_CHECK=PASS scope=staged staged_paths=1 selected_paths=1 validation_paths=1 boundary=PASS parity=PASS whitespace=PASS validate_page=PASS stability=PASS$' "$LAST_OUTPUT"; then
+  ok "success output contains the concise component-status summary"
+else
+  not_ok "success output is missing or malformed"
+fi
+
+TOTAL=$((PASS + FAIL))
+printf '1..%d\n' "$TOTAL"
+if [ "$FAIL" -ne 0 ]; then
+  printf '# %d passed; %d failed\n' "$PASS" "$FAIL" >&2
+  exit 1
+fi
+printf '# %d passed; 0 failed\n' "$PASS"

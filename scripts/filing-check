@@ -1,0 +1,312 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""Run the deterministic mechanical floor for a staged AgenticWiki changeset."""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import os
+import re
+import subprocess
+import sys
+import unicodedata
+from pathlib import Path
+from typing import NoReturn, Sequence
+
+DATE_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}\Z")
+
+
+class SetupError(RuntimeError):
+    """The command cannot run in the current environment."""
+
+
+class MechanicalError(RuntimeError):
+    """The selected staged boundary failed a mechanical check."""
+
+
+def render_path(path: str) -> str:
+    return repr(path)
+
+
+def detail(result: subprocess.CompletedProcess[bytes]) -> str:
+    output = result.stderr or result.stdout
+    return output.decode("utf-8", "replace").strip() or f"exit {result.returncode}"
+
+
+def run_git(*args: str) -> subprocess.CompletedProcess[bytes]:
+    try:
+        return subprocess.run(
+            ["git", *args],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            env={
+                **os.environ,
+                "GIT_OPTIONAL_LOCKS": "0",
+                "GIT_LITERAL_PATHSPECS": "1",
+            },
+        )
+    except OSError as exc:
+        raise SetupError(f"cannot execute git: {exc}") from exc
+
+
+def repository_root() -> Path:
+    result = run_git("rev-parse", "--show-toplevel")
+    if result.returncode != 0:
+        raise SetupError(f"must run inside a Git worktree: {detail(result)}")
+    raw_root = result.stdout.rstrip(b"\r\n")
+    if not raw_root:
+        raise SetupError("git returned an empty repository root")
+    return Path(os.fsdecode(raw_root))
+
+
+def diff_args(*args: str) -> tuple[str, ...]:
+    return (
+        "diff",
+        "--no-renames",
+        "--no-ext-diff",
+        "--no-textconv",
+        "--ignore-submodules=none",
+        *args,
+    )
+
+
+def staged_paths() -> list[str]:
+    result = run_git(*diff_args("--cached", "--name-only", "-z", "--"))
+    if result.returncode != 0:
+        raise SetupError(f"cannot discover staged paths: {detail(result)}")
+    paths = [os.fsdecode(value) for value in result.stdout.split(b"\0") if value]
+    if len(paths) != len(set(paths)):
+        raise MechanicalError("Git returned duplicate staged paths")
+    unsafe = [path for path in paths if any(unicodedata.category(char) == "Cc" for char in path)]
+    if unsafe:
+        raise MechanicalError(
+            "staged paths containing control characters are unsupported: "
+            + ", ".join(render_path(path) for path in unsafe)
+        )
+    return paths
+
+
+def index_entries(selected: Sequence[str]) -> dict[str, tuple[str, str]]:
+    result = run_git("ls-files", "--stage", "-z")
+    if result.returncode != 0:
+        raise SetupError(f"cannot inspect index entries: {detail(result)}")
+
+    wanted = set(selected)
+    found: dict[str, list[tuple[str, str, str]]] = {path: [] for path in selected}
+    for record in result.stdout.split(b"\0"):
+        if not record:
+            continue
+        try:
+            metadata, raw_path = record.split(b"\t", 1)
+            mode_raw, oid_raw, stage_raw = metadata.split()
+            path = os.fsdecode(raw_path)
+            mode = mode_raw.decode("ascii")
+            oid = oid_raw.decode("ascii")
+            stage = stage_raw.decode("ascii")
+        except (ValueError, UnicodeDecodeError) as exc:
+            raise MechanicalError("Git returned a malformed index entry") from exc
+        if path in wanted:
+            found[path].append((mode, oid, stage))
+
+    boundary: dict[str, tuple[str, str]] = {}
+    for path in selected:
+        entries = found[path]
+        if len(entries) != 1:
+            raise MechanicalError(
+                f"selected path {render_path(path)} requires one normal stage-0 index entry; "
+                f"found {len(entries)} (deletion or conflict is not supported)"
+            )
+        mode, oid, stage = entries[0]
+        normal_oid = bool(re.fullmatch(r"[0-9a-f]+", oid)) and any(char != "0" for char in oid)
+        if stage != "0" or mode not in {"100644", "100755"} or not normal_oid:
+            raise MechanicalError(
+                f"selected path {render_path(path)} requires an ordinary stage-0 file "
+                f"(mode 100644 or 100755); got mode={mode!r} oid={oid!r} stage={stage!r}"
+            )
+        boundary[path] = (mode, oid)
+    return boundary
+
+
+def require_parity(paths: Sequence[str], phase: str) -> None:
+    result = run_git(*diff_args("--quiet", "--", *paths))
+    if result.returncode == 0:
+        return
+    if result.returncode != 1:
+        raise SetupError(f"{phase} staged/worktree parity check failed to run: {detail(result)}")
+
+    changed = run_git(*diff_args("--name-only", "-z", "--", *paths))
+    if changed.returncode == 0:
+        names = [os.fsdecode(value) for value in changed.stdout.split(b"\0") if value]
+        context = ", ".join(render_path(path) for path in names) or "selected paths"
+    else:
+        context = "selected paths"
+    raise MechanicalError(f"{phase} staged/worktree parity failed for {context}")
+
+
+def require_whitespace(paths: Sequence[str]) -> None:
+    result = run_git(*diff_args("--cached", "--check", "--", *paths))
+    if result.stdout:
+        sys.stdout.buffer.write(result.stdout)
+        sys.stdout.buffer.flush()
+    if result.stderr:
+        sys.stderr.buffer.write(result.stderr)
+        sys.stderr.buffer.flush()
+    if result.returncode in (1, 2):
+        raise MechanicalError("cached whitespace check failed")
+    if result.returncode != 0:
+        raise SetupError(f"cached whitespace check failed to run: git exit {result.returncode}")
+
+
+def validation_paths(root: Path, selected: Sequence[str]) -> list[str]:
+    paths = [
+        path
+        for path in selected
+        if path.endswith(".md") and (path.startswith("wiki/") or path.startswith("raw/"))
+    ]
+    missing = [path for path in paths if not os.path.lexists(root / path)]
+    if missing:
+        raise MechanicalError(
+            "selected staged Markdown path is absent from the worktree: "
+            + ", ".join(render_path(path) for path in missing)
+        )
+    return paths
+
+
+def run_validator(root: Path, filing_date: str, paths: Sequence[str]) -> int:
+    if not paths:
+        return 0
+    validator = root / "scripts" / "validate-page"
+    if not validator.is_file() or not os.access(validator, os.X_OK):
+        raise SetupError(f"repository validator is missing or not executable: {validator}")
+    try:
+        result = subprocess.run(
+            [os.fspath(validator), "--filing-date", filing_date, *paths],
+            cwd=root,
+            check=False,
+        )
+    except OSError as exc:
+        raise SetupError(f"cannot execute repository validator {validator}: {exc}") from exc
+    return result.returncode
+
+
+def parse_args(argv: Sequence[str]) -> tuple[argparse.ArgumentParser, argparse.Namespace]:
+    parser = argparse.ArgumentParser(prog="filing-check")
+    subparsers = parser.add_subparsers(dest="scope", required=True)
+
+    staged = subparsers.add_parser("staged", help="check the complete staged path set")
+    staged.add_argument("--filing-date", required=True)
+
+    paths = subparsers.add_parser("paths", help="check selected paths within the staged set")
+    paths.add_argument("--filing-date", required=True)
+    paths.add_argument("--path", action="append", required=True, dest="paths")
+
+    args = parser.parse_args(argv)
+    if not DATE_RE.fullmatch(args.filing_date):
+        parser.error("filing date must be strict ISO YYYY-MM-DD")
+    try:
+        parsed = dt.date.fromisoformat(args.filing_date)
+    except ValueError:
+        parser.error("filing date must be strict ISO YYYY-MM-DD")
+    if parsed.isoformat() != args.filing_date:
+        parser.error("filing date must be strict ISO YYYY-MM-DD")
+
+    if args.scope == "paths":
+        if any(path == "" for path in args.paths):
+            parser.error("--path values must be nonempty")
+        if len(args.paths) != len(set(args.paths)):
+            parser.error("--path values must be unique")
+    return parser, args
+
+
+def fail(message: str, code: int) -> NoReturn:
+    print(f"filing-check: {message}", file=sys.stderr)
+    raise SystemExit(code)
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser, args = parse_args(sys.argv[1:] if argv is None else argv)
+    del parser
+
+    try:
+        root = repository_root()
+        try:
+            os.chdir(root)
+        except OSError as exc:
+            raise SetupError(f"cannot enter repository root {root}: {exc}") from exc
+        complete = staged_paths()
+        if args.scope == "staged":
+            if not complete:
+                raise MechanicalError("complete staged path set is empty")
+            selected = complete
+        else:
+            selected = args.paths
+            staged_set = set(complete)
+            absent = [path for path in selected if path not in staged_set]
+            if absent:
+                raise MechanicalError(
+                    "selected path does not exactly match a staged path: "
+                    + ", ".join(render_path(path) for path in absent)
+                )
+
+        original_boundary = index_entries(selected)
+        require_parity(selected, "initial")
+        require_whitespace(selected)
+        content_paths = validation_paths(root, selected)
+        validator_returncode = run_validator(root, args.filing_date, content_paths)
+
+        stability_error: MechanicalError | None = None
+        try:
+            require_parity(selected, "final")
+            final_boundary = index_entries(selected)
+            if final_boundary != original_boundary:
+                changed = [
+                    path for path in selected if final_boundary.get(path) != original_boundary.get(path)
+                ]
+                raise MechanicalError(
+                    "selected staged mode/blob changed during validation: "
+                    + ", ".join(render_path(path) for path in changed)
+                )
+            final_staged = staged_paths()
+            if args.scope == "staged" and final_staged != complete:
+                raise MechanicalError("complete staged path set changed during validation")
+            if args.scope == "paths" and not set(selected).issubset(final_staged):
+                raise MechanicalError("a selected path ceased to be staged during validation")
+        except MechanicalError as exc:
+            stability_error = exc
+
+        if validator_returncode != 0:
+            if stability_error is not None:
+                print(f"filing-check: additionally, {stability_error}", file=sys.stderr)
+            if validator_returncode == 1:
+                raise MechanicalError("validate-page failed with status 1")
+            if validator_returncode == 2:
+                raise SetupError("validate-page reported setup failure with status 2")
+            if validator_returncode < 0:
+                raise SetupError(
+                    "validate-page execution failed with status "
+                    f"{validator_returncode} (signal {-validator_returncode})"
+                )
+            raise SetupError(f"validate-page execution failed with unexpected status {validator_returncode}")
+        if stability_error is not None:
+            raise stability_error
+
+        validator_status = "PASS" if content_paths else "SKIPPED"
+        print(
+            "MECHANICAL_CHECK=PASS "
+            f"scope={args.scope} staged_paths={len(complete)} selected_paths={len(selected)} "
+            f"validation_paths={len(content_paths)} boundary=PASS parity=PASS whitespace=PASS "
+            f"validate_page={validator_status} stability=PASS"
+        )
+        return 0
+    except SetupError as exc:
+        fail(str(exc), 2)
+    except MechanicalError as exc:
+        fail(str(exc), 1)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

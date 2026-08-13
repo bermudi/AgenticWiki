@@ -13,7 +13,7 @@ This skill is read-mostly. It may inspect staged diffs only for mechanical check
 
 > **Terminology note.** In full-topology filing, “the orchestrator” is `coordinating-filing`, which routes fixes to the writer and holds the gate. In Freebuff it is the active fresh review/fix pass, whose mutation status is enforced by `scripts/filing-baton`.
 
-> **Deterministic checks are load-bearing; LLM verdicts flag where to look.** The `PASS`/`FAIL` verdicts below are LLM judgments, not ground truth. A failing `validate-page` run plus a reviewer `PASS` is a contradiction to resolve, not a signal to ignore the validator. Treat mechanical output as the hard floor and reviewer verdicts as directed attention — when they agree, confidence rises; when they disagree, investigate before committing.
+> **Deterministic checks are load-bearing; LLM verdicts flag where to look.** The `PASS`/`FAIL` verdicts below are LLM judgments, not ground truth. A failing `filing-check` run plus a reviewer `PASS` is a contradiction to resolve, not a signal to ignore the mechanical floor. Treat mechanical output as the hard floor and reviewer verdicts as directed attention — when they agree, confidence rises; when they disagree, investigate before committing.
 
 ## Input Contract
 
@@ -45,15 +45,15 @@ Run quality review for a new page, a substantial rewrite or reorganization, or m
 
 ## 1. Mechanical validation
 
-For each changed wiki content page, run the content validator. Run cached whitespace and parity checks on the full staged union, including coordinator-owned process artifacts; do not pass `meta/` ledgers to the content validator:
+Run the deterministic floor on the complete staged union via:
 
 ```bash
-./scripts/validate-page <changed-wiki-content-paths>
-git diff --cached --check -- <all-changed-paths>
-test -z "$(git diff --name-only -- <all-changed-paths>)"
+./scripts/filing-check staged --filing-date "$FILING_DATE"
 ```
 
-Inspect the page-specific findings. The current validator may also emit repository-wide debt status even when given one page; report that global status separately and do not treat unrelated historical debt as a changeset failure.
+This single command checks provenance, frontmatter, links, whitespace (`git diff --cached --check`), and cached/worktree parity for the entire staged boundary — wiki paths, raw sources, assets, and coordinator-owned `meta/` process artifacts together. Do not filter `meta/` ledgers from the complete union; they are part of the approved tree. For repaired paths after a fix, run the focused form `filing-check paths --filing-date "$FILING_DATE" --path <repaired-path>` with each repaired path as a repeated `--path` argument.
+
+Inspect the findings. The checker may also emit repository-wide debt status even when run on one path; report that global status separately and do not treat unrelated historical debt as a changeset failure.
 
 **Mechanical classification floor.** Before classifying a page as Mechanical, check the staged body-prose diff for digits, quotation marks, or capitalized multi-word proper-noun patterns. If any are present in a changed hunk, the page cannot be classified Mechanical — body prose containing factual markers is substantive at minimum. This is a crude guard; its job is to convert the worst self-serving misclassification (substantive → mechanical, silently skipping source verification) from undetectable to impossible. Every Mechanical classification must also include one line of justification in the verdict report stating why the change is non-claim.
 
@@ -89,14 +89,15 @@ Reviewer skills remain report-only while making their judgments. Because the top
 
 ### Mandatory reviewer dispatch
 
-The following worker requirement applies literally in full topology and maps to the baton adapter above in Freebuff. “Construct a worker” is a hard process requirement, not a suggestion to perform the same review in the full-topology coordinator context. For every initially required diff, source-fidelity, and quality review, the inline verifier dispatches a fresh isolated read-only worker through the harness. The only reuse is an OID-identical same-run aggregation rerun caused solely by staging coordinator-owned ledger evidence, as defined in Verdict; any content edit requires the affected fresh review again. In Pi, this is the `delegate` adapter with one task object per reviewer; other harnesses use native equivalents. The verifier may classify risk, assemble inputs, route findings, and translate verdicts; it must not perform reviewer file-reading and judgment inline or by a manual substitute.
+The following worker requirement applies literally in full topology and maps to the baton adapter above in Freebuff. “Construct a worker” is a hard process requirement, not a suggestion to perform the same review in the full-topology coordinator context. For every initially required theory, diff, source-fidelity, and quality review, the inline verifier dispatches a fresh isolated read-only worker through the harness (full topology) or records the BATON iteration and harness session id when the fresh baton pass executes the four named methods. The only reuse is an OID-identical same-run aggregation rerun caused solely by staging coordinator-owned ledger evidence once per transaction — one source filing transaction including all fresh baton passes is one ledger run, and a later pass over unchanged evidence does not restage it; any content edit requires the affected fresh review again. In Pi, this is the `delegate` adapter with one task object per reviewer; other harnesses use native equivalents. The verifier may classify risk, assemble inputs, route findings, and translate verdicts; it must not perform reviewer file-reading and judgment inline or by a manual substitute.
 
 Do not dispatch a separate verifier worker and then ask it to nest reviewer workers. The active orchestrator runs this skill directly and owns reviewer dispatch. Each reviewer must have repository read/search access and return the named skill's structured report. If reviewer dispatch is unavailable, the worker cannot read the repository, or dispatch returns an empty/no-op result after the documented retry, stop and warn the user. Verification is incomplete; do **not** issue a PASS or fall back to inline/manual review. Record the unavailable review as a process failure and hold the commit gate.
 
-**Reviewers** return a verdict that maps to the changeset state and gates the commit:
+**Reviewers** return a verdict that maps to the changeset state and gates the commit (four rows, no correction row):
 
 | Skill | Required capabilities | Forbidden capabilities |
 |---|---|---|
+| `reviewing-wiki-theory` | Read/search files; inspect threads and concept pages | Local writes, network, staging, commit, deletion |
 | `reviewing-wiki-diffs` | Read/search files; inspect version-control diffs and prior versions | Local writes, network, staging, commit, deletion |
 | `verifying-source-fidelity` | Read/search files; media-skill access for multi-speaker audio/video sources | Local writes, staging, commit, deletion |
 | `reviewing-wiki-quality` | Read/search files | Local writes, network, staging, commit, deletion |
@@ -207,8 +208,8 @@ Report:
 ## Verification: PASS | PASS WITH EXPLICIT DEBT | FAIL
 
 - Scope: ...
-- Review topology: full = one isolated read-only worker per required review; Freebuff = one fresh zero-delta pass running all four named methods; unavailable applicable topology = incomplete
-- Process telemetry: full topology records worker/task, read-only capability, dispatch result, and retries; baton records session/path/inode plus every state/OID transition; exact staging commands are included when exposed and never inferred from final state
+- Review topology: full = one isolated read-only worker per required review; Freebuff = one fresh zero-delta pass (with BATON iteration and harness session id when exposed) running all four named methods (theory, diff, source-fidelity, quality; no correction row); unavailable applicable topology = incomplete
+- Process telemetry: full topology records worker/task, read-only capability, dispatch result, and retries; baton records BATON iteration, harness session id when exposed, session/path/inode plus every state/OID transition; exact staging commands are included when exposed and never inferred from final state; process evidence is staged once per transaction, not re-appended on every fresh pass
 - Pages mechanically checked: ...
 - Pages source-verified: ...
 - Diff reasoning: run | not required

@@ -9,6 +9,7 @@ set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 BATON="$SCRIPT_DIR/filing-baton"
+CHECK="$SCRIPT_DIR/filing-check"
 TMP_ROOT=$(mktemp -d)
 ORIGINAL_PWD=$PWD
 trap 'cd "$ORIGINAL_PWD"; rm -rf "$TMP_ROOT"' EXIT
@@ -54,7 +55,8 @@ new_repo() {
   git -C "$REPO" config user.name baton-test
   git -C "$REPO" config user.email baton@example.invalid
   cp "$BATON" "$REPO/scripts/filing-baton"
-  chmod +x "$REPO/scripts/filing-baton"
+  cp "$CHECK" "$REPO/scripts/filing-check"
+  chmod +x "$REPO/scripts/filing-baton" "$REPO/scripts/filing-check"
   cat >"$REPO/scripts/validate-page" <<'VALIDATOR'
 #!/usr/bin/env bash
 set -euo pipefail
@@ -70,10 +72,32 @@ VALIDATOR
 IGNORE
   printf '# fixture\n' >"$REPO/README.md"
   printf '# Wiki index\n' >"$REPO/wiki/index.md"
-  git -C "$REPO" add README.md .gitignore wiki/index.md scripts/filing-baton scripts/validate-page
+  git -C "$REPO" add README.md .gitignore wiki/index.md scripts/filing-baton scripts/filing-check scripts/validate-page
   git -C "$REPO" commit -qm fixture
   cd "$REPO"
 }
+
+new_repo common-check-failure
+expect_success "write pass starts for common-check failure fixture" \
+  bash -c 'scripts/filing-baton start-write --source check-source --locator raw/check.md --filing-date 2026-08-06'
+mkdir -p raw
+printf 'trailing whitespace \n' >raw/check.md
+git add -- raw/check.md
+expect_success "restart-write adopts mechanically invalid partial staged work" \
+  bash -c 'scripts/filing-baton restart-write --source check-source --reason "resume partial writer"'
+expect_failure "finish-write fails when the common filing-check fails" \
+  bash -c 'scripts/filing-baton finish-write --source check-source --path raw/check.md'
+if grep -q 'filing-check failed' "$TMP_ROOT/output"; then
+  ok "baton reports the common checker failure"
+else
+  not_ok "baton did not identify the common checker failure"
+fi
+
+new_repo preexisting-index
+printf 'unrelated\n' >unrelated.txt
+git add -- unrelated.txt
+expect_failure "new write transaction rejects a pre-existing staged index" \
+  bash -c 'scripts/filing-baton start-write --source preexisting-source --locator raw/preexisting.md --filing-date 2026-08-06'
 
 new_repo happy
 
@@ -113,6 +137,11 @@ expect_failure "write pass rejects a staged path omitted from its explicit bound
 
 expect_success "write pass snapshots staged index entries and requires review" \
   bash -c 'scripts/filing-baton finish-write --source example-source --path raw/example-source.md --path wiki/topics/example.md --path wiki/index.md'
+if grep -q 'MECHANICAL_CHECK=PASS scope=staged' .filing-handoff/example-source.json; then
+  ok "baton history preserves the common mechanical summary"
+else
+  not_ok "baton history omitted the common mechanical summary"
+fi
 
 if scripts/filing-baton handoff --source example-source >"$TMP_ROOT/handoff-summary" && \
   grep -q 'FREEBUFF FILING HANDOFF' "$TMP_ROOT/handoff-summary" && \
@@ -124,6 +153,7 @@ if scripts/filing-baton handoff --source example-source >"$TMP_ROOT/handoff-summ
   grep -q 'on-disk handoff and Git index are authoritative' "$TMP_ROOT/handoff-summary" && \
   grep -q 'paste the entire previous response verbatim' "$TMP_ROOT/handoff-summary" && \
   grep -q '"boundary"' "$TMP_ROOT/handoff-summary" && \
+  ! grep -q 'process ancestry' "$TMP_ROOT/handoff-summary" && \
   ! grep -q '.freebuff/session' "$TMP_ROOT/handoff-summary"; then
   ok "generated handoff is a self-contained verbatim continuation summary with no marker-file instructions"
 else
@@ -331,7 +361,17 @@ bash -c 'scripts/filing-baton start-review --source blocked-source' >/dev/null
 touch validator-fail
 expect_success "blocked result persists even when deterministic validation fails" \
   bash -c "scripts/filing-baton finish-review --source blocked-source --result blocked --note 'validator failure'"
+if grep -q 'blocked check: filing-check failed' .filing-handoff/blocked-source.json; then
+  ok "blocked review history records the common checker failure"
+else
+  not_ok "blocked review history omitted the common checker failure"
+fi
+expect_success "review pass restarts a blocked review while content validation remains broken" \
+  bash -c "scripts/filing-baton restart-review --source blocked-source --reason 'repair validation blocker'"
 mv validator-fail "$TMP_ROOT/blocked-validator-fail"
+expect_success "blocked recovery may record another blocked pass after validation is repaired" \
+  bash -c "scripts/filing-baton finish-review --source blocked-source --result blocked --note 'recovery fixture'"
+# Test that restart-review rejects untracked wiki/raw bytes before judgment
 printf 'untracked review contaminant\n' >wiki/untracked-review.md
 expect_failure "restart-review rejects untracked wiki/raw bytes before judgment" \
   bash -c "scripts/filing-baton restart-review --source blocked-source --reason 'blocker resolved'"

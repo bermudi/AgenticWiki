@@ -10,6 +10,7 @@ import argparse
 import datetime as dt
 import fcntl
 import json
+import os
 import re
 import subprocess
 import sys
@@ -32,7 +33,11 @@ def fail(message: str) -> NoReturn:
 
 def run_git(*args: str, check: bool = True) -> subprocess.CompletedProcess[bytes]:
     result = subprocess.run(
-        ["git", *args], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False
+        ["git", *args],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+        env={**os.environ, "GIT_LITERAL_PATHSPECS": "1"},
     )
     if check and result.returncode != 0:
         detail = result.stderr.decode("utf-8", "replace").strip()
@@ -97,7 +102,17 @@ def baton_lock(root: Path) -> Iterator[None]:
 
 
 def staged_paths() -> list[str]:
-    output = run_git("diff", "--cached", "--name-only", "-z").stdout
+    output = run_git(
+        "diff",
+        "--no-renames",
+        "--no-ext-diff",
+        "--no-textconv",
+        "--ignore-submodules=none",
+        "--cached",
+        "--name-only",
+        "-z",
+        "--",
+    ).stdout
     return [part.decode("utf-8") for part in output.split(b"\0") if part]
 
 
@@ -147,7 +162,18 @@ def require_empty_index() -> None:
 def require_clean_content_worktree() -> None:
     unstaged = [
         part.decode("utf-8")
-        for part in run_git("diff", "--name-only", "-z", "--", "wiki", "raw").stdout.split(b"\0")
+        for part in run_git(
+            "diff",
+            "--no-renames",
+            "--no-ext-diff",
+            "--no-textconv",
+            "--ignore-submodules=none",
+            "--name-only",
+            "-z",
+            "--",
+            "wiki",
+            "raw",
+        ).stdout.split(b"\0")
         if part
     ]
     untracked = [
@@ -191,6 +217,40 @@ def require_no_active_handoff(root: Path) -> None:
 def require_nonempty_boundary(boundary: dict[str, str]) -> None:
     if not boundary:
         raise BatonError("staged filing boundary is empty")
+
+
+def require_parity(boundary: dict[str, str]) -> None:
+    """Check recovery-state parity without requiring content to validate cleanly."""
+    require_nonempty_boundary(boundary)
+    paths = list(boundary)
+    result = run_git(
+        "diff",
+        "--no-renames",
+        "--no-ext-diff",
+        "--no-textconv",
+        "--ignore-submodules=none",
+        "--quiet",
+        "--",
+        *paths,
+        check=False,
+    )
+    if result.returncode == 0:
+        return
+    if result.returncode != 1:
+        raise BatonError(f"staged/worktree parity check failed to run (git exit {result.returncode})")
+    changed = run_git(
+        "diff",
+        "--no-renames",
+        "--no-ext-diff",
+        "--no-textconv",
+        "--ignore-submodules=none",
+        "--name-only",
+        "-z",
+        "--",
+        *paths,
+    ).stdout
+    names = [os.fsdecode(part) for part in changed.split(b"\0") if part]
+    raise BatonError("staged/worktree parity failed for: " + ", ".join(names))
 
 
 def path_exists_at_revision(revision: str, path: str) -> bool:
@@ -248,46 +308,26 @@ def require_boundary(expected: object) -> dict[str, str]:
     return current
 
 
-def require_parity_and_whitespace(boundary: dict[str, str]) -> None:
-    require_nonempty_boundary(boundary)
-    paths = list(boundary)
-    whitespace = run_git("diff", "--cached", "--check", "--", *paths, check=False)
-    if whitespace.returncode != 0:
-        detail = whitespace.stdout.decode("utf-8", "replace") + whitespace.stderr.decode(
-            "utf-8", "replace"
-        )
-        raise BatonError("cached whitespace check failed:\n" + detail.strip())
-    parity = run_git("diff", "--quiet", "--", *paths, check=False)
-    if parity.returncode != 0:
-        changed = run_git("diff", "--name-only", "--", *paths).stdout.decode().strip()
-        raise BatonError("staged/worktree parity failed for: " + changed.replace("\n", ", "))
-
-
-def validation_paths(boundary: dict[str, str]) -> list[str]:
-    return [
-        path
-        for path in boundary
-        if path.endswith(".md") and (path.startswith("wiki/") or path.startswith("raw/"))
-    ]
-
-
-def run_validator(root: Path, filing_date: str, boundary: dict[str, str]) -> str:
-    paths = validation_paths(boundary)
-    if not paths:
-        return "not applicable — no supported wiki/raw markdown paths"
-    validator = root / "scripts" / "validate-page"
+def run_mechanical_check(root: Path, filing_date: str) -> str:
+    checker = root / "scripts" / "filing-check"
+    if not checker.is_file() or not checker.stat().st_mode & 0o111:
+        raise BatonError(f"repository filing-check is missing or not executable: {checker}")
     result = subprocess.run(
-        [str(validator), *paths],
+        [str(checker), "staged", "--filing-date", filing_date],
         cwd=root,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         check=False,
         text=True,
     )
+    output = result.stdout.strip()
     if result.returncode != 0:
-        raise BatonError("validate-page failed:\n" + result.stdout.strip())
-    summary = result.stdout.strip().splitlines()
-    return summary[-1] if summary else "passed"
+        raise BatonError(
+            f"filing-check failed with exit {result.returncode}:\n"
+            + (output or "no diagnostic output")
+        )
+    summary = [line for line in output.splitlines() if line.startswith("MECHANICAL_CHECK=PASS")]
+    return summary[-1] if summary else "MECHANICAL_CHECK=PASS"
 
 
 def append_history(state: dict[str, object], event: dict[str, object]) -> None:
@@ -379,7 +419,17 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
         base_head = state.get("base_head")
         if not isinstance(base_head, str) or not path_exists_at_revision(base_head, relative):
             raise BatonError("--no-change is only valid for a raw artifact already present at baton start")
-        if run_git("diff", "--quiet", "--", relative, check=False).returncode != 0:
+        if run_git(
+            "diff",
+            "--no-renames",
+            "--no-ext-diff",
+            "--no-textconv",
+            "--ignore-submodules=none",
+            "--quiet",
+            "--",
+            relative,
+            check=False,
+        ).returncode != 0:
             raise BatonError("--no-change source has worktree modifications")
         require_clean_content_worktree()
         append_history(
@@ -409,9 +459,8 @@ def cmd_finish_write(args: argparse.Namespace) -> None:
             f"{sorted(intended)}, got {sorted(boundary)}"
         )
     require_content_invariants(boundary, state.get("base_head"))
-    require_parity_and_whitespace(boundary)
     require_clean_content_worktree()
-    validation = run_validator(root, str(state["filing_date"]), boundary)
+    validation = run_mechanical_check(root, str(state["filing_date"]))
     append_history(
         state,
         {
@@ -472,8 +521,8 @@ def cmd_start_review(args: argparse.Namespace) -> None:
     boundary = require_boundary(state.get("boundary"))
     require_required_raw_paths(state, boundary)
     require_content_invariants(boundary, state.get("base_head"))
-    require_parity_and_whitespace(boundary)
     require_clean_content_worktree()
+    run_mechanical_check(root, str(state["filing_date"]))
     if index_tree() != state.get("index_tree"):
         raise BatonError("complete staged index tree does not match the handoff")
     state["state"] = "reviewing"
@@ -508,12 +557,14 @@ def cmd_restart_review(args: argparse.Namespace) -> None:
             },
         )
     boundary = require_boundary(state.get("boundary"))
+    require_nonempty_boundary(boundary)
     current_tree = index_tree()
     if current_tree != state.get("index_tree"):
         raise BatonError(
             "staged index changed before restart-review; restore the recorded boundary or "
             "finish the prior pass before starting a fresh reviewer"
         )
+    require_parity(boundary)
     require_clean_content_worktree()
     state["state"] = "reviewing"
     state["active_pass"] = {
@@ -549,8 +600,7 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
     if args.result == "blocked":
         check_result = "not run"
         try:
-            require_parity_and_whitespace(current)
-            check_result = run_validator(root, str(state["filing_date"]), current)
+            check_result = run_mechanical_check(root, str(state["filing_date"]))
         except BatonError as exc:
             check_result = f"blocked check: {exc}"
         append_history(
@@ -576,9 +626,8 @@ def cmd_finish_review(args: argparse.Namespace) -> None:
 
     require_required_raw_paths(state, current)
     require_content_invariants(current, state.get("base_head"))
-    require_parity_and_whitespace(current)
     require_clean_content_worktree()
-    validation = run_validator(root, str(state["filing_date"]), current)
+    validation = run_mechanical_check(root, str(state["filing_date"]))
 
     if args.result == "clean":
         if changed:
@@ -650,8 +699,8 @@ def cmd_commit(args: argparse.Namespace) -> None:
     boundary = require_boundary(state.get("boundary"))
     require_required_raw_paths(state, boundary)
     require_content_invariants(boundary, state.get("base_head"))
-    require_parity_and_whitespace(boundary)
     require_clean_content_worktree()
+    run_mechanical_check(root, str(state["filing_date"]))
     approved_tree = state.get("approved_tree")
     if not isinstance(approved_tree, str) or index_tree() != approved_tree:
         raise BatonError("complete index tree no longer matches the approved tree")

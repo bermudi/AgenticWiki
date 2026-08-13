@@ -5,393 +5,235 @@ description: "Coordinates AgenticWiki filing through either shared-checkout work
 
 # Coordinating Filing
 
-You coordinate the AgenticWiki filing pipeline. Your job: choose the supported harness adapter, preserve role separation, produce an exact staged boundary, run the theory and verification gates, and hold the commit gate. You own the process. You do not own the content.
+You coordinate the filing pipeline: order sources, arrange preservation and writing, stage the complete raw/wiki/process boundary, run verification, route fixes, and hold the commit gate. You own the process, not editorial content.
 
-## Input Contract
+## Interface and mandatory startup
 
-Before you run:
+**Input:** one or more source documents, URLs, transcripts, or media items, plus explicit scope or commit instructions.
 
-- One or more source documents, URLs, transcripts, media items, or explicit scope/commit instructions from the user.
-- The conventions path `meta/wiki-conventions.md` is available.
-- The worker skill `filing-agentic-sources` is available under `.agents/skills/`.
-- The reviewer skill `reviewing-wiki-theory` is available under `.agents/skills/`.
-- The coordinator skill `verifying-wiki-changes` is available under `.agents/skills/`.
+**Output:** preserved and staged raw sources, a verified wiki changeset, and a reconciled filing report.
 
-## Output
-
-- Preserved and staged raw source(s) in `raw/`.
-- A staged wiki changeset.
-- A committed changeset (when authorized and verification passes).
-- A concise report to the user.
-
-## You are a coordinator, not an editor
-
-You do not read source bodies for content or wiki page bodies as coordinator. The narrow exception is staged-diff inspection while running `verifying-wiki-changes` inline for mechanical checks, risk classification, and reviewer construction. You do not write wiki prose as coordinator. Page set, framing, callout placement, and scope decisions belong to the writer.
-
-In a capable harness, you dispatch workers that do editorial work and check that the process was followed. Freebuff uses the explicit cross-session baton adapter below instead of unavailable subagents. Do not invent a third topology or use baton mode merely to avoid workers a harness can construct.
-
-## Worker topology and process ledger
-
-Read `meta/pipeline-recommendations.md` before starting. The coordinator owns updates to this durable process queue: report tested rows and close one only after recording the required dated run evidence.
-
-The pipeline has exactly two adapters:
-
-- **Full worker topology:** a writer is a write-capable worker attached to the coordinator's authoritative checkout. Reviewers are fresh isolated read-only workers. `verifying-wiki-changes` runs inline as orchestration and dispatches those reviewers. If a required worker cannot be constructed, stop; do not collapse roles inline.
-- **Freebuff baton topology:** one bounded top-level session preserves, writes, and stages but cannot review or commit. A fresh session reviews the complete staged tree. The baton enforces the state machine and the exact staged boundary; it does not identify or distinguish sessions. Role separation comes from the operator pasting the handoff into a genuinely fresh Freebuff session — the value is clean context, not a different process ID. There is no `--session` argument and no `.freebuff/` marker file. If that pass stages any fix, another fresh session must review again. Only a zero-delta pass with complete theory, diff, source-fidelity, and quality rows may commit through `scripts/filing-baton`.
-
-Reviewer edits or “fixed” self-reports are never authoritative. Full topology routes accepted edits to the active writer; baton mode permits a review pass to switch explicitly into fixer role, but that forfeits approval and forces another fresh pass.
-
-## Pi tool-schema adapter
-
-The following examples apply only when the current harness is Pi and exposes these tool schemas. They are adapter instructions, not universal workflow semantics; other harnesses must preserve the topology and permissions above using their native tools.
-
-### Pi `delegate` sanity check
-
-Pass Pi's tool an object whose top-level `tasks` value is an array of task objects. A writer dispatch uses the authoritative repository as `cwd` and grants write tools:
-
-```json
-{
-  "tasks": [
-    {
-      "action": "prompt",
-      "agent": "",
-      "prompt": "Load .agents/skills/filing-agentic-sources/SKILL.md. Preserve and file <source URL or path> using meta/wiki-conventions.md. Create but do not stage the raw artifact; edit and stage only the intended wiki paths; do not commit. Return the required writer report.",
-      "cwd": ".",
-      "context": "fresh",
-      "tools": ["*"]
-    }
-  ]
-}
-```
-
-A fresh read-only reviewer dispatch has this shape:
-
-```json
-{
-  "tasks": [
-    {
-      "action": "prompt",
-      "agent": "",
-      "prompt": "Load .agents/skills/reviewing-wiki-diffs/SKILL.md and review the staged changeset. Return the required report only; do not edit files.",
-      "cwd": ".",
-      "context": "fresh",
-      "tools": ["ro"]
-    }
-  ]
-}
-```
-
-`agent: ""` requests an ad-hoc worker; replace it only with a profile that the harness actually exposes. `cwd: "."` is this authoritative repository. `tools: ["*"]` is required for the writer; `tools: ["ro"]` is required for reviewers. For parallel reviews, add more task **objects** to the same `tasks` array. Do not pass `tasks` as a quoted JSON string, put `action: "prompt"` or `context` at the top level, or use a skill filename as an invented agent name. A schema-validation failure is a dispatch failure: correct the shape and retry once, then stop and warn if dispatch still cannot be constructed. Never replace a failed worker dispatch with inline work.
-
-### Pi `edit` sanity check
-
-Pass Pi's tool an object with a target `path` and an `edits` array. Each edit is an object with exact, unique `oldText` and `newText` strings:
-
-```json
-{
-  "path": ".agents/skills/coordinating-filing/SKILL.md",
-  "edits": [
-    {
-      "oldText": "the exact unique block currently in the file",
-      "newText": "the replacement block"
-    }
-  ]
-}
-```
-
-Do not pass `edits` as a JSON string, do not use a single edit object where an array is required, and do not overlap replacements. Re-read the target when a match fails; never broaden an edit blindly.
-
-## Workflow
-
-### 1. Inspect state and receive sources
-
-1. Capture `FILING_DATE=$(date +%F)`, then run `git status` and `git diff --cached --name-only`. A filing requires an empty staged index so `commit the staged set` cannot absorb earlier work. If any path is already staged, report the exact baseline and stop for the human to commit/unstage it; do not unstage or incorporate it yourself. Leave unrelated **unstaged** worktree changes untouched.
-2. Identify every source the user wants ingested.
-3. For multiple sources, order them by a simple heuristic if the source type is clear from metadata or user intent: primary sources (arXiv papers, original blog posts, conference talks) before commentary or aggregation. If ordering is unclear, use the order supplied. For a single source, skip ordering.
-4. Detect the harness. A known Freebuff session goes directly to Step 1b. Other harnesses use full topology and the worker steps below.
-
-### 1b. Freebuff baton mode
-
-Freebuff uses fresh top-level sessions as the role-separation seam. `.filing-handoff/<source-slug>.json` binds each pass to exact staged modes/blob OIDs, the complete index tree, base HEAD, and branch. It handles one source locator per transaction, and only one unfinished transaction may own the repository index. Multi-source requests become ordered, separate transactions. Because reviewer skills read ordinary files, baton mode requires `wiki/` and `raw/` to contain no unstaged, untracked, or ignored files outside the staged transaction; otherwise validation could depend on bytes absent from the approved tree, so the script stops before writing/approval.
-
-The baton enforces the state machine (write → review → commit) and the exact staged boundary; it does not identify or distinguish sessions. Role separation comes from the operator pasting the handoff into a genuinely fresh Freebuff session — the value is clean context, not a different process ID. Never create `.freebuff/` marker files or pass `--session` (it does not exist). If the handoff was pasted into the wrong (old) session, stop and tell the user to paste it into a genuinely new Freebuff session.
-
-**Write pass (session A):** before fetching or reading the source, require an empty staged index and run:
+Before fetching, opening, or reading any source body:
 
 ```bash
-./scripts/filing-baton start-write \
-  --source <source-slug> \
-  --locator <URL-or-path> \
-  --filing-date "$FILING_DATE"
+FILING_DATE=$(date +%F)
+git status --short
+git diff --cached --name-only
 ```
 
-Load `filing-agentic-sources` and perform its preservation, triage, and writing work in this bounded session. In baton mode the pass stages the complete intended boundary itself, including new raw artifacts and any process/debt files; it still must use exact `git add -- <paths>`, never `git add -A`. It may run deterministic checks but must not issue a baton verdict or commit.
+`FILING_DATE` is the local calendar date and remains fixed throughout a new filing. Record the complete status and staged boundary before acting on it.
 
-**Pre-flight code review (harness-expected).** Freebuff's system prompt directs you to spawn `code-reviewer-luna` after making changes, and its response example teaches write → review → fix → summary. This is expected — do not fight it. Treat `code-reviewer-luna` as a **pre-flight sanity check** before the boundary is recorded: fix any real findings it surfaces, re-stage the affected paths, and re-run `validate-page`. Its "no findings" is **not** baton approval and does not fill any reviewer row; the fresh-session review pass with the named wiki reviewer skills is still required. This pre-flight is valuable because it catches mechanical and provenance issues before the handoff, so the fresh review pass gets a cleaner changeset.
+### Select and load exactly one adapter
 
-**Finish-write is the gate.** After `code-reviewer-luna` passes and your staged boundary is final (all paths staged, parity-clean, validator clean), you **must** run `finish-write` then `handoff` before writing your final summary. These two commands are not optional cleanup — they record the exact staged blob OIDs and emit the handoff block the next session needs. Your todo list must include "Run finish-write and handoff" as a late item; do not mark it complete until both commands have run. Do not write your final summary with this item incomplete.
+Select the adapter **before source access** and load its entire reference:
 
-```bash
-./scripts/filing-baton finish-write \
-  --source <source-slug> \
-  --path <exact-staged-path-1> \
-  --path <exact-staged-path-2> \
-  --note '<classification and write summary>'
-```
+- A known Freebuff/commandcode session **must** load [Freebuff baton](references/freebuff-baton.md).
+- Every other harness **must** load [Full worker topology](references/full-topology.md). That adapter begins with a capability probe; inability to supply it is handled there, not by inventing another workflow.
 
-For a `skip` whose locator is an unchanged raw artifact already tracked at baton start, finish with `finish-write --no-change --note '<skip reason>'`; the script records terminal `no_change` with no review or commit. A newly preserved archive-only source is not no-change: stage and review it as a raw-only transaction. Otherwise run `./scripts/filing-baton handoff --source <source-slug>`, end your final summary with its complete output, and stop. The user pastes that response verbatim into a clean Freebuff session; never ask the user for a slug, path, command, or session identifier.
+There is no third topology, and a capable harness may not choose baton mode merely to avoid worker dispatch. [Harness notes](references/harness-notes.md) are an observational inventory, not a normative adapter.
 
-**Review/fix pass (fresh session B, C, ...):** start before making edits:
+A **new** filing starts from an empty staged boundary. If paths are already staged, stop unless the selected Freebuff adapter confirms they exactly match one nonterminal baton handoff being continued. A valid baton continuation preserves that index intact and inherits the handoff's recorded filing date; it never unstages its boundary. Any other pre-existing staged paths require human authorization to unstage those exact paths. Never use broad `git reset`, `git restore --staged .`, or any operation that absorbs or clears unrelated worktree/index changes.
 
-```bash
-./scripts/filing-baton start-review \
-  --source <source-slug>
-```
+Read `meta/pipeline-recommendations.md` before work. Report relevant rows tested; never close one without its required dated commit/session evidence. One source filing transaction—including all of its fresh baton review/fix passes—is one run for ledger purposes. Record materially new evidence once inside that transaction; a later pass over unchanged evidence does not append the same observation again or mutate the boundary merely because it rechecked it.
 
-Start with deterministic checks, then run `reviewing-wiki-theory` first. These named skills are the baton reviewer rows — not `code-reviewer-luna`. Freebuff's system prompt may direct you to spawn `code-reviewer-luna` here too; if it does, treat its output as an extra signal only, never as one of the four required reviewer rows. If theory requires an edit, record its verdict, switch to fixer role, stage the repair, finish as `changed`, and defer the other judgments to the next fresh pass rather than reviewing an obsolete tree. If theory passes or is validly skipped, continue with `reviewing-wiki-diffs`, `verifying-source-fidelity`, and `reviewing-wiki-quality` under their normal risk/skip rules. Reviewer skills remain report-only while making judgments. Baton cannot deny the top-level session's write tools, so separation is temporal: complete judgments before explicitly switching to fixer role. Any final staged index/tree delta forfeits approval. A theory `PASS WITH WARNINGS` maps to `PASS` only when every warning was resolved or is purely advisory; an accepted unresolved limitation maps to `PASS WITH EXPLICIT DEBT: <representation>`, while a required edit maps to `changed` and an unresolved structural decision maps to `blocked`.
+## Shared role boundary
 
-- With fixes staged: `finish-review --result changed --note '<findings and fixes>'`, then stop for another fresh session.
-- With a blocker: `finish-review --result blocked --note '<blocker>'`.
-- With zero delta: run `finish-review --result clean` with all four exact mapped rows and a non-empty evidence note. Row values must be `PASS`, `PASS WITH EXPLICIT DEBT: <where represented>`, or `SKIPPED: <risk-rule reason>`; `CARRIED`, prefixes such as `PASSING`, and missing rows are rejected.
+The common interface is always the staged Git artifact. Content roles may build it, reviewers may inspect it, and only the selected gate may authorize committing it. No role may redefine success around an unstaged worktree copy.
 
-```bash
-./scripts/filing-baton finish-review \
-  --source <source-slug> \
-  --result clean \
-  --review 'theory=PASS' \
-  --review 'diff=PASS' \
-  --review 'source-fidelity=PASS' \
-  --review 'quality=PASS' \
-  --note '<verbatim reviewer verdicts and material findings>'
+In full topology the coordinator never fetches or reads source bodies, reads wiki page bodies, writes wiki prose, or writes raw artifacts. It passes locators to shared-checkout content workers and inspects only process evidence, paths, metadata/provenance, status, diffs needed for immutability, and staged OIDs.
 
-./scripts/filing-baton commit \
-  --source <source-slug> \
-  --message '<commit message>'
-```
+In baton topology the bounded top-level write role may perform content work only as authorized by its adapter. This does not grant the later review role same-state approval after mutation.
 
-The commit command rechecks the complete approved tree and atomically advances the recorded branch with `commit-tree`/`update-ref`. It deliberately bypasses normal commit hooks so hooks cannot add unreviewed paths; all required checks must run before approval. After commit, the handoff command prints a terminal receipt with no continuation instruction; report the result to the user and stop.
+The first applicable content role owns source-body access and preservation: the writer. Existing `raw/` bodies are immutable. Writers create/verify raw artifacts but do not stage them in full topology; the filing coordinator role (the full coordinator or bounded baton write role) performs exact raw staging. AgenticWiki has no corrector role; there is no correcting-sources step and no correction review row.
 
-Interrupted write passes recover with `restart-write`; interrupted, blocked, or approved review states recover with `restart-review`, which voids prior approval. It preserves the recorded boundary even when that boundary has mechanical failures so the fresh pass can fix them, but refuses unrecorded staged drift. Run restart before editing. If recovery should be abandoned, a fresh session runs `abort --source <slug> --reason '<reason>'`; it resets the baton-owned index to current HEAD while preserving worktree files and marks the handoff terminal; separate the preserved `wiki/`/`raw/` drafts before starting another transaction. `reconcile-commit` handles only an exact approved single-parent commit whose handoff save failed. Every command holds a repository-local transition lock.
+Canonical content and verification contracts live in:
 
-Freebuff follows this section through commit and does not execute the full-topology dispatch steps below.
+- [filing-agentic-sources](../filing-agentic-sources/SKILL.md)
+- [verifying-wiki-changes](../verifying-wiki-changes/SKILL.md)
+- [reviewing-wiki-theory](../reviewing-wiki-theory/SKILL.md)
 
-### 2. Prepare source locators (metadata only; full topology)
+Load them when their role begins. Do not duplicate or weaken their report, risk, evidence, or verdict contracts here.
 
-For each source, record only the URL or local path supplied by the user and any explicit scope. Do not fetch, extract, open, or read the source body. Do not verify an existing raw artifact's body. Raw creation and content-aware provenance checks belong to the dispatched writer in Step 3; the coordinator checks the reported artifact and stages it later without reading its body.
+### Role limits
 
-### 3. Dispatch writers (sequential)
+The coordinator does not choose page scope, framing, evidence posture, or narrative structure; those are writer judgments. It does not repair wiki content, even for links, frontmatter, `## Sources`, or `wiki/index.md`; it routes defects to the owning writer. It does not perform reviewer judgment or infer that a silent worker completed work. In full topology these limits are absolute. Baton grants the bounded write/fixer role only the edits described in its adapter, never approval of bytes that role changed.
 
-Writers run sequentially, one per source, in the order from step 1. Each writer is a fresh write-capable worker sharing the coordinator's authoritative checkout and loading `filing-agentic-sources`. Dispatch one writer per source. Do not use isolated worktrees, patch-only workers, or any worker whose edits do not land in this checkout. You do not write wiki prose yourself.
+## Source order
 
-**Dispatch gate:** successfully construct the first qualifying writer before any source fetch, extraction, body inspection, provenance judgment, triage, page selection, or wiki editing. Only source-locator metadata may be handled first. A claimed worker limitation without a harness dispatch attempt is not evidence of unavailability. In Pi, use the write-capable `delegate` call shown above. If the call fails, correct a schema error and retry once; if no qualifying writer can be constructed, stop and report the failure. Do not continue inline or hand source inspection to a non-qualifying helper.
+Ordering is an evidence discipline: stronger/direct material establishes the factual spine before interpretation and aggregation are layered onto it.
 
-Dispatch each writer with:
+Use a simple heuristic from locator metadata only — primary sources (arXiv papers, original blog posts, conference talks, official docs) before commentary or aggregation. If ordering is unclear, use the order supplied. Do not read a source body to classify it. Baton mode uses one source locator per transaction; its adapter defines the multi-source sequence.
 
-- the source locator supplied by the user: URL, local path, or existing `raw/` path;
-- the instruction: "file this source into the wiki";
-- the conventions path: `meta/wiki-conventions.md`;
-- `FILING_DATE=$FILING_DATE`, which the writer uses for changed-page `updated` and new-source saved/ingested metadata;
-- any explicit scope from the user (e.g., "triage-and-file", "full", "marginal").
+## Shared filing flow
 
-The writer creates or verifies the raw artifact, reads the source and wiki state, decides the page set, writes prose, and stages only wiki changes. The writer returns the raw path and a structured report. The coordinator later checks raw provenance/immutability mechanically and stages the reported new artifact.
+### Prepare locator records
 
-Immediately before each writer dispatch, capture the index path/blob snapshot (`git ls-files -s`). Capture it again after the writer returns. The paths whose index blob OIDs changed are that writer's contribution; this remains correct when a later writer modifies a page already staged by an earlier writer. Keep the cumulative staged boundary separate from this per-writer delta.
+For each source retain only the supplied URL/local path, class inferable from locator metadata, and explicit user scope until a content role starts. Do not prefetch, extract, move, open, or verify a body. The first content role chooses the canonical slug/path and follows `meta/wiki-conventions.md`: truthful provenance, `filed: $FILING_DATE` for a new artifact, historical `filed:` preserved for an existing artifact, and move—not copy—when consuming a supplied Downloads file. The role reports every resulting raw/asset path for exact staging.
 
-You check:
+### Execute the pipeline
 
-- the before/after index-blob delta matches the writer's exact intended-path report, while `git diff --cached --name-only` remains the explicitly labeled cumulative boundary;
-- `wiki/index.md` is staged if any page was created or updated;
-- the writer report includes each exact staging command, or the explicit marker `command telemetry unavailable`. Treat this as worker self-report and record independently exposed harness command telemetry separately. Only independently exposed command telemetry—not self-report or the final staged set—can establish whether `git add -A` was invoked or close AG-008. If telemetry is unavailable, report that fact; never infer “no `git add -A`” from staged-state parity alone.
+1. **Preserve the original before dependent prose.** Writers preserve or verify the immutable original first. Articles and text-native primary documents need no separate correction step; AgenticWiki files from the original directly.
+2. **Run writers sequentially.** Use one source at a time in source-class order so each writer sees earlier staged wiki contributions. The writer decides the page set, updates `wiki/index.md` when pages change, stages only intended wiki paths, and never commits. Capture authoritative before/after index state rather than trusting a self-report.
+3. **Stage every raw/process artifact exactly.** Explicitly `git add -- <path>` every new/changed original, asset, permitted raw-frontmatter mutation, writer-retrieved durable source, and coordinator-owned ledger. Never use `git add -A`. The reviewed union is writer-staged wiki paths plus coordinator-staged raw and process paths; no raw artifact may remain unstaged.
+4. **Run the common mechanical floor.** Immediately before semantic review and again before commit:
+   ```bash
+   ./scripts/filing-check staged --filing-date "$FILING_DATE"
+   ```
+   Route content errors to the owning writer. A clean check is necessary but is not a semantic verdict.
+5. **Verify the complete staged changeset.** Load `verifying-wiki-changes` in `staged-changeset` mode and supply the complete wiki/raw/process boundary, scope, `FILING_DATE`, and media records. Follow the selected adapter for reviewer construction. Generic code review is extra only and cannot fill a wiki-review row.
+6. **Route findings and close loops.** Content owners apply fixes. Re-stage only their exact paths, run `filing-check paths` with the same repeated paths, and rerun every affected semantic reviewer across the full error-pattern footprint. Validator-only closure is forbidden. Media questions follow the verifier's Tier-1 route and return to the writer; the media call alone never closes fidelity review.
+7. **Represent debt and process evidence before approval.** Any accepted evidence gap must already exist as honest in-page posture or a staged `meta/tech-debt.md` row. Materially new recommendation evidence is recorded once per filing transaction in staged `meta/pipeline-recommendations.md`; subsequent fresh passes do not duplicate unchanged evidence. Re-run the mechanical floor and verification aggregation; reviewer reports may be reused only under the verifier's same-run, ledger-only, content-OID-identical rule.
+8. **Commit through the adapter gate.** Commit only after `PASS` or `PASS WITH EXPLICIT DEBT`, with all loops closed and no unresolved CRITICAL or question. Full topology uses the coordinator's normal commit after the final mechanical rerun; baton uses only the script-owned zero-delta commit path. "Stop before commit" overrides filing authorization.
+9. **Reconcile and report.** Compare the report with `git diff --cached --stat`, or after commit with `git show --stat --oneline HEAD`.
 
-### 4. Triage gate (human, non-routine)
+### Ownership routing
 
-The writer classifies the source as `full`, `marginal`, or `skip`.
+The content role that created a defect repairs it: writers own wiki prose/frontmatter/index/source declarations and writer-retrieved source preservation. The coordinator owns only process ledgers, exact raw/process staging, mechanical reruns, review dispatch, and commit. Do not let convenient write access blur those boundaries.
 
-- **Skip:** no wiki changes. Treat it as a raw-only archive transaction: stage the new raw artifact in Step 5, run raw mechanical validation and full-boundary checks, skip theory/diff/source-fidelity/quality with concrete `raw-only, no wiki claim` reasons, obtain the normal verifier verdict, and commit unless the user requested stop-before-commit. An existing raw source produces no change and needs no commit.
-- **Marginal:** the writer reports the proposed target pages and scope, but does not edit yet. Present the triage to the human. If approved, dispatch the writer again with `scope: marginal` to apply the changes. If the human upgrades to `full`, dispatch with `scope: full`.
-- **Full:** the writer has staged a full changeset. Proceed to the mechanical pre-check.
+A writer blocker stops later writers and verification. Sequential writing is deliberate: later sources build on earlier staged wiki state rather than racing shared pages.
 
-You escalate only when the writer reports a borderline or marginal source. Clear full ingests do not stop for triage.
+### Complete staged boundary
 
-### 5. Stage raw artifacts
+The stable review boundary is the union of all cumulative writer-staged wiki paths, coordinator-staged raw/assets, and staged process ledgers. Report the raw subset, wiki subset, and process subset separately. Check cached/worktree parity through `filing-check`, and inspect pre-existing raw diffs specifically for body hunks. A reviewer reads the complete stable artifact, not a writer's cumulative-path claim.
 
-After all writers complete and before the mechanical pre-check, stage every new/modified raw artifact so the staged set, the verifier's review scope, and the commit's contents all agree. The verifier's boundary is the staged set — anything not staged will not be reviewed and will not be committed, even if wiki pages cite it by path.
+### Verification and remediation details
 
-Stage each of the following with explicit paths (`git add -- <path>`). Never `git add -A`. Never absorb unrelated worktree changes.
+The verifier, not this common skill, classifies changes as mechanical/substantive/high risk and decides which named reviews apply. Preserve all four rows — theory, diff, source-fidelity, quality — including justified `SKIPPED`, and same-run ledger-only reuse where allowed. An unavailable row is incomplete verification. The common skill only ensures the verifier ran; it does not second-guess which rows the verifier required.
 
-1. **Newly preserved raw sources** reported by writers — each `raw/<slug>.md` and any `raw/assets/` companions.
-2. **arXiv extractions produced by the writer** — the writer extracts to `raw/<arxiv-id>.md` per their Step 1 and reports the path; `git add` it now. The PDF is never committed.
-3. **Non-arXiv PDFs with no stable URL** — if the PDF is the durable raw copy per Step 2, `git add` it.
-4. **Writer-discovered raw sources** — any additional sources a writer retrieved, preserved under the conventions, and reported back. Check that each path is new and provenance is present, then `git add` it. The writer creates raw artifacts but does not stage them.
-5. **Companion media** — any images, audio, or screenshots in `raw/assets/` referenced by a raw source.
-6. **Coordinator-owned process artifacts** — if this run adds or updates observed evidence in `meta/pipeline-recommendations.md` (or registers filing debt in `meta/tech-debt.md`), update it before verification and stage that exact path with `git add -- <path>`. Process artifacts are part of the reviewed commit boundary, not post-verdict appendages.
+When a reviewer reports a deterministic defect, rerun the named mechanical command before accepting or diagnosing the claim. When a fix lands, the owning content role reports it, but authoritative checkout evidence controls. Re-review the whole error pattern: for example all changed dates after a date error, all source declarations after desynchronization, and all changed Related sections after relationship loss.
 
-Report the raw staged set (`git diff --cached --name-only` filtered to `raw/`) alongside the cumulative wiki staged set and any coordinator-owned process artifacts. The staging boundary is now the union: cumulative writer-staged wiki paths ∪ coordinator-staged raw paths ∪ coordinator-staged process artifacts. The staging-boundary process check compares against this union, not against one writer's cumulative report. Record each exact coordinator `git add -- <path>` command and each writer staging command exposed by the harness.
+Tier-1 media adjudication is narrow evidence for the verifier's structured Audio Attribution or Exact Quote question, never as proper-noun spelling authority.
 
-### 6. Mechanical pre-check
+## Common phase records
 
-After any writer completes, including a raw-only skip, rebuild the complete staged path list, run `./scripts/validate-page` on its supported changed wiki/raw content paths, run `git diff --cached --check -- <all-changed-paths>`, and require `test -z "$(git diff --name-only -- <all-changed-paths>)"`. Do not pass coordinator-owned `meta/` process artifacts to the content validator; they remain in the full cached whitespace/parity boundary. The parity check proves reviewers will read the same bytes that are staged; run it again immediately before commit.
+Maintain these compact records while the selected adapter runs. They make a filing inspectable after the workers disappear and are the basis for the final report.
 
-- If `validate-page` returns errors: route the specific errors back to the writer. The writer fixes them and re-reports. You do not fix them yourself — even mechanical fixes are edits to wiki pages, and editing wiki pages is writer work. Re-run `validate-page` after the writer reports fixes.
-- If `validate-page` returns clean: proceed.
+### Startup record
+- captured `FILING_DATE`;
+- pre-existing status and cached-path output;
+- selected adapter and why it applies;
+- ordered locator/class list;
+- pipeline-recommendation rows inspected.
 
-After the pre-check is clean, proceed to theory as required and then verification. A marginal label never bypasses verification or the commit-gate verdict.
+### Content record
+- writer identity or baton pass/iteration;
+- authoritative path/OID delta for each role;
+- original/assets and provenance result;
+- blockers, contradictions, gaps, and media questions;
+- triage outcomes (full/marginal/skip) and scope decisions.
 
-### 7. Theory gate
-
-For full ingests, construct a fresh isolated worker and load `reviewing-wiki-theory`. A marginal ingest may skip theory with a recorded scope-based justification. A raw-only skip records `skipped — raw-only archive; no wiki theory changed`. Neither skip bypasses changeset verification.
-
-Give it:
-
-- every changed wiki page path;
-- the raw source path(s) being ingested;
-- the changeset scope.
-
-The worker re-reads all `wiki/threads/*.md` and related concept pages, classifies theory pressure, and returns a theory summary plus a verdict (`PASS` / `PASS WITH WARNINGS` / `FAIL`).
-
-Record the theory summary for the final report. The coordinator and writer own routine theory follow-through; do not ask the human to perform a second quality evaluation.
-
-- **PASS:** proceed to verification. If the theory report contains a non-blocking suggestion that would add a meaningful cross-link or strengthen a thread connection, route it to the writer before verification. The writer applies or declines it and reports which; after an applied edit, rerun the mechanical pre-check and rerun theory if the theory picture materially changed. Cosmetic or low-value suggestions may be skipped with that reason recorded.
-- **PASS WITH WARNINGS:** when the pressure is local or thread-level and the corrective action fits existing structure, route callouts, tension updates, or thread edits to the writer. Re-run the mechanical pre-check and every affected review. Escalate only when the warning requires a structural human decision such as creating, merging, splitting, retiring, or fundamentally reframing a thread.
-- **FAIL:** route a concrete local/thread-level repair to the writer when it can be resolved inside approved structure, then rerun theory. Stop and ask the human only for a genuinely structural decision or an unresolved critical conflict. Do not commit around either.
-
-### 8. Verify the completed changeset
-
-After the theory gate is clean or validly skipped and all writer edits are staged, load and run `verifying-wiki-changes` **inline in the coordinator process**. Do not dispatch a verifier worker; that would create an unnecessary nested-dispatch dependency.
-
-Give the inline verifier:
-
-- every changed wiki page (including `wiki/index.md` if relevant);
-- every new or changed raw source;
-- whether external research is permitted;
-- the changeset scope;
-- every coordinator-owned staged process artifact, or `none`.
-
-The inline verifier may inspect staged diffs only to run mechanical checks, classify actual change risk, and assemble reviewer inputs. It must not perform source-fidelity, diff-integrity, or quality judgment itself. It dispatches each required review to a fresh isolated read-only worker and returns a changeset verdict. Review requirements follow actual risk, not the writer's `full`/`marginal` label. If required reviewer dispatch is unavailable, stop and warn; do not issue a PASS.
-
-### Reviewer-dispatch checklist
-
-Copy this four-row checklist into the final verdict report. Every status must be either `dispatched ✓` or `skipped — <specific rule-based justification>`; “reviewed inline,” “covered manually,” and bare “not needed” are not valid statuses.
-
-| Review | Status | Worker/report or skip justification |
-|---|---|---|
-| Theory | `dispatched ✓` / `skipped — ...` | `reviewing-wiki-theory` report or documented marginal/mechanical scope justification |
-| Diff | `dispatched ✓` / `skipped — ...` | `reviewing-wiki-diffs` report or documented transition-risk classification |
-| Source-fidelity | `dispatched ✓` / `skipped — ...` | `verifying-source-fidelity` report(s) or documented mechanical/non-claim classification |
-| Quality | `dispatched ✓` / `skipped — ...` | `reviewing-wiki-quality` report or documented narrow-additive/structure-preserving classification |
-
-### Verify the verifier
-
-When a delegated reviewer reports a **mechanical** failure — for example, missing frontmatter, a broken link, or a validator error — independently run the deterministic check before diagnosing the cause:
-
-```bash
-./scripts/validate-page <path>
-```
-
-Use the exact affected path(s), and inspect the current checkout/staged boundary rather than trusting the report's description. If `validate-page` is clean, classify the reviewer report as inconsistent and re-dispatch the affected reviewer with the command output; do not invent a validator bug or record debt from the report alone. If the deterministic check reproduces the failure, route the actual fix to the owner and rerun the check after the fix. A reviewer report is a pointer to a check, not the check itself.
-
-### 9. Commit gate
-
-You hold the commit gate. The writer does not commit. The verdict comes from `verifying-wiki-changes`, not from `validate-page`.
-
-- **DEBT REGISTRATION REQUIRED** (internal hold, not a final verdict): apply the representation matrix in AGENTS.md Rule 9. Route a reader-facing page callout to the writer; add `meta/tech-debt.md` for structural, recurring, artifact-level, or out-of-scope content debt; use `meta/pipeline-recommendations.md` for workflow/process recommendations; use both page and ledger when both conditions apply. Stage the exact representation and rebuild the boundary. A page/content edit requires deterministic checks and every affected reviewer to rerun. A ledger-only addition may reuse same-run reviewer reports only after proving all reviewed content OIDs identical; never use ledger-only reuse after changed content.
-- **PROCESS EVIDENCE STAGING REQUIRED** (internal hold, not a final verdict): if this run tested a pipeline recommendation and reviewer/dispatch evidence arose only during verification, update and stage `meta/pipeline-recommendations.md`, then perform the same boundary/check/OID-identical aggregation rerun. Never append same-run evidence after the final verdict.
-- **PASS:** rerun full-boundary cached/worktree parity, then commit the staged set. Do not re-stage or absorb new worktree changes.
-- **PASS WITH EXPLICIT DEBT:** permitted only after every accepted unresolved gap has the Rule 9 representation required for its type inside the verified staged boundary. Confirm the page callout and/or correct ledger entry, rerun parity, then commit.
-- **FAIL:** route the specific findings to the writer. The writer applies fixes and re-reports. Re-run `validate-page` on the fixed paths, then re-run only the affected verification checks. Do not commit until the rerun returns `PASS` or `PASS WITH EXPLICIT DEBT`.
-- **FAIL on a CRITICAL that cannot be resolved without a human decision:** stop and escalate. Do not commit around it.
-
-### Debt-registration discipline
-
-Before adding a row to `meta/tech-debt.md`, verify all three conditions against the current checkout and the conventions:
-
-1. **Real:** the issue actually exists; do not copy a reviewer's claim without checking it.
-2. **Not trivially fixable:** one-line mechanical fixes get routed to the writer and fixed, not deferred as debt.
-3. **Not self-contradicted:** the proposed row is not disproved by the agent's own current observations or a nearby convention/example.
-
-Record a debt row only after those checks pass, and state which condition makes the item a genuine deferral. If a row fails any check, fix or discard it instead of polluting the debt registry.
-
-A request to “file,” “ingest,” or “process” authorizes commit after the applicable topology returns `PASS` or `PASS WITH EXPLICIT DEBT`; “stop before commit” overrides it. Full topology requires every applicable isolated review. Freebuff requires `filing-baton finish-review --result clean` to accept all four rows with zero delta and commits only through the script in that same approving pass. In both topologies, prove exact parity-clean boundaries, mechanical checks, closed fix loops, no unresolved CRITICAL or external question, and honest debt representation before commit.
-
-### 10. Report
-
-Report to the user:
-
-- sources preserved;
-- writers run (count, order, any blockers);
-- pages created and updated;
-- material claims and attributed frames added;
-- contradictions and unresolved evidence gaps;
-- theory pressure and any theory-gate escalation, including meaningful non-blocking suggestions routed to the writer and their disposition;
-- verification performed and its verdict (including the reviewer verdict ledger from `verifying-wiki-changes`);
-- the four-row reviewer-dispatch checklist, with every skipped review justified;
-- process telemetry: each dispatched worker/task, granted capabilities (`*` for writers and `ro` for reviewers), dispatch result, retry/empty-result events, and every exact staging command exposed by the harness; if staging commands were not exposed, say so rather than inferring their history from the staged set;
-- any debt-registration checks performed before adding `meta/tech-debt.md` rows;
-- whether changes were committed.
-
-**Freebuff final-summary contract:** every Freebuff turn must end by running `./scripts/filing-baton handoff --source <source-slug>` and appending its complete output **verbatim as the final block of the response**. Before that block, summarize source/classification, pages and raw artifacts, findings and fixes, mechanical results, every reviewer verdict/status, staged-path count, unrelated files left untouched, baton state, and commit status. The generated block carries the authoritative handoff path, state, boundary/OIDs/tree, history, review ledger, and exact next action. The human can paste the whole response into a new Freebuff session with nothing added; the next agent must follow the block rather than asking the human to reconstruct the slug, commands, or prior work.
-
-A missing baton review ledger is verification **incomplete**, not `PASS WITH EXPLICIT PROCESS DEBT`. Process noncompliance cannot be rounded into any PASS vocabulary. If the state is nonterminal, emit the handoff block and stop; if it is `committed`, `no_change`, or `aborted`, emit the terminal handoff block for a complete final record.
-
-## Process checks
-
-| Check | How |
-|---|---|
-| Session staging isolation | Staged index is empty before filing; any pre-existing cached path stops the run rather than entering this filing's commit |
-| Staging boundary | `git diff --cached --name-only` = cumulative writer-staged wiki paths ∪ coordinator-staged raw paths ∪ coordinator-owned staged process artifacts; per-writer contributions come from before/after index blob OIDs |
-| Raw artifacts staged | All new raw files (preserved sources, arXiv extractions, writer-discovered sources, companion assets) are staged; any modification to a pre-existing raw path blocks |
-| Existing raw immutability | For pre-existing `raw/**`, inspect the staged diff and confirm the file is unchanged; AgenticWiki permits creating raw artifacts but not modifying existing raw files. Any staged diff in an existing raw file blocks the gate. |
-| Explicit-path staging | Record exact staging commands when exposed and reject any observed `git add -A`; staged-state parity alone cannot prove command history |
-| `index.md` updated | In staged set if pages changed |
-| Mechanical pre-check | `validate-page`, cached whitespace check, and full-boundary cached/worktree parity before theory/verification; errors routed to writer |
-| Theory gate before verification | Full topology dispatches theory first; a fresh baton pass also judges theory first and fixes/stops before judging an obsolete tree; valid skips are explicit |
-| Verification on stable changeset | Full topology runs inline orchestration plus isolated reviewers; Freebuff runs all named methods in one fresh zero-delta approving pass |
-| No commit on FAIL | Commit gate logic above; verdict from verifier |
-| Raw preservation | Sources slugified; arXiv PDFs extracted, not committed; raw artifacts staged per Step 5 |
-| Review independence | Full topology gives each required review a read-only worker; Freebuff requires a fresh pass that did not stage the reviewed OIDs |
-| Delegated fix propagation | Worker self-reports are not evidence; accepted fixes are present in the coordinator checkout, inspected, and re-verified |
-| Pi adapter schemas | When using Pi, tool calls use the worked object/array shapes in § Pi tool-schema adapter; other harnesses use native equivalents |
-| Recommendation ledger | Coordinator reports tested IDs and closes rows only with a date plus commit/session/run identifier |
-| Reviewer-dispatch checklist | Final report contains theory/diff/source-fidelity/quality rows, each dispatched or skipped with a rule-based justification |
-| Process telemetry | Final report records writer and reviewer task/worker identity when exposed, granted capability, dispatch result, and retries/empty returns |
-| Verify the verifier | Mechanical reviewer failures are checked with `./scripts/validate-page <path>` before diagnosis or debt registration |
-| Debt-registration discipline | New debt rows pass the real/not-trivial/not-self-contradicted checks; fixable one-line issues are not deferred |
-| Content-role separation | Full topology constructs a qualifying shared-checkout writer before source access; Freebuff starts a bounded write pass that cannot review or commit |
-| Theory suggestions routed | Meaningful non-blocking theory suggestions are routed to the writer before verification and their disposition is reported |
-
-## What you do not do
-
-- Do not read source or wiki page bodies for coordination work, except staged hunks needed for inline verifier mechanics/risk classification.
-- Do not write wiki prose as coordinator.
-- Do not edit wiki pages — not for editorial reasons, not for mechanical fixes, and not even to repair `wiki/index.md`. Route every wiki edit back to the writer.
-- Do not make editorial judgments — page set, framing, evidence posture, and scope decisions belong to the writer.
-- Do not make scope decisions (the writer owns page-set selection).
-- Do not perform reviewer judgment yourself. Running `verifying-wiki-changes` inline permits only staged-diff inspection for mechanical checks, risk classification, reviewer construction, and verdict translation.
-- Do not treat a clean `validate-page` run as a PASS verdict. The commit-gate verdict comes from `verifying-wiki-changes`.
-- Do not commit without a `PASS` or `PASS WITH EXPLICIT DEBT` verdict from `verifying-wiki-changes`.
-- Outside explicit Freebuff baton mode, do not perform worker roles inline. Inside baton mode, the write pass cannot review/commit and a review/fix pass that stages any delta cannot approve.
+### Boundary record
+- cumulative wiki paths;
+- exact coordinator-staged raw/process paths and commands;
+- complete stage-0 OID set/tree where the adapter uses it;
+- `filing-check` results and parity state;
+- explicit `git add --` inventory versus `git diff --cached --name-only`.
+
+### Review record
+- all four named rows with dispatch/pass identity and verdict;
+- carried/reused/skip basis where canonically allowed;
+- each finding → owner → repaired paths → mechanical check → semantic rerun chain;
+- debt/process representation and content-OID identity proof;
+- media questions and their structured results.
+
+### Closure record
+- final verdict or named non-committing stop;
+- authorization, final mechanical result, commit mechanism/hash;
+- Git stat reconciliation and complete disclosure;
+- handoff or deferred-verification artifact when applicable.
+
+## Core invariants
+
+These are hard gates, not guidance. The adapter may add controls but cannot relax them. When a reference and this section appear to conflict, choose the interpretation that preserves role separation, exact staged identity, and semantic reruns, then stop for clarification rather than weakening a gate.
+
+- Raw source bodies are immutable; only permitted raw frontmatter may change.
+- Exact staging is mandatory. Never absorb unrelated paths or leave a cited/new raw artifact unstaged.
+- A writer cannot commit. A full-topology coordinator cannot perform a failed content role inline.
+- Required workers/reviewers cannot be replaced by coordinator reading, same-context judgment, or a generic agent. Generic code review is not wiki review.
+- `filing-check` is mechanical evidence, never a semantic `PASS`.
+- Every semantic fix invalidates affected judgments and requires the appropriate rerun; claim/source fixes require fidelity review, substantive transition rewrites require diff review, and structural/chronology changes require quality review; theory pressure requires theory review.
+- No commit on `FAIL`, `VERIFICATION DEFERRED`, unavailable reviewer rows, malformed/skipped-without-reason rows, deferred debt registration, deferred process evidence, an open retry/fix/media/review loop, or an unresolved human decision.
+- Commentary remains attributed framing unless independently supported; never launder it into fact. Contradictions and fragile evidence are represented explicitly under wiki conventions.
+- A staged boundary/OID check proves bytes, not command history; record exact staging commands when exposed and disclose when telemetry is unavailable.
+- An empty/no-op worker return is failure: retry once after checking shape/scope, then stop. Transient rate limits/timeouts use bounded backoff; capability failures do not.
+- Repository status and staged OIDs are authoritative after every dispatched edit; worker prose is only a report.
+- Process ledger evidence and accepted content debt must be staged before the approval that relies on them; post-verdict appendages invalidate closure. A baton transaction records each materially distinct observation once—rechecking the same staged evidence in its next fresh pass is not a new ledger mutation.
+- `wiki/index.md`, each new page's `## Related`, and every edited page's `updated: $FILING_DATE` remain writer obligations under project conventions.
+
+## Process checklist
+
+Use this short checklist together with the selected adapter's detailed gates. A checked mechanical row never compensates for a missing semantic row.
+
+- [ ] For a new transaction, captured one local `FILING_DATE` and an empty staged boundary before source access; for a baton continuation, inherited the handoff date and preserved its exact nonempty staged boundary.
+- [ ] Loaded exactly one mandatory adapter; full topology completed its pre-content capability probe.
+- [ ] Ordered sources by `source_class`; baton transactions contain one source each.
+- [ ] Preserved originals before dependent prose; no existing raw body changed.
+- [ ] Ran writers sequentially; authoritative status/OID deltas match intended wiki scopes; `wiki/index.md` is included when required.
+- [ ] Explicitly staged all raw, asset, and process paths; unrelated staged/worktree paths remain untouched.
+- [ ] `filing-check staged` passed on the stable complete union before review.
+- [ ] `verifying-wiki-changes` recorded all four reviewer rows (theory, diff, source-fidelity, quality); generic review appears only as `EXTRA`.
+- [ ] Every fix was exactly re-staged, mechanically checked, and followed by affected semantic reruns over the full pattern.
+- [ ] Media questions, debt registration, and same-run process evidence are closed inside the reviewed boundary.
+- [ ] Final mechanical check and topology-specific commit gate passed; no deferred/fail/open state was committed.
+- [ ] Final report matches staged/committed Git evidence and discloses retries, stalls, empty returns, hard stops, and interventions.
+- [ ] Writer self-reports were reconciled with authoritative status, diffs, and index OIDs.
+- [ ] No process/debt edit was appended after the semantic verdict it supports.
+- [ ] Commit authorization was confirmed and the adapter-specific final receipt/report contract was followed.
+
+Before closing, explicitly challenge each forbidden path: no unstaged raw artifact, validator-only closure, generic reviewer row, deferred-verification commit, or cleared continuation index.
+
+### Minimum process evidence
+
+Retain the initial cached boundary, source-class order, content-role dispatch sequence, per-writer index delta, raw/process staging list, pre-review and pre-commit mechanical results, reviewer ledger, fix/rerun pairs, and final commit/stop state.
 
 ## Human decisions
 
+Escalation keeps the gate closed and preserves the staged boundary unless the selected adapter explicitly describes recovery. Never clear unrelated or continuation state merely to make a blocker easier to restart.
+
+Ordinary content findings, link/frontmatter failures, index maintenance, source desynchronization, and routine debt routing are not human decisions; route them to their owner and rerun the gate.
+
 Stop and ask only when:
 
-- a writer reports a blocker requiring a human decision (gated source, schema change, merge, delete);
-- in full topology, no shared-checkout writer can be spawned after the required dispatch attempt;
-- in full topology, a required theory or verification reviewer cannot be dispatched in isolation;
-- in Freebuff, baton state cannot be safely restarted, fixed, approved, or aborted;
-- theory review requires a genuinely structural decision (new/merged/split/retired thread or fundamental reframe) or leaves an unresolved critical conflict;
-- a CRITICAL verification finding cannot be resolved without a human decision;
-- the user explicitly instructed the coordinator to stop before commit.
+- the initial index is nonempty and continuation requires exact-path unstaging authorization;
+- a required full-topology writer cannot be constructed after the applicable retry;
+- a writer reports a gated source, schema change, merge/page-deletion decision, or another blocker reserved for the human;
+- a CRITICAL finding cannot be resolved without human judgment;
+- a role worker returns empty/no-op twice; or
+- commit is expected but not authorized.
 
-## Pipeline architecture
+Never delete a page without approval. Do not ask the human to repair ordinary writer/reviewer findings that the selected topology can route and recheck itself.
 
-| Role | Skill | Owns |
-|---|---|---|
-| Coordinator | `coordinating-filing` (this skill) | Full topology: source ordering, dispatch, raw staging, theory/verification orchestration, commit gate; Freebuff: baton protocol |
-| Writer | `filing-agentic-sources` | Full topology worker or bounded Freebuff write pass: preserve/read source, decide page set, write prose, stage permitted paths |
-| Theory reviewer | `reviewing-wiki-theory` | Whole-wiki theory coherence — isolated in full topology, report-only phase in a fresh baton pass |
-| Changeset verifier | `verifying-wiki-changes` | Full topology inline orchestration; Freebuff fresh-pass reviewer mapping and verdict translation |
-| Diff reviewer | `reviewing-wiki-diffs` | Transition integrity of a changeset's diff — report-only |
-| Source-fidelity reviewer | `verifying-source-fidelity` | One page against every raw source it lists — report-only |
-| Quality reviewer | `reviewing-wiki-quality` | Structure, clarity, context, navigation, thread quality — report-only |
-| Research tool | `researching-wiki-claims` | Focused external research; returns evidence + recommendation, not a verdict |
+## Failure and telemetry discipline
+
+Never treat a worker's confident formatting as evidence that it read the repository. Full topology proves repository access before content work; baton proves artifact identity mechanically and relies on operator-enforced fresh context. In either topology, preserve the distinction between mechanical identity and semantic independence.
+
+Classify dispatch outcomes as transient, shape/schema, capability, or ambiguous/empty. Retry only according to the adapter; do not hide stalls or interventions. Record worker/task identity and capability when exposed, every bounded retry and duration, authoritative OID/path transitions, exact coordinator staging commands, and worker staging commands only when harness telemetry exposes them. If command telemetry is unavailable, say so rather than inferring it from final state.
+
+## Shared report contract
+
+A useful report lets the human understand what became durable knowledge and audit how it passed the gate without reading hidden worker logs. Keep factual additions separate from attributed commentary and from process observations.
+
+Report:
+
+- sources preserved;
+- writer count/order/blockers and pages created/updated;
+- material facts, attributed frames, contradictions, evidence gaps, and narratives considered/updated/left untouched;
+- mechanical checks, final verifier verdict, and the complete reviewer ledger;
+- debt/process evidence recorded and relevant AG-xxx IDs tested;
+- Tier-1 media calls and actions;
+- exact raw/wiki/process staged inventory, retries/failures/stalls/interventions, and topology telemetry;
+- commit state and hash when committed.
+
+Also distinguish newly created pages from updated pages and identify deliberate omissions or archive-only outcomes. Surface contradictions rather than silently replacing old claims. State whether unrelated staged/worktree paths were left untouched.
+
+Full topology records worker/task capabilities and dispatch results. Baton records pass role/result, iteration, OID/tree transition, reviewer rows, script commit result, and a session identifier only when the harness actually exposes one. The selected adapter adds its required deferred handoff or verbatim terminal/handoff receipt.
+
+## Commit authorization and closure
+
+The coordinator holds the gate even when all workers report success. Success means the exact staged artifact—not merely the worktree—passed the required mechanical and semantic controls.
+
+A request to "file," "ingest," or "process" authorizes commit only after the selected adapter's complete gate returns `PASS` or `PASS WITH EXPLICIT DEBT`; an explicit stop-before-commit instruction wins. If authorization is absent but commit is otherwise ready, ask one concrete question rather than implying completion.
+
+Do not end a turn at a phase boundary. Continue through the active retry, fix, deterministic check, semantic rerun, and verdict, or name the blocker/intervention and state that the commit gate remains closed. Reconcile counts, paths, raw inventory, reviewer rows, and commit status against Git before reporting.
+
+If a final comparison exposes an unreported or unstaged path, reopen the appropriate gate. Do not edit the prose report to conceal artifact drift, and do not commit first in hopes that the post-commit stat will make the boundary easier to explain.

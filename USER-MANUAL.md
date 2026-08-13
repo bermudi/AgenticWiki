@@ -74,14 +74,14 @@ Use this whenever an agent report becomes procedural or obscure.
 
 ## What happens when a source is filed
 
-A capable harness uses shared-checkout writers and isolated reviewers. Freebuff preserves role separation across fresh top-level sessions through `scripts/filing-baton`.
+A capable harness uses shared-checkout writers and isolated reviewers. Freebuff preserves role separation across fresh top-level sessions through `scripts/filing-baton`. The coordinator loads exactly one adapter before touching any source — `Full worker topology` for every normal harness, `Freebuff baton` for a known Freebuff session — and keeps that choice for the whole filing.
 
 | Stage | What happens | Who does it | Can it stop? |
 |---|---|---|---|
-| 1. State check | The coordinator checks existing staged and uncommitted work so unrelated files are not absorbed. | Coordinator | Yes—pre-existing staged work needs a decision. |
+| 1. State check | The coordinator captures `FILING_DATE=$(date +%F)`, shows `git status` and the staged boundary, and requires an empty staged index unless it is continuing one baton handoff with that handoff's date. | Coordinator | Yes—pre-existing staged work needs a decision. |
 | 2. Register source locator | The coordinator records only the supplied URL/path and scope; it does not fetch or inspect source content. | Coordinator | Yes—an unusable locator blocks filing. |
 | 3. Preserve source and write pages | Full topology dispatches a writer into the authoritative repository. Freebuff's bounded write pass performs the same writer skill and stages the complete transaction, but cannot review or commit. | Writer / baton write pass | Yes—unavailable full-topology dispatch, failed preservation, or marginal triage can stop the run. |
-| 4. Mechanical validation | Scripts check frontmatter, links, source lists, and page structure. In Freebuff, the harness's built-in code reviewer runs as a pre-flight after staging; its findings are fixed before the boundary is recorded. | Coordinator | Yes—errors return to the writer. |
+| 4. Mechanical validation | `scripts/filing-check staged --filing-date "$FILING_DATE"` checks the complete staged boundary (parity, whitespace, and `validate-page` on wiki/raw). In Freebuff, the harness's built-in code reviewer still runs as a pre-flight after staging, but it is extra only and never substitutes for the mechanical check. | Coordinator | Yes—errors return to the writer. |
 | 5. Theory review | Full topology uses an isolated theory reviewer. Freebuff runs the same report-only judgment in a fresh review pass. | Theory reviewer / baton pass | Only a structural decision or unresolved critical conflict requires you. |
 | 6. Independent verification | Full topology uses isolated reviewers. Freebuff's fresh pass runs the named diff, source-fidelity, and quality methods against the complete staged tree. | Reviewers / baton pass | Yes—missing required review keeps the gate closed. |
 | 7. Fix loop | Full topology routes fixes to the writer. A Freebuff reviewer may switch to fixer, but then another fresh session must review its staged result. | Writer / baton fixer | Repeats until pass or a real blocker remains. |
@@ -147,7 +147,7 @@ An **operational stop** occurs when the applicable topology cannot complete, the
 
 The baton commit uses low-level Git tree/ref operations, so ordinary commit hooks do **not** run. This prevents hooks from adding unreviewed paths; all required checks must pass before approval.
 
-A clean `validate-page` result is not a semantic PASS. The validator catches mechanical problems; reviewers check whether the prose is faithful and theoretically coherent. If deterministic command output and a reviewer disagree about a mechanical defect, the coordinator reruns the exact command and re-dispatches the reviewer with that evidence. It stops and shows you both only if the contradiction persists and cannot be resolved safely.
+A clean `filing-check` (and its underlying `validate-page`) result is not a semantic PASS. The checker catches mechanical problems — parity, whitespace, frontmatter, links; reviewers check whether the prose is faithful and theoretically coherent. If deterministic command output and a reviewer disagree about a mechanical defect, the coordinator reruns `filing-check staged` (or `filing-check paths` for a repaired scope) and re-dispatches the reviewer with that evidence. It stops and shows you both only if the contradiction persists and cannot be resolved safely.
 
 ### What “ready to commit” means
 
