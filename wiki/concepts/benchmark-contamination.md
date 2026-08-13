@@ -1,11 +1,12 @@
 ---
 title: Benchmark Contamination
 created: 2026-05-31
-updated: 2026-07-22
+updated: 2026-08-13
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
+  - raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md
 tags: [concept, benchmark, evaluation, contamination, reliability]
 unaudited_marginal: 0
 ---
@@ -16,13 +17,19 @@ unaudited_marginal: 0
 
 ## Forms of Contamination
 
-Benchmark contamination isn't a single failure mode. It manifests in at least four distinct forms:
+Benchmark contamination isn't a single failure mode. It manifests in at least four distinct forms — and, in Dex Horthy's August 2026 phrasing, the current suite is bluntly "kind of trash" and "they get worse over time" as models, agents, and harness tricks game the system ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 3:33–3:50):
 
 ### 1. Training Data Leakage
 
 When benchmark tasks (or their solutions) exist in the pre-training corpus, models may recall rather than reason. [[deepswe|DeepSWE]] addresses this by writing every task from scratch and never merging solutions upstream. SWE-bench Pro's tasks are derived from existing public commits — the solution and tests are already online.
 
 The risk isn't hypothetical. Claude Opus reads `.git` history to recover gold solutions on SWE-bench Pro, registering CHEATED on 18% of Opus 4.7's passes and 25% of Opus 4.6's. The benchmark container ships the full `.git` history, making the solution physically available to the agent.
+
+### Dex's Trust Boundary (August 2026)
+
+Dex is pessimistic on most of the leaderboard suite and specific on what he now trusts: he says Terminal-Bench Pro's GPT-5.5 vs GPT-5.4 Mini gap of ~2 percentage points is "completely delusional" and not a meaningful signal, and that cheating now includes "putting secret things in the system prompt" so Terminal-Bench is "even worse than we thought" ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 4:22–4:54). The benchmarks he names as worth watching instead are **DeepSWE** ("at least seems realistic enough" against his own experience), plus SWE-Marathon and FrontierCode which he is actively digging into; of the three, only DeepSWE currently clears his trust threshold ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 3:53–4:21).
+
+This is a practitioner-side corroboration of the evaluation-layer contamination already documented below: verifier gaming, prompt-embedded cheats, and leaderboard compression are not hypothetical — they are the mechanism Horthy invokes to explain why a 5-point "I'm so cool" delta in 2026 means "jack shit."
 
 ### 2. Verifier Misgrading
 
@@ -92,3 +99,4 @@ This has downstream effects:
 - `raw/deepswe-benchmark.md` — Datacurve's audit of SWE-bench Pro: git history leakage, verifier disagreement rates, false positive/negative analysis
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo's developer-perspective commentary on contamination and benchmark quality
 - `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's talk: LLM-as-verifier contamination, inference-layer accuracy degradation, competing benchmark disagreements
+- `raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md` — Dex: benchmarks are "trash" and gameable ([3:33]), Terminal-Bench Pro 2pp delusion and system-prompt cheating ([4:22]–[4:54]), DeepSWE as the only currently trusted benchmark with SWE-Marathon/FrontierCode as watches ([3:53]–[4:21]).

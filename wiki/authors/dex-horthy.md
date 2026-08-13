@@ -1,13 +1,14 @@
 ---
 title: Dex Horthy
 created: 2026-04-25
-updated: 2026-08-02
+updated: 2026-08-13
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
   - raw/yt-context-engineering-with-dex-horthy.md
   - raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md
   - raw/how-to-test-new-ai-models-before-they-break-production.md
+  - raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md
 unaudited_marginal: 0
 tags: ["engineer", "agent-engineering", "context-engineering"]
 ---
@@ -32,6 +33,11 @@ Dex Horthy is a software engineer, founder of HumanLayer, and a leading voice in
 - **Slow Loops Over Dark Factories**: On autonomous loops, his line is "everything except stop reading the code is good advice" — favoring [[slow-loops|incremental, human-reviewed nightly loops]] over lights-off factories.
 - **Protect Vocabulary**: Warns, via Martin Fowler, about *semantic diffusion* — useful words ("agents," "software factory") becoming meaningless through overuse. Adopted Fowler's [[harness-engineering|inner/outer harness]] distinction as the best available definition.
 - **Everything Is Structured Outputs**: His closing maxim from the model-swap evals episode: "Everything in AI engineering is structured outputs. Everything else is just more abstractions that you might not need." Even when the product-facing output is free text, the eval and verification layers should turn it into structured data (booleans, enums, counts) for programmatic processing. See [[model-swap-evals]].
+- **Spec Leverage Over Spec Shape**: "I don't give two damns how your spec is shaped. It should give you leverage" — Dex's August 2026 calibration that a 200-line markdown that lets you re-steer before code exists beats reading 2,000 lines after. Architecture docs alone still produce leaky abstractions and tramp data; the missing layer is program design (interfaces, test seams, dependency injection), especially on the front end where models still struggle with React despite being strong on API endpoints and CRUD. See [[research-plan-implement]] and [[plan-disposability]].
+- **The 2–3× Ceiling**: "You can get 99% of human-quality code, like very good code as if you had written every character by hand, but two to three times faster. You can't get 10×. It can't be done. Not today." The 10×/100× cases are reserved for very verifiable domains (Bun's rewrite with hundreds of thousands of unit tests; compilers/Ralph-style loops). See [[token-harder-vs-token-smarter]].
+- **Benchmark Skepticism**: Benchmarks are "kind of trash" — Terminal-Bench Pro's 2pp GPT-5.5 vs GPT-5.4 Mini gap is "completely delusional," and cheating now includes secret system-prompt patches. The exception he now trusts is DeepSWE; SWE-Marathon and FrontierCode are the ones he is watching. See [[benchmark-contamination]].
+- **Model-Specific Prompting**: GPT is literal, Opus is expansive ("you said this but you probably want this"). HumanLayer had to rewrite research-phase prompts because Codex returned an unreadable 200-bullet file-and-line dump where Claude wrote human-readable docs. See [[intelligence-tier-routing]].
+- **Context Window as Three Budgets + Compaction**: The dumb zone was ~40%/80–100k; HumanLayer now warns at ~100k for 200k-window models and ~200k for 1M-window models, but the killer tell is the model "struggling to get tests to pass" and trying weird fixes. Compaction has improved — it now preserves every user message verbatim and can grep the old conversation — which is why a markdown handoff you can edit still beats an opaque compaction. See [[context-engineering]] and [[fresh-context-subagents]].
 
 ## Contributions
 
@@ -89,3 +95,4 @@ Drew a direct analogy between model-swap evals and a pre-AI API migration projec
 - `raw/yt-context-engineering-with-dex-horthy.md` — The Pragmatic Engineer interview: the deabstracting definition of context engineering, the two budgets, Smart/Dumb Zone physics, the RPI retrospective, slow loops, the lights-off factory build-and-shutdown, token-harder/smarter, Martin Fowler's inner/outer harness, and the HumanLayer product reveal.
 - `raw/why-passing-benchmarks-doesnt-mean-your-ai-wrote-good-code.md` — "AI that Works" episode (Boundary, 2026): co-hosted with [[vibv|Vibv]] on coding agent benchmarks. The episode covers benchmark generations, the maintainability gap, the RL training constraint, the velocity framework, and a proposed evolving-codebase benchmark. The discussion extends Dex's previously documented maintainability-gap argument (from the Pragmatic Engineer interview) into a full episode-length treatment. **Note:** This is a multi-speaker source whose transcript lacks per-line speaker labels; attribution of specific claims to Dex could not be verified against the audio. Claims are attributed to the video/discussion in [[the-benchmark-crisis]], not to Dex individually.
 - `raw/how-to-test-new-ai-models-before-they-break-production.md` — "AI that Works" episode (Boundary, 2026): Dex hosts [[kevin-gregory|Kevin Gregory]] on model-swap evals. Dex contributes the Sprout API migration analogy (replay-diff-cutover), the observation that disagreement cases are the most interesting, and the closing maxim "everything in AI engineering is structured outputs." **Note:** Multi-speaker transcript without per-line speaker labels; attribution based on contextual cues (Dex mentions Sprout and HumanLayer, addresses Kevin by name), not verified against audio.
+- `raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md` — Wortmann interview (Aug 2026): the 2–3× at 99% calibration and 10× impossibility, spec-as-leverage (200 vs 2,000 lines), disposable tactical specs in a symlinked side-repo, program-vs-system design and tramp data, benchmark trash, bitter-lesson vs context engineering, AI psychosis and Goldratt's bottleneck, software engineering as facilitation/architecture not code, model-specific prompting (GPT literal/Opus expansive), cost stage gate make-it-run/right/fast/cheap, Fable/Opus pricing, context window warnings (100k/200k) and compaction, subagents as map-reduce and RLM (subagents calling subagents), permission-to-ship-slop collapses codebase to ash. **Note:** Multi-speaker transcript with `[mm:ss]` timestamps but no per-line speaker labels; Dex vs host attribution based on turn position and content, not verified against audio.

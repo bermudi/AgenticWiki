@@ -1,10 +1,11 @@
 ---
 title: Research / Plan / Implement
 created: 2026-07-16
-updated: 2026-07-16
+updated: 2026-08-13
 sources:
   - raw/yt-context-engineering-with-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
+  - raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md
 unaudited_marginal: 0
 tags: [concept, workflow, context-engineering, planning, agent-loops]
 ---
@@ -43,6 +44,18 @@ After a year of running RPI (and recommending that people read the plans), Dex's
 
 The fix: treat every RPI doc as a **tactical execution artifact** — use it for the task at hand, then throw it out and regenerate from scratch next time. Tokens are cheap; human time is expensive; a stale research doc reused against a changed codebase is actively dangerous. This is the empirical grounding for [[plan-disposability]], and it is a direct tension with [[spec-driven-development|evergreen specs]] (see below).
 
+## August 2026: Leverage Over Shape, System vs. Program Design
+
+The August 2026 Wortmann interview deepens the retrospective into an operating doctrine:
+
+**Spec shape doesn't matter; spec leverage does.** "I don't give two damns how your spec is shaped. It should give you leverage. It should let you read a 200-line markdown file and re-steer rather than having to read 2,000 lines of code and re-steer later where it's more work for you to load it into context, more work for the model to debug or make changes, 'cause it's already committed down one path." ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 0:00–0:10, 29:48–30:01). The leverage test replaces the template debate: if reading the doc lets you intervene at the 50,000-foot, 25,000-foot, and 10,000-foot levels before reviewing code on the ground, it is doing its job; if it tries to guarantee every line is written a particular way it has drifted into being code.
+
+**System design vs. program design.** A lot of teams stopped at system design — "Mermaid charts, here's the modules, here's the new endpoints, exactly as specified" — and still got garbage: "leaky abstractions, tramp data everywhere" ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 14:33–14:50, 15:15–15:28). The next layer that actually moves quality is *program* design — interfaces, test seams, dependency injection, and how things compose. This reframes the failure: following an architecture doc to the letter is not sufficient; the code can still be garbage if the program-design seams are wrong. Dex notes the effect is especially stark on the front end — models are strong at API endpoints, CRUD, and even write-ahead logs, but still can't reason well about React ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 15:49–16:08), which aligns with the [[plan-vs-review]] matrix finding that front-end features are review-heavy.
+
+**Tactical specs live off the code, not in it.** HumanLayer's first-year answer to "where do the specs live?" is a symlinked side-repo: every spec write syncs to a separate GitHub repo, every change pushes a new version, no merge, Git treated like Google Docs/S3, accessible but not `git log` history. When the feature ships the docs are archived; they are rarely pulled back ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 33:32–35:02). The alternative — checking specs into the code and maintaining parity — is the exact "two sources of truth" trap that makes evergreen SDD feel final, approved, and expensive to rewind. Bugs tied to several specs and bugs that are about internals rather than spec state are the cases that break the checked-in spec model.
+
+**The steering sweet spot.** The first attempt most teams make is an hour chasing a perfect spec to avoid re-coding; Dex coaches to 10 minutes for ~80% and to be comfortable rewinding: a plan that is 20% wrong should be recoverable in-session, 50% wrong should be thrown out, and that requires a speculative posture where you *expect* surprises and optimize for probability of recovery, not proof of correctness. If you didn't like the design after two hours of work, reset and rebuild from scratch — the understanding is the hard part, and the second build is always better code ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 32:30–33:11, 37:58–38:06). This is plan disposability operationalized as a leverage calculation, and it is the same probabilistic intuition behind the RTS/fog-of-war analogy Dex uses for LLM intuition.
+
 ## Horizontal vs. Vertical Plans
 
 A concrete planning failure mode Dex names: **models default to horizontal plans.** Asked to build a feature, they plan "database layer → services → API → frontend" — every layer touched, nothing testable until the end, so you're 2,000 lines in before anyone can tell whether it works.
@@ -75,3 +88,4 @@ RPI is often called "spec-driven dev" and the terms get muddled. Dex draws the l
 
 - `raw/yt-context-engineering-with-dex-horthy.md` — The original RPI definition and the research→100k-to-10k compaction (1:01:16–1:02:53), the "plans were terrible" / anti-leverage retrospective (1:02:53–1:03:31), the disposable-docs / tokens-are-cheap principle (1:04:59–1:06:16), intentional compaction as the building block (1:06:18–1:08:24), horizontal vs. vertical plans (1:08:25–1:09:34), the SDD-didn't-work verdict (1:03:33–1:04:16).
 - `raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md` — The earlier articulation of RPI as a Claude Code workflow.
+- `raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md` — Leverage over shape ([0:00]), architecture doc followed to the letter but code still garbage with leaky abstractions/tramp data ([14:33]), program design (interfaces/test seams/DI) and React-specific weakness ([15:42]–[16:08]), the 200-line vs 2,000-line steering economics ([29:48]–[30:50]), tactical docs in a symlinked side-repo and the "two sources of truth" critique ([33:21]–[35:02]), the 10-minutes-for-80% and comfortable-rewind doctrine and the fog-of-war / LLM intuition framing ([32:30]–[38:06]).

@@ -1,11 +1,12 @@
 ---
 title: Plan Disposability
 created: 2026-04-26
-updated: 2026-07-16
+updated: 2026-08-13
 sources:
   - raw/how-to-ralph-wiggum.md
   - raw/ralph-wiggum-playbook.md
   - raw/yt-context-engineering-with-dex-horthy.md
+  - raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md
 unaudited_marginal: 0
 tags: [concept, autonomous-agents, agent-loops, context-management]
 ---
@@ -40,7 +41,7 @@ Plan disposability is a form of [[smart-zone-dumb-zone|context management]] for 
 
 The deepest first-person evidence for plan disposability comes from [[dex-horthy|Dex Horthy]], who ran his own [[research-plan-implement|RPI workflow]] for a year and concluded the detailed plans were *anti-leverage*. His original plans enumerated every line of code in diff blocks; the intended use was "read the plan, then read the PR." In practice people skimmed the plans, and the plan-plus-PR review burden *doubled* reading time rather than reducing it. Worse, the plan and the code drifted, so by review time they described different things.
 
-His resolution is the strongest possible version of disposability: **treat all planning docs as tactical execution artifacts — use once, throw out, regenerate from scratch next time.** Tokens are cheap; human time is expensive; a stale research doc reused against a changed codebase is actively dangerous. This is also why he is skeptical of [[spec-driven-development|evergreen specs]] — the code is the only durable source of truth, and anything that has to be kept in parity with it stops being worth the effort.
+His resolution is the strongest possible version of disposability: **treat all planning docs as tactical execution artifacts — use once, throw out, regenerate from scratch next time.** Tokens are cheap; human time is expensive; a stale research doc reused against a changed codebase is actively dangerous. This is also why he is skeptical of [[spec-driven-development|evergreen specs]] — the code is the only durable source of truth, and anything that has to be kept in parity with it stops being worth the effort. In August 2026 he adds storage nuance: HumanLayer keeps these tactical docs out of the working repo entirely — a symlinked side-repo where every write syncs and pushes a new version (Git as Google Docs/S3, no commits or merges), archived when the feature ships and rarely pulled back ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 33:21–35:02). Checking specs into the code makes them feel "final, approved, this is what's going to happen" and raises the cost of rewinding when the second half reveals the plan was 50–80% wrong; the off-repo posture is a deliberate leverage choice, not an oversight.
 
 ## Thread
 
@@ -66,3 +67,4 @@ His resolution is the strongest possible version of disposability: **treat all p
 - `raw/how-to-ralph-wiggum.md` — Plan regeneration as a core Ralph discipline
 - `raw/ralph-wiggum-playbook.md` — "Treat IMPLEMENTATION_PLAN.md as coordination state, not a contract"
 - `raw/yt-context-engineering-with-dex-horthy.md` — Dex's RPI retrospective: detailed plans as anti-leverage (doubled review time), and the throw-out-and-regenerate resolution (1:02:53–1:06:16).
+- `raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md` — The symlinked side-repo storage pattern and the "don't check tactical specs into code" argument ([33:21]–[35:02]), the "200-line markdown beats 2,000 lines of code" leverage economics ([29:48]–[30:01]), and the comfortable-rewind norm ([31:30]–[37:58]).

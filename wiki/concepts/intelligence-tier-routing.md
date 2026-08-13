@@ -1,9 +1,10 @@
 ---
 title: Intelligence-Tier Routing
 created: 2026-07-12
-updated: 2026-07-12
+updated: 2026-08-13
 sources:
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
+  - raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md
 unaudited_marginal: 0
 tags: [concept, factory, routing, model-selection, cost, local-models, architecture]
 ---
@@ -43,6 +44,18 @@ Yegge does not commit to a specific tier count, but the sketch in his talk sugge
 | **Mechanical execution** | Boilerplate, format conversion, deterministic transforms | Local / cheap |
 
 The boundaries are not fixed; they shift with model releases. Tessl's observation (related, not Yegge): a verifier-style model (LLM-as-lint) does not need frontier capability — focused, well-specified checks can be powered by cheaper models. The verifier can be downgraded; the planner cannot.
+
+## The August 2026 Field Report (Dex Horthy & Host)
+
+The Wortmann/Horthy conversation grounds tier routing in today's pricing and habits:
+
+**Make it run, make it right, make it fast (then cheap).** Dex's stage gate: prove the smartest model (o3 at the time of the story; Opus/GPT-5.6 today) can solve the task and that someone wants the result; only at volume do you pay to break the task into calls and move pieces down the cost ladder — e.g., run parts on a 12B OSS model at ~1/1000th Opus cost, reserving frontier for the hard steps. Engineering time is the binding constraint early; per-token cost is the late constraint ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 48:43–50:11, 23:58–24:34). The tokenizer/cost shock that made this real for most teams: Opus 4.7's 30% more tokens at the same price, then Fable at ~2× Opus, which is when "do I really get more bang for this buck?" entered day-to-day decisions ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 50:11–50:42).
+
+**Which tier for which phase is not settled.** Enterprise guidance Dex hears now is often "Opus for planning, Sonnet for implementation," but both speakers push back: their own workflow is usually frontier-only because fixing Sonnet is slower than paying for Opus, and Dex reserves the opposite instinct — *cheap* model as planning sparring partner, *expensive* model to cover edge cases — as valid when the plan is the personal-thinking layer. The wiki's prior "planner cannot be downgraded" gloss is thus too strong; both directions appear in practice, gated by how much the implementer is expected to discover vs. execute ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 51:24–53:55). The shared principle: a plan is a prompt on a spectrum between two sentences and the full diff, and the right point is "good enough that if it's 20% wrong I can recover in-session, 50% wrong I throw it out" — which is itself a tiering judgment.
+
+**Models need different prompting.** Calvin French-Owen's (Segment, Codex launch) characterization that the speakers adopt: GPT is more literal (does the instructions), Opus more expansive ("you said this but based on everything I've seen you probably want this"). HumanLayer had to rewrite research-phase prompts because Codex under the same prompt returned an unreadable 200-bullet file-and-line dump where Claude wrote human-readable docs ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 58:11–59:27). The host adds an affordance difference that matters for tiering: Opus/Claude still more natural for creative writing; GPT more "to the point" and — in his framing — "very German" ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 59:30–1:00:05). Tier routing therefore entails per-model prompt sets, not one prompt routed anywhere.
+
+**Subscription vs. per-token changes the calculus.** "Are you on a subscription or paying per token?" is Dex's first disambiguation before any tier advice; the same workload feels cheap or expensive depending on the billing model ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 51:43).
 
 ## Why Tagging Matters
 
@@ -100,3 +113,4 @@ These are open empirical questions; the wiki should not claim answers that the s
 ## Sources
 
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's intelligence-tier routing thesis: tagging work with intelligence tiers, swapping agents in and out, the intelligence arbitrage problem, the seven-month prediction for open-source model parity, the hosted-local-model drop-in opportunity, the tier-aware verifier implication
+- `raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md` — The make-it-run/right/fast/cheap stage gate and 12B-at-1/1000th example ([23:58]–[24:34], [48:43]–[50:11]), the Opus 4.7 tokenizer and Fable 2× pricing shocks ([50:11]–[50:42]), the "Opus for planning, Sonnet for impl" enterprise guidance vs. frontier-only practice and the cheap-planner/expensive-implementer counter-case ([51:24]–[53:55]), the GPT-literal vs Opus-expansive prompting difference and the Codex-200-bullets rewrite ([58:11]–[59:27]), subscription vs per-token framing ([51:43]).
