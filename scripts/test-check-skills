@@ -1,0 +1,312 @@
+#!/usr/bin/env bash
+# Integration tests for scripts/check-skills using isolated temporary repositories.
+
+set -euo pipefail
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+PROJECT_ROOT=$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)
+CHECK="$SCRIPT_DIR/check-skills"
+TMP_ROOT=$(mktemp -d)
+ORIGINAL_PWD=$PWD
+trap 'cd "$ORIGINAL_PWD"; rm -rf "$TMP_ROOT"' EXIT
+
+PASS=0
+FAIL=0
+LAST_OUTPUT="$TMP_ROOT/output"
+LAST_STATUS=0
+BACKTICK=$'\x60'
+
+REQUIRED_SKILLS=(
+  auditing-agentic-wiki
+  coordinating-filing
+  filing-agentic-sources
+  hybrid-parse
+  querying-agentic-wiki
+  researching-wiki-claims
+  reviewing-wiki-diffs
+  reviewing-wiki-quality
+  reviewing-wiki-theory
+  verifying-source-fidelity
+  verifying-wiki-changes
+)
+
+ok() {
+  PASS=$((PASS + 1))
+  printf 'ok %d - %s\n' "$((PASS + FAIL))" "$1"
+}
+
+not_ok() {
+  FAIL=$((FAIL + 1))
+  printf 'not ok %d - %s\n' "$((PASS + FAIL))" "$1" >&2
+  if [ -f "$LAST_OUTPUT" ]; then
+    sed 's/^/  /' "$LAST_OUTPUT" >&2
+  fi
+}
+
+run_check() {
+  set +e
+  "$@" >"$LAST_OUTPUT" 2>&1
+  LAST_STATUS=$?
+  set -e
+}
+
+run_project_check() {
+  (cd "$PROJECT_ROOT" && "$CHECK")
+}
+
+edit_in_place() {
+  sed -i.bak "$1" "$2"
+  rm -f "$2.bak"
+}
+
+expect_status() {
+  local description="$1" expected="$2"
+  shift 2
+  run_check "$@"
+  if [ "$LAST_STATUS" -eq "$expected" ]; then
+    ok "$description"
+  else
+    not_ok "$description (expected exit $expected, got $LAST_STATUS)"
+  fi
+}
+
+expect_output() {
+  local description="$1" pattern="$2"
+  if grep -Fq -- "$pattern" "$LAST_OUTPUT"; then
+    ok "$description"
+  else
+    not_ok "$description (missing output: $pattern)"
+  fi
+}
+
+write_skill() {
+  local name="$1"
+  mkdir -p ".agents/skills/$name"
+  cat >".agents/skills/$name/SKILL.md" <<EOF
+---
+name: $name
+description: Fixture.
+---
+
+# Fixture
+EOF
+}
+
+new_repo() {
+  local fixture="$1"
+  REPO="$TMP_ROOT/$fixture"
+  mkdir -p "$REPO/scripts"
+  cp "$CHECK" "$REPO/scripts/check-skills"
+  chmod +x "$REPO/scripts/check-skills"
+  git -C "$REPO" init -q
+  cd "$REPO" || exit 1
+
+  local name
+  for name in "${REQUIRED_SKILLS[@]}"; do
+    write_skill "$name"
+  done
+
+  mkdir -p \
+    .agents/skills/coordinating-filing/references \
+    .agents/skills/filing-agentic-sources/references \
+    .agents/skills/hybrid-parse/scripts
+
+  cat >>.agents/skills/coordinating-filing/SKILL.md <<'EOF'
+
+[Freebuff](references/freebuff-baton.md)
+[Full](references/full-topology.md)
+[Writer](../filing-agentic-sources/SKILL.md)
+[Verifier](../verifying-wiki-changes/SKILL.md)
+[Theory](../reviewing-wiki-theory/SKILL.md)
+EOF
+  cat >.agents/skills/coordinating-filing/references/full-topology.md <<'EOF'
+[Writer](../../filing-agentic-sources/SKILL.md)
+[Verifier](../../verifying-wiki-changes/SKILL.md)
+EOF
+  cat >.agents/skills/coordinating-filing/references/freebuff-baton.md <<'EOF'
+[Writer](../../filing-agentic-sources/SKILL.md)
+[Verifier](../../verifying-wiki-changes/SKILL.md)
+EOF
+  cat >.agents/skills/filing-agentic-sources/references/ingest-philosophy.md <<'EOF'
+# Ingest philosophy
+EOF
+  cat >>.agents/skills/filing-agentic-sources/SKILL.md <<'EOF'
+
+Load `references/ingest-philosophy.md`.
+EOF
+  cat >>.agents/skills/verifying-wiki-changes/SKILL.md <<'EOF'
+
+| Skill | Contract |
+|---|---|
+| `reviewing-wiki-theory` | Fixture |
+| `reviewing-wiki-diffs` | Fixture |
+| `verifying-source-fidelity` | Fixture |
+| `reviewing-wiki-quality` | Fixture |
+EOF
+  cat >.agents/skills/hybrid-parse/scripts/pdf-hybrid.mjs <<'EOF'
+// Fixture
+EOF
+  cat >scripts/filing-baton <<'EOF'
+SKILL_PATH = ".agents/skills/coordinating-filing/SKILL.md"
+print(f"Load {SKILL_PATH}")
+EOF
+  cat >scripts/filing-check <<'EOF'
+print("fixture")
+EOF
+  cat >AGENTS.md <<'EOF'
+.agents/skills/coordinating-filing/SKILL.md
+EOF
+  cat >USER-MANUAL.md <<'EOF'
+# Fixture manual
+EOF
+  cat >README.md <<'EOF'
+# Fixture
+EOF
+}
+
+new_repo valid
+expect_status "a complete and wired skill graph passes" 0 scripts/check-skills
+expect_output "the pass report includes the active skill count" "skills=11"
+
+new_repo missing-skill
+rm .agents/skills/querying-agentic-wiki/SKILL.md
+expect_status "a missing required operation fails" 1 scripts/check-skills
+expect_output "the missing operation is named" \
+  "required active skill is missing: querying-agentic-wiki"
+
+new_repo mismatched-name
+edit_in_place 's/name: hybrid-parse/name: wrong-name/' \
+  .agents/skills/hybrid-parse/SKILL.md
+expect_status "frontmatter and directory names must agree" 1 scripts/check-skills
+expect_output "the name mismatch is explained" \
+  "frontmatter name 'wrong-name' does not match directory 'hybrid-parse'"
+
+new_repo symlinked-root
+mv .agents/skills .agents/skills-real
+ln -s skills-real .agents/skills
+expect_status "a symlinked active skill root fails" 1 scripts/check-skills
+expect_output "the symlinked root is rejected" \
+  "active skill root must be an ordinary directory"
+
+new_repo symlinked-skill-directory
+mv .agents/skills/querying-agentic-wiki querying-agentic-wiki-real
+ln -s ../../querying-agentic-wiki-real \
+  .agents/skills/querying-agentic-wiki
+expect_status "a symlinked active skill directory fails" 1 scripts/check-skills
+expect_output "the symlinked skill directory is rejected" \
+  "active skill entry must be an ordinary directory"
+
+new_repo symlinked-skill-file
+mv .agents/skills/querying-agentic-wiki/SKILL.md \
+  .agents/skills/querying-agentic-wiki/SKILL.real.md
+ln -s SKILL.real.md .agents/skills/querying-agentic-wiki/SKILL.md
+expect_status "a symlinked SKILL.md fails" 1 scripts/check-skills
+expect_output "the symlinked skill file is rejected" \
+  "SKILL.md must be an ordinary file"
+
+new_repo symlinked-skill-support
+printf '# Fixture\n' > \
+  .agents/skills/querying-agentic-wiki/reference.real.md
+ln -s reference.real.md \
+  .agents/skills/querying-agentic-wiki/reference.md
+expect_status "an unreferenced symlinked skill support file fails" 1 \
+  scripts/check-skills
+expect_output "the symlinked support file is rejected" \
+  "symlink is not allowed in the skill discovery tree"
+
+new_repo skill-file-masquerade
+rm .agents/skills/querying-agentic-wiki/SKILL.md
+mkdir .agents/skills/querying-agentic-wiki/SKILL.md
+expect_status "a directory masquerading as SKILL.md fails" 1 scripts/check-skills
+expect_output "the masquerading directory is rejected" \
+  "SKILL.md must be an ordinary file"
+
+new_repo referenced-file-masquerade
+mkdir .agents/skills/querying-agentic-wiki/reference.md
+cat >>AGENTS.md <<'EOF'
+.agents/skills/querying-agentic-wiki/reference.md
+EOF
+expect_status "a referenced directory masquerading as a file fails" 1 \
+  scripts/check-skills
+expect_output "the referenced masquerading directory is rejected" \
+  "skill path must resolve to a file .agents/skills/querying-agentic-wiki/reference.md"
+
+new_repo archived-copy
+mkdir -p .agents/skills-old/querying-agentic-wiki
+cp .agents/skills/querying-agentic-wiki/SKILL.md \
+  .agents/skills-old/querying-agentic-wiki/SKILL.md
+expect_status "a duplicate discovery tree under .agents is rejected" 1 \
+  scripts/check-skills
+expect_output "the unsafe discovery location is named" \
+  "discoverable SKILL.md is outside .agents/skills/<name>/SKILL.md"
+
+new_repo broken-reference
+cat >>AGENTS.md <<'EOF'
+.agents/skills/does-not-exist/SKILL.md
+EOF
+expect_status "an unresolved explicit skill path fails" 1 scripts/check-skills
+expect_output "the broken path and source are reported" \
+  "AGENTS.md:2: unresolved skill path .agents/skills/does-not-exist/SKILL.md"
+
+new_repo missing-adapter
+rm .agents/skills/coordinating-filing/references/freebuff-baton.md
+expect_status "a missing topology adapter fails" 1 scripts/check-skills
+expect_output "the missing adapter is named" \
+  "required skill support file is missing: .agents/skills/coordinating-filing/references/freebuff-baton.md"
+
+new_repo missing-entry-point
+rm scripts/filing-check
+expect_status "a missing workflow entry point fails" 1 scripts/check-skills
+expect_output "the missing workflow entry point is named" \
+  "required skill support file is missing: scripts/filing-check"
+
+new_repo broken-routing
+edit_in_place '\|../verifying-wiki-changes/SKILL.md|d' \
+  .agents/skills/coordinating-filing/SKILL.md
+printf '\n<!-- [Verifier](../verifying-wiki-changes/SKILL.md) -->\n' >> \
+  .agents/skills/coordinating-filing/SKILL.md
+expect_status "a coordinator that cannot reach verification fails" 1 \
+  scripts/check-skills
+expect_output "a commented link cannot satisfy a route" \
+  "missing required Markdown route to .agents/skills/verifying-wiki-changes/SKILL.md"
+
+new_repo broken-inline-route
+edit_in_place "\|Load ${BACKTICK}references/ingest-philosophy.md${BACKTICK}|d" \
+  .agents/skills/filing-agentic-sources/SKILL.md
+printf '\n<!-- %sreferences/ingest-philosophy.md%s -->\n' \
+  "$BACKTICK" "$BACKTICK" >> \
+  .agents/skills/filing-agentic-sources/SKILL.md
+expect_status "a commented inline path cannot satisfy writer routing" 1 \
+  scripts/check-skills
+expect_output "the missing inline route is named" \
+  "missing required inline route to .agents/skills/filing-agentic-sources/references/ingest-philosophy.md"
+
+new_repo broken-reviewer-row
+edit_in_place "\|${BACKTICK}reviewing-wiki-quality${BACKTICK}|d" \
+  .agents/skills/verifying-wiki-changes/SKILL.md
+printf '\n<!-- | %sreviewing-wiki-quality%s | Fixture | -->\n' \
+  "$BACKTICK" "$BACKTICK" >> \
+  .agents/skills/verifying-wiki-changes/SKILL.md
+expect_status "a commented reviewer row cannot replace the required row" 1 \
+  scripts/check-skills
+expect_output "the missing reviewer row is named" \
+  "missing required reviewer table row reviewing-wiki-quality"
+
+new_repo broken-output-route
+cat >scripts/filing-baton <<'EOF'
+ROUTE = ".agents/skills/coordinating-filing/SKILL.md"
+EOF
+expect_status "a dormant string cannot replace emitted baton routing" 1 \
+  scripts/check-skills
+expect_output "the missing emitted route is named" \
+  "does not print required route to .agents/skills/coordinating-filing/SKILL.md"
+
+cd "$TMP_ROOT" || exit 1
+expect_status "an external test cwd still resolves the real project" 0 \
+  run_project_check
+
+printf '1..%d\n' "$((PASS + FAIL))"
+printf 'passed=%d failed=%d\n' "$PASS" "$FAIL"
+if [ "$FAIL" -ne 0 ]; then
+  exit 1
+fi

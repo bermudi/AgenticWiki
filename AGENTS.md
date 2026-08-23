@@ -76,6 +76,7 @@ The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`. In Freebuf
 | Audit, debt resolution, deep-semantic audit | `.agents/skills/auditing-agentic-wiki/SKILL.md` |
 | Open process recommendations | `meta/pipeline-recommendations.md` |
 | Quick mechanical validation (frontmatter, links, sources) | `./scripts/validate-page` |
+| Skill graph and dispatch wiring validation | `./scripts/check-skills` |
 
 ## Invariant Rules
 

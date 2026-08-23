@@ -1,0 +1,502 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""Check that AgenticWiki's active skill graph is complete and resolvable."""
+
+from __future__ import annotations
+
+import ast
+import os
+import re
+import subprocess
+import sys
+from collections import Counter
+from collections.abc import Iterable
+from pathlib import Path
+from typing import NoReturn
+
+SKILL_NAME_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
+SKILL_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9_.-])"
+    r"(\.agents/skills/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*)"
+)
+MARKDOWN_LINK_RE = re.compile(r"\[[^\]\n]+\]\(([^)\s]+)(?:\s+[^)]*)?\)")
+INLINE_CODE_RE = re.compile(r"(?<!`)`([^`\n]+)`(?!`)")
+REVIEWER_ROW_RE = re.compile(r"^\|\s*`([a-z0-9]+(?:-[a-z0-9]+)*)`\s*\|", re.MULTILINE)
+HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+FENCED_CODE_RE = re.compile(
+    r"^(?:```|~~~).*?^(?:```|~~~)[ \t]*$", re.MULTILINE | re.DOTALL
+)
+
+REQUIRED_SKILLS = (
+    "auditing-agentic-wiki",
+    "coordinating-filing",
+    "filing-agentic-sources",
+    "hybrid-parse",
+    "querying-agentic-wiki",
+    "researching-wiki-claims",
+    "reviewing-wiki-diffs",
+    "reviewing-wiki-quality",
+    "reviewing-wiki-theory",
+    "verifying-source-fidelity",
+    "verifying-wiki-changes",
+)
+
+REQUIRED_FILES = (
+    ".agents/skills/coordinating-filing/references/freebuff-baton.md",
+    ".agents/skills/coordinating-filing/references/full-topology.md",
+    ".agents/skills/filing-agentic-sources/references/ingest-philosophy.md",
+    ".agents/skills/hybrid-parse/scripts/pdf-hybrid.mjs",
+    "scripts/filing-baton",
+    "scripts/filing-check",
+)
+
+# These checks establish routing, not editorial wording. They catch the broken state
+# where a skill exists but the coordinator, adapter, or verifier cannot reach it.
+REQUIRED_MARKDOWN_ROUTES = {
+    ".agents/skills/coordinating-filing/SKILL.md": (
+        ".agents/skills/coordinating-filing/references/freebuff-baton.md",
+        ".agents/skills/coordinating-filing/references/full-topology.md",
+        ".agents/skills/filing-agentic-sources/SKILL.md",
+        ".agents/skills/verifying-wiki-changes/SKILL.md",
+        ".agents/skills/reviewing-wiki-theory/SKILL.md",
+    ),
+    ".agents/skills/coordinating-filing/references/full-topology.md": (
+        ".agents/skills/filing-agentic-sources/SKILL.md",
+        ".agents/skills/verifying-wiki-changes/SKILL.md",
+    ),
+    ".agents/skills/coordinating-filing/references/freebuff-baton.md": (
+        ".agents/skills/filing-agentic-sources/SKILL.md",
+        ".agents/skills/verifying-wiki-changes/SKILL.md",
+    ),
+}
+
+REQUIRED_INLINE_ROUTES = {
+    ".agents/skills/filing-agentic-sources/SKILL.md": (
+        ".agents/skills/filing-agentic-sources/references/ingest-philosophy.md",
+    ),
+}
+
+REQUIRED_REVIEWER_ROWS = (
+    "reviewing-wiki-theory",
+    "reviewing-wiki-diffs",
+    "verifying-source-fidelity",
+    "reviewing-wiki-quality",
+)
+
+REQUIRED_OUTPUT_ROUTES = {
+    "scripts/filing-baton": (".agents/skills/coordinating-filing/SKILL.md",),
+}
+
+
+class SetupError(RuntimeError):
+    """The checker cannot inspect the repository."""
+
+
+def fail(message: str) -> NoReturn:
+    print(f"check-skills: {message}", file=sys.stderr)
+    raise SystemExit(2)
+
+
+def repository_root() -> Path:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            capture_output=True,
+            check=False,
+            env={**os.environ, "GIT_OPTIONAL_LOCKS": "0"},
+        )
+    except OSError as exc:
+        raise SetupError(f"cannot execute git: {exc}") from exc
+    if result.returncode != 0:
+        detail = result.stderr.decode("utf-8", "replace").strip()
+        raise SetupError(f"must run inside a Git worktree: {detail}")
+    value = result.stdout.rstrip(b"\r\n")
+    if not value:
+        raise SetupError("git returned an empty repository root")
+    return Path(os.fsdecode(value))
+
+
+def read_text(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        raise SetupError(f"cannot read {path}: {exc}") from exc
+
+
+def symlink_component(root: Path, path: Path) -> Path | None:
+    try:
+        relative = path.relative_to(root)
+    except ValueError:
+        return path
+    current = root
+    for part in relative.parts:
+        current /= part
+        try:
+            current.lstat()
+        except FileNotFoundError:
+            return None
+        except OSError as exc:
+            raise SetupError(f"cannot inspect {current}: {exc}") from exc
+        if current.is_symlink():
+            return current
+    return None
+
+
+def is_ordinary_file(root: Path, path: Path) -> bool:
+    return path.is_file() and symlink_component(root, path) is None
+
+
+def is_ordinary_directory(root: Path, path: Path) -> bool:
+    return path.is_dir() and symlink_component(root, path) is None
+
+
+def route_target(root: Path, source: Path, value: str) -> Path | None:
+    value = value.split("#", 1)[0]
+    if not value or value.startswith(("#", "/")) or "://" in value:
+        return None
+    base = root if value.startswith((".agents/", "scripts/")) else source.parent
+    return Path(os.path.abspath(base / value))
+
+
+def semantic_markdown(text: str) -> str:
+    return HTML_COMMENT_RE.sub("", FENCED_CODE_RE.sub("", text))
+
+
+def static_string(node: ast.expr, constants: dict[str, str]) -> str | None:
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    if isinstance(node, ast.Name):
+        return constants.get(node.id)
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+        left = static_string(node.left, constants)
+        right = static_string(node.right, constants)
+        return None if left is None or right is None else left + right
+    if isinstance(node, ast.JoinedStr):
+        parts: list[str] = []
+        for value in node.values:
+            if isinstance(value, ast.FormattedValue):
+                part = static_string(value.value, constants)
+            else:
+                part = static_string(value, constants)
+            if part is None:
+                return None
+            parts.append(part)
+        return "".join(parts)
+    return None
+
+
+def module_constants(tree: ast.Module) -> dict[str, str]:
+    constants: dict[str, str] = {}
+    for statement in tree.body:
+        if isinstance(statement, ast.Assign):
+            value = static_string(statement.value, constants)
+            if value is not None:
+                for target in statement.targets:
+                    if isinstance(target, ast.Name):
+                        constants[target.id] = value
+        elif isinstance(statement, ast.AnnAssign) and statement.value is not None:
+            value = static_string(statement.value, constants)
+            if value is not None and isinstance(statement.target, ast.Name):
+                constants[statement.target.id] = value
+    return constants
+
+
+def frontmatter_name(path: Path, errors: list[str]) -> str | None:
+    text = read_text(path)
+    lines = text.splitlines()
+    if not lines or lines[0] != "---":
+        errors.append(f"{path}: missing opening YAML frontmatter delimiter")
+        return None
+    try:
+        closing = lines.index("---", 1)
+    except ValueError:
+        errors.append(f"{path}: missing closing YAML frontmatter delimiter")
+        return None
+
+    names: list[str] = []
+    for line in lines[1:closing]:
+        match = re.fullmatch(r"name:\s*(.*?)\s*", line)
+        if match:
+            value = match.group(1)
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+                value = value[1:-1]
+            names.append(value)
+    if len(names) != 1:
+        errors.append(
+            f"{path}: expected exactly one frontmatter name, found {len(names)}"
+        )
+        return None
+    return names[0]
+
+
+def scan_files(root: Path) -> Iterable[Path]:
+    top_level = ("AGENTS.md", "USER-MANUAL.md", "README.md")
+    for relative in top_level:
+        path = root / relative
+        if is_ordinary_file(root, path):
+            yield path
+
+    for relative in ("meta", "scripts", ".agents/skills"):
+        base = root / relative
+        if not is_ordinary_directory(root, base):
+            continue
+        for path in sorted(base.rglob("*")):
+            if not is_ordinary_file(root, path):
+                continue
+            if "__pycache__" in path.parts or path.suffix in (".pyc", ".pyo"):
+                continue
+            if relative == "scripts" and path.name.startswith("test-"):
+                continue
+            if relative in ("meta", ".agents/skills") and path.suffix != ".md":
+                continue
+            yield path
+
+
+def check_explicit_references(root: Path, errors: list[str]) -> int:
+    checked = 0
+    for path in scan_files(root):
+        text = read_text(path)
+        for match in SKILL_PATH_RE.finditer(text):
+            reference = match.group(1).rstrip(".,:;")
+            checked += 1
+            target = root / reference
+            location = text.count("\n", 0, match.start()) + 1
+            source = path.relative_to(root)
+            if ".." in Path(reference).parts:
+                errors.append(f"{source}:{location}: unsafe skill path {reference}")
+            elif not target.exists():
+                errors.append(f"{source}:{location}: unresolved skill path {reference}")
+            elif symlink_component(root, target) is not None:
+                errors.append(
+                    f"{source}:{location}: skill path traverses a symlink {reference}"
+                )
+            elif Path(reference).suffix and not target.is_file():
+                errors.append(
+                    f"{source}:{location}: skill path must resolve to a file {reference}"
+                )
+            elif not Path(reference).suffix and not target.is_dir():
+                errors.append(
+                    f"{source}:{location}: skill path must resolve to a directory {reference}"
+                )
+    return checked
+
+
+def check_markdown_routes(root: Path, errors: list[str]) -> int:
+    checked = 0
+    for relative, required_targets in REQUIRED_MARKDOWN_ROUTES.items():
+        path = root / relative
+        if not is_ordinary_file(root, path):
+            continue
+        text = semantic_markdown(read_text(path))
+        targets = {
+            target
+            for value in MARKDOWN_LINK_RE.findall(text)
+            if (target := route_target(root, path, value)) is not None
+        }
+        for required in required_targets:
+            checked += 1
+            if Path(os.path.abspath(root / required)) not in targets:
+                errors.append(
+                    f"{relative}: missing required Markdown route to {required}"
+                )
+    return checked
+
+
+def check_inline_routes(root: Path, errors: list[str]) -> int:
+    checked = 0
+    for relative, required_targets in REQUIRED_INLINE_ROUTES.items():
+        path = root / relative
+        if not is_ordinary_file(root, path):
+            continue
+        text = semantic_markdown(read_text(path))
+        targets = {
+            target
+            for value in INLINE_CODE_RE.findall(text)
+            if (target := route_target(root, path, value)) is not None
+        }
+        for required in required_targets:
+            checked += 1
+            if Path(os.path.abspath(root / required)) not in targets:
+                errors.append(
+                    f"{relative}: missing required inline route to {required}"
+                )
+    return checked
+
+
+def check_reviewer_rows(root: Path, errors: list[str]) -> int:
+    relative = ".agents/skills/verifying-wiki-changes/SKILL.md"
+    path = root / relative
+    if not is_ordinary_file(root, path):
+        return 0
+    rows = set(REVIEWER_ROW_RE.findall(semantic_markdown(read_text(path))))
+    for name in REQUIRED_REVIEWER_ROWS:
+        if name not in rows:
+            errors.append(f"{relative}: missing required reviewer table row {name}")
+    return len(REQUIRED_REVIEWER_ROWS)
+
+
+def check_output_routes(root: Path, errors: list[str]) -> int:
+    checked = 0
+    for relative, required_targets in REQUIRED_OUTPUT_ROUTES.items():
+        path = root / relative
+        if not is_ordinary_file(root, path):
+            continue
+        try:
+            tree = ast.parse(read_text(path), filename=str(path))
+        except SyntaxError as exc:
+            errors.append(f"{relative}: cannot parse Python routing output: {exc}")
+            continue
+        constants = module_constants(tree)
+        outputs = {
+            output
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == "print"
+            for argument in node.args
+            if (output := static_string(argument, constants)) is not None
+        }
+        for required in required_targets:
+            checked += 1
+            if not any(required in output for output in outputs):
+                errors.append(
+                    f"{relative}: does not print required route to {required}"
+                )
+    return checked
+
+
+def check_wiring(root: Path, errors: list[str]) -> int:
+    return (
+        check_markdown_routes(root, errors)
+        + check_inline_routes(root, errors)
+        + check_reviewer_rows(root, errors)
+        + check_output_routes(root, errors)
+    )
+
+
+def check_graph(root: Path) -> tuple[list[str], int, int, int]:
+    errors: list[str] = []
+    skills_root = root / ".agents/skills"
+    if skills_root.is_symlink():
+        return (
+            [".agents/skills: active skill root must be an ordinary directory"],
+            0,
+            0,
+            0,
+        )
+    if not skills_root.exists():
+        return [".agents/skills: active skill directory is missing"], 0, 0, 0
+    if not is_ordinary_directory(root, skills_root):
+        return (
+            [".agents/skills: active skill root must be an ordinary directory"],
+            0,
+            0,
+            0,
+        )
+
+    active_paths: list[Path] = []
+    active_names: list[str] = []
+    for directory in sorted(skills_root.iterdir()):
+        relative_directory = directory.relative_to(root)
+        if not is_ordinary_directory(root, directory):
+            errors.append(
+                f"{relative_directory}: active skill entry must be an ordinary directory"
+            )
+            continue
+        path = directory / "SKILL.md"
+        relative = path.relative_to(root)
+        if not is_ordinary_file(root, path):
+            errors.append(f"{relative}: SKILL.md must be an ordinary file")
+            continue
+        active_paths.append(path)
+        name = frontmatter_name(path, errors)
+        if name is None:
+            continue
+        active_names.append(name)
+        directory_name = path.parent.name
+        if not SKILL_NAME_RE.fullmatch(name):
+            errors.append(f"{relative}: invalid skill name {name!r}")
+        if name != directory_name:
+            errors.append(
+                f"{relative}: frontmatter name {name!r} does not match "
+                f"directory {directory_name!r}"
+            )
+
+    counts = Counter(active_names)
+    for name, count in sorted(counts.items()):
+        if count > 1:
+            errors.append(f"duplicate active skill name {name!r} appears {count} times")
+
+    for name in REQUIRED_SKILLS:
+        if name not in counts:
+            errors.append(f"required active skill is missing: {name}")
+
+    expected_skill_paths = set(active_paths)
+    agents_root = root / ".agents"
+    if is_ordinary_directory(root, agents_root):
+        for path in sorted(agents_root.rglob("*")):
+            relative = path.relative_to(root)
+            is_active_entry = path.parent == skills_root
+            is_active_skill_file = (
+                path.name == "SKILL.md" and path.parent.parent == skills_root
+            )
+            if (
+                path.is_symlink()
+                and (
+                    skills_root in path.parents
+                    or path.is_dir()
+                    or path.name == "SKILL.md"
+                )
+                and not is_active_entry
+                and not is_active_skill_file
+            ):
+                errors.append(
+                    f"{relative}: symlink is not allowed in the skill discovery tree"
+                )
+            if path.name != "SKILL.md" or is_active_skill_file:
+                continue
+            if not is_ordinary_file(root, path):
+                errors.append(
+                    f"{relative}: discoverable SKILL.md must be an ordinary file"
+                )
+            elif path not in expected_skill_paths:
+                errors.append(
+                    f"{relative}: discoverable SKILL.md is outside "
+                    ".agents/skills/<name>/SKILL.md"
+                )
+
+    for required_file in REQUIRED_FILES:
+        path = root / required_file
+        if not is_ordinary_file(root, path):
+            errors.append(f"required skill support file is missing: {required_file}")
+
+    reference_count = check_explicit_references(root, errors)
+    wiring_count = check_wiring(root, errors)
+    return errors, len(active_paths), reference_count, wiring_count
+
+
+def main() -> None:
+    try:
+        root = repository_root()
+        errors, skill_count, reference_count, wiring_count = check_graph(root)
+    except SetupError as exc:
+        fail(str(exc))
+
+    if errors:
+        print(f"check-skills: FAIL errors={len(errors)}", file=sys.stderr)
+        for error in errors:
+            print(f"  - {error}", file=sys.stderr)
+        raise SystemExit(1)
+
+    print(
+        "check-skills: PASS "
+        f"skills={skill_count} "
+        f"path_references={reference_count} "
+        f"routing_checks={wiring_count}"
+    )
+
+
+if __name__ == "__main__":
+    main()
