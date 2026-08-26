@@ -1,8 +1,9 @@
 ---
 title: Intelligence-Tier Routing
 created: 2026-07-12
-updated: 2026-08-13
+updated: 2026-08-25
 sources:
+  - raw/perplexity-local-first-agent.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md
 unaudited_marginal: 0
@@ -57,6 +58,16 @@ The Wortmann/Horthy conversation grounds tier routing in today's pricing and hab
 
 **Subscription vs. per-token changes the calculus.** "Are you on a subscription or paying per token?" is Dex's first disambiguation before any tier advice; the same workload feels cheap or expensive depending on the billing model ([`raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md`](../raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md), 51:43).
 
+## Advisor Escalation: A Shipped Tier-Routing Harness
+
+[[perplexity-computer|Perplexity Computer]] (Aug 2026) ships the routing pattern this page previously treated as a thesis: a [[local-first-agent|local-first agent]] where the 27B local model (Qwen 3.8, later PPLX 27B) handles the common case and escalates selectively to a frontier advisor (evaluated with Claude Opus 5).
+
+**How it routes.** The local model decides when to request advice — planning, ambiguity resolution, failure recovery, final verification — while the deterministic harness orchestrator retains tool authority and controls what context is sent. Escalation is user-gated (enable/disable, manual vs automatic per-call approval). Before a call, the harness selects relevant context, runs a PII classifier, and previews what would leave the device. The advisor returns text guidance only, with no direct access to files, tools, or the response channel; the local model may use it, but the harness still executes.
+
+**The measured trade.** On Terminal Bench 2.1 (89 coding tasks, Computer harness): Qwen 3.8 fully local 59.6% at ~$0/rollout → with Opus 5 advisor 73.0% at $0.415/rollout → Opus 5 alone 82.4% at $0.65/rollout. Escalation recovers roughly three-fifths of the gap to frontier at about two-thirds the cost. Perplexity did not evaluate Pi/Hermes with an advisor — adding one would no longer be the off-the-shelf harness — so the trade is shown to be harness-dependent.
+
+**What this resolves and what it doesn't.** The pattern makes Yegge's "tag your work with intelligence tiers" concrete: the tier tag is the advisor call itself, the routing policy is "local by default, frontier on request," and the preview is the inspectable gate from [[the-human-lever]] / [[harness-engineering]]'s HITL-safety layer. It also extends the August 2026 field report's stage gate (frontier to prove it runs, then down-tier at volume) into a live, per-task decision rather than a pre-planned split. Open questions from this page remain — who should tag (local model vs human vs automatic analysis), whether tag boundaries are stable across model drops — but the mechanism for answering them is now filed.
+
 ## Why Tagging Matters
 
 A factory that routes by tag is a factory whose routing decisions are inspectable. The human can see: this work went to local, that work went to Opus, here's the routing policy. When a failure happens, the question "was the right tier chosen?" is answerable from the ledger.
@@ -101,6 +112,8 @@ These are open empirical questions; the wiki should not claim answers that the s
 ## Related
 
 - [[steve-yegge]] — Source of the intelligence-tier routing thesis
+- [[perplexity-computer]] — Ships the advisor-escalation pattern: local by default, frontier advisor on request, orchestrator retains tool authority
+- [[local-first-agent]] — The architectural pattern whose advisor tool implements tier routing with PII gating and preview
 - [[beads-work-ledger]] — The work substrate; tier tagging is an extension of the ledger schema
 - [[software-factory]] — The factory is the routing layer
 - [[claude-code]] — The substrate; the drop-in replacement is the product opportunity
@@ -114,3 +127,4 @@ These are open empirical questions; the wiki should not claim answers that the s
 
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's intelligence-tier routing thesis: tagging work with intelligence tiers, swapping agents in and out, the intelligence arbitrage problem, the seven-month prediction for open-source model parity, the hosted-local-model drop-in opportunity, the tier-aware verifier implication
 - `raw/yt-what-actually-gets-you-2-3x-with-ai-coding-dex-horthy.md` — The make-it-run/right/fast/cheap stage gate and 12B-at-1/1000th example ([23:58]–[24:34], [48:43]–[50:11]), the Opus 4.7 tokenizer and Fable 2× pricing shocks ([50:11]–[50:42]), the "Opus for planning, Sonnet for impl" enterprise guidance vs. frontier-only practice and the cheap-planner/expensive-implementer counter-case ([51:24]–[53:55]), the GPT-literal vs Opus-expansive prompting difference and the Codex-200-bullets rewrite ([58:11]–[59:27]), subscription vs per-token framing ([51:43]).
+- `raw/perplexity-local-first-agent.md` — The shipped advisor-escalation pattern: local model owns the request decision, orchestrator retains tool authority and sends only PII-filtered previewed context, advisor returns text guidance only. Terminal Bench 2.1 trade (59.6% → 73.0% at $0.415 vs 82.4% at $0.65 for Opus 5 alone) that quantifies Yegge's tier-routing cost/quality dial.

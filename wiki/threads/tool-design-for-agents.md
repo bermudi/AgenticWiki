@@ -1,8 +1,9 @@
 ---
 title: Tool Design for Agents
 created: 2026-04-26
-updated: 2026-08-03
+updated: 2026-08-25
 sources:
+  - raw/perplexity-local-first-agent.md
   - raw/yt-how-agents-use-dev-tools.md
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
   - raw/agentic-coding-recommendations.md
@@ -287,6 +288,28 @@ The [[ears-notation|EARS]] (Easy Approach to Requirements Syntax) format used in
 
 [//]: # ([[recursive-agent-harness]] links here from its ## Thread section)
 
+## Layer 8: Local-First Harness Design — Building for a 100K Effective Window
+
+[[perplexity-computer|Perplexity Computer]] (Aug 2026) is the first local-first harness the wiki has filed that is explicitly co-designed around a small model's constraints, and it sharpens every claim in this thread into a set of concrete engineering defaults.
+
+**The constraint.** Qwen 3.8 27B advertises 260K tokens but Perplexity finds it "begins to struggle beyond 100K." That gap between nominal and effective context is the binding constraint. The harness responds by treating the instruction budget as a scarce resource — every tool definition competes for the same 100K, so the design task is to spend it only on what is load-bearing right now.
+
+**Four design moves that follow from the constraint.**
+
+1. **Succinct core + on-demand [[agent-skills|skills]]** — a minimal system prompt and small core tool set, with all other capabilities (research, data science, visualization, document creation, software engineering) modularized into skills that load and unload during the trajectory. This is [[context-engineering|context engineering]]'s progressive-disclosure pattern applied to the harness itself; the skill is the tier-2 mechanism that keeps the core lean.
+2. **[[context-engineering|Context compaction]]** — summarizing stale context when a trajectory grows long so the model stays within its effective window, not its nominal one.
+3. **Compact CLI tools instead of MCP servers** — connectors (Gmail, GitHub, Outlook, Calendar) are conventionally exposed as MCP servers whose large tool definitions consume a substantial share of context. Perplexity converts the most-used MCPs into compact CLI tools supplemented with custom skills. The thesis is the same as this thread's CLI-over-MCP argument (Kun Chen: 3× tokens, 2× latency for MCP), but the local-first version is stronger: on a 100K budget, MCP overhead doesn't just cost money — it crowds out reasoning.
+4. **Verification hooks** — the agent verifies its own work, either self-triggered or via hooks that monitor trajectory health and request self-verification when something goes wrong. Verification adds steps but "substantially narrows the gap to frontier models," making the tool-design lesson that deterministic verification is the cheap way to buy quality back from a weaker model.
+
+**A security default that inverts [[pi|Pi]]'s.** Perplexity's harness executes every tool in an OS-level sandbox that restricts processes, filesystem paths, and network per policy. If the sandbox is unavailable, the harness disables itself rather than degrading to unsandboxed execution — fail-closed, always on, no configuration. This is the inverse of [[pi|Pi]]'s [[yolo-mode-philosophy|YOLO mode]] (no permission gates by default; push security to the container boundary). The local-first argument is that on a device that holds private documents, fail-open is not an acceptable fallback. See [[local-first-agent]] for the full pattern.
+
+**The execution loop as a privacy boundary.** The orchestrator is deterministic harness code, not an LLM: it maintains the loop, assembles context, and enforces policy; the local model proposes the next action; the orchestrator executes approved calls in the sandbox and returns results. Web search, connectors, and advisor calls cross the device boundary only when enabled and approved — the same boundary discipline the [[harness-engineering]] and [[harnessx]] sections advocate, but with the added invariant that the boundary is a privacy boundary.
+
+**Empirical anchor.** With the same Qwen 3.8 27B on the same DGX Spark hardware (isolating harness, not model), Perplexity Computer outscores Pi and Hermes on every reported bench: BrowseComp 66.7% vs 50.2% vs 43.9% (402s/852K vs 826s/2.82M vs 1,021s/1.01M tokens), ParseBench-100 65.1% vs 13.9% vs 34.6% (60.6s/20.1K vs 410.5s/829.1K vs 108.3s/32.1K), Local Knowledge Work Bench 82.6% vs 77.6% vs 74.0% (PPLX 27B lifts Computer to 85.4%). Among the three benches that report efficiency, Computer is fastest on two and most token-efficient on all three — the succinct-core + skill-modularization + CLI-tooling thesis has a measured cost edge, not just a cleanliness one.
+
+> [!note] Departure: The Local-First Caveat on Search
+> BrowseComp confounds harness and search backend (Perplexity Search via Search as Code vs Brave for Pi/Hermes), so the 16-point lead on that bench mixes two variables. ParseBench-100 and LKWB — where the task is document understanding and private knowledge work — isolate the harness more cleanly.
+
 ## The Economics: Tool Design as Cost Control
 
 [[david-cramer|David Cramer]] adds an economics dimension that strengthens the thread's thesis from a different direction. His argument: training data is part of inference cost, and it's not factored into current pricing. "If a model has not been heavily trained on a thing, models will only give you the right answer if you give them the right answer first." The web crawler analogy: the wrong way is to have an LLM parse every page; the right way is to have an LLM generate a script when pages change, then run that script. Efficiency comes from deterministic reuse, not repeated inference.
@@ -322,3 +345,4 @@ The [[harness-monoculture]] cost data makes this concrete: OpenClaw's $1.3M/mont
 - `raw/agents-md-standard.md` — The agents.md/ site: the convention's rationale, minimal format, nested-file discovery, cross-agent compatibility, Linux Foundation stewardship.
 - `raw/yt-agent-development-lifecycle-101.md` — [[harrison-chase|Chase]] (LangChain, 2026): the build-stage abstraction taxonomy (frameworks vs. runtimes vs. harnesses), no-code agents as markdown files, and the virtual file system pattern with its six-method backend interface. Source for the "Virtual File System" extension.
 - `raw/2602.17622.md` — Deng et al. (arXiv:2602.17622v1, 19 Feb 2026). Type A capability gaps versus Type B complexity barriers (§3.2); Tool and Skill Layer, TDA-EGATS, and Memory Subsystem (§4); component ablations (§5.3). Source for the departure that tool quality fixes the capability floor while difficulty-aware control handles long attack chains.
+- `raw/perplexity-local-first-agent.md` — Perplexity (Aug 2026). Source for the new "Local-First Harness Design" section: succinct core + on-demand skills + context compaction for a 100K effective window (vs 260K nominal), compact CLI tools instead of MCP servers, verification hooks, always-on OS-level sandbox (fail-closed vs Pi's YOLO mode), deterministic orchestrator as privacy boundary, and the three-bench harness-isolation results (BrowseComp 66.7% vs 50.2/43.9%, ParseBench-100 65.1% vs 13.9/34.6%, LKWB 82.6% vs 77.6/74.0% and PPLX 27B 85.4%).

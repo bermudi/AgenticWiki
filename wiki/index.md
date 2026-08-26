@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-08-13
+updated: 2026-08-25
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -214,7 +214,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[harness-monoculture]] — When frontier models are RL-trained on one dominant proprietary harness (Claude Code), its leniency and slop propagate as a de-facto spec the ecosystem must match — corrupting strict tools, polluting specs, regressing off-path capability, and starving custom MCP tools.
 - [[html-as-agent-output]] — Using HTML instead of Markdown for agent output: richer density, visual clarity, two-way interaction, at the cost of tokens and version control pain.
 - [[inferential-rule-following]] — Applying abstract conditional rules to concrete reasoning problems; models pattern-match against training data rather than following given rules.
-- [[intelligence-tier-routing]] — Tag work with intelligence tiers so it can be routed across frontier Claude (planning) and open-source / local models (implementation). The factory is the routing layer; the bottleneck is "intelligence arbitrage" — finding open-source models capable enough to carry the load.
+- [[local-first-agent]] — The model, harness, conversation, and trajectory run on-device by default; web search, connectors, and frontier advisor escalation cross the device boundary only when user-gated. Perplexity Computer's co-designed harness + PPLX 27B is the filed instantiation.
+- [[intelligence-tier-routing]] — Tag work with intelligence tiers so it can be routed across frontier Claude (planning) and open-source / local models (implementation). The factory is the routing layer; the bottleneck is "intelligence arbitrage" — finding open-source models capable enough to carry the load. Now has a shipped implementation: Perplexity's advisor escalation (local 59.6% → with advisor 73.0% toward frontier 82.4% on Terminal Bench 2.1).
 - [[instruction-hierarchy]] — The mechanism by which LLMs resolve conflicting instructions from heterogeneous sources; current models fail at >3 privilege tiers.
 - [[instruction-severity-inflation]] — The phenomenon where competing emphatic formatting degrades LLM instruction following.
 - [[infrastructure-blindness]] — A coding agent finds the relevant code but reimplements its machinery instead of calling it; the rewrite fails where the existing machinery already succeeded.
@@ -327,6 +328,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[improve-codebase-architecture]] — Matt Pocock's skill for systematic codebase deepening scans.
 - [[mattpocock-skills]] — The 38-skill user-invoked set (`mattpocock/skills`); the full idea-to-ship pipeline `setup → grill-with-docs → to-spec → to-tickets → implement → code-review` at 660 tokens of context. The shipped instantiation of [[agent-skills|Pocock's user-invoked checklist]].
 - [[mastra]] — Open-source TypeScript agent framework with built-in observability, evals, and scoring.
+- [[perplexity-computer]] — Portable Computer: Perplexity's local-first agent (Qwen 3.8 27B → PPLX 27B on DGX Spark, hybrid orchestrator, 53-task LKWB, sandbox always-on, advisor escalation)
 - [[pi]] — Minimalist agent harness for building and controlling AI workflows.
 - [[humanlayer]] — Dex Horthy's agent-first IDE and collaboration platform; "kill the pull request" in favor of real-time Google-Doc-style review of agent work.
 - [[plum-dev]] — CLI decision-tracking tool that keeps spec, tests, and code in sync via git hooks; extracts decisions from diffs and agent traces at commit time.
