@@ -27,6 +27,8 @@ Budget is read from this file's frontmatter (`warning_budget`, `critical_blocks`
 |------|------|------------|------|
 | the-verifiability-thesis.md | Extension callout ("widens over time") extrapolates beyond Schillings' source material | Verify against future sources or soften to "may widen" | 2026-07-27 |
 | discourse-slop.md | Slop Family table lists 5 categories (code, information, benchmark, spec, discourse); the-slop-problem now enumerates 7 (adds skill slop + foundation-layer) — cross-page ordinal mismatch: "sixth category" in the thread reads as "fifth" against the table | Align the table with the thread's 7-category enumeration (add skill slop and foundation-layer rows) | 2026-08-05 |
+| factory-maintenance.md / gas-town.md | "The current best-practice framing is 'sweeps' agents…" (gas-town.md:39; same phrasing removed from factory-maintenance.md:50 in the 2026-08-30 fix pass) states a best-practice certainty Yegge's filed transcript does not make (17:52–17:59: "the next thing that usually emerges within a factory") | Soften to the source's "usually emerges" phrasing with attribution, matching the factory-maintenance fix | 2026-08-30 |
+| birgitta-boeckeler.md | INFO-level source-fidelity notes left unapplied at filing: "Tessel" spelling (line 18) vs wiki-canonical "Tessl"; "Others" resolved to "the open-source tools" (line 18, wiki interpretation); sledgehammer bullet merges the video's solo-weekend-project cost rationale (line 19); Clarke recommendation (lede) is sourced from a raw file not listed in this page's `sources:` | Normalize spelling/attributions on next marginal edit to the page | 2026-08-30 |
 
 ## Audit History
 

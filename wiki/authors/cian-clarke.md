@@ -1,7 +1,7 @@
 ---
 title: Cian Clarke
 created: 2026-06-07
-updated: 2026-06-08
+updated: 2026-08-30
 sources:
   - raw/yt-cian-clarke-vibe-coding-to-spec-driven-dev.md
 unaudited_marginal: 0
@@ -60,7 +60,7 @@ The talk's live demo used Kiro to build a 3D unicorn rendering engine, comparing
 - [[bmad-method]] — The other tool foundation; heavy on specialized role definition
 - [[intent-to-code]] — Clarke's stack is the most explicit practitioner instantiation of the plan-as-contract position
 - [[near-form]] — The consultancy where Clarke works
-- [[birgitta-boeckler]] — ThoughtWorks writer on SDD methodology; recommended by Clarke as further reading
+- [[birgitta-boeckeler]] — ThoughtWorks writer on SDD methodology; recommended by Clarke as further reading
 - [[al-harris]] — Kiro principal engineer; complementary technical depth on EARS and property-based testing
 
 ## Sources

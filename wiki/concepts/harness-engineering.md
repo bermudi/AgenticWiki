@@ -1,8 +1,9 @@
 ---
 title: Harness Engineering
 created: 2026-05-21
-updated: 2026-07-23
+updated: 2026-08-30
 sources:
+  - raw/harness-engineering-ai-literacy-superpowers.md
   - raw/2605.18747.md
   - raw/2606.09498.md
   - raw/2606.13643.md
@@ -16,7 +17,7 @@ unaudited_marginal: 0
 
 # Harness Engineering
 
-> The emerging science of designing and evolving reliable agent harnesses. Code-as-harness systems shift the central challenge from isolated model generation to the reliability of the complete execution loop — and harness engineering is the discipline that addresses this shift. It covers evaluation beyond SWE-bench, semantic verification, self-evolving harnesses, multi-agent state coordination, human-in-the-loop safety, multimodal extensions, and the broader science of building executable, inspectable, stateful, and governed agent systems.
+> The emerging science of designing and evolving reliable agent harnesses. Code-as-harness systems shift the central challenge from isolated model generation to the reliability of the complete execution loop — and harness engineering is the discipline that addresses this shift. It covers evaluation beyond SWE-bench, semantic verification, self-evolving harnesses, multi-agent state coordination, human-in-the-loop safety, multimodal extensions, and the broader science of building executable, inspectable, stateful, and governed agent systems. The page also tracks the term's practitioner sense — [[birgitta-boeckeler|Boeckeler]]'s codebase-coherence harness — and the resulting term collision.
 
 ## The Inner/Outer Harness Distinction
 
@@ -26,6 +27,15 @@ The vocabulary the wiki finds most useful is **Martin Fowler's**, surfaced and p
 - **Outer harness** — what the human builds *around* it to customize for a specific codebase, language, and workflow: commands, [[mcp|MCPs]], [[agent-skills|skills]], codebase organization.
 
 [[harness-engineering|Harness engineering]] is the discipline of engineering against both — and the term, Dex warns (again via Fowler), is vulnerable to **semantic diffusion**: like "agents" and "software factory," it risks being overloaded until it means everything and therefore nothing. He credits [[vibv|Vib (Boundary/LangChain)]] for the underlying intuition that every step is just tokens-in/tokens-out and the engineer's job is to maximize the chance the tokens-out are good. See [[dex-horthy-agentic-engineering]] for the framing in context.
+
+## The Practitioner Sense: Boeckeler's Codebase Harness
+
+> [!note] Departure: the term has now diffused — exactly as warned
+> Horthy's semantic-diffusion warning above is no longer hypothetical. A 2026 plugin-explanation doc (habitat-thinking.github.io, ai-literacy-superpowers) uses "harness engineering" for a third sense: [[birgitta-boeckeler|Birgitta Boeckeler]]'s practitioner frame (martinfowler.com, ThoughtWorks context) for keeping the *codebase* coherent under AI-assisted development — not the agent runtime this page's survey sense addresses. The wiki keeps both senses here and routes the practitioner mechanism family to [[verification-slots]].
+
+Boeckeler's observation: AI assistants produce plausible code that quietly drifts — forgetting conventions, repeating mistakes, eroding internal consistency while the code still compiles and passes tests. Her analogy is the test harness: tests do not make code correct by construction, they detect when code stops being correct; the harness does not trust the programmer, it verifies. The AI-era difference she draws: a test harness checks functional correctness, while a codebase harness must check whether the code still embodies the architectural decisions, naming conventions, security constraints, and structural rules the team agreed on — functional tests are necessary but not sufficient.
+
+Her three components: **context engineering** (a maintained knowledge base for the AI — `HARNESS.md` in the plugin's conventions — explicitly not a README for humans), **architectural constraints** (enforced at "verification slots," each choosing a deterministic tool or an agent-based review), and **garbage collection** (scheduled entropy-fighting that produces reports, not blocked PRs). The plugin doc credits her martinfowler.com article as the primary reference for this model, and credits Addy Osmani's Agent Harness Engineering for the model-plus-harness distinction and the "every line earned" discipline; the progressive-hardening ladder, three enforcement loops, and self-improving dimension are the plugin's own extensions. See [[verification-slots]] for the mechanism family and [[factory-maintenance]] for the GC/sweeps convergence.
 
 ## Open Problems
 
@@ -215,6 +225,8 @@ This pattern is the operational version of the survey's [[self-harness|§5.2.3 s
 - [[intelligence-tier-routing]] — The factory as a routing layer across model tiers; harness-engineering's concern at the model-selection axis
 - [[ruhan-wang]] — Lead author of the Harness Handbook paper (arXiv 2607.13285) that reframes §5.2.3 around a localization prerequisite
 - [[harness-handbook]] — Behavior-centric harness map supplying the localization layer beneath in-place and co-evolution approaches
+- [[verification-slots]] — the practitioner sense's mechanism family: slots, the deterministic-vs-agent choice, progressive hardening, three loops, the living harness
+- [[birgitta-boeckeler]] — originator of the practitioner frame this page now disambiguates
 
 ## Sources
 
@@ -225,3 +237,4 @@ This pattern is the operational version of the survey's [[self-harness|§5.2.3 s
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Practitioner patterns from the panel: determinism-at-the-boundary (Tessl/Dru Knox: the six-orchestrator lesson, the git push / stop session hooks), swarming-as-anti-bitter-lesson (Yegge: multiple passes, adversarial reviews, consensus, quality as a token-spend dial), the factory as a living system needing sweeps (Yegge)
 - `raw/yt-context-engineering-with-dex-horthy.md` — Martin Fowler's inner/outer harness definition (26:56–27:32); the semantic-diffusion warning (53:05–53:16); credit to Vib for the tokens-in/tokens-out intuition (17:26).
 - `raw/2607.13285v1.md` — Wang, Shi, Li, Li, Yu, Yang, Panaganti, Mi, Zhou, Leoweiliang (2026). *Harness Handbook: Making Evolving Agent Harnesses Readable, Navigable, and Editable.* arXiv 2607.13285v1 (14 Jul 2026). Source for the new `> [!note] Update: Harness Handbook as the Localization Prerequisite` callout under §5.2.3: behavior localization as the upstream bottleneck, the L1–L3 + state-register representation, BGPD + resync, and the Terminus-2 / Codex evaluation numbers.
+- `raw/harness-engineering-ai-literacy-superpowers.md` — ai-literacy-superpowers plugin explanation doc (habitat-thinking.github.io, 2026). Source for the new "Practitioner Sense" section: Boeckeler's codebase-coherence harness (three-component model, verification slots) as a third sense of the term, documented as a live instance of the semantic-diffusion risk flagged above.

@@ -1,8 +1,9 @@
 ---
 title: Context Files (AGENTS.md, CLAUDE.md)
 created: 2026-05-10
-updated: 2026-08-05
+updated: 2026-08-30
 sources:
+  - raw/harness-engineering-ai-literacy-superpowers.md
   - raw/fighting-slop-with-slop-vaibhav-gupta-boundary.md
   - raw/2602.11988v1.md
   - raw/2601.20404v1.md
@@ -50,7 +51,7 @@ This study introduces AGENTBENCH (138 instances across 12 repositories with deve
 | Developer-provided context files | Marginal improvement (~4%) on AGENTBENCH, not consistent across agents |
 | Cost impact | Increases inference cost by >20% on average |
 | Behavioral change | Context files encourage broader exploration — more testing, more file traversal, more grep |
-| Instruction following | Agents faithfully follow context file instructions (e.g., using `uv` when mentioned, file reading patterns) |
+| Instruction following | Agents faithfully follow context file instructions (e.g., using `uv` when mentioned, repository-specific tools used 2.5× per instance when mentioned) |
 | Redundancy with docs (**the key explanation**) | The `/init`-generated files duplicate existing documentation. When all other docs are removed, those same files *improve* performance by 2.7% and even outperform developer-written docs — so the degradation tracks with redundancy, not with generation as such |
 | Reasoning overhead | Context files increase reasoning tokens by 14–22%, suggesting they make tasks harder, not easier |
 | Overview ineffectiveness | The "repository overview" section, recommended by agent developers, does not help agents find relevant files faster |
@@ -142,6 +143,15 @@ This reframing has several implications for context file design:
 
 The paper doesn't contradict the minimalism consensus — ContextCov works best with clear, precise instructions. But it adds a new dimension: **enforceability**. The paper's fail-closed philosophy means ambiguous or imprecise instructions are interpreted strictly (blocking broadly), creating a practical incentive for authors to be more precise over time.
 
+## HARNESS.md: The Self-Referential Context Document
+
+The ai-literacy-superpowers plugin doc (2026) describes `HARNESS.md`, a context document with a different job from AGENTS.md's operational minimalism: it captures the stack, the architectural decisions, the naming conventions, the constraints, and — crucially — the rationale behind each. The doc draws the audience distinction sharply: "a README explains what the project does. A context document tells an AI agent what it must and must not do, and why. These are different documents with different audiences and different update rhythms."
+
+Its distinctive twist is self-reference: `HARNESS.md` tracks each constraint's enforcement status (unverified / under agent review / enforced deterministically), and a scheduled harness auditor updates those entries against reality — the document is both specification and health record, making neglect of the document itself visible ([[verification-slots]] carries the mechanism; `/harness-sync` presents the drift table). This approaches ContextCov's enforceability dimension from the document side: instead of making the instructions executable, make the declaration carry its own verification status so staleness is surfaced by audit rather than discovered by the next session that trusts it.
+
+> [!note] Departure: comprehensive knowledge base vs. the minimalism consensus
+> The empirical consensus on this page (keep context files short, operational, human-written) and `HARNESS.md`'s comprehensive-knowledge-base advocacy point in different directions. The tension is real but not a direct contradiction: the Gloaguen findings indict `/init`-style dumps that duplicate existing docs and untested verbosity — and neither study measured curated, maintained, rationale-bearing documents. `HARNESS.md` is also a different artifact class: a status-tracked specification audited against reality, not a static instruction file. The wiki files the distinction and flags that no study has tested which posture actually helps agents.
+
 ## Thread
 
 - [[tool-design-for-agents]] — Context files are a tool-level interface for shaping agent behavior; their design quality directly impacts agent effectiveness
@@ -166,6 +176,8 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 - [[system-prompt-effects]] — System prompt effects are the mechanism by which context files influence agent behavior; the non-monotonic relationship explains why more detailed context files don't always help
 - [[knowledge-triplet]] — Context files push "what you know" into "what's in the codebase," making knowledge available to the model without explicit expression each time
 - [[open-knowledge-format]] — OKF standardizes the broader knowledge-as-markdown pattern that context files are one instance of; the AGENTS.md / CLAUDE.md family is named in the OKF announcement as a related bespoke instance
+- [[verification-slots]] — The enforcement mechanism family that `HARNESS.md` bookkeeps; the living-harness status tracking is the context-file twist this page's HARNESS.md section covers
+- [[context-shards]] — the same scheduled-miner + human-disposition shape as the harness auditor, applied to team memory instead of constraint status
 
 ## Sources
 
@@ -177,3 +189,4 @@ The paper doesn't contradict the minimalism consensus — ContextCov works best 
 - `raw/yt-al-harris-amazon-kiro-faang-spec-driven.md` — Steering docs as accumulated learnings; three demonstrated use cases (commit style, code style, operational learnings).
 - `raw/agents-md-standard.md` — The agents.md/ site: the convention's rationale, no-required-fields format, nested-file discovery (nearest wins), cross-agent compatibility, and Agentic AI Foundation (Linux Foundation) stewardship.
 - `raw/create-project-agentsmd-skill.md` — Local `create-project-agentsmd` skill: the minimalist authoring craft (goals over mechanism, stable reference facts vs volatile implementation detail, file-it-don't-delete-it, <200-line discipline, anti-patterns).
+- `raw/harness-engineering-ai-literacy-superpowers.md` — ai-literacy-superpowers plugin doc (2026): `HARNESS.md` as a self-referential context document — the README-vs-context-document audience distinction, constraint status tracking, and the harness auditor; source for the HARNESS.md section and its minimalism-tension callout.

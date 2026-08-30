@@ -1,8 +1,9 @@
 ---
 title: Factory Maintenance
 created: 2026-07-12
-updated: 2026-07-16
+updated: 2026-08-30
 sources:
+  - raw/harness-engineering-ai-literacy-superpowers.md
   - raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md
   - raw/yt-context-engineering-with-dex-horthy.md
 unaudited_marginal: 0
@@ -46,7 +47,11 @@ Once a factory is in steady state, the explicit answer to ongoing drift is a cla
 
 The agents are not magical: they're regular agents with a scan-the-codebase prompt. Their value is *cadence* and *legibility* — a scheduled scan is more reliable than a human remembering to check.
 
-In Gas Town, this role was originally called "dogs" — a dedicated agent class that kept the system clean. The current best-practice framing is "sweeps" or "maintainer" agents, run as scheduled scans rather than continuous loops.
+In Gas Town, this role was originally called "dogs" — a dedicated agent class that kept the system clean. The pattern that usually emerges, per Yegge, is "sweeps" or "maintainer" agents run on a cadence.
+
+### Garbage Collection: The Declared-Standards Variant
+
+The ai-literacy-superpowers plugin doc (2026) independently describes the same pattern under the name **garbage collection**: even with good context engineering and strict constraints, entropy accumulates — dead code grows, TODOs persist, dependencies go stale, early conventions get quietly abandoned. GC rules are explicit declarations of what "clean" looks like, paired with scheduled agents or scripts that check whether the codebase still meets those standards. Two nuances extend the sweeps pattern: the standards are *declared up front* rather than discovered by scanning, and the output is deliberately a report rather than a blocked PR — GC draws attention to accumulating problems before they become serious. It runs because time has passed, not because a coding event triggered it. This is the outer loop of [[verification-slots]], and the convergence with Yegge's sweeps is another instance of the factory-maintenance pattern being rediscovered independently.
 
 ## Why Determinism at the Boundary, Not in the Middle
 
@@ -97,8 +102,10 @@ The wiki has not yet seen evidence for when to refactor the factory's structure 
 - [[dex-horthy-agentic-engineering]] — Dex's loop-engineering posture: incremental, human-reviewed, lights-on
 - [[claude-code]] — The substrate whose hooks make boundary-gating easy
 - [[verification-loop]] — The general verification pattern; maintenance sweeps are verification loops at the factory level
+- [[verification-slots]] — The practitioner frame whose outer loop formalizes GC: declared clean-standards plus scheduled checks producing reports
 
 ## Sources
 
 - `raw/yt-steve-yegge-youll-never-write-code-the-same-way-again.md` — Yegge's craftsman's-workshop metaphor and Gas Town "dogs" role; Dru Knox (Tessl)'s "fix the harness before leaving the comment" rule, the sweeps pattern (architecture / test-quality / documentation agents), and deterministic checks at boundaries (git push → run tests; stop session → check committed); Yegge's Flat Curve Society training formula and the token-maxing → token-restraining training arc
 - `raw/yt-context-engineering-with-dex-horthy.md` — Dex's slow-loop pattern as the minimum viable sweep: nightly cron, fix one thing, one PR, two scaling dimensions (36:56–38:01).
+- `raw/harness-engineering-ai-literacy-superpowers.md` — ai-literacy-superpowers plugin doc (2026): the garbage-collection component — declared clean-standards, scheduled checks, reports-not-blocks — as an independent articulation of the sweeps pattern.

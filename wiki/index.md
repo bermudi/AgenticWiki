@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-08-25
+updated: 2026-08-30
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -77,7 +77,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[thorsten-ball]] — Co-creator of AMP; argues the harness should decay like a cast as models improve. "Software as we know it is dead."
 - [[cian-clarke]] — Engineer at Near Form; primary practitioner source on SDD at team scale; single-player-to-multiplayer framing; empirical fit/miss for SDD
 - [[al-harris]] — Principal engineer at Amazon Kiro; EARS, property-based testing, steering docs, neurosymbolic hybrid architecture
-- [[birgitta-boeckler]] — ThoughtWorks writer on SDD methodology; identified the spec drift problem and the "sledgehammer to crack a nut" critique
+- [[birgitta-boeckeler]] — ThoughtWorks writer on SDD methodology; identified the spec drift problem and the "sledgehammer to crack a nut" critique; originator of the harness-engineering frame (three-component model, verification slots)
 - [[colin-eberhardt]] — CTO of Scott Logic; ran the head-to-head Spec Kit vs iterative benchmark (10× faster without SDD)
 - [[near-form]] — Consultancy behind Cian Clarke's SDD work; 6-9 months of internal SDD experience as of late 2025
 - [[bojie-li]] — Researcher at Pine AI; author of *User as Code: Executable Memory for Personalized Agents*; argues the user model should be a living software project (typed Python state + Python functions for rules) maintained by a two-phase pipeline
@@ -152,7 +152,8 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[harness-interface]] — The harness interface where code connects agents to reasoning, action, and environment modeling.
 - [[harness-mechanisms]] — Planning, memory, tool use, control, and optimization that sustain code-centric agents.
 - [[harness-handbook]] — A behavior-centric harness map (L1–L3 + state registers) + Behavior-Guided Progressive Disclosure; solves behavior localization before harness evolution
-- [[harness-engineering]] — Self-evolving harnesses, harness-level evaluation, and the open problems of building reliable agent systems.
+- [[harness-engineering]] — Self-evolving harnesses, harness-level evaluation, and the open problems of building reliable agent systems; also tracks the term's practitioner sense (Boeckeler's codebase-coherence harness) and the resulting collision
+- [[verification-slots]] — The practitioner harness's enforcement points: deterministic tool vs. agent review per slot, the progressive-hardening ladder (unverified → agent → deterministic), three enforcement loops (edit-time advisory, PR-time strict, scheduled investigative), and the self-referential living harness that audits its own status
 - [[harnessx]] — A foundry for composable, adaptive, and evolvable agent harnesses; the harness as a first-class typed object, evolved via AEGIS (a four-stage trace-driven engine grounded in the operational mirror), and coupled with the model via cross-harness GRPO. +14.5% average / +44.0% peak across 5 benchmarks and 3 model families
 - [[operational-mirror]] — The formal correspondence between symbolic harness evolution and reinforcement learning; predicts three concrete failure modes (reward hacking, catastrophic forgetting, under-exploration) with corresponding architectural defenses
 - [[variant-isolation]] — Ensemble routing strategy that maintains up to K harness variants and routes each task to the variant with highest estimated success rate; resolves the catastrophic-forgetting failure on heterogeneous task sets (Global 49.5% → Ensemble 87.4% on GAIA GPT-5.4)
@@ -181,7 +182,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[compounding-booboos]] — The risk of small agent errors accumulating into failures.
 - [[self-conditioning]] — Models degrade on their own error-laden history; the failure mode that caps horizon length. Not fixed by scaling, fixed by thinking.
 - [[comprehension-debt]] — The gap between code that exists and code any human understands. Speeds you up right until it breaks you.
-- [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks; `/init`-style auto-generated dumps that duplicate existing docs hurt.
+- [[context-files]] — Repository-level artifacts (AGENTS.md, CLAUDE.md) that provide AI coding agents with project-specific instructions; empirical evidence shows their impact is ambiguous — minimal human-written files help on simple tasks; `/init`-style auto-generated dumps that duplicate existing docs hurt; also covers the self-referential `HARNESS.md` context document.
 - [[context-engineering]] — Putting the right information in while keeping context as small and dense as possible. Maximizing information-per-token density.
 - [[context-trajectory]] — The fourth property of the context window: the autoregressive history that conditions the next message ("you're absolutely right" = time to reset).
 - [[dynamic-trust]] — Trust in multi-agent systems should be dynamically computed from source + context + provability, not statically assigned to sources.
@@ -204,7 +205,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[execution-apathy]] — Failure mode where an LLM plans a multi-step solution but resigns before executing, producing plausible-looking outputs without doing the work.
 - [[explain-diff]] — A skill that generates a personalized, literate explainer doc for a code change, with background, intuition, interactive figures, and an embedded quiz.
 - [[failure-modes]] — Playbook mapping known AI-assisted engineering failure modes to detection signals and countermeasures.
-- [[factory-maintenance]] — A software factory bit-rots faster than it gets used: skills drift, systems change, failure modes emerge. Yegge's pattern is to leave every interaction with the factory slightly better than you found it, and to schedule sweep agents (architecture, test-quality, documentation) on a cadence.
+- [[factory-maintenance]] — A software factory bit-rots faster than it gets used: skills drift, systems change, failure modes emerge. Yegge's pattern is to leave every interaction with the factory slightly better than you found it, and to schedule sweep agents (architecture, test-quality, documentation) on a cadence; the plugin-doc GC variant declares clean-standards up front and runs scheduled checks that report rather than block.
 - [[fighting-slop-with-slop]] — The intentional, controlled use of AI-generated slop for internal tooling and verification infrastructure to produce higher quality where it matters. Origin: Vaibhav Gupta's (Boundary) conference talk — no code reviews, invariant toolchain, and the reading-relative definition "any code you don't read."
 - [[functional-collapse]] — The runtime failure mode of automated MAS: complex architecture reduces to single-agent execution. Five documented manifestations: DyLAN consensus collapse, MAS-Zero positional bias, MaAS signal saturation, MAS-Orchestra static policy, role redundancy.
 - [[smfr]] — Synthetic Multi-Hop Financial Reasoning: a procedurally generated diagnostic benchmark designed to expose the [[multi-agent-illusion]] under conditions where MAS *should* help. Immune to contamination; the [[expert-mas]] control demonstrates the multi-agent paradigm can work.

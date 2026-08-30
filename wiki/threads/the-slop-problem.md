@@ -1,7 +1,7 @@
 ---
 title: The Slop Problem
 created: 2026-04-25
-updated: 2026-08-05
+updated: 2026-08-30
 sources:
   - raw/yt-how-to-ship-real-code-with-ai-not-junk-ft.-david-cramer-the-weekly-dev-s-brew.md
   - raw/yt-code-isnt-free-mario-zechner-hard-truths-coding-ai.md
@@ -337,7 +337,7 @@ Cramer also identifies the verification problem as the bottleneck: "Software ver
 - `raw/agentic-coding-is-a-trap.md` — [[lars-faye|Lars Faye]]: cognitive debt as the human-side complement to codebase slop; the inverted priority list (speed over understanding); the argument that AI accelerates the wrong parts of development
 - `raw/yt-we-all-fell-for-it.md` — [[theo-t3gg|Theo]]: the code-frequency distinction (ship vs. one-off); forced speed without earned competence produces slop; "most devs should not be allowed to code fast"
 - `raw/yt-systems-building-systems.md` — [[eero-alvar|Eero Alvar]]: slop defined as outputs outside the desirable subset in the software factory mapping; chaos property of spec→implementation mapping; the aiming problem as the inverse of the slop problem
-- `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark of Spec Kit vs iterative development (10x faster without SDD on the test problem) is the strongest empirical counter-evidence cited in the thread's theory-pressure callout; [[birgitta-boeckler|Birgitta Boeckler]] on spec drift is the source behind the open-source-SDD-tools "spec first, vague about spec maintenance" observation
+- `raw/yt-spec-driven-dev-hype-or-future.md` — Devsplainers: [[colin-eberhardt|Colin Eberhardt]] head-to-head benchmark of Spec Kit vs iterative development (10x faster without SDD on the test problem) is the strongest empirical counter-evidence cited in the thread's theory-pressure callout; [[birgitta-boeckeler|Birgitta Boeckeler]] on spec drift is the source behind the open-source-SDD-tools "spec first, vague about spec maintenance" observation
 - `raw/yt-are-we-really-doing-this-again.md` — [[neetcode|NeetCode]]'s [[discourse-slop]] category: the meta-discourse about agentic tools is itself AI-generated, hype-amplified slop (the 2M-view loop-engineering post); the incentive structure (Anthropic/OpenAI/Cursor hype, Google measured).
 - `raw/yt-building-great-agent-skills-the-missing-manual.md` — [[matt-pocock|Pocock]] names [[skill-hell|skill hell]] as the skills-flavored slop variant: supply of skills outpaces evaluative capacity, discourse is slop-shaped. Skill slop's internal mechanisms: no-ops (instructions with no behavioral effect, especially when agents author skills) and sediment (compounding-booboos on the skill file). The four-part checklist is the proposed evaluative framework. See the "Skill Slop" departure callout.
 - `raw/gsd-core-opengsd-spec-driven-framework.md` — GSD Core: Package Legitimacy Audit (slopcheck) as dependency-layer anti-slop infrastructure; verification gates that perform goal-backward checks against requirements before declaring done. Source for the "Slopcheck and Verification Gates" marginal note.
