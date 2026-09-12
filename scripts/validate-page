@@ -575,14 +575,21 @@ compute_debt_status() {
   done < "$td"
 
   # "## Current Debt" table: count rows by severity (last column).
-  # Table rows: | Date | Page | Issue | Severity |
-  local in_table=0 sev
+  # Table rows: | Date | Page | Issue | Severity | — the header itself is
+  # asserted below so schema drift cannot silently zero the budget (AG-013).
+  local in_table=0 sev header_seen=0
   while IFS= read -r line || [[ -n "$line" ]]; do
     if [[ "$line" == "## Current Debt" ]]; then in_table=1; continue; fi
     if [[ $in_table -eq 1 && "$line" == "## " ]]; then break; fi
     if [[ $in_table -eq 1 && "$line" == \|* ]]; then
       [[ "$line" == *"--"* ]] && continue   # separator
-      [[ "$line" == *Severity* ]] && continue # header
+      if [[ $header_seen -eq 0 ]]; then
+        header_seen=1
+        if [[ "${line// /}" != "|Date|Page|Issue|Severity|" ]]; then
+          err "meta/tech-debt.md: Current Debt header drifted from schema '| Date | Page | Issue | Severity |' — severity must be the last column (AG-013)"
+        fi
+        continue
+      fi
       sev="$(awk -F'|' '{ gsub(/^ +| +$/,"",$5); print $5 }' <<< "$line")"
       case "$sev" in
         critical) DEBT_CRITICAL=$((DEBT_CRITICAL + 1)) ;;

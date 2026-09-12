@@ -1,7 +1,7 @@
 ---
 title: Technical Debt Registry
 created: 2026-07-20
-updated: 2026-08-05
+updated: 2026-09-12
 last_audit: 2026-07-22
 warning_budget: 5
 critical_blocks: true
@@ -23,12 +23,14 @@ Budget is read from this file's frontmatter (`warning_budget`, `critical_blocks`
 
 ## Current Debt
 
-| Page | Debt | Resolution | Date |
-|------|------|------------|------|
-| the-verifiability-thesis.md | Extension callout ("widens over time") extrapolates beyond Schillings' source material | Verify against future sources or soften to "may widen" | 2026-07-27 |
-| discourse-slop.md | Slop Family table lists 5 categories (code, information, benchmark, spec, discourse); the-slop-problem now enumerates 7 (adds skill slop + foundation-layer) — cross-page ordinal mismatch: "sixth category" in the thread reads as "fifth" against the table | Align the table with the thread's 7-category enumeration (add skill slop and foundation-layer rows) | 2026-08-05 |
-| factory-maintenance.md / gas-town.md | "The current best-practice framing is 'sweeps' agents…" (gas-town.md:39; same phrasing removed from factory-maintenance.md:50 in the 2026-08-30 fix pass) states a best-practice certainty Yegge's filed transcript does not make (17:52–17:59: "the next thing that usually emerges within a factory") | Soften to the source's "usually emerges" phrasing with attribution, matching the factory-maintenance fix | 2026-08-30 |
-| birgitta-boeckeler.md | INFO-level source-fidelity notes left unapplied at filing: "Tessel" spelling (line 18) vs wiki-canonical "Tessl"; "Others" resolved to "the open-source tools" (line 18, wiki interpretation); sledgehammer bullet merges the video's solo-weekend-project cost rationale (line 19); Clarke recommendation (lede) is sourced from a raw file not listed in this page's `sources:` | Normalize spelling/attributions on next marginal edit to the page | 2026-08-30 |
+Schema (asserted by `./scripts/validate-page`): `| Date | Page | Issue | Severity |` — severity must be the last column. Changing this header is a schema change requiring human approval, coordinated with the validator.
+
+| Date | Page | Issue | Severity |
+|------|------|-------|----------|
+| 2026-07-27 | the-verifiability-thesis.md | Extension callout ("widens over time") extrapolates beyond Schillings' source material. Fix: verify against future sources or soften to "may widen". | warning |
+| 2026-08-05 | discourse-slop.md | Slop Family table lists 5 categories (code, information, benchmark, spec, discourse); the-slop-problem now enumerates 7 (adds skill slop + foundation-layer) — cross-page ordinal mismatch: "sixth category" in the thread reads as "fifth" against the table. Fix: align the table with the thread's 7-category enumeration (add skill slop and foundation-layer rows). | warning |
+| 2026-08-30 | factory-maintenance.md / gas-town.md | "The current best-practice framing is 'sweeps' agents…" (gas-town.md:39; same phrasing removed from factory-maintenance.md:50 in the 2026-08-30 fix pass) states a best-practice certainty Yegge's filed transcript does not make (17:52–17:59: "the next thing that usually emerges within a factory"). Fix: soften to the source's "usually emerges" phrasing with attribution, matching the factory-maintenance fix. | warning |
+| 2026-08-30 | birgitta-boeckeler.md | INFO-level source-fidelity notes left unapplied at filing: "Tessel" spelling (line 18) vs wiki-canonical "Tessl"; "Others" resolved to "the open-source tools" (line 18, wiki interpretation); sledgehammer bullet merges the video's solo-weekend-project cost rationale (line 19); Clarke recommendation (lede) is sourced from a raw file not listed in this page's `sources:`. Fix: normalize spelling/attributions on next marginal edit to the page. | warning |
 
 ## Audit History
 
@@ -36,3 +38,4 @@ Budget is read from this file's frontmatter (`warning_budget`, `critical_blocks`
 |------|---------|-------|---------------|
 | 2026-07-20 | Devin | Migration schema commit | Created registry; seeded archived ingest-notes row |
 | 2026-07-22 | MiMo | Full audit | Resolved 2 warning rows: MemRefine ingest-note (all 5 recommended updates verified in wiki), validate-page contract drift (fixed in 6c3771a). Registry clean. |
+| 2026-09-12 | ZCode | Health report + debt resolution | Found schema drift: ingest 6cdb4be (2026-07-26) rewrote the Current Debt header without the Severity column, so the validator counted 0 debt across five subsequent filings. Restored the schema, re-tagged the 4 open rows as warning; validate-page now asserts the header. Tracked as AG-013. |
