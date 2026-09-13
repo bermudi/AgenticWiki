@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-08-30
+updated: 2026-09-12
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -21,7 +21,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[the-slop-problem]] — AI generates code faster than humans can review. Without discipline, codebase quality degrades irreversibly. The taxonomy now extends from code and benchmark slop to spec, skill, information, discourse, and foundation-layer slop — slop baked into the languages themselves.
 - [[the-human-lever]] — The human's job shifts from writing code to owning design boundaries and verifying outcomes. You don't read every line, but you own the interfaces.
 - [[the-agent-workflow]] — How to actually work day-to-day: plan HITL, execute AFK, manage context ruthlessly, ship tracer bullets.
-- [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. The tool layer — from single tools to harness architecture to ecosystem effects — is the bottleneck across seven layers of increasing scope.
+- [[tool-design-for-agents]] — Tools were built for humans. Agents need different interface contracts, output formats, and design priorities. The tool layer — from single tools to harness architecture to ecosystem effects — is the bottleneck across eight layers of increasing scope.
 - [[agent-quality-engineering]] — Making agents shippable requires a quality infrastructure: evals (probabilistic CI) + observability (decision-chain tracing) + a feedback flywheel (production failures → eval cases → improvement).
 - [[intent-to-code]] — What stands between human intent and shipped code? Five positions — specs-as-compiler, plan-as-contract, alignment-first, enforcement-as-code, and pure vibes — disagree on the artifact's weight and where quality enforcement lives.
 - [[the-verifiability-thesis]] — Karpathy's unified theory: verifiability drives RL training, which creates the jagged frontier, which makes vibe coding possible on the peaks and demands agentic engineering to manage the boundary.

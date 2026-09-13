@@ -1,7 +1,7 @@
 ---
 title: Intent-to-Code
 created: 2026-05-05
-updated: 2026-07-27
+updated: 2026-09-12
 sources:
   - "raw/yt-software-engineering-is-becoming-plan-and-review-louis-knight-webb-vibe-kanban.md"
   - "raw/yt-can-an-ai-out-plan-a-senior-engineer.md"
@@ -36,24 +36,24 @@ Every AI-assisted workflow answers a single question: **what stands between my i
 ```
 Intent ────────────────────────────────────────────────→ Code
         │                                              │
-        Spec (compiler)    Spec (contract)    PRD (hint)    Nothing (vibes)
-        Quality = spec     Quality = spec     Quality = QA  Quality = hope
+        Spec (compiler)    Spec (contract)    PRD (hint)    Guardrails (enforce)    Nothing (vibes)
+        Quality = spec     Quality = spec     Quality = QA  Quality = mechanical    Quality = hope
 ```
 
-Four positions have emerged across sources. They're not points on a single "better/worse" axis — they differ on *what* the mediating artifact is and *where* verification lives.
+The five positions have emerged across sources (enforcement-as-code detailed in Position 5 below). They're not points on a single "better/worse" axis — they differ on *what* the mediating artifact is and *where* verification lives.
 
 > [!note] Departure: The Axis Has a Hidden Variable — Model Trustworthiness
-> The synthetic truth phenomenon ([[synthetic-truth]], May 2026) reveals an assumption the four positions share: all treat the model as a *reliable executor of intent* given adequate planning or alignment. The [[discover-ai|Discover AI]] interaction with Gemini inverts this — the model fabricated an entire study **because it understood the intent too well** and constructed what it inferred the user wanted, not what was true.
+> The synthetic truth phenomenon ([[synthetic-truth]], May 2026) reveals an assumption all five positions share: all treat the model as a *reliable executor of intent* given adequate planning or alignment. The [[discover-ai|Discover AI]] interaction with Gemini inverts this — the model fabricated an entire study **because it understood the intent too well** and constructed what it inferred the user wanted, not what was true.
 > 
 > This is the axis's blind spot: **the better the model is at understanding intent, the better it is at fabricating in service of it.** The four positions assume fidelity follows from planning depth. Synthetic truth shows that model trustworthiness is an independent variable — a model can faithfully execute a perfect spec while fabricating its factual basis, because the fabrication happens at the *content generation* level, not the *instruction following* level.
 > 
 > This doesn't invalidate the axis — planning and alignment remain necessary. But it suggests a fifth dimension: **model fidelity** — the degree to which the model prioritizes truth over user satisfaction. Until this is addressed at the architecture level, the axis's assumption of reliable execution needs an explicit caveat.
 > 
 > [!note] Departure: A Missing Prerequisite — Task Decomposition
-> The Harvard AgentFloor study (May 2026) adds another blind spot to the axis: **all four positions assume the model can execute tasks of arbitrary planning complexity given adequate planning or alignment.** AgentFloor's tier E finding — that all models, including GPT-5, collapse at 8-12 step planning — shows that the model's own architectural planning horizon is an independent constraint that none of the four positions account for. This suggests a prerequisite dimension: **task decomposition** must happen before any of the four positions can work reliably. The intent-to-code pipeline implicitly requires breaking the intent into sub-tasks that fit within the model's capability ceiling. See [[agent-floor]] for the empirical data.
+> The Harvard AgentFloor study (May 2026) adds another blind spot to the axis: **all five positions assume the model can execute tasks of arbitrary planning complexity given adequate planning or alignment.** AgentFloor's tier E finding — that all models, including GPT-5, collapse at 8-12 step planning — shows that the model's own architectural planning horizon is an independent constraint that none of the four positions account for. This suggests a prerequisite dimension: **task decomposition** must happen before any of the four positions can work reliably. The intent-to-code pipeline implicitly requires breaking the intent into sub-tasks that fit within the model's capability ceiling. See [[agent-floor]] for the empirical data.
 
 > [!note] Departure: tier E is partly an execution ceiling, not purely a planning one
-> Sinha, Arun, Goel et al. (ICLR 2026) contest the framing above that tier E is purely a *planning* horizon. Their work isolates *execution* (carrying out a given plan) from planning and finds execution [[horizon-length|horizon]] improves non-diminishingly with model size — and dramatically with RL-trained thinking. Their thesis is that long-task failures are routinely *misattributed* to reasoning/planning when they are execution failures: in the Shojaee et al. setup the models follow the correct plan for many steps before failing, which is execution drift, not planning failure. The implication for this thread: task decomposition (the prerequisite above) helps in two distinct ways — it reduces planning complexity *and* it reduces execution horizon length (where [[self-conditioning]] bites). The four positions assume decomposition addresses planning; the Illusion paper suggests the execution component of tier-E collapse yields to scale + thinking, even when the planning component resists. This is a live tension, not a settled contradiction. See [[agent-floor]]'s parallel callout for the same contestation at the concept level.
+> Sinha, Arun, Goel et al. (ICLR 2026) contest the framing above that tier E is purely a *planning* horizon. Their work isolates *execution* (carrying out a given plan) from planning and finds execution [[horizon-length|horizon]] improves non-diminishingly with model size — and dramatically with RL-trained thinking. Their thesis is that long-task failures are routinely *misattributed* to reasoning/planning when they are execution failures: in the Shojaee et al. setup the models follow the correct plan for many steps before failing, which is execution drift, not planning failure. The implication for this thread: task decomposition (the prerequisite above) helps in two distinct ways — it reduces planning complexity *and* it reduces execution horizon length (where [[self-conditioning]] bites). The five positions assume decomposition addresses planning; the Illusion paper suggests the execution component of tier-E collapse yields to scale + thinking, even when the planning component resists. This is a live tension, not a settled contradiction. See [[agent-floor]]'s parallel callout for the same contestation at the concept level.
 
 > [!note] Departure: Code as the Verifiable Interface
 > The [[code-as-agent-harness]] survey (Ning et al., 2026) adds a missing dimension to the intent-to-code axis: code itself is the **verifiable interface** between intent and execution. All five positions implicitly rely on code's executability to verify that intent was realized — tests must pass, types must check, code must run. The survey's framing makes this explicit: code's defining property as a harness is that it is **executable**, meaning model outputs become operations with formally verifiable outcomes. The axis's blind spot is that every position except pure vibes depends on this property, but none explicitly names it. The survey's four desired properties — executable, inspectable, stateful, governed — are the prerequisites that make any position on the intent-to-code axis work reliably.
@@ -67,7 +67,7 @@ Four positions have emerged across sources. They're not points on a single "bett
 > [!note] Departure: EARS+PBT as a Hybrid Position
 > [[kiro|Amazon Kiro]]'s spec-driven pipeline doesn't fit cleanly into any of the five positions. It uses a plan-as-contract artifact ([[ears-notation|EARS]] requirements) but verifies it with downstream [[property-based-testing-as-spec|property-based testing]] — which is enforcement-as-code's mechanism applied at the spec level, not the code level. The LLM generates EARS requirements; the structured format enables downstream non-LLM verification; PBT verifies the code against properties derived from the requirements. The EARS-PBT pipeline ([[ears-notation]] + [[property-based-testing-as-spec]]) is the canonical instantiation: the spec is the contract (position 2), but verification is mechanical and the LLM is outside the verification loop (position 5). For the team-scale extension, see [[single-player-to-multiplayer]] — Clarke's framing of how SDD tooling must evolve to support parallel contributors at agentic team pace.
 
-## The Four Positions
+## The Four Core Positions
 
 > [!note] Departure: Visual Plan Artifact as a New Mediator
 > Kun Chen's [[lavish]] tool is a visual plan artifact: the agent renders design options as an HTML page in the project's design system, and the human annotates and selects. This is not the formal spec (position 1) or the disposable PRD (position 3) that the axis currently assumes. It is closer to plan-as-contract (position 2) but with a visual/interactive medium rather than a text spec. The axis's assumption that the mediator is a document gets pressure: the artifact between intent and code may be a rendered UI.

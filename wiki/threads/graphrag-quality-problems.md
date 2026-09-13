@@ -1,7 +1,7 @@
 ---
 title: GraphRAG Quality Problems
 created: 2026-07-13
-updated: 2026-07-13
+updated: 2026-09-12
 sources:
   - raw/2606.00610v1.md
   - raw/yt-memorygraphrag-outperforms-every-rag.md
@@ -70,10 +70,10 @@ This is an instance of the broader principle: **engineered decomposition + messa
 
 ## Tensions
 
-> [!note] Departure:
+> [!note] Departure: Index-Heavy / Query-Light as a Deliberate Operational Regime
 > MemGraphRAG invests heavily in offline indexing (multi-agent construction + graph building) for ultra-fast online retrieval (0.061s). This is a deliberate operational trade-off: "do not forget operational if you have it... you have to invest quite a lot of here for your particular training, for your particular domain knowledge indexing."
 
-> [!warning] Contradiction:
+> [!warning] Contradiction: "GraphRAG underperforms RAG" vs. the SOTA literature
 > The paper claims GraphRAG underperforms naive RAG in real-world QA, yet most GraphRAG papers report SOTA gains. The discrepancy stems from benchmark choice: MemGraphRAG uses G-Medical/G-Novel (complex reasoning) vs simpler HotpotQA. The "GraphRAG underperforms RAG" finding needs replication on standard benchmarks.
 
 ## Sources

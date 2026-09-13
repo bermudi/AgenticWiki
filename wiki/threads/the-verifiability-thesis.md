@@ -1,7 +1,7 @@
 ---
 title: The Verifiability Thesis
 created: 2026-05-09
-updated: 2026-07-27
+updated: 2026-09-12
 sources:
   - "raw/yt-andrej-karpathy-from-vibe-coding-to-agentic-engineering.md"
   - raw/yt-learning-while-you-sleep-beyond-memory-to-dreaming.md
@@ -162,10 +162,11 @@ The thesis's causal chain assumes verifiability enables improvement. These paper
 
 ### For [[intent-to-code]]
 
-The four positions on the intent-to-code axis are different strategies for managing the verifiability boundary:
+The five positions on the intent-to-code axis are different strategies for managing the verifiability boundary:
 - **Specs-as-compiler**: Make the intent maximally verifiable (the spec IS the verification)
 - **Plan-as-contract**: Use the plan as a verifiable checkpoint
 - **Alignment-first**: Use QA as the verification mechanism ("verify against reality")
+- **Enforcement-as-code**: Make compliance with intent mechanically enforced (ContextCov's executable checks — see below)
 - **Pure vibes**: Abandon verification entirely
 
 The axis isn't about philosophical preference — it's about how much verification infrastructure each position builds between intent and code. And where verifiability is absent, no position fully works.

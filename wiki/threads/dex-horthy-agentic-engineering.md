@@ -1,7 +1,7 @@
 ---
 title: Dex Horthy's Agentic Engineering
 created: 2026-07-16
-updated: 2026-08-13
+updated: 2026-09-12
 sources:
   - raw/yt-no-vibes-allowed-dex-horthy.md
   - raw/yt-chroma-context-engineering-episode-1-dex-horthy-dexhorthy.md
@@ -82,7 +82,7 @@ Dex's contribution to [[harness-engineering]] vocabulary is the adoption of **Ma
 - **Inner harness** — the tool definitions and integration points a coding agent *exposes* (what Claude Code, Codex, AMP ship).
 - **Outer harness** — what the human builds *around* it to customize for a specific codebase, language, and workflow (commands, MCPs, [[agent-skills|skills]], codebase organization).
 
-[[harness-engineering|Harness engineering]] is the discipline of engineering against both. Dex credits [[vibv|Vib (Boundary/LangChain)]] for the underlying intuition that every step is just tokens-in-tokens-out and your job is to maximize the chance the tokens-out are good.
+[[harness-engineering|Harness engineering]] is the discipline of engineering against both. Dex credits [[vibv|Vib (Boundary)]] for the underlying intuition that every step is just tokens-in-tokens-out and your job is to maximize the chance the tokens-out are good.
 
 He also warns, via Fowler again, about **semantic diffusion**: when a useful word ("agents," "software factory") gets overloaded until it means everything and therefore nothing, the vocabulary stops helping builders and starts generating hype. Protecting precise vocabulary is part of the engineering.
 
