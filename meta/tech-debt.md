@@ -1,7 +1,7 @@
 ---
 title: Technical Debt Registry
 created: 2026-07-20
-updated: 2026-09-12
+updated: 2026-09-16
 last_audit: 2026-07-22
 warning_budget: 5
 critical_blocks: true
@@ -31,6 +31,7 @@ Schema (asserted by `./scripts/validate-page`): `| Date | Page | Issue | Severit
 | 2026-08-05 | discourse-slop.md | Slop Family table lists 5 categories (code, information, benchmark, spec, discourse); the-slop-problem now enumerates 7 (adds skill slop + foundation-layer) — cross-page ordinal mismatch: "sixth category" in the thread reads as "fifth" against the table. Fix: align the table with the thread's 7-category enumeration (add skill slop and foundation-layer rows). | warning |
 | 2026-08-30 | factory-maintenance.md / gas-town.md | "The current best-practice framing is 'sweeps' agents…" (gas-town.md:39; same phrasing removed from factory-maintenance.md:50 in the 2026-08-30 fix pass) states a best-practice certainty Yegge's filed transcript does not make (17:52–17:59: "the next thing that usually emerges within a factory"). Fix: soften to the source's "usually emerges" phrasing with attribution, matching the factory-maintenance fix. | warning |
 | 2026-08-30 | birgitta-boeckeler.md | INFO-level source-fidelity notes left unapplied at filing: "Tessel" spelling (line 18) vs wiki-canonical "Tessl"; "Others" resolved to "the open-source tools" (line 18, wiki interpretation); sledgehammer bullet merges the video's solo-weekend-project cost rationale (line 19); Clarke recommendation (lede) is sourced from a raw file not listed in this page's `sources:`. Fix: normalize spelling/attributions on next marginal edit to the page. | warning |
+| 2026-09-16 | harness-tax.md (raw: harnesstax-how-much-does-the-harness-matter-for-coding-agents.md) | Figures 1–4 of the HarnessTax study are interactive widgets whose extracted text is garbled in the raw artifact; only prose-stated statistics are citable. Per-model cost/success values appearing only inside figure widget text (e.g. the full 21-pair Pareto data, Figure 3 context statistics) are unverifiable from raw/. Fix: when the authors' promised profiling-trace release lands, re-verify figure-level numbers cited on harness-tax.md, pi.md, claude-code.md, and the two thread pages. | warning |
 
 ## Audit History
 

@@ -1,16 +1,17 @@
 ---
 title: HarnessX
 created: 2026-06-17
-updated: 2026-07-23
+updated: 2026-09-16
 sources:
   - raw/2606.14249.md
+  - raw/2605.18747.md
 tags: [concept, agent-harness, harness-engineering, self-evolution, composition, harness-co-evolution, reinforcement-learning, aegis]
 unaudited_marginal: 0
 ---
 
 # HarnessX
 
-> A foundry for **composable, adaptive, and evolvable** agent harnesses. Treats the harness as a first-class, typed, substitutable value composed from processor primitives (Section 3), evolves it via AEGIS — a trace-driven four-stage engine grounded in the [[operational-mirror]] between symbolic adaptation and reinforcement learning (Section 4), and closes the loop with the underlying model via cross-harness GRPO over a shared replay buffer (Section 5). Across 5 benchmarks and 3 model families, harness evolution yields an average gain of +14.5% (peak +44.0%); co-evolution adds an additional +4.7% on top of harness-only evolution on the two benchmarks where it was tested. The system is the most complete instantiation of the [[harness-engineering]] §5.2.3 open problem to date, extending [[self-harness]] from propose-evaluate-accept to typed composition + named pathology defenses + harness-model co-evolution.
+> A foundry for **composable, adaptive, and evolvable** agent harnesses. Treats the harness as a first-class, typed, substitutable value composed from processor primitives (Section 3), evolves it via AEGIS — a trace-driven four-stage engine grounded in the [[operational-mirror]] between symbolic adaptation and reinforcement learning (Section 4), and closes the loop with the underlying model via cross-harness GRPO over a shared replay buffer (Section 5). Across 5 benchmarks and 3 model families, harness evolution yields an average gain of +14.5% (peak +44.0%); co-evolution adds an additional +4.7% on top of harness-only evolution on the two benchmarks where it was tested. The wiki reads the system as the most complete instantiation of the [[harness-engineering]] §5.2.3 open problem to date. The wiki pairs it with [[self-harness]] — from propose-evaluate-accept to typed composition + named pathology defenses + harness-model co-evolution — a pairing, not a lineage the paper itself claims (HarnessX cites no Self-Harness).
 
 ## Three Layers in One System
 
@@ -152,7 +153,7 @@ All three predicted pathologies appear empirically:
 
 - **Reward hacking** (GAIA, Sonnet 4.6, R10): a composite edit (tool + prompt + config) passed the seesaw and raised accuracy from 74.8% to 79.6%, but trace analysis at R11 revealed a subset passed via format regularities (verbatim match) rather than actual retrieval. Detected at R11, fixed by R12 (guard restricting the tool to tasks with cross-checkable output).
 - **Catastrophic forgetting** (τ3-Bench, Sonnet 4.6, Telecom, R7): five consecutive same-type prompt/processor edits (R2–R6) accumulated sub-threshold coupling undetected by the seesaw; the sixth edit triggered a visible −14.0% regression (94.7% → 80.7%) via cross-rule conflicts. Pipeline self-corrected by R9 once the Planner diagnosed the concentration pattern.
-- **Under-exploration** (ALFWorld, Sonnet 4.6, R4–R7): pipeline shipped predominantly prompt-level edits with <1% gain/round; ship-prediction accuracy dropped from 80% (R3) to 0% (R7), signaling prompt-space exhaustion. The sole structural edit (R6) achieved only 14% accuracy, suggesting the Planner lacked sufficient structural-edit history to calibrate.
+- **Under-exploration** (ALFWorld, Sonnet 4.6, R4–R7): pipeline shipped predominantly prompt-level edits with <1% gain/round; ship-prediction accuracy dropped from 80% (R3) to 0% (R7), signaling prompt-space exhaustion. The sole structural edit (R6) achieved only 14% ship-prediction accuracy, suggesting the Planner lacked sufficient structural-edit history to calibrate.
 
 ## Why Compositional Structure Matters for Evolution (§7.1)
 
@@ -168,7 +169,7 @@ The authors explicitly state: "The RL–symbolic-space mirror is a design heuris
 `raw/2605.18747.md` §5.2.3 lists "Self-Evolving Harnesses without Regression" as an open problem. HarnessX is the most complete instantiation to date: typed composition enables safe programmatic mutation, the operational mirror formalizes what can go wrong, AEGIS is the four-stage defense architecture, the seesaw constraint enforces non-regression, and cross-harness GRPO breaks the scaffolding/training-signal ceilings.
 
 ### Relationship to [[self-harness]]
-[[self-harness]] is the simpler 3-stage loop (Weakness Mining → Harness Proposal → Proposal Validation) with bounded edits and a conservative acceptance rule. HarnessX extends in three ways: (1) **typed composition** — the harness is a first-class, substitutable object with per-hook contracts, which Self-Harness lacks; (2) **explicit pathology taxonomy** — Self-Harness treats editing as a generic "propose and validate" loop, while HarnessX names three failure modes with dedicated architectural defenses (Critic for reward hacking, deterministic gate for forgetting, Planner for under-exploration); (3) **harness-model co-evolution** — HarnessX closes the loop with the model via cross-harness GRPO, an axis Self-Harness does not address. Self-Harness remains the simpler, more model-agnostic option when the harness is not yet a typed object; HarnessX is the more powerful option when the harness can be reified as typed components.
+[[self-harness]] is the simpler 3-stage loop (Weakness Mining → Harness Proposal → Proposal Validation) with bounded edits and a conservative acceptance rule. The wiki reads HarnessX as extending that paradigm in three ways: (1) **typed composition** — the harness is a first-class, substitutable object with per-hook contracts, which Self-Harness lacks; (2) **explicit pathology taxonomy** — Self-Harness treats editing as a generic "propose and validate" loop, while HarnessX names three failure modes with dedicated architectural defenses (Critic for reward hacking, deterministic gate for forgetting, Planner for under-exploration); (3) **harness-model co-evolution** — HarnessX closes the loop with the model via cross-harness GRPO, an axis Self-Harness does not address. Self-Harness remains the simpler, more model-agnostic option when the harness is not yet a typed object; HarnessX is the more powerful option when the harness can be reified as typed components.
 
 ### Relationship to [[recursive-agent-harness]]
 [[recursive-agent-harness]] is the complementary pattern: rather than editing one harness over time, spawn fresh harness instances per task. HarnessX's in-place evolution and recursive instantiation are orthogonal levers — in-place evolution improves a single harness; recursive instantiation amortizes the harness over a population.
@@ -178,7 +179,7 @@ HarnessX is the most concrete "foundry" to instantiate the code-as-harness visio
 
 ## Limitations (declared by the authors)
 
-- **No held-out evaluation.** All reported gains are measured on the same task set used for evolution. Generalization to unseen tasks within the same distribution is plausible but untested.
+- **No held-out evaluation.** All reported gains are measured on the same task set used for evolution. Generalization to unseen tasks within the same distribution is plausible but untested. The numbers carry both selection bias and potential overfitting.
 - **Discrete action spaces only.** Not tested for continuous action spaces (robotic control).
 - **Closed-source meta-agent.** AEGIS requires a meta-agent capable of multi-file code generation and structured trace analysis. Open-weight models approaching this capability level (Qwen3.5-72B, Llama-4-Maverick) remain untested as meta-agents.
 - **Joint control assumption.** Co-evolution requires joint control over both harness evolution and model training; in practice, these concerns are often separated across teams.
@@ -194,18 +195,20 @@ HarnessX is the most concrete "foundry" to instantiate the code-as-harness visio
 ## Related
 
 - [[harness-mechanisms]] — The nine-dimension taxonomy extends the §3 mechanism taxonomy with composition as a first-class operation
-- [[harness-interface]] — The processor abstraction is the most formal interface specification in the harness literature
+- [[harness-interface]] — The processor abstraction is, in the wiki's judgment, the most formal interface specification in the harness literature
 - [[operational-mirror]] — The RL ↔ symbolic-space correspondence that motivates AEGIS's three architectural defenses
 - [[variant-isolation]] — The ensemble routing strategy that resolves catastrophic forgetting on heterogeneous task sets
 - [[harness-model-co-evolution]] — The cross-harness GRPO loop that closes the harness–model optimization cycle
-- [[self-harness]] — The simpler propose-evaluate-accept loop; HarnessX extends with typed composition, pathology taxonomy, and co-evolution
+- [[self-harness]] — The wiki's pairing, not the paper's stated lineage (HarnessX cites no Self-Harness): the simpler propose-evaluate-accept loop, contrasted by the wiki with HarnessX's typed composition, named pathology defenses, and harness-model co-evolution
 - [[harness-handbook]] — The behavior-centric map that supplies the localization layer HarnessX assumes exists; typed composition and AEGIS still require finding the code sites a behavioral change must touch
 - [[recursive-agent-harness]] — The complementary pattern: spawn fresh harnesses per task
-- [[backpressure]] — The seesaw constraint is the strongest empirical backpressure mechanism in the harness literature
-- [[failure-modes]] — The three predicted pathologies are the most empirically validated failure modes in the self-evolution context
+- [[backpressure]] — The seesaw constraint is, in the wiki's judgment, the strongest empirical backpressure mechanism in the harness literature
+- [[failure-modes]] — The three predicted pathologies are, in the wiki's judgment, the most empirically validated failure modes in the self-evolution context
 - [[verifiability]] — Oracle adequacy is the active ceiling for all self-evolution systems; the operational mirror's pathologies only matter if verifiers are trustworthy
 - [[agent-observability]] — The trace substrate (D8) is the optimization signal; trace richness bounds the sophistication of evolution that can be safely performed
+- [[harness-tax]] — The measured off-the-shelf counterpart: swapping mature harnesses moves cost, not success, which is what makes this page's engineered +14.5% average a capability result rather than a between-harness selection effect (§7.7's peak-on-evolution-set selection bias still applies to the figure; [[harness-tax]]'s synthesis relies on it)
 
 ## Sources
 
-- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full paper: §3 harness composition (first-class object, processor, 9-dim taxonomy), §4 AEGIS (operational mirror, three pathologies, four-stage pipeline, adaptation loop, variant isolation), §5 co-evolution (iteration, cross-harness GRPO, off-policy buffer), §6 experiments (5 benchmarks × 3 model families × 15 rounds; 14/15 improve; +14.5% average, +44.0% peak), §7 discussion (compositional structure, trace richness, scope/limits of mirror, cost-performance). Codebase to be open-sourced in a future release.
+- `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). Full paper: §3 harness composition (first-class object, processor, 9-dim taxonomy), §4 AEGIS (operational mirror, three pathologies, four-stage pipeline, adaptation loop, variant isolation), §5 co-evolution (iteration, cross-harness GRPO, off-policy buffer), §6 experiments (5 benchmarks × 3 model families, up to 15 evolution rounds; 14/15 improve; +14.5% average, +44.0% peak), §7 discussion (compositional structure, trace richness, scope/limits of mirror, cost-performance). Codebase to be open-sourced in a future release.
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness* survey. Source for the §5.2.3 "Self-Evolving Harnesses without Regression" open-problem framing used on this page and in the wiki's pairing with [[self-harness]].

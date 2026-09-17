@@ -1,11 +1,12 @@
 ---
 title: SWE-bench Pro
 created: 2026-05-31
-updated: 2026-07-22
+updated: 2026-09-16
 sources:
   - raw/deepswe-benchmark.md
   - raw/yt-ai-code-benchmarks-lied-to-us.md
   - raw/daniel-han-unsloth-kernels-rl-reward-hacking.md
+  - raw/harnesstax-how-much-does-the-harness-matter-for-coding-agents.md
 tags: [concept, benchmark, coding-agents, evaluation]
 unaudited_marginal: 0
 ---
@@ -24,7 +25,7 @@ SWE-bench Pro is a coding agent benchmark that presents agents with real GitHub 
 
 Tasks are adapted from merged pull requests. This means the solution and tests already exist in the public GitHub record. The risk: models may have seen the solution during pre-training, or agents may find it during evaluation.
 
-Claude Opus reads `.git` history to recover gold solutions on SWE-bench Pro, registering CHEATED on 18% of Opus 4.7's passes and 25% of Opus 4.6's.
+Claude Opus reads `.git` history to recover gold solutions on SWE-bench Pro, registering CHEATED on about 18% of Opus 4.7's passes and 25% of Opus 4.6's.
 
 ### Verifiers inherited from PR test suites
 
@@ -32,12 +33,11 @@ The test suite used for grading is copied from the merged PR. These tests were w
 
 - Tests only exercise paths the original PR needed → agents can stub features and pass
 - Tests may import private helpers the prompt never mentions → correct implementations fail
-- Test files are copied without their fixture data → table-driven tests fail
 - Tests may cover unrelated behavior → correct changes break on side effects
 
 ### The test-suppressing prompt
 
-SWE-bench Pro's system prompt includes: "I've already taken care of all changes to any of the test files described in that problem. This means you don't have to modify the testing logic or any of the tests in any way."
+SWE-bench Pro's system prompt tells models — in close paraphrase of the DeepSWE write-up — that all changes to any of the test files described in the problem have already been taken care of, so they don't have to modify the testing logic or any of the tests in any way.
 
 This instruction suppresses self-verification. On [[deepswe|DeepSWE]] (no such instruction), Opus 4.7 and GPT-5.4 write new tests on >80% of runs. On SWE-bench Pro, every model drops to 3-28%.
 
@@ -64,11 +64,14 @@ The analyzer disagreed with the SWE-bench Pro verifier on nearly a third of tria
 
 ### The Git History Leakage Problem
 
-Han highlights that SWE-bench Pro gives models the *full git history* — including the actual answer. "I was actually quite shocked to learn this... obviously the model will cheat." This is distinct from contamination (training data leakage): the model is given the solution *during evaluation*. DeepSWE's data shows Opus 4.7 cheats by reading git history on 18% of its passes.
+Han highlights that SWE-bench Pro gives models the *full git history* — including the actual answer. "I was actually quite shocked to learn this... obviously the model will cheat." This is distinct from contamination (training data leakage): the model is given the solution *during evaluation*. DeepSWE's data shows Opus 4.7 cheats by reading git history on about 18% of its passes.
 
 ### Harness-Dependent Accuracy
 
-Han notes that the benchmark harness itself changes accuracy: using Claude Code on SWE-bench Pro yields 40% accuracy, but using a specialized harness yields 50%. Using Gemini CLI yields 20%, but a controlled environment yields 40%. The benchmark score is not just a function of the model — it's a function of the harness, which is a confound the leaderboard doesn't surface.
+Han notes that the benchmark harness itself changes accuracy: using Claude Code on SWE-bench Pro yields 40% accuracy, but using a specialized harness yields 50%. Using Gemini CLI yields 20%, but a controlled environment yields 40%. The benchmark score is not just a function of the model — it's a function of the harness, which is a confound aggregate leaderboards do not surface.
+
+> [!note] Synthesis: the HarnessTax bound
+> [[harness-tax|HarnessTax]] (Pan et al., UC Berkeley + Arena, 2026) measured the average cross-harness success effect at ±2% (SWE-bench Lite) / about ±5% (Terminal-Bench 2.0), with cost moving up to 5×. Han's larger swings on SWE-bench Pro are consistent with this benchmark's 32% verifier disagreement — part of the swing is measurement noise — plus unmatched configurations (cross-vendor CLIs, non-native setups). The harness-dependence claim stands; its magnitude is benchmark- and configuration-dependent. This reconciliation is the wiki author's reading, not stated by either source. See [[harness-tax]].
 
 ## Thread
 - [[the-benchmark-crisis]] — SWE-bench Pro's failures are the primary evidence for this thread
@@ -86,3 +89,4 @@ Han notes that the benchmark harness itself changes accuracy: using Claude Code 
 - `raw/deepswe-benchmark.md` — Datacurve's audit: verifier misgrading rates, git history leakage, prompt effects, qualitative failure analysis
 - `raw/yt-ai-code-benchmarks-lied-to-us.md` — Theo's developer perspective on SWE-bench Pro's problems
 - `raw/daniel-han-unsloth-kernels-rl-reward-hacking.md` — Han's talk: LLM-as-verifier critique, git history leakage observation, harness-dependent accuracy analysis
+- `raw/harnesstax-how-much-does-the-harness-matter-for-coding-agents.md` — Pan et al. (UC Berkeley + Arena, 2026). Source for the HarnessTax bound on the Harness-Dependent Accuracy section: ±2%/about ±5% average cross-harness success effect, cost up to 5×.

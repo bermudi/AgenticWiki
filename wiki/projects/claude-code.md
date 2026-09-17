@@ -1,15 +1,15 @@
 ---
 title: Claude Code
 created: 2026-04-25
-updated: 2026-07-19
-sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md, raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md]
+updated: 2026-09-16
+sources: [raw/yt-claude-code-feature-build.md, raw/how-to-ralph-wiggum.md, raw/ralph-wiggum-playbook.md, "raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md", raw/thariq-unreasonable-effectiveness-of-html.md, raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md, raw/harnesstax-how-much-does-the-harness-matter-for-coding-agents.md, raw/yt-effect-opencode-dax-raad.md]
 tags: [tool, ai, agent, anthropic]
 unaudited_marginal: 0
 ---
 
 # Claude Code
 
-> A command-line interface (CLI) agent from Anthropic designed for high-fidelity code exploration, editing, and execution.
+> A command-line interface (CLI) agent from Anthropic designed for agentic code exploration, editing, and execution.
 
 ## Overview
 
@@ -17,7 +17,7 @@ Claude Code is an agentic tool that operates directly in the terminal, allowing 
 
 ## Features
 
-- **Agentic Workflows**: Supports complex tasks like bug fixing, feature implementation, and codebase refactoring.
+- **Agentic Workflows**: Supports complex tasks like feature implementation and automated loop-based workflows.
 - **Tools & Skills**: Can be extended with custom skills (e.g., `/grill-me`) to perform specialized tasks.
 - **HITL/AFK Support**: Designed to work both interactively with the developer and as a background agent for longer-running tasks.
 - **Security**: Can be run in sandboxed environments (like Docker) to prevent unsafe operations.
@@ -25,7 +25,7 @@ Claude Code is an agentic tool that operates directly in the terminal, allowing 
 
 ## Autonomous Loops: /loop and /goal
 
-In spring 2026 Claude Code shipped productized loop primitives that made [[boris-cherny|Cherny]]'s "designing loops that prompt your agents" thesis a one-command on-ramp:
+In spring 2026 Claude Code shipped productized loop primitives that turned the "designing loops that prompt your agents" thesis ([[peter-steinberger|Steinberger]]'s phrase; Cherny's own formulation is "My job is to write loops") into a one-command on-ramp:
 
 - **`/goal`** — runs the [[ralph-loop|ralph loop]] until a small validator model confirms the task is done.
 - **`/loop`** — a built-in loop with cron-like scheduling (uses cron under the hood) that runs on infrastructure time instead of your attention. Cherny's canonical starter:
@@ -38,19 +38,25 @@ Cherny's five tips for running Opus autonomously for hours or days (June 2026), 
 
 > Use auto mode for permissions so Claude doesn't ask for approval; use dynamic workflows to have Claude orchestrate hundreds or thousands of agents to get a task done; use /goal or /loop to nudge Claude to keep going until it's done; use Claude Code in the cloud so you can close your laptop; and make sure Claude has a way to self-verify its work end to end.
 
-Tip five is the one the hype skips and the practitioners obsess over: a loop is only as trustworthy as its ability to check its own work.
+The wiki's reading of the five tips: the first four are mechanics, but tip five is the load-bearing one — a loop is only as trustworthy as its ability to check its own work.
 
-The loops inherit the [[agent-loop|hard-stops discipline]] — maximum iteration count, no-progress detection, a token-or-dollar budget ceiling — because the loop that does not stop is the production failure mode. See [[orchestration-loop]].
+The wiki reads these primitives as inheriting the [[agent-loop|hard-stops discipline]] — maximum iteration count, no-progress detection, a token-or-dollar budget ceiling — because the loop that does not stop is the production failure mode. See [[orchestration-loop]].
 
 ## The Context Manipulation Problem
 
 [[mario-zechner|Mario Zechner]] was an early, enthusiastic Claude Code user but soured on it during summer 2025. His grievances:
 
 - **Silent context injection**: Anthropic injected system reminders and modified tool definitions behind the user's back, changing agent behavior between releases without the user's knowledge.
-- **Evolving system prompts**: Mario reverse-engineered their obfuscated JavaScript and tracked every system prompt change (documented at cc-history.mario.ai). "Every release was messing with stuff."
+- **Evolving system prompts**: Mario reverse-engineered their obfuscated JavaScript and tracked every system prompt change (documented on his site). "Every release was messing with stuff."
 - **Workflow breakage**: Previously working workflows would stop working because of invisible system reminders modifying model behavior.
 
 This experience directly motivated Mario to build [[pi]], founded on the principle of context transparency — the user controls what goes into the model.
+
+## The Harness Tax Measurement (2026)
+
+The [[harness-tax|HarnessTax]] study (Pan et al., UC Berkeley + Arena, 2026) put Claude Code's overhead on a measured footing. Across 21 model–harness pairs on SWE-bench Lite and Terminal-Bench 2.0, Claude Code was, on average, the most expensive harness tested: geometric-mean cost ratios of about **2.0× [[pi|Pi]] and 1.6× Codex** on SWE-bench Lite, and **1.5× Pi** on Terminal-Bench 2.0, with the average harness effect on success within ±2% (SWE-bench Lite) / about ±5% (Terminal-Bench 2.0) across the same models in other harnesses. The canonical case: Claude Fable 5 solved 97.8% in Claude Code vs 96.7% in Pi — roughly double the cost ($1.33 vs $0.67) for +1.1% success at near-identical average turn counts (15.3 vs 15.4). The mechanism is visible on the first model call: Claude Code's mean initial context across all seven models was **over 10× Pi's**, with longer instructions and larger tool schemas — the study's "harness tax can begin with the first model call."
+
+One nuance the study also shows: Claude Code did produce the single highest observed success rate for Fable 5 on SWE-bench Lite (97.8%) — the tax buys margin, not failure. And in 9 of 12 provider-model comparisons across both benchmarks, an alternative harness scored higher than the model's own provider harness, Claude Code included. See [[harness-tax]] for the full study, and [[harness-monoculture]] for the ecosystem-level reading of the same asymmetry.
 
 ## HTML as a Workflow Primitive
 
@@ -82,7 +88,7 @@ This also applies in reverse: HTML files serve as high-context inputs for verifi
 
 - [[thariq]] — Claude Code team member who documented the HTML-as-output workflow pattern
 - [[html-as-agent-output]] — HTML as the emerging output format for agent communication
-- [[opencode]] — A similar open-source coding agent rewritten in Effect (~8M MAU)
+- [[opencode]] — A similar open-source coding agent being rewritten in Effect (~8M MAU)
 - [[boris-cherny]] — Creator of Claude Code (side project, September 2024)
 - [[agent-loop]] — The concept Claude Code's `/loop` and `/goal` primitives instantiate
 - [[orchestration-loop]] — Stage 5: loops supervising loops on a schedule, made accessible by `/loop`
@@ -92,12 +98,15 @@ This also applies in reverse: HTML files serve as high-context inputs for verifi
 - [[grammar-constrained-sampling]] — Claude Code's lenient tool-call parsing masks a decoding-level failure (~20% edit failure) that only strict harnesses surface
 - [[harness-monoculture]] — Claude Code's leniency is hypothesized to propagate through RL training as a de-facto ecosystem spec
 - [[agentskills]] — Claude Code is a primary reference client for the Agent Skills open standard; supports `disable-model-invocation` user-invoked skills
+- [[harness-tax]] — The controlled study measuring Claude Code as the costliest harness on average: ~2× Pi's cost with >10× its initial context at similar success
 
 ## Sources
 
 - `raw/yt-claude-code-feature-build.md` — Demonstration of complex feature building with Claude Code.
 - `raw/how-to-ralph-wiggum.md` — Ralph Wiggum autonomous loop pattern using Claude Code.
 - `raw/ralph-wiggum-playbook.md` — paddo.dev summary of the Ralph methodology, Claude Code's role as the agent CLI in the loop.
-- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Mario's grievances with Claude Code (silent context injection, system prompt manipulation); the "should I just build my own" origin story that led to Pi.
+- `raw/yt-building-pi-and-what-makes-self-modifying-software-so-fascinating.md` — Mario's grievances with Claude Code (silent context injection, system prompt manipulation); the "how hard can it be? I built my own little thing" reaction that led to Pi.
 - `raw/thariq-unreasonable-effectiveness-of-html.md` — Thariq's article on using Claude Code to generate HTML files for specs, code review, design, reports, and custom editors; the tool's context access (filesystem, MCPs, git, browser) as the key differentiator over Claude.ai artifacts.
 - `raw/wtf-is-a-loop-peter-steinberger-vs-boris-cherny.md` — Cherny as creator (side project, Sep 2024; ~4% of public GitHub commits); the `/loop` and `/goal` primitives; the five autonomous-Opus tips; the canonical `/loop` starter
+- `raw/harnesstax-how-much-does-the-harness-matter-for-coding-agents.md` — Pan et al. (UC Berkeley + Arena, 2026). Source for "The Harness Tax Measurement" section: ~2.0× Pi / ~1.6× Codex cost ratios (SWE-bench Lite) and 1.5× Pi (Terminal-Bench 2.0), average success effects within ±2%/about ±5%, the Fable 5 $1.33-vs-$0.67 case at near-identical average turn counts, the >10× initial-context gap, and the nine-of-twelve alternative-harness result.
+- `raw/yt-effect-opencode-dax-raad.md` — Dax Raad on OpenCode's ~8M monthly active users ([1:19]); sole source for the scale figure on the [[opencode]] Related line.

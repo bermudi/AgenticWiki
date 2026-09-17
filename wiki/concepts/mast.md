@@ -1,7 +1,7 @@
 ---
 title: MAST — Multi-Agent System Failure Taxonomy
 created: 2026-07-03
-updated: 2026-07-14
+updated: 2026-09-16
 sources:
   - raw/2503.13657.md
   - raw/2512.08296.md
@@ -45,7 +45,7 @@ Failures arising from breakdowns in critical information flow during inter-agent
 | FM-2.5 Ignored Other Agent's Input | 1.9% | Disregarding input or recommendations from other agents |
 | FM-2.6 Reasoning-Action Mismatch | 13.2% | Discrepancy between stated reasoning and actual actions taken |
 
-**Insight 2:** Communication-protocol fixes (e.g., MCP, A2A) are often insufficient for FC2 failures. The errors occur even when agents within the same framework communicate in natural language. The paper attributes this to a collapse of "theory of mind" — agents fail to model other agents' informational needs. Robust solutions likely require both structural improvements to message content and model-level advancements in communicative intelligence, since base LLMs are not pre-trained for nuanced inter-agent dynamics.
+**Insight 2:** Communication-protocol fixes (e.g., MCP, A2A) are often insufficient for FC2 failures. The errors occur even when agents within the same framework communicate in natural language. The paper attributes this to a collapse of "theory of mind" — agents fail to model other agents' informational needs. Robust solutions likely require both structural improvements to message content and model-level advancements in communicative intelligence, since base LLMs are generally not pre-trained for nuanced inter-agent dynamics.
 
 ### FC3. Task Verification (23.5% of failures)
 
@@ -162,10 +162,10 @@ The Grounded Theory approach ensures the taxonomy emerges from empirical data ra
 - [[functional-collapse]] — FC2 inter-agent misalignment includes the runtime reduction patterns (consensus collapse, ignored input, reasoning-action mismatch)
 - [[agent-evals]] — MAST-Data is a labeled eval dataset for MAS; the LLM annotator is a calibrated LLM-as-judge for failure classification
 - [[llm-as-code-judge]] — the LLM annotator's κ=0.77 against human experts is a data point for LLM-as-judge reliability in a structured classification task (vs. the open-ended rubric evaluation where RUBRICEVAL found 55.97%)
-- [[critical-failure]] — MAST's per-mode percentages are the MAS analog of the sparse-catastrophic-error finding: a few modes (FM-1.3, FM-1.1, FM-2.6, FM-3.3) account for the majority of failures
+- [[critical-failure]] — MAST's per-mode percentages are the MAS analog of the sparse-catastrophic-error finding: a few modes (FM-1.3, FM-1.1, FM-2.6, FM-3.3) account for roughly half of failures (49.8% per Figure 1)
 - [[backpressure]] — the FC3 finding (superficial checks pass, runtime bugs remain) is a backpressure failure: the verification gate is too weak to mechanically reject wrong outputs
 - [[operational-mirror]] — MAST's tactical-vs-structural strategy distinction parallels the operational mirror's per-edit-vs-distributional distinction: tactical fixes address individual modes, structural strategies address system-wide patterns
-- [[mert-cemri]] — lead author (with Melissa Z. Pan and Shuyi Yang) of the MAST paper
+- [[mert-cemri]] — lead author (with [[melissa-pan|Melissa Z. Pan]] and Shuyi Yang) of the MAST paper
 - [[scaling-agent-systems]] — the quantitative companion: 260-config regression that measures the error amplification factors and coordination regimes MAST diagnoses qualitatively
 - [[capability-saturation]] — the quantitative corroboration of MAST's central conjecture (base-model improvements insufficient): the 45% threshold means MAS failure modes become *more* expensive as models improve
 - [[error-cascades]] — the formal propagation mechanism beneath MAST's diagnostic categories; βρ(A) > δ is the dynamic that produces the FC1/FC2/FC3 failure patterns
@@ -176,4 +176,4 @@ The Grounded Theory approach ensures the taxonomy emerges from empirical data ra
 
 - `raw/2503.13657.md` — Cemri, Pan, Yang et al. (UC Berkeley + Intesa Sanpaolo, NeurIPS 2025 Datasets & Benchmarks, arXiv 2503.13657v3, 26 Oct 2025). §3 MAST-Data construction (Grounded Theory, IAA κ=0.88, LLM annotator κ=0.77); §4 MAST taxonomy (14 modes, 3 categories, 3 insights); §5 failure breakdown and primacy of system design; Appendix A failure mode definitions; Appendix B MAS details and failure rates (41–86.7%); Appendix G tactical vs structural strategies (Table 4); Appendix H intervention case studies (Table 5: AG2 +5pp, ChatDev +15.6pp); Appendix N failure mode examples.
 - `raw/2512.08296.md` — Kim, Gu, Park et al. (Google Research + DeepMind + MIT, arXiv 2512.08296v3, 8 Apr 2026). §4.4 error taxonomy (architecture-specific failure modes mapped to MAST categories); Table 5 trace-level error amplification factors (Independent 17.2×, Centralized 4.4×); §4.4 three coordination regimes (under-coordination, optimal band, over-coordination). Source for the "Quantitative Corroboration" section.
-- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes mapped to MAST's FC1/FC2/FC3; §VI the governance layer as the structural defense MAST's Appendix G calls for. Source for the "Mechanism Layer" section.
+- `raw/2603.04474.md` — Xie, Zhu, Zhang et al. (City University of Macau + Minzu University, arXiv 2603.04474v2, 11 May 2026). §II propagation-dynamics model (βρ(A) > δ); §IV three vulnerability classes (cascade amplification, topological fragility, consensus inertia); the wiki maps these onto MAST's FC1/FC2/FC3; §VI the governance layer as the structural defense MAST's Appendix G calls for. Source for the "Mechanism Layer" section.

@@ -1,7 +1,7 @@
 ---
 title: Index
 created: 2026-04-25
-updated: 2026-09-12
+updated: 2026-09-16
 tags: [index, wiki]
 unaudited_marginal: 0
 ---
@@ -97,6 +97,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[neetcode]] — YouTube creator; the hype-cycle and discourse-slop critic of the loops wave
 - [[shashwat-goel]] — Researcher (MPI Tübingen / ELLS); conceived *The Illusion of Diminishing Returns* (ICLR 2026) — formalized horizon length and named self-conditioning.
 - [[mert-cemri]] — Lead author (with Melissa Z. Pan and Shuyi Yang) of *Why Do Multi-Agent LLM Systems Fail?* (NeurIPS 2025); co-created the [[mast]] failure taxonomy and MAST-Data — the first empirically grounded MAS failure dataset.
+- [[melissa-pan]] — UC Berkeley Sky Lab researcher; co-equal first author of [[mast]] (with [[mert-cemri]]) and lead author of [[harness-tax]] — the controlled 21-pair study measuring what harness choice does to coding-agent cost and success.
 - [[elliot-meyerson]] — Lead author of *Solving a Million-Step LLM Task with Zero Errors* (Cognizant AI Lab + UT Austin, 2025); co-designed the [[massively-decomposed-agentic-processes|MDAP]] framework and [[maker|MAKER]]; co-authored the AALPs position paper that motivates asymptotic analysis of LLM primitives.
 - [[yizhe-xie]] — Lead author (with Congcong Zhu and Xinyue Zhang) of *From Spark to Fire: Modeling and Mitigating Error Cascades in LLM-Based Multi-Agent Collaboration* (City University of Macau + Minzu University, 2026); co-designed the [[error-cascades|propagation-dynamics model]] and [[genealogy-governance|genealogy-based governance layer]].
 - [[garry-tan]] — President & CEO of Y Combinator; creator of [[gstack]], the open-source software factory for Claude Code; reports shipping at ~810× his 2013 pace using AI-assisted development
@@ -213,6 +214,7 @@ Synthetic essays that trace themes across multiple sources. Start here.
 - [[hallucination]] — The technical causes and types of LLM fabrications.
 - [[grammar-constrained-sampling]] — JSON grammar-constrained decoding forces fabricated schema-invalid keys after a stray comma; the malformed call poisons context (~20% edit failure). A regression attributed to RL training on Claude Code's lenient harness.
 - [[harness-monoculture]] — When frontier models are RL-trained on one dominant proprietary harness (Claude Code), its leniency and slop propagate as a de-facto spec the ecosystem must match — corrupting strict tools, polluting specs, regressing off-path capability, and starving custom MCP tools.
+- [[harness-tax]] — The hidden cost of accepting an agent's default harness. Pan et al.'s 21-pair study: harness swap moves task success only ±2–5% but cost up to 5×; [[pi]]'s four-tool core sits on the Pareto frontier of both benchmarks; models most often score highest outside their own provider's harness.
 - [[html-as-agent-output]] — Using HTML instead of Markdown for agent output: richer density, visual clarity, two-way interaction, at the cost of tokens and version control pain.
 - [[inferential-rule-following]] — Applying abstract conditional rules to concrete reasoning problems; models pattern-match against training data rather than following given rules.
 - [[local-first-agent]] — The model, harness, conversation, and trajectory run on-device by default; web search, connectors, and frontier advisor escalation cross the device boundary only when user-gated. Perplexity Computer's co-designed harness + PPLX 27B is the filed instantiation.

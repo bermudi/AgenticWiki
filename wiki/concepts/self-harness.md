@@ -1,10 +1,12 @@
 ---
 title: Self-Harness
 created: 2026-06-16
-updated: 2026-07-23
+updated: 2026-09-16
 sources:
   - raw/2606.09498.md
   - raw/2606.14249.md
+  - raw/harnesstax-how-much-does-the-harness-matter-for-coding-agents.md
+  - raw/2605.18747.md
 tags: [concept, agent-harness, self-evolution, harness-engineering, harness-recursion]
 unaudited_marginal: 0
 ---
@@ -61,6 +63,9 @@ Three base models from diverse families, same minimal DeepAgent-based initial ha
 
 Held-in improvements were also substantial (16%, 138%, 20% relative). The held-out gains are decisive: edits generalize rather than overfitting to the evidence used to motivate them.
 
+> [!note] Synthesis: how this reconciles with HarnessTax's ±5% harness bound
+> The [[harness-tax|HarnessTax]] study (Pan et al., Sept 2026) found that swapping between mature off-the-shelf harnesses ([[pi|Pi]], Codex CLI, [[claude-code|Claude Code]]) moves the average Terminal-Bench 2.0 success by only about ±5% — numbers that point the opposite way from the +14.2 to +21.4 pp above. The treatments differ: Self-Harness measures the distance from a *deliberately minimal baseline harness* (a minimal DeepAgent configuration) to a per-model engineered one, while HarnessTax measures the user-facing swap between mature harnesses at native configurations. Reconciled — the wiki author's reconciliation, not stated by either paper, and drawn across the two studies' disjoint model sets and task samples (30 tasks × 3 reps vs a 64-task subset): engineered harness improvement still moves capability; choosing among existing harnesses mostly moves cost. See the synthesis callout on [[harness-tax]].
+
 ## Model-Specific Harness Adaptations
 
 The qualitative analyses reveal that Self-Harness produces *different* edits for *different* models, driven by their observed failure mechanisms:
@@ -76,11 +81,11 @@ A common thread: all three models receive edits targeting **artifact reliability
 ### Self-evolving harness as the open problem comes due
 `raw/2605.18747.md` §5.2.3 explicitly lists "Self-Evolving Harnesses without Regression" as an open problem. Self-Harness provides a concrete instantiation: a propose-evaluate-accept loop with a conservative acceptance rule, regression-tested on held-out splits, and bounded edits rather than free-form rewrites. The empirical results (held-out improvements of 14–21 pp across three models) show that the open problem is closer to solved than to speculative.
 
-### Strictly weaker than Meta-Harness, but model-agnostic
-Meta-Harness (Lee et al., 2026) uses a stronger external agent to optimize a weaker target's harness — strictly more capable, but requires access to a stronger model. Self-Harness's contribution is that the same model can drive its own improvement without that external anchor. This matters for frontier models where no stronger model exists to provide guidance, and for deployment contexts where model families differ from training stacks.
+### Weaker proposer than Meta-Harness, but model-agnostic
+Meta-Harness (Lee et al., 2026) uses a stronger external model as the proposer to optimize a weaker target agent's harness — the proposer can find and evaluate edits beyond what the target could propose for itself, but requires access to that stronger model. Self-Harness's contribution is that the same model can drive its own improvement without that external anchor. This matters for frontier models where no stronger model exists to provide guidance, and for deployment contexts where model families differ from training stacks.
 
 ### Bounded edits vs. free evolution
-Self-Harness deliberately constrains the proposal space: each edit must target one mechanism, modify only the relevant surface, and not rewrite the control architecture. This contrasts with broader self-evolution work (Gödel Agent, Darwin Gödel Machine, The AI Scientist) where the harness and model weights can change together. The narrower scope is what makes regression testing decisive: small bounded edits either improve a specific held-in failure mechanism or they don't, and the acceptance rule is auditable.
+Self-Harness deliberately constrains the proposal space: each edit must target one mechanism, modify only the relevant surface, and not rewrite the control architecture. This contrasts with broader self-evolution work (Gödel Agent, Darwin Gödel Machine, The AI Scientist) where the agent program or scaffold can change together. The narrower scope is what makes regression testing decisive: small bounded edits either improve a specific held-in failure mechanism or they don't, and the acceptance rule is auditable.
 
 ## Design Properties
 
@@ -94,7 +99,7 @@ Self-Harness deliberately constrains the proposal space: each edit must target o
 
 ## The Acceptance Rule as a Safety Mechanism
 
-The conservative acceptance rule — improve at least one split without degrading the other — is the key safety property. It prevents the harness from:
+The conservative acceptance rule — improve at least one split without degrading the other — is the key safety property. It reduces the risk of:
 
 - **Overfitting** to the held-in evidence at the cost of held-out performance
 - **Pareto trades** that improve aggregate pass count but break specific task types
@@ -120,19 +125,20 @@ In domains where higher-stakes harness changes matter, the rule is the floor, no
 ## Related
 
 - [[harness-mechanisms]] — Self-Harness is a meta-loop over the harness mechanisms (planning, memory, tool use, control, optimization)
-- [[multi-agent-code-orchestration]] — Subagent-based decomposition and middleware creation are the structural edits Self-Harness can promote (see GLM-5 case)
+- [[multi-agent-code-orchestration]] — Subagent-based decomposition and middleware creation are the structural edits Self-Harness can promote (see the Qwen3.5-35B-A3B case)
 - [[code-as-agent-harness]] — The harness surface that Self-Harness modifies is the [[harness-interface]] layer
 - [[verifiability]] — The acceptance rule relies on the verifiability principle: trustworthy pass/fail signals are the substrate for self-evolution
 - [[verification-loop]] — Held-out regression testing extends the verification loop to the self-evolution process itself
 - [[recursive-agent-harness]] — The complementary pattern: same model, but recursing over the harness rather than editing it
 - [[babysitter-agent]] — The babysitter manages the agent's context; Self-Harness manages the agent's harness — the same invisible-maintenance pattern at different layers
 - [[software-factory]] — Software factories automate spec-to-software; Self-Harness automates harness-engineering — both self-optimization at different layers of the stack
-- [[harnessx]] — Extends Self-Harness with typed composition, [[operational-mirror]] pathology taxonomy, [[variant-isolation]] ensemble routing, and [[harness-model-co-evolution]]; the more powerful but more architecturally demanding alternative
+- [[harnessx]] — The wiki's sibling paradigm (a pairing, not the paper's own lineage): typed composition, [[operational-mirror]] pathology taxonomy, [[variant-isolation]] ensemble routing, and [[harness-model-co-evolution]]; the more powerful but more architecturally demanding alternative
 - [[harness-handbook]] — The behavior-centric map that supplies the localization layer Self-Harness assumes exists; a coding agent needs the Handbook's behavior→source map before it can apply Self-Harness's bounded edits
+- [[harness-tax]] — The complementary measurement: off-the-shelf harness swaps move cost, not success — which is what makes engineered harness gains (this page) a capability result rather than a between-harness selection effect (for the [[harnessx]] figure, §7.7's peak-on-evolution-set selection bias still applies)
 
 ## Self-Harness vs. HarnessX: A Comparison
 
-The [[harnessx]] paper (Darwin Agent Team, arXiv 2606.14249v1, June 2026) generalizes the Self-Harness paradigm in three orthogonal ways. Both are concrete instantiations of the [[harness-engineering]] §5.2.3 open problem; both rely on the same model as agent and proposer; both produce regression-tested bounded edits. They differ in three areas:
+The wiki pairs the [[harnessx]] paper (Darwin Agent Team, arXiv 2606.14249v1, June 2026) with Self-Harness along three orthogonal axes of the same problem space — this pairing is the wiki's framing, not the paper's lineage; HarnessX cites no Self-Harness. Both address the [[harness-engineering]] §5.2.3 open problem, and both produce regression-tested bounded edits. They differ in who proposes: Self-Harness relies on the same model as agent and proposer, while HarnessX drives evolution with a separate meta-agent (Claude Opus 4.6) that can differ from the task agent (§6.1/§7.4). They differ in three areas:
 
 ### 1. Harness substrate: opaque string vs. typed object
 - **Self-Harness** treats the harness as an opaque configuration (a prompt template, a set of tool definitions, a control policy) and edits it as a string. The proposer generates edits by string manipulation, and the acceptance rule is a black-box regression test.
@@ -140,7 +146,7 @@ The [[harnessx]] paper (Darwin Agent Team, arXiv 2606.14249v1, June 2026) genera
 
 ### 2. Failure-mode coverage: implicit acceptance rule vs. named pathology defenses
 - **Self-Harness** relies on a single conservative acceptance rule (improve at least one split without degrading the other) to prevent regression. It does not name specific failure modes; the acceptance rule is the only defense.
-- **HarnessX** grounds the design in the [[operational-mirror]] — a formal RL ↔ symbolic-space correspondence that predicts **three concrete failure modes**:
+- **HarnessX** grounds the design in the [[operational-mirror]] — an RL ↔ symbolic-space correspondence that predicts **three concrete failure modes**:
   - **Reward hacking** — defended by the **Critic**, which assesses non-local effects and may issue one revision request to the Evolver
   - **Catastrophic forgetting** — defended by the **deterministic gating layer**, which enforces the **seesaw constraint** (no regression on previously-solved tasks)
   - **Under-exploration** — defended by the **Planner**, which constructs the adaptation landscape before edit generation, ensuring structural changes are considered alongside incremental prompt edits
@@ -156,10 +162,10 @@ The [[harnessx]] paper (Darwin Agent Team, arXiv 2606.14249v1, June 2026) genera
 |---|---|---|
 | Base models | M2.5, Qwen3.5-35B-A3B, GLM-5 | Sonnet 4.6, GPT-5.4, Qwen3.5-9B |
 | Benchmark | Terminal-Bench-2.0 (64-task subset) | ALFWorld, GAIA, WebShop, τ3-Bench, SWE-bench Verified |
-| Held-out gain | +14.2 to +21.4 pp | +14.5% average across 15 model-benchmark configurations (peak +44.0%) |
+| Reported gain | +14.2 to +21.4 pp (held-out) | +14.5% average across 15 model-benchmark configurations (peak +44.0%) — on the evolution task set; held-out not evaluated (§6.1/§7.7) |
 | Scaling law | Per-model | Inverse-scaling (weaker models gain most) |
 | Acceptance rule | Conservative split-level (held-in/held-out) | Per-task seesaw (regression-free on prior passes) + Critic assessment |
-| Failure modes addressed | Implicit (conservative acceptance prevents most) | Named (reward hacking, forgetting, under-exploration with named defenses) |
+| Failure modes addressed | Implicit (non-regressive acceptance only) | Named (reward hacking, forgetting, under-exploration with named defenses) |
 | Co-evolution | No | Yes (cross-harness GRPO, +4.7% over harness-only) |
 | Cost efficiency | Not reported | ~12% fewer tokens than single-agent CC SDK evolver on GAIA |
 
@@ -169,3 +175,5 @@ The two are not competitors — they live at different points on the simplicity/
 
 - `raw/2606.09498.md` — Zhang, Zhang, Li, Zhang, Chen, Zhang, Bai, Hu (Shanghai AI Lab, 2026). *Self-Harness: Harnesses That Improve Themselves.* Full paper: §1 motivation, §3 algorithm, §4 experiments, §5 conclusion. Empirical results on Terminal-Bench-2.0 with MiniMax M2.5, Qwen3.5-35B-A3B, GLM-5.
 - `raw/2606.14249.md` — Chen, Lu, Zhao, Meng, Shao, Luan et al. (Darwin Agent Team, 2026). *HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry.* arXiv 2606.14249v1 (12 Jun 2026). §3 (typed composition: processor abstraction, eight hook points, nine-dimension taxonomy), §4.1 (operational mirror), §4.2 (three predicted pathologies with architectural defenses), §4.3 (AEGIS pipeline), §4.5 (variant isolation), §5 (harness-model co-evolution), §6.4 (meta-agent effectiveness ablation). Source for the comparison section above.
+- `raw/harnesstax-how-much-does-the-harness-matter-for-coding-agents.md` — Pan et al. (UC Berkeley + Arena, 2026). Source for the HarnessTax reconciliation callout only: the ±5% Terminal-Bench 2.0 cross-harness success bound used to delimit what the +14–21 pp gains above demonstrate.
+- `raw/2605.18747.md` — Ning, Tieu, Fu et al. (2026). *Code as Agent Harness* survey. Source for the §5.2.3 "Self-Evolving Harnesses without Regression" open-problem framing cited twice in the body (the "Self-evolving harness as the open problem comes due" subsection and the HarnessX comparison).
