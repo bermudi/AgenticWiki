@@ -34,6 +34,23 @@ For each diff hunk:
 4. Check dates, `unaudited_marginal`, and source lists against both versions.
 5. Report only concrete regressions that can be tied to a hunk.
 
+### Fix specs
+
+Every CRITICAL and WARNING that should be fixed must carry a fix spec the coordinator can verify mechanically:
+
+```markdown
+Fix spec: `wiki/path.md` — exact current text → exact replacement text
+Basis: pre-change version, source, or convention supporting the replacement
+```
+
+Quote the current text verbatim and minimally so it occurs exactly once in the page. `ADVISORY` is available only to WARNING findings — a CRITICAL always carries a fix spec: when the exact replacement is uncertain, the spec states the smallest accurate correction plus the evidence so the writer can construct the precise wording. Advisory findings default to explicit-debt representation instead of a fix round.
+
+## Close-Out Re-Review
+
+After a remediation pass, the diff reviewer runs once more in close-out mode. Input: the remediated page paths, the pre-remediation staged versions (the coordinator supplies the recorded OIDs from round 1), and the fix ledger.
+
+Judge only the remediation delta — did each fix land, and did the fix hunks introduce regressions? Do not reopen the original diff or issue findings on unchanged text; defects noticed elsewhere go under `OUT-OF-SCOPE` as debt candidates. New findings on fix hunks use the normal severity vocabulary, but they never trigger a third review round: new CRITICALs there get one bounded mechanical fix, new warnings become debt representation.
+
 ## Findings
 
 ### Unrelated edits
@@ -92,10 +109,13 @@ Quote the old value from version control before calling a date regression.
 - `raw/file.md` — relevance to the changeset
 
 ### CRITICAL
-- `page.md`, hunk: before → after; concrete regression; source evidence
+- `page.md`, hunk: before → after; concrete regression; source evidence; fix spec + basis
 
 ### WARNING
-- `page.md`, hunk: reviewable concern and why it matters
+- `page.md`, hunk: reviewable concern and why it matters; fix spec + basis, or ADVISORY
+
+### OUT-OF-SCOPE
+- pre-existing defects outside this changeset's hunks, noted as `meta/tech-debt.md` candidates; no edit proposed in this filing
 
 ### CLEAN
 - material transitions checked and confirmed

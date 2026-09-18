@@ -55,7 +55,7 @@ The filing pipeline has two adapters. **Full topology** uses dispatched write-ca
 
 - `.agents/skills/reviewing-wiki-theory/SKILL.md` — whole-wiki theory coherence gate
 - `.agents/skills/reviewing-wiki-diffs/SKILL.md` — transition integrity of a changeset diff
-- `.agents/skills/verifying-source-fidelity/SKILL.md` — one page against every raw source it lists
+- `.agents/skills/verifying-source-fidelity/SKILL.md` — one page against its listed raw sources (full for new pages/audits, diff-scoped for updates)
 - `.agents/skills/reviewing-wiki-quality/SKILL.md` — structure, clarity, context, navigation, thread quality
 
 The writer skill is `.agents/skills/filing-agentic-sources/SKILL.md`. In Freebuff, the same named reviewer skills run report-only before the pass may switch to fixer role; any staged mutation forfeits approval.

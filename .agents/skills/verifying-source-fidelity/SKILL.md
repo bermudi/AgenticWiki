@@ -1,6 +1,6 @@
 ---
 name: verifying-source-fidelity
-description: "Verifies one AgenticWiki page against every raw source it lists. Full topology uses an isolated read-only worker; Freebuff uses a fresh baton review pass."
+description: "Verifies one AgenticWiki page against its listed raw sources: full mode (every source) for new pages and audits, targeted mode (changed hunks and their sources) for updated pages. Full topology uses an isolated read-only worker; Freebuff uses a fresh baton review pass."
 ---
 
 # Verifying Source Fidelity
@@ -11,20 +11,27 @@ Judge final-state fidelity: whether one wiki page accurately represents its file
 
 This is report-only while making the judgment. Full-topology workers never edit, stage, commit, or delete. A Freebuff baton pass may switch to fixer only after recording all judgments; then it forfeits approval.
 
+## Review Modes
+
+- **`full`** — the page is new, or the invocation is an audit or debt resolution. Read and verify against **every** `raw/` source listed in the page's frontmatter and `## Sources` section.
+- **`targeted`** — the page already exists and a filing updated it. Verify only the claims in the filing's changed hunks and their enclosing sections; read only the sources supporting those claims. The worker derives the changed sections from the staged diff itself, not from a coordinator summary.
+
+Full verification of a page happens when the page is created. Updated pages are not re-read against all sources on every filing — that cost bought almost no findings and is the main reason filings ran long. Defects noticed on unchanged text are reported under scope tagging below, not silently dropped.
+
 ## Worker Capabilities
 
 Require repository read/search access. Media-skill access is required for multi-speaker audio/video sources when textual cues are insufficient to settle who said what. General web search is unnecessary: when filed sources cannot settle an external fact, report a precise question for `researching-wiki-claims`. Full topology denies local writes, staging, commits, and deletion; baton mode enforces the same restriction behaviorally during review.
 
 ## Input Contract
 
-Require one wiki page path. Read:
+Require one wiki page path and a review mode. Read:
 
-1. the complete page;
-2. every `raw/` source listed in its frontmatter and `## Sources` section;
+1. the complete page (for structure and context; in `targeted` mode unchanged sections are not re-verified);
+2. the raw sources the mode requires: all listed sources in `full` mode; only those supporting in-scope claims in `targeted` mode;
 3. `meta/wiki-conventions.md` for current page and source contracts;
 4. narrowly relevant existing wiki pages when needed to check canonical names or explicit contradictions.
 
-Report missing or desynchronized source references as defects. Do not substitute web research for a listed raw source.
+Frontmatter `sources:` / `## Sources` agreement is checked in both modes. Report missing or desynchronized source references as defects. Do not substitute web research for a listed raw source.
 
 ## Review Method
 
@@ -37,7 +44,23 @@ Review material, reusable claims rather than pretending to inventory every sente
 - summary claims likely to drive future synthesis;
 - interpretations, predictions, and normative claims that require attribution.
 
-For each material claim, identify its supporting source and assess whether the page's wording is no stronger than that source permits.
+For each material claim, identify its supporting source and assess whether the page's wording is no stronger than that source permits. In `targeted` mode this applies to in-scope claims only.
+
+## Scope Tagging and Fix Specs
+
+Classify every finding relative to the supplied change scope:
+
+- **IN-SCOPE** — the claim sits anywhere in the page (`full` mode) or in a changed hunk or its enclosing section (`targeted` mode).
+- **OUT-OF-SCOPE** — a WARNING/INFO on pre-existing text outside the changed hunks and enclosing sections. Report it and mark it `OUT-OF-SCOPE: route to tech-debt`; it is not fix-routed in this filing. An **OUT-OF-SCOPE CRITICAL stays fix-routable** — a fabricated or contradicted claim must not survive the filing as a debt row.
+
+Every CRITICAL and WARNING that should be fixed must carry a **fix spec** the coordinator can verify mechanically:
+
+```markdown
+Fix spec: `wiki/path.md` — exact current text → exact replacement text
+Basis: source locus or convention supporting the replacement
+```
+
+Quote the current text verbatim and minimally so it occurs exactly once in the page. `ADVISORY` is available only to WARNING/INFO findings — advisory findings default to explicit-debt representation instead of a fix round. A CRITICAL always carries a fix spec: when the exact replacement is uncertain, the spec states the smallest accurate correction plus the source evidence so the writer can construct the precise wording.
 
 ## Required Checks
 
@@ -97,21 +120,27 @@ Check titles, roles, affiliations, project/tool labels, benchmark names, and tec
 ```markdown
 ## Source Fidelity: PASS | PASS WITH WARNINGS | FAIL
 
+- Mode: full | targeted
+- Scope reviewed: whole page | changed hunks + enclosing sections
+
 ### Sources Checked
 - `raw/file.md` — type and contribution
 
 ### Claim coverage
-For substantive pages, enumerate the material claims actually checked (group only genuinely repeated claims). Include the summary/lede, every load-bearing paraphrase, and numeric slash notation where present:
+For substantive pages, enumerate the material claims actually checked (group only genuinely repeated claims). In `targeted` mode, cover the in-scope claims. Include the summary/lede, every load-bearing paraphrase, and numeric slash notation where present:
 
 | Section / claim | Raw source and location | Attribution / framing check | Result |
 |---|---|---|---|
 | ... | ... | actor, action, modality, source-specific vocabulary | supported / drift / unresolved |
 
 ### CRITICAL
-- section/claim; source evidence; smallest accurate correction
+- section/claim; source evidence; IN/OUT-OF-SCOPE; fix spec + basis
 
 ### WARNING
-- section/claim; evidence limitation; recommended treatment
+- section/claim; evidence limitation; IN/OUT-OF-SCOPE; fix spec + basis, or ADVISORY
+
+### OUT-OF-SCOPE
+- pre-existing defects noted but not fix-routed in this filing (CRITICALs excepted); candidates for `meta/tech-debt.md`
 
 ### External Questions
 - exact fact that requires focused web research, and why filed sources cannot settle it

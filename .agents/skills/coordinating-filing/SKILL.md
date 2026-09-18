@@ -81,8 +81,8 @@ For each source retain only the supplied URL/local path, class inferable from lo
    ```
    Route content errors to the owning writer. A clean check is necessary but is not a semantic verdict.
 5. **Verify the complete staged changeset.** Load `verifying-wiki-changes` in `staged-changeset` mode and supply the complete wiki/raw/process boundary, scope, `FILING_DATE`, and media records. Follow the selected adapter for reviewer construction. Generic code review is extra only and cannot fill a wiki-review row.
-6. **Route findings and close loops.** Content owners apply fixes. Re-stage only their exact paths, run `filing-check paths` with the same repeated paths, and rerun every affected semantic reviewer across the full error-pattern footprint. Validator-only closure is forbidden. Media questions follow the verifier's Tier-1 route and return to the writer; the media call alone never closes fidelity review.
-7. **Represent debt and process evidence before approval.** Any accepted evidence gap must already exist as honest in-page posture or a staged `meta/tech-debt.md` row. Materially new recommendation evidence is recorded once per filing transaction in staged `meta/pipeline-recommendations.md`; subsequent fresh passes do not duplicate unchanged evidence. Re-run the mechanical floor and verification aggregation; reviewer reports may be reused only under the verifier's same-run, ledger-only, content-OID-identical rule.
+6. **Remediate once, then close out.** Route every CRITICAL (including out-of-scope CRITICALs), every IN-SCOPE warning carrying a fix spec, accepted theory suggestions, and Rule-9 callout representations for known-unrouteable reader-facing warnings to the owning writer as ONE batched pass; the writer repairs each finding's whole error pattern within it and dispositions any spec it adjusted or declined. Re-stage only the exact repaired paths and run `filing-check paths` with the same repeated paths. Then run the verifier's single close-out round: mechanically verify exact fix specs against staged bytes, re-review the remediation delta (fixes and callouts) with the diff reviewer, targeted fidelity for semantically adjusted fixes, theory/quality only under the verifier's convergence conditions. There is no third round — residual warnings become Rule-9 debt representation (page callouts ride in the reviewed batches; ledger rows are coordinator-owned meta). Validator-only closure of semantic findings is forbidden; mechanical closure applies only to exact fix specs proven against staged bytes. Media questions follow the verifier's Tier-1 route and return to the writer; the media call alone never closes fidelity review.
+7. **Represent debt and process evidence before approval.** Any accepted evidence gap must already exist as honest in-page posture or a staged `meta/tech-debt.md` row. Materially new recommendation evidence is recorded once per filing transaction in staged `meta/pipeline-recommendations.md`; subsequent fresh passes do not duplicate unchanged evidence. Re-run the mechanical floor and verification aggregation; reviewer reports may be reused only under the verifier's same-run, ledger-only, content-OID-identical rule plus its aggregation reuse exception for round-1 theory/quality rows whose close-out trigger did not fire.
 8. **Commit through the adapter gate.** Commit only after `PASS` or `PASS WITH EXPLICIT DEBT`, with all loops closed and no unresolved CRITICAL or question. Full topology uses the coordinator's normal commit after the final mechanical rerun; baton uses only the script-owned zero-delta commit path. "Stop before commit" overrides filing authorization.
 9. **Reconcile and report.** Compare the report with `git diff --cached --stat`, or after commit with `git show --stat --oneline HEAD`.
 
@@ -100,7 +100,7 @@ The stable review boundary is the union of all cumulative writer-staged wiki pat
 
 The verifier, not this common skill, classifies changes as mechanical/substantive/high risk and decides which named reviews apply. Preserve all four rows — theory, diff, source-fidelity, quality — including justified `SKIPPED`, and same-run ledger-only reuse where allowed. An unavailable row is incomplete verification. The common skill only ensures the verifier ran; it does not second-guess which rows the verifier required.
 
-When a reviewer reports a deterministic defect, rerun the named mechanical command before accepting or diagnosing the claim. When a fix lands, the owning content role reports it, but authoritative checkout evidence controls. Re-review the whole error pattern: for example all changed dates after a date error, all source declarations after desynchronization, and all changed Related sections after relationship loss.
+When a reviewer reports a deterministic defect, rerun the named mechanical command before accepting or diagnosing the claim. When a fix lands, the owning content role reports it, but authoritative checkout evidence controls. The writer repairs the whole error pattern inside the single remediation pass — all instances of a wrong date, all desynchronized source declarations, all affected Related sections — while re-review stays scoped to the convergence close-out: an exact fix spec proven against staged bytes closes its own finding, and everything else is re-reviewed once over the remediation delta.
 
 Tier-1 media adjudication is narrow evidence for the verifier's structured Audio Attribution or Exact Quote question, never as proper-noun spelling authority.
 
@@ -132,7 +132,7 @@ Maintain these compact records while the selected adapter runs. They make a fili
 ### Review record
 - all four named rows with dispatch/pass identity and verdict;
 - carried/reused/skip basis where canonically allowed;
-- each finding → owner → repaired paths → mechanical check → semantic rerun chain;
+- each finding → owner → repair → closure chain (mechanical fix-spec match, close-out rerun verdict, or Rule-9 debt representation);
 - debt/process representation and content-OID identity proof;
 - media questions and their structured results.
 
@@ -151,7 +151,7 @@ These are hard gates, not guidance. The adapter may add controls but cannot rela
 - A writer cannot commit. A full-topology coordinator cannot perform a failed content role inline.
 - Required workers/reviewers cannot be replaced by coordinator reading, same-context judgment, or a generic agent. Generic code review is not wiki review.
 - `filing-check` is mechanical evidence, never a semantic `PASS`.
-- Every semantic fix invalidates affected judgments and requires the appropriate rerun; claim/source fixes require fidelity review, substantive transition rewrites require diff review, and structural/chronology changes require quality review; theory pressure requires theory review.
+- Filing verification converges: one full review round, one batched remediation pass, one scoped close-out round — never a third round. An exact fix spec proven against staged bytes closes its own finding; the close-out re-reviews the remediation delta with the diff reviewer whenever remediation edited anything, adds targeted fidelity for semantically adjusted claim/source fixes, quality for structural changes, and theory for thread-touching remediation. Residual warnings terminate as Rule-9 debt representation, not as further rounds; the two bounded closure loops (a round-2 critical's single mechanical fix, a round-2 reader-facing warning's single representation edit plus hunk diff review) are the only exceptions.
 - No commit on `FAIL`, `VERIFICATION DEFERRED`, unavailable reviewer rows, malformed/skipped-without-reason rows, deferred debt registration, deferred process evidence, an open retry/fix/media/review loop, or an unresolved human decision.
 - Commentary remains attributed framing unless independently supported; never launder it into fact. Contradictions and fragile evidence are represented explicitly under wiki conventions.
 - A staged boundary/OID check proves bytes, not command history; record exact staging commands when exposed and disclose when telemetry is unavailable.
@@ -172,7 +172,7 @@ Use this short checklist together with the selected adapter's detailed gates. A 
 - [ ] Explicitly staged all raw, asset, and process paths; unrelated staged/worktree paths remain untouched.
 - [ ] `filing-check staged` passed on the stable complete union before review.
 - [ ] `verifying-wiki-changes` recorded all four reviewer rows (theory, diff, source-fidelity, quality); generic review appears only as `EXTRA`.
-- [ ] Every fix was exactly re-staged, mechanically checked, and followed by affected semantic reruns over the full pattern.
+- [ ] Fixes ran as one batched remediation pass; each fix spec was mechanically closed against staged bytes or covered by the single scoped close-out round; no third review round occurred.
 - [ ] Media questions, debt registration, and same-run process evidence are closed inside the reviewed boundary.
 - [ ] Final mechanical check and topology-specific commit gate passed; no deferred/fail/open state was committed.
 - [ ] Final report matches staged/committed Git evidence and discloses retries, stalls, empty returns, hard stops, and interventions.

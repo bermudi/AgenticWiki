@@ -84,7 +84,7 @@ A capable harness uses shared-checkout writers and isolated reviewers. Freebuff 
 | 4. Mechanical validation | `scripts/filing-check staged --filing-date "$FILING_DATE"` checks the complete staged boundary (parity, whitespace, and `validate-page` on wiki/raw). In Freebuff, the harness's built-in code reviewer still runs as a pre-flight after staging, but it is extra only and never substitutes for the mechanical check. | Coordinator | Yes—errors return to the writer. |
 | 5. Theory review | Full topology uses an isolated theory reviewer. Freebuff runs the same report-only judgment in a fresh review pass. | Theory reviewer / baton pass | Only a structural decision or unresolved critical conflict requires you. |
 | 6. Independent verification | Full topology uses isolated reviewers. Freebuff's fresh pass runs the named diff, source-fidelity, and quality methods against the complete staged tree. | Reviewers / baton pass | Yes—missing required review keeps the gate closed. |
-| 7. Fix loop | Full topology routes fixes to the writer. A Freebuff reviewer may switch to fixer, but then another fresh session must review its staged result. | Writer / baton fixer | Repeats until pass or a real blocker remains. |
+| 7. Fix loop | Full topology routes all fixes to the writer as one batched pass, then runs one scoped close-out review. A Freebuff fresh pass may switch to fixer at most once, batching the whole fix ledger; a fresh session then reviews the fix delta. | Writer / baton fixer | Bounded: review round → one batched fix pass → one close-out round. Leftover warnings become recorded debt instead of extra rounds; only a newly introduced critical issue (or a reader-facing warning needing one callout) loops once more. |
 | 8. Commit gate | Full topology commits through the coordinator. Freebuff commits exactly the approved tree through `scripts/filing-baton`. | Coordinator / baton approver | Yes—FAIL, incomplete review, open loops, or critical issues prevent commit. |
 | 9. Report | You receive sources, pages, theory pressure, unresolved issues, worker dispatches, retries, and commit status. | Coordinator | — |
 
@@ -125,7 +125,7 @@ The reviewer reports; it does not edit.
 - **Freebuff review/fix pass:** a fresh session makes all applicable reviewer judgments; if it then fixes anything, it cannot approve those bytes.
 - **Theory reviewer:** compares a filing with the complete thread/concept map and reports theory pressure.
 - **Diff reviewer:** checks that existing meaning, caveats, and unrelated prose were not damaged.
-- **Source-fidelity reviewer:** checks claims, quotations, attribution, modality, scope, and vocabulary against every listed raw source.
+- **Source-fidelity reviewer:** checks claims, quotations, attribution, modality, scope, and vocabulary against the page's listed raw sources — every source for a new page or audit, and the changed sections' sources for an update to an existing page.
 - **Quality reviewer:** checks whether substantial pages are readable, well structured, and well connected.
 - **Query agent:** answers from already filed material without editing unless you separately request a filing.
 - **Audit agent:** checks repository health, resolves selected debt, or performs a deep semantic audit.
@@ -138,7 +138,7 @@ Outside Freebuff, the writer must be a dispatched, write-capable worker editing 
 ## What the verdicts mean
 
 - **PASS:** required checks passed. The coordinator commits unless you said “stop before commit.”
-- **PASS WITH EXPLICIT DEBT:** the bounded change is acceptable, but a real limitation remains. A reader-facing gap is warned about on the affected page; structural, recurring, source-artifact, or out-of-scope content debt goes in `meta/tech-debt.md`; process debt goes in `meta/pipeline-recommendations.md`. Both page and ledger are used when both apply. The coordinator then commits unless you said “stop before commit.”
+- **PASS WITH EXPLICIT DEBT:** the bounded change is acceptable, but a real limitation remains. A reader-facing gap is warned about on the affected page; structural, recurring, source-artifact, or out-of-scope content debt goes in `meta/tech-debt.md`; process debt goes in `meta/pipeline-recommendations.md`. Both page and ledger are used when both apply. This is the normal landing spot for minor reviewer warnings: mechanically specified fixes are applied and verified in the single batched fix pass, and anything that cannot be safely fixed in the filing is recorded here instead of triggering repeated review rounds. The coordinator then commits unless you said “stop before commit.”
 - **FAIL:** something must be fixed and re-reviewed. No commit.
 
 An **operational stop** occurs when the applicable topology cannot complete, the agent needs your decision, or a critical issue cannot be resolved safely. The commit gate remains closed; verification is incomplete or failed rather than a fourth verdict.
@@ -156,7 +156,8 @@ Before committing, the coordinator must know—not ask you to guess—that:
 - the staged files are exactly the intended filing and match the bytes reviewers saw;
 - mechanical checks pass for the changed files;
 - every required theory, diff, source-fidelity, and quality review completed through isolated workers or a fresh zero-delta Freebuff pass, or has a rule-based reason to be skipped;
-- every resolvable finding was fixed and the affected checks/reviews reran;
+- every critical finding was fixed and re-verified, and every mechanically specified fix was proven against the staged bytes; semantically adjusted fixes were re-reviewed once in the close-out round;
+- findings that cannot be safely fixed in this filing are represented as explicit debt rather than left silent;
 - no fix loop, reviewer task, or external research question remains open;
 - no unresolved critical issue remains;
 - accepted unresolved or out-of-scope limitations have the appropriate durable record: page warning, content/artifact debt row, process-recommendation row, or both.

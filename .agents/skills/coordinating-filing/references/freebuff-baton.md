@@ -97,7 +97,9 @@ Each row is always present. Use `SKIPPED: <specific risk-rule reason>` only when
 
 Obey every reviewer skill's report-only/no-edit contract while making and recording all judgments. If findings require edits, finish those judgments first, explicitly switch the pass into **fixer role**, then edit/stage. The switch forfeits approval authority. A pass that mutates any staged OID/tree can only report `changed`, never clean.
 
-Apply the common fix rules: repair the full error-pattern footprint, exact-restage, and run `filing-check paths --filing-date "$FILING_DATE" --path <repaired-paths>` for repaired paths. Semantic acceptance waits for another fresh pass; mechanical validation cannot substitute.
+Apply the convergence rules: a fresh pass may switch to fixer **at most once** — batch the whole fix ledger into that single pass: every CRITICAL (including out-of-scope CRITICALs), every IN-SCOPE warning carrying a fix spec, accepted theory suggestions, and Rule-9 callout representations for known-unrouteable reader-facing warnings — repairing each finding's full error pattern inside it. Advisory (WARNING/INFO only) and out-of-scope warning/INFO findings are not fix-routed; the next fresh pass represents them as debt rows. Exact-restage, run `filing-check paths --filing-date "$FILING_DATE" --path <repaired-paths>`, finish `changed`, and hand off. Semantic acceptance waits for another fresh pass; mechanical validation cannot substitute.
+
+The next fresh pass still runs all four rows, but scoped to convergence: the diff reviewer judges the fix delta (fixes and callouts) against the recorded pre-fix boundary; source-fidelity mechanically counts exact fix specs against staged bytes (current text absent, replacement present once) and re-verifies only adjusted fixes' hunks in `targeted` mode; theory/quality make a scoped fresh current-boundary judgment that their round-1 conclusions still hold given the fix delta — a fresh judgment, not a carried verdict — unless remediation touched threads or page structure, in which case they re-judge in full. The sole permitted second fixer switch is one of the two bounded closure loops — the mechanical fix for a round-2 critical on a fix hunk, or the single verbatim callout edit representing a round-2 reader-facing warning — each covered by a diff review of its hunk; it may not reopen the ledger. New findings on unchanged text are debt candidates, not a new fix round. There is no third round: residual warnings terminate as `PASS WITH EXPLICIT DEBT: <where represented>` rows on the zero-delta approving pass.
 
 ## 4. Finish-review transitions
 
@@ -233,6 +235,7 @@ Then run `./scripts/filing-baton handoff --source <source-slug>` and append its 
 No baton path may:
 
 - approve in the same pass after any mutation;
+- run repeated fixer passes for spec-fixable findings instead of one batched pass per review cycle;
 - leave a new/changed raw artifact unstaged at `finish-write`;
 - treat validator or generic code review as a semantic row;
 - omit any of the four rows (theory, diff, source-fidelity, quality) from clean approval;

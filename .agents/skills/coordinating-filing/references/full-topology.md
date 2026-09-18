@@ -162,7 +162,7 @@ Immediately before and after each dispatch capture authoritative `git ls-files -
 
 Record exact staging commands when telemetry exists. If unavailable, disclose that; a correct final set cannot prove which command produced it.
 
-Writer-originated Tier-1 questions follow `verifying-wiki-changes`: coordinator runs the focused media tool, returns the structured result to the writer, exact-restages the resulting wiki/source annotation, and repeats fidelity review until closed.
+Writer-originated Tier-1 questions follow `verifying-wiki-changes`: coordinator runs the focused media tool, returns the structured result to the writer, and exact-restages the resulting wiki/source annotation. Media corrections join the remediation batch (or, if surfaced at close-out, the bounded closure loops) and are covered by the convergence close-out — media routing is part of the two-round structure, not an exception to it.
 
 ## 7. Raw boundary and exact coordinator staging
 
@@ -183,8 +183,19 @@ Load [verifying-wiki-changes](../../verifying-wiki-changes/SKILL.md) inline; do 
 
 Use the verifier's canonical reviewer rows — theory, diff, source-fidelity, quality — plus media-question routing, verdict translation, debt holds, and report. A generic code reviewer is extra only. If a required reviewer becomes unavailable, enter deferred verification.
 
-Route fixes to the owning writer. After each fix, inspect authoritative changes, exact-restage, run `filing-check paths --filing-date "$FILING_DATE" --path <repaired-paths>`, and redispatch every semantically affected reviewer over the full error-pattern footprint. No validator-only closure.
+Verification converges in three dispatch waves after writing (the verifier's review-rounds section defines the contracts):
 
-Reviewer report reuse is limited to the verifier's same-run ledger-only aggregation rerun after proving every reviewed wiki/raw OID unchanged.
+1. **Round 1 — full review, parallel.** Dispatch every required row over the complete staged boundary; source-fidelity is `full` mode for new pages and `targeted` mode (changed hunks + enclosing sections) for updated pages. Record each content path's staged blob OID set — the close-out needs them as the pre-remediation baseline.
+2. **One remediation pass.** Dispatch ONE fresh writer with the complete fix ledger — every CRITICAL (including out-of-scope CRITICALs), every IN-SCOPE fix-spec warning, accepted theory suggestions, and Rule-9 callout representations for known-unrouteable reader-facing warnings — loading `filing-agentic-sources` as usual: apply each spec's whole error pattern, stage only the listed wiki paths, do not commit, and report a disposition for every spec adjusted or declined. After it returns, inspect authoritative changes and exact-restage (`git add -- <path>`, then `filing-check paths --filing-date "$FILING_DATE" --path <repaired-path>` for each).
+3. **Close-out.** For each fix spec, prove mechanical closure against the staged blob as an occurrence count: current text 0, replacement exactly 1 (occurrences, not matching lines):
+   ```bash
+   git show ":<path>" | grep -oF -- '<exact current text>' | wc -l   # must print 0
+   git show ":<path>" | grep -oF -- '<exact replacement>' | wc -l    # must print 1
+   ```
+   Multi-line specs need the same fixed-string occurrence count over the full blob via a short scripted check (quote safely — heredoc or file, not hand-escaped prose). Ambiguity fails closed: a spec that cannot be counted unambiguously, fails the match, or was adjusted by the writer joins the semantic set — one fresh diff reviewer over the remediation delta (fixes and callouts), targeted fidelity for pages with adjusted content fixes, theory/quality only under the verifier's convergence conditions. No validator-only closure of semantic findings; mechanical closure applies to exact fix specs only.
+
+There is no third round. A round-2 CRITICAL on a fix hunk gets one bounded mechanical fix plus staged verification or the run stops; round-2 warnings and unrouteable round-1 findings become Rule-9 debt representation staged before approval.
+
+Reviewer report reuse is limited to the verifier's same-run ledger-only aggregation rerun after proving every reviewed wiki/raw OID unchanged, plus the verifier's aggregation reuse exception: round-1 theory/quality verdicts carry into final aggregation when their close-out trigger was evaluated and did not fire.
 
 Stage debt and recommendation evidence (AG-xxx rows) before final approval. Then rerun `filing-check staged --filing-date "$FILING_DATE"`. Commit the exact staged set only on `PASS` or `PASS WITH EXPLICIT DEBT`, when authorized and all rows/loops/questions are closed. Never commit `VERIFICATION DEFERRED` or a deferred/open finding. Reconcile `git show --stat --oneline HEAD` with the final report.

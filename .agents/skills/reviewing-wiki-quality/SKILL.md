@@ -94,6 +94,11 @@ For thread pages specifically:
 - Do not turn concise pages into essays.
 - Do not make source-fidelity findings without identifying the exact claim that needs separate verification.
 - Prefer a few high-leverage findings over line-by-line copyediting.
+- Do not issue findings about pages outside the changed set; note them under `OUT-OF-SCOPE` as `meta/tech-debt.md` candidates instead.
+
+## Fix Specs
+
+Every FAIL-level defect and warning that should be fixed must carry a fix spec the coordinator can verify mechanically: `Fix spec: \`wiki/path.md\` — exact current text → exact replacement text`, quoted verbatim and minimally so it occurs exactly once. `ADVISORY` is available only to warnings — structural suggestions that cannot be expressed as an exact replacement are advisory and default to explicit-debt representation instead of a fix round. A FAIL-level defect always carries a fix spec: when the exact replacement is uncertain, the spec states the smallest useful correction plus its basis so the writer can construct the precise wording.
 
 ## Output
 
@@ -104,10 +109,13 @@ For thread pages specifically:
 - `wiki/path.md` — new | substantial rewrite | related context
 
 ### FAIL (material defects)
-- page/section; reader-facing defect; smallest useful correction
+- page/section; reader-facing defect; fix spec + basis
 
 ### Warnings
-- page/section; quality risk worth reviewing
+- page/section; quality risk worth reviewing; fix spec + basis, or ADVISORY
+
+### OUT-OF-SCOPE
+- pre-existing quality concerns on pages outside this changeset; `meta/tech-debt.md` candidates
 
 ### Source-Fidelity Questions
 - exact claim to send to `verifying-source-fidelity`
