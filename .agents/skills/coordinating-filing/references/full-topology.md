@@ -162,7 +162,7 @@ Immediately before and after each dispatch capture authoritative `git ls-files -
 
 Record exact staging commands when telemetry exists. If unavailable, disclose that; a correct final set cannot prove which command produced it.
 
-Writer-originated Tier-1 questions follow `verifying-wiki-changes`: coordinator runs the focused media tool, returns the structured result to the writer, and exact-restages the resulting wiki/source annotation. Media corrections join the remediation batch (or, if surfaced at close-out, the bounded closure loops) and are covered by the convergence close-out — media routing is part of the two-round structure, not an exception to it.
+Writer-originated Tier-1 questions follow `verifying-wiki-changes`: coordinator runs the focused media tool, returns the structured result to the writer, and exact-restages the resulting wiki/source annotation. Media corrections join the remediation batch (or, if surfaced at close-out, the bounded closure mutations) and are covered by the convergence close-out — media routing is part of the two-round structure, not an exception to it.
 
 ## 7. Raw boundary and exact coordinator staging
 
@@ -187,14 +187,13 @@ Verification converges in three dispatch waves after writing (the verifier's rev
 
 1. **Round 1 — full review, parallel.** Dispatch every required row over the complete staged boundary; source-fidelity is `full` mode for new pages and `targeted` mode (changed hunks + enclosing sections) for updated pages. Record each content path's staged blob OID set — the close-out needs them as the pre-remediation baseline.
 2. **One remediation pass.** Dispatch ONE fresh writer with the complete fix ledger — every CRITICAL (including out-of-scope CRITICALs), every IN-SCOPE fix-spec warning, accepted theory suggestions, and Rule-9 callout representations for known-unrouteable reader-facing warnings — loading `filing-agentic-sources` as usual: apply each spec's whole error pattern, stage only the listed wiki paths, do not commit, and report a disposition for every spec adjusted or declined. After it returns, inspect authoritative changes and exact-restage (`git add -- <path>`, then `filing-check paths --filing-date "$FILING_DATE" --path <repaired-path>` for each).
-3. **Close-out.** For each fix spec, prove mechanical closure against the staged blob as an occurrence count: current text 0, replacement exactly 1 (occurrences, not matching lines):
+3. **Close-out.** For each fix spec, prove mechanical closure against the staged blob as an occurrence count: current text 0, replacement exactly 1 (occurrences, not matching lines), via the deterministic checker:
    ```bash
-   git show ":<path>" | grep -oF -- '<exact current text>' | wc -l   # must print 0
-   git show ":<path>" | grep -oF -- '<exact replacement>' | wc -l    # must print 1
+   ./scripts/fix-spec-check wiki/path.md --current old.txt --replacement new.txt
    ```
-   Multi-line specs need the same fixed-string occurrence count over the full blob via a short scripted check (quote safely — heredoc or file, not hand-escaped prose). Ambiguity fails closed: a spec that cannot be counted unambiguously, fails the match, or was adjusted by the writer joins the semantic set — one fresh diff reviewer over the remediation delta (fixes and callouts), targeted fidelity for pages with adjusted content fixes, theory/quality only under the verifier's convergence conditions. No validator-only closure of semantic findings; mechanical closure applies to exact fix specs only.
+   Write both strings to files with a quoted heredoc — the checker is byte-exact and quote-safe (apostrophes, quotes, multi-line; it tolerates one heredoc-added trailing newline); hand-quoted inline grep is not. Specs carry context-unique current/replacement pairs (see the reviewer skills' fix-spec contracts) so each side counts exactly once. Ambiguity fails closed: a spec that cannot be counted unambiguously, fails the match, or was adjusted by the writer joins the semantic set — one fresh diff reviewer over the remediation delta (fixes and callouts), targeted fidelity for pages with adjusted content fixes, theory/quality only under the verifier's convergence conditions. No validator-only closure of semantic findings; mechanical closure applies to exact fix specs only.
 
-There is no third round. A round-2 CRITICAL on a fix hunk gets one bounded mechanical fix plus staged verification or the run stops; round-2 warnings and unrouteable round-1 findings become Rule-9 debt representation staged before approval.
+There is no third round. A round-2 CRITICAL — on a fix hunk or on unchanged text; fabricated claims never become debt rows — gets one bounded mechanical fix plus staged verification and a hunk diff review, or the run stops; a round-2 reader-facing warning gets its single bounded callout edit with a hunk diff review; other round-2 warnings and unrouteable round-1 findings become Rule-9 debt representation staged before approval (the coordinator stages round-1 ledger rows with the remediation return and round-2 rows at close-out). A CRITICAL surfaced while reviewing a bounded closure mutation's hunk gets no further bounded fix — the changeset is `FAIL` (or human escalation).
 
 Reviewer report reuse is limited to the verifier's same-run ledger-only aggregation rerun after proving every reviewed wiki/raw OID unchanged, plus the verifier's aggregation reuse exception: round-1 theory/quality verdicts carry into final aggregation when their close-out trigger was evaluated and did not fire.
 

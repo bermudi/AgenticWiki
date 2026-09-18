@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# Test scripts/fix-spec-check closure semantics against a throwaway git repo.
+set -euo pipefail
+
+REPO=$(mktemp -d)
+trap 'rm -rf "$REPO"' EXIT
+export GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com
+export GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com
+
+git -C "$REPO" init -q
+mkdir -p "$REPO/wiki"
+CHECK="$PWD/scripts/fix-spec-check"
+PASS=0
+FAIL=0
+
+note() { printf '%s\n' "$*"; }
+ok() { PASS=$((PASS + 1)); note "ok   - $1"; }
+bad() { FAIL=$((FAIL + 1)); note "FAIL - $1"; }
+
+expect() { # expect <desc> <wanted-exit> -- <cmd...>  (runs inside $REPO)
+  local desc=$1 want=$2; shift 3
+  set +e; (cd "$REPO" && "$@") >/tmp/fspec.out 2>/tmp/fspec.err; local got=$?; set -e
+  if [[ $got -eq $want ]]; then ok "$desc"; else bad "$desc (exit $got, wanted $want)"; cat /tmp/fspec.out /tmp/fspec.err; fi
+}
+
+stage() { git -C "$REPO" add wiki/page.md; }
+
+# Page with an apostrophe, a repeated wrong date, and a multi-line paragraph.
+cat > "$REPO/wiki/page.md" <<'EOF'
+---
+title: Test
+---
+
+The harness doesn't matter much, according to the study.
+The study was published in March 2024-03-01 by the lab.
+The follow-up also cites 2024-03-01 as the release date.
+
+> [!warning] Contradiction: one source disagrees.
+EOF
+stage
+
+cat > /tmp/cur.txt <<'EOF'
+The harness doesn't matter much, according to the study.
+EOF
+cat > /tmp/rep.txt <<'EOF'
+The harness matters less than correctness, according to the study.
+EOF
+
+# 1. Before repair: current present -> OPEN.
+expect "open before repair (apostrophe text)" 1 -- "$CHECK" wiki/page.md --current /tmp/cur.txt --replacement /tmp/rep.txt
+# 2. After repair: current gone, replacement once -> CLOSED.
+sed -i "s/The harness doesn't matter much/The harness matters less than correctness/" "$REPO/wiki/page.md"
+stage
+expect "closed after repair (apostrophe text)" 0 -- "$CHECK" wiki/page.md --current /tmp/cur.txt --replacement /tmp/rep.txt
+
+# 3. Repeated error, bare replacement: both instances repaired at once ->
+#    the error's own current text is gone but the replacement occurs twice -> OPEN.
+printf '%s' "2024-03-01" > /tmp/cur2.txt
+printf '%s' "2024-03-02" > /tmp/rep2.txt
+sed -i 's/2024-03-01/2024-03-02/g' "$REPO/wiki/page.md"
+stage
+expect "bare replacement for a repeated error stays open" 1 -- "$CHECK" wiki/page.md --current /tmp/cur2.txt --replacement /tmp/rep2.txt
+
+# 4. Trailing-newline tolerance must not mask a present current text.
+cat > /tmp/cur3.txt <<'EOF'
+The study was published in March 2024-03-02 by the lab.
+EOF
+expect "heredoc newline does not mask a present current text" 1 -- "$CHECK" wiki/page.md --current /tmp/cur3.txt --replacement /tmp/rep.txt
+
+# 5. Multi-line spec: open before repair, closed after.
+cat > /tmp/cur4.txt <<'EOF'
+The study was published in March 2024-03-02 by the lab.
+The follow-up also cites 2024-03-02 as the release date.
+EOF
+cat > /tmp/rep4.txt <<'EOF'
+The study was published in March 2024-03-03 by the lab.
+The follow-up also cites 2024-03-03 as the release date.
+EOF
+expect "multi-line spec open before repair" 1 -- "$CHECK" wiki/page.md --current /tmp/cur4.txt --replacement /tmp/rep4.txt
+sed -i 's/2024-03-02/2024-03-03/g' "$REPO/wiki/page.md"
+stage
+expect "multi-line spec closed after repair" 0 -- "$CHECK" wiki/page.md --current /tmp/cur4.txt --replacement /tmp/rep4.txt
+
+# 6. Spec errors exit 2.
+printf '%s' "2024-03-03" > /tmp/same.txt
+expect "identical current/replacement rejected" 2 -- "$CHECK" wiki/page.md --current /tmp/same.txt --replacement /tmp/same.txt
+printf '%s' 'The study was published in March 2024-03-03' > /tmp/sub-cur.txt
+printf '%s' 'The study was published in March 2024-03-03 (revised).' > /tmp/sub-rep.txt
+expect "current-inside-replacement spec rejected" 2 -- "$CHECK" wiki/page.md --current /tmp/sub-cur.txt --replacement /tmp/sub-rep.txt
+expect "unstaged path rejected" 2 -- "$CHECK" wiki/other.md --current /tmp/cur.txt --replacement /tmp/rep.txt
+: > /tmp/empty.txt
+expect "empty pattern rejected" 2 -- "$CHECK" wiki/page.md --current /tmp/empty.txt --replacement /tmp/rep.txt
+
+note "pass=$PASS fail=$FAIL"
+[[ $FAIL -eq 0 ]]

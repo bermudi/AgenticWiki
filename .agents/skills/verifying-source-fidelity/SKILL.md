@@ -51,7 +51,7 @@ For each material claim, identify its supporting source and assess whether the p
 Classify every finding relative to the supplied change scope:
 
 - **IN-SCOPE** — the claim sits anywhere in the page (`full` mode) or in a changed hunk or its enclosing section (`targeted` mode).
-- **OUT-OF-SCOPE** — a WARNING/INFO on pre-existing text outside the changed hunks and enclosing sections. Report it and mark it `OUT-OF-SCOPE: route to tech-debt`; it is not fix-routed in this filing. An **OUT-OF-SCOPE CRITICAL stays fix-routable** — a fabricated or contradicted claim must not survive the filing as a debt row.
+- **OUT-OF-SCOPE** — a WARNING/INFO on pre-existing text outside the changed hunks and enclosing sections. Report it and mark it `OUT-OF-SCOPE: route to tech-debt`; it is not fix-routed in this filing. An **OUT-OF-SCOPE CRITICAL stays fix-routable in any round** — through the remediation batch in round 1, through the bounded mechanical-fix loop at close-out — because a fabricated or contradicted claim must not survive the filing as a debt row.
 
 Every CRITICAL and WARNING that should be fixed must carry a **fix spec** the coordinator can verify mechanically:
 
@@ -60,7 +60,7 @@ Fix spec: `wiki/path.md` — exact current text → exact replacement text
 Basis: source locus or convention supporting the replacement
 ```
 
-Quote the current text verbatim and minimally so it occurs exactly once in the page. `ADVISORY` is available only to WARNING/INFO findings — advisory findings default to explicit-debt representation instead of a fix round. A CRITICAL always carries a fix spec: when the exact replacement is uncertain, the spec states the smallest accurate correction plus the source evidence so the writer can construct the precise wording.
+Quote the current text verbatim and minimally so it occurs exactly once in the page, and mirror the same disambiguating context into the replacement so it also occurs exactly once after the repair; when the same error repeats, issue one spec per occurrence with each current/replacement pair context-unique — a bare shared replacement can never close mechanically, and the replacement must not contain the current text verbatim (the closure checker rejects such specs — extend the correction instead). `ADVISORY` is available only to WARNING/INFO findings — advisory findings default to explicit-debt representation instead of a fix round. A CRITICAL always carries a fix spec: when the exact replacement is uncertain, the spec states the smallest accurate correction plus the source evidence so the writer can construct the precise wording.
 
 ## Required Checks
 

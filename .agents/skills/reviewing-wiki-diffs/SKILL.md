@@ -43,13 +43,13 @@ Fix spec: `wiki/path.md` — exact current text → exact replacement text
 Basis: pre-change version, source, or convention supporting the replacement
 ```
 
-Quote the current text verbatim and minimally so it occurs exactly once in the page. `ADVISORY` is available only to WARNING findings — a CRITICAL always carries a fix spec: when the exact replacement is uncertain, the spec states the smallest accurate correction plus the evidence so the writer can construct the precise wording. Advisory findings default to explicit-debt representation instead of a fix round.
+Quote the current text verbatim and minimally so it occurs exactly once in the page, and mirror the same disambiguating context into the replacement so it also occurs exactly once after the repair; when the same error repeats, issue one spec per occurrence with each current/replacement pair context-unique — a bare shared replacement can never close mechanically, and the replacement must not contain the current text verbatim (the closure checker rejects such specs — extend the correction instead). `ADVISORY` is available only to WARNING findings — a CRITICAL always carries a fix spec: when the exact replacement is uncertain, the spec states the smallest accurate correction plus the evidence so the writer can construct the precise wording. Advisory findings default to explicit-debt representation instead of a fix round.
 
 ## Close-Out Re-Review
 
 After a remediation pass, the diff reviewer runs once more in close-out mode. Input: the remediated page paths, the pre-remediation staged versions (the coordinator supplies the recorded OIDs from round 1), and the fix ledger.
 
-Judge only the remediation delta — did each fix land, and did the fix hunks introduce regressions? Do not reopen the original diff or issue findings on unchanged text; defects noticed elsewhere go under `OUT-OF-SCOPE` as debt candidates. New findings on fix hunks use the normal severity vocabulary, but they never trigger a third review round: new CRITICALs there get one bounded mechanical fix, new warnings become debt representation.
+Judge only the remediation delta — did each fix land, and did the fix hunks introduce regressions? Do not reopen the original diff or issue findings on unchanged text; defects noticed elsewhere go under `OUT-OF-SCOPE` as debt candidates — **CRITICALs excepted**, which stay fix-routable through the bounded mechanical-fix loop (a fabricated or contradicted claim never becomes a debt row) and therefore carry a fix spec like any other CRITICAL. New findings use the normal severity vocabulary, but they never trigger a third review round: new CRITICALs get one bounded mechanical fix, new warnings become debt representation.
 
 ## Findings
 

@@ -147,6 +147,19 @@ Return a structured report:
 
 If the source justified no wiki change (archive-only outcome), report that with the classification and raw-source frontmatter checklist result.
 
+## Remediation pass (fix-ledger dispatch)
+
+The coordinator may dispatch you without a source locator, with the complete fix ledger from review round 1 instead. This is the single batched remediation pass of the convergence pipeline; you do not triage, preserve sources, or plan a page set in this mode.
+
+Input: one fix ledger — each finding's page, severity, exact fix spec (`current text → replacement` + basis) or callout-representation instruction, plus any theory-suggestion edits the coordinator accepted.
+
+- Apply each accepted spec's whole error pattern (all instances of a wrong date, every desynchronized source declaration) using the spec's context-unique pairs. Where you must adjust wording, keep the correction's basis and report the adjustment.
+- Add Rule-9 callout representations exactly as instructed — restate the reviewed gap, add no new claims.
+- Do not content-fix findings marked ADVISORY or OUT-OF-SCOPE warning/INFO; they terminate as coordinator-owned debt rows. Do not expand into new content beyond the ledger — a defect you notice outside the ledger is reported, not repaired.
+- In a multi-writer changeset you repair the whole staged changeset's findings, not only pages you authored: the one-pass convergence rule overrides per-source ownership for this dispatch, and nothing else.
+- Stage only the listed wiki paths (`git add -- <paths>`), run `filing-check paths --filing-date "$FILING_DATE" --path ...` on them, and do not commit.
+- Report a disposition for every ledger row: `applied verbatim`, `adjusted` (with the adjustment), or `declined` (with the reason). A declined CRITICAL spec returns to the coordinator as unresolved — CRITICALs close or the run stops.
+
 ## Marginal procedure
 
 If the source is marginal (or the coordinator dispatches you with `scope: marginal`):
